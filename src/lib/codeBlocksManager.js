@@ -193,8 +193,16 @@ class CodeBlocksManager {
             
             
             block.noContent = block.noContent !== undefined && block.noContent != "false" && block.noContent != "0";
-            if (block.noContent) {
+            if (!data.editMode && block.noContent) {
                 block.content = ''
+            } 
+            if (block.alternativeContent !== undefined  && !block.static && !block.hidden){
+                block.hasAlternativeContent = true
+                if (!data.editMode && block.noContent){                
+                    block.content = block.alternativeContent
+                }
+            } else {
+                block.hasAlternativeContent = false
             }
 
             if (block.type == 'PLAYGROUND') {                

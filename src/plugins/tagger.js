@@ -16,6 +16,7 @@ Vue.$tagger = new Vue({
     },
     methods:{
         getMarkers(s){
+            if (s===undefined || s===null) return [];
             let lines = s.split("\n");
             let markers = []
             let m;

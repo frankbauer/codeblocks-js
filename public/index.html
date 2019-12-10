@@ -42,7 +42,8 @@
   }
 }
     </playground>
-    <block>console.log("-> {:randomized}, {!init}, {!init}")</block>
+    <block data-alternative-content="//line 1
+//line 2 {:init} ">console.log("-> {:randomized}, {!init}, {!init}")</block>
     <block data-static>console.log("color is {:color} with {!init}")</block>
     <text>This is just some sample Text with a [hl]given {:color} and {!init}[/hl] for your exercicse.</text>
 </div>
@@ -53,8 +54,9 @@
     update: function(text, json, canvasElement, outputElement) { return text + "\nUPDATE = {:color}\n"}
 }
 </playground>
-  <block data-static>console.log("color is {:color} ")</block>
-  <block data-no-content>console.log("{:randomized}, {!init}, {!init}")</block>
+  <block data-static >console.log("color is {:color} ")</block>
+  <block data-no-content data-alternative-content="//line A
+//line B {:color}">console.log("{:randomized}, {!init}, {!init}")</block>
   <text>This is just some sample Text with a [hl]given {:color} and {!init}[/hl] for your exercicse.</text>
 </div>
     

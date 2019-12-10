@@ -15,7 +15,7 @@
                 <div class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right">
                     
                     <q-btn icon="settings" color="blue-7" push dense v-if="hasExtendedSettings"> 
-                        <q-popup-proxy transition-show="flip-up" transition-hide="flip-down">                    <!-- LineNumbers -->
+                        <q-popup-proxy >                    <!-- LineNumbers -->
                             <div class="q-pa-md" v-if="canSetLineNumbers"> 
                                 <div class="row no-wrap q-pa-none"> 
                                     <div class="text-overline">DISPLAY</div>
@@ -32,6 +32,17 @@
                                             maxlength="4"
                                             
                                             style="width:132px"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="row no-wrap q-pl-md" v-if="canHaveAlternativeContent"> 
+                                   <div class="col-7" >                                    
+                                        <div class="text-subtitle2">Prepopulate Answer</div>
+                                        <div class="text-caption text-blue-grey-4" lines="2">Define content that is displayed in a new answer.</div>
+                                    </div>
+                                    <div class="col-5 q-pl-sm" >                            
+                                        <q-toggle
+                                            v-model="hasAltComntent"
                                         />
                                     </div>
                                 </div>
@@ -226,7 +237,6 @@ export default {
             }).onDismiss(() => {
                 self.highlighted = false;                
             })
-            
         }
     },
     computed:{
@@ -261,6 +271,9 @@ export default {
         canSetLineNumbers(){
             return this.type=="BLOCK";
         },
+        canHaveAlternativeContent(){
+            return this.type=="BLOCK";
+        },
         canDefinePlacement(){
             return this.type=="PLAYGROUND";
         },
@@ -280,13 +293,21 @@ export default {
                 });
             }
         },
+        hasAltComntent:{
+            get(){
+                return this.block.hasAlternativeContent
+            },
+            set(v){
+                this.block.hasAlternativeContent = v
+            }
+        },
         colorClass(){
             const t = this.type
             if (t == 'TEXT'){
                 return 'text-border';
             } else if (t == 'PLAYGROUND'){
                 return 'playground-border';
-            } else if (t == 'BLOCK'){
+            } else if (t == 'q-t'){
                 return 'block-border';
             } else if (t == 'BLOCK-hidden'){
                 return 'block-hidden-border'

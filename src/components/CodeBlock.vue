@@ -2,7 +2,14 @@
     <div :class="`codeblock block-${typeName}`">        
         <codemirror ref="codeBox" :value="code" :options="options" :class="`accqstXmlInput noRTEditor ${boxClass}`" @ready="onCodeReady"
         @focus="onCodeFocus" @input="onCodeChange" :name="`block[${block.parentID}][${block.id}]`">
-        </codemirror>        
+        </codemirror>   
+
+        <div v-show="hasAlternativeContent" v-if="editMode">
+            <div class="q-mt-lg text-subtitle2">Initial Content</div>
+            <codemirror ref="altBox" :value="altCode" :options="options" :class="`accqstXmlInput noRTEditor ${boxClass}`" @ready="onAltCodeReady"
+        @focus="onAltCodeFocus" @input="onAltCodeChange" :name="`alt_block[${block.parentID}][${block.id}]`">
+            </codemirror> 
+        </div>
     </div>
 </template>
 
@@ -50,7 +57,6 @@
                 default: false
             },
             'visibleLines': {
-                type: String,
                 default: 'auto'
             },
             'theme': {
@@ -87,6 +93,15 @@
                         e.clear()
                     }
                 })
+
+                if (this.altcodemirror){
+                    allMarks = this.altcodemirror.getDoc().getAllMarks();
+                    allMarks.forEach(e => {
+                        if (e.className == Vue.$tagger.className.rnd || e.className == Vue.$tagger.className.templ){
+                            e.clear()
+                        }
+                    })
+                }
             },
             clearErrorDisplay(){
                 let allMarks = this.codemirror.getDoc().getAllMarks();
@@ -108,7 +123,23 @@
                 this.updateDiagnosticDisplay();
                 this.onCodeChange(this.block.content);                
             },
+            onAltCodeReady(editor) {
+                console.log("READY")
+                //we need this for StudON to make sure tinyMCE is not taking over :D
+                this.codemirror.display.input.textarea.className = "noRTEditor"                
+                this.$refs.altBox.$el.querySelectorAll('textarea[name]').forEach(el => {
+                    el.className = (el.className + " accqstXmlInput noRTEditor").trim();
+                })
+                this.$nextTick(()=>{
+                    this.onAltCodeChange(this.block.alternativeContent); 
+                    this.updateTagDisplay();      
+                    this.updateHeight()            
+                })
+            },
             onCodeFocus(editor) {
+
+            },
+            onAltCodeFocus(editor) {
 
             },
             onCodeChange(newCode) {
@@ -119,11 +150,22 @@
                 this.updateTagDisplay();
                 if (this.editMode) this.$emit("code-changed-in-edit-mode", undefined);
             },
+            onAltCodeChange(newCode) {
+                const tb = this.$refs.altBox.$el.querySelector('textarea[name]');
+                tb.value = newCode
+                
+                this.block.alternativeContent = newCode
+                this.updateTagDisplay();                
+            },
             updateHeight(){
                 if (this.visibleLines === 'auto') {
                     this.codemirror.setSize('height', 'auto');
+                    if (this.altcodemirror) 
+                        this.altcodemirror.setSize('height', 'auto');
                 } else {
                     this.codemirror.setSize(null, Math.round(20 * Math.max(1, this.visibleLines)) + 9);
+                    if (this.altcodemirror) 
+                        this.altcodemirror.setSize(null, Math.round(20 * Math.max(1, this.visibleLines)) + 9);
                 }
             },
             replaceTemplateTags(o){
@@ -147,8 +189,24 @@
                         }
                     );
                 })
+                this.$nextTick(()=>Vue.$tagger.hookClick(this.$refs.codeBox.$el, this.block.scopeUUID)) 
 
-                this.$nextTick(()=>Vue.$tagger.hookClick(this.$refs.codeBox.$el, this.block.scopeUUID))                
+                if (this.altcodemirror){
+                    Vue.$tagger.getMarkers(this.block.alternativeContent).forEach(m => {
+                        this.altcodemirror.getDoc().markText(
+                            m.start, 
+                            m.end, 
+                            {
+                                className:Vue.$tagger.className[m.type],
+                                inclusiveLeft:true,
+                                inclusiveRight:true,
+                                title:m.name
+                            }
+                        );
+                    })
+
+                    this.$nextTick(()=>Vue.$tagger.hookClick(this.$refs.altBox.$el, this.block.scopeUUID)) 
+                }             
             },
             updateDiagnosticDisplay(){
                 const val = this.errors;
@@ -207,6 +265,9 @@
             }
         },
         computed: {
+            hasAlternativeContent(){
+                return this.block.hasAlternativeContent && this.typeName == 'block'
+            },
             errors() {
                 return this.block.errors;
             },
@@ -225,6 +286,9 @@
                 if (this.block.hidden) s += '-hidden'
                 if (this.block.static) s += '-static'
                 return s;
+            },
+            altCode(){
+                return this.block.alternativeContent;
             },
             code() {
                 if (!this.editMode) return this.block.actualContent()                   
@@ -245,8 +309,17 @@
                     gutters: ["diagnostics", "CodeMirror-linenumbers"]
                 }
             },
+            alt() {
+                let o = this.options;
+                o.firstLineNumber = 1
+                return o;
+            },
             codemirror() {
                 return this.$refs.codeBox.codemirror
+            },
+            altcodemirror() {
+                if (this.$refs.altBox===undefined) return undefined
+                return this.$refs.altBox.codemirror
             }
         },
         watch: {
