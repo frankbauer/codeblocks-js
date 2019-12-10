@@ -8,14 +8,14 @@
                 <div class="tagList">
                     <div class="text-subtitle2">Available Tags <q-btn color="primary" class="gt-xs" size="12px" flat dense round icon="add" @click="addTag" /></div>
                     <div class="row q-mb-sm">
-                        <div :class="`tagItem q-ml-sm ${tagClass}`" v-for="tag in options.randomizer.knownTags" v-bind:key="tag">
+                        <div :class="`tagItem q-ml-sm ${tagClass}`" v-for="(tag, i) in options.randomizer.knownTags" v-bind:key="tag">
                             <div class="row no-wrap">
                                 <div class="tagInfo col-shrink">
                                     <div class="tagName">{{tag}}</div>
                                     <div class="tagString">{:{{tag}}}</div> 
                                 </div>
                                 <div class="tagAction col-4 q-pl-sm text-right">
-                                    <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+                                    <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="removeTag(i)"/>
                                 </div>
                             </div>
                         </div>
@@ -28,7 +28,7 @@
                     <q-list class="setList">
                         <q-item v-for="(s, i) in options.randomizer.sets" v-bind:key="s.uuid">
                             <q-item-section avatar>
-                                <q-avatar color="primary" text-color="white" :disabled="i!=options.randomizer.previewIndex">
+                                <q-avatar color="primary" text-color="white" :disabled="!isVisible(i)">
                                     {{ i }}
                                 </q-avatar>
                             </q-item-section>   
@@ -51,12 +51,14 @@
 
                             <q-item-section side top>
                                 <div class="text-grey-8 q-gutter-xs">
-                                    <q-icon :name="isCompleteSet(s)?'check':'close'" :color="isCompleteSet(s)?'positive':'negative'" size="24px" class="q-mr-lg"/>
+                                    <q-icon :name="isCompleteSet(s)?'check':'warning'" :color="isCompleteSet(s)?'positive':'negative'" size="24px" class="q-mr-lg"/>
+                                    
+                                    <q-btn class="gt-xs" size="12px" flat dense round :icon="isVisible(i)?'visibility':'visibility_off'" @click="setVisible(i)"/>
                                     
                                     <q-btn class="gt-xs" size="12px" flat dense round  icon="edit">
                                         <RandomizerSetEditor :options="options" :tagSet="getFullSet(s)" :nr="i"/>
                                     </q-btn>  
-                                    <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+                                    <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="removeSet(i)"/>
                                 </div>                            
                             </q-item-section>
                         </q-item>
@@ -89,6 +91,12 @@ export default {
         tagClass(){return Vue.$tagger.className.rnd}
     },
     methods:{
+        isVisible(nr){
+            return nr==this.options.randomizer.previewIndex
+        },
+        setVisible(nr){
+            this.options.randomizer.previewIndex = nr
+        },
         isValidTag(tag){
             return this.options.randomizer.knownTags.find(t => t==tag)!==undefined
         },
@@ -106,8 +114,14 @@ export default {
         getFullSet(s){
             return s;
         },
+        removeSet(nr){
+            this.options.randomizer.sets.splice(nr, 1)
+        },
         addSet(){
             this.options.randomizer.sets.push({uuid:this.$uuid.v4(), values:[]})
+        },
+        removeTag(nr){
+            this.options.randomizer.knownTags.splice(nr, 1)
         },
         addTag(){
             this.$q.dialog({
