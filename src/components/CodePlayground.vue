@@ -16,7 +16,8 @@
                 color="secondary" 
                 small 
                 flat round   
-                style="margin-right:-9px; margin-bottom:-10px"                     
+                style="margin-right:-9px; margin-bottom:-10px" 
+                v-if="editMode"                     
                 @click="toggleExpanded">
                     <q-icon :name="expanded?'expand_less':'expand_more'" size="24" />
             </q-btn>

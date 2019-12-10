@@ -6,7 +6,7 @@
 
         <div v-show="hasAlternativeContent" v-if="editMode">
             <div class="q-mt-lg text-subtitle2">Initial Content</div>
-            <codemirror ref="altBox" :value="altCode" :options="options" :class="`accqstXmlInput noRTEditor ${boxClass}`" @ready="onAltCodeReady"
+            <codemirror ref="altBox" :value="altCode" :options="altOptions" :class="`accqstXmlInput noRTEditor ${boxClass}`" @ready="onAltCodeReady"
         @focus="onAltCodeFocus" @input="onAltCodeChange" :name="`alt_block[${block.parentID}][${block.id}]`">
             </codemirror> 
         </div>
@@ -309,7 +309,7 @@
                     gutters: ["diagnostics", "CodeMirror-linenumbers"]
                 }
             },
-            alt() {
+            altOptions() {
                 let o = this.options;
                 o.firstLineNumber = 1
                 return o;
