@@ -181,8 +181,6 @@ export default {
                     s.values.forEach(v => values[v.tag] = v.value );
                     return values
                 });
-                
-                console.log(JSON.stringify(o))
                 return JSON.stringify(o);
             },
             set(v){}

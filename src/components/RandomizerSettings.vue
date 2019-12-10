@@ -51,8 +51,11 @@
 
                             <q-item-section side top>
                                 <div class="text-grey-8 q-gutter-xs">
-                                    <q-icon name="check" color="positive" />
-                                    <q-btn class="gt-xs" size="12px" flat dense round icon="edit" />
+                                    <q-icon :name="isCompleteSet(s)?'check':'close'" :color="isCompleteSet(s)?'positive':'negative'" size="24px" class="q-mr-lg"/>
+                                    
+                                    <q-btn class="gt-xs" size="12px" flat dense round  icon="edit">
+                                        <RandomizerSetEditor :options="options" :tagSet="getFullSet(s)" :nr="i"/>
+                                    </q-btn>  
                                     <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
                                 </div>                            
                             </q-item-section>
@@ -67,7 +70,10 @@
 
 <script>
 import Vue from 'vue'
+import RandomizerSetEditor from './RandomizerSetEditor'
+
 export default {
+    components: {RandomizerSetEditor},
     data:function(){
         return {
             _newTagName:''
@@ -80,29 +86,37 @@ export default {
         }
     },
     computed:{
-        tagClass(){return Vue.$tagger.className.rnd},
-        newTagName:{
-            get(){ return this._newTagName},
-            set(v){
-                
-                this._newTagName = v
-            }
-        }
+        tagClass(){return Vue.$tagger.className.rnd}
     },
     methods:{
+        isValidTag(tag){
+            return this.options.randomizer.knownTags.find(t => t==tag)!==undefined
+        },
+        isCompleteSet(s){
+            if (s.values.filter(v => this.options.randomizer.knownTags.indexOf(v.tag)<0).length>0) {
+                return false;
+            }
+            if (this.options.randomizer.knownTags
+                    .filter(t => s.values.find(v => (v.tag==t)) === undefined).length>0
+            ) {
+                return false;
+            }
+            return true;
+        },
+        getFullSet(s){
+            return s;
+        },
         addSet(){
-
+            this.options.randomizer.sets.push({uuid:this.$uuid.v4(), values:[]})
         },
         addTag(){
-            this.newTagName = "NewTagName"
             this.$q.dialog({
                 title: 'Create Tag',
                 message: 'This will generate a new randomizer-Tag with the below name.',
                 html: true,
                 persistent: true,
-                val:'me',
                 prompt: {
-                    model: this.newTagName,
+                    model: "tag_name",
                     type: 'text'
                 },
                 ok: {
@@ -139,7 +153,8 @@ export default {
 @import '../styles/quasar.variables.styl'
 .tagItem
     width:auto
-    padding-bottom:1px    
+    padding-bottom:1px   
+    min-height:24px 
     .tagInfo
         padding-left:4px
         .tagName
@@ -154,6 +169,7 @@ export default {
         min-width:36px
 .setList
     .tagItem
+        
         .tagInfo
             padding-right:4px
             .tagName
