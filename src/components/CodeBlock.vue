@@ -221,6 +221,8 @@
                 return s;
             },
             code() {
+                if (this.block.noContent && !this.editMode && this.typeName=='block') 
+                    return ''
                 return this.block.content;
             },
             options() {

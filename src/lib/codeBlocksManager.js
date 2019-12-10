@@ -174,7 +174,11 @@ class CodeBlocksManager {
             block.readonly = block.readonly !== undefined && block.readonly != "false" && block.readonly != "0";
             block.static = block.static !== undefined && block.static != "false" && block.static != "0";
             block.hidden = block.hidden !== undefined && block.hidden != "false" && block.hidden != "0";
-            block.visibleLines = block.visibleLines === undefined ? 'auto' : block.visibleLines;            
+            block.visibleLines = block.visibleLines === undefined ? 'auto' : block.visibleLines;        
+
+            
+            
+            block.noContent = block.noContent !== undefined && block.noContent != "false" && block.noContent != "0";
 
             if (block.type == 'PLAYGROUND') {                
                 block.obj = new ScriptBlock(block.content, block.version);  
