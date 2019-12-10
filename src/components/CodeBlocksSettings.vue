@@ -169,8 +169,21 @@ export default {
     },
     computed:{
         serializedOptions:{
-            get(){                
-                return JSON.stringify(this.options);
+            get(){         
+                const o = {
+                    ...this.options
+                }       
+                o.randomizer = {
+                    ...this.options.randomizer,                     
+                }
+                o.randomizer.sets = this.options.randomizer.sets.map( s => {
+                    let values = {}
+                    s.values.forEach(v => values[v.tag] = v.value );
+                    return values
+                });
+                
+                console.log(JSON.stringify(o))
+                return JSON.stringify(o);
             },
             set(v){}
         },

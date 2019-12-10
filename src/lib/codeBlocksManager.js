@@ -58,11 +58,26 @@ class CodeBlocksManager {
             data.randomizer.previewIndex = data.randomizerPreviewIndex;
             delete data.randomizerPreviewIndex;
         }
-
         if (data.randomizerKnownTags!==undefined){
-            console.log(data.randomizerKnownTags)
             data.randomizer.knownTags = JSON.parse(data.randomizerKnownTags);
             delete data.randomizerKnownTags;
+        }
+        if (data.randomizerSets!==undefined){
+            data.randomizer.sets = JSON.parse(data.randomizerSets).map((o, i) => {
+                let ret = {
+                    uuid : uuid.v4(),
+                    values: []
+                }
+                Object.keys(o).forEach(tag => {
+                    ret.values.push({
+                        tag: tag,
+                        value: o[tag]
+                    })
+                })
+
+                return ret;
+            });
+            delete data.randomizerSets;
         }
 
 
