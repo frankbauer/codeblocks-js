@@ -53,7 +53,12 @@
                                 <div class="text-grey-8 q-gutter-xs">
                                     <q-icon :name="isCompleteSet(s)?'check':'warning'" :color="isCompleteSet(s)?'positive':'negative'" size="24px" class="q-mr-lg"/>
                                     
-                                    <q-btn class="gt-xs" size="12px" flat dense round :icon="isVisible(i)?'visibility':'visibility_off'" @click="setVisible(i)"/>
+                                    
+                                    <q-btn class="gt-xs" size="12px" flat dense round :icon="isVisible(i)?'visibility':'visibility_off'" @click="setVisible(i)">
+                                        <q-tooltip :delay="200" :offset="[0, 10]">
+                                            Use this set when running code in preview or editMode.
+                                        </q-tooltip>
+                                    </q-btn>
                                     
                                     <q-btn class="gt-xs" size="12px" flat dense round  icon="edit">
                                         <RandomizerSetEditor :options="options" :tagSet="getFullSet(s)" :nr="i"/>

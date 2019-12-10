@@ -46,6 +46,7 @@ class CodeBlocksManager {
                 active:false,
                 previewIndex:0,
                 knownTags:[],
+                sets:[]
             },
             blocks: []
         };

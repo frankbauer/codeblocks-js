@@ -167,8 +167,23 @@
                 if (!cmp) return false;
                 return cmp.canRun && this.runCode;
             },
+            randomizerActive(){
+                return  this.blockInfo.randomizer.active;
+            },
+            activeTagSet(){
+                return this.tagSet(this.blockInfo.randomizer.previewIndex);
+            },
             completeSource() {
-                return this.blocks.filter(b => b.hasCode).map(b => b.content).reduce((p, c) => p + "\n" + c, "");                      
+                return this.blocks
+                            .filter(b => b.hasCode)
+                            .map(b => b.content)
+                            .reduce((p, c) => {
+                                if (this.editMode && this.randomizerActive) {
+                                    return p + "\n" + Vue.$tagger.replaceRandomTagsInString(c, this.activeTagSet)
+                                } else {
+                                    return p + "\n" + c
+                                }
+                            }, "");                      
             },
             showGlobalMessages() {
                 return !this.$compilerState.globalStateHidden;
@@ -190,6 +205,7 @@
             }
         },
         methods: {
+            
             didMountChild(){
                 let mountCount = this.blockInfo.blocks.map(b => b.mountCount).reduce((p,c) => p+c, 0);
                 console.log("mounted Blocks", mountCount)
@@ -198,6 +214,9 @@
                         this.eventHub.$emit('all-mounted', {  })
                     })
                 }
+            },
+            tagSet(nr){
+                return this.blockInfo.randomizer.sets[nr]
             },
             themeForBlock(bl){
                 if (bl.static || bl.readonly || bl.hidden) {

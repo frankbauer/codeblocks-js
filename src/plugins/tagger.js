@@ -86,6 +86,16 @@ Vue.$tagger = new Vue({
                 return m0;
             })
         },
+        replaceRandomTagsInString(str, tagSet){
+            return str.replace(randomAndTemplateTag, (m0, m1, m2)=>{
+                if (m1 == ':'){
+                    const tag = tagSet.values.find(t=>t.tag==m2)
+                    if (tag!==undefined) return tag.value
+                    return m0;
+                }
+                return m0;
+            })
+        },
         clickFunction: function(name, tagEl, scopeUUID){
             Vue.prototype.$q.dialog({
                 title: 'Confirm Tag Replacement',
