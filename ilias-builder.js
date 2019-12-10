@@ -5,7 +5,7 @@ const     conf = require('./package.json')
         , vueconf = require('./vue.config')
 
         
-const dest = path.join('..', 'codeblocks', conf.version);
+const dest = path.join('..', '..', 'codeblocks', conf.version);
 console.log("Deploying CodeBlocks to '" +dest + "'");
 
 const vuecli = exec('vue-cli-service build --dest ' + dest, function(code, stdout, stderr) 
