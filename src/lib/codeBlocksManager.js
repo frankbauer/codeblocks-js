@@ -42,8 +42,16 @@ class CodeBlocksManager {
         let data = {
             ...el.dataset,            
             editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute("codeblockseditor"),
+            randomizer:{
+                active:false,
+            },
             blocks: []
         };
+
+        if (data.randomizerActive!==undefined){
+            data.randomizer.active = data.randomizerActive=='true'||data.randomizerActive=='1';
+            delete data.randomizerActive;
+        }
 
         if (data.question!==undefined){
             data.id = data.question

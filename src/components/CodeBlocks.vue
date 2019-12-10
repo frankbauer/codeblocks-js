@@ -129,7 +129,8 @@
                     id:this.blockInfo.id,
                     codeTheme:this.codeTheme,
                     solutionTheme:this.solutionTheme,
-                    outputParser:this.outputParser
+                    outputParser:this.outputParser,
+                    randomizer:this.blockInfo.randomizer
                 }
             },
             blocks() { return this.blockInfo.blocks },

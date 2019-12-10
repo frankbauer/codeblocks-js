@@ -117,7 +117,9 @@
                     </q-card>
                 </div>
             </q-slide-transition>
-        
+        <div :class="`col-xs-${options.randomizer.active?'12':'12'} q-mt-sm`">
+            <RandomizerSettings :options="options" />
+        </div>
         <div class="col-xs-12">
             <textarea :name="`block_settings[${this.options.id}]`" class="blocksettings" v-model="serializedOptions"></textarea>
         </div>
@@ -126,7 +128,9 @@
 </template>
 
 <script>
+import RandomizerSettings from './RandomizerSettings'
 export default {
+    components:{RandomizerSettings},
     data:function(){
         return {
             themes:[
