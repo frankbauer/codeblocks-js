@@ -73,6 +73,10 @@
             'editMode': {
                 type: Boolean,
                 default: false
+            },
+            'tagSet':{
+                type:Object,
+                default: undefined
             }
         },
         methods: {
@@ -207,6 +211,9 @@
             errors() {
                 return this.block.errors;
             },
+            randomizerActive(){
+                return  this.tagSet !== undefined;
+            },
             boxClass() {
                 let cl = "";
                 if (this.block.hidden && !this.editMode) cl += "hiddenBox "
@@ -223,7 +230,11 @@
             code() {
                 if (this.block.noContent && !this.editMode && this.typeName=='block') 
                     return ''
-                return this.block.content;
+
+                let code = this.block.content
+                if (!this.editMode && this.randomizerActive)
+                    return Vue.$tagger.replaceRandomTagsInString(code, this.tagSet)
+                return code;
             },
             options() {
                 return {

@@ -6,6 +6,7 @@
             :key="runCount" 
             :block="block" 
             :eventHub="eventHub"
+            :tagSet="tagSet"
             @canvas-change="onCanvasChange" 
             @did-init="onDidInit"
         />
@@ -28,6 +29,7 @@
             :mode="options.mode"
             :visibleLines="visibleLinesNow" 
             :editMode="this.editMode" 
+            :tagSet="tagSet"
             
             @code-changed-in-edit-mode="onCodeChange"
         />
@@ -76,6 +78,10 @@ export default {
         'eventHub': {
             type: Object,
             required: true            
+        },
+        'tagSet':{
+            type:Object,
+            default: undefined
         }
     },
     computed:{

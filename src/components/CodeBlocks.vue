@@ -37,6 +37,7 @@
                     :visibleLines="block.visibleLines" 
                     :editMode="editMode" 
                     :readonly="readonly"
+                    :tagSet="activeTagSet"
                     @build="run" />
 
                 <CodePlayground 
@@ -45,6 +46,7 @@
                     :editMode="editMode" 
                     :finalOutputObject="finalOutputObject" 
                     :theme="themeForBlock(block)" 
+                    :tagSet="activeTagSet"
                     @changeOutput="onPlaygroundChangedOutput" 
                     :eventHub="eventHub" />
 
@@ -54,6 +56,7 @@
                     :editMode="editMode"
                     :name="`block[${block.parentID}][${block.id}]`"
                     :scopeUUID="block.scopeUUID"
+                    :tagSet="activeTagSet"
                     :language="language" />
         </CodeBlockContainer>
 
@@ -171,6 +174,7 @@
                 return  this.blockInfo.randomizer.active;
             },
             activeTagSet(){
+                if (!this. randomizerActive) return undefined;
                 return this.tagSet(this.blockInfo.randomizer.previewIndex);
             },
             completeSource() {

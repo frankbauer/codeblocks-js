@@ -19,6 +19,10 @@ export default {
         'eventHub': {
             type: Object,
             required: false            
+        },
+        tagSet:{
+            default:undefined,
+            type: Object 
         }
     },
     computed:{
