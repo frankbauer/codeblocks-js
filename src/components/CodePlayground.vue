@@ -28,8 +28,7 @@
             :theme="options.theme" 
             :mode="options.mode"
             :visibleLines="visibleLinesNow" 
-            :editMode="this.editMode" 
-            :tagSet="tagSet"
+            :editMode="this.editMode"             
             
             @code-changed-in-edit-mode="onCodeChange"
         />
@@ -165,11 +164,10 @@ export default {
             }
         },
         resetBeforeRun(){
-            if (this.editMode && this.needsCodeRebuild){
+            if (this.editMode && (this.needsCodeRebuild || this.tagSet!==undefined)){
                 this.initAndRebuildErrors = [];
 
-                //console.log("Code", this.block.content);
-                this.block.obj.rebuild(this.block.content);                
+                this.block.obj.rebuild(this.block.actualContent());                
                 if (this.updateErrors()) {
                     this.initAndRebuildErrors = this.block.obj.err;
                     return;
@@ -224,7 +222,6 @@ export default {
                                 jStr = val.parseError.parsedString;
                             }
                             jStr = jStr.replace(/</g, '&lt;');
-                            console.log(val, jStr);
 
                            this.$q.dialog({
                                 title: 'Output is not a valid JSON-Object',

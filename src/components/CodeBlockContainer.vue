@@ -190,7 +190,7 @@ export default {
     },
     methods:{
         validNumber(v){
-            console.log(v, isNaN(v), v!='auto');
+            //console.log(v, isNaN(v), v!='auto');
             if (v!='auto' && isNaN(v)) return "Must be a valid Number or 'auto'."
             return true
         },
@@ -365,7 +365,7 @@ export default {
         }
     },
     mounted(){
-        console.log("Mounted", this.block.id);
+        //console.log("Mounted", this.block.id);
         this.block.mountCount++;
         this.$emit("mounted", {});
     },

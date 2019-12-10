@@ -72,10 +72,8 @@ export default {
         onDomLibChange(v){
             this.blockInfo.domLibs = v;
         },
-        onScriptVersionChange(nfo){
-            
-            let bl = this.blockById(nfo.id);
-            console.log(bl, nfo);
+        onScriptVersionChange(nfo){            
+            let bl = this.blockById(nfo.id);            
             bl.version = nfo.version;
             if (bl.obj) bl.obj.version = nfo.version;
         },

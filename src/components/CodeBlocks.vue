@@ -53,6 +53,7 @@
                 <SimpleText 
                     v-else-if="block.type=='TEXT'" 
                     v-model="block.content" 
+                    :previewValue="block.actualContent()"
                     :editMode="editMode"
                     :name="`block[${block.parentID}][${block.id}]`"
                     :scopeUUID="block.scopeUUID"
@@ -180,13 +181,9 @@
             completeSource() {
                 return this.blocks
                             .filter(b => b.hasCode)
-                            .map(b => b.content)
+                            .map(b => b.actualContent())
                             .reduce((p, c) => {
-                                if (this.editMode && this.randomizerActive) {
-                                    return p + "\n" + Vue.$tagger.replaceRandomTagsInString(c, this.activeTagSet)
-                                } else {
-                                    return p + "\n" + c
-                                }
+                                return p + "\n" + c                                
                             }, "");                      
             },
             showGlobalMessages() {
@@ -212,7 +209,7 @@
             
             didMountChild(){
                 let mountCount = this.blockInfo.blocks.map(b => b.mountCount).reduce((p,c) => p+c, 0);
-                console.log("mounted Blocks", mountCount)
+                //console.log("mounted Blocks", mountCount)
                 if (mountCount == this.blockInfo.blocks.length){
                     this.$nextTick(()=>{
                         this.eventHub.$emit('all-mounted', {  })

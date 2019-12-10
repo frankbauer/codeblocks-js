@@ -20,17 +20,9 @@ export default {
             type: Boolean,
             default: false
         },
-        'tagSet':{
-            type:Object,
-            default: undefined
-        }
-    },
-    computed:{
-        previewValue(){
-            if (this.tagSet!==undefined){
-                return Vue.$tagger.replaceRandomTagsInString(this.value, this.tagSet)
-            }
-            return this.value;
+        'previewValue':{
+            type:String,
+            default: ""
         }
     },
     methods:{

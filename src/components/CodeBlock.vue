@@ -106,8 +106,7 @@
                     el.className = (el.className + " accqstXmlInput noRTEditor").trim();
                 })
                 this.updateDiagnosticDisplay();
-                this.onCodeChange(this.block.content);
-                console.log("codeReady", this.block.id)
+                this.onCodeChange(this.block.content);                
             },
             onCodeFocus(editor) {
 
@@ -228,13 +227,8 @@
                 return s;
             },
             code() {
-                if (this.block.noContent && !this.editMode && this.typeName=='block') 
-                    return ''
-
-                let code = this.block.content
-                if (!this.editMode && this.randomizerActive)
-                    return Vue.$tagger.replaceRandomTagsInString(code, this.tagSet)
-                return code;
+                if (!this.editMode) return this.block.actualContent()                   
+                return this.block.content;
             },
             options() {
                 return {

@@ -15,6 +15,15 @@ class CodeBlocksManager {
     constructBlock(data, bl){
         return new Vue({
             data:function(){return bl;},
+            methods:{                
+                actualContent(){     
+                   if (data.randomizer.active){
+                        return Vue.$tagger.replaceRandomTagsInString(this.content, data.randomizer.sets[data.randomizer.previewIndex])                                        
+                    } 
+
+                    return this.content
+                }
+            },
             computed:{ 
                 isLast(){
                     return this.id == data.blocks.length-1;
@@ -33,6 +42,11 @@ class CodeBlocksManager {
                 },
                 domLibs(){
                     return data.domLibs;
+                }
+            },
+            created(){
+                if (this.type == 'PLAYGROUND') {                
+                    this.obj = new ScriptBlock(this.actualContent(), this.version);
                 }
             }
         })
@@ -179,9 +193,12 @@ class CodeBlocksManager {
             
             
             block.noContent = block.noContent !== undefined && block.noContent != "false" && block.noContent != "0";
+            if (block.noContent) {
+                block.content = ''
+            }
 
             if (block.type == 'PLAYGROUND') {                
-                block.obj = new ScriptBlock(block.content, block.version);  
+                block.obj = null;
                 
                 block.width = bl.getAttribute('width')?bl.getAttribute('width'):block.width
                 block.height = bl.getAttribute('height')?bl.getAttribute('height'):block.height
