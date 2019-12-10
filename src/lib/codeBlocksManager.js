@@ -44,6 +44,8 @@ class CodeBlocksManager {
             editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute("codeblockseditor"),
             randomizer:{
                 active:false,
+                previewIndex:0,
+                knownTags:[],
             },
             blocks: []
         };
@@ -52,6 +54,17 @@ class CodeBlocksManager {
             data.randomizer.active = data.randomizerActive=='true'||data.randomizerActive=='1';
             delete data.randomizerActive;
         }
+        if (data.randomizerPreviewIndex!==undefined){
+            data.randomizer.previewIndex = data.randomizerPreviewIndex;
+            delete data.randomizerPreviewIndex;
+        }
+
+        if (data.randomizerKnownTags!==undefined){
+            console.log(data.randomizerKnownTags)
+            data.randomizer.knownTags = JSON.parse(data.randomizerKnownTags);
+            delete data.randomizerKnownTags;
+        }
+
 
         if (data.question!==undefined){
             data.id = data.question
