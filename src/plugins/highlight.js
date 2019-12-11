@@ -24,7 +24,7 @@ hljs.registerLanguage('sql', require('highlight.js/lib/languages/sql'));
 hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'));
 
 const reg_hl=/(\[hl\]|\[hl\s+language="?(.*?)"?\])(.*?)(\[\/hl\])/gm
-const reg_code=/(\[code\]|\[code\s+language="?(.*?)"?\])(.*?)(\[\/code\])/gms
+const reg_code=/(\[code\]|\[code\s+language="?(.*?)"?\])([\s\S]*?)(\[\/code\])/gm
 
 
 hljs.$vue = {
