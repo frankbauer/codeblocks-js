@@ -59,6 +59,7 @@ export default {
             required: true,
             type: Object,
             validator: function (b) {
+                console.log(b.type, b);
                 if (!b.obj) return false;                
                 return true;
             }

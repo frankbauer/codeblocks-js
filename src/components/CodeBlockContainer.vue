@@ -321,7 +321,7 @@ export default {
             return '';
         },
         type(){
-    if (this.block.type == 'BLOCK'){                
+                if (this.block.type == 'BLOCK'){                
                     if (this.block.hidden) return 'BLOCK-hidden';
                     if (this.block.static) return 'BLOCK-static';
                 }
@@ -339,7 +339,7 @@ export default {
                     static:v=='BLOCK-static',                    
                     id:this.block.id
                 }
-                ret.hasCode = ret.type=='BLOCK';
+                ret.hasCode = ret.type=='BLOCK';                
                 
                 this.$emit('type-change', ret);
             }

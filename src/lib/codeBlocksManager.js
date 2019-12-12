@@ -13,6 +13,11 @@ Vue.prototype.$compilerRegistry = CompilerRegistry;
 //this will handle the vue mounting on the dom
 class CodeBlocksManager {
     constructBlock(data, bl){
+        if (this.type == 'PLAYGROUND') {
+            if (bl.content=='' || bl.content===undefined || bl.content===null) {
+                bl.content = '{}'
+            }            
+        }
         return new Vue({
             data:function(){return bl;},
             methods:{                
@@ -22,6 +27,13 @@ class CodeBlocksManager {
                     } 
 
                     return this.content
+                },
+                recreateScriptObject(){                    
+                    if (this.type == 'PLAYGROUND') {              
+                        const so = new ScriptBlock(this.actualContent(), this.version);
+                        this.obj = so
+                        console.log("Block Rebuild", this.obj, this._uid);
+                    }
                 }
             },
             computed:{ 
@@ -45,9 +57,14 @@ class CodeBlocksManager {
                 }
             },
             created(){
-                if (this.type == 'PLAYGROUND') {                
-                    this.obj = new ScriptBlock(this.actualContent(), this.version);
-                }
+                this.recreateScriptObject()
+            },
+            watch: {
+                type: function (newType, oldType) {
+                    if (newType!=oldType){
+                        this.recreateScriptObject();
+                    }
+                  }
             }
         })
     }
