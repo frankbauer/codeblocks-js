@@ -38,7 +38,7 @@
                     :visibleLines="block.visibleLines" 
                     :editMode="editMode" 
                     :readonly="readonly"
-                    :tagSet="activeTagSet"
+                    :tagSet="activeTagSet"                    
                     @build="run" />
 
                 <CodePlayground 
@@ -72,7 +72,10 @@
             <div class="row runnerState">
                 <q-btn :loading="!isReady" :disabled="!isReady" color="primary" class="white--text" @click="run" :ripple="{ center: true }" style="border-radius:0px" >
                     Run
-                    <q-icon right dark name="play_arrow"></q-icon>
+                    <q-icon right dark name="play_arrow"></q-icon> 
+                     <q-tooltip :delay="200" v-if="editMode">
+                        Press <code>Ctrl</code>+<code>W</code> when in a code box to run code.
+                     </q-tooltip>                   
                 </q-btn>
                 
                 <transition
@@ -390,6 +393,11 @@
                     )
                     }.bind(this)
                 )
+            },
+            onkey(event){
+                if (this.editMode && event.ctrlKey && event.key==='w'){
+                    this.run();
+                }
             }
         },
         mounted() {
@@ -401,6 +409,12 @@
                     this.eventHub.$emit('initialized-libraries', {  })
             }.bind(this));
             this.didInitialize = true;
+
+            if (this.editMode)
+                window.addEventListener('keydown', this.onkey)
+        },
+        beforeDestroy(){
+            window.removeEventListener('keydown', this.onkey)
         }
     }
 </script>

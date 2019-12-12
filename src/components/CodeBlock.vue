@@ -333,22 +333,26 @@
         mounted() {
             this.updateHeight();
 
-            const buildIt = () => {
-                if (this.editMode) {
-                    this.$emit("build");
-                }
-            };
+            
 
-            this.codemirror.addKeyMap({
-                "Cmd-B": function(cMirror) { buildIt() },
-                 "Ctrl-B": function(cMirror) { buildIt() }
-            });    
+            if (this.editMode) {
+                console.log("Attach")
+                const buildIt = () => {
+                    console.log("EMIT");
+                    this.$emit("build");                              
+                };
 
-            this.codemirror.addKeyMap({
-                "Tab": function(cMirror) {
-                    cMirror.execCommand("insertSoftTab");              
-                }
-            });     
+                this.codemirror.addKeyMap({
+                    "Cmd-B": function(cMirror) { buildIt() },
+                    "Ctrl-B": function(cMirror) { buildIt() }
+                });    
+
+                this.codemirror.addKeyMap({
+                    "Tab": function(cMirror) {
+                        cMirror.execCommand("insertSoftTab");              
+                    }
+                });    
+            } 
             
             Vue.$tagger.$on('replace-template-tag', this.replaceTemplateTags);
             this.updateTagDisplay();   
