@@ -48,7 +48,6 @@ Vue.$tagger = new Vue({
             }
             
             const elements = scope.querySelectorAll('[tagged]');
-            console.log(elements)
             elements.forEach(el => {
                 this.processElement(el, uuid);
             })
