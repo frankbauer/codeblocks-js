@@ -15,15 +15,15 @@ const jsErrorParser = function(e){
       const regex = /<anonymous>:(\d+):(\d+)/gm;
       let m;            
       if ((m = regex.exec(lines[1])) !== null) {
-        line = Number(m[1])-1;
-        column = Number(m[2])-1;
+        line = Number(m[1])+1;
+        column = Number(m[2])+1;
       }            
     }
   }   
   
   if (line !== undefined){
     line--;
-    if (line==1) column -= 24;        
+    if (line==1) column -= 43;        
   }
   return {line:line, column:column, msg:e.message};
 }
@@ -41,6 +41,10 @@ class ScriptBlock {
 
     requestsOriginalVersion(){
       return this.version=='100' || this.version=='' || this.version===undefined;
+    }
+
+    invalidate(){
+      this.obj = undefined
     }
     
     rebuild(code) {
