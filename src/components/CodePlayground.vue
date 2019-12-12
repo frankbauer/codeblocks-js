@@ -19,7 +19,7 @@
                 style="margin-right:-9px; margin-bottom:-10px" 
                 v-if="editMode"                     
                 @click="toggleExpanded">
-                    <q-icon :name="expanded?'expand_less':'expand_more'" size="24" />
+                    <q-icon :name="block.codeExpanded?'expand_less':'expand_more'" size="24" />
             </q-btn>
         </div>
         <q-slide-transition>
@@ -104,7 +104,7 @@ export default {
                 }
         },
         visibleLinesNow(){
-            if (!this.expanded) return "5.2";
+            if (!this.block.codeExpanded) return "5.2";
             return 'auto'
         }
     },
@@ -127,13 +127,12 @@ export default {
             runCount:0,
             canvas:undefined,
             needsCodeRebuild:false,
-            initAndRebuildErrors:[],
-            expanded:true          
+            initAndRebuildErrors:[]    
         }
     },
     methods:{
         toggleExpanded(){
-            this.expanded = !this.expanded;
+            this.block.codeExpanded = !this.block.codeExpanded;
         },
         updateErrors(){
             this.block.errors = [];

@@ -208,6 +208,9 @@ class CodeBlocksManager {
             block.visibleLines = block.visibleLines === undefined ? 'auto' : block.visibleLines;        
 
             block.shouldAutoreset = block.shouldAutoreset !== undefined && block.shouldAutoreset != "false" && block.shouldAutoreset != "0";
+
+            block.expanded = block.expanded !== undefined && block.expanded != "false" && block.expanded != "0";
+
             
             block.noContent = block.noContent !== undefined && block.noContent != "false" && block.noContent != "0";
             if (!data.editMode && block.noContent) {
@@ -229,6 +232,9 @@ class CodeBlocksManager {
                 block.height = bl.getAttribute('height')?bl.getAttribute('height'):block.height
                 block.align = bl.getAttribute('align')?bl.getAttribute('align'):block.align   
                 block.version = bl.getAttribute('data-version')?bl.getAttribute('data-version'):'101'
+
+                block.codeExpanded = block.codeExpanded !== undefined && block.codeExpanded != "false" && block.codeExpanded != "0";
+            
             } else if (block.type == 'BLOCK') {
                 block.hasCode = true;                
             } else if (block.type == 'LOADING' || block.type == 'DIV') {
