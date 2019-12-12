@@ -77,6 +77,10 @@ export default {
             bl.version = nfo.version;
             if (bl.obj) bl.obj.version = nfo.version;
         },
+        onSetAutoReset(nfo){
+            let bl = this.blockById(nfo.id);            
+            bl.shouldAutoreset = nfo.shouldAutoreset;
+        },
         onThemeChange(nfo){
             this.blockInfo.solutionTheme = nfo.solution;
             this.blockInfo.codeTheme = nfo.code

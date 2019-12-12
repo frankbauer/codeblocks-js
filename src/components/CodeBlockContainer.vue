@@ -51,7 +51,7 @@
                             <!-- Playground Versioning -->
                             <div class="q-pa-md" v-if="isVersionedPlayground"> 
                                 <div class="row no-wrap q-pa-none"> 
-                                    <div class="text-overline">VERSIONING</div>
+                                    <div class="text-overline">BEHAVIOUR</div>
                                 </div>                  
                                 <div class="row no-wrap q-pl-md"> 
                                    <div class="col-7" >                                    
@@ -63,6 +63,18 @@
                                                 
                                                 :options="scriptVersions"
                                                 v-model="scriptVersionObj" 
+                                            />
+                                    </div>
+                                </div>
+
+                                <div class="row no-wrap q-pl-md"> 
+                                   <div class="col-7" >                                    
+                                            <div class="text-subtitle2">Auto Reset</div>
+                                            <div class="text-caption text-blue-grey-4">Recreate Canvas-Element before each run</div>
+                                    </div>
+                                    <div class="col-5 q-pl-sm" >                            
+                                            <q-toggle                                                
+                                                v-model="shouldAutoReset" 
                                             />
                                     </div>
                                 </div>
@@ -276,6 +288,17 @@ export default {
         },
         canDefinePlacement(){
             return this.type=="PLAYGROUND";
+        },
+        shouldAutoReset:{
+            get(){
+                return this.block.shouldAutoreset;
+            },
+            set(v){
+                this.$emit('auto-reset-change', {
+                    shouldAutoreset: v,
+                    id:this.block.id
+                });
+            }
         },
         scriptVersion(){
             if (this.block === undefined || this.block.version === undefined || this.block.version == '')

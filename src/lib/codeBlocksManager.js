@@ -207,7 +207,7 @@ class CodeBlocksManager {
             block.hidden = block.hidden !== undefined && block.hidden != "false" && block.hidden != "0";
             block.visibleLines = block.visibleLines === undefined ? 'auto' : block.visibleLines;        
 
-            
+            block.shouldAutoreset = block.shouldAutoreset !== undefined && block.shouldAutoreset != "false" && block.shouldAutoreset != "0";
             
             block.noContent = block.noContent !== undefined && block.noContent != "false" && block.noContent != "0";
             if (!data.editMode && block.noContent) {

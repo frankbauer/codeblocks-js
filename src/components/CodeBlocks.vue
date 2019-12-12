@@ -27,7 +27,8 @@
             @move-up="moveUp"
             @move-down="moveDown"
             @remove-block="removeBlock"
-            @mounted="didMountChild">              
+            @mounted="didMountChild"
+            @auto-reset-change="onSetAutoReset">              
             
                 <CodeBlock 
                     v-if="block.hasCode" 
@@ -233,6 +234,7 @@
             onVisibleLinesChange(nfo){},
             onPlacementChange(nfo){},
             onScriptVersionChange(nfo){},
+            onSetAutoReset(nfo){},
             onCompilerChange(v){},
             onCompilerVersionChange(v){},
             onRunStateChange(v){},
@@ -364,6 +366,7 @@
                 this.clearDiagnostics();
                 this.loadLibraries(function(){
                     this.eventHub.$emit('before-run', {  })
+                    console.log("compileAndRun")
                     cmp.compileAndRun(
                         this.blocks.id,
                         this.completeSource,
