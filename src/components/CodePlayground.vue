@@ -59,7 +59,6 @@ export default {
             required: true,
             type: Object,
             validator: function (b) {
-                console.log(b.type, b);
                 if (!b.obj) return false;                
                 return true;
             }
@@ -166,26 +165,16 @@ export default {
             }
         },
         resetBeforeRun(){
-            if (this.editMode && (this.needsCodeRebuild || this.tagSet!==undefined)){
-                this.initAndRebuildErrors = [];
-
-                this.block.obj.rebuild(this.block.actualContent());                
-                if (this.updateErrors()) {
-                    this.initAndRebuildErrors = this.block.obj.err;
-                    return;
-                }
-
-                this.block.obj.init($(this.canvas));                
-                if (this.updateErrors()) {
-                    this.initAndRebuildErrors = this.block.obj.err;
-                    return;
-                }
-            }
+            const rebuildCode = this.editMode && (this.needsCodeRebuild || this.tagSet!==undefined)
+            let reInitCode = rebuildCode
+            let onNextTick = false;
             if (this.block && this.block.obj){
-                if (this.block && this.block.obj && this.block.obj.shouldAutoReset()) {
-                    //console.log("Will Re-Initialize", this.canvas, $(this.canvas).css('background-color'));                           
+                if (this.block.shouldAutoreset || rebuildCode) {
+                    console.log("Will Re-Initialize", this.canvas, $(this.canvas).css('background-color'));                           
                     this.lastRun = new Date()
-                    this.runCount++;                                   
+                    this.runCount++;  
+                    reInitCode = true;
+                    onNextTick = true;                                 
                 } else {
                    this.$nextTick(function () {
                         //console.log("Will Reset", this.canvas, $(this.canvas).css('background-color'));   
@@ -193,7 +182,38 @@ export default {
                         this.updateErrors();
                     }.bind(this))  
                 }
-                this.updateErrors();
+                
+            }
+
+            if (rebuildCode){
+                this.initAndRebuildErrors = [];
+
+                this.block.obj.rebuild(this.block.actualContent());                
+                if (this.updateErrors()) {
+                    this.initAndRebuildErrors = this.block.obj.err;
+                    this.block.obj.invalidate();
+                    return;
+                }
+
+                reInitCode = true;
+            }
+
+            if (reInitCode) {
+                this.initAndRebuildErrors = [];
+                let doInit = ()=>{
+                    this.block.obj.init($(this.canvas))               
+                    if (this.updateErrors()){
+                        this.initAndRebuildErrors = this.block.obj.err;
+                        this.block.obj.invalidate();
+                        return false;
+                    }
+                    return true;
+                }
+                if (onNextTick){
+                    this.$nextTick(doInit)
+                } else {
+                    if (!doInit()) return
+                }
             }
         },
         onCanvasChange(can){
