@@ -13,9 +13,11 @@
     "quasar": "^1.5.4",
     "vue": "^2.6.10",
     "vue-codemirror": "^4.0.5",
+    "vue-i18n": "^8.15.1",
     "vue-uuid": "^1.1.1"
   },
   "devDependencies": {
+    "@kazupon/vue-i18n-loader": "^0.4.1",
     "@vue/cli-service": "^4.0.0",
     "babel-plugin-transform-imports": "1.5.0",
     "fibers": "^4.0.2",
@@ -27,6 +29,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-codemirror": "0.0.6",
+    "vue-cli-plugin-i18n": "^0.6.0",
     "vue-cli-plugin-quasar": "^2.0.0",
     "vue-template-compiler": "^2.6.10"
   },

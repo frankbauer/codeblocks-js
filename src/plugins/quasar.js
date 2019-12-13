@@ -14,9 +14,9 @@ import '@quasar/extras/animate/fadeOut.css'
 import '@quasar/extras/animate/zoomInDown.css'
 import '@quasar/extras/animate/zoomInUp.css'
 
-
 import  Quasar  from 'quasar'
 import  {Dialog}  from 'quasar'
+
 
 Vue.use(Quasar, {
   config: {},

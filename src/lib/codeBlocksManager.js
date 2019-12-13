@@ -1,5 +1,5 @@
 import ScriptBlock from './scriptBlock'
-//import vuetify from '../plugins/quasar';
+import i18n from '../plugins/i18n'
 import Vue from 'vue'
 import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
@@ -251,6 +251,7 @@ class CodeBlocksManager {
         const data = this.data;
         const self = this;
         new Vue({
+            i18n, 
             render: function (h) {
                 const context = {
                     props: {
