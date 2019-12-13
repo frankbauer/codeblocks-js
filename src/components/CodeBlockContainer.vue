@@ -18,12 +18,12 @@
                         <q-popup-proxy >                    <!-- LineNumbers -->
                             <div class="q-pa-md" v-if="canSetLineNumbers"> 
                                 <div class="row no-wrap q-pa-none"> 
-                                    <div class="text-overline">DISPLAY</div>
+                                    <div class="text-overline">{{$t('CodeBlockContainer.Display')}}</div>
                                 </div>                  
                                 <div class="row no-wrap q-pl-md"> 
                                    <div class="col-7" >                                    
-                                        <div class="text-subtitle2">Lines</div>
-                                        <div class="text-caption text-blue-grey-4">Number of Visible lines or <b>auto</b>.</div>
+                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Lines')}}</div>
+                                        <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.Lines_detail')}}</div>
                                     </div>
                                     <div class="col-5 q-pl-sm" >                            
                                         <q-input
@@ -37,8 +37,8 @@
                                 </div>
                                 <div class="row no-wrap q-pl-md" v-if="canHaveAlternativeContent"> 
                                    <div class="col-7" >                                    
-                                        <div class="text-subtitle2">Prepopulate Answer</div>
-                                        <div class="text-caption text-blue-grey-4" lines="2">Define content that is displayed in a new answer.</div>
+                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Prepopulate')}}</div>
+                                        <div class="text-caption text-blue-grey-4" lines="2">{{$t('CodeBlockContainer.Prepopulate_detail')}}</div>
                                     </div>
                                     <div class="col-5 q-pl-sm" >                            
                                         <q-toggle
@@ -51,12 +51,12 @@
                             <!-- Playground Versioning -->
                             <div class="q-pa-md" v-if="isVersionedPlayground"> 
                                 <div class="row no-wrap q-pa-none"> 
-                                    <div class="text-overline">BEHAVIOUR</div>
+                                    <div class="text-overline">{{$t('CodeBlockContainer.Behaviour')}}</div>
                                 </div>                  
                                 <div class="row no-wrap q-pl-md"> 
                                    <div class="col-7" >                                    
-                                            <div class="text-subtitle2">Script Version</div>
-                                            <div class="text-caption text-blue-grey-4">API-Version for the Visualization Object.</div>
+                                            <div class="text-subtitle2">{{$t('CodeBlockContainer.ScriptV')}}</div>
+                                            <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.ScriptV_detail')}}</div>
                                     </div>
                                     <div class="col-5 q-pl-sm" >                            
                                             <q-select
@@ -69,8 +69,8 @@
 
                                 <div class="row no-wrap q-pl-md"> 
                                    <div class="col-7" >                                    
-                                            <div class="text-subtitle2">Auto Reset</div>
-                                            <div class="text-caption text-blue-grey-4">Recreate Canvas-Element before each run</div>
+                                            <div class="text-subtitle2">{{$t('CodeBlockContainer.AutoReset')}}</div>
+                                            <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.AutoReset_detail')}}</div>
                                     </div>
                                     <div class="col-5 q-pl-sm" >                            
                                             <q-toggle                                                
@@ -83,12 +83,12 @@
                             <!-- Positioning -->
                             <div class="q-pa-md" v-if="canDefinePlacement"> 
                                 <div class="row no-wrap q-pa-none"> 
-                                    <div class="text-overline">POSITIONING</div>
+                                    <div class="text-overline">{{$t('CodeBlockContainer.Positioning')}}</div>
                                 </div>                  
                                 <div class="row no-wrap q-pl-md q-pb-md"> 
                                     <div class="col-7" >
-                                        <div class="text-subtitle2">Width</div>
-                                        <div class="text-caption text-blue-grey-4">CSS Property for the canvas-width.</div>                                            
+                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Width')}}</div>
+                                        <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.Width_detail')}}</div>                                            
                                     </div>
                                     <div class="col-5 q-pl-sm" >
                                             <q-input
@@ -100,8 +100,8 @@
                                 </div>
                                 <div class="row no-wrap q-pl-md q-pb-md"> 
                                     <div class="col-7" >
-                                        <div class="text-subtitle2">Height</div>
-                                        <div class="text-caption text-blue-grey-4">CSS Property for the canvas-height.</div>                                            
+                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Height')}}</div>
+                                        <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.Height_detail')}}</div>                                            
                                     </div>
                                     <div class="col-5 q-pl-sm" >
                                             <q-input
@@ -113,8 +113,8 @@
                                 </div>
                                 <div class="row no-wrap q-pl-md"> 
                                     <div class="col-7" >
-                                        <div class="text-subtitle2">Alignment</div>
-                                        <div class="text-caption text-blue-grey-4">Horizontal Positioning of the canvas.</div>                                            
+                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Alignment')}}</div>
+                                        <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.Alignment_detail')}}</div>                                            
                                     </div>
                                     <div class="col-5 q-pl-sm" >
                                             <q-select
@@ -130,7 +130,7 @@
 
                     <q-btn @click="moveUp" :disable="!canMoveUp" icon="arrow_drop_up" push dense class="q-ml-md q-mr-xs"  color="orange-6" :ripple="{ center: true }"></q-btn>
                     <q-btn @click="moveDown" :disabled="!canMoveDown" icon="arrow_drop_down" push dense class="q-mr-md" color="orange-6" :ripple="{ center: true }" ></q-btn>
-                    <q-btn @click="removeBlock" label="Delete" icon="warning" push dense class="gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm" color="red-6" right :ripple="{ center: true }"></q-btn>
+                    <q-btn @click="removeBlock" :label="$t('CodeBlockContainer.Delete')" icon="warning" push dense class="gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm" color="red-6" right :ripple="{ center: true }"></q-btn>
                     <q-btn @click="removeBlock" icon="warning" push dense class="lt-sm q-mr-lg q-pr-none" color="red-6" right :ripple="{ center: true }"></q-btn>
                     <q-btn 
                         icon
@@ -165,38 +165,38 @@ export default {
             highlighted:false,            
             alignments:[
                 {
-                    label:'Start',
+                    label:this.$t('CodeBlockContainer.Start'),
                     value:'left'
                 },{
-                    label:'Center',
+                    label:this.$t('CodeBlockContainer.Center'),
                     value:'center'
                 },{
-                    label:'End',
+                    label:this.$t('CodeBlockContainer.End'),
                     value:'right'
                 }],
             scriptVersions:[
                 {
-                    label:'1.0 (original)',
+                    label:this.$t('CodeBlockContainer.ScriptVersion_1'),
                     value:'100'
                 },{
-                    label:'2.0 (since 2020)',
+                    label:this.$t('CodeBlockContainer.ScriptVersion_2'),
                     value:'101'
                 }],
             types:[
                 {
-                    label:'Visualization Canvas',
+                    label:this.$t('CodeBlockContainer.Canvas'),
                     value:'PLAYGROUND'
                 },{
-                    label:'Plain Text',
+                    label:this.$t('CodeBlockContainer.Text'),
                     value:'TEXT'
                 },{
-                    label:'Hidden Code Block',
+                    label:this.$t('CodeBlockContainer.Hidden'),
                     value:'BLOCK-hidden'
                 },{
-                    label:'Fixed Code Block',
+                    label:this.$t('CodeBlockContainer.Static'),
                     value:'BLOCK-static'
                 },{
-                    label:'Solution Block',
+                    label:this.$t('CodeBlockContainer.Block'),
                     value:'BLOCK'
                 }]
         }

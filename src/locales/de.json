@@ -1,3 +1,35 @@
 {
-    "hello": "German"
+    "CodeBlock": {
+        "Initial_Content": "Initial Content"
+    },
+    "CodeBlockContainer": {
+        "Display":"Display",
+        "Lines":"Lines",
+        "Lines_detail":"Number of Visible lines or <b>auto</b>.",
+        "Prepopulate":"Prepopulate Answer",
+        "Prepopulate_detail":"Define content that is displayed in a new answer.",
+        "Behaviour":"Behaviour",
+        "ScriptV":"Script Version",
+        "ScriptV_detail":"API-Version for the Visualization Object.",
+        "AutoReset":"Auto Reset",
+        "AutoReset_detail":"Recreate Canvas-Element for each run",
+        "Positioning":"Positioning",
+        "Width":"Width",
+        "Width_detail":"CSS Property for the canvas-width.",
+        "Height":"Height",
+        "Height_detail":"CSS Property for the canvas-height.",
+        "Alignment":"Alignment",
+        "Alignment_detail":"Horizontal Positioning of the canvas.",
+        "Delete":"Delete",
+        "Start":"Start",
+        "Center":"Center",
+        "End":"End",
+        "ScriptVersion_1":"1.0 (original)",
+        "ScriptVersion_2":"2.0 (since 2020)",
+        "Canvas":"Visualization Canvas",
+        "Text":"Plain Text",
+        "Hidden":"Hidden Code Block",
+        "Static":"Fixed Code Block",
+        "Block":"Solution Block"
+    }
 }
