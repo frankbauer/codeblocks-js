@@ -185,7 +185,9 @@
                             className:Vue.$tagger.className[m.type],
                             inclusiveLeft:true,
                             inclusiveRight:true,
-                            title:m.name
+                            title:m.name,
+                            startStyle:'tag-mark-start',
+                            endStyle:'tag-mark-end'
                         }
                     );
                 })
@@ -200,7 +202,9 @@
                                 className:Vue.$tagger.className[m.type],
                                 inclusiveLeft:true,
                                 inclusiveRight:true,
-                                title:m.name
+                                title:m.name,
+                                startStyle:'tag-mark-start',
+                                endStyle:'tag-mark-end'
                             }
                         );
                     })

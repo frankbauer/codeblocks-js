@@ -93,7 +93,7 @@ export default {
         }
     },
     computed:{
-        tagClass(){return Vue.$tagger.className.rnd}
+        tagClass(){return Vue.$tagger.className.rnd+' tag-mark-start tag-mark-end tag-mark-shadow'}
     },
     methods:{
         isVisible(nr){

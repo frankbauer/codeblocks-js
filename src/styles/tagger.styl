@@ -1,27 +1,39 @@
 @import './quasar.variables.styl'
 
 .random-tag-placeholder, .template-tag-placeholder, .template-tag-placeholder-noclick
-    padding-left:2px
-    padding-right:3px
-    padding-bottom:4px
-    padding-top:0px
-    border-radius: 4px   
+    position relative
+    padding-bottom 4px
+    padding-top 0px 
 .random-tag-placeholder
-    background-color: rgba(255, 255, 255, 0.75)
-    border:1px solid rgba(0,0,0,0.5)
-    box-shadow: 1px 1px 2px rgba(0,0,0,0.3)  
+    background-color  rgba(255, 255, 255, 0.75)
+    border 0px solid rgba(0,0,0,0.5)
+    border-top-width  1px
+    border-bottom-width  1px
+     
 span.random-tag-placeholder
-    color:$blue-grey-9!important
+    color $blue-grey-9!important
 span.random-tag-placeholder, span.template-tag-placeholder, span.template-tag-placeholder-noclick
-    padding-top:1px
+    padding-top 1px
 .template-tag-placeholder
-    cursor: pointer
-.template-tag-placeholder-noclick
-    padding-left: 3px
-    padding-bottom: 2px
+    cursor pointer
+.template-tag-placeholder-noclick    
+    padding-bottom  2px
 .template-tag-placeholder, .template-tag-placeholder-noclick
-    text-shadow:none!important
-    background-color: $pink-8
-    color:$blue-grey-11!important
-    box-shadow: 2px 2px 3px rgba(0,0,0,0.2) 
-    
+    text-shadow none!important
+    background-color  $pink-8
+    color $blue-grey-11!important
+    box-shadow  2px 2px 3px rgba(0,0,0,0.2) 
+.tag-mark-start
+    border-radius  4px 0 0 4px 
+    padding-left  2px
+    border-left-width  1px
+.tag-mark-end 
+    border-radius  0 4px 4px 0
+    padding-right  3px   
+    border-right-width  1px
+.tag-mark-start.tag-mark-end 
+    border-radius 4px
+.template-tag-placeholder-noclick.tag-mark-start
+    padding-left  3px
+.tag-mark-shadow
+    box-shadow 1px 1px 2px rgba(0,0,0,0.3)      
