@@ -3,7 +3,7 @@
     <q-popup-proxy transition-show="flip-up" transition-hide="flip-down" @before-show="onShow">                    <!-- LineNumbers -->
         <div class="q-pa-md"> 
             <div class="row no-wrap q-pa-none"> 
-                <div class="text-overline">Edit Set {{nr}}</div>
+                <div class="text-overline">{{$t('RandomizerSetEditor.Caption', {nr:nr})}}</div>
             </div>                  
             <div class="q-pl-md" v-for="tag in tagSet.values" v-bind:key="tag.tag"> 
                <q-input

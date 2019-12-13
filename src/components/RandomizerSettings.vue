@@ -1,12 +1,12 @@
 <template>
   <div>
       <q-card>
-          <q-card-section class="text-overline">Randomizer <q-toggle v-model="options.randomizer.active" /></q-card-section>
+          <q-card-section class="text-overline">{{$t('RandomizerSettings.Caption')}} <q-toggle v-model="options.randomizer.active" /></q-card-section>
 
           <q-slide-transition>
             <q-card-section class="q-ml-md" v-show="options.randomizer.active">
                 <div class="tagList">
-                    <div class="text-subtitle2">Available Tags <q-btn color="primary" class="gt-xs" size="12px" flat dense round icon="add" @click="addTag" /></div>
+                    <div class="text-subtitle2">{{$t('RandomizerSettings.Available')}} <q-btn color="primary" class="gt-xs" size="12px" flat dense round icon="add" @click="addTag" /></div>
                     <div class="row q-mb-sm">
                         <div :class="`tagItem q-ml-sm ${tagClass}`" v-for="(tag, i) in options.randomizer.knownTags" v-bind:key="tag">
                             <div class="row no-wrap">
@@ -23,7 +23,7 @@
                 </div>   
 
                 <div class="tagList q-mt-lg">
-                    <div class="text-subtitle2">Defined Sets <q-btn color="primary" class="gt-xs" size="12px" flat dense round icon="add" @click="addSet" /></div>
+                    <div class="text-subtitle2">{{$t('RandomizerSettings.Sets')}} <q-btn color="primary" class="gt-xs" size="12px" flat dense round icon="add" @click="addSet" /></div>
                     
                     <q-list class="setList">
                         <q-item v-for="(s, i) in options.randomizer.sets" v-bind:key="s.uuid">

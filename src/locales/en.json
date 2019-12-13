@@ -1,3 +1,79 @@
 {
-    "hello": "English"
+    "CodeBlock": {
+        "Initial_Content": "Initial Content"
+    },
+    "CodeBlockContainer": {
+        "Display":"Display",
+        "Lines":"Lines",
+        "Lines_detail":"Number of Visible lines or <b>auto</b>.",
+        "Prepopulate":"Prepopulate Answer",
+        "Prepopulate_detail":"Define content that is displayed in a new answer.",
+        "Behaviour":"Behaviour",
+        "ScriptV":"Script Version",
+        "ScriptV_detail":"API-Version for the Visualization Object.",
+        "AutoReset":"Auto Reset",
+        "AutoReset_detail":"Recreate Canvas-Element for each run",
+        "Positioning":"Positioning",
+        "Width":"Width",
+        "Width_detail":"CSS Property for the canvas-width.",
+        "Height":"Height",
+        "Height_detail":"CSS Property for the canvas-height.",
+        "Alignment":"Alignment",
+        "Alignment_detail":"Horizontal Positioning of the canvas.",
+        "Delete":"Delete",
+        "Start":"Start",
+        "Center":"Center",
+        "End":"End",
+        "ScriptVersion_1":"1.0 (original)",
+        "ScriptVersion_2":"2.0 (since 2020)",
+        "Canvas":"Visualization Canvas",
+        "Text":"Plain Text",
+        "Hidden":"Hidden Code Block",
+        "Static":"Fixed Code Block",
+        "Block":"Solution Block",
+        "Confirm":"Confirm",
+        "DeleteQuestion":"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?"
+    },
+    "CodeBlocks":{
+        "run_hint":"Press <code>Ctrl</code>+<code>W</code> when in a code box to run code.",
+        "run":"Run",
+        "AddBlock":"Add new Block"
+    },
+    "CodeBlocksSettings":{
+        "Language":"Language",
+        "AllowExec":"Allow Code Execution",
+        "CVersion":"Version",
+        "RunTime":"Max. Runtime in ms.",
+        "Output":"Output",
+        "MaxCharacters":"Max. Output Characters",
+        "Parser":"Output Parser",
+        "Themes":"Themes",
+        "TGeneral":"General Theme",
+        "TSolution":"Solution Theme",
+        "Libraries":"Libraries",
+        "DomLibs":"DOM-Libraries",
+        "WorkLibs":"Worker-Libraries",
+        "PAutomatic":"Automatisch",
+        "PText":"Text Passthrough",
+        "PJSON":"JSON",
+        "PMagic":"Text+JSON (seperated by '\\n\\n&lt;JSON>\\n')",
+        "NumberErr":"Muss ein gültiger Zahlenwert sein"
+    },
+    "CodePlayground":{
+        "InvalidJson":"Output is not a valid JSON-Object",
+        "Output":"Output:",
+        "Message":"Message:"
+    },
+    "Tagger":{
+        "ConfirmRepl":"Confirm Tag Replacement",
+        "ConfirmReplMsg":"Do you really want to replace <b>all</b> occurrences of {name} with the below value?"
+    },
+    "RandomizerSetEditor":{
+        "Caption":"Edit Set {nr}"
+    },
+    "RandomizerSettings":{
+        "Caption":"Randomizer",
+        "Available":"Available Tags",
+        "Sets":"Defined Sets"
+    }
 }

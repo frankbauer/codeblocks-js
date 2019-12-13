@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import i18n from '../plugins/i18n'
 //!!! make sure to also change the expression in ilias-builder.js !!!
 const randomAndTemplateTag = /\{(:|!)([\w]+)}/g
 
@@ -97,9 +97,10 @@ Vue.$tagger = new Vue({
             })
         },
         clickFunction: function(name, tagEl, scopeUUID){
+            console.log(i18n)
             Vue.prototype.$q.dialog({
-                title: 'Confirm Tag Replacement',
-                message: 'Do you really want to replace <b>all</b> occurances of the <span class="template-tag-placeholder-noclick">'+name+'</span> Template with the below value?',
+                title: i18n.t('Tagger.ConfirmRepl'),
+                message: i18n.t('Tagger.ConfirmReplMsg', {name:'<span class="template-tag-placeholder-noclick">'+name+'</span>'}),
                 html: true,
                 persistent: true,
                 prompt: {

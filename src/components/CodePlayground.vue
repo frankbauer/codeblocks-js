@@ -245,8 +245,8 @@ export default {
                             jStr = jStr.replace(/</g, '&lt;');
 
                            this.$q.dialog({
-                                title: 'Output is not a valid JSON-Object',
-                                message: '<span class="text-caption jsonErrTitle">Output:</span><div class="jsonErrObj">' + jStr + '</div>\n<span class="text-caption jsonErrTitle">Message:</span><div class="jsonErr">' + val.parseError + '</div>',
+                                title: this.$t('CodePlayground.InvalidJson'),
+                                message: '<span class="text-caption jsonErrTitle">'+this.$t('CodePlayground.Output')+'</span><div class="jsonErrObj">' + jStr + '</div>\n<span class="text-caption jsonErrTitle">'+this.$t('CodePlayground.Message')+'</span><div class="jsonErr">' + val.parseError + '</div>',
                                 html: true
                             }).onOk(() => {
                                 // console.log('OK')

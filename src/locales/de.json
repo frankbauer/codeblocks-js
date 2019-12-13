@@ -1,35 +1,79 @@
 {
     "CodeBlock": {
-        "Initial_Content": "Initial Content"
+        "Initial_Content": "Lösungsvorgabe"
     },
     "CodeBlockContainer": {
-        "Display":"Display",
-        "Lines":"Lines",
-        "Lines_detail":"Number of Visible lines or <b>auto</b>.",
-        "Prepopulate":"Prepopulate Answer",
-        "Prepopulate_detail":"Define content that is displayed in a new answer.",
-        "Behaviour":"Behaviour",
-        "ScriptV":"Script Version",
-        "ScriptV_detail":"API-Version for the Visualization Object.",
-        "AutoReset":"Auto Reset",
-        "AutoReset_detail":"Recreate Canvas-Element for each run",
-        "Positioning":"Positioning",
-        "Width":"Width",
-        "Width_detail":"CSS Property for the canvas-width.",
-        "Height":"Height",
-        "Height_detail":"CSS Property for the canvas-height.",
-        "Alignment":"Alignment",
-        "Alignment_detail":"Horizontal Positioning of the canvas.",
-        "Delete":"Delete",
-        "Start":"Start",
-        "Center":"Center",
-        "End":"End",
+        "Display":"Darstellung",
+        "Lines":"Zeilen",
+        "Lines_detail":"Anzahl sichtbarer Zeilen oder <b>auto</b>.",
+        "Prepopulate":"Antwort Vorbelegen",
+        "Prepopulate_detail":"Lösungsvorgabe für neue Fragen angeben.",
+        "Behaviour":"Verhalten",
+        "ScriptV":"Script-Version",
+        "ScriptV_detail":"API-Version des Visualisierungsobjektes.",
+        "AutoReset":"Autom. Reset",
+        "AutoReset_detail":"Canvas-Element bei jeder Ausführung neu erzeugen.",
+        "Positioning":"Positionierung",
+        "Width":"Breite",
+        "Width_detail":"CSS-Eigenschaft für die Breite",
+        "Height":"Höhe",
+        "Height_detail":"CSS-Eigenschaft für die Höhe",
+        "Alignment":"Ausrichtung",
+        "Alignment_detail":"Horizontale Ausrichtung des Canvas-Element",
+        "Delete":"Löschen",
+        "Start":"Anfang",
+        "Center":"Mitte",
+        "End":"Ende",
         "ScriptVersion_1":"1.0 (original)",
-        "ScriptVersion_2":"2.0 (since 2020)",
-        "Canvas":"Visualization Canvas",
-        "Text":"Plain Text",
-        "Hidden":"Hidden Code Block",
-        "Static":"Fixed Code Block",
-        "Block":"Solution Block"
+        "ScriptVersion_2":"2.0 (seit 2020)",
+        "Canvas":"Visualisierungsbereich",
+        "Text":"Text",
+        "Hidden":"Versteckter Quellcode",
+        "Static":"Statischer Quellcode",
+        "Block":"Antwortfeld/Lösung",
+        "Confirm":"Bestätigung",
+        "DeleteQuestion":"Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?"
+    },
+    "CodeBlocks":{
+        "run_hint":"<code>Ctrl</code>+<code>W</code> drücken um Code auszuführen",
+        "run":"Ausführen",
+        "AddBlock":"Neuen Block Anlegen"
+    },
+    "CodeBlocksSettings":{
+        "Language":"Sprache",
+        "AllowExec":"Ausführung zulassen",
+        "CVersion":"Version",
+        "RunTime":"Max. Laufzeit in ms.",
+        "Output":"Ausgabe",
+        "MaxCharacters":"Max. Textlänge",
+        "Parser":"Ausgabe Behandlung",
+        "Themes":"Stile",
+        "TGeneral":"Allgemeine Darstellung",
+        "TSolution":"Lösungsdarstellung",
+        "Libraries":"Bibliotheken",
+        "DomLibs":"DOM-Bibliotheken",
+        "WorkLibs":"Worker-Bibliotheken",
+        "PAutomatic":"Automatisch",
+        "PText":"Als Text",
+        "PJSON":"Als JSON",
+        "PMagic":"Text+JSON (getrennt mit '\\n\\n&lt;JSON>\\n')",
+        "NumberErr":"Must be a valid Number."
+    },
+    "CodePlayground":{
+        "InvalidJson":"Ausgabe ist nicht JSON-Formatiert",
+        "Output":"Ausgabe:",
+        "Message":"Meldung:"
+    },
+    "Tagger":{
+        "ConfirmRepl":"Ersetzung Bestätigen",
+        "ConfirmReplMsg":"Sollen <b>alle</b> vorkomnisse von {name} mit dem untenstehenden Wert ersetzt werden?"
+    },
+    "RandomizerSetEditor":{
+        "Caption":"Bearbeit Zusammenstellung {nr}"
+    },
+    "RandomizerSettings":{
+        "Caption":"Würfler",
+        "Available":"Definierte Platzhalter",
+        "Sets":"Zusammenstellungen"
     }
 }

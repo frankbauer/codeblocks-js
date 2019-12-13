@@ -2,31 +2,31 @@
     <div class="row q-pa-none q-mb-md">
             <div class="col-xs-12 col-sm-4">
                 <q-card class="q-mb-sm q-mr-sm-xs">
-                    <q-card-section class="text-overline">Language</q-card-section>
+                    <q-card-section class="text-overline">{{$t('CodeBlocksSettings.Language')}}</q-card-section>
                     <q-card-section class="q-ml-md">                        
                         <div class="row">
                             <div class="col-12">
-                                <q-toggle v-model="runCode" :disabled="!languageHasCompiler" label="Allow Code Execution"/>
+                                <q-toggle v-model="runCode" :disabled="!languageHasCompiler" :label="$t('CodeBlocksSettings.AllowExec')"/>
                             </div>
                             <div :class="`col-xs-12 col-md-${runCode?8:12} ${runCode?'q-pr-md-sm':''}`">
                                 <q-select
                                     :options="compiledLanguages"
                                     v-model="compilerLanguageObj"  
-                                    label="Language"   
+                                    :label="$t('CodeBlocksSettings.Language')"   
                                 /> 
                             </div> 
                             <div class="col-xs-12 col-md-4" v-if="runCode">
                                 <q-select
                                     :options="compilerVersions"
                                     v-model="compilerVersion"                            
-                                    label="Version"    
+                                    :label="$t('CodeBlocksSettings.CVersion')"    
                                 />                      
                             </div>
                             <div class="col-12" v-if="runCode">
                                 <q-input
                                     v-model="maxRuntime"
                                     :rules="[validNumber]"
-                                    label="Max. Runtime in ms."                            
+                                    :label="$t('CodeBlocksSettings.RunTime')"                            
                                     maxlength="6"
                                 />
                             </div> 
@@ -38,14 +38,14 @@
             <div class="col-xs-12 col-sm-4">
                 <q-slide-transition>
                     <q-card class="q-mb-sm q-mr-sm-xs" v-if="runCode">
-                        <q-card-section class="text-overline">Output</q-card-section>
+                        <q-card-section class="text-overline">{{$t('CodeBlocksSettings.Output')}}</q-card-section>
                         <q-card-section class="q-ml-md">
                             <div class="row">                               
                                <div class="col-xs-12 col-md-6 col-12 q-pr-md-sm">
                                     <q-input
                                         v-model="maxCharacters"
                                         :rules="[validNumber]"
-                                        label="Max. Output Characters"                            
+                                        :label="$t('CodeBlocksSettings.MaxCharacters')"                            
                                         maxlength="6"
                                     />
                                 </div> 
@@ -53,7 +53,7 @@
                                     <q-select
                                         :options="outputParsers"
                                         v-model="outputParser"  
-                                        label="Output Parser"
+                                        :label="$t('CodeBlocksSettings.Parser')"
                                     /> 
                                 </div> 
                             </div>
@@ -61,21 +61,21 @@
                     </q-card>
                 </q-slide-transition>
                 <q-card class="q-mr-sm-xs">
-                    <q-card-section class="text-overline">Themes</q-card-section>
+                    <q-card-section class="text-overline">{{$t('CodeBlocksSettings.Themes')}}</q-card-section>
                     <q-card-section class="q-ml-md">
                         <div class="row" dense>
                             <div class="col-xs-12 col-md-6 q-pr-md-sm">
                                 <q-select
                                     :options="themes"
                                     v-model="codeTheme"  
-                                    label="General Theme"
+                                    :label="$t('CodeBlocksSettings.TGeneral')"
                                 /> 
                             </div>
                             <div class="col-xs-12 col-md-6">
                                 <q-select
                                     :options="themes"
                                     v-model="solutionTheme"  
-                                    label="Solution Theme"
+                                    :label="$t('CodeBlocksSettings.TSolution')"
                                 /> 
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                                         use-chips
                                         stack-label  
                                         deletable-chips                      
-                                        label="DOM-Libraries"
+                                        :label="$t('CodeBlocksSettings.DomLibs')"
                                     /> 
                                 </div> 
                                 <div class="col-xs-12 q-my-none q-py-none" v-if="runCode && workerLibraries.length>0">
@@ -109,7 +109,7 @@
                                         use-chips
                                         stack-label
                                         deletable-chips                        
-                                        label="Worker-Libraries" 
+                                        :label="$t('CodeBlocksSettings.WorkLibs')" 
                                     />                      
                                 </div>
                             </div>
@@ -148,10 +148,10 @@ export default {
                 {label:"mdn like", value:"mdn-like"}
             ],
             outputParsers:[
-                {label:"Automatic", value:"auto"},
-                {label:"Text Passthrough", value:"text"},
-                {label:"JSON", value:"json"},
-                {label:"Text+JSON", value:"magic"}
+                {label:this.$t('CodeBlocksSettings.PAutomatic'), value:"auto"},
+                {label:this.$t('CodeBlocksSettings.PText'), value:"text"},
+                {label:this.$t('CodeBlocksSettings.PJSON'), value:"json"},
+                {label:this.$t('CodeBlocksSettings.PMagic'), value:"magic"}
             ]
         }
     },

@@ -64,17 +64,17 @@
 
         <div class="row justify-end" v-if="editMode">
             <div >
-                <q-btn @click="addNewBlock" push color="green">Add new Block <q-icon name="library_add" class="q-ml-sm"/></q-btn>
+                <q-btn @click="addNewBlock" push color="green">{{$t('CodeBlocks.AddBlock')}} <q-icon name="library_add" class="q-ml-sm"/></q-btn>
             </div>
         </div>
         
         <div :class="`runner ${editMode?'q-pt-lg q-mx-lg':''}`" v-if="canRun">
             <div class="row runnerState">
                 <q-btn :loading="!isReady" :disabled="!isReady" color="primary" class="white--text" @click="run" :ripple="{ center: true }" style="border-radius:0px" >
-                    Run
+                    {{$t('CodeBlocks.run')}}
                     <q-icon right dark name="play_arrow"></q-icon> 
                      <q-tooltip :delay="200" v-if="editMode">
-                        Press <code>Ctrl</code>+<code>W</code> when in a code box to run code.
+                        {{$t('CodeBlocks.run_hint')}}
                      </q-tooltip>                   
                 </q-btn>
                 

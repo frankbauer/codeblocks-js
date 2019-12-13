@@ -23,7 +23,7 @@
                                 <div class="row no-wrap q-pl-md"> 
                                    <div class="col-7" >                                    
                                         <div class="text-subtitle2">{{$t('CodeBlockContainer.Lines')}}</div>
-                                        <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.Lines_detail')}}</div>
+                                        <div class="text-caption text-blue-grey-4" v-html="$t('CodeBlockContainer.Lines_detail')"></div>
                                     </div>
                                     <div class="col-5 q-pl-sm" >                            
                                         <q-input
@@ -230,8 +230,8 @@ export default {
             const self = this;
             self.highlighted = true;
             this.$q.dialog({
-                title: 'Confirm',
-                message: 'Do you really want to delete the <span class="highlightedCard sample">highlighted</span> Block?',
+                title: this.$t('CodeBlockContainer.Confirm'),
+                message: this.$t('CodeBlockContainer.DeleteQuestion'),
                 html: true,
                 ok: {
                     push: true,
