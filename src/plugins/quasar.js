@@ -17,6 +17,10 @@ import '@quasar/extras/animate/zoomInUp.css'
 import  Quasar  from 'quasar'
 import  {Dialog}  from 'quasar'
 
+let lang = document.getElementsByTagName('html')[0].getAttribute('lang');
+import langDe from 'quasar/dist/lang/de.umd.min.js'
+import langEn from 'quasar/dist/lang/en-gb.umd.min.js'
+
 
 Vue.use(Quasar, {
   config: {},
@@ -24,5 +28,7 @@ Vue.use(Quasar, {
   directives: { /* not needed if importStrategy is not 'manual' */ },
   plugins: {
     Dialog
-  }
+  },
+  lang: lang=='de'? langDe : langEn 
  })
+ Quasar.lang.set(lang=='de'? langDe : langEn )

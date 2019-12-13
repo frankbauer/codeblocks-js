@@ -10,7 +10,6 @@ String.prototype.replaceRec = function (pattern, replacement) {
 };
 
 import Vue from 'vue'
-import './plugins/i18n'
 import './plugins/uuid'
 import './plugins/quasar'
 import './plugins/codemirror';
