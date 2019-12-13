@@ -87,7 +87,7 @@
             <q-slide-transition>
                 <div class="col-xs-12 col-sm-4" v-if="runCode">
                     <q-card>
-                        <q-card-section class="text-overline">Libraries</q-card-section>
+                        <q-card-section class="text-overline">{{$t('CodeBlocksSettings.Libraries')}}</q-card-section>
                         <q-card-section class="q-ml-md">
                             <div class="row q-my-none q-py-none" dense>
                                 <div class="col-xs-12 q-my-none q-py-none">
