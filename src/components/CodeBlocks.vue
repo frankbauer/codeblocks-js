@@ -74,7 +74,7 @@
                     {{$t('CodeBlocks.run')}}
                     <q-icon right dark name="play_arrow"></q-icon> 
                      <q-tooltip :delay="200" v-if="editMode">
-                        {{$t('CodeBlocks.run_hint')}}
+                        <span v-html="$t('CodeBlocks.run_hint')"></span>
                      </q-tooltip>                   
                 </q-btn>
                 
