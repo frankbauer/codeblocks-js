@@ -362,7 +362,15 @@ export default {
                     static:v=='BLOCK-static',                    
                     id:this.block.id
                 }
-                ret.hasCode = ret.type=='BLOCK';                
+                ret.hasCode = ret.type=='BLOCK'; 
+                
+                if (ret.type=="PLAYGROUND" && this.block.content==='' && this.editMode){
+                    if (this.block.scriptVersion == 100){
+                        this.block.content = "{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}"
+                    } else {
+                        this.block.content = "{\n    init: function(canvasElement) {\n\n    },\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}"
+                    }                    
+                }
                 
                 this.$emit('type-change', ret);
             }

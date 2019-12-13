@@ -209,6 +209,7 @@ class CodeBlocksManager {
             block.shouldAutoreset = block.shouldAutoreset !== undefined && block.shouldAutoreset != "false" && block.shouldAutoreset != "0";
 
             block.expanded = block.expanded === undefined || (block.expanded != "false" && block.expanded != "0");
+            block.codeExpanded = block.codeExpanded === undefined || ( block.codeExpanded != "false" && block.codeExpanded != "0");
 
             
             block.noContent = block.noContent !== undefined && block.noContent != "false" && block.noContent != "0";
@@ -231,8 +232,6 @@ class CodeBlocksManager {
                 block.height = bl.getAttribute('height')?bl.getAttribute('height'):block.height
                 block.align = bl.getAttribute('align')?bl.getAttribute('align'):block.align   
                 block.version = bl.getAttribute('data-version')?bl.getAttribute('data-version'):'101'
-
-                block.codeExpanded = block.codeExpanded === undefined || ( block.codeExpanded != "false" && block.codeExpanded != "0");
             
             } else if (block.type == 'BLOCK') {
                 block.hasCode = true;                
@@ -292,6 +291,7 @@ class CodeBlocksManager {
                                         uuid: uuid.v4(),
                                         parentID: data.id,
                                         expanded: true,
+                                        codeExpanded: true,
                                         width: '100%',
                                         height: '200px',
                                         align: 'center',
