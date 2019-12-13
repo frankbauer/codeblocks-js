@@ -4,8 +4,6 @@ import Quasar from 'quasar'
 
 let lang = document.getElementsByTagName('html')[0].getAttribute('lang');
 lang = lang.split('-', 2)[0]
-
-console.log(lang, document.getElementsByTagName('html')[0].getAttribute('lang'));
 Vue.use(VueI18n)
 
 function loadLocaleMessages () {
