@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import hljs from 'highlight.js/lib/highlight'
-import 'highlight.js/styles/ocean.css'
+//import 'highlight.js/styles/ocean.css'
+import 'highlight.js/styles/tomorrow.css'
 import '../styles/highlight.styl'
 
 hljs.configure({useBR: false});

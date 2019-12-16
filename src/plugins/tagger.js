@@ -59,7 +59,7 @@ Vue.$tagger = new Vue({
         processString: function(str, scopeUUID){        
             return str.replace(randomAndTemplateTag, (m0, m1, m2)=>{
                 const className = m1===':'?this.className.rnd:this.className.templ;
-                return `<span class="q-mb-xs ${className}" >` + m0 + '</span>';
+                return `<span class="q-mb-xs  tag-mark-start tag-mark-end ${className}" >` + m0 + '</span>';
             });            
         },       
         hookClick: function(el, scopeUUID){
