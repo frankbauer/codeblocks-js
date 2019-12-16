@@ -35,7 +35,7 @@
         "DeleteQuestion":"Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?"
     },
     "CodeBlocks":{
-        "run_hint":"<code>Ctrl</code>+<code>W</code> drücken um Code auszuführen",
+        "run_hint":"<code>Ctrl</code>+<code>W</code> oder <code>Ctrl</code>+<code>J</code> drücken um Code auszuführen",
         "run":"Ausführen",
         "AddBlock":"Neuen Block Anlegen"
     },

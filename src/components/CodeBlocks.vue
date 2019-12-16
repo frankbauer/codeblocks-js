@@ -395,8 +395,10 @@
                 )
             },
             onkey(event){
-                if (this.editMode && event.ctrlKey && event.key==='w'){
+                if (this.editMode && (event.ctrlKey || event.metaKey) && (event.key==='w' || event.key==='j')){
                     this.run();
+                    event.preventDefault();
+                    return false;
                 }
             }
         },
@@ -411,7 +413,7 @@
             this.didInitialize = true;
 
             if (this.editMode)
-                window.addEventListener('keydown', this.onkey)
+                window.addEventListener('keydown', this.onkey, false)
         },
         beforeDestroy(){
             window.removeEventListener('keydown', this.onkey)

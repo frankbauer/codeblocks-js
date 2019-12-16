@@ -35,7 +35,7 @@
         "DeleteQuestion":"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?"
     },
     "CodeBlocks":{
-        "run_hint":"Press <code>Ctrl</code>+<code>W</code> when in a code box to run code.",
+        "run_hint":"Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.",
         "run":"Run",
         "AddBlock":"Add new Block"
     },
