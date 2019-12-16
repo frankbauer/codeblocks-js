@@ -265,7 +265,9 @@ export default {
 
                         //construct a split output object
                         if (result === undefined && val.processedOutput.type!='text'){
-                            result = val.processedOutput.text
+                            if (!this.originalMode){
+                                result = val.processedOutput.text
+                            }
                         }      
                         
                         if (result !== undefined){
