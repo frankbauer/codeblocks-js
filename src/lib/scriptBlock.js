@@ -60,7 +60,7 @@ class ScriptBlock {
           //we also return a function to make and call (.call({})) it with a clean object 
           //to ensure that 'this' is will allways be in a defined state inside the users code
           if (this.requestsOriginalVersion())
-            this.fkt = new Function('              return function(){ return {o:' + code + '}.o}.call({})'); 
+            this.fkt = new Function('let usestric; return function(){ return {o:' + code + '}.o}.call({})'); 
           else
             this.fkt = new Function('"use strict"; return function(){ return {o:' + code + '}.o}.call({})');
           this.obj = this.fkt();
