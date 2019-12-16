@@ -28,9 +28,9 @@
         "ScriptVersion_2":"2.0 (since 2020)",
         "Canvas":"Visualization Canvas",
         "Text":"Plain Text",
-        "Hidden":"Hidden Code Block",
-        "Static":"Fixed Code Block",
-        "Block":"Solution Block",
+        "Hidden":"Code (Hidden)",
+        "Static":"Code (Static)",
+        "Block":"Solution",
         "Confirm":"Confirm",
         "DeleteQuestion":"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?"
     },

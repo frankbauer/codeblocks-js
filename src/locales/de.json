@@ -28,8 +28,8 @@
         "ScriptVersion_2":"2.0 (seit 2020)",
         "Canvas":"Visualisierungsbereich",
         "Text":"Text",
-        "Hidden":"Versteckter Quellcode",
-        "Static":"Statischer Quellcode",
+        "Hidden":"Quellcode (Versteckt)",
+        "Static":"Quellcode (Angabe)",
         "Block":"Antwortfeld/Lösung",
         "Confirm":"Bestätigung",
         "DeleteQuestion":"Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?"
