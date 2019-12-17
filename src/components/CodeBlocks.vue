@@ -26,8 +26,7 @@
             @script-version-change="onScriptVersionChange"
             @move-up="moveUp"
             @move-down="moveDown"
-            @remove-block="removeBlock"
-            @mounted="didMountChild"
+            @remove-block="removeBlock"            
             @auto-reset-change="onSetAutoReset">              
             
                 <CodeBlock 
@@ -38,7 +37,8 @@
                     :visibleLines="block.visibleLines" 
                     :editMode="editMode" 
                     :readonly="readonly"
-                    :tagSet="activeTagSet"                    
+                    :tagSet="activeTagSet" 
+                    @ready="blockBecameReady"                   
                     @build="run" />
 
                 <CodePlayground 
@@ -49,17 +49,20 @@
                     :theme="themeForBlock(block)" 
                     :tagSet="activeTagSet"
                     @changeOutput="onPlaygroundChangedOutput" 
+                    @ready="blockBecameReady" 
                     :eventHub="eventHub" />
 
                 <SimpleText 
                     v-else-if="block.type=='TEXT'" 
                     v-model="block.content" 
+                    :block="block" 
                     :previewValue="block.actualContent()"
                     :editMode="editMode"
                     :name="`block[${block.parentID}][${block.id}]`"
                     :scopeUUID="block.scopeUUID"
                     :tagSet="activeTagSet"
-                    :language="language" />
+                    :language="language"
+                    @ready="blockBecameReady"  />
         </CodeBlockContainer>
 
         <div class="row justify-end" v-if="editMode">
@@ -210,15 +213,14 @@
             }
         },
         methods: {
-            
-            didMountChild(){
-                let mountCount = this.blockInfo.blocks.map(b => b.mountCount).reduce((p,c) => p+c, 0);
-                //console.log("mounted Blocks", mountCount)
-                if (mountCount == this.blockInfo.blocks.length){
+            blockBecameReady(){
+                let readyCount = this.blockInfo.blocks.map(b => b.readyCount).reduce((p,c) => p+c, 0);
+                if (readyCount == this.blockInfo.blocks.length){
                     this.$nextTick(()=>{
                         this.eventHub.$emit('all-mounted', {  })
                     })
                 }
+                console.log("Ready", readyCount, this.blockInfo.blocks.length);
             },
             tagSet(nr){
                 return this.blockInfo.randomizer.sets[nr]

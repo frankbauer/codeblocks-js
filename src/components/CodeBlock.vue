@@ -346,10 +346,11 @@
                 this.updateDiagnosticDisplay();
             }
         },
-        mounted() {
-            this.updateHeight();
-
-            
+        created(){
+            this.$options.readyWhenMounted = false;
+        },
+        mounted() {            
+            this.updateHeight();            
 
             if (this.editMode) {
                 console.log("Attach")

@@ -267,7 +267,7 @@ export default {
                 let obj = {};
                 Object
                     .keys(this.block)
-                    .filter(k => k.indexOf('$')!=0 && k.indexOf('_')!=0 && k!='obj' && k!='errors' && k!='content' && k!='firstLine' && k!='nextLine' && k!='lineCount' && k!='hasCode' && k!='isLast' && k!='mountCount' && k!='noContent' && k!='uuid' && k!='scopeUUID')
+                    .filter(k => k.indexOf('$')!=0 && k.indexOf('_')!=0 && k!='obj' && k!='errors' && k!='content' && k!='firstLine' && k!='nextLine' && k!='lineCount' && k!='hasCode' && k!='isLast' && k!='readyCount' && k!='noContent' && k!='uuid' && k!='scopeUUID')
                     .forEach(k => obj[k] = this.block[k])
                 
                 return JSON.stringify(obj)
@@ -415,14 +415,6 @@ export default {
                 });
             }
         }
-    },
-    mounted(){
-        //console.log("Mounted", this.block.id);
-        this.block.mountCount++;
-        this.$emit("mounted", {});
-    },
-    beforeDestroy(){
-        this.block.mountCount--;
     }
 }
 </script>

@@ -8,7 +8,9 @@
 <script>
 import Vue from 'vue'
 import TipTap from './TipTap'
+import BaseBlock from './BaseBlock'
 export default {
+    extends: BaseBlock,
     name:"simpletext",
     components:{TipTap},
     props:{

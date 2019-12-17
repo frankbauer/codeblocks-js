@@ -30,7 +30,8 @@
             :theme="options.theme" 
             :mode="options.mode"
             :visibleLines="visibleLinesNow" 
-            :editMode="this.editMode"             
+            :editMode="this.editMode" 
+            :muteReadyState="true"            
             
             @code-changed-in-edit-mode="onCodeChange"
         />
@@ -45,10 +46,12 @@ import 'codemirror/lib/codemirror.css'
 //helper to reset the canvas area if needed
 import Vue from 'vue'
 import PlaygroundCanvas from './PlaygroundCanvas'
+import BaseBlock from './BaseBlock'
 const PlaygroundCanvasCtor = Vue.extend(PlaygroundCanvas)
 
 import CodeBlock from './CodeBlock'
 export default {
+    extends:BaseBlock,
     name:"codePlayground",
     components:{PlaygroundCanvas, CodeBlock},
     props:{

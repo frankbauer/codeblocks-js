@@ -196,7 +196,7 @@ class CodeBlocksManager {
                 width: '100%',
                 height: '200px',
                 align: 'center',
-                mountCount: 0,
+                readyCount: 0,
                 obj: null,                
                 errors:[]
             }
@@ -299,8 +299,8 @@ class CodeBlocksManager {
                                         readonly: false,
                                         static: true,
                                         hidden: false,
-                                        version: 101, 
-                                        mountCount: 0,               
+                                        version: 101,  
+                                        readyCount: 0,              
                                         errors:[],
                                         scopeUUID: data.scopeUUID,
                                         scopeSelector: data.scopeSelector
