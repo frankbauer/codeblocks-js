@@ -368,7 +368,7 @@ export default {
                     if (this.block.scriptVersion == 100){
                         this.block.content = "{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}"
                     } else {
-                        this.block.content = "{\n    init: function(canvasElement) {\n\n    },\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}"
+                        this.block.content = "{\n    init: function(canvasElement, outputElement, scope) {\n\n    },\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}"
                     }                    
                 }
                 

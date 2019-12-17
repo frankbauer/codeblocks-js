@@ -200,7 +200,7 @@ export default {
             if (reInitCode) {
                 this.initAndRebuildErrors = [];
                 let doInit = ()=>{
-                    this.block.obj.init($(this.canvas))               
+                    this.block.obj.init($(this.canvas), $(this.block.scopeSelector)) 
                     if (this.updateErrors()){
                         this.initAndRebuildErrors = this.block.obj.err;
                         this.block.obj.invalidate();

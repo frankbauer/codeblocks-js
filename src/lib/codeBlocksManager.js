@@ -301,7 +301,9 @@ class CodeBlocksManager {
                                         hidden: false,
                                         version: 101, 
                                         mountCount: 0,               
-                                        errors:[]
+                                        errors:[],
+                                        scopeUUID: data.scopeUUID,
+                                        scopeSelector: data.scopeSelector
                                     }
                                     data.blocks.push(self.constructBlock(data, block));
                                 }
@@ -332,6 +334,7 @@ export default {
                 cbm.data.scopeUUID = scope.getAttribute('uuid');
                 cbm.data.blocks.forEach(b => {
                     b.scopeUUID = cbm.data.scopeUUID
+                    b.scopeSelector = cbm.data.scopeSelector
                 })
             }
             

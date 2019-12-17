@@ -76,11 +76,17 @@ class ScriptBlock {
       this.err.push(jsErrorParser(e));
     }
 
-    init(canvasElement, outputElement){
+    init(canvasElement, scope){
       if (this.obj===undefined) return;
       try {
-        console.log("!!! INIT !!!");        
-        this.obj.init(canvasElement);
+        console.log("!!! INIT !!!");   
+        if (this.requestsOriginalVersion()) {     
+          this.obj.init(canvasElement); 
+        } else {
+          let outputElement = undefined;
+          if (scope) outputElement = scope.find('div.runner pre.output')
+          this.obj.init(canvasElement, outputElement, scope); 
+        }
       } catch(e) {
          this.pushError(e); 
       }

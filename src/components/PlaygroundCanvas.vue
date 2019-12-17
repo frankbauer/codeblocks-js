@@ -38,7 +38,7 @@ export default {
 
                 this.$compilerRegistry.loadLibraries(this.block.domLibs, () => {  
                     this.$nextTick( () => {
-                        this.obj.init($(this.canvas));
+                        this.obj.init($(this.canvas), $(this.block.scopeSelector));
                         this.$emit('did-init', this.canvas);
                     })
                 });          
