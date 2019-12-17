@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 const legacyCodeTemplate = {
-  prefix : 'let editors=[]; $(".CodeMirror").toArray().forEach(cm => editors[cm.CodeMirror.getTextArea().id] = cm.CodeMirror); return function(){ return {o:',
+  prefix : 'let editors=[]; $(".CodeMirror").toArray().forEach(cm =>  {if (!cm.CodeMirror.getTextArea().hasAttribute("is-editmode")) editors[cm.CodeMirror.getTextArea().id] = cm.CodeMirror}); return function(){ return {o:',
   postfix : '}.o}.call({})'
 }
 const v101CodeTemplate = {

@@ -47,9 +47,11 @@
     //helper to create tooltips at runtime
     import Vue from 'vue'
     import ErrorTip from './ErrorTip.vue'
+    import BaseBlock from './BaseBlock.vue'
     const ErrorTipCtor = Vue.extend(ErrorTip)
 
     export default {
+        extends: BaseBlock,
         name: 'CodeBlock',
         props: {
             'readonly':{
@@ -119,12 +121,18 @@
                 this.codemirror.display.input.textarea.className = "noRTEditor"                
                 this.$refs.codeBox.$el.querySelectorAll('textarea[name]').forEach(el => {
                     el.className = (el.className + " accqstXmlInput noRTEditor").trim();
-                    el.id = this.$refs.codeBox.$el.id;
+                    el.id = this.$refs.codeBox.$el.id;   
+
+                    $(el).text(this.block.content);
                     el.setAttribute('data-question', this.block.parentID);
                     el.setAttribute('data-blocktype', this.iliasTypeNr);
+                    if (this.editMode)
+                        el.setAttribute('is-editmode', this.editMode);
                 })
                 this.updateDiagnosticDisplay();
-                this.onCodeChange(this.block.content);                
+                this.onCodeChange(this.block.content);  
+                
+                this.whenBlockIsReady();     
             },
             onAltCodeReady(editor) {
                 console.log("READY")
