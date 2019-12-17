@@ -7,6 +7,7 @@
             :block="block" 
             :eventHub="eventHub"
             :tagSet="tagSet"
+            :data-question="block.parentID"
             @canvas-change="onCanvasChange" 
             @did-init="onDidInit"
         />
@@ -268,7 +269,13 @@ export default {
                             if (!this.originalMode){
                                 result = val.processedOutput.text
                             }
-                        }      
+                        } 
+                        
+                        if (this.originalMode){
+                            if (typeof result!=='string'){
+                                result = ''        
+                            }
+                        }
                         
                         if (result !== undefined){
                             this.$emit('changeOutput', result);

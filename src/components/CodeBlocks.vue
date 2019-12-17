@@ -87,7 +87,7 @@
                 </transition>  
             </div>
             <q-slide-transition>
-                <pre :id="`${blockInfo.id}Output`" ref="output" class="output" v-if="hasOutput" v-html="outputHTML"></pre>
+                <pre :id="`${blockInfo.id}Output`"  ref="output" class="output" v-if="hasOutput" ><div id="out" v-html="outputHTML"></div></pre>
             </q-slide-transition>
         </div>
     </div>
