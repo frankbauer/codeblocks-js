@@ -1,7 +1,7 @@
 <template>
     <div :class="`codeblock block-${typeName}`">        
         <codemirror ref="codeBox" :value="code" :options="options" :class="`accqstXmlInput noRTEditor ${boxClass}`" @ready="onCodeReady"
-        @focus="onCodeFocus" @input="onCodeChange" :name="`block[${block.parentID}][${block.id}]`">
+        @focus="onCodeFocus" @input="onCodeChange" :name="`block[${block.parentID}][${block.id}]`" :id="`teQ${block.parentID}B${block.id}`" :data-question="block.parentID">
         </codemirror>   
 
         <div v-show="hasAlternativeContent" v-if="editMode">
@@ -119,6 +119,9 @@
                 this.codemirror.display.input.textarea.className = "noRTEditor"                
                 this.$refs.codeBox.$el.querySelectorAll('textarea[name]').forEach(el => {
                     el.className = (el.className + " accqstXmlInput noRTEditor").trim();
+                    el.id = this.$refs.codeBox.$el.id;
+                    el.setAttribute('data-question', this.block.parentID);
+                    el.setAttribute('data-blocktype', this.iliasTypeNr);
                 })
                 this.updateDiagnosticDisplay();
                 this.onCodeChange(this.block.content);                
@@ -284,6 +287,15 @@
                 if (this.block.readonly || this.readonly) cl += "readonlyBox "
                 if (this.block.static) cl += "staticBox "                
                 return cl;
+            },
+            iliasTypeNr(){
+                const t = this.typeName;
+                if (t=='text') return 0;                
+                if (t=='block-static') return 1;                
+                if (t=='block') return 2;
+                if (t=='block-hidden') return 3;
+                if (t=='playground') return 4;
+                return -1;
             },
             typeName(){
                 let s = this.block.type.toLowerCase()

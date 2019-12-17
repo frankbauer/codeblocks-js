@@ -1,6 +1,15 @@
 import Vue from 'vue'
 
-const jsErrorParser = function(e){
+const legacyCodeTemplate = {
+  prefix : 'let editors=[]; $(".CodeMirror").toArray().forEach(cm => editors[cm.CodeMirror.getTextArea().id] = cm.CodeMirror); return function(){ return {o:',
+  postfix : '}.o}.call({})'
+}
+const v101CodeTemplate = {
+  prefix : '"use strict"; return function(){ return {o:',
+  postfix : '}.o}.call({})'
+}
+
+const jsErrorParser = function(e, templ){
   console.error(e);
   let line, column;
   if (e.line) line = e.line;
@@ -15,19 +24,24 @@ const jsErrorParser = function(e){
       const regex = /<anonymous>:(\d+):(\d+)/gm;
       let m;            
       if ((m = regex.exec(lines[1])) !== null) {
-        line = Number(m[1])+1;
-        column = Number(m[2])+1;
+        line = Number(m[1])-1;
+        column = Number(m[2])-1;
       }            
     }
   }   
   
   if (line !== undefined){
     line--;
-    if (line==1) column -= 43;        
+    if (line==1) {
+      if (templ!==undefined)
+        column -= templ.prefix.length;        
+    }
   }
   return {line:line, column:column, msg:e.message};
 }
 Vue.prototype.$jsErrorParser = jsErrorParser;
+
+
 
 class ScriptBlock {
     constructor(script, version){
@@ -59,10 +73,10 @@ class ScriptBlock {
 
           //we also return a function to make and call (.call({})) it with a clean object 
           //to ensure that 'this' is will allways be in a defined state inside the users code
-          if (this.requestsOriginalVersion())
-            this.fkt = new Function('let usestric; return function(){ return {o:' + code + '}.o}.call({})'); 
-          else
-            this.fkt = new Function('"use strict"; return function(){ return {o:' + code + '}.o}.call({})');
+          if (this.requestsOriginalVersion()) {
+            this.fkt = new Function(legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix); 
+          } else
+            this.fkt = new Function(v101CodeTemplate.prefix + code + v101CodeTemplate.postfix);           
           this.obj = this.fkt();
         } catch (e){
           this.pushError(e);

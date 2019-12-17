@@ -68,9 +68,9 @@
             </div>
         </div>
         
-        <div :class="`runner ${editMode?'q-pt-lg q-mx-lg':''}`" v-if="canRun">
-            <div class="row runnerState">
-                <q-btn :loading="!isReady" :disabled="!isReady" color="primary" class="white--text" @click="run" :ripple="{ center: true }" style="border-radius:0px" >
+        <div :class="`runner ${editMode?'q-pt-lg q-mx-lg':''}`" v-if="canRun" id="runContainer" :data-question="blockInfo.id">
+            <div class="row runnerState" id="stateBox" :data-question="blockInfo.id">
+                <q-btn id="allow_run_button" :loading="!isReady" :disabled="!isReady" color="primary" class="white--text" @click="run" :ripple="{ center: true }" style="border-radius:0px" :data-question="blockInfo.id">
                     {{$t('CodeBlocks.run')}}
                     <q-icon right dark name="play_arrow"></q-icon> 
                      <q-tooltip :delay="200" v-if="editMode">
