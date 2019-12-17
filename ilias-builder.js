@@ -6,8 +6,9 @@ const     conf = require('./package.json')
 
         
 const dest = path.join('..', '..', 'codeblocks', conf.version);
+const conffile = path.join('..', '..', 'classes', 'support', `codeblocks-conf-${conf.version}.php`);
 console.log("Deploying CodeBlocks to '" +dest + "'");
-
+console.log("    - Config File at '" +conffile + "'")
 const vuecli = exec('vue-cli-service build --dest ' + dest, function(code, stdout, stderr) 
 {
     //console.log('Exit code:', code); 
@@ -15,7 +16,7 @@ const vuecli = exec('vue-cli-service build --dest ' + dest, function(code, stdou
     shell.rm(path.join(dest, 'favicon.ico')) 
 
     shell.config.silent = true;
-    const conffile = path.join(dest, 'ilias-conf.php')
+    
     shell.echo('<?php ').to(conffile)
     shell.echo('define("CODEBLOCKS_VERSION",     "'+conf.version+'");').toEnd(conffile)
     shell.echo('define("CODEBLOCKS_BASE_URI",     "./'+vueconf.publicPath+'");').toEnd(conffile)
