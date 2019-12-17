@@ -84,7 +84,8 @@ class ScriptBlock {
           this.obj.init(canvasElement); 
         } else {
           let outputElement = undefined;
-          if (scope) outputElement = scope.find('div.runner pre.output')
+          if (scope===undefined || scope.length===0) scope = canvasElement.parents('.codeblocks')
+          if (scope!==undefined) outputElement = scope.find('div.runner pre.output')
           this.obj.init(canvasElement, outputElement, scope); 
         }
       } catch(e) {
