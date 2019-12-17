@@ -38,6 +38,8 @@ export default {
 
                 this.$compilerRegistry.loadLibraries(this.block.domLibs, () => {  
                     this.$nextTick( () => {
+                        this.obj.rebuild(); //we need to rebuild the script to make sure its context is the current state of the DOM
+
                         this.obj.init($(this.canvas), $(this.block.scopeSelector));
                         this.$emit('did-init', this.canvas);
                     })
