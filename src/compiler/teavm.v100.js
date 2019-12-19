@@ -110,7 +110,8 @@ const singleton = new Vue({
 
 
             var mainClass = 'Unknown';
-            let text = code.replace(/"(?:[^"\\]+?|(?!")"|\\{2}|\\[\s\S])*?"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments    
+            let text = code.replace(/"(?:[^"\\]|\\.)*"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments    
+            //let text = code.replace(/"(?:[^"\\]+?|(?!")"|\\{2}|\\[\s\S])*?"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments    
 
             text = text.replaceRec(/(\{[^{}]*\})/gm, '[]'); //replace parentheses    
 
