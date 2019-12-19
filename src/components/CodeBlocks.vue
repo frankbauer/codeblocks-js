@@ -220,7 +220,7 @@
                         this.eventHub.$emit('all-mounted', {  })
                     })
                 }
-                console.log("Ready", readyCount, this.blockInfo.blocks.length);
+                //console.log("Ready", readyCount, this.blockInfo.blocks.length);
             },
             tagSet(nr){
                 return this.blockInfo.randomizer.sets[nr]
