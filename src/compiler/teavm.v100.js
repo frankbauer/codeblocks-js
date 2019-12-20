@@ -103,14 +103,16 @@ const singleton = new Vue({
             const compilerTimeout = setTimeout(function () {
                 if (!booted) {
                     var time = Date.now() - start;
+
                     this.teaworker.end("TimeoutError:  Compilation took too long (>" + time + "ms) and was terminated. Trying to reset the System. Please re-run your code and call a Tutor if this Problem persists.");
-                    this.teaworker = undefined;
+                    this.teaworker = undefined;  
                 }
             }.bind(this), teaVMRunOverhead);
 
 
             var mainClass = 'Unknown';
-            let text = code.replace(/"(?:[^"\\]+?|(?!")"|\\{2}|\\[\s\S])*?"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments    
+            let text = code.replace(/"(?:[^"\\]|\\.)*"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments    
+            //let text = code.replace(/"(?:[^"\\]+?|(?!")"|\\{2}|\\[\s\S])*?"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments    
 
             text = text.replaceRec(/(\{[^{}]*\})/gm, '[]'); //replace parentheses    
 
@@ -182,6 +184,9 @@ const singleton = new Vue({
                         } else {
                             info_callback(msg + "\n");
                         }
+                    } else if (e.data.command == 'error'){
+                        this.teaworker.end("Error:  An internal compiler Error occured");
+                        this.teaworker = undefined;                          
                     } else if (e.data.command == 'compilation-complete') {
                         booted = true;
                         let runTimeout = undefined;
@@ -266,7 +271,7 @@ const singleton = new Vue({
                 this.teaworker.terminate();
                 finishedExecutionCB(false);
                 this.isRunning = false;
-                this.isReady = false;
+                this.isReady = true;
                 if (msg) err_callback(msg + "\n");
             }.bind(this);
 
