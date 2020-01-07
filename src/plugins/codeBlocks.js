@@ -60,9 +60,16 @@ Vue.prototype.$CodeBlock = {
    * @param {*} magicString The seperating String. By default it is '\n\n<JSON>\n'
    */
   processMixedOutput(outputObject, type, magicString) {
+      if (outputObject !== undefined && Array.isArray(outputObject)){
+        return {
+          type:'json',
+          json:outputObject,
+          text:''
+        };
+      }
+
       if (magicString===undefined) magicString = '\n\n<JSON>\n';
       const idx = outputObject.indexOf(magicString);
-      console.log(type);
       
       if ((type=='auto'  && idx >= 0) || (type=='magic')){
           const str = outputObject.substr(0, idx);
