@@ -321,6 +321,15 @@ export default {
                 return this.block.hasAlternativeContent
             },
             set(v){
+                if (v!=this.block.hasAlternativeContent && v){
+                    this.$nextTick(()=>{
+                        setTimeout(function() {
+                            $(".CodeMirror").toArray().forEach(cm =>{            
+                                cm.CodeMirror.refresh();
+                            });
+                        }, 200);
+                    });
+                }
                 this.block.hasAlternativeContent = v
             }
         },
