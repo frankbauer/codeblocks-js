@@ -14,7 +14,7 @@ import '@quasar/extras/animate/fadeOut.css'
 import '@quasar/extras/animate/zoomInDown.css'
 import '@quasar/extras/animate/zoomInUp.css'
 
-import  Quasar  from 'quasar'
+import  {default as Quasar}  from 'quasar'
 import  {Dialog}  from 'quasar'
 
 let lang = document.getElementsByTagName('html')[0].getAttribute('lang');
@@ -23,7 +23,8 @@ import langEn from 'quasar/dist/lang/en-gb.umd.min.js'
 
 
 Vue.use(Quasar, {
-  config: {},
+  config: {
+  },
   components: { /* not needed if importStrategy is not 'manual' */ },
   directives: { /* not needed if importStrategy is not 'manual' */ },
   plugins: {
