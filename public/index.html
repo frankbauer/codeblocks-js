@@ -36,7 +36,7 @@
           {
               gl_FragColor = vec4(1, 0, 0, 1);
           }</block>
-          <playground data-version="100" width="600px" height="200px" align="center" data-code-expanded=0 data-should-autoreset=0>{
+          <playground data-version="101" width="600px" height="200px" align="center" data-code-expanded=0 data-should-autoreset=0>{
             cube: null,
       material: null,
   
@@ -60,11 +60,11 @@
           )
       }, //init
   
-      update: function(outputObject, canvasElement) {
+      update: function(txt, json, canvasElement, outputElement) {
           this.cube.material = new THREE.ShaderMaterial(
           {
-              vertexShader:outputObject[0], 
-              fragmentShader:outputObject[1]
+              vertexShader:json[0], 
+              fragmentShader:json[1]
           }
           )
       }}
