@@ -32,7 +32,9 @@
         "Static":"Code (Static)",
         "Block":"Solution",
         "Confirm":"Confirm",
-        "DeleteQuestion":"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?"
+        "DeleteQuestion":"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?",
+        "TypesCaption":"Block-Types",
+        "Types":"The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Visualization Canvas</b>: A 2D-drawing area you may use to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>"
     },
     "CodeBlocks":{
         "run_hint":"Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.",

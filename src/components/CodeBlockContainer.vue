@@ -3,13 +3,17 @@
     <q-card v-if="editMode" :class="`q-mx-none q-my-xs q-pa-none editModeBlockContainer ${colorClass} ${bgClass}`" >
         <q-card-section class="q-mb-none q-pb-sm q-pt-sm ">
             <div class="row q-my-none q-py-none" dense>
-                <div class="col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none">
+                <div class="col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none">                    
                     <q-select
                         :options="types"
                         v-model="typeObj"
                         dense
                         style="margin-top:-5px !important"
-                    />                        
+                    >
+                        <template v-slot:after>
+                            <q-btn flat round color="primary" icon="info" size="xs" @click="showTypeInfoDialog"></q-btn>      
+                        </template>
+                    </q-select>               
                 </div>
                 <div class="col-grow"></div>
                 <div class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right">
@@ -225,6 +229,20 @@ export default {
         },
         moveDown(){
             this.$emit('move-down', this.block.id);
+        },
+        showTypeInfoDialog(){            
+            this.$q.dialog({
+                title: this.$t('CodeBlockContainer.TypesCaption'),
+                message: this.$t('CodeBlockContainer.Types'),
+                html: true,
+                style:"width:75%",
+            }).onOk(() => {
+                // console.log('OK')
+            }).onCancel(() => {
+                // console.log('Cancel')
+            }).onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            })                
         },
         removeBlock(){
             const self = this;
