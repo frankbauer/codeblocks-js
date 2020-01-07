@@ -303,7 +303,10 @@ class CodeBlocksManager {
                                         readyCount: 0,              
                                         errors:[],
                                         scopeUUID: data.scopeUUID,
-                                        scopeSelector: data.scopeSelector
+                                        scopeSelector: data.scopeSelector,
+                                        visibleLines: 10,
+                                        hasAlternativeContent: false,
+                                        shouldAutoreset: false
                                     }
                                     data.blocks.push(self.constructBlock(data, block));
                                 }
