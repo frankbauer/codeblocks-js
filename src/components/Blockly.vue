@@ -6,7 +6,7 @@
       
     </xml>
     <div v-if="editMode">
-        <pre>{{block.content}}</pre>
+        <textarea :name="`block[${block.parentID}][${block.id}]`" v-html="block.content" style="display:block"></textarea>
         <div class="q-mt-lg text-subtitle2">{{$t('Blockly.CodePreviewLabel')}}</div>
         <CodeBlock 
                 v-if="editMode" 
@@ -16,7 +16,7 @@
                 :visibleLines="visibleLinesNow" 
                 :editMode="false" 
                 :muteReadyState="true"            
-                
+                namePrefix="preview_"
                 @code-changed-in-edit-mode="onCodeChange"/>
         <div class="q-mt-lg text-subtitle2">{{$t('Blockly.ToolboxLabel')}}</div>
         <CodeBlock 
@@ -27,7 +27,7 @@
                 :visibleLines="visibleLinesNow" 
                 :editMode="this.editMode" 
                 :muteReadyState="true"            
-                
+                namePrefix="toolbox_"
                 @code-changed-in-edit-mode="onToolboxChange"/>
     </div>
   </div>

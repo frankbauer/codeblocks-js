@@ -1,13 +1,13 @@
 <template>
     <div :class="`codeblock block-${typeName}`">        
         <codemirror ref="codeBox" :value="code" :options="options" :class="`accqstXmlInput noRTEditor ${boxClass}`" @ready="onCodeReady"
-        @focus="onCodeFocus" @input="onCodeChange" :name="`block[${block.parentID}][${block.id}]`" :id="`teQ${block.parentID}B${block.id}`" :data-question="block.parentID">
+        @focus="onCodeFocus" @input="onCodeChange" :name="`${namePrefix}block[${block.parentID}][${block.id}]`" :id="`teQ${block.parentID}B${block.id}`" :data-question="block.parentID">
         </codemirror>   
 
         <div v-show="hasAlternativeContent" v-if="editMode">
             <div class="q-mt-lg text-subtitle2">{{$t('CodeBlock.Initial_Content')}}</div>
             <codemirror ref="altBox" :value="altCode" :options="altOptions" :class="`accqstXmlInput noRTEditor ${boxClass}`" @ready="onAltCodeReady"
-        @focus="onAltCodeFocus" @input="onAltCodeChange" :name="`alt_block[${block.parentID}][${block.id}]`">
+        @focus="onAltCodeFocus" @input="onAltCodeChange" :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`">
             </codemirror> 
         </div>
     </div>
@@ -54,6 +54,9 @@
         extends: BaseBlock,
         name: 'CodeBlock',
         props: {
+            'namePrefix':{
+                default:''
+            },
             'readonly':{
                 type: Boolean,
                 default: false
