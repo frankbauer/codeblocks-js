@@ -78,5 +78,9 @@
         "Caption":"Würfler",
         "Available":"Definierte Platzhalter",
         "Sets":"Zusammenstellungen"
+    },
+    "Blockly":{
+        "CodePreviewLabel":"Code-Vorschau",
+        "ToolboxLabel":"Toolbox Definition"
     }
 }

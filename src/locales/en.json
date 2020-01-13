@@ -78,5 +78,9 @@
         "Caption":"Randomizer",
         "Available":"Available Tags",
         "Sets":"Defined Sets"
+    },
+    "Blockly":{
+        "CodePreviewLabel":"Code Preview",
+        "ToolboxLabel":"Toolbox Definition"
     }
 }
