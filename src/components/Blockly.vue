@@ -31,7 +31,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .blocklyContainer {
-  height: 100%;
+  height: 500px;
   width: 100%;
   text-align: left;
 }

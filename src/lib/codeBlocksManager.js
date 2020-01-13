@@ -235,7 +235,9 @@ class CodeBlocksManager {
             
             } else if (block.type == 'BLOCK') {
                 block.hasCode = true;                
-            } else if (block.type == 'LOADING' || block.type == 'DIV') {
+            } else if (block.type == 'BLOCKLY') {
+                block.hasCode = true;                
+            }else if (block.type == 'LOADING' || block.type == 'DIV') {
                 return;
             }
 

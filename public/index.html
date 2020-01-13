@@ -22,65 +22,7 @@
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div style="padding-left:50px;padding-right:50px">
-
-
-      <div codeblockseditor data-compiler="glsl" data-compiler-version="default" data-question="53" data-dom-libs='["3js-r0"]' data-worker-libs='[]' data-execution-timeout="10000" data-max-characters="4000" data-run-code="true" data-randomizer-active="false">
-        <loading><div></div><div></div></loading>          
-        <text>&lt;b>Vertex&lt;/b> Shader:</text>
-        <block>void main()
-          {
-              gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-          }</block>
-        <text>&lt;b>Fragment&lt;/b> Shader:</text>
-        <block>void main()
-          {
-              gl_FragColor = vec4(1, 0, 0, 1);
-          }</block>
-          <playground data-version="101" width="600px" height="200px" align="center" data-code-expanded=0 data-should-autoreset=0>{
-            cube: null,
-      material: null,
-  
-      createScene: function(scene, camera, renderer){ 
-          var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-          this.material = new THREE.MeshBasicMaterial( { color: "#FF3F81" } );
-          this.cube = new THREE.Mesh( geometry, this.material );
-          scene.add(this.cube);                                  
-      },
-  
-      updateScene: function(scene, camera, renderer){
-          this.cube.rotation.x += 0.01;
-          this.cube.rotation.y += 0.01;
-      },
-  
-      init: function(canvasElement, outputElement, scope) {
-          setupThreeJSScene(
-              canvasElement, 
-              this.createScene.bind(this),
-              this.updateScene.bind(this)
-          )
-      }, //init
-  
-      update: function(txt, json, canvasElement, outputElement) {
-          this.cube.material = new THREE.ShaderMaterial(
-          {
-              vertexShader:json[0], 
-              fragmentShader:json[1]
-          }
-          )
-      }}
-          </playground>
-      </div>  
-
-      <div codeblocks data-compiler="java" data-compiler-version="101" data-run-code="true" data-dom-libs='[]' data-worker-libs='[]' data-execution-timeout="1000" data-max-characters="4000">
-        <loading><div></div><div></div></loading>
-        <block>public class Foo {
-    public static void main(String[] args){
-        String s = "Hello";
-        s.substring(s.substring(0,1), 1);
-    }
-}
-        </block>
-      </div>
+            
     <div id="master">
     
     <p highlight="javascript" tagged>
@@ -92,43 +34,9 @@
 
    
   
-      <div codeblockseditor data-compiler="javascript" data-compiler-version="default" data-question="53" data-dom-libs='[]' data-worker-libs='["d3-101"]' data-execution-timeout="10000" data-max-characters="4000" data-run-code="true" data-scope-selector="#master" data-randomizer-active="true" data-randomizer-known-tags='["init", "randomized", "color"]' data-randomizer-sets='[{"init":"This was init", "randomized":14, "color":"#fefab0"}, {"init":"Second", "randomized":42, "color":"#000001", "other":"..."}, {"init":"me"}]'>
-        <loading><div></div><div></div></loading>    
-    <block data-alternative-content="//line 1
-//line 2 {:init} ">console.log("-> {:randomized}, {!init}, {!init}")//{:init} {!init}</block>
-    <block data-static>console.log("color is {:color} with {!init}")</block>
-    <text data-expanded=0 >This is just some sample Text with a [hl]given {:color} and {!init}[/hl] for your exercicse.</text>
-    <playground data-version="100" width="600px" height="200px" align="center" data-code-expanded=0 data-should-autoreset=0>
-      { init:(ce)=>{        
-          console.log("A", this.a, this, ce.a, ce.css('background-color'));
-          ce.attr('a', 20);
-          this.a = 10;
-          ce.css('background-color', 'red')
-          console.log("B", this.a, this, ce.attr('a'), ce.css('background-color'));
-
-          function findUIElements(canvasElement){
-              let res = {};
-              res.questionID = canvasElement.attr('data-question');
-              res.textEdit = $("[data-blocktype=2][data-question="+res.questionID+"]");
-              res.stateBox = $("#stateBox[data-question="+res.questionID+"]");
-              res.runButton = $("#allow_run_button[data-question="+res.questionID+"]");
-              res.runContainer = $("#runContainer[data-question="+res.questionID+"]");
-              if (res.textEdit!==undefined) {
-                  res.editor = editors[res.textEdit.attr('id')];
-              } else {
-                  res.editor = undefined;
-              } 
-              
-              console.log("Text", res.textEdit.text())
-              return res;
-          }
-          console.log(findUIElements(ce));
-        },
-        update:(t,j,ce,oe) => {
-            console.log("C", this.a, ce.attr('a'), ce.css('background-color'))
-        }
-      }
-    </playground>
+<div codeblockseditor data-compiler="javascript" data-compiler-version="default" data-question="53" data-dom-libs='[]' data-worker-libs='["d3-101"]' data-execution-timeout="10000" data-max-characters="4000" data-run-code="true" data-scope-selector="#master" data-randomizer-active="true" data-randomizer-known-tags='["init", "randomized", "color"]' data-randomizer-sets='[{"init":"This was init", "randomized":14, "color":"#fefab0"}, {"init":"Second", "randomized":42, "color":"#000001", "other":"..."}, {"init":"me"}]'>
+  <loading><div></div><div></div></loading>    
+  <Blockly></Blockly>
 </div>
 </div>
 

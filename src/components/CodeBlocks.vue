@@ -30,7 +30,7 @@
             @auto-reset-change="onSetAutoReset">              
             
                 <CodeBlock 
-                    v-if="block.hasCode" 
+                    v-if="block.hasCode && block.type!='BLOCKLY'" 
                     :block="block" 
                     :theme="themeForBlock(block)" 
                     :mode="mimeType"
@@ -63,6 +63,13 @@
                     :tagSet="activeTagSet"
                     :language="language"
                     @ready="blockBecameReady"  />
+                <Blockly 
+                    v-else-if="block.type=='BLOCKLY'" 
+                    :block="block" 
+                    :editMode="editMode" 
+                    :readonly="readonly"
+                    :tagSet="activeTagSet" 
+                    />
         </CodeBlockContainer>
 
         <div class="row justify-end" v-if="editMode">
@@ -101,6 +108,7 @@
     import CodeBlockContainer from './CodeBlockContainer';
     import CodeBlocksSettings from './CodeBlocksSettings';
     import CodeBlock from './CodeBlock';
+    import Blockly from './Blockly';
     import CodePlayground from './CodePlayground';
     import SimpleText from './SimpleText';
 
@@ -111,7 +119,8 @@
             CodeBlocksSettings,
             CodeBlock,
             CodePlayground,
-            SimpleText
+            SimpleText,
+            Blockly
         },
         data:function(){
             return {
