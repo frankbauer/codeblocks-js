@@ -183,7 +183,7 @@ export default {
            static: true,
            alternativeContent: '',
            parentID: this.block.parentID,
-           id: this.block.id+"-toolbox",
+           id: this.block.id,
            actualContent: () => {return this.block.toolbox}
        } 
     },
