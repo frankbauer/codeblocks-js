@@ -202,6 +202,9 @@ export default {
                 },{
                     label:this.$t('CodeBlockContainer.Block'),
                     value:'BLOCK'
+                },{
+                    label:this.$t('CodeBlockContainer.Blockly'),
+                    value:'BLOCKLY'
                 }]
         }
     },

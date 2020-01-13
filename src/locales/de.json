@@ -31,6 +31,7 @@
         "Hidden":"Quellcode (Versteckt)",
         "Static":"Quellcode (Angabe)",
         "Block":"Antwortfeld/Lösung",
+        "Blockly":"Blockly for JavaScript (Experimental!!!)",
         "Confirm":"Bestätigung",
         "DeleteQuestion":"Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?",
         "TypesCaption":"Blocktypen",
