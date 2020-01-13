@@ -185,6 +185,9 @@ class CodeBlocksManager {
         else data.maxCharacters = Number(data.maxCharacters);   
         
         el.querySelectorAll("*").forEach(bl => {
+            //only first level children
+            if (bl.parentElement !=el ) return;
+
             let block = {
                 ...bl.dataset,
                 hasCode: false,
@@ -197,7 +200,8 @@ class CodeBlocksManager {
                 height: '200px',
                 align: 'center',
                 readyCount: 0,
-                obj: null,                
+                obj: null,  
+                toolbox: null,              
                 errors:[]
             }
 
@@ -234,10 +238,37 @@ class CodeBlocksManager {
                 block.version = bl.getAttribute('data-version')?bl.getAttribute('data-version'):'101'
             
             } else if (block.type == 'BLOCK') {
+                const alts = bl.getElementsByTagName('ALTERNATIVE');
+                if (alts.length > 0){
+                    block.hasAlternativeContent = true
+                    block.alternativeContent = alts[0].textContent;
+                    if (!data.editMode && block.noContent){                
+                        block.content = block.alternativeContent
+                    }                    
+                } else {
+                    const codes = bl.getElementsByTagName('CODE');
+                    if (codes.length > 0){
+                        block.content = codes[0].textContent;
+                    }
+                }
                 block.hasCode = true;                
             } else if (block.type == 'BLOCKLY') {
+                const toolboxes = bl.getElementsByTagName('TOOLBOX');
+                let toolbox = undefined;
+                if (toolboxes.length > 0){
+                    toolbox = toolboxes[0].innerHTML;
+                } else {
+                    toolbox='';
+                }
+                block.toolbox = toolbox;
+
+                const codes = bl.getElementsByTagName('CODE');
+                if (codes.length > 0){
+                    block.content = codes[0].textContent;
+                } 
                 block.hasCode = true;                
-            }else if (block.type == 'LOADING' || block.type == 'DIV') {
+            } else if (block.type != 'TEXT') {
+                console.log("Skipping", block.type);
                 return;
             }
 
@@ -245,7 +276,7 @@ class CodeBlocksManager {
         })
         this.data = data;   
         
-        //console.log("DATA", data)
+        console.log("DATA", data)
     }
 
     instantiateVue(){
@@ -308,7 +339,8 @@ class CodeBlocksManager {
                                         scopeSelector: data.scopeSelector,
                                         visibleLines: 10,
                                         hasAlternativeContent: false,
-                                        shouldAutoreset: false
+                                        shouldAutoreset: false,
+                                        toolbox: null
                                     }
                                     data.blocks.push(self.constructBlock(data, block));
                                 }

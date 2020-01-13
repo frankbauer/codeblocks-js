@@ -36,7 +36,50 @@
   
 <div codeblockseditor data-compiler="javascript" data-compiler-version="default" data-question="53" data-dom-libs='[]' data-worker-libs='["d3-101"]' data-execution-timeout="10000" data-max-characters="4000" data-run-code="true" data-scope-selector="#master" data-randomizer-active="true" data-randomizer-known-tags='["init", "randomized", "color"]' data-randomizer-sets='[{"init":"This was init", "randomized":14, "color":"#fefab0"}, {"init":"Second", "randomized":42, "color":"#000001", "other":"..."}, {"init":"me"}]'>
   <loading><div></div><div></div></loading>    
-  <Blockly></Blockly>
+  <Blockly>
+    <Toolbox>
+      <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+        <block type="controls_if"></block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean"></block>
+      </category>
+      <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+        <block type="controls_repeat_ext">
+          <value name="TIMES">
+            <block type="math_number">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+        </block>
+        <block type="controls_whileUntil"></block>
+      </category>
+      <category name="Math" colour="%{BKY_MATH_HUE}">
+        <block type="math_number">
+          <field name="NUM">123</field>
+        </block>
+        <block type="math_arithmetic"></block>
+        <block type="math_single"></block>
+      </category>
+      <category name="Text" colour="%{BKY_TEXTS_HUE}">
+        <block type="text"></block>
+        <block type="text_length"></block>
+        <block type="text_print"></block>
+      </category>
+      <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
+        </category>
+      <category name="Stocks" colour="%{BKY_LOOPS_HUE}">
+        <block type="stock_buy_simple"></block>
+        <block type="stock_buy_prog"></block>
+        <block type="stock_fetch_price"></block>
+      </category>
+    </Toolbox>
+    <Code>
+
+    </Code>
+  </Blockly>
+  <Block><Code>console.log("Hello World")</Code><Alternative>console.log("...");</Alternative></Block>
 </div>
 </div>
 
