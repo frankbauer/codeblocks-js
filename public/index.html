@@ -82,11 +82,13 @@
       </category>
     </Toolbox>
     <Code>
-      <xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="jdG#t8[]mlM`z)kFuNjx">ab</variable></variables><block type="controls_if" id="`Oj.KaccwlI!+J66YD!|" x="29" y="15"><value name="IF0"><block type="logic_compare" id="tRS@jPrw=~BAu4[k82V9"><field name="OP">EQ</field></block></value></block><block type="controls_repeat_ext" id="uZ9l8c{.(cJin.8ahABj" x="214" y="14"><value name="TIMES"><block type="math_number" id="8|}Grg%43z|R.Ur.7*a8"><field name="NUM">10</field></block></value></block><block type="math_number" id="9Voy@$$#Dhka,=?3!g[7" x="426" y="28"><field name="NUM">123</field></block><block type="text" id="-48.E`nT2OY$?Y=GvZQe" x="417" y="78"><field name="TEXT"/></block><block type="variables_set" id="ItB9PY0E][:MB/Uh/,;=" x="173" y="139"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field></block></xml>
+      <xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="jdG#t8[]mlM`z)kFuNjx">ab</variable></variables><block type="variables_set" id="ItB9PY0E][:MB/Uh/,;=" x="36" y="5"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field><value name="VALUE"><block type="math_number" id="9Voy@$$#Dhka,=?3!g[7"><field name="NUM">123</field></block></value><next><block type="controls_if" id="`Oj.KaccwlI!+J66YD!|"><value name="IF0"><block type="logic_compare" id="tRS@jPrw=~BAu4[k82V9"><field name="OP">EQ</field><value name="A"><block type="variables_get" id="~U[n#w.dv9!PS0b07rJP"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field></block></value><value name="B"><block type="math_number" id="9TT_AEK=QRTC:xo7=Zhs"><field name="NUM">123</field></block></value></block></value><statement name="DO0"><block type="controls_repeat_ext" id="uZ9l8c{.(cJin.8ahABj"><value name="TIMES"><block type="math_number" id="8|}Grg%43z|R.Ur.7*a8"><field name="NUM">10</field></block></value><statement name="DO"><block type="math_change" id="(?=Sb]PLV)01D,o;7drb"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field><value name="DELTA"><shadow type="math_number" id="f3LLAO*NBY)S6MzYn?OG"><field name="NUM">1</field></shadow></value></block></statement></block></statement></block></next></block></xml>
+
+
 
     </Code>
   </Blockly>
-  <Block><Code>console.log("Hello World")</Code><Alternative>console.log("...");</Alternative></Block>
+  <Block><Code>console.log("Hello World");console.log(ab);console.log(4)</Code><Alternative>console.log("...", ab, 3);</Alternative></Block>
 </div>
 </div>
 

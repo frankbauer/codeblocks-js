@@ -6,6 +6,7 @@
       
     </xml>
     <div v-if="editMode">
+        <pre>{{block.content}}</pre>
         <div class="q-mt-lg text-subtitle2">{{$t('Blockly.CodePreviewLabel')}}</div>
         <CodeBlock 
                 v-if="editMode" 
@@ -74,13 +75,57 @@ export default {
       tmpcode: ''
     }
   },  
+  beforeDestroy(){
+      if (this.block._oac){
+        this.block.actualContent = this.block._oac;
+        this.block._oac = undefined;
+      }
+  },
   mounted() {
+      if (!this.block._oac){
+        let self = this;
+        this.block._oac = this.block.actualContent;
+        this.block.actualContent = function(){
+            return self.code;
+        }.bind(this.block);
+      }
+      
     var options = this.$props.options || {};
     if (!options.toolbox) {
       options.toolbox = this.$refs["blocklyToolbox"];
     }
+    if (!options.theme){
+        const blockStyles = {
+            "colour_blocks":{"colourPrimary":"#d20992","colourSecondary":"#f6cee9","colourTertiary":"#bd0883"},
+            "list_blocks":{"colourPrimary":"#3d349a","colourSecondary":"#d8d6eb","colourTertiary":"#372f8b"},
+            "logic_blocks":{"colourPrimary":"#5ecd88","colourSecondary":"#dff5e7","colourTertiary":"#55b97a"},
+            "loop_blocks":{"colourPrimary":"#e8c74a","colourSecondary":"#faf4db","colourTertiary":"#d1b343"},
+            "math_blocks":{"colourPrimary":"#54bfeb","colourSecondary":"#ddf2fb","colourTertiary":"#4cacd4"},
+            "procedure_blocks":{"colourPrimary":"#843bd5","colourSecondary":"#e6d8f7","colourTertiary":"#7735c0"},
+            "text_blocks":{"colourPrimary":"#bbbbca","colourSecondary":"#f1f1f4","colourTertiary":"#a8a8b6"},
+            "variable_blocks":{"colourPrimary":"#ee8845","colourSecondary":"#fce7da","colourTertiary":"#d67a3e"},
+            "variable_dynamic_blocks":{"colourPrimary":"#fea865","colourSecondary":"#ffeee0","colourTertiary":"#e5975b"},
+            "hat_blocks": {
+                "colourPrimary": "330",
+                "hat": "cap"
+            }
+        }
+
+        const categoryStyles = {
+            "colour_category": {"colour": blockStyles.colour_blocks.colourPrimary},
+            "list_category": {"colour": blockStyles.list_blocks.colourPrimary},
+            "logic_category": {"colour": blockStyles.logic_blocks.colourPrimary},
+            "loop_category": {"colour": blockStyles.loop_blocks.colourPrimary},
+            "math_category": {"colour": blockStyles.math_blocks.colourPrimary},
+            "procedure_category": {"colour": blockStyles.procedure_blocks.colourPrimary},
+            "text_category": {"colour": blockStyles.text_blocks.colourPrimary},
+            "variable_category": {"colour": blockStyles.variable_blocks.colourPrimary},
+            "variable_dynamic_category": {"colour": blockStyles.variable_dynamic_blocks.colourPrimary},
+        }
+        options.theme = new Blockly.Theme(blockStyles, categoryStyles)
+    }
     this.workspace = Blockly.inject(this.$refs["blocklyContainer"], options);
-    this.workspace.addChangeListener(this.onBlocklyChange.bind(this));
+    this.workspace.addChangeListener(this.onBlocklyChange.bind(this));    
     this.content = this.block.content;
   },
   computed:{        
@@ -155,11 +200,9 @@ export default {
     },
     content:{
         get(){
-            if (this.workspace){
-                console.log(1)
+            if (this.workspace){                
                 let xml = Blockly.Xml.workspaceToDom(this.workspace);
-                if (xml) {
-                    console.log(2)
+                if (xml) {                    
                     return Blockly.Xml.domToText(xml);
                 }
             } 
@@ -170,7 +213,7 @@ export default {
                 try {
                     let dom = Blockly.Xml.textToDom(text);
                     if (dom){
-                        Blockly.Xml.domToWorkspace(this.workspace, dom)
+                        Blockly.Xml.domToWorkspace(dom, this.workspace)
                     }
                 } catch (e){
                     console.error("toDOM Error", e);
@@ -186,13 +229,11 @@ export default {
             }
         },
         onBlocklyChange(e){
-            this.tmpcode = this.code
-            console.log(this.cmblock)
+            this.tmpcode = this.code            
             this.block.content = this.content
         },
         onToolboxChange(newCode){
-            if (this.workspace){
-                console.log("nCode", this.tbblock.content);
+            if (this.workspace){                
                 this.workspace.updateToolbox('<xml>'+this.tbblock.content+'</xml>');
             }
         }
