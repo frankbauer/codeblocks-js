@@ -239,18 +239,19 @@ class CodeBlocksManager {
             
             } else if (block.type == 'BLOCK') {
                 const alts = bl.getElementsByTagName('ALTERNATIVE');
+                const codes = bl.getElementsByTagName('CODE');
+                if (codes.length > 0){
+                    block.content = codes[0].textContent;
+                }
+
                 if (alts.length > 0){
                     block.hasAlternativeContent = true
                     block.alternativeContent = alts[0].textContent;
                     if (!data.editMode && block.noContent){                
                         block.content = block.alternativeContent
                     }                    
-                } else {
-                    const codes = bl.getElementsByTagName('CODE');
-                    if (codes.length > 0){
-                        block.content = codes[0].textContent;
-                    }
-                }
+                } 
+                    
                 block.hasCode = true;                
             } else if (block.type == 'BLOCKLY') {
                 const toolboxes = bl.getElementsByTagName('TOOLBOX');
@@ -264,8 +265,10 @@ class CodeBlocksManager {
 
                 const codes = bl.getElementsByTagName('CODE');
                 if (codes.length > 0){
-                    block.content = codes[0].textContent;
-                } 
+                    block.content = codes[0].innerHTML;
+                }  else {
+                    block.content = '<xml xmlns="https://developers.google.com/blockly/xml"></xml>';
+                }
                 block.hasCode = true;                
             } else if (block.type != 'TEXT') {
                 console.log("Skipping", block.type);
