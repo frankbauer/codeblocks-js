@@ -98,16 +98,16 @@ export default {
     }
     if (!options.theme){
         const blockStyles = {
-            "colour_blocks":{"colourPrimary":"#d20992","colourSecondary":"#f6cee9","colourTertiary":"#bd0883"},
-            "list_blocks":{"colourPrimary":"#3d349a","colourSecondary":"#d8d6eb","colourTertiary":"#372f8b"},
-            "logic_blocks":{"colourPrimary":"#5ecd88","colourSecondary":"#dff5e7","colourTertiary":"#55b97a"},
-            "loop_blocks":{"colourPrimary":"#e8c74a","colourSecondary":"#faf4db","colourTertiary":"#d1b343"},
-            "math_blocks":{"colourPrimary":"#54bfeb","colourSecondary":"#ddf2fb","colourTertiary":"#4cacd4"},
-            "procedure_blocks":{"colourPrimary":"#843bd5","colourSecondary":"#e6d8f7","colourTertiary":"#7735c0"},
-            "text_blocks":{"colourPrimary":"#bbbbca","colourSecondary":"#f1f1f4","colourTertiary":"#a8a8b6"},
-            "variable_blocks":{"colourPrimary":"#ee8845","colourSecondary":"#fce7da","colourTertiary":"#d67a3e"},
-            "variable_dynamic_blocks":{"colourPrimary":"#fea865","colourSecondary":"#ffeee0","colourTertiary":"#e5975b"},
-            "hat_blocks": {
+            "colour_blocks":{"colourPrimary":"#cf63cf","colourSecondary":"#c55ec5","colourTertiary":"#ba59ba"},
+            "list_blocks":{"colourPrimary":"#5cb1d6","colourSecondary":"#57a8cb","colourTertiary":"#539fc1"},
+            "logic_blocks":{"colourPrimary":"#ffab19","colourSecondary":"#f2a218","colourTertiary":"#e69a17"},
+            "loop_blocks":{"colourPrimary":"#ffbf00","colourSecondary":"#f2b500","colourTertiary":"#e6ac00"},
+            "math_blocks":{"colourPrimary":"#4c97ff","colourSecondary":"#488ff2","colourTertiary":"#4488e6"},
+            "procedure_blocks":{"colourPrimary":"#ff6680","colourSecondary":"#f2617a","colourTertiary":"#e65c73"},
+            "text_blocks":{"colourPrimary":"#bbbbca","colourSecondary":"#b2b2c0","colourTertiary":"#a8a8b6"},
+            "variable_blocks":{"colourPrimary":"#59c059","colourSecondary":"#55b655","colourTertiary":"#50ad50"},
+            "variable_dynamic_blocks":{"colourPrimary":"#0fbd8c","colourSecondary":"#0eb485","colourTertiary":"#0eaa7e"},
+"hat_blocks": {
                 "colourPrimary": "330",
                 "hat": "cap"
             }
@@ -124,9 +124,9 @@ export default {
             "variable_category": {"colour": blockStyles.variable_blocks.colourPrimary},
             "variable_dynamic_category": {"colour": blockStyles.variable_dynamic_blocks.colourPrimary},
         }
-        //options.theme = new Blockly.Theme(blockStyles, categoryStyles)
+        options.theme = new Blockly.Theme(blockStyles, categoryStyles)
     }
-
+    options.renderer = 'minimalist'
     this.workspace = Blockly.inject(this.$refs["blocklyContainer"], options);
     this.workspace.addChangeListener(this.onBlocklyChange.bind(this));    
     this.content = this.block.content;

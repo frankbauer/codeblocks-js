@@ -18,10 +18,9 @@ import './plugins/compilerState';
 import './plugins/codemirror';
 import './plugins/highlight'
 import './plugins/tagger'
+import './plugins/blockly'
 import CodeBlocksManager from './lib/codeBlocksManager';
 
-Vue.config.productionTip = false
-Vue.config.ignoredElements = ['field','block','category','xml','mutation','value','sep']
 Vue.config.productionTip = false
 CodeBlocksManager.find(document).mount();
 

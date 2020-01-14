@@ -1,5 +1,5 @@
 const BRIGHTNESS_VAL = .65 * 255
-const LIGHT_FACTOR = .8
+const LIGHT_FACTOR = .05
 const DARK_FACTOR = .1
 
 function blend(rgb1, rgb2, factor){
@@ -35,7 +35,7 @@ function componentToHex(c) {
 
 function findOtherColours(rgb){
    colourPrimary = rgbToHex(rgb)
-   colourSecondary = rgbToHex(lighten(rgb, LIGHT_FACTOR))
+   colourSecondary = rgbToHex(darken(rgb, LIGHT_FACTOR))
    colourTertiary = rgbToHex(darken(rgb, DARK_FACTOR))
    return JSON.stringify({
       "colourPrimary": colourPrimary,
@@ -57,14 +57,14 @@ function print(name, hex){
     console.log( `"${name}":${findOtherColours(hexToRgb(hex))},`)
 }
 
-print("colour_blocks", rgbToHex([210, 9, 146]))
-print("list_blocks", "#3D349A")
-print("logic_blocks", "#5ECD88")
-print("loop_blocks", "#E8C74A")
-print("math_blocks", "#54BFEB")
-print("procedure_blocks", "#843BD5")
+print("colour_blocks", "#CF63CF")
+print("list_blocks", "#5CB1D6")
+print("logic_blocks", "#FFAB19")
+print("loop_blocks", "#FFBF00")
+print("math_blocks", "#4C97FF")
+print("procedure_blocks", "#FF6680")
 print("text_blocks", "#BBBBCA")
-print("variable_blocks", "#EE8845")
-print("variable_dynamic_blocks", "#FEA865")
+print("variable_blocks", "#59C059")
+print("variable_dynamic_blocks", "#0FBD8C")
 print("hat_blocks", "#AAAAAA")
 
