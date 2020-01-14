@@ -34,7 +34,9 @@
 </template>
 
 <script>
-import Blockly from 'blockly';
+import Blockly from '../plugins/blockly.js';
+
+
 import CodeBlock from './CodeBlock'
 export default {
   components: {
@@ -122,8 +124,9 @@ export default {
             "variable_category": {"colour": blockStyles.variable_blocks.colourPrimary},
             "variable_dynamic_category": {"colour": blockStyles.variable_dynamic_blocks.colourPrimary},
         }
-        options.theme = new Blockly.Theme(blockStyles, categoryStyles)
+        //options.theme = new Blockly.Theme(blockStyles, categoryStyles)
     }
+
     this.workspace = Blockly.inject(this.$refs["blocklyContainer"], options);
     this.workspace.addChangeListener(this.onBlocklyChange.bind(this));    
     this.content = this.block.content;
