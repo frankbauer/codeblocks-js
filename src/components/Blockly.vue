@@ -69,6 +69,10 @@ export default {
         'theme': {
             type: String,
             default: 'base16-dark'
+        },
+        'mode': {
+            type: String,
+            default: 'text/javascript'
         }
   },
   data(){
@@ -107,7 +111,7 @@ export default {
             "text_blocks":{"colourPrimary":"#bbbbca","colourSecondary":"#b2b2c0","colourTertiary":"#a8a8b6"},
             "variable_blocks":{"colourPrimary":"#59c059","colourSecondary":"#55b655","colourTertiary":"#50ad50"},
             "variable_dynamic_blocks":{"colourPrimary":"#0fbd8c","colourSecondary":"#0eb485","colourTertiary":"#0eaa7e"},
-"hat_blocks": {
+            "hat_blocks": {
                 "colourPrimary": "330",
                 "hat": "cap"
             }
@@ -196,6 +200,11 @@ export default {
     },
     code(){
         if (this.workspace){
+            if (this.mode == 'text/x-python' || this.mode == 'text/python' || this.mode == 'python'){
+                return Blockly.Python.workspaceToCode(this.workspace);
+            } else if (this.mode == 'text/x-java' || this.mode == 'text/java' || this.mode == 'java'){
+                return Blockly.Java.workspaceToCode(this.workspace);
+            }
             return Blockly.JavaScript.workspaceToCode(this.workspace);
         } else {
             return '';

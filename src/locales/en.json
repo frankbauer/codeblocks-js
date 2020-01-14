@@ -31,7 +31,7 @@
         "Hidden":"Code (Hidden)",
         "Static":"Code (Static)",
         "Block":"Solution",
-        "Blockly":"Blockly for JavaScript (Experimental!!!)",
+        "Blockly":"Blockly (Experimental!!!)",
         "Confirm":"Confirm",
         "DeleteQuestion":"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?",
         "TypesCaption":"Block-Types",

@@ -66,6 +66,7 @@
                 <Blockly 
                     v-else-if="block.type=='BLOCKLY'" 
                     :block="block" 
+                    :mode="mimeType"
                     :theme="themeForBlock(block)" 
                     :editMode="editMode" 
                     :readonly="readonly"

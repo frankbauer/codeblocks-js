@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Blockly from '../lib/blockly'
 import '../lib/blockly/javascript'
 import '../lib/blockly/python'
+import '../lib/blockly/java'
 import De from '../lib/blockly/msg/de'
 import i18n from '../plugins/i18n'
 
