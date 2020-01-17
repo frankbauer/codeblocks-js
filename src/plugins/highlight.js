@@ -39,25 +39,80 @@ hljs.$vue = {
             this.processElement(el , inLang);
         })
     },
-    processElement: function(el, inLang){
+    /////The Folowing Code will not replace tags on a string level as this will 
+    /////destroy attached objects in the DOM but aims to replace the strings in 
+    /////TextNodes only. Changes ar recorded in the q and applied once all nodes
+    /////Were visited. This is probably a lot slower than the pure string version
+    // processTextElement: function(el, inLang, q){
+    //     let txt = el.textContent.replace(reg_hl, function(m1, m2, m3, m4, m5){
+    //         const lang = m3===undefined?inLang:m3;
+    //         //console.log("m1", m1, "m2", m2, "m3", m3, "m4", m4, "m5", m5, "in", inLang, "res", lang)
+    //         if (lang) return '<span is-code>'+hljs.highlight(lang, m4).value + '</span>';
+    //         else return '<span is-code>'+hljs.highlightAuto(m4).value + '</span>';
+    //     });
+
+    //     txt = txt.replace(reg_code, function(m1, m2, m3, m4, m5){
+    //         const lang = m3===undefined?inLang:m3;
+    //         m4 = m4.replace(/<br( +\/)?>/g, "\n").replace(/&nbsp;/g, " ");
+    //         if (lang) return '<pre is-code>'+hljs.highlight(lang, m4).value + '</pre>';
+    //         else return '<pre is-code>'+hljs.highlightAuto(m4).value + '</pre>';
+    //     });
+    //     if (txt != el.textContent) {
+    //       q.push(()=>{
+    //          let nel = document.createElement('span');
+    //          nel.innerHTML = txt;
+    //          el.parentNode.replaceChild(nel, el);
+    //       })
+    //     }
+    // },   
+    // processElementRec: function(el, inLang, updateList){
+    //     let q = updateList;
+    //     if (q === undefined) q = [];
+
+    //     if (inLang === undefined && el.hasAttribute('highlight')){
+    //         inLang = el.getAttribute('highlight');
+    //     }  
+    //     el.innerHTML = el.innerHTML;  
+        
+    //     el.childNodes.forEach(c => {
+    //        if (c.nodeType==Node.TEXT_NODE) {
+    //            this.processTextElement(c, inLang, q);
+    //        } else {
+    //            this.processElement(c, inLang, q);
+    //        }
+    //     })
+        
+    //     if (updateList === undefined){
+    //         q.forEach(f => f());
+    //     }
+    // },
+    processElementSimple(el, inLang){
         if (inLang === undefined && el.hasAttribute('highlight')){
             inLang = el.getAttribute('highlight');
-        }
-        //console.log("update in ", el.innerHTML, inLang)
-        
-        el.innerHTML = el.innerHTML.replace(reg_hl, function(m1, m2, m3, m4, m5){
+        } 
+
+        let txt = el.innerHTML.replace(reg_hl, function(m1, m2, m3, m4, m5){
             const lang = m3===undefined?inLang:m3;
             //console.log("m1", m1, "m2", m2, "m3", m3, "m4", m4, "m5", m5, "in", inLang, "res", lang)
             if (lang) return '<span is-code>'+hljs.highlight(lang, m4).value + '</span>';
             else return '<span is-code>'+hljs.highlightAuto(m4).value + '</span>';
         });
-        
-        el.innerHTML = el.innerHTML.replace(reg_code, function(m1, m2, m3, m4, m5){
+
+        txt = txt.replace(reg_code, function(m1, m2, m3, m4, m5){
             const lang = m3===undefined?inLang:m3;
             m4 = m4.replace(/<br( +\/)?>/g, "\n").replace(/&nbsp;/g, " ");
             if (lang) return '<pre is-code>'+hljs.highlight(lang, m4).value + '</pre>';
-            else return '<spprean is-code>'+hljs.highlightAuto(m4).value + '</pre>';
+            else return '<pre is-code>'+hljs.highlightAuto(m4).value + '</pre>';
         });
+
+        el.innerHTML = txt;
+    },
+    processElement(el, inLang){
+        if (window.MathJax === undefined){
+            this.processElementSimple(el, inLang);
+        } else {
+           MathJax.Hub.Register.StartupHook("End",() => { this.processElementSimple(el, inLang); })
+        }
     }
 };
 

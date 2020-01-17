@@ -48,9 +48,17 @@ Vue.$tagger = new Vue({
             }
             
             const elements = scope.querySelectorAll('[tagged]');
-            elements.forEach(el => {
-                this.processElement(el, uuid);
-            })
+            const calle = () => {
+                elements.forEach(el => {
+                    this.processElement(el, uuid);
+                })
+            }
+            if (window.MathJax === undefined){
+                calle()
+            } else {
+               MathJax.Hub.Register.StartupHook("End", calle)
+            }
+            
         },
         processElement: function(el, scopeUUID){        
             el.innerHTML = this.processString(el.innerHTML, scopeUUID);
