@@ -100,7 +100,8 @@ hljs.$vue = {
 
         txt = txt.replace(reg_code, function(m1, m2, m3, m4, m5){
             const lang = m3===undefined?inLang:m3;
-            m4 = m4.replace(/<br( +\/)?>/g, "\n").replace(/&nbsp;/g, " ");
+            m4 = m4.replace(/<br( +\/)?>/g, "\n").replace(/&nbsp;/g, " ").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&") 
+            
             if (lang) return '<pre is-code>'+hljs.highlight(lang, m4).value + '</pre>';
             else return '<pre is-code>'+hljs.highlightAuto(m4).value + '</pre>';
         });
@@ -119,6 +120,11 @@ hljs.$vue = {
 window.highlightAll = function() {
     hljs.$vue.processElements();
 }
+window.highlightElement = function(el) {
+    hljs.$vue.processElement(el, el.getAttribute('highlight'));
+}
+window.hljs = hljs
+
 Vue.$hljs = hljs
 
 Vue.directive('highlight', {
