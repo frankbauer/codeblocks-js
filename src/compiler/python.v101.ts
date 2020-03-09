@@ -1,18 +1,20 @@
-import Vue from 'vue'
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import {ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry} from '../lib/ICompilerRegistry'
 
 
 function runPythonWorker(
-    questionID, 
-    prog, 
-    callingCodeBlocks, 
-    maxRuntime, 
-    logCallback, 
-    infoCallback, 
-    errCallback, 
-    compileFailedCallback, 
-    finishCallback, 
-    legacy = true) {    
-
+    questionID:string, 
+    prog:string, 
+    callingCodeBlocks:any, 
+    maxRuntime:number, 
+    logCallback:(txt:string) => void, 
+    infoCallback:(txt:string) => void, 
+    errCallback:(txt:string) => void, 
+    compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+    finishCallback:(success:boolean) => void,
+    legacy:boolean)  
+{   
     console.log("Python Version:", legacy ? "2.7" : "3")
 
     // the Python program
@@ -67,7 +69,7 @@ function runPythonWorker(
         }
         if (e.data[0] == 'finished') {
             logCallback(e.data[1].stdOut);
-            finishCallback();
+            finishCallback(true);
             infoCallback("Info: Execution finished in : " + (Date.now() - start) + " ms");
             worker.end();
         } else if (e.data[0] === 'err') {
@@ -111,22 +113,29 @@ function runPythonWorker(
 
 }
 
-const singleton = new Vue({
-    data: function () {
-        return {
-            version: "101",
-            language: "python",
-            canRun: true,
-            isReady: true,
-            isRunning: false
-        }
-    },
-    methods: {
-        preload() {
+//ICompilerInstance
+export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance { 
+    version = "101"
+    language = "python"    
+    canRun = true
+    isReady = true
+    isRunning = false
+    
+    preload() {}
 
-        },
-        compileAndRun(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, runCreate = true) {
-            return runPythonWorker(
+    compileAndRun(
+        questionID:string, 
+        code:string, 
+        callingCodeBlocks:any, 
+        max_ms:number, 
+        log_callback:(txt:string) => void, 
+        info_callback:(txt:string) => void, 
+        err_callback:(txt:string) => void, 
+        compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+        finishedExecutionCB:(success:boolean) => void, 
+        runCreate:boolean = true): void 
+    {
+        return runPythonWorker(
                 questionID,
                 code,
                 callingCodeBlocks,
@@ -137,26 +146,32 @@ const singleton = new Vue({
                 compileFailedCallback, 
                 finishedExecutionCB,             
                 true);
-        }
     }
-})
+}
 
-const singleton3 = new Vue({
-    data: function () {
-        return {
-            version: "101",
-            language: "python",
-            canRun: true,
-            isReady: true,
-            isRunning: false
-        }
-    },
-    methods: {
-        preload() {
+//ICompilerInstance
+export class PythonV101Compiler extends Vue implements ICompilerInstance { 
+    version = "101"
+    language = "python"    
+    canRun = true
+    isReady = true
+    isRunning = false
+        
+   preload() {}
 
-        },
-        compileAndRun(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, runCreate = true) {
-            return runPythonWorker(
+   compileAndRun(
+    questionID:string, 
+    code:string, 
+    callingCodeBlocks:any, 
+    max_ms:number, 
+    log_callback:(txt:string) => void, 
+    info_callback:(txt:string) => void, 
+    err_callback:(txt:string) => void, 
+    compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+    finishedExecutionCB:(success:boolean) => void, 
+    runCreate:boolean = true): void 
+{
+    return runPythonWorker(
                 questionID, 
                 code, 
                 callingCodeBlocks, 
@@ -168,9 +183,12 @@ const singleton3 = new Vue({
                 finishedExecutionCB,
                 false);
         }
-    }
-})
+}
+
+export const pythonCompiler_V101 = new PythonV101Compiler();
+export const pythonLegacyCompiler_V101 = new PythonV101LegacyCompiler();
+
 export default {
-    legacyPython: singleton,
-    python3: singleton3
+    legacyPython: pythonLegacyCompiler_V101,
+    python3: pythonCompiler_V101
 };

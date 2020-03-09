@@ -1,7 +1,19 @@
-import Vue from 'vue'
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import {ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry} from '../lib/ICompilerRegistry'
 
 
-function runPythonWorker(questionID, prog, callingCodeBlocks, maxRuntime, logCallback, infoCallback, errCallback, compileFailedCallback, finishCallback) { 
+function runPythonWorker(
+    questionID:string, 
+    prog:string, 
+    callingCodeBlocks:any, 
+    maxRuntime:number, 
+    logCallback:(txt:string) => void, 
+    infoCallback:(txt:string) => void, 
+    errCallback:(txt:string) => void, 
+    compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+    finishCallback:(success:boolean) => void)  
+{ 
     // the Python program
     prog = prog.replaceAll("\t", "    ");    
     
@@ -47,7 +59,7 @@ function runPythonWorker(questionID, prog, callingCodeBlocks, maxRuntime, logCal
         if (testTimeoutIntern() === true) { return; }
         if( e.data[0] == 'finished' ){
             logCallback(e.data[1].stdOut);
-            finishCallback();            
+            finishCallback(true);            
             infoCallback("Info: Execution finished in : " + (Date.now() - start) + " ms");
             worker.end();
         }else if (e.data[0] ==='err'){  
@@ -75,27 +87,34 @@ function runPythonWorker(questionID, prog, callingCodeBlocks, maxRuntime, logCal
         }
     }
     // in any case use the window timeout to terminate the worker
-    setTimeout(testTimeout, maxRuntime);
-    
+    setTimeout(testTimeout, maxRuntime);    
 }
 
-const singleton = new Vue({
-    data: function () {
-        return {
-            version: "100",
-            language: "python",    
-            canRun: true,
-            isReady: true,
-            isRunning: false
-        }
-    },
-    methods: {
-        preload() {
-            
-        },
-        compileAndRun(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, runCreate = true){
-            return runPythonWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, runCreate);
-        }
+//ICompilerInstance
+export class PythonV100Compiler extends Vue implements ICompilerInstance { 
+    version = "100"
+    language = "python"    
+    canRun = true
+    isReady = true
+    isRunning = false
+    
+    
+    preload() { }
+
+    compileAndRun(
+        questionID:string, 
+        code:string, 
+        callingCodeBlocks:any, 
+        max_ms:number, 
+        log_callback:(txt:string) => void, 
+        info_callback:(txt:string) => void, 
+        err_callback:(txt:string) => void, 
+        compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+        finishedExecutionCB:(success:boolean) => void, 
+        runCreate:boolean = true): void 
+    {
+        return runPythonWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB);
     }
-})
-export default singleton;
+}
+export const pythonCompiler_V100 = new PythonV100Compiler();
+export default pythonCompiler_V100;

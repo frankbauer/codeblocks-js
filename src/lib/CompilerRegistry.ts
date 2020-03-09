@@ -189,7 +189,7 @@ compilerRegistry.register(JavaCompilers);
 import {JavascriptCompilers} from '../compiler/javascript'
 compilerRegistry.register(JavascriptCompilers);
 
-import PythonCompilers from '../compiler/python'
+import {PythonCompilers} from '../compiler/python'
 compilerRegistry.register(PythonCompilers);
 
 import GLSLCompilers from '../compiler/glsl'
