@@ -15,5 +15,9 @@ declare module 'vue/types/vue' {
   interface VueConstructor {
     $hljs: any;
     $tagger: any;
+    $CodeBlock: any;
+  }
+  interface Vue {
+    $CodeBlock: any;
   }
 }
