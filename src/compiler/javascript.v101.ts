@@ -104,7 +104,7 @@ function runJavaScriptWorker(
     }
 }
 
-export class Javascriptv101Compiler extends Vue implements ICompilerInstance {    
+export class JavascriptV101Compiler extends Vue implements ICompilerInstance {    
     version = "101"
     language = "javascript"    
     canRun = true
@@ -150,5 +150,5 @@ export class Javascriptv101Compiler extends Vue implements ICompilerInstance {
     
 }
 
-export const javascriptCompiler_V101 = new Javascriptv101Compiler();
+export const javascriptCompiler_V101 = new JavascriptV101Compiler();
 export default javascriptCompiler_V101;

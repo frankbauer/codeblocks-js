@@ -135,7 +135,7 @@ import {ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry} from '.
 }
 
 //ICompilerInstance
-export class Javascriptv100Compiler extends Vue implements ICompilerInstance { 
+export class JavascriptV100Compiler extends Vue implements ICompilerInstance { 
     version = "100"
     language = "javascript"    
     canRun = true
@@ -160,5 +160,5 @@ export class Javascriptv100Compiler extends Vue implements ICompilerInstance {
             return runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB);
     }    
 }
-export const javascriptCompiler_V100 = new Javascriptv100Compiler();
+export const javascriptCompiler_V100 = new JavascriptV100Compiler();
 export default javascriptCompiler_V100;
