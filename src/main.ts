@@ -1,14 +1,3 @@
-declare global {
-  interface Window { 
-    mountInElement(element:any):void; 
-  }
-  
-  interface String {
-    replaceAll(search:string, replacement:string) : string;
-    replaceRec(pattern:string|RegExp, replacement:string)  : string;
-  } 
-}
-
 String.prototype.replaceAll = function(search:string, replacement:string) : string {
   var target = this;
   return target.replace(new RegExp(search, 'g'), replacement);
@@ -36,13 +25,6 @@ import CodeBlocksManager from './lib/codeBlocksManager';
 
 Vue.config.productionTip = false
 CodeBlocksManager.find(document).mount();
-
-declare module 'vue/types/vue' {
-  interface VueConstructor {
-    $hljs: any;
-    $tagger: any;
-  }
-}
 
 window.mountInElement = function(element:any) :void{
   Vue.$hljs.$vue.processElements(element);
