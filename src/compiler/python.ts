@@ -18,6 +18,7 @@ export class PythonCompilerInfo extends Vue implements ICompilerInfo{
     default = v101.legacyPython        
 };
 
+@Component
 export class Python3CompilerInfo extends Vue implements ICompilerInfo{
     type = "python3"
     displayName = "Python 3"

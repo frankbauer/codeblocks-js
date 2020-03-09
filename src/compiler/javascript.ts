@@ -6,6 +6,7 @@ import {ICompilerInfo} from '../lib/ICompilerRegistry'
 import v100 from './javascript.v100'
 import v101 from './javascript.v101'
 
+@Component
 export class JavascriptCompilerInfo extends Vue implements ICompilerInfo{
     type = "javascript"
     displayName = "JavaScript"

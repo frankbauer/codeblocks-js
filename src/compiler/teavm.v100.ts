@@ -6,6 +6,7 @@ const teaVMRunOverhead = 30000;
 
 
 //ICompilerInstance
+@Component
 export class JavaV100Compiler extends Vue implements ICompilerInstance {    
     version = "100"
     language = "java"  
@@ -22,11 +23,12 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
 
         console.log(`[Preloading TeaVM ${this.version} for Java]`);
         this.isRunning = true;
-        this.createTeaWorker(function (this:JavaV100Compiler) {
+        this.createTeaWorker( () => {
             this.isRunning = false;
             this.$compilerState.hideGlobalState();
             this.$compilerState.setAllRunButtons(true);
-        }.bind(this));
+            console.log("setAllRun", true)
+        });
     }
 
     private createTeaWorker(whenReady:()=>void) : boolean {
@@ -40,10 +42,10 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                 this.teaworker = new Worker('../assCodeQuestion/js/teavm/worker.js');
             }
 
-            this.teaworker.addEventListener('message', function (this:JavaV100Compiler, e:any) {
-                //console.log("teastuff", e.data);
+            this.teaworker.addEventListener('message', (e:any) => {
+                console.log("teastuff", e.data);
                 if (e.data.command == 'ok' && e.data.id == 'didload-classlib') {
-                    this.teaworker!.postMessage({
+                    if (this.teaworker) this.teaworker.postMessage({
                         command: "compile",
                         id: 'prep',
                         text: 'public class Bootstrap { public static void main(String[] args){}}',
@@ -58,9 +60,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         this.$compilerState.hideGlobalState();
                     }
                 } else if (e.data.id == 'prep' && e.data.command == 'compilation-complete') {
-                    /* We could finish initialization here if there appear to be races when compiling multiple sources at once */
+                    /* We could finish initialization here if there appear to be races when compiling multiple sources at once */                    
                 }
-            }.bind(this));
+            });
 
             //bootstrap environment
             this.teaworker.postMessage({
@@ -97,10 +99,10 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }
         this.isRunning = true;
         if (runCreate) {
-            if (this.createTeaWorker(function (this:JavaV100Compiler) {
+            if (this.createTeaWorker( () => {
                     this.isRunning = false;
                     this.compileAndRun(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, false);
-                }.bind(this))) {
+                })) {
                 return;
             }
         }
@@ -110,7 +112,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             return;
         }
 
-        const compilerTimeout = setTimeout(function (this:JavaV100Compiler) {
+        const compilerTimeout = setTimeout( () => {
             if (!booted) {
                 var time = Date.now() - start;
 
@@ -119,7 +121,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
 
                 this.teaworker = undefined;  
             }
-        }.bind(this), teaVMRunOverhead);
+        }, teaVMRunOverhead);
 
 
         var mainClass = 'Unknown';
@@ -139,7 +141,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }
 
         //console.log(mainClass, code);
-        var myListener = function (this:JavaV100Compiler, e:any) {
+        var myListener =  (e:any) => {
             //console.log('this.teaworker', questionID, e.data);
             if (e.data.id == '' + questionID) {
                 if (e.data.command == 'phase') {
@@ -211,7 +213,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         finishedExecutionCB(false);
                         this.isRunning = false;
                     } else {
-                        function runListener(this:JavaV100Compiler, ee:any) {
+                        let runListener = (ee:any) => {
                             //console.log('tearunner', questionID, ee.data);
                             if (ee.data.command == 'run-finished-setup') {
 
@@ -237,7 +239,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             code: e.data.script
                         });
 
-                        workerrun.end = function (this:JavaV100Compiler, msg:string) {
+                        workerrun.end =  (msg:string) => {
                             //when we end it IS over, no matter how often we tried :)
                             try {
                                 workerrun.terminate();
@@ -249,7 +251,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             finishedExecutionCB(false);
                             this.isRunning = false;
                             if (msg) err_callback(msg + "\n");
-                        }.bind(this);
+                        };
 
                         var runStart = Date.now();
                         runTimeout = setTimeout(function () {
@@ -259,7 +261,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                     }
                 }
             }
-        }.bind(this);
+        };
 
         if (this.teaworker) this.teaworker.addEventListener('message', myListener);
         //console.log(code);
@@ -274,7 +276,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         });
 
 
-        if (this.teaworker) this.teaworker.end = function (this:JavaV100Compiler, msg:string) {
+        if (this.teaworker) this.teaworker.end = (msg:string) => {
             try {
                 clearTimeout(compilerTimeout);
             } catch (e) {}
@@ -285,7 +287,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             this.isRunning = false;
             this.isReady = true;
             if (msg) err_callback(msg + "\n");
-        }.bind(this);
+        };
     }    
 }
 

@@ -91,6 +91,7 @@ function runPythonWorker(
 }
 
 //ICompilerInstance
+@Component
 export class PythonV100Compiler extends Vue implements ICompilerInstance { 
     version = "100"
     language = "python"    

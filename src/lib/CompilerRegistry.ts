@@ -14,15 +14,20 @@ interface IDomLibraray {
     order:number
 }
 
+export interface ICompilerHashMap {
+    [lang: string] : ICompilerInfo;
+} 
+
 //prepare Compiler Registry
+@Component
 export class CompilerRegistry extends Vue implements ICompilerRegistry{
-    compilers = new Map<string, ICompilerInfo>()
+    compilers: ICompilerHashMap = {}
     libraries:IDomLibraray[] = []
     loadedURIs: string[] = []
     afterLoadFinished: (() => void)[] = []
     isLoadingLibs = false
 
-    get languages() : IListItemData[] {
+    get languages(): IListItemData[] {
         const langs = Object
             .keys(this.compilers)
             .map(k => this.compilers[k])
@@ -46,7 +51,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry{
     }
 
     registerSingle(c:ICompilerInfo): void{
-        this.compilers.set(c.type, c)            
+        this.compilers[c.type] = c
         c.versions.forEach( v => {
             if (v.registerLibs) {
                 v.registerLibs(this);
@@ -55,7 +60,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry{
     }
 
     getCompiler(compilerInfo:ICompilerID) : ICompilerInstance|undefined {
-        let cmps = this.compilers.get(compilerInfo.languageType)
+        let cmps = this.compilers[compilerInfo.languageType]
         if (!cmps) return undefined;
 
         let res = cmps.versions.find(e => e.version == compilerInfo.version);

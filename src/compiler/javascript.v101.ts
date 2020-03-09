@@ -103,7 +103,7 @@ function runJavaScriptWorker(
         startExecution()
     }
 }
-
+@Component
 export class JavascriptV101Compiler extends Vue implements ICompilerInstance {    
     version = "101"
     language = "javascript"    

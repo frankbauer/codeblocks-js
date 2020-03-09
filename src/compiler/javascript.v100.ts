@@ -135,6 +135,7 @@ import {ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry} from '.
 }
 
 //ICompilerInstance
+@Component
 export class JavascriptV100Compiler extends Vue implements ICompilerInstance { 
     version = "100"
     language = "javascript"    

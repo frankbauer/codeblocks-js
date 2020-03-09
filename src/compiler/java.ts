@@ -6,7 +6,7 @@ import {ICompilerInfo} from '../lib/ICompilerRegistry'
 import v001 from './doppio.v001'
 import v100 from './teavm.v100'
 
-
+@Component
 export class JavaCompilerInfo extends Vue implements ICompilerInfo{
     type = "java"
     displayName = "Java"
