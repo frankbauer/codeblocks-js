@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import Quasar from 'quasar'
+import {Quasar} from 'quasar'
 
 let lang = document.getElementsByTagName('html')[0].getAttribute('lang');
 lang = lang.split('-', 2)[0]

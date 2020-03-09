@@ -5,13 +5,13 @@ import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
 import { uuid } from 'vue-uuid';
 
-import CompilerRegistry from '../lib/CompilerRegistry'
+import CompilerRegistry from './CompilerRegistry'
 Vue.prototype.$compilerRegistry = CompilerRegistry;
 
 
 
 //this will handle the vue mounting on the dom
-class CodeBlocksManager {
+class InternalCodeBlocksManager {
     constructBlock(data, bl){
         if (this.type == 'PLAYGROUND') {
             if (bl.content=='' || bl.content===undefined || bl.content===null) {
@@ -363,7 +363,7 @@ export default {
         const allCodeBlockParents = scope.querySelectorAll("codeblocks, codeblockseditor, div[codeblocks], div[codeblockseditor]");
         let result = [];
         allCodeBlockParents.forEach(el => {
-            const cbm = new CodeBlocksManager(el);            
+            const cbm = new InternalCodeBlocksManager(el);            
             let scope = cbm.data.scopeSelector?document.querySelector(cbm.data.scopeSelector):undefined
             if (scope === undefined || scope === null) scope = el;
             
