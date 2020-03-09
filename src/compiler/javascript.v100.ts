@@ -1,7 +1,18 @@
-import Vue from 'vue'
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import {ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry} from '../lib/ICompilerRegistry'
 
 //function runJavaScriptWorker( code, log_callback, max_ms, questionID){
-function runJavaScriptWorker (questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback,  finishedExecutionCB){
+    function runJavaScriptWorker(
+        questionID:string, 
+        code:string, 
+        callingCodeBlocks:any, 
+        max_ms:number, 
+        log_callback:(txt:string) => void, 
+        info_callback:(txt:string) => void, 
+        err_callback:(txt:string) => void, 
+        compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+        finishedExecutionCB:(success:boolean) => void) {
     
     log_callback('');
 
@@ -80,7 +91,7 @@ function runJavaScriptWorker (questionID, code, callingCodeBlocks, max_ms, log_c
 
         testTimeoutIntern();
         if( e.data[0] == 'finished' ){
-            finishedExecutionCB();            
+            finishedExecutionCB(true);            
             info_callback("Info: Execution finished in " + (Date.now() - start) + " ms\n");
             worker.end();
         }else if(e.data[0]=='log'){
@@ -123,24 +134,31 @@ function runJavaScriptWorker (questionID, code, callingCodeBlocks, max_ms, log_c
     setTimeout( testTimeout, max_ms );
 }
 
-
-const singleton = new Vue({
-    data: function () {
-        return {
-            version: "100",
-            language: "javascript",    
-            canRun: true,
-            isReady: true,
-            isRunning: false
-        }
-    },
-    methods: {
-        preload() {
+//ICompilerInstance
+export class Javascriptv100Compiler extends Vue implements ICompilerInstance { 
+    version = "100"
+    language = "javascript"    
+    canRun = true
+    isReady = true
+    isRunning = false   
+    
+    preload() {
             
-        },
-        compileAndRun(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, runCreate = true){
-            return runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, runCreate);
-        }
     }
-})
-export default singleton;
+    compileAndRun(
+        questionID:string, 
+        code:string, 
+        callingCodeBlocks:any, 
+        max_ms:number, 
+        log_callback:(txt:string) => void, 
+        info_callback:(txt:string) => void, 
+        err_callback:(txt:string) => void, 
+        compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+        finishedExecutionCB:(success:boolean) => void, 
+        runCreate:boolean = true): void 
+    {
+            return runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB);
+    }    
+}
+export const javascriptCompiler_V100 = new Javascriptv100Compiler();
+export default javascriptCompiler_V100;

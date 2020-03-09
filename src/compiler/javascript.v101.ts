@@ -1,6 +1,24 @@
-import Vue from 'vue'
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import {ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry} from '../lib/ICompilerRegistry'
 
-function runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB) {
+
+declare global {
+    interface Worker { 
+        end(msg?:string):void;  
+    }    
+}
+
+function runJavaScriptWorker(
+    questionID:string, 
+    code:string, 
+    callingCodeBlocks:any, 
+    max_ms:number, 
+    log_callback:(txt:string) => void, 
+    info_callback:(txt:string) => void, 
+    err_callback:(txt:string) => void, 
+    compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+    finishedExecutionCB:(success:boolean) => void) {
 
     //WebWorkers need to be supported
     if (!window.Worker) {
@@ -86,43 +104,51 @@ function runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_ca
     }
 }
 
+export class Javascriptv101Compiler extends Vue implements ICompilerInstance {    
+    version = "101"
+    language = "javascript"    
+    canRun = true
+    isReady = true
+    isRunning = false
+    libraries = [
+        {
+            key: 'd3-101',
+            name: 'd3',
+            version: '5.14.3',
+            displayName: 'D3 - Proxy',
+        }
+    ]
 
-const singleton = new Vue({
-    data: function () {
-        return {
-            version: "101",
-            language: "javascript",    
-            canRun: true,
-            isReady: true,
-            isRunning: false,
-            libraries: [
-                {
-                    key: 'd3-101',
-                    name: 'd3',
-                    version: '5.14.3',
-                    displayName: 'D3 - Proxy',
-                }
-            ]
-        }
-    },
-    methods: {
-        registerLibs(compilerRegistry){
-            compilerRegistry.registerDOMLib(
-                [
-                    Vue.$CodeBlock.baseurl+'js/javascript/v101/d3DomProxyToHTML.js'
-                ], 
-                'd3proxy', 
-                '101', 
-                'D3 - Proxy',
-                true //makes it a utility lib => not selectable by users
-            )
-        },
-        preload() {
-            
-        },
-        compileAndRun(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, runCreate = true){
-            return runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, runCreate);
-        }
+    
+    registerLibs?(compilerRegistry:ICompilerRegistry):void {
+        compilerRegistry.registerDOMLib(
+            [
+                Vue.$CodeBlock.baseurl+'js/javascript/v101/d3DomProxyToHTML.js'
+            ], 
+            'd3proxy', 
+            '101', 
+            'D3 - Proxy',
+            true //makes it a utility lib => not selectable by users
+        )
     }
-})
-export default singleton;
+    preload() {
+        
+    }
+    compileAndRun(
+        questionID:string, 
+        code:string, 
+        callingCodeBlocks:any, 
+        max_ms:number, 
+        log_callback:(txt:string) => void, 
+        info_callback:(txt:string) => void, 
+        err_callback:(txt:string) => void, 
+        compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+        finishedExecutionCB:(success:boolean) => void, 
+        runCreate:boolean = true): void{
+        return runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB);
+    }
+    
+}
+
+export const javascriptCompiler_V101 = new Javascriptv101Compiler();
+export default javascriptCompiler_V101;

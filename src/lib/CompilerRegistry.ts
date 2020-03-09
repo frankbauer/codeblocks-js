@@ -1,6 +1,7 @@
 
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import {ICompilerID, ICompilerInfo, IListItemData, ICompilerInstance, ICompilerRegistry} from './ICompilerRegistry'
 
 interface IDomLibraray {
     key:string
@@ -13,25 +14,8 @@ interface IDomLibraray {
     order:number
 }
 
-export interface IListItemData {
-    label: string
-    value: string
-}
-
-export interface ICompilerInfo {
-    type: string
-    displayName: string
-    versions: any[]
-    default: any
-}
-
-export interface ICompilerID {
-    languageType: string
-    version: string
-}
-
 //prepare Compiler Registry
-export class CompilerRegistry extends Vue {
+export class CompilerRegistry extends Vue implements ICompilerRegistry{
     compilers = new Map<string, ICompilerInfo>()
     libraries:IDomLibraray[] = []
     loadedURIs: string[] = []
@@ -53,7 +37,7 @@ export class CompilerRegistry extends Vue {
     }   
     
     
-    register(compilers:ICompilerInfo[]): void{
+    register(compilers:ICompilerInfo[]|ICompilerInfo): void{
         if (Array.isArray(compilers)){
             compilers.forEach(c => this.registerSingle(c))
         } else {
@@ -70,7 +54,7 @@ export class CompilerRegistry extends Vue {
         })
     }
 
-    getCompiler(compilerInfo:ICompilerID) : ICompilerInfo|undefined {
+    getCompiler(compilerInfo:ICompilerID) : ICompilerInstance|undefined {
         let cmps = this.compilers.get(compilerInfo.languageType)
         if (!cmps) return undefined;
 
@@ -202,7 +186,7 @@ export const compilerRegistry = new CompilerRegistry();
 import JavaCompilers from '../compiler/java'
 compilerRegistry.register(JavaCompilers);
 
-import JavascriptCompilers from '../compiler/javascript'
+import {JavascriptCompilers} from '../compiler/javascript'
 compilerRegistry.register(JavascriptCompilers);
 
 import PythonCompilers from '../compiler/python'

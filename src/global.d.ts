@@ -16,6 +16,8 @@ declare module 'vue/types/vue' {
     $hljs: any;
     $tagger: any;
     $CodeBlock: any;
+    $SEVERITY_ERROR: number;
+    $SEVERITY_WARNING: number;
   }
   interface Vue {
     $CodeBlock: any;
