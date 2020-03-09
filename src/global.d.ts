@@ -22,5 +22,7 @@ declare module 'vue/types/vue' {
   interface Vue {
     $CodeBlock: any;
     $compilerState: any;
+    SEVERITY_ERROR: number;
+    SEVERITY_WARNING: number;
   }
 }
