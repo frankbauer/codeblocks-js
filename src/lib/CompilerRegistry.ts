@@ -183,7 +183,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry{
 export const compilerRegistry = new CompilerRegistry();
 
 //load all available compilers
-import JavaCompilers from '../compiler/java'
+import {JavaCompilers} from '../compiler/java'
 compilerRegistry.register(JavaCompilers);
 
 import {JavascriptCompilers} from '../compiler/javascript'

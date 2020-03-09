@@ -21,5 +21,6 @@ declare module 'vue/types/vue' {
   }
   interface Vue {
     $CodeBlock: any;
+    $compilerState: any;
   }
 }
