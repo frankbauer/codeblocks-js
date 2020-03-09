@@ -347,6 +347,9 @@
             altcodemirror() {
                 if (this.$refs.altBox===undefined) return undefined
                 return this.$refs.altBox.codemirror
+            },
+            readyWhenMounted(){
+                return false;
             }
         },
         watch: {
@@ -358,7 +361,8 @@
             }
         },
         created(){
-            this.$options.readyWhenMounted = false;
+            console.log("[DEBUG] ReadyWhenMounted in CodeBlock", this.readyWhenMounted)
+            //this.$options.readyWhenMounted = false;
         },
         mounted() {            
             this.updateHeight();            
