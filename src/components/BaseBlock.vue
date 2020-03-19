@@ -1,10 +1,11 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
+import { BlockData } from '@/lib/codeBlocksManager'
 @Component
 export default class BaseBlock extends Vue {
     @Prop({ default: false }) muteReadyState!: boolean
-    @Prop({ required: true }) block!: any
+    @Prop({ required: true }) block!: BlockData
 
     whenBlockIsReady() {
         if (this.muteReadyState) {
