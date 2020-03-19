@@ -32,7 +32,7 @@ export interface IRandomizerSettings {
     active: boolean
     previewIndex: number
     knownTags: string[]
-    sets: IRandomizerSet
+    sets: IRandomizerSet[]
 }
 
 export interface IAppSettings {
@@ -189,7 +189,7 @@ export class BlockData extends Vue implements IBlockData {
 
     actualContent() {
         if (this.appSettings.randomizer.active) {
-            return Vue.$tagger.replaceRandomTagsInString(this.content, this.appSettings.randomizer.sets.values[this.appSettings.randomizer.previewIndex])
+            return Vue.$tagger.replaceRandomTagsInString(this.content, this.appSettings.randomizer.sets[this.appSettings.randomizer.previewIndex])
         }
 
         return this.content
@@ -210,8 +210,7 @@ export class BlockData extends Vue implements IBlockData {
         return this.id == this.appSettings.blocks.length - 1
     }
     get firstLine(): number {
-        if (this.id == 0) {
-            console.error('ID=0')
+        if (this.id === 0) {
             return 1
         }
         return this.appSettings.blocks[this.id - 1].nextLine
@@ -220,6 +219,7 @@ export class BlockData extends Vue implements IBlockData {
         if (!this.hasCode) {
             return 0
         }
+        console.log(`id:${this.id}, len:${this.content.split('\n').length}`)
         return this.content.split('\n').length
     }
     get nextLine(): number {
@@ -278,10 +278,7 @@ class InternalCodeBlocksManager {
                 active: false,
                 previewIndex: 0,
                 knownTags: [],
-                sets: {
-                    uuid: '',
-                    values: []
-                }
+                sets: []
             },
             domLibs: [],
             workerLibs: [],
