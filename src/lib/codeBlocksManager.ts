@@ -249,7 +249,6 @@ class InternalCodeBlocksManager {
             }
         }
 
-        console.log(data, bl)
         return new BlockData({
             data: () => {
                 return {

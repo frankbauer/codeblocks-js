@@ -1,8 +1,11 @@
 export {}
 
 declare global {
+    const MathJax: any
+
     interface Window {
         mountInElement(element: any): void
+        MathJax: any
     }
 
     interface String {
@@ -24,5 +27,6 @@ declare module 'vue/types/vue' {
         $compilerState: any
         SEVERITY_ERROR: number
         SEVERITY_WARNING: number
+        $uuid: any
     }
 }
