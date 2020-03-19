@@ -29,29 +29,29 @@ function runGLSLWorker(
 
 @Component
 export class GLSLV100Compiler extends Vue implements ICompilerInstance { 
-    version = "100"
-    language = "glsl"    
-    canRun = true
+    readonly version = "100"
+    readonly language = "glsl"    
+    readonly canRun = true
     isReady = true
     isRunning = false   
     
     preload() {
             
     }
-        compileAndRun(
-            questionID:string, 
-            code:string, 
-            callingCodeBlocks:any, 
-            max_ms:number, 
-            log_callback:(txt:string) => void, 
-            info_callback:(txt:string) => void, 
-            err_callback:(txt:string) => void, 
-            compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-            finishedExecutionCB:(success:boolean, overrideOutput?: any) => void, 
-            runCreate:boolean = true): void 
-        {
-            return runGLSLWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB);
-        }
+    compileAndRun(
+        questionID:string, 
+        code:string, 
+        callingCodeBlocks:any, 
+        max_ms:number, 
+        log_callback:(txt:string) => void, 
+        info_callback:(txt:string) => void, 
+        err_callback:(txt:string) => void, 
+        compileFailedCallback:(info:ICompilerErrorDescription) => void, 
+        finishedExecutionCB:(success:boolean, overrideOutput?: any) => void, 
+        runCreate:boolean = true): void 
+    {
+        return runGLSLWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB);
+    }
     
 }
 export const v100 = new GLSLV100Compiler();

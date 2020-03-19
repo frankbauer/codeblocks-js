@@ -1,6 +1,6 @@
 export interface IListItemData {
-    label: string
-    value: string
+    readonly label: string
+    readonly value: string
 }
 
 export interface ICompilerErrorDescription {
@@ -12,12 +12,12 @@ export interface ICompilerRegistry {
 }
 
 export interface ICompilerInstance {
-    version: string
-    language: string
-    canRun: boolean
+    readonly version: string
+    readonly language: string
+    readonly canRun: boolean
     isReady: boolean
     isRunning: boolean
-    libraries?:ICompilerLibraryInfo[]
+    readonly libraries?:ICompilerLibraryInfo[]
 
     registerLibs?(compilerRegistry:ICompilerRegistry):void
     preload(): void
@@ -30,25 +30,25 @@ export interface ICompilerInstance {
         info_callback:(txt:string) => void, 
         err_callback:(txt:string) => void, 
         compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-        finishedExecutionCB:(success:boolean) => void, 
+        finishedExecutionCB:(success:boolean, overrideOutput?: any) => void, 
         runCreate:boolean): void;
 }
 
 export interface ICompilerLibraryInfo {
-    key: string
-    name: string
-    version: string
-    displayName: string
+    readonly key: string
+    readonly name: string
+    readonly version: string
+    readonly displayName: string
 }
 
 export interface ICompilerInfo {
-    type: string
-    displayName: string
-    versions: ICompilerInstance[]
-    default: ICompilerInstance
+    readonly type: string
+    readonly displayName: string
+    readonly versions: ICompilerInstance[]
+    readonly default: ICompilerInstance
 }
 
 export interface ICompilerID {
-    languageType: string
-    version: string
+    readonly languageType: string
+    readonly version: string
 }

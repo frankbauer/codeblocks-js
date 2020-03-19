@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Component } from 'vue-property-decorator'
 import {ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry} from '../lib/ICompilerRegistry'
 
 const teaVMRunOverhead = 30000;
@@ -86,7 +86,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         info_callback:(txt:string) => void, 
         err_callback:(txt:string) => void, 
         compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-        finishedExecutionCB:(success:boolean) => void, 
+        finishedExecutionCB:(success:boolean, overrideOutput?: any) => void, 
         runCreate:boolean = true): void 
     {
         var start = Date.now();

@@ -12,7 +12,7 @@ function runPythonWorker(
     infoCallback:(txt:string) => void, 
     errCallback:(txt:string) => void, 
     compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-    finishCallback:(success:boolean) => void)  
+    finishCallback:(success:boolean, overrideOutput?: any) => void)  
 { 
     // the Python program
     prog = prog.replaceAll("\t", "    ");    
@@ -111,7 +111,7 @@ export class PythonV100Compiler extends Vue implements ICompilerInstance {
         info_callback:(txt:string) => void, 
         err_callback:(txt:string) => void, 
         compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-        finishedExecutionCB:(success:boolean) => void, 
+        finishedExecutionCB:(success:boolean, overrideOutput?: any) => void, 
         runCreate:boolean = true): void 
     {
         return runPythonWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB);

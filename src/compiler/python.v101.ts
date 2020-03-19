@@ -12,7 +12,7 @@ function runPythonWorker(
     infoCallback:(txt:string) => void, 
     errCallback:(txt:string) => void, 
     compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-    finishCallback:(success:boolean) => void,
+    finishCallback:(success:boolean, overrideOutput?: any) => void,
     legacy:boolean)  
 {   
     console.log("Python Version:", legacy ? "2.7" : "3")
@@ -170,7 +170,7 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
     info_callback:(txt:string) => void, 
     err_callback:(txt:string) => void, 
     compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-    finishedExecutionCB:(success:boolean) => void, 
+    finishedExecutionCB:(success:boolean, overrideOutput?: any) => void, 
     runCreate:boolean = true): void 
 {
     return runPythonWorker(

@@ -18,7 +18,7 @@ function runJavaScriptWorker(
     info_callback:(txt:string) => void, 
     err_callback:(txt:string) => void, 
     compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-    finishedExecutionCB:(success:boolean) => void) {
+    finishedExecutionCB:(success:boolean, overrideOutput?: any) => void) {
 
     //WebWorkers need to be supported
     if (!window.Worker) {
@@ -143,7 +143,7 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
         info_callback:(txt:string) => void, 
         err_callback:(txt:string) => void, 
         compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-        finishedExecutionCB:(success:boolean) => void, 
+        finishedExecutionCB:(success:boolean, overrideOutput?: any) => void, 
         runCreate:boolean = true): void{
         return runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB);
     }
