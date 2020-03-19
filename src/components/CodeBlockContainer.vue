@@ -1,455 +1,488 @@
 <template>
-  <div :data-question="block.parentID" :data-nr="block.id" :uuid="block.uuid" class="block-container">
-    <q-card v-if="editMode" :class="`q-mx-none q-my-xs q-pa-none editModeBlockContainer ${colorClass} ${bgClass}`" >
-        <q-card-section class="q-mb-none q-pb-sm q-pt-sm ">
-            <div class="row q-my-none q-py-none" dense>
-                <div class="col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none">                    
-                    <q-select
-                        :options="types"
-                        v-model="typeObj"
-                        dense
-                        style="margin-top:-5px !important"
-                    >
-                        <template v-slot:after>
-                            <q-btn flat round color="primary" icon="info" size="xs" @click="showTypeInfoDialog"></q-btn>      
-                        </template>
-                    </q-select>               
+    <div :data-question="block.parentID" :data-nr="block.id" :uuid="block.uuid" class="block-container">
+        <q-card v-if="editMode" :class="`q-mx-none q-my-xs q-pa-none editModeBlockContainer ${colorClass} ${bgClass}`">
+            <q-card-section class="q-mb-none q-pb-sm q-pt-sm ">
+                <div class="row q-my-none q-py-none" dense>
+                    <div class="col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none">
+                        <q-select :options="types" v-model="typeObj" dense style="margin-top:-5px !important">
+                            <template v-slot:after>
+                                <q-btn flat round color="primary" icon="info" size="xs" @click="showTypeInfoDialog"></q-btn>
+                            </template>
+                        </q-select>
+                    </div>
+                    <div class="col-grow"></div>
+                    <div class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right">
+                        <q-btn icon="settings" color="blue-7" push dense v-if="hasExtendedSettings">
+                            <q-popup-proxy>
+                                <!-- LineNumbers -->
+                                <div class="q-pa-md" v-if="canSetLineNumbers">
+                                    <div class="row no-wrap q-pa-none">
+                                        <div class="text-overline">{{ $t('CodeBlockContainer.Display') }}</div>
+                                    </div>
+                                    <div class="row no-wrap q-pl-md">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">{{ $t('CodeBlockContainer.Lines') }}</div>
+                                            <div class="text-caption text-blue-grey-4" v-html="$t('CodeBlockContainer.Lines_detail')"></div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-input v-model="visibleLines" :rules="[validNumber]" maxlength="4" style="width:132px" />
+                                        </div>
+                                    </div>
+                                    <div class="row no-wrap q-pl-md" v-if="canHaveAlternativeContent">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">{{ $t('CodeBlockContainer.Prepopulate') }}</div>
+                                            <div class="text-caption text-blue-grey-4" lines="2">{{ $t('CodeBlockContainer.Prepopulate_detail') }}</div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-toggle v-model="hasAltComntent" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Playground Versioning -->
+                                <div class="q-pa-md" v-if="isVersionedPlayground">
+                                    <div class="row no-wrap q-pa-none">
+                                        <div class="text-overline">{{ $t('CodeBlockContainer.Behaviour') }}</div>
+                                    </div>
+                                    <div class="row no-wrap q-pl-md">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">{{ $t('CodeBlockContainer.ScriptV') }}</div>
+                                            <div class="text-caption text-blue-grey-4">{{ $t('CodeBlockContainer.ScriptV_detail') }}</div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-select :options="scriptVersions" v-model="scriptVersionObj" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row no-wrap q-pl-md">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">{{ $t('CodeBlockContainer.AutoReset') }}</div>
+                                            <div class="text-caption text-blue-grey-4">{{ $t('CodeBlockContainer.AutoReset_detail') }}</div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-toggle v-model="shouldAutoReset" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Positioning -->
+                                <div class="q-pa-md" v-if="canDefinePlacement">
+                                    <div class="row no-wrap q-pa-none">
+                                        <div class="text-overline">{{ $t('CodeBlockContainer.Positioning') }}</div>
+                                    </div>
+                                    <div class="row no-wrap q-pl-md q-pb-md">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">{{ $t('CodeBlockContainer.Width') }}</div>
+                                            <div class="text-caption text-blue-grey-4">{{ $t('CodeBlockContainer.Width_detail') }}</div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-input v-model="width" maxlength="7" dense />
+                                        </div>
+                                    </div>
+                                    <div class="row no-wrap q-pl-md q-pb-md">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">{{ $t('CodeBlockContainer.Height') }}</div>
+                                            <div class="text-caption text-blue-grey-4">{{ $t('CodeBlockContainer.Height_detail') }}</div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-input v-model="height" maxlength="7" dense />
+                                        </div>
+                                    </div>
+                                    <div class="row no-wrap q-pl-md">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">{{ $t('CodeBlockContainer.Alignment') }}</div>
+                                            <div class="text-caption text-blue-grey-4">{{ $t('CodeBlockContainer.Alignment_detail') }}</div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-select :options="alignments" v-model="align" dense />
+                                        </div>
+                                    </div>
+                                </div>
+                            </q-popup-proxy>
+                        </q-btn>
+
+                        <q-btn @click="moveUp" :disable="!canMoveUp" icon="arrow_drop_up" push dense class="q-ml-md q-mr-xs" color="orange-6" :ripple="{ center: true }"></q-btn>
+                        <q-btn @click="moveDown" :disabled="!canMoveDown" icon="arrow_drop_down" push dense class="q-mr-md" color="orange-6" :ripple="{ center: true }"></q-btn>
+                        <q-btn
+                            @click="removeBlock"
+                            :label="$t('CodeBlockContainer.Delete')"
+                            icon="warning"
+                            push
+                            dense
+                            class="gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm"
+                            color="red-6"
+                            right
+                            :ripple="{ center: true }"
+                        ></q-btn>
+                        <q-btn @click="removeBlock" icon="warning" push dense class="lt-sm q-mr-lg q-pr-none" color="red-6" right :ripple="{ center: true }"></q-btn>
+                        <q-btn icon color="primary" small flat round style="margin-right:-9px" @click="toggleExpanded">
+                            <q-icon :name="expanded ? 'expand_less' : 'expand_more'" size="24" />
+                        </q-btn>
+                    </div>
                 </div>
-                <div class="col-grow"></div>
-                <div class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right">
-                    
-                    <q-btn icon="settings" color="blue-7" push dense v-if="hasExtendedSettings"> 
-                        <q-popup-proxy >                    <!-- LineNumbers -->
-                            <div class="q-pa-md" v-if="canSetLineNumbers"> 
-                                <div class="row no-wrap q-pa-none"> 
-                                    <div class="text-overline">{{$t('CodeBlockContainer.Display')}}</div>
-                                </div>                  
-                                <div class="row no-wrap q-pl-md"> 
-                                   <div class="col-7" >                                    
-                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Lines')}}</div>
-                                        <div class="text-caption text-blue-grey-4" v-html="$t('CodeBlockContainer.Lines_detail')"></div>
-                                    </div>
-                                    <div class="col-5 q-pl-sm" >                            
-                                        <q-input
-                                            v-model="visibleLines"
-                                            :rules="[validNumber]"
-                                            maxlength="4"
-                                            
-                                            style="width:132px"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="row no-wrap q-pl-md" v-if="canHaveAlternativeContent"> 
-                                   <div class="col-7" >                                    
-                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Prepopulate')}}</div>
-                                        <div class="text-caption text-blue-grey-4" lines="2">{{$t('CodeBlockContainer.Prepopulate_detail')}}</div>
-                                    </div>
-                                    <div class="col-5 q-pl-sm" >                            
-                                        <q-toggle
-                                            v-model="hasAltComntent"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Playground Versioning -->
-                            <div class="q-pa-md" v-if="isVersionedPlayground"> 
-                                <div class="row no-wrap q-pa-none"> 
-                                    <div class="text-overline">{{$t('CodeBlockContainer.Behaviour')}}</div>
-                                </div>                  
-                                <div class="row no-wrap q-pl-md"> 
-                                   <div class="col-7" >                                    
-                                            <div class="text-subtitle2">{{$t('CodeBlockContainer.ScriptV')}}</div>
-                                            <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.ScriptV_detail')}}</div>
-                                    </div>
-                                    <div class="col-5 q-pl-sm" >                            
-                                            <q-select
-                                                
-                                                :options="scriptVersions"
-                                                v-model="scriptVersionObj" 
-                                            />
-                                    </div>
-                                </div>
-
-                                <div class="row no-wrap q-pl-md"> 
-                                   <div class="col-7" >                                    
-                                            <div class="text-subtitle2">{{$t('CodeBlockContainer.AutoReset')}}</div>
-                                            <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.AutoReset_detail')}}</div>
-                                    </div>
-                                    <div class="col-5 q-pl-sm" >                            
-                                            <q-toggle                                                
-                                                v-model="shouldAutoReset" 
-                                            />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Positioning -->
-                            <div class="q-pa-md" v-if="canDefinePlacement"> 
-                                <div class="row no-wrap q-pa-none"> 
-                                    <div class="text-overline">{{$t('CodeBlockContainer.Positioning')}}</div>
-                                </div>                  
-                                <div class="row no-wrap q-pl-md q-pb-md"> 
-                                    <div class="col-7" >
-                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Width')}}</div>
-                                        <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.Width_detail')}}</div>                                            
-                                    </div>
-                                    <div class="col-5 q-pl-sm" >
-                                            <q-input
-                                                v-model="width"
-                                                maxlength="7" 
-                                                dense     
-                                            />                                        
-                                    </div>
-                                </div>
-                                <div class="row no-wrap q-pl-md q-pb-md"> 
-                                    <div class="col-7" >
-                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Height')}}</div>
-                                        <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.Height_detail')}}</div>                                            
-                                    </div>
-                                    <div class="col-5 q-pl-sm" >
-                                            <q-input
-                                                v-model="height"
-                                                maxlength="7" 
-                                                dense     
-                                            />                                        
-                                    </div>
-                                </div>
-                                <div class="row no-wrap q-pl-md"> 
-                                    <div class="col-7" >
-                                        <div class="text-subtitle2">{{$t('CodeBlockContainer.Alignment')}}</div>
-                                        <div class="text-caption text-blue-grey-4">{{$t('CodeBlockContainer.Alignment_detail')}}</div>                                            
-                                    </div>
-                                    <div class="col-5 q-pl-sm" >
-                                            <q-select
-                                                :options="alignments"
-                                                v-model="align"  
-                                                dense  
-                                            />                                         
-                                    </div>
-                                </div>
-                            </div>
-                        </q-popup-proxy >
-                    </q-btn>
-
-                    <q-btn @click="moveUp" :disable="!canMoveUp" icon="arrow_drop_up" push dense class="q-ml-md q-mr-xs"  color="orange-6" :ripple="{ center: true }"></q-btn>
-                    <q-btn @click="moveDown" :disabled="!canMoveDown" icon="arrow_drop_down" push dense class="q-mr-md" color="orange-6" :ripple="{ center: true }" ></q-btn>
-                    <q-btn @click="removeBlock" :label="$t('CodeBlockContainer.Delete')" icon="warning" push dense class="gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm" color="red-6" right :ripple="{ center: true }"></q-btn>
-                    <q-btn @click="removeBlock" icon="warning" push dense class="lt-sm q-mr-lg q-pr-none" color="red-6" right :ripple="{ center: true }"></q-btn>
-                    <q-btn 
-                        icon
-                        color="primary" 
-                        small 
-                        flat round   
-                        style="margin-right:-9px"                     
-                        @click="toggleExpanded">
-                            <q-icon :name="expanded?'expand_less':'expand_more'" size="24" />
-                    </q-btn>
-                </div>
-            </div>
-            <textarea :name="`block_options[${this.block.parentID}][${this.block.id}]`" class="blockoptions" v-model="serializedOptions"></textarea>
-            </q-card-section>   
-                <q-slide-transition>                
-                    <q-card-section class="my-0 q-pt-1 q-pb-0" v-show="expanded">
-                        <slot ></slot>            
-                    </q-card-section>            
-                </q-slide-transition>
-            </q-card>
-      <div v-else class="ma-0 pa-0">
-        <slot></slot>
-      </div>
-  </div>
+                <textarea :name="`block_options[${this.block.parentID}][${this.block.id}]`" class="blockoptions" v-model="serializedOptions"></textarea>
+            </q-card-section>
+            <q-slide-transition>
+                <q-card-section class="my-0 q-pt-1 q-pb-0" v-show="expanded">
+                    <slot></slot>
+                </q-card-section>
+            </q-slide-transition>
+        </q-card>
+        <div v-else class="ma-0 pa-0">
+            <slot></slot>
+        </div>
+    </div>
 </template>
 
 <script>
 export default {
-    data:function(){
+    data: function() {
         return {
-            settingsMenu:false,
-            highlighted:false,            
-            alignments:[
+            settingsMenu: false,
+            highlighted: false,
+            alignments: [
                 {
-                    label:this.$t('CodeBlockContainer.Start'),
-                    value:'left'
-                },{
-                    label:this.$t('CodeBlockContainer.Center'),
-                    value:'center'
-                },{
-                    label:this.$t('CodeBlockContainer.End'),
-                    value:'right'
-                }],
-            scriptVersions:[
+                    label: this.$t('CodeBlockContainer.Start'),
+                    value: 'left'
+                },
                 {
-                    label:this.$t('CodeBlockContainer.ScriptVersion_1'),
-                    value:'100'
-                },{
-                    label:this.$t('CodeBlockContainer.ScriptVersion_2'),
-                    value:'101'
-                }],
-            types:[
+                    label: this.$t('CodeBlockContainer.Center'),
+                    value: 'center'
+                },
                 {
-                    label:this.$t('CodeBlockContainer.Canvas'),
-                    value:'PLAYGROUND'
-                },{
-                    label:this.$t('CodeBlockContainer.Text'),
-                    value:'TEXT'
-                },{
-                    label:this.$t('CodeBlockContainer.Hidden'),
-                    value:'BLOCK-hidden'
-                },{
-                    label:this.$t('CodeBlockContainer.Static'),
-                    value:'BLOCK-static'
-                },{
-                    label:this.$t('CodeBlockContainer.Block'),
-                    value:'BLOCK'
-                },{
-                    label:this.$t('CodeBlockContainer.Blockly'),
-                    value:'BLOCKLY'
-                }]
+                    label: this.$t('CodeBlockContainer.End'),
+                    value: 'right'
+                }
+            ],
+            scriptVersions: [
+                {
+                    label: this.$t('CodeBlockContainer.ScriptVersion_1'),
+                    value: '100'
+                },
+                {
+                    label: this.$t('CodeBlockContainer.ScriptVersion_2'),
+                    value: '101'
+                }
+            ],
+            types: [
+                {
+                    label: this.$t('CodeBlockContainer.Canvas'),
+                    value: 'PLAYGROUND'
+                },
+                {
+                    label: this.$t('CodeBlockContainer.Text'),
+                    value: 'TEXT'
+                },
+                {
+                    label: this.$t('CodeBlockContainer.Hidden'),
+                    value: 'BLOCK-hidden'
+                },
+                {
+                    label: this.$t('CodeBlockContainer.Static'),
+                    value: 'BLOCK-static'
+                },
+                {
+                    label: this.$t('CodeBlockContainer.Block'),
+                    value: 'BLOCK'
+                },
+                {
+                    label: this.$t('CodeBlockContainer.Blockly'),
+                    value: 'BLOCKLY'
+                }
+            ]
         }
     },
-    props:{
-        block:{
-            type:Object,
-            required:true
+    props: {
+        block: {
+            type: Object,
+            required: true
         },
-        editMode:{
-            type:Boolean,
-            default:false
+        editMode: {
+            type: Boolean,
+            default: false
         }
     },
-    methods:{
-        validNumber(v){
+    methods: {
+        validNumber(v) {
             //console.log(v, isNaN(v), v!='auto');
-            if (v!='auto' && isNaN(v)) return "Must be a valid Number or 'auto'."
+            if (v != 'auto' && isNaN(v)) {
+                return "Must be a valid Number or 'auto'."
+            }
             return true
         },
-        toggleExpanded(){
-            this.expanded = !this.expanded;
+        toggleExpanded() {
+            this.expanded = !this.expanded
         },
-        moveUp(){
-            this.$emit('move-up', this.block.id);
+        moveUp() {
+            this.$emit('move-up', this.block.id)
         },
-        moveDown(){
-            this.$emit('move-down', this.block.id);
+        moveDown() {
+            this.$emit('move-down', this.block.id)
         },
-        showTypeInfoDialog(){            
-            this.$q.dialog({
-                title: this.$t('CodeBlockContainer.TypesCaption'),
-                message: this.$t('CodeBlockContainer.Types'),
-                html: true,
-                style:"width:75%",
-            }).onOk(() => {
-                // console.log('OK')
-            }).onCancel(() => {
-                // console.log('Cancel')
-            }).onDismiss(() => {
-                // console.log('I am triggered on both OK and Cancel')
-            })                
+        showTypeInfoDialog() {
+            this.$q
+                .dialog({
+                    title: this.$t('CodeBlockContainer.TypesCaption'),
+                    message: this.$t('CodeBlockContainer.Types'),
+                    html: true,
+                    style: 'width:75%'
+                })
+                .onOk(() => {
+                    // console.log('OK')
+                })
+                .onCancel(() => {
+                    // console.log('Cancel')
+                })
+                .onDismiss(() => {
+                    // console.log('I am triggered on both OK and Cancel')
+                })
         },
-        removeBlock(){
-            const self = this;
-            self.highlighted = true;
-            this.$q.dialog({
-                title: this.$t('CodeBlockContainer.Confirm'),
-                message: this.$t('CodeBlockContainer.DeleteQuestion'),
-                html: true,
-                ok: {
-                    push: true,
-                    color: 'negative',
-                    icon: 'warning'
-                },
-                cancel: {
-                    push: true,
-                    color: 'positive'
-                },
-                persistent: true
-            }).onOk(() => {
-                this.$emit('remove-block', this.block.id);
-            }).onCancel(() => {                
-            }).onDismiss(() => {
-                self.highlighted = false;                
-            })
+        removeBlock() {
+            const self = this
+            self.highlighted = true
+            this.$q
+                .dialog({
+                    title: this.$t('CodeBlockContainer.Confirm'),
+                    message: this.$t('CodeBlockContainer.DeleteQuestion'),
+                    html: true,
+                    ok: {
+                        push: true,
+                        color: 'negative',
+                        icon: 'warning'
+                    },
+                    cancel: {
+                        push: true,
+                        color: 'positive'
+                    },
+                    persistent: true
+                })
+                .onOk(() => {
+                    this.$emit('remove-block', this.block.id)
+                })
+                .onCancel(() => {})
+                .onDismiss(() => {
+                    self.highlighted = false
+                })
         }
     },
-    computed:{
-        expanded:{
-            get(){ return this.block.expanded },
-            set(v) { this.block.expanded = v }
+    computed: {
+        expanded: {
+            get() {
+                return this.block.expanded
+            },
+            set(v) {
+                this.block.expanded = v
+            }
         },
-        canMoveUp(){
-            return this.block.id > 0;
+        canMoveUp() {
+            return this.block.id > 0
         },
-        canMoveDown(){
-            return !this.block.isLast;
+        canMoveDown() {
+            return !this.block.isLast
         },
-        serializedOptions:{
-            get(){
-                let obj = {};
-                Object
-                    .keys(this.block)
-                    .filter(k => k.indexOf('$')!=0 && k.indexOf('_')!=0 && k!='obj' && k!='errors' && k!='content' && k!='firstLine' && k!='nextLine' && k!='lineCount' && k!='hasCode' && k!='isLast' && k!='readyCount' && k!='noContent' && k!='uuid' && k!='scopeUUID')
-                    .forEach(k => obj[k] = this.block[k])
-                
+        serializedOptions: {
+            get() {
+                let obj = {}
+                Object.keys(this.block)
+                    .filter(
+                        k =>
+                            k.indexOf('appSettings') != 0 &&
+                            k.indexOf('$') != 0 &&
+                            k.indexOf('_') != 0 &&
+                            k != 'obj' &&
+                            k != 'errors' &&
+                            k != 'content' &&
+                            k != 'firstLine' &&
+                            k != 'nextLine' &&
+                            k != 'lineCount' &&
+                            k != 'hasCode' &&
+                            k != 'isLast' &&
+                            k != 'readyCount' &&
+                            k != 'noContent' &&
+                            k != 'uuid' &&
+                            k != 'scopeUUID'
+                    )
+                    .forEach(k => (obj[k] = this.block[k]))
+
                 return JSON.stringify(obj)
             },
-            set(v){}
+            set(v) {}
         },
-        hasExtendedSettings(){
-            return this.type=="PLAYGROUND" || this.type=="BLOCK";
+        hasExtendedSettings() {
+            return this.type == 'PLAYGROUND' || this.type == 'BLOCK'
         },
-        isVersionedPlayground(){
-            return this.type=="PLAYGROUND";
+        isVersionedPlayground() {
+            return this.type == 'PLAYGROUND'
         },
-        canSetLineNumbers(){
-            return this.type=="BLOCK";
+        canSetLineNumbers() {
+            return this.type == 'BLOCK'
         },
-        canHaveAlternativeContent(){
-            return this.type=="BLOCK";
+        canHaveAlternativeContent() {
+            return this.type == 'BLOCK'
         },
-        canDefinePlacement(){
-            return this.type=="PLAYGROUND";
+        canDefinePlacement() {
+            return this.type == 'PLAYGROUND'
         },
-        shouldAutoReset:{
-            get(){
-                return this.block.shouldAutoreset;
+        shouldAutoReset: {
+            get() {
+                return this.block.shouldAutoreset
             },
-            set(v){
+            set(v) {
                 this.$emit('auto-reset-change', {
                     shouldAutoreset: v,
-                    id:this.block.id
-                });
+                    id: this.block.id
+                })
             }
         },
-        scriptVersion(){
-            if (this.block === undefined || this.block.version === undefined || this.block.version == '')
-                return '100';
+        scriptVersion() {
+            if (this.block === undefined || this.block.version === undefined || this.block.version == '') {
+                return '100'
+            }
             return this.block.version
         },
-        scriptVersionObj:{
-            get(){
-                return this.scriptVersions.find(k=>k.value == this.scriptVersion)
+        scriptVersionObj: {
+            get() {
+                return this.scriptVersions.find(k => k.value == this.scriptVersion)
             },
-            set(v){
+            set(v) {
                 this.$emit('script-version-change', {
                     version: v.value,
-                    id:this.block.id
-                });
+                    id: this.block.id
+                })
             }
         },
-        hasAltComntent:{
-            get(){
+        hasAltComntent: {
+            get() {
                 return this.block.hasAlternativeContent
             },
-            set(v){
-                if (v!=this.block.hasAlternativeContent && v){
-                    this.$nextTick(()=>{
+            set(v) {
+                if (v != this.block.hasAlternativeContent && v) {
+                    this.$nextTick(() => {
                         setTimeout(function() {
-                            $(".CodeMirror").toArray().forEach(cm =>{            
-                                cm.CodeMirror.refresh();
-                            });
-                        }, 200);
-                    });
+                            $('.CodeMirror')
+                                .toArray()
+                                .forEach(cm => {
+                                    cm.CodeMirror.refresh()
+                                })
+                        }, 200)
+                    })
                 }
                 this.block.hasAlternativeContent = v
             }
         },
-        colorClass(){
+        colorClass() {
             const t = this.type
-            if (t == 'TEXT'){
-                return 'text-border';
-            } else if (t == 'PLAYGROUND'){
-                return 'playground-border';
-            } else if (t == 'q-t'){
-                return 'block-border';
-            } else if (t == 'BLOCK-hidden'){
+            if (t == 'TEXT') {
+                return 'text-border'
+            } else if (t == 'PLAYGROUND') {
+                return 'playground-border'
+            } else if (t == 'q-t') {
+                return 'block-border'
+            } else if (t == 'BLOCK-hidden') {
                 return 'block-hidden-border'
-            } else if (t == 'BLOCK-static'){
+            } else if (t == 'BLOCK-static') {
                 return 'block-static-border'
             }
             return 'default-border'
         },
-        bgClass(){
-            if (this.highlighted) return 'highlightedCard';
-            return '';
+        bgClass() {
+            if (this.highlighted) {
+                return 'highlightedCard'
+            }
+            return ''
         },
-        type(){
-                if (this.block.type == 'BLOCK'){                
-                    if (this.block.hidden) return 'BLOCK-hidden';
-                    if (this.block.static) return 'BLOCK-static';
+        type() {
+            if (this.block.type == 'BLOCK') {
+                if (this.block.hidden) {
+                    return 'BLOCK-hidden'
                 }
-                return this.block.type;  
+                if (this.block.static) {
+                    return 'BLOCK-static'
+                }
+            }
+            return this.block.type
         },
-        typeObj:{
-            get(){
-                return this.types.find(t => t.value == this.type);                
+        typeObj: {
+            get() {
+                return this.types.find(t => t.value == this.type)
             },
-            set(v){
+            set(v) {
                 v = v.value
                 let ret = {
-                    type:v.match(/([^-]*)/)[0],
-                    hidden:v=='BLOCK-hidden',
-                    static:v=='BLOCK-static',                    
-                    id:this.block.id
+                    type: v.match(/([^-]*)/)[0],
+                    hidden: v == 'BLOCK-hidden',
+                    static: v == 'BLOCK-static',
+                    id: this.block.id
                 }
-                ret.hasCode = ret.type=='BLOCK'; 
-                
-                if (ret.type=="PLAYGROUND" && this.block.content==='' && this.editMode){
-                    if (this.block.scriptVersion == 100){
-                        this.block.content = "{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}"
+                ret.hasCode = ret.type == 'BLOCK'
+
+                if (ret.type == 'PLAYGROUND' && this.block.content === '' && this.editMode) {
+                    if (this.block.scriptVersion == 100) {
+                        this.block.content = '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
                     } else {
-                        this.block.content = "{\n    init: function(canvasElement, outputElement, scope) {\n\n    },\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}"
-                    }                    
+                        this.block.content =
+                            '{\n    init: function(canvasElement, outputElement, scope) {\n\n    },\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
+                    }
                 }
-                
-                this.$emit('type-change', ret);
+
+                this.$emit('type-change', ret)
             }
         },
-        visibleLines:{
-            get() { return this.block.visibleLines; },
-            set(v) { 
+        visibleLines: {
+            get() {
+                return this.block.visibleLines
+            },
+            set(v) {
                 this.$emit('visible-lines-change', {
-                    visibleLines: isNaN(v)?v:new Number(v),
-                    id:this.block.id
-                });
+                    visibleLines: isNaN(v) ? v : new Number(v),
+                    id: this.block.id
+                })
             }
         },
-        width:{
-            get() { return this.block.width; },
-            set(v) { 
+        width: {
+            get() {
+                return this.block.width
+            },
+            set(v) {
                 this.$emit('placement-change', {
                     width: v,
-                    height:this.block.height,
-                    align:this.block.align,
-                    id:this.block.id
-                });
+                    height: this.block.height,
+                    align: this.block.align,
+                    id: this.block.id
+                })
             }
-        },height:{
-            get() { return this.block.height; },
-            set(v) { 
+        },
+        height: {
+            get() {
+                return this.block.height
+            },
+            set(v) {
                 this.$emit('placement-change', {
                     width: this.block.width,
-                    height:v,
-                    align:this.block.align,
-                    id:this.block.id
-                });
+                    height: v,
+                    align: this.block.align,
+                    id: this.block.id
+                })
             }
-        },align:{
-            get() { return this.alignments.find(k => k.value==this.block.align); },
-            set(v) { 
+        },
+        align: {
+            get() {
+                return this.alignments.find(k => k.value == this.block.align)
+            },
+            set(v) {
                 this.$emit('placement-change', {
                     width: this.block.width,
-                    height:this.block.height,
-                    align:v.value,
-                    id:this.block.id
-                });
+                    height: this.block.height,
+                    align: v.value,
+                    id: this.block.id
+                })
             }
         }
     }
 }
 </script>
 
-<style lang="sass" >
+<style lang="sass">
 
 .editModeBlockContainer
     border-radius : 0px !important
@@ -462,7 +495,7 @@ textarea.blockoptions
 .highlightedCard
     background-image: linear-gradient(45deg, #d15151 25%, #5F5370 25%, #5F5370 50%, #d15151 50%, #d15151 75%, #5F5370 75%, #5F5370 100%)
     background-size: 56.57px 56.57px
-    background-repeat: repeat    
+    background-repeat: repeat
 .highlightedCard.sample
     border-radius: 6px
     padding: 4px

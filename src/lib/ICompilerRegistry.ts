@@ -49,5 +49,5 @@ export interface ICompilerInfo {
 
 export interface ICompilerID {
     readonly languageType: string
-    readonly version: string
+    version: string
 }

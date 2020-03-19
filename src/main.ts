@@ -1,33 +1,34 @@
-String.prototype.replaceAll = function(search:string, replacement:string) : string {
-  var target = this;
-  return target.replace(new RegExp(search, 'g'), replacement);
-};
-String.prototype.replaceRec = function (pattern:string|RegExp, replacement:string)  : string {
-  var newstr = this.replace(pattern, replacement);
-  if (newstr == this)
-      return newstr;
-  return newstr.replaceRec(pattern, replacement);
-};
+String.prototype.replaceAll = function(search: string, replacement: string): string {
+    var target = this
+    return target.replace(new RegExp(search, 'g'), replacement)
+}
+String.prototype.replaceRec = function(pattern: string | RegExp, replacement: string): string {
+    var newstr = this.replace(pattern, replacement)
+    if (newstr == this) {
+        return newstr
+    }
+    return newstr.replaceRec(pattern, replacement)
+}
 
 import Vue from 'vue'
 import 'reflect-metadata'
 import './plugins/uuid'
 import './plugins/quasar'
-import './plugins/codemirror';
-import './plugins/codeBlocks';
-import './plugins/compilerState';
-import './plugins/codemirror';
+import './plugins/codemirror'
+import './plugins/codeBlocks'
+import './plugins/compilerState'
+import './plugins/codemirror'
 import './plugins/highlight'
 import './plugins/tagger'
 import './plugins/blockly'
 //remove "noImplicitAny": false from tsconfig when this file goes ts
-import CodeBlocksManager from './lib/codeBlocksManager';
+import { CodeBlocksManager } from './lib/codeBlocksManager'
 
 Vue.config.productionTip = false
-CodeBlocksManager.find(document).mount();
+CodeBlocksManager.find(document).mount()
 
-window.mountInElement = function(element:any) :void{
-  Vue.$hljs.$vue.processElements(element);
-  Vue.$tagger.processElements(element);
-  CodeBlocksManager.find(element).mount();
+window.mountInElement = function(element: any): void {
+    Vue.$hljs.$vue.processElements(element)
+    Vue.$tagger.processElements(element)
+    CodeBlocksManager.find(element).mount()
 }
