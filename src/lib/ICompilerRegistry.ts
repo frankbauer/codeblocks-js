@@ -3,12 +3,10 @@ export interface IListItemData {
     readonly value: string
 }
 
-export interface ICompilerErrorDescription {
-
-}
+export interface ICompilerErrorDescription {}
 
 export interface ICompilerRegistry {
-    registerDOMLib(uri:string[], name:string, version:string, displayName:string, utility?:boolean, order?:number) : void;
+    registerDOMLib(uri: string[], name: string, version: string, displayName: string, utility?: boolean, order?: number): void
 }
 
 export interface ICompilerInstance {
@@ -17,21 +15,22 @@ export interface ICompilerInstance {
     readonly canRun: boolean
     isReady: boolean
     isRunning: boolean
-    readonly libraries?:ICompilerLibraryInfo[]
+    readonly libraries?: ICompilerLibraryInfo[]
 
-    registerLibs?(compilerRegistry:ICompilerRegistry):void
+    registerLibs?(compilerRegistry: ICompilerRegistry): void
     preload(): void
     compileAndRun(
-        questionID:string, 
-        code:string, 
-        callingCodeBlocks:any, 
-        max_ms:number, 
-        log_callback:(txt:string) => void, 
-        info_callback:(txt:string) => void, 
-        err_callback:(txt:string) => void, 
-        compileFailedCallback:(info:ICompilerErrorDescription) => void, 
-        finishedExecutionCB:(success:boolean, overrideOutput?: any) => void, 
-        runCreate:boolean): void;
+        questionID: string,
+        code: string,
+        callingCodeBlocks: any,
+        max_ms: number,
+        log_callback: (txt: string) => void,
+        info_callback: (txt: string) => void,
+        err_callback: (txt: string) => void,
+        compileFailedCallback: (info: ICompilerErrorDescription) => void,
+        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        runCreate?: boolean
+    ): void
 }
 
 export interface ICompilerLibraryInfo {
