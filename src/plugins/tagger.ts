@@ -6,7 +6,7 @@ const randomAndTemplateTag = /\{(:|!)([\w]+)}/g
 
 import '../styles/tagger.styl'
 import { DirectiveBinding } from 'vue/types/options'
-import { IRandomizerSet } from '@/lib/codeBlocksManager'
+import { IRandomizerSet } from '@/lib/ICodeBlocks'
 
 export interface ITagReplaceAction {
     name: string

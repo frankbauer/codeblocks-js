@@ -1,5 +1,4 @@
-import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import Vue from 'vue'
 import hljs from 'highlight.js/lib/highlight'
 //import 'highlight.js/styles/ocean.css'
 import 'highlight.js/styles/tomorrow.css'
