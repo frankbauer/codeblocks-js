@@ -33,9 +33,10 @@
 </template>
 
 <script lang="ts">
+import Blockly from '@/plugins/blocklyEnv'
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-import Blockly from '@/plugins/blocklyEnv'
+
 import CodeBlock from './CodeBlock.vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
@@ -212,7 +213,6 @@ export default class BlocklyBlock extends Vue {
         return ''
     }
     set content(text: string) {
-        console.log('[DEBUG] Blockly: setContent')
         if (this.workspace && text && text != '') {
             try {
                 let dom = Blockly.Xml.textToDom(text)
@@ -236,7 +236,6 @@ export default class BlocklyBlock extends Vue {
     }
     onToolboxChange(newCode) {
         if (this.workspace) {
-            console.log('[DEBUG] Blockly: onToolboxChange', this.tbblock.content, ws)
             const ws = this.workspace as any
             ws.updateToolbox('<xml>' + this.tbblock.content + '</xml>')
         }

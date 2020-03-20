@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Blockly from '@/lib/blockly/blockly'
+import '@/lib/blockly/blocks'
 import '@/lib/blockly/javascript'
 import '@/lib/blockly/python'
 import '@/lib/blockly/java'
