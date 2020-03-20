@@ -37,3 +37,8 @@ export const i18n: I18n = new I18n({
 })
 
 export default i18n
+Vue.prototype.$l = (key: string, values?: any[]): string => {
+    return key
+    const res = Vue.prototype.$t(key, values)
+    return res.toString()
+}

@@ -134,350 +134,352 @@
     </div>
 </template>
 
-<script>
-export default {
-    data: function() {
-        return {
-            settingsMenu: false,
-            highlighted: false,
-            alignments: [
-                {
-                    label: this.$t('CodeBlockContainer.Start'),
-                    value: 'left'
-                },
-                {
-                    label: this.$t('CodeBlockContainer.Center'),
-                    value: 'center'
-                },
-                {
-                    label: this.$t('CodeBlockContainer.End'),
-                    value: 'right'
-                }
-            ],
-            scriptVersions: [
-                {
-                    label: this.$t('CodeBlockContainer.ScriptVersion_1'),
-                    value: '100'
-                },
-                {
-                    label: this.$t('CodeBlockContainer.ScriptVersion_2'),
-                    value: '101'
-                }
-            ],
-            types: [
-                {
-                    label: this.$t('CodeBlockContainer.Canvas'),
-                    value: 'PLAYGROUND'
-                },
-                {
-                    label: this.$t('CodeBlockContainer.Text'),
-                    value: 'TEXT'
-                },
-                {
-                    label: this.$t('CodeBlockContainer.Hidden'),
-                    value: 'BLOCK-hidden'
-                },
-                {
-                    label: this.$t('CodeBlockContainer.Static'),
-                    value: 'BLOCK-static'
-                },
-                {
-                    label: this.$t('CodeBlockContainer.Block'),
-                    value: 'BLOCK'
-                },
-                {
-                    label: this.$t('CodeBlockContainer.Blockly'),
-                    value: 'BLOCKLY'
-                }
-            ]
-        }
-    },
-    props: {
-        block: {
-            type: Object,
-            required: true
-        },
-        editMode: {
-            type: Boolean,
-            default: false
-        }
-    },
-    methods: {
-        validNumber(v) {
-            //console.log(v, isNaN(v), v!='auto');
-            if (v != 'auto' && isNaN(v)) {
-                return "Must be a valid Number or 'auto'."
-            }
-            return true
-        },
-        toggleExpanded() {
-            this.expanded = !this.expanded
-        },
-        moveUp() {
-            this.$emit('move-up', this.block.id)
-        },
-        moveDown() {
-            this.$emit('move-down', this.block.id)
-        },
-        showTypeInfoDialog() {
-            this.$q
-                .dialog({
-                    title: this.$t('CodeBlockContainer.TypesCaption'),
-                    message: this.$t('CodeBlockContainer.Types'),
-                    html: true,
-                    style: 'width:75%'
-                })
-                .onOk(() => {
-                    // console.log('OK')
-                })
-                .onCancel(() => {
-                    // console.log('Cancel')
-                })
-                .onDismiss(() => {
-                    // console.log('I am triggered on both OK and Cancel')
-                })
-        },
-        removeBlock() {
-            const self = this
-            self.highlighted = true
-            this.$q
-                .dialog({
-                    title: this.$t('CodeBlockContainer.Confirm'),
-                    message: this.$t('CodeBlockContainer.DeleteQuestion'),
-                    html: true,
-                    ok: {
-                        push: true,
-                        color: 'negative',
-                        icon: 'warning'
-                    },
-                    cancel: {
-                        push: true,
-                        color: 'positive'
-                    },
-                    persistent: true
-                })
-                .onOk(() => {
-                    this.$emit('remove-block', this.block.id)
-                })
-                .onCancel(() => {})
-                .onDismiss(() => {
-                    self.highlighted = false
-                })
-        }
-    },
-    computed: {
-        expanded: {
-            get() {
-                return this.block.expanded
-            },
-            set(v) {
-                this.block.expanded = v
-            }
-        },
-        canMoveUp() {
-            return this.block.id > 0
-        },
-        canMoveDown() {
-            return !this.block.isLast
-        },
-        serializedOptions: {
-            get() {
-                let obj = {}
-                Object.keys(this.block)
-                    .filter(
-                        k =>
-                            k.indexOf('appSettings') != 0 &&
-                            k.indexOf('$') != 0 &&
-                            k.indexOf('_') != 0 &&
-                            k != 'obj' &&
-                            k != 'errors' &&
-                            k != 'content' &&
-                            k != 'firstLine' &&
-                            k != 'nextLine' &&
-                            k != 'lineCount' &&
-                            k != 'hasCode' &&
-                            k != 'isLast' &&
-                            k != 'readyCount' &&
-                            k != 'noContent' &&
-                            k != 'uuid' &&
-                            k != 'scopeUUID'
-                    )
-                    .forEach(k => (obj[k] = this.block[k]))
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { IListItemData } from '@/lib/ICompilerRegistry'
+import { KnownBlockTypes } from '@/lib/ICodeBlocks'
+import { BlockData } from '@/lib/codeBlocksManager'
 
-                return JSON.stringify(obj)
-            },
-            set(v) {}
+@Component
+export default class CodeBlocksContainer extends Vue {
+    settingsMenu: boolean = false
+    highlighted: boolean = false
+    alignments: IListItemData[] = [
+        {
+            label: this.$l('CodeBlockContainer.Start'),
+            value: 'left'
         },
-        hasExtendedSettings() {
-            return this.type == 'PLAYGROUND' || this.type == 'BLOCK'
+        {
+            label: this.$l('CodeBlockContainer.Center'),
+            value: 'center'
         },
-        isVersionedPlayground() {
-            return this.type == 'PLAYGROUND'
+        {
+            label: this.$l('CodeBlockContainer.End'),
+            value: 'right'
+        }
+    ]
+    scriptVersions: IListItemData[] = [
+        {
+            label: this.$l('CodeBlockContainer.ScriptVersion_1'),
+            value: '100'
         },
-        canSetLineNumbers() {
-            return this.type == 'BLOCK'
+        {
+            label: this.$l('CodeBlockContainer.ScriptVersion_2'),
+            value: '101'
+        }
+    ]
+    types: IListItemData[] = [
+        {
+            label: this.$l('CodeBlockContainer.Canvas'),
+            value: KnownBlockTypes.PLAYGROUND
         },
-        canHaveAlternativeContent() {
-            return this.type == 'BLOCK'
+        {
+            label: this.$l('CodeBlockContainer.Text'),
+            value: KnownBlockTypes.TEXT
         },
-        canDefinePlacement() {
-            return this.type == 'PLAYGROUND'
+        {
+            label: this.$l('CodeBlockContainer.Hidden'),
+            value: KnownBlockTypes.BLOCKHIDDEN
         },
-        shouldAutoReset: {
-            get() {
-                return this.block.shouldAutoreset
-            },
-            set(v) {
-                this.$emit('auto-reset-change', {
-                    shouldAutoreset: v,
-                    id: this.block.id
-                })
-            }
+        {
+            label: this.$l('CodeBlockContainer.Static'),
+            value: KnownBlockTypes.BLOCKSTATIC
         },
-        scriptVersion() {
-            if (this.block === undefined || this.block.version === undefined || this.block.version == '') {
-                return '100'
-            }
-            return this.block.version
+        {
+            label: this.$l('CodeBlockContainer.Block'),
+            value: KnownBlockTypes.BLOCK
         },
-        scriptVersionObj: {
-            get() {
-                return this.scriptVersions.find(k => k.value == this.scriptVersion)
-            },
-            set(v) {
-                this.$emit('script-version-change', {
-                    version: v.value,
-                    id: this.block.id
-                })
-            }
-        },
-        hasAltComntent: {
-            get() {
-                return this.block.hasAlternativeContent
-            },
-            set(v) {
-                if (v != this.block.hasAlternativeContent && v) {
-                    this.$nextTick(() => {
-                        setTimeout(function() {
-                            $('.CodeMirror')
-                                .toArray()
-                                .forEach(cm => {
-                                    cm.CodeMirror.refresh()
-                                })
-                        }, 200)
-                    })
-                }
-                this.block.hasAlternativeContent = v
-            }
-        },
-        colorClass() {
-            const t = this.type
-            if (t == 'TEXT') {
-                return 'text-border'
-            } else if (t == 'PLAYGROUND') {
-                return 'playground-border'
-            } else if (t == 'q-t') {
-                return 'block-border'
-            } else if (t == 'BLOCK-hidden') {
-                return 'block-hidden-border'
-            } else if (t == 'BLOCK-static') {
-                return 'block-static-border'
-            }
-            return 'default-border'
-        },
-        bgClass() {
-            if (this.highlighted) {
-                return 'highlightedCard'
-            }
-            return ''
-        },
-        type() {
-            if (this.block.type == 'BLOCK') {
-                if (this.block.hidden) {
-                    return 'BLOCK-hidden'
-                }
-                if (this.block.static) {
-                    return 'BLOCK-static'
-                }
-            }
-            return this.block.type
-        },
-        typeObj: {
-            get() {
-                return this.types.find(t => t.value == this.type)
-            },
-            set(v) {
-                v = v.value
-                let ret = {
-                    type: v.match(/([^-]*)/)[0],
-                    hidden: v == 'BLOCK-hidden',
-                    static: v == 'BLOCK-static',
-                    id: this.block.id
-                }
-                ret.hasCode = ret.type == 'BLOCK'
+        {
+            label: this.$l('CodeBlockContainer.Blockly'),
+            value: KnownBlockTypes.BLOCKLY
+        }
+    ]
 
-                if (ret.type == 'PLAYGROUND' && this.block.content === '' && this.editMode) {
-                    if (this.block.scriptVersion == 100) {
-                        this.block.content = '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
-                    } else {
-                        this.block.content =
-                            '{\n    init: function(canvasElement, outputElement, scope) {\n\n    },\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
-                    }
-                }
+    @Prop({ required: true }) block!: BlockData
+    @Prop({ default: false }) editMode!: boolean
 
-                this.$emit('type-change', ret)
-            }
-        },
-        visibleLines: {
-            get() {
-                return this.block.visibleLines
-            },
-            set(v) {
-                this.$emit('visible-lines-change', {
-                    visibleLines: isNaN(v) ? v : new Number(v),
-                    id: this.block.id
-                })
-            }
-        },
-        width: {
-            get() {
-                return this.block.width
-            },
-            set(v) {
-                this.$emit('placement-change', {
-                    width: v,
-                    height: this.block.height,
-                    align: this.block.align,
-                    id: this.block.id
-                })
-            }
-        },
-        height: {
-            get() {
-                return this.block.height
-            },
-            set(v) {
-                this.$emit('placement-change', {
-                    width: this.block.width,
-                    height: v,
-                    align: this.block.align,
-                    id: this.block.id
-                })
-            }
-        },
-        align: {
-            get() {
-                return this.alignments.find(k => k.value == this.block.align)
-            },
-            set(v) {
-                this.$emit('placement-change', {
-                    width: this.block.width,
-                    height: this.block.height,
-                    align: v.value,
-                    id: this.block.id
-                })
+    validNumber(v: 'auto' | number): boolean | string {
+        //console.log(v, isNaN(v), v!='auto');
+        if (v != 'auto' && isNaN(v)) {
+            return "Must be a valid Number or 'auto'."
+        }
+        return true
+    }
+    toggleExpanded(): void {
+        this.expanded = !this.expanded
+    }
+    moveUp(): void {
+        this.$emit('move-up', this.block.id)
+    }
+    moveDown(): void {
+        this.$emit('move-down', this.block.id)
+    }
+    showTypeInfoDialog(): void {
+        this.$q
+            .dialog({
+                title: this.$l('CodeBlockContainer.TypesCaption'),
+                message: this.$l('CodeBlockContainer.Types'),
+                html: true,
+                style: 'width:75%'
+            })
+            .onOk(() => {
+                // console.log('OK')
+            })
+            .onCancel(() => {
+                // console.log('Cancel')
+            })
+            .onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            })
+    }
+    removeBlock(): void {
+        const self = this
+        self.highlighted = true
+        this.$q
+            .dialog({
+                title: this.$l('CodeBlockContainer.Confirm'),
+                message: this.$l('CodeBlockContainer.DeleteQuestion'),
+                html: true,
+                ok: {
+                    push: true,
+                    color: 'negative',
+                    icon: 'warning'
+                },
+                cancel: {
+                    push: true,
+                    color: 'positive'
+                },
+                persistent: true
+            })
+            .onOk(() => {
+                this.$emit('remove-block', this.block.id)
+            })
+            .onCancel(() => {})
+            .onDismiss(() => {
+                self.highlighted = false
+            })
+    }
+
+    get expanded(): boolean {
+        return this.block.expanded
+    }
+    set expanded(v: boolean) {
+        this.block.expanded = v
+    }
+
+    get canMoveUp(): boolean {
+        return this.block.id > 0
+    }
+    get canMoveDown(): boolean {
+        return !this.block.isLast
+    }
+    get serializedOptions(): string {
+        let obj = {}
+        Object.keys(this.block)
+            .filter(
+                k =>
+                    k.indexOf('appSettings') != 0 &&
+                    k.indexOf('$') != 0 &&
+                    k.indexOf('_') != 0 &&
+                    k != 'obj' &&
+                    k != 'errors' &&
+                    k != 'content' &&
+                    k != 'firstLine' &&
+                    k != 'nextLine' &&
+                    k != 'lineCount' &&
+                    k != 'hasCode' &&
+                    k != 'isLast' &&
+                    k != 'readyCount' &&
+                    k != 'noContent' &&
+                    k != 'uuid' &&
+                    k != 'scopeUUID'
+            )
+            .forEach(k => (obj[k] = this.block[k]))
+
+        return JSON.stringify(obj)
+    }
+    set serializedOptions(v: string) {}
+
+    get hasExtendedSettings(): boolean {
+        return this.type == KnownBlockTypes.PLAYGROUND || this.type == KnownBlockTypes.BLOCK
+    }
+    get isVersionedPlayground(): boolean {
+        return this.type == KnownBlockTypes.PLAYGROUND
+    }
+    get canSetLineNumbers() {
+        return this.type == KnownBlockTypes.BLOCK
+    }
+    get canHaveAlternativeContent() {
+        return this.type == KnownBlockTypes.BLOCK
+    }
+    get canDefinePlacement() {
+        return this.type == KnownBlockTypes.PLAYGROUND
+    }
+    get shouldAutoReset(): boolean {
+        return this.block.shouldAutoreset
+    }
+    set shouldAutoReset(v: boolean) {
+        this.$emit('auto-reset-change', {
+            shouldAutoreset: v,
+            id: this.block.id
+        })
+    }
+
+    get scriptVersion(): string {
+        if (this.block === undefined || this.block.version === undefined || this.block.version == '') {
+            return '100'
+        }
+        return this.block.version
+    }
+    get scriptVersionObj(): IListItemData {
+        const ret = this.scriptVersions.find(k => k.value == this.scriptVersion)
+        if (ret === undefined) {
+            return {
+                value: '???',
+                label: '???'
             }
         }
+        return ret
+    }
+    set scriptVersionObj(v: IListItemData) {
+        this.$emit('script-version-change', {
+            version: v.value,
+            id: this.block.id
+        })
+    }
+
+    get hasAltComntent(): boolean {
+        return this.block.hasAlternativeContent
+    }
+    set hasAltComntent(v: boolean) {
+        if (v != this.block.hasAlternativeContent && v) {
+            this.$nextTick(() => {
+                setTimeout(function() {
+                    $('.CodeMirror')
+                        .toArray()
+                        .forEach(cm => {
+                            const element = cm as any
+                            element.CodeMirror.refresh()
+                        })
+                }, 200)
+            })
+        }
+        this.block.hasAlternativeContent = v
+    }
+
+    get colorClass(): string {
+        const t = this.type
+        if (t == KnownBlockTypes.TEXT) {
+            return 'text-border'
+        } else if (t == KnownBlockTypes.PLAYGROUND) {
+            return 'playground-border'
+        } else if (t == KnownBlockTypes.BLOCK) {
+            return 'block-border'
+        } else if (t == KnownBlockTypes.BLOCKHIDDEN) {
+            return 'block-hidden-border'
+        } else if (t == KnownBlockTypes.BLOCKSTATIC) {
+            return 'block-static-border'
+        }
+        return 'default-border'
+    }
+    get bgClass(): string {
+        if (this.highlighted) {
+            return 'highlightedCard'
+        }
+        return ''
+    }
+    get type(): KnownBlockTypes {
+        if (this.block.type == KnownBlockTypes.BLOCK) {
+            if (this.block.hidden) {
+                return KnownBlockTypes.BLOCKHIDDEN
+            }
+            if (this.block.static) {
+                return KnownBlockTypes.BLOCKSTATIC
+            }
+        }
+        return this.block.type
+    }
+    get typeObj(): IListItemData {
+        const ret = this.types.find(t => t.value == this.type)
+        if (ret === undefined) {
+            return {
+                value: '???',
+                label: '???'
+            }
+        }
+        return ret
+    }
+    set typeObj(val: IListItemData) {
+        const v = val.value
+        let ret = {
+            type: v.match(/([^-]*)/)![0],
+            hidden: v == KnownBlockTypes.BLOCKHIDDEN,
+            static: v == KnownBlockTypes.BLOCKSTATIC,
+            id: this.block.id,
+            hasCode: false
+        }
+        ret.hasCode = ret.type == KnownBlockTypes.BLOCK
+
+        if (ret.type == KnownBlockTypes.PLAYGROUND && this.block.content === '' && this.editMode) {
+            if (this.block.scriptVersion == '100') {
+                this.block.content = '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
+            } else {
+                this.block.content =
+                    '{\n    init: function(canvasElement, outputElement, scope) {\n\n    },\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
+            }
+        }
+
+        this.$emit('type-change', ret)
+    }
+    get visibleLines(): number | 'auto' {
+        return this.block.visibleLines
+    }
+    set visibleLines(v: number | 'auto') {
+        this.$emit('visible-lines-change', {
+            visibleLines: v == 'auto' || isNaN(v) ? v : new Number(v),
+            id: this.block.id
+        })
+    }
+
+    get width(): string {
+        return this.block.width
+    }
+    set width(v: string) {
+        this.$emit('placement-change', {
+            width: v,
+            height: this.block.height,
+            align: this.block.align,
+            id: this.block.id
+        })
+    }
+    get height(): string {
+        return this.block.height
+    }
+    set height(v: string) {
+        this.$emit('placement-change', {
+            width: this.block.width,
+            height: v,
+            align: this.block.align,
+            id: this.block.id
+        })
+    }
+    get align(): IListItemData {
+        const ret = this.alignments.find(k => k.value == this.block.align)
+        if (ret === undefined) {
+            if (ret === undefined) {
+                return this.alignments[1]
+            }
+        }
+        return ret
+    }
+    set align(v: IListItemData) {
+        this.$emit('placement-change', {
+            width: this.block.width,
+            height: this.block.height,
+            align: v.value,
+            id: this.block.id
+        })
     }
 }
 </script>

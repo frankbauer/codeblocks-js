@@ -176,6 +176,11 @@ export class BlockData extends Vue implements IBlockData {
         return this.appSettings.domLibs
     }
 
+    //is this right. Happend when converting from JS
+    get scriptVersion(): string {
+        return this.version
+    }
+
     @Watch('type')
     onTypeChanged(newType: KnownBlockTypes, oldType: KnownBlockTypes) {
         if (newType != oldType) {
