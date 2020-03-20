@@ -4,8 +4,11 @@ declare global {
     const MathJax: any
 
     interface Window {
+        hljs: any
         mountInElement(element: any): void
         MathJax: any
+        highlightAll(): void
+        highlightElement(element: HTMLElement): void
     }
 
     interface String {
