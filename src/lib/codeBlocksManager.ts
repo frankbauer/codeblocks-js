@@ -219,7 +219,6 @@ export class BlockData extends Vue implements IBlockData {
         if (!this.hasCode) {
             return 0
         }
-        console.log(`id:${this.id}, len:${this.content.split('\n').length}`)
         return this.content.split('\n').length
     }
     get nextLine(): number {
