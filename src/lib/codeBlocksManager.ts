@@ -99,6 +99,7 @@ export class BlockData extends Vue implements IBlockData {
     height!: string
     align!: string
     toolbox!: string | null
+    _oac?: () => string //used by Blockly to re-place the actuakContent-Method while keeping the old implementation around
 
     // constructor(appSettings: IAppSettings, data: IBlockData) {
     //     super()

@@ -68,7 +68,8 @@ import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import ErrorTip from './ErrorTip.vue'
 import BaseBlock from './BaseBlock.vue'
-import { BlockData, IRandomizerSet } from '@/lib/codeBlocksManager'
+import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { BlockData } from '@/lib/codeBlocksManager'
 import { ITagReplaceAction } from '@/plugins/tagger'
 const ErrorTipCtor = Vue.extend(ErrorTip)
 
@@ -96,6 +97,10 @@ export default class CodeBlock extends BaseBlock {
     block!: BlockData
 
     clearTagMarkers() {
+        if (this.codemirror === undefined) {
+            return
+        }
+
         let allMarks = this.codemirror.getDoc().getAllMarks()
         allMarks.forEach(e => {
             if (e.className == Vue.$tagger.className.rnd || e.className == Vue.$tagger.className.templ) {
@@ -113,6 +118,9 @@ export default class CodeBlock extends BaseBlock {
         }
     }
     clearErrorDisplay() {
+        if (this.codemirror === undefined) {
+            return
+        }
         let allMarks = this.codemirror.getDoc().getAllMarks()
         //console.log("marks", this.block.type, allMarks)
         allMarks.forEach(e => {
@@ -126,9 +134,9 @@ export default class CodeBlock extends BaseBlock {
     onCodeReady(editor) {
         //we need this for StudON to make sure tinyMCE is not taking over :D
         this.codemirror.display.input.textarea.className = 'noRTEditor'
-        this.codeBox.$el.querySelectorAll('textarea[name]').forEach(el => {
+        this.codeBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
             el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
-            el.id = this.codeBox.$el.id
+            el.id = this.codeBox!.$el.id
 
             $(el).text(this.block.content)
             el.setAttribute('data-question', `${this.block.parentID}`)
@@ -145,8 +153,8 @@ export default class CodeBlock extends BaseBlock {
     onAltCodeReady(editor) {
         console.log('READY')
         //we need this for StudON to make sure tinyMCE is not taking over :D
-        this.codemirror.display.input.textarea.className = 'noRTEditor'
-        this.altBox.$el.querySelectorAll('textarea[name]').forEach(el => {
+        this.altcodemirror.display.input.textarea.className = 'noRTEditor'
+        this.altBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
             el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
         })
         this.$nextTick(() => {
@@ -168,20 +176,26 @@ export default class CodeBlock extends BaseBlock {
         }
     }
     onAltCodeChange(newCode) {
-        const tb = this.altBox.$el.querySelector('textarea[name]') as HTMLTextAreaElement
-        tb.value = newCode
+        if (this.altBox !== undefined) {
+            const tb = this.altBox.$el.querySelector('textarea[name]') as HTMLTextAreaElement
+            tb.value = newCode
+        }
 
         this.block.alternativeContent = newCode
         this.updateTagDisplay()
     }
     updateHeight() {
         if (this.visibleLines === 'auto') {
-            this.codemirror.setSize('height', 'auto')
+            if (this.codemirror) {
+                this.codemirror.setSize('height', 'auto')
+            }
             if (this.altcodemirror) {
                 this.altcodemirror.setSize('height', 'auto')
             }
         } else {
-            this.codemirror.setSize(null, Math.round(20 * Math.max(1, this.visibleLines)) + 9)
+            if (this.codemirror) {
+                this.codemirror.setSize(null, Math.round(20 * Math.max(1, this.visibleLines)) + 9)
+            }
             if (this.altcodemirror) {
                 this.altcodemirror.setSize(null, Math.round(20 * Math.max(1, this.visibleLines)) + 9)
             }
@@ -212,7 +226,9 @@ export default class CodeBlock extends BaseBlock {
                 endStyle: 'tag-mark-end'
             })
         })
-        this.$nextTick(() => Vue.$tagger.hookClick(this.codeBox.$el, this.block.scopeUUID))
+        this.$nextTick(() => {
+            Vue.$tagger.hookClick(this.codeBox.$el, this.block.scopeUUID)
+        })
 
         if (this.altcodemirror) {
             Vue.$tagger.getMarkers(this.block.alternativeContent).forEach(m => {
@@ -226,7 +242,11 @@ export default class CodeBlock extends BaseBlock {
                 })
             })
 
-            this.$nextTick(() => Vue.$tagger.hookClick(this.altBox.$el, this.block.scopeUUID))
+            this.$nextTick(() => {
+                if (this.altBox !== undefined) {
+                    Vue.$tagger.hookClick(this.altBox.$el, this.block.scopeUUID)
+                }
+            })
         }
     }
     updateDiagnosticDisplay() {
@@ -289,7 +309,7 @@ export default class CodeBlock extends BaseBlock {
         return this.$refs.codeBox as Vue
     }
 
-    get altBox(): Vue {
+    get altBox(): Vue | undefined {
         return this.$refs.altBox as Vue
     }
 
@@ -376,10 +396,10 @@ export default class CodeBlock extends BaseBlock {
         o.firstLineNumber = 1
         return o
     }
-    get codemirror() {
+    get codemirror(): any | undefined {
         return (this.codeBox as any).codemirror
     }
-    get altcodemirror() {
+    get altcodemirror(): any | undefined {
         if (this.altBox === undefined) {
             return undefined
         }
@@ -404,7 +424,7 @@ export default class CodeBlock extends BaseBlock {
     mounted() {
         this.updateHeight()
 
-        if (this.editMode) {
+        if (this.editMode && this.codemirror) {
             console.log('Attach')
             const buildIt = () => {
                 console.log('EMIT')

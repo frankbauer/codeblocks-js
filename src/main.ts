@@ -20,7 +20,7 @@ import './plugins/compilerState'
 import './plugins/codemirror'
 import './plugins/highlight'
 import './plugins/tagger'
-import './plugins/blockly'
+import './plugins/blocklyEnv'
 //remove "noImplicitAny": false from tsconfig when this file goes ts
 import { CodeBlocksManager } from './lib/codeBlocksManager'
 

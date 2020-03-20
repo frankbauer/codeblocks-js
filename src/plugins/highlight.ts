@@ -36,7 +36,8 @@ hljs.$vue = {
         const elements = scope.querySelectorAll('[highlight]')
         elements.forEach(el => {
             if (inLang === undefined && el.hasAttribute('highlight')) {
-                inLang = el.getAttribute('highlight')
+                const lang = el.getAttribute('highlight')
+                inLang = lang === null ? undefined : lang
             }
             this.processElement(el, inLang)
         })
@@ -90,7 +91,8 @@ hljs.$vue = {
     // },
     processElementSimple(el: HTMLElement, inLang: string | undefined) {
         if (inLang === undefined && el.hasAttribute('highlight')) {
-            inLang = el.getAttribute('highlight')
+            const lang = el.getAttribute('highlight')
+            inLang = lang === null ? 'javascript' : lang
         }
 
         let txt = el.innerHTML.replace(reg_hl, function(m1, m2, m3, m4, m5) {
