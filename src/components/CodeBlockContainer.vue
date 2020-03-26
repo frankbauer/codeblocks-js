@@ -141,7 +141,7 @@ import { IListItemData } from '@/lib/ICompilerRegistry'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
 
-@Component({})
+@Component
 export default class CodeBlocksContainer extends Vue {
     frank = 'hello'
     settingsMenu: boolean = false
