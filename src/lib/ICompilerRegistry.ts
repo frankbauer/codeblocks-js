@@ -52,7 +52,7 @@ export interface ICompilerRegistry {
     registerSingle(c: ICompilerInfo): void
     getCompiler(compilerInfo: ICompilerIDQuery): ICompilerInstance | undefined
 
-    versionsForLanguage(languageType: string): any[] | ['none']
+    versionsForLanguage(languageType: string): string[] | ['none']
 
     registerDOMLib(uri: string[], name: string, version: string, displayName: string, utility?: boolean, order?: number): void
 

@@ -60,7 +60,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
         return res
     }
 
-    versionsForLanguage(languageType: string): any[] | ['none'] {
+    versionsForLanguage(languageType: string): string[] | ['none'] {
         const c = this.compilers[languageType]
         if (c === undefined) {
             return ['none']

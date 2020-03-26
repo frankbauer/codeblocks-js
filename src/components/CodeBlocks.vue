@@ -109,7 +109,7 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
-import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
+import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import Blockly from '@/components/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
@@ -171,7 +171,7 @@ export default class CodeBlocks extends Vue {
     eventHub: Vue = new Vue()
 
     @Prop({ required: true }) blockInfo!: IMainBlock
-    get options() {
+    get options(): ICodeBlockSettingsOptions {
         return {
             language: this.language,
             compiler: this.compiler,
