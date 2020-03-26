@@ -3,10 +3,62 @@ export interface IListItemData {
     readonly value: string
 }
 
-export interface ICompilerErrorDescription {}
+export enum ErrorSeverity {
+    Error = 2,
+    Warning = 1
+}
+export interface IErrorPosition {
+    line: number
+    column: number
+}
+export interface ICompilerErrorDescription {
+    start: IErrorPosition
+    end: IErrorPosition
+    message: string
+    severity: ErrorSeverity
+}
+
+export interface IDomLibraray {
+    key: string
+    uri: string[]
+    name: string
+    version: string
+    displayName: string
+    didLoad: boolean
+    utility: boolean
+    order: number
+}
+
+export interface ICompilerHashMap {
+    [lang: string]: ICompilerInfo
+}
+
+export interface ICompilerState {
+    hideGlobalState(): void
+    setAllRunButtons(what: boolean): void
+    displayGlobalState(message: string | null): void
+
+    readonly globalStateHidden: boolean
+    readonly globalStateMessage: string
+    readonly runButtonForceHide: boolean
+}
 
 export interface ICompilerRegistry {
+    readonly languages: IListItemData[]
+    readonly domLibraries: IListItemData[]
+
+    register(compilers: ICompilerInfo[] | ICompilerInfo): void
+
+    registerSingle(c: ICompilerInfo): void
+    getCompiler(compilerInfo: ICompilerID): ICompilerInstance | undefined
+
+    versionsForLanguage(languageType: string): any[] | ['none']
+
     registerDOMLib(uri: string[], name: string, version: string, displayName: string, utility?: boolean, order?: number): void
+
+    getLibObjects(domLibs: string[]): IDomLibraray[]
+    urisForDOMLibs(domLibs: string[]): string[]
+    loadLibraries(domLibraries: string[], whenLoaded: () => void): void
 }
 
 export interface ICompilerInstance {

@@ -69,6 +69,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import ErrorTip from './ErrorTip.vue'
 import BaseBlock from './BaseBlock.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { ITagReplaceAction } from '@/plugins/tagger'
 const ErrorTipCtor = Vue.extend(ErrorTip)
@@ -316,7 +317,7 @@ export default class CodeBlock extends BaseBlock {
     get hasAlternativeContent() {
         return this.block.hasAlternativeContent && this.typeName == 'block'
     }
-    get errors() {
+    get errors(): ICompilerErrorDescription[] {
         return this.block.errors
     }
     get randomizerActive() {

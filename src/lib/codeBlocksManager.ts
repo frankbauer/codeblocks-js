@@ -8,7 +8,7 @@ import AppEditor from '../AppEditor.vue'
 import { uuid } from 'vue-uuid'
 
 import { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
-import { ICompilerID } from './ICompilerRegistry'
+import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
 import { IRandomizerSettings, CodeOutputTypes, IBlockData, KnownBlockTypes, IRandomizerSet, IRandomizerSetTag } from './ICodeBlocks'
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
@@ -89,7 +89,7 @@ export class BlockData extends Vue implements IBlockData {
     hidden!: boolean
     version!: string
     readyCount!: number
-    errors!: any[]
+    errors!: ICompilerErrorDescription[]
     scopeUUID?: string
     scopeSelector?: string
     visibleLines!: number | 'auto'

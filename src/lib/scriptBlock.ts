@@ -33,9 +33,11 @@ export interface IProcessedScriptOutput {
 
 export interface IScriptOutputObject {
     output: string
+    sansoutput: string
     outputElement: JQuery<HTMLElement>
     initialOutput: string
     processedOutput: IProcessedScriptOutput
+    parseError?: string | object
 }
 
 const legacyCodeTemplate: ICodeTemplate = {

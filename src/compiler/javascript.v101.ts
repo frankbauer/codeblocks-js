@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry } from '../lib/ICompilerRegistry'
+import { ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry, ErrorSeverity } from '../lib/ICompilerRegistry'
 
 declare global {
     interface Worker {
@@ -65,7 +65,7 @@ function runJavaScriptWorker(
             start: { line: e.lineno - 3, column: e.colno - 1 },
             end: { line: e.lineno - 3, column: e.colno },
             message: e.message,
-            severity: Vue.$SEVERITY_ERROR
+            severity: ErrorSeverity.Error
         })
         worker.end('Line ' + (e.lineno - 3) + ': ' + e.message)
     }

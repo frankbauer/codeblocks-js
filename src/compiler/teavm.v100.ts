@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry } from '../lib/ICompilerRegistry'
+import { ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry, ErrorSeverity } from '../lib/ICompilerRegistry'
 
 const teaVMRunOverhead = 30000
 
@@ -173,7 +173,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                                 line: e.data.lineNumber,
                                 column: 0
                             },
-                            severity: e.data.severity == 'ERROR' ? this.SEVERITY_ERROR : this.SEVERITY_WARNING
+                            severity: e.data.severity == 'ERROR' ? ErrorSeverity.Error : ErrorSeverity.Warning
                         })
                     }
 
@@ -195,7 +195,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                                 line: e.data.endLineNumber,
                                 column: e.data.endColumn
                             },
-                            severity: e.data.kind == 'ERROR' ? this.SEVERITY_ERROR : this.SEVERITY_WARNING
+                            severity: e.data.kind == 'ERROR' ? ErrorSeverity.Error : ErrorSeverity.Warning
                         })
                     }
 

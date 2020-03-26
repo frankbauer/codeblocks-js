@@ -1,9 +1,10 @@
 import Vue from 'vue'
+import { ErrorSeverity } from '@/lib/ICompilerRegistry'
 
-Vue.prototype.SEVERITY_ERROR = 2
-Vue.prototype.SEVERITY_WARNING = 1
-Vue.$SEVERITY_ERROR = Vue.prototype.SEVERITY_ERROR
-Vue.$SEVERITY_WARNING = Vue.prototype.SEVERITY_WARNING
+Vue.prototype.SEVERITY_ERROR = ErrorSeverity.Error
+Vue.prototype.SEVERITY_WARNING = ErrorSeverity.Warning
+Vue.$SEVERITY_ERROR = ErrorSeverity.Error
+Vue.$SEVERITY_WARNING = ErrorSeverity.Warning
 
 Vue.prototype.$compilerState = new Vue({
     data: function() {
@@ -17,12 +18,12 @@ Vue.prototype.$compilerState = new Vue({
         hideGlobalState() {
             this.displayGlobalState(null)
         },
-        setAllRunButtons(what) {
+        setAllRunButtons(what: boolean) {
             this.runButtonForceHide = !what
         },
-        displayGlobalState(message) {
+        displayGlobalState(message: string | null) {
             this.globalStateHidden = message === null || message === undefined || message === ''
-            this.globalStateMessage = message
+            this.globalStateMessage = message ? message : ''
         }
     }
 })

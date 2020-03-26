@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription } from '../lib/ICompilerRegistry'
+import { ICompilerInstance, ICompilerErrorDescription, ErrorSeverity } from '../lib/ICompilerRegistry'
 
 //function runJavaScriptWorker( code, log_callback, max_ms, questionID){
 function runJavaScriptWorker(
@@ -109,7 +109,7 @@ function runJavaScriptWorker(
                 start: { line: -1, column: -1 },
                 end: { line: -1, column: -1 },
                 message: e.message,
-                severity: Vue.$SEVERITY_ERROR
+                severity: ErrorSeverity.Error
             })
             worker.end('Error: ' + e.message)
         } else if (e.lineno >= lines + 2) {
@@ -117,7 +117,7 @@ function runJavaScriptWorker(
                 start: { line: lines + 2, column: 0 },
                 end: { line: lines + 2, column: 0 },
                 message: e.message,
-                severity: Vue.$SEVERITY_ERROR
+                severity: ErrorSeverity.Error
             })
             worker.end('EndOfFile: ' + e.message)
         } else {
@@ -125,7 +125,7 @@ function runJavaScriptWorker(
                 start: { line: e.lineno - 2, column: e.colno - 1 },
                 end: { line: e.lineno - 2, column: e.colno },
                 message: e.message,
-                severity: Vue.$SEVERITY_ERROR
+                severity: ErrorSeverity.Error
             })
             worker.end('Line ' + (e.lineno - 2) + ': ' + e.message)
         }

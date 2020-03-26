@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription } from '../lib/ICompilerRegistry'
+import { ICompilerInstance, ICompilerErrorDescription, ErrorSeverity } from '../lib/ICompilerRegistry'
 
 function runPythonWorker(
     questionID: string,
@@ -76,7 +76,7 @@ function runPythonWorker(
                     start: { line: err.lineno - 1, column: err.colno },
                     end: { line: err.lineno - 1, column: err.colno + 1 },
                     message: err.message,
-                    severity: Vue.$SEVERITY_ERROR
+                    severity: ErrorSeverity.Error
                 })
             } else {
                 if (err && err.lineno !== undefined) {
@@ -84,7 +84,7 @@ function runPythonWorker(
                         start: { line: err.lineno - 1, column: 0 },
                         end: { line: err.lineno - 1, column: 0 },
                         message: err.message,
-                        severity: Vue.$SEVERITY_ERROR
+                        severity: ErrorSeverity.Error
                     })
                 }
             }

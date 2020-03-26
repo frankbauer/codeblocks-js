@@ -1,21 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { ICompilerID, ICompilerInfo, IListItemData, ICompilerInstance, ICompilerRegistry } from './ICompilerRegistry'
-
-interface IDomLibraray {
-    key: string
-    uri: string[]
-    name: string
-    version: string
-    displayName: string
-    didLoad: boolean
-    utility: boolean
-    order: number
-}
-
-export interface ICompilerHashMap {
-    [lang: string]: ICompilerInfo
-}
+import { ICompilerHashMap, IDomLibraray, ICompilerID, ICompilerInfo, IListItemData, ICompilerInstance, ICompilerRegistry } from './ICompilerRegistry'
 
 //prepare Compiler Registry
 @Component
