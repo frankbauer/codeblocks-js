@@ -108,13 +108,16 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import CodeBlockContainer from './CodeBlockContainer.vue'
-import CodeBlocksSettings from './CodeBlocksSettings.vue'
-import CodeBlock from './CodeBlock.vue'
-import Blockly from './Blockly.vue'
-import CodePlayground from './CodePlayground.vue'
-import SimpleText from './SimpleText.vue'
+import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
+import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import Blockly from '@/components/Blockly.vue'
+import CodePlayground from '@/components/CodePlayground.vue'
+import SimpleText from '@/components/SimpleText.vue'
 import { BlockData, IAppSettings } from '@/lib/codeBlocksManager'
+import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/scriptBlock'
+import { ICompilerID, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
+import { CodeOutputTypes, IRandomizerSet } from '@/lib/ICodeBlocks'
 
 @Component({
     components: {
@@ -132,7 +135,7 @@ export default class CodeBlocks extends Vue {
     output: string = ''
     sansoutput: string = ''
     didClip: boolean = false
-    finalOutputObject = { output: '', sansoutput: '', parseError: undefined }
+    finalOutputObject: IScriptOutputObject | null = null
     eventHub: Vue = new Vue()
 
     @Prop({ required: true }) blockInfo!: IAppSettings
@@ -152,56 +155,56 @@ export default class CodeBlocks extends Vue {
             randomizer: this.blockInfo.randomizer
         }
     }
-    get blocks() {
+    get blocks(): BlockData[] {
         return this.blockInfo.blocks
     }
-    get language() {
+    get language(): string {
         return this.blockInfo.language
     }
-    get blockid() {
+    get blockid(): number {
         return this.blockInfo.id
     }
-    get executionTimeout() {
+    get executionTimeout(): number {
         return this.blockInfo.executionTimeout
     }
-    get maxCharacters() {
+    get maxCharacters(): number {
         return this.blockInfo.maxCharacters
     }
-    get compiler() {
+    get compiler(): ICompilerID {
         return this.blockInfo.compiler
     }
-    get runCode() {
+    get runCode(): boolean {
         return this.blockInfo.runCode
     }
-    get domLibraries() {
+    get domLibraries(): string[] {
         return this.blockInfo.domLibs
     }
-    get workerLibraries() {
+    get workerLibraries(): string[] {
         return this.blockInfo.workerLibs
     }
-    get solutionTheme() {
+    get solutionTheme(): string {
         return this.blockInfo.solutionTheme
     }
-    get codeTheme() {
+    get codeTheme(): string {
         return this.blockInfo.codeTheme
     }
-    get readonly() {
+    get readonly(): boolean {
         return this.blockInfo.readonly
     }
-    get outputParser() {
+    get outputParser(): CodeOutputTypes {
         return this.blockInfo.outputParser
     }
 
-    get editMode() {
+    get editMode(): boolean {
         return false
     }
-    get hasOutput() {
+    get hasOutput(): boolean {
         return this.outputHTML !== undefined && this.outputHTML != ''
     }
-    get mimeType() {
+    get mimeType(): string {
         return this.$CodeBlock.mimeType(this.language)
     }
-    get isReady() {
+    get isReady(): boolean {
         let cmp = this.$compilerRegistry.getCompiler(this.compiler)
         if (!cmp) {
             return false
@@ -209,23 +212,23 @@ export default class CodeBlocks extends Vue {
 
         return this.didInitialize && cmp.isReady && !cmp.isRunning && !this.$compilerState.runButtonForceHide
     }
-    get canRun() {
+    get canRun(): boolean {
         let cmp = this.$compilerRegistry.getCompiler(this.compiler)
         if (!cmp) {
             return false
         }
         return cmp.canRun && this.runCode
     }
-    get randomizerActive() {
+    get randomizerActive(): boolean {
         return this.blockInfo.randomizer.active
     }
-    get activeTagSet() {
+    get activeTagSet(): IRandomizerSet | undefined {
         if (!this.randomizerActive) {
             return undefined
         }
         return this.tagSet(this.blockInfo.randomizer.previewIndex)
     }
-    get completeSource() {
+    get completeSource(): string {
         return this.blocks
             .filter(b => b.hasCode)
             .map(b => b.actualContent())
@@ -233,16 +236,16 @@ export default class CodeBlocks extends Vue {
                 return p + '\n' + c
             }, '')
     }
-    get showGlobalMessages() {
+    get showGlobalMessages(): boolean {
         return !this.$compilerState.globalStateHidden
     }
-    get playgrounds() {
+    get playgrounds(): BlockData[] {
         return this.blocks.filter(b => b.type == 'PLAYGROUND')
     }
-    get outputElement() {
-        return this.$refs.output
+    get outputElement(): HTMLElement {
+        return this.$refs.output as HTMLElement
     }
-    get addonClass() {
+    get addonClass(): string {
         let cl = ''
         if (this.editMode) {
             cl += 'editmode '
@@ -252,11 +255,11 @@ export default class CodeBlocks extends Vue {
         }
         return cl
     }
-    get backgroundColorClass() {
+    get backgroundColorClass(): string {
         return this.editMode ? 'blue-grey darken-4' : ''
     }
 
-    blockBecameReady() {
+    blockBecameReady(): void {
         let readyCount = this.blockInfo.blocks.map(b => b.readyCount).reduce((p, c) => p + c, 0)
         if (readyCount == this.blockInfo.blocks.length) {
             this.$nextTick(() => {
@@ -265,17 +268,19 @@ export default class CodeBlocks extends Vue {
         }
         //console.log("Ready", readyCount, this.blockInfo.blocks.length);
     }
-    tagSet(nr) {
+
+    tagSet(nr: number): IRandomizerSet {
         return this.blockInfo.randomizer.sets[nr]
     }
-    themeForBlock(bl) {
+
+    themeForBlock(bl: BlockData): string {
         if (bl.static || bl.readonly || bl.hidden) {
             return this.blockInfo.codeTheme
         }
 
         return this.blockInfo.solutionTheme
     }
-    blockById(id) {
+    public blockById(id: number): BlockData | undefined {
         return this.blocks.find(block => block.id == id)
     }
     onTypeChange(nfo) {}
@@ -297,7 +302,7 @@ export default class CodeBlocks extends Vue {
     moveDown(idx) {}
     removeBlock(idx) {}
     addNewBlock() {}
-    onPlaygroundChangedOutput(newOutput) {
+    onPlaygroundChangedOutput(newOutput: string | undefined): void {
         if (newOutput === undefined) {
             return
         }
@@ -313,14 +318,14 @@ export default class CodeBlocks extends Vue {
         }
     }
 
-    resetOutput() {
+    resetOutput(): void {
         this.output = ''
         this.sansoutput = ''
         this.didClip = false
         this.outputHTML = ''
     }
 
-    log(text) {
+    log(text: string): void {
         //console.log("log", text);
         this.output += text
         text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
@@ -334,7 +339,7 @@ export default class CodeBlocks extends Vue {
         }
     }
 
-    logError(text) {
+    logError(text: string): void {
         text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
         text = this.$CodeBlock.format_error(text)
         //console.log("err", text);
@@ -342,7 +347,7 @@ export default class CodeBlocks extends Vue {
         this.outputHTML += text
     }
 
-    logInfo(text) {
+    logInfo(text: String): void {
         text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
         text = this.$CodeBlock.format_info(text)
         //console.log("nfo", text);
@@ -350,7 +355,7 @@ export default class CodeBlocks extends Vue {
         this.outputHTML += text
     }
 
-    processDiagnostics(error) {
+    processDiagnostics(error: ICompilerErrorDescription) {
         const line = error.start.line
         this.blocks.forEach(block => {
             if (!block.hasCode) {
@@ -366,12 +371,12 @@ export default class CodeBlocks extends Vue {
         })
     }
 
-    clearDiagnostics() {
+    clearDiagnostics(): void {
         this.blocks.forEach(block => (block.errors = []))
         this.eventHub.$emit('render-diagnostics', {})
     }
 
-    loadLibraries(whenLoaded) {
+    loadLibraries(whenLoaded: () => void): void {
         this.$compilerRegistry.loadLibraries(this.domLibraries, whenLoaded)
     }
 
@@ -380,9 +385,9 @@ export default class CodeBlocks extends Vue {
      * @param {*} output
      * @param {*} infoErrorOutput output generated by info or error messages
      */
-    finishedExecution(output, infoErrorOutput) {
-        let parseError = null
-        let processed = { type: 'text', json: undefined, text: output }
+    finishedExecution(output: string, infoErrorOutput: string): void {
+        let parseError = undefined
+        let processed: IProcessedScriptOutput = { type: 'text', json: undefined, text: output }
 
         if (output !== undefined && this.playgrounds.length > 0) {
             try {
@@ -393,50 +398,52 @@ export default class CodeBlocks extends Vue {
         }
 
         this.finalOutputObject = {
+            initialOutput: output,
             output: output,
             processedOutput: processed,
             sansoutput: this.sansoutput,
             parseError: parseError,
-            outputElement: $(this.outputElement)
+            outputElement: $(this.outputElement) as JQuery<HTMLElement>
         }
     }
 
-    run() {
-        let cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (!cmp) {
+    run(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp === undefined) {
             return false
         }
 
         this.$compilerState.setAllRunButtons(false)
         this.resetOutput()
         this.clearDiagnostics()
-        this.loadLibraries(
-            function() {
-                this.eventHub.$emit('before-run', {})
-                console.log('compileAndRun')
-                cmp.compileAndRun(
-                    this.blocks.id,
-                    this.completeSource,
-                    this,
-                    this.executionTimeout,
-                    this.log.bind(this),
-                    this.logInfo.bind(this),
-                    this.logError.bind(this),
-                    this.processDiagnostics.bind(this),
-                    function(success = true, overrideOutput = undefined) {
-                        if (!success) {
-                            this.$compilerState.hideGlobalState()
-                            this.$compilerState.setAllRunButtons(true)
-                            return undefined
-                        }
-                        let res = this.finishedExecution(overrideOutput ? overrideOutput : this.output, this.sansoutput)
-                        this.$compilerState.hideGlobalState()
-                        this.$compilerState.setAllRunButtons(true)
-                        return res
-                    }.bind(this)
-                )
-            }.bind(this)
-        )
+        const self = this
+        this.loadLibraries(() => {
+            self.eventHub.$emit('before-run', {})
+            console.log('compileAndRun')
+            cmp.compileAndRun(
+                '' + self.blockid,
+                self.completeSource,
+                self,
+                self.executionTimeout,
+                self.log.bind(this),
+                self.logInfo.bind(this),
+                self.logError.bind(this),
+                self.processDiagnostics.bind(this),
+                (success = true, overrideOutput = undefined) => {
+                    if (!success) {
+                        self.$compilerState.hideGlobalState()
+                        self.$compilerState.setAllRunButtons(true)
+                        return undefined
+                    }
+                    let res = self.finishedExecution(overrideOutput ? overrideOutput : self.output, self.sansoutput)
+                    self.$compilerState.hideGlobalState()
+                    self.$compilerState.setAllRunButtons(true)
+                    return res
+                }
+            )
+        })
+
+        return true
     }
     onkey(event) {
         if (this.editMode && (event.ctrlKey || event.metaKey) && (event.key === 'w' || event.key === 'j')) {
@@ -451,11 +458,10 @@ export default class CodeBlocks extends Vue {
         if (cmp) {
             cmp.preload()
         }
-        this.loadLibraries(
-            function() {
-                this.eventHub.$emit('initialized-libraries', {})
-            }.bind(this)
-        )
+        const self = this
+        this.loadLibraries(() => {
+            self.eventHub.$emit('initialized-libraries', {})
+        })
         this.didInitialize = true
 
         if (this.editMode) {
