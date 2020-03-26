@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import { CodeOutputTypes } from '@/lib/ICodeBlocks'
-import { IProcessedScriptOutput } from '@/lib/scriptBlock'
+import { CodeOutputTypes, IGlobalSettings, IGlobalState } from '@/lib/ICodeBlocks'
+import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 
 /**
@@ -28,9 +28,6 @@ const mimeTypesForLanguage = {
     xml: { mime: 'application/xml', displayName: 'XML' } //text/html (XML)
 }
 
-export interface IGlobalSettings {
-    baseurl: string
-}
 function loadSettings(scope: HTMLElement | Document): IGlobalSettings {
     let options = {
         baseurl: ''
@@ -47,7 +44,7 @@ function loadSettings(scope: HTMLElement | Document): IGlobalSettings {
     return options
 }
 
-export class GlobalState implements IGlobalSettings {
+export class GlobalState implements IGlobalState {
     public readonly baseurl: string
 
     constructor() {

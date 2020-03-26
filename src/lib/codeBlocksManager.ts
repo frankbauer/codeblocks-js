@@ -1,4 +1,5 @@
-import { ScriptBlock, IScriptOutputObject, IPlaygroundObject, ILegacyPlaygroundObject } from './scriptBlock'
+import { ScriptBlock } from './scriptBlock'
+import { IScriptOutputObject, IPlaygroundObject, ILegacyPlaygroundObject } from './IScriptBlock'
 import i18n from '../plugins/i18n'
 import 'reflect-metadata'
 import { Vue, Component, Watch } from 'vue-property-decorator'
@@ -91,7 +92,7 @@ export class BlockData extends Vue implements IBlockData {
     readyCount!: number
     errors!: ICompilerErrorDescription[]
     scopeUUID?: string
-    scopeSelector?: string
+    scopeSelector!: string
     visibleLines!: number | 'auto'
     hasAlternativeContent!: boolean
     shouldAutoreset!: boolean
@@ -564,7 +565,7 @@ export const CodeBlocksManager = {
                 cbm.data.scopeUUID = scope.getAttribute('uuid') ? scope.getAttribute('uuid')! : undefined
                 cbm.data.blocks.forEach(b => {
                     b.scopeUUID = cbm.data.scopeUUID
-                    b.scopeSelector = cbm.data.scopeSelector
+                    b.scopeSelector = cbm.data.scopeSelector ? cbm.data.scopeSelector : `[uuid=${b.scopeUUID}]`
                 })
             }
 

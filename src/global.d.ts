@@ -1,6 +1,6 @@
 export {}
 import { ICompilerRegistry, ICompilerState } from '@/lib/ICompilerRegistry'
-import { GlobalState } from './plugins/codeBlocks'
+import { IGlobalState } from './lib/ICodeBlocks'
 declare global {
     const MathJax: any
 
@@ -28,7 +28,7 @@ declare module 'vue/types/vue' {
     }
     interface Vue {
         $l: (key: string, values?: any[]) => string
-        $CodeBlock: GlobalState
+        $CodeBlock: IGlobalState
         $compilerState: ICompilerState
         $compilerRegistry: ICompilerRegistry
         SEVERITY_ERROR: number

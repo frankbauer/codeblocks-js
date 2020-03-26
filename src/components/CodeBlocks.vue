@@ -115,7 +115,7 @@ import Blockly from '@/components/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import { BlockData, IAppSettings, IMainBlock } from '@/lib/codeBlocksManager'
-import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/scriptBlock'
+import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import { ICompilerID, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { CodeOutputTypes, IRandomizerSet, KnownBlockTypes, IBlockDataPlayground } from '@/lib/ICodeBlocks'
 
@@ -379,7 +379,7 @@ export default class CodeBlocks extends Vue {
         this.outputHTML += text
     }
 
-    logInfo(text: String): void {
+    logInfo(text: string): void {
         text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
         text = this.$CodeBlock.format_info(text)
         //console.log("nfo", text);
