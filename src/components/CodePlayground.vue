@@ -47,6 +47,20 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '../lib/codeBlocksManager'
 import { IRandomizerSet } from '../lib/ICodeBlocks'
 import { IScriptOutputObject } from '../lib/IScriptBlock'
+
+export interface ICodePlaygroundOptions {
+    mode: string
+    theme: string
+    lineNumbers: boolean
+    line: boolean
+    tabSize: number
+    indentUnit: number
+    autoCloseBrackets: boolean
+    readOnly: boolean
+    firstLineNumber: number
+    gutters: string[]
+}
+
 @Component({
     components: { PlaygroundCanvas, CodeBlock }
 })
@@ -76,7 +90,7 @@ export default class CodePlayground extends BaseBlock {
         return this.block.obj.requestsOriginalVersion()
     }
 
-    get options() {
+    get options(): ICodePlaygroundOptions {
         return {
             // codemirror options
             mode: this.$CodeBlock.mimeType('javascript'),

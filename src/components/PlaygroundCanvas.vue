@@ -12,6 +12,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { IRandomizerSet } from '../lib/ICodeBlocks'
 import { BlockData } from '../lib/codeBlocksManager'
 import { IScriptBlock } from '../lib/IScriptBlock'
+
 @Component
 export default class PlaygroundCanvas extends Vue {
     @Prop() output: string = ''
