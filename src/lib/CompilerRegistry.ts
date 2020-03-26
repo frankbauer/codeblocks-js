@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { ICompilerHashMap, IDomLibraray, ICompilerID, ICompilerInfo, IListItemData, ICompilerInstance, ICompilerRegistry } from './ICompilerRegistry'
+import { ICompilerHashMap, IDomLibraray, ICompilerID, ICompilerInfo, IListItemData, ICompilerInstance, ICompilerRegistry, ICompilerIDQuery } from './ICompilerRegistry'
 
 //prepare Compiler Registry
 @Component
@@ -45,12 +45,14 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
         })
     }
 
-    getCompiler(compilerInfo: ICompilerID): ICompilerInstance | undefined {
+    getCompiler(compilerInfo: ICompilerIDQuery): ICompilerInstance | undefined {
         let cmps = this.compilers[compilerInfo.languageType]
         if (!cmps) {
             return undefined
         }
-
+        if (compilerInfo.version === undefined) {
+            return cmps.default
+        }
         let res = cmps.versions.find(e => e.version == compilerInfo.version)
         if (res === undefined) {
             res = cmps.default

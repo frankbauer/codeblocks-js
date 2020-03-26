@@ -95,12 +95,12 @@ Vue.prototype.$jsErrorParser = jsErrorParser
 
 export class ScriptBlock {
     private err: IParsedError[] = []
-    private version: string = '100'
+
     private src: string | undefined = undefined
     private fkt: Function | undefined = undefined
     private obj: IPlaygroundObject | ILegacyPlaygroundObject | undefined = undefined
 
-    constructor(script: string, version: string) {
+    constructor(script: string, public version: string) {
         this.rebuild(script)
     }
 

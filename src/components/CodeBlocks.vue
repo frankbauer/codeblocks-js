@@ -114,10 +114,42 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import Blockly from '@/components/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
-import { BlockData, IAppSettings } from '@/lib/codeBlocksManager'
+import { BlockData, IAppSettings, IMainBlock } from '@/lib/codeBlocksManager'
 import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/scriptBlock'
 import { ICompilerID, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
-import { CodeOutputTypes, IRandomizerSet } from '@/lib/ICodeBlocks'
+import { CodeOutputTypes, IRandomizerSet, KnownBlockTypes, IBlockDataPlayground } from '@/lib/ICodeBlocks'
+
+export interface IOnTypeChangeInfo {
+    type: KnownBlockTypes
+    hidden: boolean
+    static: boolean
+    id: number
+    hasCode: boolean
+}
+
+export interface IOnVisibleLinesChangeInfo {
+    visibleLines: 'auto' | number
+    id: number
+}
+
+export interface IOnPlacementChangeInfo extends IBlockDataPlayground {
+    id: number
+}
+
+export interface IOnScriptVersionChangeInfo {
+    version: string
+    id: number
+}
+
+export interface IOnSetAutoResetInfo {
+    shouldAutoreset: boolean
+    id: number
+}
+
+export interface IOnThemeChangeInfo {
+    solution: string
+    code: string
+}
 
 @Component({
     components: {
@@ -138,7 +170,7 @@ export default class CodeBlocks extends Vue {
     finalOutputObject: IScriptOutputObject | null = null
     eventHub: Vue = new Vue()
 
-    @Prop({ required: true }) blockInfo!: IAppSettings
+    @Prop({ required: true }) blockInfo!: IMainBlock
     get options() {
         return {
             language: this.language,
@@ -283,25 +315,25 @@ export default class CodeBlocks extends Vue {
     public blockById(id: number): BlockData | undefined {
         return this.blocks.find(block => block.id == id)
     }
-    onTypeChange(nfo) {}
-    onVisibleLinesChange(nfo) {}
-    onPlacementChange(nfo) {}
-    onScriptVersionChange(nfo) {}
-    onSetAutoReset(nfo) {}
-    onCompilerChange(v) {}
-    onCompilerVersionChange(v) {}
-    onRunStateChange(v) {}
-    onLanguageChange(v) {}
-    onCharacterLimitChange(v) {}
-    onTimeoutChange(v) {}
-    onWorkerLibChange(v) {}
-    onDomLibChange(v) {}
-    onThemeChange(nfo) {}
-    onOutputParserChange(v) {}
-    moveUp(idx) {}
-    moveDown(idx) {}
-    removeBlock(idx) {}
-    addNewBlock() {}
+    onTypeChange(nfo: IOnTypeChangeInfo): void {}
+    onVisibleLinesChange(nfo: IOnVisibleLinesChangeInfo): void {}
+    onPlacementChange(nfo: IOnPlacementChangeInfo): void {}
+    onScriptVersionChange(nfo: IOnScriptVersionChangeInfo): void {}
+    onSetAutoReset(nfo: IOnSetAutoResetInfo): void {}
+    onCompilerChange(v: string): void {}
+    onCompilerVersionChange(v: string): void {}
+    onRunStateChange(v: boolean): void {}
+    onLanguageChange(v: string): void {}
+    onCharacterLimitChange(v: number): void {}
+    onTimeoutChange(v: number): void {}
+    onWorkerLibChange(v: string[]): void {}
+    onDomLibChange(v: string[]): void {}
+    onThemeChange(nfo: IOnThemeChangeInfo): void {}
+    onOutputParserChange(v: CodeOutputTypes): void {}
+    moveUp(idx: number): void {}
+    moveDown(idx: number): void {}
+    removeBlock(idx: number): void {}
+    addNewBlock(): void {}
     onPlaygroundChangedOutput(newOutput: string | undefined): void {
         if (newOutput === undefined) {
             return

@@ -1,4 +1,4 @@
-import { ScriptBlock } from './scriptBlock'
+import { ScriptBlock, IScriptOutputObject, IPlaygroundObject, ILegacyPlaygroundObject } from './scriptBlock'
 import i18n from '../plugins/i18n'
 import 'reflect-metadata'
 import { Vue, Component, Watch } from 'vue-property-decorator'
@@ -83,7 +83,7 @@ export class BlockData extends Vue implements IBlockData {
     parentID!: number
     expanded!: boolean
     codeExpanded!: boolean
-    obj!: object | null
+    obj!: ScriptBlock | null
     readonly!: boolean
     static!: boolean
     hidden!: boolean
@@ -187,6 +187,14 @@ export class BlockData extends Vue implements IBlockData {
             this.recreateScriptObject()
         }
     }
+}
+
+export interface IMainBlock extends IAppSettings {
+    swap(id1: number, id2: number): void
+    moveUp(id: number): void
+    moveDown(id: number): void
+    removeBlock(idx: number): void
+    addNewBlock(): void
 }
 
 //this will handle the vue mounting on the dom
@@ -434,75 +442,93 @@ class InternalCodeBlocksManager {
         new Vue({
             i18n,
             render: function(h) {
+                @Component({
+                    data: function() {
+                        return data
+                    }
+                })
+                class MainBlock extends Vue implements IMainBlock {
+                    id!: number
+                    uuid!: string
+                    editMode!: boolean
+                    readonly!: boolean
+                    randomizer!: IRandomizerSettings
+                    blocks!: BlockData[]
+                    compiler!: ICompilerID
+                    language!: string
+                    runCode!: boolean
+                    domLibs!: string[]
+                    workerLibs!: string[]
+                    outputParser!: CodeOutputTypes
+                    solutionTheme!: string
+                    codeTheme!: string
+                    executionTimeout!: number
+                    maxCharacters!: number
+                    scopeUUID?: string
+                    scopeSelector?: string
+                    swap(id1: number, id2: number) {
+                        const a = this.blocks[id1]
+                        this.blocks[id1] = this.blocks[id2]
+                        this.blocks[id2] = a
+
+                        this.blocks[id1].id = id1
+                        this.blocks[id2].id = id2
+                    }
+                    moveUp(id: number) {
+                        if (id <= 0) {
+                            return
+                        }
+                        this.swap(id - 1, id)
+                    }
+                    moveDown(id: number) {
+                        if (id >= this.blocks.length - 1) {
+                            return
+                        }
+                        this.swap(id, id + 1)
+                    }
+                    removeBlock(idx: number) {
+                        data.blocks.splice(idx, 1)
+                        for (let i = idx; i < data.blocks.length; i++) {
+                            data.blocks[i].id = i
+                        }
+                    }
+                    addNewBlock() {
+                        let block: IBlockData = {
+                            noContent: false,
+                            alternativeContent: null,
+                            hasCode: true,
+                            type: KnownBlockTypes.BLOCK,
+                            content: '',
+                            id: data.blocks.length,
+                            uuid: uuid.v4(),
+                            parentID: data.id,
+                            expanded: true,
+                            codeExpanded: true,
+                            width: '100%',
+                            height: '200px',
+                            align: 'center',
+                            obj: null,
+                            readonly: false,
+                            static: true,
+                            hidden: false,
+                            version: '101',
+                            readyCount: 0,
+                            errors: [],
+                            scopeUUID: data.scopeUUID,
+                            scopeSelector: data.scopeSelector,
+                            visibleLines: 10,
+                            hasAlternativeContent: false,
+                            shouldAutoreset: false,
+                            toolbox: null
+                        }
+                        data.blocks.push(self.constructBlock(data, block))
+                    }
+                }
                 const context = {
                     props: {
                         language: data.language,
                         id: data.id,
-                        blocks: new Vue({
-                            data: function() {
-                                return data
-                            },
-                            computed: {},
-                            methods: {
-                                swap(id1: number, id2: number) {
-                                    const a = this.blocks[id1]
-                                    this.blocks[id1] = this.blocks[id2]
-                                    this.blocks[id2] = a
-
-                                    this.blocks[id1].id = id1
-                                    this.blocks[id2].id = id2
-                                },
-                                moveUp(id: number) {
-                                    if (id <= 0) {
-                                        return
-                                    }
-                                    this.swap(id - 1, id)
-                                },
-                                moveDown(id: number) {
-                                    if (id >= this.blocks.length - 1) {
-                                        return
-                                    }
-                                    this.swap(id, id + 1)
-                                },
-                                removeBlock(idx: number) {
-                                    data.blocks.splice(idx, 1)
-                                    for (let i = idx; i < data.blocks.length; i++) {
-                                        data.blocks[i].id = i
-                                    }
-                                },
-                                addNewBlock() {
-                                    let block: IBlockData = {
-                                        noContent: false,
-                                        alternativeContent: null,
-                                        hasCode: true,
-                                        type: KnownBlockTypes.BLOCK,
-                                        content: '',
-                                        id: data.blocks.length,
-                                        uuid: uuid.v4(),
-                                        parentID: data.id,
-                                        expanded: true,
-                                        codeExpanded: true,
-                                        width: '100%',
-                                        height: '200px',
-                                        align: 'center',
-                                        obj: null,
-                                        readonly: false,
-                                        static: true,
-                                        hidden: false,
-                                        version: '101',
-                                        readyCount: 0,
-                                        errors: [],
-                                        scopeUUID: data.scopeUUID,
-                                        scopeSelector: data.scopeSelector,
-                                        visibleLines: 10,
-                                        hasAlternativeContent: false,
-                                        shouldAutoreset: false,
-                                        toolbox: null
-                                    }
-                                    data.blocks.push(self.constructBlock(data, block))
-                                }
-                            }
-                        })
+                        blocks: new MainBlock()
                     }
                 }
                 return h(data.editMode ? AppEditor : App, context)

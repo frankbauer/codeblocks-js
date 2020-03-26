@@ -50,7 +50,7 @@ export interface ICompilerRegistry {
     register(compilers: ICompilerInfo[] | ICompilerInfo): void
 
     registerSingle(c: ICompilerInfo): void
-    getCompiler(compilerInfo: ICompilerID): ICompilerInstance | undefined
+    getCompiler(compilerInfo: ICompilerIDQuery): ICompilerInstance | undefined
 
     versionsForLanguage(languageType: string): any[] | ['none']
 
@@ -100,6 +100,11 @@ export interface ICompilerInfo {
 }
 
 export interface ICompilerID {
-    readonly languageType: string
+    languageType: string
     version: string
+}
+
+export interface ICompilerIDQuery {
+    languageType: string
+    version?: string
 }
