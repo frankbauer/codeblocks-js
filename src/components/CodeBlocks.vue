@@ -167,9 +167,25 @@ export default class CodeBlocks extends Vue {
     output: string = ''
     sansoutput: string = ''
     didClip: boolean = false
-    finalOutputObject: IScriptOutputObject | null = null
+    _finalOutputObject: IScriptOutputObject | null = null
     eventHub: Vue = new Vue()
 
+    get finalOutputObject(): IScriptOutputObject {
+        if (this._finalOutputObject === null || this._finalOutputObject === undefined) {
+            return {
+                initialOutput: '',
+                output: '',
+                processedOutput: {
+                    type: 'text',
+                    text: '',
+                    json: undefined
+                },
+                sansoutput: '',
+                outputElement: $(this.outputElement) as JQuery<HTMLElement>
+            }
+        }
+        return this._finalOutputObject
+    }
     @Prop({ required: true }) blockInfo!: IMainBlock
     get options(): ICodeBlockSettingsOptions {
         return {
@@ -429,7 +445,7 @@ export default class CodeBlocks extends Vue {
             }
         }
 
-        this.finalOutputObject = {
+        this._finalOutputObject = {
             initialOutput: output,
             output: output,
             processedOutput: processed,

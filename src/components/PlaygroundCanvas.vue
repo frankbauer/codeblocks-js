@@ -1,70 +1,64 @@
 <template>
-    <div class="row ma-0 pa-0 block-playground" :data-question="block.parentID" :data-nr="block.id"><div :class="`col-12 text-${block.align}`">
-        <div ref="innerPlaygroundContainer" class="playground" :style="`width:${block.width};height:${block.height}`" :data-question="block.parentID" :data-nr="block.id">{{output}}</div>        
-    </div></div>
+    <div class="row ma-0 pa-0 block-playground" :data-question="block.parentID" :data-nr="block.id">
+        <div :class="`col-12 text-${block.align}`">
+            <div ref="innerPlaygroundContainer" class="playground" :style="`width:${block.width};height:${block.height}`" :data-question="block.parentID" :data-nr="block.id">{{ output }}</div>
+        </div>
+    </div>
 </template>
 
-<script>
-export default {    
-    props: {
-        output : '',
-        obj:{
-            type:Object,
-            required:true
-        },
-        block:{
-            type:Object,
-            required:true
-        },
-        'eventHub': {
-            type: Object,
-            required: false            
-        },
-        tagSet:{
-            default:undefined,
-            type: Object 
-        }
-    },
-    computed:{
-        canvas(){
-            return this.$refs.innerPlaygroundContainer;           
-        }
-    },
-    methods:{
-        whenMounted(o){
-            //console.log("MOUNTED");
-            if (this.obj){
-                //console.log("Will Init", this.canvas, $(this.canvas).css('background-color'));  
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { IRandomizerSet } from '../lib/ICodeBlocks'
+import { BlockData } from '../lib/codeBlocksManager'
+import { IScriptBlock } from '../lib/IScriptBlock'
+@Component
+export default class PlaygroundCanvas extends Vue {
+    @Prop() output: string = ''
+    @Prop({ required: true }) obj!: IScriptBlock
+    @Prop({ required: true }) block!: BlockData
+    @Prop({ required: true }) eventHub!: Vue
+    @Prop() tagSet?: IRandomizerSet
 
-                this.$compilerRegistry.loadLibraries(this.block.domLibs, () => {  
-                    this.$nextTick( () => {
-                        this.obj.rebuild(); //we need to rebuild the script to make sure its context is the current state of the DOM
+    get canvas(): HTMLElement {
+        return this.$refs.innerPlaygroundContainer as HTMLElement
+    }
 
-                        this.obj.init($(this.canvas), $(this.block.scopeSelector));
-                        this.$emit('did-init', this.canvas);
-                    })
-                });          
-                
-            }
+    whenMounted(): void {
+        //console.log("MOUNTED");
+        if (this.obj) {
+            //console.log("Will Init", this.canvas, $(this.canvas).css('background-color'));
+
+            this.$compilerRegistry.loadLibraries(this.block.domLibs, () => {
+                this.$nextTick(() => {
+                    this.obj.rebuild() //we need to rebuild the script to make sure its context is the current state of the DOM
+
+                    this.obj.init($(this.canvas), $(this.block.scopeSelector))
+                    this.$emit('did-init', this.canvas)
+                })
+            })
         }
-    },
-    mounted(){
-        if (this.eventHub)
-            this.eventHub.$on('all-mounted', this.whenMounted);
-        else
+    }
+
+    mounted() {
+        if (this.eventHub) {
+            this.eventHub.$on('all-mounted', this.whenMounted)
+        } else {
             this.whenMounted()
-        
-        this.$emit('canvas-change', this.canvas);
-    },
+        }
+
+        this.$emit('canvas-change', this.canvas)
+    }
     beforeDestroy() {
-        if (this.eventHub)
-            this.eventHub.$off('all-mounted');
+        if (this.eventHub) {
+            this.eventHub.$off('all-mounted')
+        }
     }
 }
 </script>
 
 <style lang="sass" scoped>
-.playground 
+.playground
     display: inline-block
     width:100%
     height:200px

@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { IParsedError, ILegacyPlaygroundObject, IPlaygroundObject, IProcessedScriptOutput, IScriptOutputObject } from '@/lib/IScriptBlock'
+import { IParsedError, ILegacyPlaygroundObject, IPlaygroundObject, IProcessedScriptOutput, IScriptOutputObject, IScriptBlock } from '@/lib/IScriptBlock'
 interface ICodeTemplate {
     prefix: string
     postfix: string
@@ -59,7 +59,7 @@ const jsErrorParser = function(e: any, templ?: ICodeTemplate): IParsedError {
 }
 Vue.prototype.$jsErrorParser = jsErrorParser
 
-export class ScriptBlock {
+export class ScriptBlock implements IScriptBlock {
     public err: IParsedError[] = []
 
     private src: string | undefined = undefined
@@ -78,7 +78,7 @@ export class ScriptBlock {
         this.obj = undefined
     }
 
-    rebuild(code: string) {
+    rebuild(code?: string) {
         if (code !== undefined) {
             try {
                 this.err = []

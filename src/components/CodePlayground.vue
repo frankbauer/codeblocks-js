@@ -114,7 +114,7 @@ export default class CodePlayground extends BaseBlock {
     isPreparingRun: boolean = false
     lastRun: Date = new Date()
     runCount: number = 0
-    canvas: any = undefined
+    canvas: HTMLElement | undefined = undefined
     needsCodeRebuild: boolean = false
     initAndRebuildErrors: any[] = []
 
@@ -158,7 +158,11 @@ export default class CodePlayground extends BaseBlock {
         let onNextTick = false
         if (this.block && this.block.obj) {
             if (this.block.shouldAutoreset || rebuildCode) {
-                console.log('Will Re-Initialize', this.canvas, $(this.canvas).css('background-color'))
+                if (this.canvas !== undefined) {
+                    console.log('Will Re-Initialize', this.canvas, $(this.canvas).css('background-color'))
+                } else {
+                    console.log('Will Re-Initialize', 'Without Canvas')
+                }
                 this.lastRun = new Date()
                 this.runCount++
                 reInitCode = true
@@ -167,7 +171,7 @@ export default class CodePlayground extends BaseBlock {
                 const self = this
                 this.$nextTick(() => {
                     //console.log("Will Reset", this.canvas, $(this.canvas).css('background-color'));
-                    if (self.block.obj !== null) {
+                    if (self.block.obj !== null && self.canvas !== undefined) {
                         self.block.obj.reset($(self.canvas))
                     }
                     self.updateErrors()
@@ -193,7 +197,7 @@ export default class CodePlayground extends BaseBlock {
         if (reInitCode) {
             this.initAndRebuildErrors = []
             let doInit = () => {
-                if (this.block.obj !== null) {
+                if (this.block.obj !== null && this.canvas !== undefined) {
                     this.block.obj.init($(this.canvas) as JQuery<HTMLElement>, $(this.block.scopeSelector) as JQuery<HTMLElement>)
                     if (this.updateErrors()) {
                         this.initAndRebuildErrors = this.block.obj.err
@@ -277,7 +281,7 @@ export default class CodePlayground extends BaseBlock {
 
                 const self = this
                 this.$nextTick(() => {
-                    if (self.block.obj !== null) {
+                    if (self.block.obj !== null && self.canvas !== undefined) {
                         let result = self.block.obj.update(val, $(self.canvas))
                         if (self.updateErrors()) {
                             return

@@ -31,3 +31,16 @@ export interface IScriptOutputObject {
     processedOutput: IProcessedScriptOutput
     parseError?: string | object
 }
+
+export interface IScriptBlock {
+    err: IParsedError[]
+    requestsOriginalVersion(): void
+    invalidate(): void
+    rebuild(code?: string): void
+    pushError(e: any): void
+
+    init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void
+    reset(canvasElement: JQuery<HTMLElement>): void
+    update(outputObject: IScriptOutputObject, canvasElement: JQuery<HTMLElement>): string | undefined
+    onParseError(initialOutput: string, parseError: string): boolean
+}
