@@ -394,7 +394,7 @@ class InternalCodeBlocksManager {
                 block.height = bl.getAttribute('height') ? bl.getAttribute('height')! : inBlock.height ? inBlock.height : '200px'
                 block.align = bl.getAttribute('align') ? bl.getAttribute('align')! : inBlock.align ? inBlock.align : 'center'
                 block.version = bl.getAttribute('data-version') ? bl.getAttribute('data-version')! : block.version
-            } else if (block.type == 'BLOCK') {
+            } else if (block.type == KnownBlockTypes.BLOCK) {
                 const alts = bl.getElementsByTagName('ALTERNATIVE')
                 const codes = bl.getElementsByTagName('CODE')
                 if (codes.length > 0) {
@@ -411,6 +411,12 @@ class InternalCodeBlocksManager {
 
                 block.hasCode = true
             } else if (block.type == KnownBlockTypes.BLOCKLY) {
+                block.obj = null
+
+                block.width = bl.getAttribute('width') ? bl.getAttribute('width')! : inBlock.width ? inBlock.width : '100%'
+                block.height = bl.getAttribute('height') ? bl.getAttribute('height')! : inBlock.height ? inBlock.height : '300px'
+                block.align = bl.getAttribute('align') ? bl.getAttribute('align')! : inBlock.align ? inBlock.align : 'center'
+
                 const toolboxes = bl.getElementsByTagName('TOOLBOX')
                 let toolbox: string = ''
                 if (toolboxes.length > 0) {

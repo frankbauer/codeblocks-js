@@ -1,5 +1,40 @@
 import { QuasarIconSetRating } from 'quasar'
 
+export enum BlockPrimaryColors {
+    colour = '#cf63cf',
+    list = '#5cb1d6',
+    logic = '#ffab19',
+    loop = '#ffbf00',
+    math = '#4c97ff',
+    procedure = '#ff6680',
+    text = '#bbbbca',
+    variable = '#59c059',
+    variable_dynamic = '#0fbd8c'
+}
+
+export enum BlockSecondaryColors {
+    colour = '#c55ec5',
+    list = '#57a8cb',
+    logic = '#f2a218',
+    loop = '#f2b500',
+    math = '#488ff2',
+    procedure = '#f2617a',
+    text = '#b2b2c0',
+    variable = '#55b655',
+    variable_dynamic = '#0eb485'
+}
+export enum BlockTertiaryColors {
+    colour = '#ba59ba',
+    list = '#539fc1',
+    logic = '#e69a17',
+    loop = '#e6ac00',
+    math = '#4488e6',
+    procedure = '#e65c73',
+    text = '#a8a8b6',
+    variable = '#50ad50',
+    variable_dynamic = '#0eaa7e'
+}
+
 export enum BlockOutputTypes {
     Number = 'Number',
     Boolean = 'Boolean',

@@ -7,7 +7,7 @@
                 </div>
             </div>
         </div>
-        <xml ref="blocklyToolbox" style="display:none" v-html="block.toolbox"> </xml>
+        <xml ref="blocklyToolbox" style="display:none" v-html="toolboxContent"> </xml>
         <div v-if="editMode">
             <q-list bordered class="rounded-borders q-mt-sm">
                 <q-expansion-item expand-separator icon="code" :label="$t('Blockly.CodePreviewLabel')" :caption="$t('Blockly.CodePreviewCaption')" @before-show="onBeforeShowCodePreview">
@@ -51,6 +51,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import CodeBlock from './CodeBlock.vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '../lib/IBlocklyHelper'
 
 @Component({
     components: {
@@ -106,15 +107,19 @@ export default class BlocklyBlock extends Vue {
         }
         if (!options.theme) {
             const blockStyles = {
-                colour_blocks: { colourPrimary: '#cf63cf', colourSecondary: '#c55ec5', colourTertiary: '#ba59ba' },
-                list_blocks: { colourPrimary: '#5cb1d6', colourSecondary: '#57a8cb', colourTertiary: '#539fc1' },
-                logic_blocks: { colourPrimary: '#ffab19', colourSecondary: '#f2a218', colourTertiary: '#e69a17' },
-                loop_blocks: { colourPrimary: '#ffbf00', colourSecondary: '#f2b500', colourTertiary: '#e6ac00' },
-                math_blocks: { colourPrimary: '#4c97ff', colourSecondary: '#488ff2', colourTertiary: '#4488e6' },
-                procedure_blocks: { colourPrimary: '#ff6680', colourSecondary: '#f2617a', colourTertiary: '#e65c73' },
-                text_blocks: { colourPrimary: '#bbbbca', colourSecondary: '#b2b2c0', colourTertiary: '#a8a8b6' },
-                variable_blocks: { colourPrimary: '#59c059', colourSecondary: '#55b655', colourTertiary: '#50ad50' },
-                variable_dynamic_blocks: { colourPrimary: '#0fbd8c', colourSecondary: '#0eb485', colourTertiary: '#0eaa7e' },
+                colour_blocks: { colourPrimary: BlockPrimaryColors.colour, colourSecondary: BlockSecondaryColors.colour, colourTertiary: BlockTertiaryColors.colour },
+                list_blocks: { colourPrimary: BlockPrimaryColors.list, colourSecondary: BlockSecondaryColors.list, colourTertiary: BlockTertiaryColors.list },
+                logic_blocks: { colourPrimary: BlockPrimaryColors.logic, colourSecondary: BlockSecondaryColors.logic, colourTertiary: BlockTertiaryColors.logic },
+                loop_blocks: { colourPrimary: BlockPrimaryColors.loop, colourSecondary: BlockSecondaryColors.loop, colourTertiary: BlockTertiaryColors.loop },
+                math_blocks: { colourPrimary: BlockPrimaryColors.math, colourSecondary: BlockSecondaryColors.math, colourTertiary: BlockTertiaryColors.math },
+                procedure_blocks: { colourPrimary: BlockPrimaryColors.procedure, colourSecondary: BlockSecondaryColors.procedure, colourTertiary: BlockTertiaryColors.procedure },
+                text_blocks: { colourPrimary: BlockPrimaryColors.text, colourSecondary: BlockSecondaryColors.text, colourTertiary: BlockTertiaryColors.text },
+                variable_blocks: { colourPrimary: BlockPrimaryColors.variable, colourSecondary: BlockSecondaryColors.variable, colourTertiary: BlockTertiaryColors.variable },
+                variable_dynamic_blocks: {
+                    colourPrimary: BlockPrimaryColors.variable_dynamic,
+                    colourSecondary: BlockSecondaryColors.variable_dynamic,
+                    colourTertiary: BlockTertiaryColors.variable_dynamic
+                },
                 hat_blocks: {
                     colourPrimary: '330',
                     hat: 'cap'
@@ -213,6 +218,12 @@ export default class BlocklyBlock extends Vue {
             }
         }
     }
+    get toolboxContent(): string {
+        if (this.block.toolbox === null) {
+            return '<xml></xml>'
+        }
+        return this.parseToolboxCode(this.block.toolbox)
+    }
     get visibleLinesNow() {
         if (!this.block.codeExpanded) {
             return '5.2'
@@ -277,8 +288,22 @@ export default class BlocklyBlock extends Vue {
     onToolboxChange(newCode) {
         if (this.workspace) {
             const ws = this.workspace as any
-            ws.updateToolbox('<xml>' + this.tbblock.content + '</xml>')
+            ws.updateToolbox(this.parseToolboxCode('<xml>' + this.tbblock.content + '</xml>'))
         }
+    }
+
+    private parseToolboxCode(toolboxXML: string) {
+        Object.keys(BlockPrimaryColors).forEach(key => {
+            toolboxXML = toolboxXML.replaceAll(`{!PrimaryColors.${key}}`, BlockPrimaryColors[key])
+        })
+        Object.keys(BlockSecondaryColors).forEach(key => {
+            toolboxXML = toolboxXML.replaceAll(`{!SecondaryColors.${key}}`, BlockSecondaryColors[key])
+        })
+        Object.keys(BlockTertiaryColors).forEach(key => {
+            toolboxXML = toolboxXML.replaceAll(`{!TertiaryColors.${key}}`, BlockTertiaryColors[key])
+        })
+
+        return toolboxXML
     }
 
     @Watch('block.width')
