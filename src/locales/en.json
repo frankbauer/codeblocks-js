@@ -87,6 +87,9 @@
         "CustomBlocksLabel": "Custom Blocks",
         "CustomBlocksCaption": "Create and manage Custom Blocks",
         "ToolboxLabel": "Customize Toolbox",
-        "ToolboxCaption": "Manage Categories and the general look of your toolbox"
+        "ToolboxCaption": "Manage Categories and the general look of your toolbox",
+        "ToolboxCategories": "Categories",
+        "ToolboxItems": "Blocks",
+        "Properties": "Properties"
     }
 }

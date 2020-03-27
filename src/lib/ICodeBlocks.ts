@@ -1,5 +1,6 @@
 import { ICompilerID, IListItemData } from './ICompilerRegistry'
 import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
+import { IBlockDefinition } from './IBlocklyHelper'
 
 export enum KnownBlockTypes {
     PLAYGROUND = 'PLAYGROUND',
@@ -39,6 +40,7 @@ export interface IBlockDataPlayground {
 }
 export interface IBlockDataBlockly {
     toolbox: string | null
+    blocks: IBlockDefinition[]
 }
 
 export interface ICodeBlockDataState {
@@ -90,10 +92,16 @@ export interface IGlobalState extends IGlobalSettings {
      * @param {*} type  'auto' = (default, try to determin what kind of output was generated), 'text', 'json' = (force json parsing), 'magic' = (force use of magic string seperator)
      * @param {*} magicString The seperating String. By default it is '\n\n<JSON>\n'
      */
-    processMixedOutput(outputObject: string[] | string, type: CodeOutputTypes, magicString?: string): IProcessedScriptOutput
+    processMixedOutput(
+        outputObject: string[] | string,
+        type: CodeOutputTypes,
+        magicString?: string
+    ): IProcessedScriptOutput
     mimeType(language: string): string
     knownLanguages(): IListItemData[]
 
     refreshAllCodeMirrors(): void
     refreshAllCodeMirrorsSync(): void
+
+    itemForValue(items: IListItemData[], value: string): IListItemData
 }

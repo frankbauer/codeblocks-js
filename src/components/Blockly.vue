@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="row ma-0 pa-0 block-blockly" :data-question="block.parentID" :data-nr="block.id">
+        <div
+            class="row ma-0 pa-0 block-blockly"
+            :data-question="block.parentID"
+            :data-nr="block.id"
+        >
             <div :class="`col-12 text-${block.align}`">
                 <div class="blocklyCanvas" :style="`width:${block.width};height:${block.height}`">
                     <div class="blocklyContainer" ref="blocklyContainer"></div>
@@ -10,8 +14,18 @@
         <xml ref="blocklyToolbox" style="display:none" v-html="toolboxContent"> </xml>
         <div v-if="editMode">
             <q-list bordered class="rounded-borders q-mt-sm">
-                <q-expansion-item expand-separator icon="code" :label="$t('Blockly.CodePreviewLabel')" :caption="$t('Blockly.CodePreviewCaption')" @before-show="onBeforeShow">
-                    <textarea :name="`block[${block.parentID}][${block.id}]`" v-html="block.content" style="display:block"></textarea>
+                <q-expansion-item
+                    expand-separator
+                    icon="code"
+                    :label="$t('Blockly.CodePreviewLabel')"
+                    :caption="$t('Blockly.CodePreviewCaption')"
+                    @before-show="onBeforeShow"
+                >
+                    <textarea
+                        :name="`block[${block.parentID}][${block.id}]`"
+                        v-html="block.content"
+                        style="display:block"
+                    ></textarea>
                     <CodeBlock
                         v-if="editMode"
                         :block="cmblock"
@@ -25,12 +39,36 @@
                     />
                 </q-expansion-item>
 
-                <q-expansion-item expand-separator icon="developer_board" :label="$t('Blockly.CustomBlocksLabel')" :caption="$t('Blockly.CustomBlocksCaption')" @before-show="onBeforeShow">
+                <q-expansion-item
+                    expand-separator
+                    :default-opened="true"
+                    icon="developer_board"
+                    :label="$t('Blockly.CustomBlocksLabel')"
+                    :caption="$t('Blockly.CustomBlocksCaption')"
+                    @before-show="onBeforeShow"
+                >
+                    <BlocklyCustomBlocksEditor :block="block" />
                 </q-expansion-item>
 
-                <q-expansion-item expand-separator icon="ballot" :label="$t('Blockly.ToolboxLabel')" :caption="$t('Blockly.ToolboxCaption')" @before-show="onBeforeShow"> </q-expansion-item>
+                <q-expansion-item
+                    expand-separator
+                    :default-opened="true"
+                    icon="ballot"
+                    :label="$t('Blockly.ToolboxLabel')"
+                    :caption="$t('Blockly.ToolboxCaption')"
+                    @before-show="onBeforeShow"
+                >
+                    <BlocklyToolboxEditor :block="block" />
+                </q-expansion-item>
 
-                <q-expansion-item expand-separator icon="event_note" :label="$t('Blockly.RAWToolboxLabel')" :caption="$t('Blockly.RAWToolboxCaption')" @before-show="onBeforeShow">
+                <q-expansion-item
+                    expand-separator
+                    icon="event_note"
+                    :expanded="true"
+                    :label="$t('Blockly.RAWToolboxLabel')"
+                    :caption="$t('Blockly.RAWToolboxCaption')"
+                    @before-show="onBeforeShow"
+                >
                     <CodeBlock
                         v-if="editMode"
                         :block="tbblock"
@@ -54,13 +92,22 @@ import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 
 import CodeBlock from './CodeBlock.vue'
+import BlocklyCustomBlocksEditor from '@/components/BlocklyCustomBlocksEditor.vue'
+import BlocklyToolboxEditor from '@/components/BlocklyToolboxEditor.vue'
+
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
-import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '../lib/IBlocklyHelper'
+import {
+    BlockPrimaryColors,
+    BlockSecondaryColors,
+    BlockTertiaryColors
+} from '../lib/IBlocklyHelper'
 
 @Component({
     components: {
-        CodeBlock
+        CodeBlock,
+        BlocklyCustomBlocksEditor,
+        BlocklyToolboxEditor
     }
 })
 export default class BlocklyBlock extends Vue {
@@ -112,14 +159,46 @@ export default class BlocklyBlock extends Vue {
         }
         if (!options.theme) {
             const blockStyles = {
-                colour_blocks: { colourPrimary: BlockPrimaryColors.colour, colourSecondary: BlockSecondaryColors.colour, colourTertiary: BlockTertiaryColors.colour },
-                list_blocks: { colourPrimary: BlockPrimaryColors.list, colourSecondary: BlockSecondaryColors.list, colourTertiary: BlockTertiaryColors.list },
-                logic_blocks: { colourPrimary: BlockPrimaryColors.logic, colourSecondary: BlockSecondaryColors.logic, colourTertiary: BlockTertiaryColors.logic },
-                loop_blocks: { colourPrimary: BlockPrimaryColors.loop, colourSecondary: BlockSecondaryColors.loop, colourTertiary: BlockTertiaryColors.loop },
-                math_blocks: { colourPrimary: BlockPrimaryColors.math, colourSecondary: BlockSecondaryColors.math, colourTertiary: BlockTertiaryColors.math },
-                procedure_blocks: { colourPrimary: BlockPrimaryColors.procedure, colourSecondary: BlockSecondaryColors.procedure, colourTertiary: BlockTertiaryColors.procedure },
-                text_blocks: { colourPrimary: BlockPrimaryColors.text, colourSecondary: BlockSecondaryColors.text, colourTertiary: BlockTertiaryColors.text },
-                variable_blocks: { colourPrimary: BlockPrimaryColors.variable, colourSecondary: BlockSecondaryColors.variable, colourTertiary: BlockTertiaryColors.variable },
+                colour_blocks: {
+                    colourPrimary: BlockPrimaryColors.colour,
+                    colourSecondary: BlockSecondaryColors.colour,
+                    colourTertiary: BlockTertiaryColors.colour
+                },
+                list_blocks: {
+                    colourPrimary: BlockPrimaryColors.list,
+                    colourSecondary: BlockSecondaryColors.list,
+                    colourTertiary: BlockTertiaryColors.list
+                },
+                logic_blocks: {
+                    colourPrimary: BlockPrimaryColors.logic,
+                    colourSecondary: BlockSecondaryColors.logic,
+                    colourTertiary: BlockTertiaryColors.logic
+                },
+                loop_blocks: {
+                    colourPrimary: BlockPrimaryColors.loop,
+                    colourSecondary: BlockSecondaryColors.loop,
+                    colourTertiary: BlockTertiaryColors.loop
+                },
+                math_blocks: {
+                    colourPrimary: BlockPrimaryColors.math,
+                    colourSecondary: BlockSecondaryColors.math,
+                    colourTertiary: BlockTertiaryColors.math
+                },
+                procedure_blocks: {
+                    colourPrimary: BlockPrimaryColors.procedure,
+                    colourSecondary: BlockSecondaryColors.procedure,
+                    colourTertiary: BlockTertiaryColors.procedure
+                },
+                text_blocks: {
+                    colourPrimary: BlockPrimaryColors.text,
+                    colourSecondary: BlockSecondaryColors.text,
+                    colourTertiary: BlockTertiaryColors.text
+                },
+                variable_blocks: {
+                    colourPrimary: BlockPrimaryColors.variable,
+                    colourSecondary: BlockSecondaryColors.variable,
+                    colourTertiary: BlockTertiaryColors.variable
+                },
                 variable_dynamic_blocks: {
                     colourPrimary: BlockPrimaryColors.variable_dynamic,
                     colourSecondary: BlockSecondaryColors.variable_dynamic,
@@ -140,7 +219,9 @@ export default class BlocklyBlock extends Vue {
                 procedure_category: { colour: blockStyles.procedure_blocks.colourPrimary },
                 text_category: { colour: blockStyles.text_blocks.colourPrimary },
                 variable_category: { colour: blockStyles.variable_blocks.colourPrimary },
-                variable_dynamic_category: { colour: blockStyles.variable_dynamic_blocks.colourPrimary }
+                variable_dynamic_category: {
+                    colour: blockStyles.variable_dynamic_blocks.colourPrimary
+                }
             }
             options.theme = new Blockly.Theme(blockStyles as any, categoryStyles)
         }
@@ -238,9 +319,17 @@ export default class BlocklyBlock extends Vue {
     get code() {
         if (this.workspace) {
             const BBlockly = Blockly as any
-            if (this.mode == 'text/x-python' || this.mode == 'text/python' || this.mode == 'python') {
+            if (
+                this.mode == 'text/x-python' ||
+                this.mode == 'text/python' ||
+                this.mode == 'python'
+            ) {
                 return BBlockly.Python.workspaceToCode(this.workspace)
-            } else if (this.mode == 'text/x-java' || this.mode == 'text/java' || this.mode == 'java') {
+            } else if (
+                this.mode == 'text/x-java' ||
+                this.mode == 'text/java' ||
+                this.mode == 'java'
+            ) {
                 return BBlockly.Java.workspaceToCode(this.workspace)
             }
             return BBlockly.JavaScript.workspaceToCode(this.workspace)
@@ -295,7 +384,10 @@ export default class BlocklyBlock extends Vue {
             toolboxXML = toolboxXML.replaceAll(`{!PrimaryColors.${key}}`, BlockPrimaryColors[key])
         })
         Object.keys(BlockSecondaryColors).forEach(key => {
-            toolboxXML = toolboxXML.replaceAll(`{!SecondaryColors.${key}}`, BlockSecondaryColors[key])
+            toolboxXML = toolboxXML.replaceAll(
+                `{!SecondaryColors.${key}}`,
+                BlockSecondaryColors[key]
+            )
         })
         Object.keys(BlockTertiaryColors).forEach(key => {
             toolboxXML = toolboxXML.replaceAll(`{!TertiaryColors.${key}}`, BlockTertiaryColors[key])

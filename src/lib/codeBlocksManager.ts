@@ -377,7 +377,8 @@ class InternalCodeBlocksManager {
                 readyCount: 0,
                 obj: null,
                 blockly: {
-                    toolbox: null
+                    toolbox: null,
+                    blocks: []
                 },
                 errors: [],
                 readonly: inBlock.readonly !== undefined && inBlock.readonly != 'false' && inBlock.readonly != '0',
@@ -546,7 +547,8 @@ class InternalCodeBlocksManager {
                             hasAlternativeContent: false,
                             shouldAutoreset: false,
                             blockly: {
-                                toolbox: null
+                                toolbox: null,
+                                blocks: []
                             }
                         }
                         data.blocks.push(self.constructBlock(data, block))

@@ -1,0 +1,101 @@
+<template>
+    <q-card class="bg-blue-grey-1 q-pl-lg">
+        <q-card-section class="q-pb-none q-mb-none">
+            <div class="text-overline text-black q-pa-none q-ma-none">
+                {{ $t('Blockly.Properties') }}
+            </div>
+        </q-card-section>
+        <q-card-section class="q-mb-none q-pb-none q-pt-none">
+            <div class="row q-pa-none">
+                <q-input
+                    class="col-3 q-ml-lg col-sm-5 col-xs-11"
+                    v-model="category.name"
+                    label="Label"
+                />
+                <div class="col-3 q-ml-lg col-sm-5 col-xs-11">
+                    <q-select v-model="color" :options="colors" label="Color">
+                        <template v-slot:before>
+                            <div class="colorBlockContainer">
+                                <div
+                                    class="colorBlock"
+                                    :style="`background-color:${htmlColor}`"
+                                ></div>
+                            </div>
+                        </template>
+                    </q-select>
+                </div>
+            </div>
+        </q-card-section>
+        <q-card-section class="q-pb-none  q-mb-none">
+            <div class="text-overline text-black q-pa-none q-ma-none">
+                {{ $t('Blockly.ToolboxItems') }}
+            </div>
+        </q-card-section>
+        <q-card-section class="q-mb-none q-pt-none">
+            <q-list dense dark bordered class="rounded-borders q-mt-sm " style="max-width:400px">
+                <q-expansion-item
+                    dense
+                    v-for="item in category.items"
+                    v-bind:key="item.uuid"
+                    expand-separator
+                    group="itemListing"
+                    header-class="bg-blue-grey text-white"
+                    :label="item.type"
+                >
+                    <BlocklyToolboxItemEditor :item="item" />
+                </q-expansion-item>
+            </q-list>
+        </q-card-section>
+    </q-card>
+</template>
+
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { IBlocklyToolboxCategory } from '@/lib/IBlocklyHelper'
+import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
+import { IListItemData } from '@/lib/ICompilerRegistry'
+import BlocklyToolboxItemEditor from '@/components/BlocklyToolboxItemEditor.vue'
+
+@Component({ components: { BlocklyToolboxItemEditor } })
+export default class BlocklyToolboxCategoryEditor extends Vue {
+    @Prop() category!: IBlocklyToolboxCategory
+
+    get color() {
+        let cl = this.category.color
+        if (cl === undefined) {
+            cl = ''
+        }
+
+        return Vue.$CodeBlock.itemForValue(this.colors, cl)
+    }
+
+    set color(v) {
+        this.category.color = blocklyHelper.toColorCode(v.value)
+    }
+
+    get colors(): IListItemData[] {
+        return ColorSelectionWithNone
+    }
+
+    get htmlColor() {
+        return blocklyHelper.toHTMLColor(this.category.color)
+    }
+}
+</script>
+
+<style>
+.colorBlockContainer {
+    position: relative;
+    height: 100%;
+    width: 40px;
+    text-align: end;
+}
+.colorBlock {
+    position: absolute;
+    bottom: 0px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid white;
+}
+</style>

@@ -83,10 +83,13 @@
         "CodePreviewLabel": "Code-Vorschau",
         "CodePreviewCaption": "Der durch die Sequenz erzeugte Quellcode",
         "RAWToolboxLabel": "RAW Toolbox Definition",
-        "": "Die Toolbox Definition als XML Quelltext",
+        "RAWToolboxCaption": "Die Toolbox Definition als XML Quelltext",
         "CustomBlocksLabel": "Angepasste Blöcke",
         "CustomBlocksCaption": "Erstellen und Anpassen von eigenen Blöcken",
         "ToolboxLabel": "Toolbox Anpassen",
-        "ToolboxCaption": "Die Toolbox mit einer UI verwalten und gestalten"
+        "ToolboxCaption": "Die Toolbox mit einer UI verwalten und gestalten",
+        "ToolboxCategories": "Kategorien",
+        "ToolboxItems": "Blöcke",
+        "Properties": "Eigenschaften"
     }
 }

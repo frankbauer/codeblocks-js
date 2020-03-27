@@ -72,6 +72,21 @@ export interface IBlockArgument {
     variableTypes?: string[]
 }
 
+export interface IBlocklyToolboxItem {
+    uuid: string
+    type: string
+}
+export interface IBlocklyToolboxCategory {
+    uuid: string
+    items: IBlocklyToolboxItem[]
+    color?: string
+    name: string
+}
+export interface IBlocklyToolbox {
+    items?: IBlocklyToolboxItem[]
+    categories?: IBlocklyToolboxCategory[]
+}
+
 export interface IBlockDefinition {
     message0: string
     arg0: IBlockArgument[]
