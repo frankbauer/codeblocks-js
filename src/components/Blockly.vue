@@ -1,8 +1,10 @@
 <template>
-    <div class="ma-0 pa-0 block-blockly" :data-question="block.parentID" :data-nr="block.id">
-        <div class="row ">
+    <div>
+        <div class="row ma-0 pa-0 block-blockly" :data-question="block.parentID" :data-nr="block.id">
             <div :class="`col-12 text-${block.align}`">
-                <div class="blocklyContainer" ref="blocklyContainer" :style="`width:${block.width};height:${block.height}`"></div>
+                <div class="blocklyCanvas" :style="`width:${block.width};height:${block.height}`">
+                    <div class="blocklyContainer" ref="blocklyContainer"></div>
+                </div>
             </div>
         </div>
         <xml ref="blocklyToolbox" style="display:none" v-html="block.toolbox"> </xml>
@@ -23,7 +25,7 @@
                     />
                 </q-expansion-item>
 
-                <q-expansion-item expand-separator icon="code" :label="$t('Blockly.ToolboxLabel')" :caption="$t('Blockly.ToolboxCaption')" @before-show="onBeforeShowRawToolbox">
+                <q-expansion-item expand-separator icon="ballot" :label="$t('Blockly.RAWToolboxLabel')" :caption="$t('Blockly.RAWToolboxCaption')" @before-show="onBeforeShowRawToolbox">
                     <CodeBlock
                         v-if="editMode"
                         :block="tbblock"
@@ -83,16 +85,8 @@ export default class BlocklyBlock extends Vue {
         return el
     }
 
-    mounted() {
-        if (!this.block._oac) {
-            let self = this
-            this.block._oac = this.block.actualContent
-            this.block.actualContent = function() {
-                return self.code
-            }.bind(this.block)
-        }
-
-        var options = this.$props.options || {}
+    mountBlockly() {
+        const options = this.$props.options || {}
         if (!options.toolbox) {
             options.toolbox = this.blocklyToolbox
         }
@@ -130,6 +124,18 @@ export default class BlocklyBlock extends Vue {
         this.workspace = Blockly.inject(this.blocklyContainer, options)
         this.workspace.addChangeListener(this.onBlocklyChange.bind(this))
         this.content = this.block.content
+    }
+
+    mounted() {
+        if (!this.block._oac) {
+            let self = this
+            this.block._oac = this.block.actualContent
+            this.block.actualContent = function() {
+                return self.code
+            }
+        }
+
+        this.mountBlockly()
     }
     get cmoptions() {
         return {
@@ -264,10 +270,18 @@ export default class BlocklyBlock extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.blocklyContainer {
-    height: 500px;
-    width: 100%;
-    text-align: left;
-}
+
+<style lang="sass" scoped>
+.blocklyContainer
+    height: 100%
+    width: 100%
+    text-align: left
+.blocklyCanvas
+    overflow: hidden
+    display: block
+    width:100%
+    height:200px
+    margin-top:4px
+    margin-bottom:4px
+    transition: opacity 600ms, visibility 600ms
 </style>

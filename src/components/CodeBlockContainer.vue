@@ -314,7 +314,7 @@ export default class CodeBlocksContainer extends Vue {
     set serializedOptions(v: string) {}
 
     get hasExtendedSettings(): boolean {
-        return this.type == KnownBlockTypes.PLAYGROUND || this.type == KnownBlockTypes.BLOCK
+        return this.type == KnownBlockTypes.PLAYGROUND || this.type == KnownBlockTypes.BLOCK || this.type == KnownBlockTypes.BLOCKLY
     }
     get isVersionedPlayground(): boolean {
         return this.type == KnownBlockTypes.PLAYGROUND
@@ -326,7 +326,7 @@ export default class CodeBlocksContainer extends Vue {
         return this.type == KnownBlockTypes.BLOCK
     }
     get canDefinePlacement() {
-        return this.type == KnownBlockTypes.PLAYGROUND
+        return this.type == KnownBlockTypes.PLAYGROUND || this.type == KnownBlockTypes.BLOCKLY
     }
     get shouldAutoReset(): boolean {
         return this.block.shouldAutoreset

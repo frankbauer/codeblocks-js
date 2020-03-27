@@ -3,84 +3,86 @@
         "Initial_Content": "Initial Content"
     },
     "CodeBlockContainer": {
-        "Display":"Display",
-        "Lines":"Lines",
-        "Lines_detail":"Number of Visible lines or <b>auto</b>.",
-        "Prepopulate":"Prepopulate Answer",
-        "Prepopulate_detail":"Define content that is displayed in a new answer.",
-        "Behaviour":"Behaviour",
-        "ScriptV":"Script Version",
-        "ScriptV_detail":"API-Version for the Visualization Object.",
-        "AutoReset":"Auto Reset",
-        "AutoReset_detail":"Recreate Canvas-Element for each run",
-        "Positioning":"Positioning",
-        "Width":"Width",
-        "Width_detail":"CSS Property for the canvas-width.",
-        "Height":"Height",
-        "Height_detail":"CSS Property for the canvas-height.",
-        "Alignment":"Alignment",
-        "Alignment_detail":"Horizontal Positioning of the canvas.",
-        "Delete":"Delete",
-        "Start":"Start",
-        "Center":"Center",
-        "End":"End",
-        "ScriptVersion_1":"1.0 (original)",
-        "ScriptVersion_2":"2.0 (since 2020)",
-        "Canvas":"Visualization Canvas",
-        "Text":"Plain Text",
-        "Hidden":"Code (Hidden)",
-        "Static":"Code (Static)",
-        "Block":"Solution",
-        "Blockly":"Blockly (Experimental!!!)",
-        "Confirm":"Confirm",
-        "DeleteQuestion":"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?",
-        "TypesCaption":"Block-Types",
-        "Types":"The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Visualization Canvas</b>: A 2D-drawing area you may use to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>"
+        "Display": "Display",
+        "Lines": "Lines",
+        "Lines_detail": "Number of Visible lines or <b>auto</b>.",
+        "Prepopulate": "Prepopulate Answer",
+        "Prepopulate_detail": "Define content that is displayed in a new answer.",
+        "Behaviour": "Behaviour",
+        "ScriptV": "Script Version",
+        "ScriptV_detail": "API-Version for the Visualization Object.",
+        "AutoReset": "Auto Reset",
+        "AutoReset_detail": "Recreate Canvas-Element for each run",
+        "Positioning": "Positioning",
+        "Width": "Width",
+        "Width_detail": "CSS Property for the canvas-width.",
+        "Height": "Height",
+        "Height_detail": "CSS Property for the canvas-height.",
+        "Alignment": "Alignment",
+        "Alignment_detail": "Horizontal Positioning of the canvas.",
+        "Delete": "Delete",
+        "Start": "Start",
+        "Center": "Center",
+        "End": "End",
+        "ScriptVersion_1": "1.0 (original)",
+        "ScriptVersion_2": "2.0 (since 2020)",
+        "Canvas": "Visualization Canvas",
+        "Text": "Plain Text",
+        "Hidden": "Code (Hidden)",
+        "Static": "Code (Static)",
+        "Block": "Solution",
+        "Blockly": "Blockly (Experimental!!!)",
+        "Confirm": "Confirm",
+        "DeleteQuestion": "Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?",
+        "TypesCaption": "Block-Types",
+        "Types": "The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Visualization Canvas</b>: A 2D-drawing area you may use to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>"
     },
-    "CodeBlocks":{
-        "run_hint":"Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.",
-        "run":"Run",
-        "AddBlock":"Add new Block"
+    "CodeBlocks": {
+        "run_hint": "Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.",
+        "run": "Run",
+        "AddBlock": "Add new Block"
     },
-    "CodeBlocksSettings":{
-        "Language":"Language",
-        "AllowExec":"Allow Code Execution",
-        "CVersion":"Version",
-        "RunTime":"Max. Runtime in ms.",
-        "Output":"Output",
-        "MaxCharacters":"Max. Output Characters",
-        "Parser":"Output Parser",
-        "Themes":"Themes",
-        "TGeneral":"General Theme",
-        "TSolution":"Solution Theme",
-        "Libraries":"Libraries",
-        "DomLibs":"DOM-Libraries",
-        "WorkLibs":"Worker-Libraries",
-        "PAutomatic":"Automatisch",
-        "PText":"Text Passthrough",
-        "PJSON":"JSON",
-        "PMagic":"Text+JSON (seperated by '\\n\\n&lt;JSON>\\n')",
-        "NumberErr":"Muss ein gültiger Zahlenwert sein"
+    "CodeBlocksSettings": {
+        "Language": "Language",
+        "AllowExec": "Allow Code Execution",
+        "CVersion": "Version",
+        "RunTime": "Max. Runtime in ms.",
+        "Output": "Output",
+        "MaxCharacters": "Max. Output Characters",
+        "Parser": "Output Parser",
+        "Themes": "Themes",
+        "TGeneral": "General Theme",
+        "TSolution": "Solution Theme",
+        "Libraries": "Libraries",
+        "DomLibs": "DOM-Libraries",
+        "WorkLibs": "Worker-Libraries",
+        "PAutomatic": "Automatisch",
+        "PText": "Text Passthrough",
+        "PJSON": "JSON",
+        "PMagic": "Text+JSON (seperated by '\\n\\n&lt;JSON>\\n')",
+        "NumberErr": "Muss ein gültiger Zahlenwert sein"
     },
-    "CodePlayground":{
-        "InvalidJson":"Output is not a valid JSON-Object",
-        "Output":"Output:",
-        "Message":"Message:"
+    "CodePlayground": {
+        "InvalidJson": "Output is not a valid JSON-Object",
+        "Output": "Output:",
+        "Message": "Message:"
     },
-    "Tagger":{
-        "ConfirmRepl":"Confirm Tag Replacement",
-        "ConfirmReplMsg":"Do you really want to replace <b>all</b> occurrences of {name} with the below value?"
+    "Tagger": {
+        "ConfirmRepl": "Confirm Tag Replacement",
+        "ConfirmReplMsg": "Do you really want to replace <b>all</b> occurrences of {name} with the below value?"
     },
-    "RandomizerSetEditor":{
-        "Caption":"Edit Set {nr}"
+    "RandomizerSetEditor": {
+        "Caption": "Edit Set {nr}"
     },
-    "RandomizerSettings":{
-        "Caption":"Randomizer",
-        "Available":"Available Tags",
-        "Sets":"Defined Sets"
+    "RandomizerSettings": {
+        "Caption": "Randomizer",
+        "Available": "Available Tags",
+        "Sets": "Defined Sets"
     },
-    "Blockly":{
-        "CodePreviewLabel":"Code Preview",
-        "ToolboxLabel":"Toolbox Definition"
+    "Blockly": {
+        "CodePreviewLabel": "Code Preview",
+        "CodePreviewCaption": "The source-code generated by the above sequence",
+        "RAWToolboxLabel": "RAW Toolbox Definition",
+        "RAWToolboxCaption": "The raw XML-Definition of your toolbox"
     }
 }
