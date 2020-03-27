@@ -85,6 +85,20 @@ export default class BlocklyBlock extends Vue {
         return el
     }
 
+    unmountBlockly() {
+        if (this.workspace !== null) {
+            this.blocklyContainer.innerHTML = ''
+            this.workspace = null
+        }
+    }
+
+    remountBlockly() {
+        if (this.workspace !== null) {
+            this.unmountBlockly()
+        }
+        this.mountBlockly()
+    }
+
     mountBlockly() {
         const options = this.$props.options || {}
         if (!options.toolbox) {
@@ -266,6 +280,27 @@ export default class BlocklyBlock extends Vue {
             ws.updateToolbox('<xml>' + this.tbblock.content + '</xml>')
         }
     }
+
+    @Watch('block.width')
+    onWidthChange(oldWidth: string, newWidth: string) {
+        this.$nextTick(() => {
+            this.remountBlockly()
+        })
+    }
+
+    @Watch('block.height', { immediate: false })
+    onHeightChange(oldHeight: string, newHeight: string) {
+        this.$nextTick(() => {
+            this.remountBlockly()
+        })
+    }
+
+    @Watch('block.align')
+    onAlignChange(oldAlign: string, newAlign: string) {
+        this.$nextTick(() => {
+            this.remountBlockly()
+        })
+    }
 }
 </script>
 
@@ -276,6 +311,8 @@ export default class BlocklyBlock extends Vue {
     height: 100%
     width: 100%
     text-align: left
+    border: 1px solid #eee
+    border-radius: 3px
 .blocklyCanvas
     overflow: hidden
     display: block
@@ -284,4 +321,35 @@ export default class BlocklyBlock extends Vue {
     margin-top:4px
     margin-bottom:4px
     transition: opacity 600ms, visibility 600ms
+</style>
+<style lang="sass">
+.blocklyText
+    font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif
+    font-weight: 300
+.blocklyEditableText
+    .blocklyText
+        font-weight:500
+.blocklyMainBackground
+    stroke:#fff
+.blocklyScrollbarHandle
+    fill:#eee
+.blocklyToolboxDiv
+    padding:4px
+    border-top-right-radius: 3px
+    border-bottom-right-radius: 3px
+    background-color:#eee
+.blocklyTreeRow
+    border-radius:3px
+.blocklyTreeSelected
+    .blocklyTreeLabel
+        font-weight: 900
+.blocklyTreeLabel
+    font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif
+    color:#444
+    font-weight: 300
+.blocklyFlyoutBackground
+    fill:#eee
+.blocklyFlyoutScrollbar
+    .blocklyScrollbarHandle
+        fill:#ddd
 </style>
