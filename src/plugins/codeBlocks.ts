@@ -129,6 +129,17 @@ export class GlobalState implements IGlobalState {
             })
             .sort((a, b) => (a.value < b.value ? -1 : 1))
     }
+    refreshAllCodeMirrorsSync(): void {
+        document.querySelectorAll('.CodeMirror').forEach((e: any) => e.CodeMirror.refresh())
+    }
+    refreshAllCodeMirrors(): void {
+        setTimeout(() => {
+            this.refreshAllCodeMirrorsSync()
+        }, 100)
+        setTimeout(() => {
+            this.refreshAllCodeMirrorsSync()
+        }, 500)
+    }
 }
 export const globalState = new GlobalState()
 Vue.prototype.$CodeBlock = globalState

@@ -134,6 +134,9 @@ export default class CodePlayground extends BaseBlock {
 
     toggleExpanded(): void {
         this.block.codeExpanded = !this.block.codeExpanded
+        if (this.block.codeExpanded) {
+            this.$CodeBlock.refreshAllCodeMirrors()
+        }
     }
     updateErrors(): boolean {
         this.block.errors = []

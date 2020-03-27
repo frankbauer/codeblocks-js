@@ -1,33 +1,42 @@
 <template>
-    <div>
-        <div class="blocklyContainer" ref="blocklyContainer"></div>
+    <div class="ma-0 pa-0 block-blockly" :data-question="block.parentID" :data-nr="block.id">
+        <div class="row ">
+            <div :class="`col-12 text-${block.align}`">
+                <div class="blocklyContainer" ref="blocklyContainer" :style="`width:${block.width};height:${block.height}`"></div>
+            </div>
+        </div>
         <xml ref="blocklyToolbox" style="display:none" v-html="block.toolbox"> </xml>
         <div v-if="editMode">
-            <textarea :name="`block[${block.parentID}][${block.id}]`" v-html="block.content" style="display:block"></textarea>
-            <div class="q-mt-lg text-subtitle2">{{ $t('Blockly.CodePreviewLabel') }}</div>
-            <CodeBlock
-                v-if="editMode"
-                :block="cmblock"
-                :theme="cmoptions.theme"
-                :mode="cmoptions.mode"
-                :visibleLines="visibleLinesNow"
-                :editMode="false"
-                :muteReadyState="true"
-                namePrefix="preview_"
-                @code-changed-in-edit-mode="onCodeChange"
-            />
-            <div class="q-mt-lg text-subtitle2">{{ $t('Blockly.ToolboxLabel') }}</div>
-            <CodeBlock
-                v-if="editMode"
-                :block="tbblock"
-                :theme="tboptions.theme"
-                :mode="tboptions.mode"
-                :visibleLines="visibleLinesNow"
-                :editMode="this.editMode"
-                :muteReadyState="true"
-                namePrefix="toolbox_"
-                @code-changed-in-edit-mode="onToolboxChange"
-            />
+            <q-list bordered class="rounded-borders q-mt-sm">
+                <q-expansion-item expand-separator icon="code" :label="$t('Blockly.CodePreviewLabel')" :caption="$t('Blockly.CodePreviewCaption')" @before-show="onBeforeShowCodePreview">
+                    <textarea :name="`block[${block.parentID}][${block.id}]`" v-html="block.content" style="display:block"></textarea>
+                    <CodeBlock
+                        v-if="editMode"
+                        :block="cmblock"
+                        :theme="cmoptions.theme"
+                        :mode="cmoptions.mode"
+                        :visibleLines="visibleLinesNow"
+                        :editMode="false"
+                        :muteReadyState="true"
+                        namePrefix="preview_"
+                        @code-changed-in-edit-mode="onCodeChange"
+                    />
+                </q-expansion-item>
+
+                <q-expansion-item expand-separator icon="code" :label="$t('Blockly.ToolboxLabel')" :caption="$t('Blockly.ToolboxCaption')" @before-show="onBeforeShowRawToolbox">
+                    <CodeBlock
+                        v-if="editMode"
+                        :block="tbblock"
+                        :theme="tboptions.theme"
+                        :mode="tboptions.mode"
+                        :visibleLines="visibleLinesNow"
+                        :editMode="this.editMode"
+                        :muteReadyState="true"
+                        namePrefix="toolbox_"
+                        @code-changed-in-edit-mode="onToolboxChange"
+                    />
+                </q-expansion-item>
+            </q-list>
         </div>
     </div>
 </template>
@@ -223,6 +232,17 @@ export default class BlocklyBlock extends Vue {
                 console.error('toDOM Error', e)
             }
         }
+    }
+
+    private onBeforeShow(e: MouseEvent) {
+        this.$CodeBlock.refreshAllCodeMirrors()
+    }
+
+    onBeforeShowCodePreview(e: MouseEvent) {
+        this.onBeforeShow(e)
+    }
+    onBeforeShowRawToolbox(e: MouseEvent) {
+        this.onBeforeShow(e)
     }
 
     onCodeChange(newCode) {

@@ -84,4 +84,7 @@ export interface IGlobalState extends IGlobalSettings {
     processMixedOutput(outputObject: string[] | string, type: CodeOutputTypes, magicString?: string): IProcessedScriptOutput
     mimeType(language: string): string
     knownLanguages(): IListItemData[]
+
+    refreshAllCodeMirrors(): void
+    refreshAllCodeMirrorsSync(): void
 }
