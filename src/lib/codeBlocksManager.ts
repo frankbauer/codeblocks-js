@@ -10,7 +10,7 @@ import { uuid } from 'vue-uuid'
 
 import { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
 import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
-import { IRandomizerSettings, CodeOutputTypes, IBlockData, KnownBlockTypes, IRandomizerSet, IRandomizerSetTag } from './ICodeBlocks'
+import { IRandomizerSettings, CodeOutputTypes, IBlockData, KnownBlockTypes, IRandomizerSet, IRandomizerSetTag, ICodeBlockDataState, IBlockDataBase, IBlockDataBlockly } from './ICodeBlocks'
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
 export interface IAppSettings {
@@ -99,7 +99,7 @@ export class BlockData extends Vue implements IBlockData {
     width!: string
     height!: string
     align!: string
-    toolbox!: string | null
+    blockly!: IBlockDataBlockly
     _oac?: () => string //used by Blockly to re-place the actuakContent-Method while keeping the old implementation around
 
     // constructor(appSettings: IAppSettings, data: IBlockData) {
@@ -152,6 +152,22 @@ export class BlockData extends Vue implements IBlockData {
         this.recreateScriptObject()
     }
 
+    getThemeForBlock(bl: ICodeBlockDataState): string {
+        if (bl.static || bl.readonly || bl.hidden) {
+            return this.appSettings.codeTheme
+        }
+
+        return this.appSettings.solutionTheme
+    }
+
+    get themeForCodeBlock(): string {
+        if (this.static || this.readonly || this.hidden) {
+            return this.appSettings.codeTheme
+        }
+
+        return this.appSettings.solutionTheme
+    }
+
     get isLast(): boolean {
         return this.id == this.appSettings.blocks.length - 1
     }
@@ -200,7 +216,7 @@ export interface IMainBlock extends IAppSettings {
 
 //this will handle the vue mounting on the dom
 class InternalCodeBlocksManager {
-    constructBlock(data: IAppSettings, bl: IBlockData): BlockData {
+    constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
         if (bl.type === KnownBlockTypes.PLAYGROUND) {
             if (bl.content == '' || bl.content === undefined || bl.content === null) {
                 bl.content = '{}'
@@ -345,7 +361,7 @@ class InternalCodeBlocksManager {
                 return
             }
             let inBlock = bl.dataset as IBlockElementData
-            let block: IBlockData = {
+            let block: IBlockDataBase = {
                 hasCode: false,
                 version: '101',
                 type: bl.tagName as KnownBlockTypes,
@@ -360,7 +376,9 @@ class InternalCodeBlocksManager {
                 align: 'center',
                 readyCount: 0,
                 obj: null,
-                toolbox: null,
+                blockly: {
+                    toolbox: null
+                },
                 errors: [],
                 readonly: inBlock.readonly !== undefined && inBlock.readonly != 'false' && inBlock.readonly != '0',
                 static: inBlock.static !== undefined && inBlock.static != 'false' && inBlock.static != '0',
@@ -422,7 +440,7 @@ class InternalCodeBlocksManager {
                 if (toolboxes.length > 0) {
                     toolbox = toolboxes[0].innerHTML ? toolboxes[0].innerHTML : ''
                 }
-                block.toolbox = toolbox
+                block.blockly.toolbox = toolbox
 
                 const codes = bl.getElementsByTagName('CODE')
                 if (codes.length > 0) {
@@ -473,6 +491,7 @@ class InternalCodeBlocksManager {
                     maxCharacters!: number
                     scopeUUID?: string
                     scopeSelector?: string
+
                     swap(id1: number, id2: number) {
                         const a = this.blocks[id1]
                         this.blocks[id1] = this.blocks[id2]
@@ -500,7 +519,7 @@ class InternalCodeBlocksManager {
                         }
                     }
                     addNewBlock() {
-                        let block: IBlockData = {
+                        let block: IBlockDataBase = {
                             noContent: false,
                             alternativeContent: null,
                             hasCode: true,
@@ -526,7 +545,9 @@ class InternalCodeBlocksManager {
                             visibleLines: 10,
                             hasAlternativeContent: false,
                             shouldAutoreset: false,
-                            toolbox: null
+                            blockly: {
+                                toolbox: null
+                            }
                         }
                         data.blocks.push(self.constructBlock(data, block))
                     }

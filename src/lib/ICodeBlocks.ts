@@ -40,7 +40,13 @@ export interface IBlockDataPlayground {
 export interface IBlockDataBlockly {
     toolbox: string | null
 }
-export interface IBlockData extends IBlockDataPlayground, IBlockDataBlockly {
+
+export interface ICodeBlockDataState {
+    readonly: boolean
+    static: boolean
+    hidden: boolean
+}
+export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataState {
     hasCode: boolean
     type: KnownBlockTypes
     content: string
@@ -52,9 +58,6 @@ export interface IBlockData extends IBlockDataPlayground, IBlockDataBlockly {
     expanded: boolean
     codeExpanded: boolean
     obj: object | null
-    readonly: boolean
-    static: boolean
-    hidden: boolean
     version: string
     readyCount: number
     errors: any[]
@@ -63,6 +66,12 @@ export interface IBlockData extends IBlockDataPlayground, IBlockDataBlockly {
     visibleLines: number | 'auto'
     hasAlternativeContent: boolean
     shouldAutoreset: boolean
+    blockly: IBlockDataBlockly
+}
+
+export interface IBlockData extends IBlockDataBase {
+    getThemeForBlock(bl: ICodeBlockDataState): string
+    readonly themeForCodeBlock: string
 }
 
 export interface IGlobalSettings {

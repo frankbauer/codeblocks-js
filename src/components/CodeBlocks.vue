@@ -322,11 +322,7 @@ export default class CodeBlocks extends Vue {
     }
 
     themeForBlock(bl: BlockData): string {
-        if (bl.static || bl.readonly || bl.hidden) {
-            return this.blockInfo.codeTheme
-        }
-
-        return this.blockInfo.solutionTheme
+        return bl.themeForCodeBlock
     }
     public blockById(id: number): BlockData | undefined {
         return this.blocks.find(block => block.id == id)

@@ -10,7 +10,7 @@
         <xml ref="blocklyToolbox" style="display:none" v-html="toolboxContent"> </xml>
         <div v-if="editMode">
             <q-list bordered class="rounded-borders q-mt-sm">
-                <q-expansion-item expand-separator icon="code" :label="$t('Blockly.CodePreviewLabel')" :caption="$t('Blockly.CodePreviewCaption')" @before-show="onBeforeShowCodePreview">
+                <q-expansion-item expand-separator icon="code" :label="$t('Blockly.CodePreviewLabel')" :caption="$t('Blockly.CodePreviewCaption')" @before-show="onBeforeShow">
                     <textarea :name="`block[${block.parentID}][${block.id}]`" v-html="block.content" style="display:block"></textarea>
                     <CodeBlock
                         v-if="editMode"
@@ -25,14 +25,19 @@
                     />
                 </q-expansion-item>
 
-                <q-expansion-item expand-separator icon="ballot" :label="$t('Blockly.RAWToolboxLabel')" :caption="$t('Blockly.RAWToolboxCaption')" @before-show="onBeforeShowRawToolbox">
+                <q-expansion-item expand-separator icon="developer_board" :label="$t('Blockly.CustomBlocksLabel')" :caption="$t('Blockly.CustomBlocksCaption')" @before-show="onBeforeShow">
+                </q-expansion-item>
+
+                <q-expansion-item expand-separator icon="ballot" :label="$t('Blockly.ToolboxLabel')" :caption="$t('Blockly.ToolboxCaption')" @before-show="onBeforeShow"> </q-expansion-item>
+
+                <q-expansion-item expand-separator icon="event_note" :label="$t('Blockly.RAWToolboxLabel')" :caption="$t('Blockly.RAWToolboxCaption')" @before-show="onBeforeShow">
                     <CodeBlock
                         v-if="editMode"
                         :block="tbblock"
                         :theme="tboptions.theme"
                         :mode="tboptions.mode"
                         :visibleLines="visibleLinesNow"
-                        :editMode="this.editMode"
+                        :editMode="false"
                         :muteReadyState="true"
                         namePrefix="toolbox_"
                         @code-changed-in-edit-mode="onToolboxChange"
@@ -160,7 +165,7 @@ export default class BlocklyBlock extends Vue {
         return {
             // codemirror options
             mode: this.$CodeBlock.mimeType('javascript'),
-            theme: this.theme,
+            theme: this.block.getThemeForBlock(this.cmblock),
             lineNumbers: true,
             line: true,
             tabSize: 4,
@@ -178,7 +183,7 @@ export default class BlocklyBlock extends Vue {
             scopeUUID: this.block.scopeUUID,
             firstLine: 1,
             hidden: false,
-            readonly: false,
+            readonly: true,
             static: true,
             alternativeContent: this.code,
             parentID: this.block.parentID,
@@ -191,12 +196,12 @@ export default class BlocklyBlock extends Vue {
     get tboptions() {
         return {
             mode: this.$CodeBlock.mimeType('xml'),
-            theme: this.theme,
+            theme: this.block.getThemeForBlock(this.tbblock),
             lineNumbers: true,
             line: true,
             tabSize: 4,
             indentUnit: 4,
-            readOnly: !this.editMode,
+            readOnly: true,
             firstLineNumber: 1,
             gutters: []
         }
@@ -204,25 +209,25 @@ export default class BlocklyBlock extends Vue {
     get tbblock() {
         return {
             type: 'XML',
-            content: this.block.toolbox,
+            content: this.block.blockly.toolbox,
             scopeUUID: this.block.scopeUUID,
             firstLine: 1,
             hidden: false,
-            readonly: false,
+            readonly: true,
             static: true,
             alternativeContent: '',
             parentID: this.block.parentID,
             id: this.block.id,
             actualContent: () => {
-                return this.block.toolbox
+                return this.block.blockly.toolbox
             }
         }
     }
     get toolboxContent(): string {
-        if (this.block.toolbox === null) {
+        if (this.block.blockly.toolbox === null) {
             return '<xml></xml>'
         }
-        return this.parseToolboxCode(this.block.toolbox)
+        return this.parseToolboxCode(this.block.blockly.toolbox)
     }
     get visibleLinesNow() {
         if (!this.block.codeExpanded) {
@@ -267,13 +272,6 @@ export default class BlocklyBlock extends Vue {
 
     private onBeforeShow(e: MouseEvent) {
         this.$CodeBlock.refreshAllCodeMirrors()
-    }
-
-    onBeforeShowCodePreview(e: MouseEvent) {
-        this.onBeforeShow(e)
-    }
-    onBeforeShowRawToolbox(e: MouseEvent) {
-        this.onBeforeShow(e)
     }
 
     onCodeChange(newCode) {
@@ -363,6 +361,8 @@ export default class BlocklyBlock extends Vue {
     border-top-right-radius: 3px
     border-bottom-right-radius: 3px
     background-color:#eee
+    box-shadow: 1px 2px 8px #ddd
+
 .blocklyTreeRow
     border-radius:3px
 .blocklyTreeSelected
