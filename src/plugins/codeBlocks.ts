@@ -67,7 +67,11 @@ export class GlobalState implements IGlobalState {
      * @param {*} type  'auto' = (default, try to determin what kind of output was generated), 'text', 'json' = (force json parsing), 'magic' = (force use of magic string seperator)
      * @param {*} magicString The seperating String. By default it is '\n\n<JSON>\n'
      */
-    processMixedOutput(outputObject: string[] | string, type: CodeOutputTypes, magicString?: string): IProcessedScriptOutput {
+    processMixedOutput(
+        outputObject: string[] | string,
+        type: CodeOutputTypes,
+        magicString?: string
+    ): IProcessedScriptOutput {
         if (outputObject !== undefined && Array.isArray(outputObject)) {
             return {
                 type: 'json',
@@ -100,7 +104,11 @@ export class GlobalState implements IGlobalState {
             }
         } else {
             const too = outputObject.trim()
-            if ((type === CodeOutputTypes.AUTO && (too.indexOf('[') == 0 || too.indexOf('{') == 0)) || type === CodeOutputTypes.JSON) {
+            if (
+                (type === CodeOutputTypes.AUTO &&
+                    (too.indexOf('[') == 0 || too.indexOf('{') == 0)) ||
+                type === CodeOutputTypes.JSON
+            ) {
                 return {
                     type: CodeOutputTypes.JSON,
                     json: JSON.parse(outputObject),
@@ -139,6 +147,16 @@ export class GlobalState implements IGlobalState {
         setTimeout(() => {
             this.refreshAllCodeMirrorsSync()
         }, 500)
+    }
+    public itemForValue(items: IListItemData[], value: string): IListItemData {
+        let ret = items.find(i => i.value == value)
+        if (ret === undefined) {
+            return {
+                label: '???',
+                value: '???'
+            }
+        }
+        return ret
     }
 }
 export const globalState = new GlobalState()

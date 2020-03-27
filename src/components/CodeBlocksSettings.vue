@@ -2,20 +2,45 @@
     <div class="row q-pa-none q-mb-md">
         <div class="col-xs-12 col-sm-4">
             <q-card class="q-mb-sm q-mr-sm-xs">
-                <q-card-section class="text-overline">{{ $t('CodeBlocksSettings.Language') }}</q-card-section>
+                <q-card-section class="text-overline">{{
+                    $t('CodeBlocksSettings.Language')
+                }}</q-card-section>
                 <q-card-section class="q-ml-md">
                     <div class="row">
                         <div class="col-12">
-                            <q-toggle v-model="runCode" :disabled="!languageHasCompiler" :label="$t('CodeBlocksSettings.AllowExec')" />
+                            <q-toggle
+                                v-model="runCode"
+                                :disabled="!languageHasCompiler"
+                                :label="$t('CodeBlocksSettings.AllowExec')"
+                            />
                         </div>
-                        <div :class="`col-xs-12 col-md-${runCode ? 8 : 12} ${runCode ? 'q-pr-md-sm' : ''}`">
-                            <q-select :options="compiledLanguages" v-model="compilerLanguageObj" :label="$t('CodeBlocksSettings.Language')" />
+                        <div
+                            :class="
+                                `col-xs-12 col-md-${runCode ? 8 : 12} ${
+                                    runCode ? 'q-pr-md-sm' : ''
+                                }`
+                            "
+                        >
+                            <q-select
+                                :options="compiledLanguages"
+                                v-model="compilerLanguageObj"
+                                :label="$t('CodeBlocksSettings.Language')"
+                            />
                         </div>
                         <div class="col-xs-12 col-md-4" v-if="runCode">
-                            <q-select :options="compilerVersions" v-model="compilerVersion" :label="$t('CodeBlocksSettings.CVersion')" />
+                            <q-select
+                                :options="compilerVersions"
+                                v-model="compilerVersion"
+                                :label="$t('CodeBlocksSettings.CVersion')"
+                            />
                         </div>
                         <div class="col-12" v-if="runCode">
-                            <q-input v-model="maxRuntime" :rules="[validNumber]" :label="$t('CodeBlocksSettings.RunTime')" maxlength="6" />
+                            <q-input
+                                v-model="maxRuntime"
+                                :rules="[validNumber]"
+                                :label="$t('CodeBlocksSettings.RunTime')"
+                                maxlength="6"
+                            />
                         </div>
                     </div>
                 </q-card-section>
@@ -25,28 +50,49 @@
         <div class="col-xs-12 col-sm-4">
             <q-slide-transition>
                 <q-card class="q-mb-sm q-mr-sm-xs" v-if="runCode">
-                    <q-card-section class="text-overline">{{ $t('CodeBlocksSettings.Output') }}</q-card-section>
+                    <q-card-section class="text-overline">{{
+                        $t('CodeBlocksSettings.Output')
+                    }}</q-card-section>
                     <q-card-section class="q-ml-md">
                         <div class="row">
                             <div class="col-xs-12 col-md-6 col-12 q-pr-md-sm">
-                                <q-input v-model="maxCharacters" :rules="[validNumber]" :label="$t('CodeBlocksSettings.MaxCharacters')" maxlength="6" />
+                                <q-input
+                                    v-model="maxCharacters"
+                                    :rules="[validNumber]"
+                                    :label="$t('CodeBlocksSettings.MaxCharacters')"
+                                    maxlength="6"
+                                />
                             </div>
                             <div class="col-xs-12 col-md-6">
-                                <q-select :options="outputParsers" v-model="outputParser" :label="$t('CodeBlocksSettings.Parser')" />
+                                <q-select
+                                    :options="outputParsers"
+                                    v-model="outputParser"
+                                    :label="$t('CodeBlocksSettings.Parser')"
+                                />
                             </div>
                         </div>
                     </q-card-section>
                 </q-card>
             </q-slide-transition>
             <q-card class="q-mr-sm-xs">
-                <q-card-section class="text-overline">{{ $t('CodeBlocksSettings.Themes') }}</q-card-section>
+                <q-card-section class="text-overline">{{
+                    $t('CodeBlocksSettings.Themes')
+                }}</q-card-section>
                 <q-card-section class="q-ml-md">
                     <div class="row" dense>
                         <div class="col-xs-12 col-md-6 q-pr-md-sm">
-                            <q-select :options="themes" v-model="codeTheme" :label="$t('CodeBlocksSettings.TGeneral')" />
+                            <q-select
+                                :options="themes"
+                                v-model="codeTheme"
+                                :label="$t('CodeBlocksSettings.TGeneral')"
+                            />
                         </div>
                         <div class="col-xs-12 col-md-6">
-                            <q-select :options="themes" v-model="solutionTheme" :label="$t('CodeBlocksSettings.TSolution')" />
+                            <q-select
+                                :options="themes"
+                                v-model="solutionTheme"
+                                :label="$t('CodeBlocksSettings.TSolution')"
+                            />
                         </div>
                     </div>
                 </q-card-section>
@@ -56,14 +102,35 @@
         <q-slide-transition>
             <div class="col-xs-12 col-sm-4" v-if="runCode">
                 <q-card>
-                    <q-card-section class="text-overline">{{ $t('CodeBlocksSettings.Libraries') }}</q-card-section>
+                    <q-card-section class="text-overline">{{
+                        $t('CodeBlocksSettings.Libraries')
+                    }}</q-card-section>
                     <q-card-section class="q-ml-md">
                         <div class="row q-my-none q-py-none" dense>
                             <div class="col-xs-12 q-my-none q-py-none">
-                                <q-select :options="domLibraries" v-model="domLibrary" multiple use-chips stack-label deletable-chips :label="$t('CodeBlocksSettings.DomLibs')" />
+                                <q-select
+                                    :options="domLibraries"
+                                    v-model="domLibrary"
+                                    multiple
+                                    use-chips
+                                    stack-label
+                                    deletable-chips
+                                    :label="$t('CodeBlocksSettings.DomLibs')"
+                                />
                             </div>
-                            <div class="col-xs-12 q-my-none q-py-none" v-if="runCode && workerLibraries.length > 0">
-                                <q-select :options="workerLibraries" v-model="workerLibrary" multiple use-chips stack-label deletable-chips :label="$t('CodeBlocksSettings.WorkLibs')" />
+                            <div
+                                class="col-xs-12 q-my-none q-py-none"
+                                v-if="runCode && workerLibraries.length > 0"
+                            >
+                                <q-select
+                                    :options="workerLibraries"
+                                    v-model="workerLibrary"
+                                    multiple
+                                    use-chips
+                                    stack-label
+                                    deletable-chips
+                                    :label="$t('CodeBlocksSettings.WorkLibs')"
+                                />
                             </div>
                         </div>
                     </q-card-section>
@@ -74,7 +141,11 @@
             <RandomizerSettings :options="options" />
         </div>
         <div class="col-xs-12">
-            <textarea :name="`block_settings[${this.options.id}]`" class="blocksettings" v-model="serializedOptions"></textarea>
+            <textarea
+                :name="`block_settings[${this.options.id}]`"
+                class="blocksettings"
+                v-model="serializedOptions"
+            ></textarea>
         </div>
     </div>
 </template>
@@ -163,7 +234,10 @@ export default class CodeBlocksSettings extends Vue {
         return this.$compilerRegistry.languages
     }
     get workerLibraries(): IListItemData[] {
-        const c = this.$compilerRegistry.getCompiler({ languageType: this.compilerLanguage, version: this.compilerVersion })
+        const c = this.$compilerRegistry.getCompiler({
+            languageType: this.compilerLanguage,
+            version: this.compilerVersion
+        })
         if (c === undefined || c.libraries === undefined) {
             return []
         }
@@ -191,14 +265,7 @@ export default class CodeBlocksSettings extends Vue {
         return this.options.compiler.languageType
     }
     get compilerLanguageObj(): IListItemData {
-        const ret = this.compiledLanguages.find(t => t.value == this.compilerLanguage)
-        if (ret === undefined) {
-            return {
-                label: '???',
-                value: ''
-            }
-        }
-        return ret
+        return Vue.$CodeBlock.itemForValue(this.compiledLanguages, this.compilerLanguage)
     }
     set compilerLanguageObj(v: IListItemData) {
         if (this.options.runCode === false) {
@@ -236,7 +303,9 @@ export default class CodeBlocksSettings extends Vue {
     }
 
     get domLibrary(): IListItemData[] {
-        return this.options.domLibs.map(d => this.domLibraries.find(k => k.value == d)).filter(v => v !== undefined) as IListItemData[]
+        return this.options.domLibs
+            .map(d => this.domLibraries.find(k => k.value == d))
+            .filter(v => v !== undefined) as IListItemData[]
     }
     set domLibrary(v: IListItemData[]) {
         this.$emit(
@@ -246,7 +315,9 @@ export default class CodeBlocksSettings extends Vue {
     }
 
     get workerLibrary(): IListItemData[] {
-        return this.options.workerLibs.map(d => this.workerLibraries.find(k => k.value == d)).filter(v => v !== undefined) as IListItemData[]
+        return this.options.workerLibs
+            .map(d => this.workerLibraries.find(k => k.value == d))
+            .filter(v => v !== undefined) as IListItemData[]
     }
     set workerLibrary(v: IListItemData[]) {
         this.$emit(
@@ -256,14 +327,7 @@ export default class CodeBlocksSettings extends Vue {
     }
 
     get solutionTheme(): IListItemData {
-        const ret = this.themes.find(t => t.value == this.options.solutionTheme)
-        if (ret === undefined) {
-            return {
-                label: '???',
-                value: ''
-            }
-        }
-        return ret
+        return Vue.$CodeBlock.itemForValue(this.themes, this.options.solutionTheme)
     }
     set solutionTheme(v: IListItemData) {
         this.$emit('theme-change', {
@@ -273,14 +337,7 @@ export default class CodeBlocksSettings extends Vue {
     }
 
     get codeTheme(): IListItemData {
-        const ret = this.themes.find(t => t.value == this.options.codeTheme)
-        if (ret === undefined) {
-            return {
-                label: '???',
-                value: ''
-            }
-        }
-        return ret
+        return Vue.$CodeBlock.itemForValue(this.themes, this.options.codeTheme)
     }
     set codeTheme(v: IListItemData) {
         this.$emit('theme-change', {
@@ -290,14 +347,7 @@ export default class CodeBlocksSettings extends Vue {
     }
 
     get outputParser(): IListItemData {
-        const ret = this.outputParsers.find(t => t.value == this.options.outputParser)
-        if (ret === undefined) {
-            return {
-                label: '???',
-                value: ''
-            }
-        }
-        return ret
+        return Vue.$CodeBlock.itemForValue(this.outputParsers, this.options.outputParser)
     }
     set outputParser(v: IListItemData) {
         this.$emit('output-parser-change', v.value)

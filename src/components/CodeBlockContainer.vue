@@ -1,37 +1,78 @@
 <template>
-    <div :data-question="block.parentID" :data-nr="block.id" :uuid="block.uuid" class="block-container">
-        <q-card v-if="editMode" :class="`q-mx-none q-my-xs q-pa-none editModeBlockContainer ${colorClass} ${bgClass}`">
+    <div
+        :data-question="block.parentID"
+        :data-nr="block.id"
+        :uuid="block.uuid"
+        class="block-container"
+    >
+        <q-card
+            v-if="editMode"
+            :class="`q-mx-none q-my-xs q-pa-none editModeBlockContainer ${colorClass} ${bgClass}`"
+        >
             <q-card-section class="q-mb-none q-pb-sm q-pt-sm ">
                 <div class="row q-my-none q-py-none" dense>
                     <div class="col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none">
-                        <q-select :options="types" v-model="typeObj" dense style="margin-top:-5px !important">
+                        <q-select
+                            :options="types"
+                            v-model="typeObj"
+                            dense
+                            style="margin-top:-5px !important"
+                        >
                             <template v-slot:after>
-                                <q-btn flat round color="primary" icon="info" size="xs" @click="showTypeInfoDialog"></q-btn>
+                                <q-btn
+                                    flat
+                                    round
+                                    color="primary"
+                                    icon="info"
+                                    size="xs"
+                                    @click="showTypeInfoDialog"
+                                ></q-btn>
                             </template>
                         </q-select>
                     </div>
                     <div class="col-grow"></div>
-                    <div class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right">
+                    <div
+                        class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right"
+                    >
                         <q-btn icon="settings" color="blue-7" push dense v-if="hasExtendedSettings">
                             <q-popup-proxy>
                                 <!-- LineNumbers -->
                                 <div class="q-pa-md" v-if="canSetLineNumbers">
                                     <div class="row no-wrap q-pa-none">
-                                        <div class="text-overline">{{ $l('CodeBlockContainer.Display') }}</div>
+                                        <div class="text-overline">
+                                            {{ $l('CodeBlockContainer.Display') }}
+                                        </div>
                                     </div>
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
-                                            <div class="text-subtitle2">{{ $l('CodeBlockContainer.Lines') }}</div>
-                                            <div class="text-caption text-blue-grey-4" v-html="$l('CodeBlockContainer.Lines_detail')"></div>
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.Lines') }}
+                                            </div>
+                                            <div
+                                                class="text-caption text-blue-grey-4"
+                                                v-html="$l('CodeBlockContainer.Lines_detail')"
+                                            ></div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
-                                            <q-input v-model="visibleLines" :rules="[validNumber]" maxlength="4" style="width:132px" />
+                                            <q-input
+                                                v-model="visibleLines"
+                                                :rules="[validNumber]"
+                                                maxlength="4"
+                                                style="width:132px"
+                                            />
                                         </div>
                                     </div>
-                                    <div class="row no-wrap q-pl-md" v-if="canHaveAlternativeContent">
+                                    <div
+                                        class="row no-wrap q-pl-md"
+                                        v-if="canHaveAlternativeContent"
+                                    >
                                         <div class="col-7">
-                                            <div class="text-subtitle2">{{ $l('CodeBlockContainer.Prepopulate') }}</div>
-                                            <div class="text-caption text-blue-grey-4" lines="2">{{ $l('CodeBlockContainer.Prepopulate_detail') }}</div>
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.Prepopulate') }}
+                                            </div>
+                                            <div class="text-caption text-blue-grey-4" lines="2">
+                                                {{ $l('CodeBlockContainer.Prepopulate_detail') }}
+                                            </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
                                             <q-toggle v-model="hasAltComntent" />
@@ -42,22 +83,35 @@
                                 <!-- Playground Versioning -->
                                 <div class="q-pa-md" v-if="isVersionedPlayground">
                                     <div class="row no-wrap q-pa-none">
-                                        <div class="text-overline">{{ $l('CodeBlockContainer.Behaviour') }}</div>
+                                        <div class="text-overline">
+                                            {{ $l('CodeBlockContainer.Behaviour') }}
+                                        </div>
                                     </div>
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
-                                            <div class="text-subtitle2">{{ $l('CodeBlockContainer.ScriptV') }}</div>
-                                            <div class="text-caption text-blue-grey-4">{{ $l('CodeBlockContainer.ScriptV_detail') }}</div>
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.ScriptV') }}
+                                            </div>
+                                            <div class="text-caption text-blue-grey-4">
+                                                {{ $l('CodeBlockContainer.ScriptV_detail') }}
+                                            </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
-                                            <q-select :options="scriptVersions" v-model="scriptVersionObj" />
+                                            <q-select
+                                                :options="scriptVersions"
+                                                v-model="scriptVersionObj"
+                                            />
                                         </div>
                                     </div>
 
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
-                                            <div class="text-subtitle2">{{ $l('CodeBlockContainer.AutoReset') }}</div>
-                                            <div class="text-caption text-blue-grey-4">{{ $l('CodeBlockContainer.AutoReset_detail') }}</div>
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.AutoReset') }}
+                                            </div>
+                                            <div class="text-caption text-blue-grey-4">
+                                                {{ $l('CodeBlockContainer.AutoReset_detail') }}
+                                            </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
                                             <q-toggle v-model="shouldAutoReset" />
@@ -68,12 +122,18 @@
                                 <!-- Positioning -->
                                 <div class="q-pa-md" v-if="canDefinePlacement">
                                     <div class="row no-wrap q-pa-none">
-                                        <div class="text-overline">{{ $l('CodeBlockContainer.Positioning') }}</div>
+                                        <div class="text-overline">
+                                            {{ $l('CodeBlockContainer.Positioning') }}
+                                        </div>
                                     </div>
                                     <div class="row no-wrap q-pl-md q-pb-md">
                                         <div class="col-7">
-                                            <div class="text-subtitle2">{{ $l('CodeBlockContainer.Width') }}</div>
-                                            <div class="text-caption text-blue-grey-4">{{ $l('CodeBlockContainer.Width_detail') }}</div>
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.Width') }}
+                                            </div>
+                                            <div class="text-caption text-blue-grey-4">
+                                                {{ $l('CodeBlockContainer.Width_detail') }}
+                                            </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
                                             <q-input v-model="width" maxlength="7" dense />
@@ -81,8 +141,12 @@
                                     </div>
                                     <div class="row no-wrap q-pl-md q-pb-md">
                                         <div class="col-7">
-                                            <div class="text-subtitle2">{{ $l('CodeBlockContainer.Height') }}</div>
-                                            <div class="text-caption text-blue-grey-4">{{ $l('CodeBlockContainer.Height_detail') }}</div>
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.Height') }}
+                                            </div>
+                                            <div class="text-caption text-blue-grey-4">
+                                                {{ $l('CodeBlockContainer.Height_detail') }}
+                                            </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
                                             <q-input v-model="height" maxlength="7" dense />
@@ -90,8 +154,12 @@
                                     </div>
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
-                                            <div class="text-subtitle2">{{ $l('CodeBlockContainer.Alignment') }}</div>
-                                            <div class="text-caption text-blue-grey-4">{{ $l('CodeBlockContainer.Alignment_detail') }}</div>
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.Alignment') }}
+                                            </div>
+                                            <div class="text-caption text-blue-grey-4">
+                                                {{ $l('CodeBlockContainer.Alignment_detail') }}
+                                            </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
                                             <q-select :options="alignments" v-model="align" dense />
@@ -101,8 +169,26 @@
                             </q-popup-proxy>
                         </q-btn>
 
-                        <q-btn @click="moveUp" :disable="!canMoveUp" icon="arrow_drop_up" push dense class="q-ml-md q-mr-xs" color="orange-6" :ripple="{ center: true }"></q-btn>
-                        <q-btn @click="moveDown" :disabled="!canMoveDown" icon="arrow_drop_down" push dense class="q-mr-md" color="orange-6" :ripple="{ center: true }"></q-btn>
+                        <q-btn
+                            @click="moveUp"
+                            :disable="!canMoveUp"
+                            icon="arrow_drop_up"
+                            push
+                            dense
+                            class="q-ml-md q-mr-xs"
+                            color="orange-6"
+                            :ripple="{ center: true }"
+                        ></q-btn>
+                        <q-btn
+                            @click="moveDown"
+                            :disabled="!canMoveDown"
+                            icon="arrow_drop_down"
+                            push
+                            dense
+                            class="q-mr-md"
+                            color="orange-6"
+                            :ripple="{ center: true }"
+                        ></q-btn>
                         <q-btn
                             @click="removeBlock"
                             :label="$l('CodeBlockContainer.Delete')"
@@ -114,13 +200,34 @@
                             right
                             :ripple="{ center: true }"
                         ></q-btn>
-                        <q-btn @click="removeBlock" icon="warning" push dense class="lt-sm q-mr-lg q-pr-none" color="red-6" right :ripple="{ center: true }"></q-btn>
-                        <q-btn icon color="primary" small flat round style="margin-right:-9px" @click="toggleExpanded">
+                        <q-btn
+                            @click="removeBlock"
+                            icon="warning"
+                            push
+                            dense
+                            class="lt-sm q-mr-lg q-pr-none"
+                            color="red-6"
+                            right
+                            :ripple="{ center: true }"
+                        ></q-btn>
+                        <q-btn
+                            icon
+                            color="primary"
+                            small
+                            flat
+                            round
+                            style="margin-right:-9px"
+                            @click="toggleExpanded"
+                        >
                             <q-icon :name="expanded ? 'expand_less' : 'expand_more'" size="24" />
                         </q-btn>
                     </div>
                 </div>
-                <textarea :name="`block_options[${this.block.parentID}][${this.block.id}]`" class="blockoptions" v-model="serializedOptions"></textarea>
+                <textarea
+                    :name="`block_options[${this.block.parentID}][${this.block.id}]`"
+                    class="blockoptions"
+                    v-model="serializedOptions"
+                ></textarea>
             </q-card-section>
             <q-slide-transition>
                 <q-card-section class="my-0 q-pt-1 q-pb-0" v-show="expanded">
@@ -314,7 +421,11 @@ export default class CodeBlocksContainer extends Vue {
     set serializedOptions(v: string) {}
 
     get hasExtendedSettings(): boolean {
-        return this.type == KnownBlockTypes.PLAYGROUND || this.type == KnownBlockTypes.BLOCK || this.type == KnownBlockTypes.BLOCKLY
+        return (
+            this.type == KnownBlockTypes.PLAYGROUND ||
+            this.type == KnownBlockTypes.BLOCK ||
+            this.type == KnownBlockTypes.BLOCKLY
+        )
     }
     get isVersionedPlayground(): boolean {
         return this.type == KnownBlockTypes.PLAYGROUND
@@ -339,20 +450,17 @@ export default class CodeBlocksContainer extends Vue {
     }
 
     get scriptVersion(): string {
-        if (this.block === undefined || this.block.version === undefined || this.block.version == '') {
+        if (
+            this.block === undefined ||
+            this.block.version === undefined ||
+            this.block.version == ''
+        ) {
             return '100'
         }
         return this.block.version
     }
     get scriptVersionObj(): IListItemData {
-        const ret = this.scriptVersions.find(k => k.value == this.scriptVersion)
-        if (ret === undefined) {
-            return {
-                value: '???',
-                label: '???'
-            }
-        }
-        return ret
+        return Vue.$CodeBlock.itemForValue(this.scriptVersions, this.scriptVersion)
     }
     set scriptVersionObj(v: IListItemData) {
         this.$emit('script-version-change', {
@@ -413,14 +521,7 @@ export default class CodeBlocksContainer extends Vue {
         return this.block.type
     }
     get typeObj(): IListItemData {
-        const ret = this.types.find(t => t.value == this.type)
-        if (ret === undefined) {
-            return {
-                value: '???',
-                label: '???'
-            }
-        }
-        return ret
+        return Vue.$CodeBlock.itemForValue(this.types, this.type)
     }
     set typeObj(val: IListItemData) {
         const v = val.value
@@ -435,7 +536,8 @@ export default class CodeBlocksContainer extends Vue {
 
         if (ret.type == KnownBlockTypes.PLAYGROUND && this.block.content === '' && this.editMode) {
             if (this.block.scriptVersion == '100') {
-                this.block.content = '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
+                this.block.content =
+                    '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
             } else {
                 this.block.content =
                     '{\n    init: function(canvasElement, outputElement, scope) {\n\n    },\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
@@ -477,13 +579,7 @@ export default class CodeBlocksContainer extends Vue {
         })
     }
     get align(): IListItemData {
-        const ret = this.alignments.find(k => k.value == this.block.align)
-        if (ret === undefined) {
-            if (ret === undefined) {
-                return this.alignments[1]
-            }
-        }
-        return ret
+        return Vue.$CodeBlock.itemForValue(this.alignments, this.block.align)
     }
     set align(v: IListItemData) {
         this.$emit('placement-change', {

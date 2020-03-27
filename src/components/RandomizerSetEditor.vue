@@ -28,7 +28,9 @@ export default class RandomizerSetEditor extends Vue {
     }
 
     onShow(o) {
-        this.tagSet.values = this.tagSet.values.filter(v => this.options.randomizer.knownTags.indexOf(v.tag) >= 0)
+        this.tagSet.values = this.tagSet.values.filter(
+            v => this.options.randomizer.knownTags.indexOf(v.tag) >= 0
+        )
         this.options.randomizer.knownTags.forEach(t => {
             if (this.tagSet.values.find(v => v.tag == t) === undefined) {
                 this.tagSet.values.push({
