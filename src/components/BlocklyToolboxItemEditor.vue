@@ -71,7 +71,7 @@ export default class BlocklyToolboxItemEditor extends Vue {
         update(() => {
             const needle = val.toLowerCase()
             this.filteredBlockTypes = this.blockTypes.filter(
-                v => v.value.toLowerCase().indexOf(needle) > -1
+                v => v.label.toLowerCase().indexOf(needle) > -1
             )
         })
     }

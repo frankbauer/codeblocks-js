@@ -424,10 +424,13 @@ export default class BlocklyBlock extends Vue {
 
     @Watch('block.blockly.toolbox', { immediate: false, deep: true })
     onToolboxChanged() {
-        if (this.workspace) {
-            const ws = this.workspace as any
-            ws.updateToolbox(this.parseToolboxCode('<xml>' + this.tbblock.content + '</xml>'))
-        }
+        // if (this.workspace) {
+        //     const ws = this.workspace as any
+        //     ws.updateToolbox(this.parseToolboxCode('<xml>' + this.tbblock.content + '</xml>'))
+        // }
+        this.$nextTick(() => {
+            this.remountBlockly()
+        })
     }
 }
 </script>

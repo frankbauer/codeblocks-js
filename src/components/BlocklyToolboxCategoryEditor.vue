@@ -50,7 +50,8 @@
                     expand-separator
                     group="itemListing"
                     header-class="bg-blue-grey text-white"
-                    :label="item.type"
+                    :label="labelForItem(item.type)"
+                    :caption="item.type"
                 >
                     <BlocklyToolboxItemEditor :item="item" :customBlocks="customBlocks" />
                 </q-expansion-item>
@@ -105,6 +106,10 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
             type: ''
         }
         this.category.items.push(item)
+    }
+
+    labelForItem(i: IBlocklyToolboxItem): string {
+        return i.type
     }
 }
 </script>
