@@ -24,7 +24,7 @@
                     <textarea
                         :name="`block[${block.parentID}][${block.id}]`"
                         v-html="block.content"
-                        style="display:block"
+                        style="display:none"
                     ></textarea>
                     <CodeBlock
                         v-if="editMode"
@@ -443,7 +443,7 @@ export default class BlocklyBlock extends Vue {
     border-radius: 3px
 .blocklyCanvas
     overflow: hidden
-    display: block
+    display: inline-block
     width:100%
     height:200px
     margin-top:4px
