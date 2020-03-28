@@ -5,9 +5,21 @@
                 <q-select
                     class="col-11 q-ml-lg col-sm-11 col-xs-11"
                     v-model="type"
-                    :options="blockTypes"
+                    :options="filteredBlockTypes"
                     label="Type"
-                />
+                    use-input
+                    input-debounce="0"
+                    behavior="menu"
+                    @filter="filterTypes"
+                >
+                    <template v-slot:no-option>
+                        <q-item>
+                            <q-item-section class="text-grey">
+                                No results
+                            </q-item-section>
+                        </q-item>
+                    </template>
+                </q-select>
             </div>
         </q-card-section>
     </q-card>
@@ -44,6 +56,24 @@ export default class BlocklyToolboxItemEditor extends Vue {
         return [...PredefinedBlockTypes, ...custom].sort((a, b) =>
             a.value == b.value ? 0 : a.value < b.value ? -1 : +1
         )
+    }
+
+    filteredBlockTypes: IListItemData[] = []
+
+    filterTypes(val, update) {
+        if (val === '') {
+            update(() => {
+                this.filteredBlockTypes = this.blockTypes
+            })
+            return
+        }
+
+        update(() => {
+            const needle = val.toLowerCase()
+            this.filteredBlockTypes = this.blockTypes.filter(
+                v => v.value.toLowerCase().indexOf(needle) > -1
+            )
+        })
     }
 }
 </script>
