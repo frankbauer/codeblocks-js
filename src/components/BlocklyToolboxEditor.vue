@@ -2,6 +2,16 @@
     <div class="q-ml-lg q-pb-sm q-pl-lg">
         <div class="row no-wrap q-pa-none">
             <div class="text-overline">{{ $t('Blockly.ToolboxCategories') }}</div>
+            <q-btn
+                color="primary"
+                class="gt-xs"
+                size="12px"
+                flat
+                dense
+                round
+                icon="add"
+                @click="addCategory"
+            />
         </div>
         <q-list dark bordered class="rounded-borders q-mt-sm ">
             <q-expansion-item
@@ -13,7 +23,10 @@
                 :label="category.name"
                 :caption="descriptionForCategory(category)"
             >
-                <BlocklyToolboxCategoryEditor :category="category" />
+                <BlocklyToolboxCategoryEditor
+                    :category="category"
+                    :customBlocks="block.blockly.blocks"
+                />
             </q-expansion-item>
         </q-list>
     </div>
@@ -27,7 +40,9 @@ import Blockly from '@/plugins/blocklyEnv'
 import BlocklyToolboxCategoryEditor from '@/components/BlocklyToolboxCategoryEditor.vue'
 import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { BlockData } from '@/lib/codeBlocksManager'
-import { IBlocklyToolboxCategory } from '../lib/IBlocklyHelper'
+import { IBlocklyToolboxCategory } from '@/lib/IBlocklyHelper'
+
+import { uuid } from 'vue-uuid'
 
 const sampleCategories: IBlocklyToolboxCategory[] = [
     {
@@ -79,13 +94,21 @@ export default class BlocklyToolboxEditor extends Vue {
     }
 
     get categories(): IBlocklyToolboxCategory[] {
-        return vCat.categories
+        if (this.block.blockly.toolbox.categories) {
+            return this.block.blockly.toolbox.categories
+        }
+        return []
     }
-    get testCategory(): IBlocklyToolboxCategory {
-        return {
-            uuid: 4,
-            name: 'test',
-            items: []
+
+    addCategory() {
+        if (this.block.blockly.toolbox.categories) {
+            const cat: IBlocklyToolboxCategory = {
+                uuid: uuid.v4(),
+                name: 'None',
+                items: [],
+                color: ''
+            }
+            this.block.blockly.toolbox.categories.push(cat)
         }
     }
 }

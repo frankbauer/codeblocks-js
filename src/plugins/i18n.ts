@@ -41,3 +41,4 @@ Vue.prototype.$l = (key: string, values?: any[]): string => {
     const res = i18n.t(key, values)
     return res.toString()
 }
+Vue.$l = Vue.prototype.$l

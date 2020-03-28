@@ -78,7 +78,7 @@
                         :editMode="false"
                         :muteReadyState="true"
                         namePrefix="toolbox_"
-                        @code-changed-in-edit-mode="onToolboxChange"
+                        @code-changed-in-edit-mode="onToolboxOverrideChange"
                     />
                 </q-expansion-item>
             </q-list>
@@ -102,6 +102,7 @@ import {
     BlockSecondaryColors,
     BlockTertiaryColors
 } from '../lib/IBlocklyHelper'
+import { blocklyHelper } from '../lib/BlocklyHelper'
 
 @Component({
     components: {
@@ -290,7 +291,7 @@ export default class BlocklyBlock extends Vue {
     get tbblock() {
         return {
             type: 'XML',
-            content: this.block.blockly.toolbox,
+            content: this.unparsedToolboxContent,
             scopeUUID: this.block.scopeUUID,
             firstLine: 1,
             hidden: false,
@@ -300,15 +301,18 @@ export default class BlocklyBlock extends Vue {
             parentID: this.block.parentID,
             id: this.block.id,
             actualContent: () => {
-                return this.block.blockly.toolbox
+                return this.unparsedToolboxContent
             }
         }
     }
-    get toolboxContent(): string {
-        if (this.block.blockly.toolbox === null) {
-            return '<xml></xml>'
+    get unparsedToolboxContent(): string {
+        if (this.block.blockly.toolboxOverride && this.block.blockly.toolboxOverride.trim() != '') {
+            return this.block.blockly.toolboxOverride
         }
-        return this.parseToolboxCode(this.block.blockly.toolbox)
+        return blocklyHelper.serializeToolbox(this.block.blockly.toolbox)
+    }
+    get toolboxContent(): string {
+        return this.parseToolboxCode(this.unparsedToolboxContent)
     }
     get visibleLinesNow() {
         if (!this.block.codeExpanded) {
@@ -372,12 +376,6 @@ export default class BlocklyBlock extends Vue {
         this.tmpcode = this.code
         this.block.content = this.content
     }
-    onToolboxChange(newCode) {
-        if (this.workspace) {
-            const ws = this.workspace as any
-            ws.updateToolbox(this.parseToolboxCode('<xml>' + this.tbblock.content + '</xml>'))
-        }
-    }
 
     private parseToolboxCode(toolboxXML: string) {
         Object.keys(BlockPrimaryColors).forEach(key => {
@@ -415,6 +413,21 @@ export default class BlocklyBlock extends Vue {
         this.$nextTick(() => {
             this.remountBlockly()
         })
+    }
+
+    onToolboxOverrideChange(newCode) {
+        if (this.workspace) {
+            const ws = this.workspace as any
+            ws.updateToolbox(this.parseToolboxCode('<xml>' + this.tbblock.content + '</xml>'))
+        }
+    }
+
+    @Watch('block.blockly.toolbox', { immediate: false, deep: true })
+    onToolboxChanged() {
+        if (this.workspace) {
+            const ws = this.workspace as any
+            ws.updateToolbox(this.parseToolboxCode('<xml>' + this.tbblock.content + '</xml>'))
+        }
     }
 }
 </script>

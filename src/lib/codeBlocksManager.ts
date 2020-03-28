@@ -10,7 +10,17 @@ import { uuid } from 'vue-uuid'
 
 import { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
 import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
-import { IRandomizerSettings, CodeOutputTypes, IBlockData, KnownBlockTypes, IRandomizerSet, IRandomizerSetTag, ICodeBlockDataState, IBlockDataBase, IBlockDataBlockly } from './ICodeBlocks'
+import {
+    IRandomizerSettings,
+    CodeOutputTypes,
+    IBlockData,
+    KnownBlockTypes,
+    IRandomizerSet,
+    IRandomizerSetTag,
+    ICodeBlockDataState,
+    IBlockDataBase,
+    IBlockDataBlockly
+} from './ICodeBlocks'
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
 export interface IAppSettings {
@@ -135,7 +145,10 @@ export class BlockData extends Vue implements IBlockData {
 
     actualContent() {
         if (this.appSettings.randomizer.active) {
-            return Vue.$tagger.replaceRandomTagsInString(this.content, this.appSettings.randomizer.sets[this.appSettings.randomizer.previewIndex])
+            return Vue.$tagger.replaceRandomTagsInString(
+                this.content,
+                this.appSettings.randomizer.sets[this.appSettings.randomizer.previewIndex]
+            )
         }
 
         return this.content
@@ -266,7 +279,8 @@ class InternalCodeBlocksManager {
         }
 
         if (inData.randomizerActive !== undefined) {
-            data.randomizer.active = inData.randomizerActive == 'true' || inData.randomizerActive == '1'
+            data.randomizer.active =
+                inData.randomizerActive == 'true' || inData.randomizerActive == '1'
         }
         if (inData.randomizerPreviewIndex !== undefined) {
             data.randomizer.previewIndex = Number(inData.randomizerPreviewIndex)
@@ -322,7 +336,8 @@ class InternalCodeBlocksManager {
             if (data.editMode) {
                 data.readonly = false
             } else {
-                data.readonly = inData.readonly == 'true' || inData.readonly == '1' || inData.readonly == ''
+                data.readonly =
+                    inData.readonly == 'true' || inData.readonly == '1' || inData.readonly == ''
             }
         }
 
@@ -377,18 +392,42 @@ class InternalCodeBlocksManager {
                 readyCount: 0,
                 obj: null,
                 blockly: {
-                    toolbox: null,
+                    toolbox: {
+                        itemsOnly: false,
+                        items: [],
+                        categories: []
+                    },
                     blocks: []
                 },
                 errors: [],
-                readonly: inBlock.readonly !== undefined && inBlock.readonly != 'false' && inBlock.readonly != '0',
-                static: inBlock.static !== undefined && inBlock.static != 'false' && inBlock.static != '0',
-                hidden: inBlock.hidden !== undefined && inBlock.hidden != 'false' && inBlock.hidden != '0',
-                visibleLines: inBlock.visibleLines === undefined ? 'auto' : Number(inBlock.visibleLines),
-                shouldAutoreset: inBlock.shouldAutoreset !== undefined && inBlock.shouldAutoreset != 'false' && inBlock.shouldAutoreset != '0',
-                expanded: inBlock.expanded === undefined || (inBlock.expanded != 'false' && inBlock.expanded != '0'),
-                codeExpanded: inBlock.codeExpanded === undefined || (inBlock.codeExpanded != 'false' && inBlock.codeExpanded != '0'),
-                noContent: inBlock.noContent !== undefined && inBlock.noContent != 'false' && inBlock.noContent != '0',
+                readonly:
+                    inBlock.readonly !== undefined &&
+                    inBlock.readonly != 'false' &&
+                    inBlock.readonly != '0',
+                static:
+                    inBlock.static !== undefined &&
+                    inBlock.static != 'false' &&
+                    inBlock.static != '0',
+                hidden:
+                    inBlock.hidden !== undefined &&
+                    inBlock.hidden != 'false' &&
+                    inBlock.hidden != '0',
+                visibleLines:
+                    inBlock.visibleLines === undefined ? 'auto' : Number(inBlock.visibleLines),
+                shouldAutoreset:
+                    inBlock.shouldAutoreset !== undefined &&
+                    inBlock.shouldAutoreset != 'false' &&
+                    inBlock.shouldAutoreset != '0',
+                expanded:
+                    inBlock.expanded === undefined ||
+                    (inBlock.expanded != 'false' && inBlock.expanded != '0'),
+                codeExpanded:
+                    inBlock.codeExpanded === undefined ||
+                    (inBlock.codeExpanded != 'false' && inBlock.codeExpanded != '0'),
+                noContent:
+                    inBlock.noContent !== undefined &&
+                    inBlock.noContent != 'false' &&
+                    inBlock.noContent != '0',
                 scopeUUID: inBlock.scopeUUID,
                 scopeSelector: inBlock.scopeSelector
             }
@@ -409,10 +448,24 @@ class InternalCodeBlocksManager {
             if (block.type === KnownBlockTypes.PLAYGROUND) {
                 block.obj = null
 
-                block.width = bl.getAttribute('width') ? bl.getAttribute('width')! : inBlock.width ? inBlock.width : '100%'
-                block.height = bl.getAttribute('height') ? bl.getAttribute('height')! : inBlock.height ? inBlock.height : '200px'
-                block.align = bl.getAttribute('align') ? bl.getAttribute('align')! : inBlock.align ? inBlock.align : 'center'
-                block.version = bl.getAttribute('data-version') ? bl.getAttribute('data-version')! : block.version
+                block.width = bl.getAttribute('width')
+                    ? bl.getAttribute('width')!
+                    : inBlock.width
+                    ? inBlock.width
+                    : '100%'
+                block.height = bl.getAttribute('height')
+                    ? bl.getAttribute('height')!
+                    : inBlock.height
+                    ? inBlock.height
+                    : '200px'
+                block.align = bl.getAttribute('align')
+                    ? bl.getAttribute('align')!
+                    : inBlock.align
+                    ? inBlock.align
+                    : 'center'
+                block.version = bl.getAttribute('data-version')
+                    ? bl.getAttribute('data-version')!
+                    : block.version
             } else if (block.type == KnownBlockTypes.BLOCK) {
                 const alts = bl.getElementsByTagName('ALTERNATIVE')
                 const codes = bl.getElementsByTagName('CODE')
@@ -432,16 +485,28 @@ class InternalCodeBlocksManager {
             } else if (block.type == KnownBlockTypes.BLOCKLY) {
                 block.obj = null
 
-                block.width = bl.getAttribute('width') ? bl.getAttribute('width')! : inBlock.width ? inBlock.width : '100%'
-                block.height = bl.getAttribute('height') ? bl.getAttribute('height')! : inBlock.height ? inBlock.height : '300px'
-                block.align = bl.getAttribute('align') ? bl.getAttribute('align')! : inBlock.align ? inBlock.align : 'center'
+                block.width = bl.getAttribute('width')
+                    ? bl.getAttribute('width')!
+                    : inBlock.width
+                    ? inBlock.width
+                    : '100%'
+                block.height = bl.getAttribute('height')
+                    ? bl.getAttribute('height')!
+                    : inBlock.height
+                    ? inBlock.height
+                    : '300px'
+                block.align = bl.getAttribute('align')
+                    ? bl.getAttribute('align')!
+                    : inBlock.align
+                    ? inBlock.align
+                    : 'center'
 
                 const toolboxes = bl.getElementsByTagName('TOOLBOX')
                 let toolbox: string = ''
                 if (toolboxes.length > 0) {
                     toolbox = toolboxes[0].innerHTML ? toolboxes[0].innerHTML : ''
                 }
-                block.blockly.toolbox = toolbox
+                block.blockly.toolboxOverride = toolbox
 
                 const codes = bl.getElementsByTagName('CODE')
                 if (codes.length > 0) {
@@ -547,7 +612,11 @@ class InternalCodeBlocksManager {
                             hasAlternativeContent: false,
                             shouldAutoreset: false,
                             blockly: {
-                                toolbox: null,
+                                toolbox: {
+                                    itemsOnly: false,
+                                    items: [],
+                                    categories: []
+                                },
                                 blocks: []
                             }
                         }
@@ -578,11 +647,15 @@ export const CodeBlocksManager = {
         if (scope === undefined) {
             scope = document
         }
-        const allCodeBlockParents = scope.querySelectorAll('codeblocks, codeblockseditor, div[codeblocks], div[codeblockseditor]')
+        const allCodeBlockParents = scope.querySelectorAll(
+            'codeblocks, codeblockseditor, div[codeblocks], div[codeblockseditor]'
+        )
         let result = new MountableArray()
         allCodeBlockParents.forEach(el => {
             const cbm = new InternalCodeBlocksManager(el as HTMLElement)
-            let scope = cbm.data.scopeSelector ? document.querySelector(cbm.data.scopeSelector) : undefined
+            let scope = cbm.data.scopeSelector
+                ? document.querySelector(cbm.data.scopeSelector)
+                : undefined
             if (scope === undefined || scope === null) {
                 scope = el
             }
@@ -591,10 +664,14 @@ export const CodeBlocksManager = {
             if (cbm.data.editMode) {
                 Vue.$tagger.processElements(scope)
                 cbm.data.scopeSelector = `[uuid=${scope.getAttribute('uuid')}]`
-                cbm.data.scopeUUID = scope.getAttribute('uuid') ? scope.getAttribute('uuid')! : undefined
+                cbm.data.scopeUUID = scope.getAttribute('uuid')
+                    ? scope.getAttribute('uuid')!
+                    : undefined
                 cbm.data.blocks.forEach(b => {
                     b.scopeUUID = cbm.data.scopeUUID
-                    b.scopeSelector = cbm.data.scopeSelector ? cbm.data.scopeSelector : `[uuid=${b.scopeUUID}]`
+                    b.scopeSelector = cbm.data.scopeSelector
+                        ? cbm.data.scopeSelector
+                        : `[uuid=${b.scopeUUID}]`
                 })
             }
 

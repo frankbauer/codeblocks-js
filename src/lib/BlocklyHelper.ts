@@ -4,7 +4,8 @@ import {
     IBlocklyToolbox,
     IBlocklyToolboxItem,
     IBlocklyToolboxCategory,
-    BlockPrimaryColors
+    BlockPrimaryColors,
+    KnownBlocklyTypes
 } from '@/lib/IBlocklyHelper'
 import { IListItemData } from './ICompilerRegistry'
 
@@ -47,6 +48,14 @@ export const ColorHues: IListItemData[] = [
     { label: '345°', value: '345' }
 ]
 
+export const PredefinedBlockTypes: IListItemData[] = Object.keys(KnownBlocklyTypes).map(key => {
+    const ret: IListItemData = {
+        label: Vue.$l(`Blockly.BlockTypeNames.${key}`),
+        value: KnownBlocklyTypes[key]
+    }
+    return ret
+})
+
 export const ColorSelection: IListItemData[] = [...ColorThemeSelection, ...ColorHues]
 
 export const ColorSelectionWithNone: IListItemData[] = [
@@ -75,11 +84,11 @@ export class BlocklyHelper {
 
     public serializeToolbox(toolbox: IBlocklyToolbox): string {
         if (toolbox.categories) {
-            return `<xml>${this.serializeToolboxCategories(toolbox.categories)}</xml>`
+            return `${this.serializeToolboxCategories(toolbox.categories)}`
         } else if (toolbox.items) {
-            return `<xml>${this.serializeToolboxItems(toolbox.items)}</xml>`
+            return `${this.serializeToolboxItems(toolbox.items)}`
         } else {
-            return '<xml></xml>'
+            return ''
         }
     }
 

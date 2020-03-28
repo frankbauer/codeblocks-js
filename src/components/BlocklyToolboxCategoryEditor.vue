@@ -29,6 +29,16 @@
         <q-card-section class="q-pb-none  q-mb-none">
             <div class="text-overline text-black q-pa-none q-ma-none">
                 {{ $t('Blockly.ToolboxItems') }}
+                <q-btn
+                    color="primary"
+                    class="gt-xs"
+                    size="12px"
+                    flat
+                    dense
+                    round
+                    icon="add"
+                    @click="addItem"
+                />
             </div>
         </q-card-section>
         <q-card-section class="q-mb-none q-pt-none">
@@ -42,7 +52,7 @@
                     header-class="bg-blue-grey text-white"
                     :label="item.type"
                 >
-                    <BlocklyToolboxItemEditor :item="item" />
+                    <BlocklyToolboxItemEditor :item="item" :customBlocks="customBlocks" />
                 </q-expansion-item>
             </q-list>
         </q-card-section>
@@ -52,14 +62,21 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-import { IBlocklyToolboxCategory } from '@/lib/IBlocklyHelper'
+import {
+    IBlocklyToolboxCategory,
+    IBlocklyToolboxItem,
+    IBlockDefinition
+} from '@/lib/IBlocklyHelper'
 import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 import BlocklyToolboxItemEditor from '@/components/BlocklyToolboxItemEditor.vue'
 
+import { uuid } from 'vue-uuid'
+
 @Component({ components: { BlocklyToolboxItemEditor } })
 export default class BlocklyToolboxCategoryEditor extends Vue {
     @Prop() category!: IBlocklyToolboxCategory
+    @Prop() customBlocks!: IBlockDefinition[]
 
     get color() {
         let cl = this.category.color
@@ -80,6 +97,14 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
 
     get htmlColor() {
         return blocklyHelper.toHTMLColor(this.category.color)
+    }
+
+    addItem() {
+        const item: IBlocklyToolboxItem = {
+            uuid: uuid.v4(),
+            type: ''
+        }
+        this.category.items.push(item)
     }
 }
 </script>

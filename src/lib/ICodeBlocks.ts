@@ -1,6 +1,6 @@
 import { ICompilerID, IListItemData } from './ICompilerRegistry'
 import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
-import { IBlockDefinition } from './IBlocklyHelper'
+import { IBlockDefinition, IBlocklyToolbox } from './IBlocklyHelper'
 
 export enum KnownBlockTypes {
     PLAYGROUND = 'PLAYGROUND',
@@ -39,8 +39,9 @@ export interface IBlockDataPlayground {
     align: string
 }
 export interface IBlockDataBlockly {
-    toolbox: string | null
+    toolbox: IBlocklyToolbox
     blocks: IBlockDefinition[]
+    toolboxOverride?: string
 }
 
 export interface ICodeBlockDataState {

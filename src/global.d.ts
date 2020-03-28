@@ -20,6 +20,7 @@ declare global {
 
 declare module 'vue/types/vue' {
     interface VueConstructor {
+        $l: (key: string, values?: any[]) => string
         $hljs: any
         $tagger: any
         $CodeBlock: any
