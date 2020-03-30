@@ -41,6 +41,7 @@ export interface IBlockDataPlayground {
 export interface IBlockDataBlockly {
     toolbox: IBlocklyToolbox
     blocks: IBlockDefinition[]
+    useOverride: boolean
     toolboxOverride?: string
 }
 

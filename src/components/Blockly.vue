@@ -51,8 +51,10 @@
                 </q-expansion-item>
 
                 <q-expansion-item
+                    v-model="tbEditExpanded"
                     expand-separator
                     :default-opened="true"
+                    :disable="useToolboxOverride"
                     icon="ballot"
                     :label="$t('Blockly.ToolboxLabel')"
                     :caption="$t('Blockly.ToolboxCaption')"
@@ -69,13 +71,18 @@
                     :caption="$t('Blockly.RAWToolboxCaption')"
                     @before-show="onBeforeShow"
                 >
+                    <q-checkbox
+                        v-model="block.blockly.useOverride"
+                        :label="$t('Blockly.UseCustomToolbox')"
+                        @input="onToolboxOverrideChange"
+                    />
                     <CodeBlock
                         v-if="editMode"
                         :block="tbblock"
                         :theme="tboptions.theme"
                         :mode="tboptions.mode"
                         :visibleLines="visibleLinesNow"
-                        :editMode="false"
+                        :editMode="this.block.blockly.toolboxOverride"
                         :muteReadyState="true"
                         namePrefix="toolbox_"
                         @code-changed-in-edit-mode="onToolboxOverrideChange"
@@ -123,6 +130,7 @@ export default class BlocklyBlock extends Vue {
 
     workspace: Blockly.Workspace | null = null
     tmpcode: string = ''
+    tbEditExpanded: boolean = false
 
     beforeDestroy() {
         if (this.block._oac) {
@@ -161,49 +169,49 @@ export default class BlocklyBlock extends Vue {
         if (!options.theme) {
             const blockStyles = {
                 colour_blocks: {
-                    colourPrimary: BlockPrimaryColors.colour,
-                    colourSecondary: BlockSecondaryColors.colour,
-                    colourTertiary: BlockTertiaryColors.colour
+                    colourPrimary: BlockPrimaryColors.Colour,
+                    colourSecondary: BlockSecondaryColors.Colour,
+                    colourTertiary: BlockTertiaryColors.Colour
                 },
                 list_blocks: {
-                    colourPrimary: BlockPrimaryColors.list,
-                    colourSecondary: BlockSecondaryColors.list,
-                    colourTertiary: BlockTertiaryColors.list
+                    colourPrimary: BlockPrimaryColors.List,
+                    colourSecondary: BlockSecondaryColors.List,
+                    colourTertiary: BlockTertiaryColors.List
                 },
                 logic_blocks: {
-                    colourPrimary: BlockPrimaryColors.logic,
-                    colourSecondary: BlockSecondaryColors.logic,
-                    colourTertiary: BlockTertiaryColors.logic
+                    colourPrimary: BlockPrimaryColors.Logic,
+                    colourSecondary: BlockSecondaryColors.Logic,
+                    colourTertiary: BlockTertiaryColors.Logic
                 },
                 loop_blocks: {
-                    colourPrimary: BlockPrimaryColors.loop,
-                    colourSecondary: BlockSecondaryColors.loop,
-                    colourTertiary: BlockTertiaryColors.loop
+                    colourPrimary: BlockPrimaryColors.Loop,
+                    colourSecondary: BlockSecondaryColors.Loop,
+                    colourTertiary: BlockTertiaryColors.Loop
                 },
                 math_blocks: {
-                    colourPrimary: BlockPrimaryColors.math,
-                    colourSecondary: BlockSecondaryColors.math,
-                    colourTertiary: BlockTertiaryColors.math
+                    colourPrimary: BlockPrimaryColors.Math,
+                    colourSecondary: BlockSecondaryColors.Math,
+                    colourTertiary: BlockTertiaryColors.Math
                 },
                 procedure_blocks: {
-                    colourPrimary: BlockPrimaryColors.procedure,
-                    colourSecondary: BlockSecondaryColors.procedure,
-                    colourTertiary: BlockTertiaryColors.procedure
+                    colourPrimary: BlockPrimaryColors.Procedure,
+                    colourSecondary: BlockSecondaryColors.Procedure,
+                    colourTertiary: BlockTertiaryColors.Procedure
                 },
                 text_blocks: {
-                    colourPrimary: BlockPrimaryColors.text,
-                    colourSecondary: BlockSecondaryColors.text,
-                    colourTertiary: BlockTertiaryColors.text
+                    colourPrimary: BlockPrimaryColors.Text,
+                    colourSecondary: BlockSecondaryColors.Text,
+                    colourTertiary: BlockTertiaryColors.Text
                 },
                 variable_blocks: {
-                    colourPrimary: BlockPrimaryColors.variable,
-                    colourSecondary: BlockSecondaryColors.variable,
-                    colourTertiary: BlockTertiaryColors.variable
+                    colourPrimary: BlockPrimaryColors.Variable,
+                    colourSecondary: BlockSecondaryColors.Variable,
+                    colourTertiary: BlockTertiaryColors.Variable
                 },
                 variable_dynamic_blocks: {
-                    colourPrimary: BlockPrimaryColors.variable_dynamic,
-                    colourSecondary: BlockSecondaryColors.variable_dynamic,
-                    colourTertiary: BlockTertiaryColors.variable_dynamic
+                    colourPrimary: BlockPrimaryColors.Variable_dynamic,
+                    colourSecondary: BlockSecondaryColors.Variable_dynamic,
+                    colourTertiary: BlockTertiaryColors.Variable_dynamic
                 },
                 hat_blocks: {
                     colourPrimary: '330',
@@ -275,6 +283,9 @@ export default class BlocklyBlock extends Vue {
             }
         }
     }
+    get useToolboxOverride(): boolean {
+        return this.block.blockly.useOverride
+    }
     get tboptions() {
         return {
             mode: this.$CodeBlock.mimeType('xml'),
@@ -283,7 +294,7 @@ export default class BlocklyBlock extends Vue {
             line: true,
             tabSize: 4,
             indentUnit: 4,
-            readOnly: true,
+            readOnly: !this.useToolboxOverride,
             firstLineNumber: 1,
             gutters: []
         }
@@ -291,23 +302,27 @@ export default class BlocklyBlock extends Vue {
     get tbblock() {
         return {
             type: 'XML',
-            content: this.unparsedToolboxContent,
+            content: this.unparsedOverrideToolboxContent,
             scopeUUID: this.block.scopeUUID,
             firstLine: 1,
             hidden: false,
-            readonly: true,
-            static: true,
+            readonly: !this.useToolboxOverride,
+            static: !this.useToolboxOverride,
             alternativeContent: '',
             parentID: this.block.parentID,
             id: this.block.id,
             actualContent: () => {
-                return this.unparsedToolboxContent
+                return this.unparsedOverrideToolboxContent
             }
         }
     }
+
+    get unparsedOverrideToolboxContent(): string {
+        return this.block.blockly.toolboxOverride ? this.block.blockly.toolboxOverride : ''
+    }
     get unparsedToolboxContent(): string {
-        if (this.block.blockly.toolboxOverride && this.block.blockly.toolboxOverride.trim() != '') {
-            return this.block.blockly.toolboxOverride
+        if (this.useToolboxOverride) {
+            return this.unparsedOverrideToolboxContent
         }
         return blocklyHelper.serializeToolbox(this.block.blockly.toolbox)
     }
@@ -416,18 +431,14 @@ export default class BlocklyBlock extends Vue {
     }
 
     onToolboxOverrideChange(newCode) {
-        if (this.workspace) {
-            const ws = this.workspace as any
-            ws.updateToolbox(this.parseToolboxCode('<xml>' + this.tbblock.content + '</xml>'))
-        }
+        this.tbEditExpanded = this.tbEditExpanded && !this.useToolboxOverride
+        this.$nextTick(() => {
+            this.remountBlockly()
+        })
     }
 
     @Watch('block.blockly.toolbox', { immediate: false, deep: true })
     onToolboxChanged() {
-        // if (this.workspace) {
-        //     const ws = this.workspace as any
-        //     ws.updateToolbox(this.parseToolboxCode('<xml>' + this.tbblock.content + '</xml>'))
-        // }
         this.$nextTick(() => {
             this.remountBlockly()
         })

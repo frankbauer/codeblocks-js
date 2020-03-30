@@ -45,6 +45,7 @@
             <q-list dense dark bordered class="rounded-borders q-mt-sm " style="max-width:400px">
                 <q-expansion-item
                     dense
+                    v-model="item.expanded"
                     v-for="item in category.items"
                     v-bind:key="item.uuid"
                     expand-separator
@@ -66,7 +67,8 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import {
     IBlocklyToolboxCategory,
     IBlocklyToolboxItem,
-    IBlockDefinition
+    IBlockDefinition,
+    IBlocklyToolboxItemUI
 } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
@@ -101,9 +103,17 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
     }
 
     addItem() {
-        const item: IBlocklyToolboxItem = {
+        //close others
+        this.category.items.forEach(item => {
+            const i = item as IBlocklyToolboxItemUI
+            i.expanded = false
+        })
+
+        //start new one expanede
+        const item: IBlocklyToolboxItemUI = {
             uuid: uuid.v4(),
-            type: ''
+            type: '',
+            expanded: true
         }
         this.category.items.push(item)
     }

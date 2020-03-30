@@ -91,6 +91,7 @@
         "ToolboxCategories": "Categories",
         "ToolboxItems": "Blocks",
         "Properties": "Properties",
+        "UseCustomToolbox": "Define Customized Toolbox XML",
         "BlockTypeNames": {
             "controls_if": "controls_if",
             "logic_compare": "logic_compare",
@@ -112,7 +113,7 @@
             "math_number_property": "math_number_property",
             "math_round": "math_round",
             "math_on_list": "math_on_list",
-            "math_modulomath_constrain": "math_modulo",
+            "math_modulo": "math_modulo",
             "math_constrain": "math_constrain",
             "math_random_int": "math_random_int",
             "math_random_float": "math_random_float",

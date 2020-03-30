@@ -21,6 +21,7 @@ import {
     IBlockDataBase,
     IBlockDataBlockly
 } from './ICodeBlocks'
+import { IBlocklyToolbox } from './IBlocklyHelper'
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
 export interface IAppSettings {
@@ -392,6 +393,7 @@ class InternalCodeBlocksManager {
                 readyCount: 0,
                 obj: null,
                 blockly: {
+                    useOverride: false,
                     toolbox: {
                         itemsOnly: false,
                         items: [],
@@ -501,12 +503,39 @@ class InternalCodeBlocksManager {
                     ? inBlock.align
                     : 'center'
 
-                const toolboxes = bl.getElementsByTagName('TOOLBOX')
-                let toolbox: string = ''
-                if (toolboxes.length > 0) {
-                    toolbox = toolboxes[0].innerHTML ? toolboxes[0].innerHTML : ''
+                const toolboxInput = bl.getElementsByTagName('TOOLBOX')
+
+                if (toolboxInput.length > 0) {
+                    let toolboxStr: string = toolboxInput[0].innerHTML
+                        ? toolboxInput[0].innerHTML
+                        : '{}'
+
+                    const code = `"use strict"; const window = undefined; const Window = undefined; const document = undefined; return function(){ return {o: ${toolboxStr}}.o}.call({})`
+
+                    try {
+                        const obj: IBlocklyToolbox = new Function(code)()
+                        obj.categories.forEach(c => {
+                            if (c.color === undefined) {
+                                c.color = ''
+                            }
+                        })
+                        block.blockly.toolbox = obj
+                    } catch (e) {
+                        console.error(e)
+                    }
                 }
-                block.blockly.toolboxOverride = toolbox
+
+                const toolboxOverride = bl.getElementsByTagName('TOOLBOXOVERRIDE')
+                if (toolboxOverride.length > 0) {
+                    block.blockly.toolboxOverride = toolboxOverride[0].innerHTML
+                        ? toolboxOverride[0].innerHTML
+                        : '{}'
+
+                    block.blockly.useOverride =
+                        toolboxOverride[0].hasAttribute('use') &&
+                        toolboxOverride[0].getAttribute('use') != 'false' &&
+                        toolboxOverride[0].getAttribute('use') != '0'
+                }
 
                 const codes = bl.getElementsByTagName('CODE')
                 if (codes.length > 0) {
@@ -612,6 +641,7 @@ class InternalCodeBlocksManager {
                             hasAlternativeContent: false,
                             shouldAutoreset: false,
                             blockly: {
+                                useOverride: false,
                                 toolbox: {
                                     itemsOnly: false,
                                     items: [],

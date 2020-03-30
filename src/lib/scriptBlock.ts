@@ -1,6 +1,13 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { IParsedError, ILegacyPlaygroundObject, IPlaygroundObject, IProcessedScriptOutput, IScriptOutputObject, IScriptBlock } from '@/lib/IScriptBlock'
+import {
+    IParsedError,
+    ILegacyPlaygroundObject,
+    IPlaygroundObject,
+    IProcessedScriptOutput,
+    IScriptOutputObject,
+    IScriptBlock
+} from '@/lib/IScriptBlock'
 interface ICodeTemplate {
     prefix: string
     postfix: string
@@ -91,9 +98,13 @@ export class ScriptBlock implements IScriptBlock {
                 //we also return a function to make and call (.call({})) it with a clean object
                 //to ensure that 'this' is will allways be in a defined state inside the users code
                 if (this.requestsOriginalVersion()) {
-                    this.fkt = new Function(legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix)
+                    this.fkt = new Function(
+                        legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix
+                    )
                 } else {
-                    this.fkt = new Function(v101CodeTemplate.prefix + code + v101CodeTemplate.postfix)
+                    this.fkt = new Function(
+                        v101CodeTemplate.prefix + code + v101CodeTemplate.postfix
+                    )
                 }
                 this.obj = this.fkt()
             } catch (e) {
@@ -144,7 +155,10 @@ export class ScriptBlock implements IScriptBlock {
         }
     }
 
-    update(outputObject: IScriptOutputObject, canvasElement: JQuery<HTMLElement>): string | undefined {
+    update(
+        outputObject: IScriptOutputObject,
+        canvasElement: JQuery<HTMLElement>
+    ): string | undefined {
         if (this.obj === undefined) {
             return outputObject.output
         }
@@ -164,7 +178,12 @@ export class ScriptBlock implements IScriptBlock {
                 } else {
                     const o = this.obj as IPlaygroundObject
                     console.log('!!! UPDATE (v' + this.version + ')!!!')
-                    return o.update(outputObject.processedOutput.text, outputObject.processedOutput.json, canvasElement, outputObject.outputElement)
+                    return o.update(
+                        outputObject.processedOutput.text,
+                        outputObject.processedOutput.json,
+                        canvasElement,
+                        outputObject.outputElement
+                    )
                 }
             }
         } catch (e) {

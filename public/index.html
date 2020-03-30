@@ -38,7 +38,51 @@
   <loading><div></div><div></div></loading>    
   <Blockly height="300px">
     <Toolbox>
-      <category name="Logic" colour="{!PrimaryColors.logic}">
+      {
+        items:[],
+        categories:[
+          {
+            name:"Math",
+            color:"{!PrimaryColors.Math}",
+            items:[
+            { type: 'math_number'},
+            { type: 'math_arithmetic'},
+            { type: 'math_single'},
+            { type: 'math_trig'},
+            { type: 'math_constant'},
+            { type: 'math_number_property'},
+            { type: 'math_round'},
+            { type: 'math_on_list'},
+            { type: 'math_modulo'},
+            { type: 'math_constrain'},
+            { type: 'math_random_int'},
+            { type: 'math_random_float'}
+            ]
+          },
+          {
+            name:"Text",
+            color:"{!PrimaryColors.Text}",
+            items:[
+            {type: "text"},
+            {type: "text_join"},
+            {type: "text_append"},
+            {type: "text_length"},
+            {type: "text_isEmpty"},
+            {type: "text_indexOf"},
+            {type: "variables_get"},
+            {type: "text_charAt"},
+            {type: "text_getSubstring"},
+            {type: "text_changeCase"},
+            {type: "text_trim"},
+            {type: "text_print"},
+            {type: "text_prompt_ext"}
+            ]
+          }
+        ]
+      }
+    </Toolbox>
+    <ToolboxOverride use="0">
+      <category name="Logic" colour="{!PrimaryColors.Logic}">
         <block type="controls_if"></block>
         <block type="logic_compare"></block>
         <block type="logic_operation"></block>
@@ -47,7 +91,7 @@
         <block type="math_arithmetic"></block>
         <block type="lists_create_empty"></block>
       </category>
-      <category name="Loops" colour="{!PrimaryColors.loop}">
+      <category name="Loops" colour="{!PrimaryColors.Loop}">
         <block type="controls_repeat_ext">
           <value name="TIMES">
             <block type="math_number">
@@ -57,25 +101,25 @@
         </block>
         <block type="controls_whileUntil"></block>
       </category>
-      <category name="Math" colour="{!PrimaryColors.math}">
+      <category name="Math" colour="{!PrimaryColors.Math}">
         <block type="math_number">
           <field name="NUM">123</field>
         </block>
         <block type="math_arithmetic"></block>
         <block type="math_single"></block>
       </category>
-      <category name="Text"  colour="{!PrimaryColors.text}">
+      <category name="Text"  colour="{!PrimaryColors.Text}">
         <block type="text"></block>
         <block type="text_length"></block>
         <block type="text_print"></block>
 
         <block type="colour_rgb"></block>
       </category>
-      <category name="Variables" custom="VARIABLE" colour="{!PrimaryColors.variable}" >
+      <category name="Variables" custom="VARIABLE" colour="{!PrimaryColors.Variable}" >
       </category>
-      <category name="Procedures" custom="PROCEDURE"  colour="{!PrimaryColors.procedure}">
+      <category name="Procedures" custom="PROCEDURE"  colour="{!PrimaryColors.Procedure}">
       </category>
-    </Toolbox>
+    </ToolboxOverride>
     <Code>
       <xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="jdG#t8[]mlM`z)kFuNjx">ab</variable></variables><block type="variables_set" id="ItB9PY0E][:MB/Uh/,;=" x="36" y="5"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field><value name="VALUE"><block type="math_number" id="9Voy@$$#Dhka,=?3!g[7"><field name="NUM">123</field></block></value><next><block type="controls_if" id="`Oj.KaccwlI!+J66YD!|"><value name="IF0"><block type="logic_compare" id="tRS@jPrw=~BAu4[k82V9"><field name="OP">EQ</field><value name="A"><block type="variables_get" id="~U[n#w.dv9!PS0b07rJP"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field></block></value><value name="B"><block type="math_number" id="9TT_AEK=QRTC:xo7=Zhs"><field name="NUM">123</field></block></value></block></value><statement name="DO0"><block type="controls_repeat_ext" id="uZ9l8c{.(cJin.8ahABj"><value name="TIMES"><block type="math_number" id="8|}Grg%43z|R.Ur.7*a8"><field name="NUM">10</field></block></value><statement name="DO"><block type="math_change" id="(?=Sb]PLV)01D,o;7drb"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field><value name="DELTA"><shadow type="math_number" id="f3LLAO*NBY)S6MzYn?OG"><field name="NUM">1</field></shadow></value></block></statement></block></statement></block></next></block></xml>
 

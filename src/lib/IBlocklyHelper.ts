@@ -1,38 +1,38 @@
 import { QuasarIconSetRating } from 'quasar'
 
 export enum BlockPrimaryColors {
-    colour = '#cf63cf',
-    list = '#5cb1d6',
-    logic = '#ffab19',
-    loop = '#ffbf00',
-    math = '#4c97ff',
-    procedure = '#ff6680',
-    text = '#bbbbca',
-    variable = '#59c059',
-    variable_dynamic = '#0fbd8c'
+    Colour = '#cf63cf',
+    List = '#5cb1d6',
+    Logic = '#ffab19',
+    Loop = '#ffbf00',
+    Math = '#4c97ff',
+    Procedure = '#ff6680',
+    Text = '#bbbbca',
+    Variable = '#59c059',
+    Variable_dynamic = '#0fbd8c'
 }
 
 export enum BlockSecondaryColors {
-    colour = '#c55ec5',
-    list = '#57a8cb',
-    logic = '#f2a218',
-    loop = '#f2b500',
-    math = '#488ff2',
-    procedure = '#f2617a',
-    text = '#b2b2c0',
-    variable = '#55b655',
-    variable_dynamic = '#0eb485'
+    Colour = '#c55ec5',
+    List = '#57a8cb',
+    Logic = '#f2a218',
+    Loop = '#f2b500',
+    Math = '#488ff2',
+    Procedure = '#f2617a',
+    Text = '#b2b2c0',
+    Variable = '#55b655',
+    Variable_dynamic = '#0eb485'
 }
 export enum BlockTertiaryColors {
-    colour = '#ba59ba',
-    list = '#539fc1',
-    logic = '#e69a17',
-    loop = '#e6ac00',
-    math = '#4488e6',
-    procedure = '#e65c73',
-    text = '#a8a8b6',
-    variable = '#50ad50',
-    variable_dynamic = '#0eaa7e'
+    Colour = '#ba59ba',
+    List = '#539fc1',
+    Logic = '#e69a17',
+    Loop = '#e6ac00',
+    Math = '#4488e6',
+    Procedure = '#e65c73',
+    Text = '#a8a8b6',
+    Variable = '#50ad50',
+    Variable_dynamic = '#0eaa7e'
 }
 
 export enum BlockOutputTypes {
@@ -76,6 +76,10 @@ export interface IBlocklyToolboxItem {
     uuid: string
     type: string
 }
+
+export interface IBlocklyToolboxItemUI extends IBlocklyToolboxItem {
+    expanded: boolean
+}
 export interface IBlocklyToolboxCategory {
     uuid: string
     items: IBlocklyToolboxItem[]
@@ -83,7 +87,7 @@ export interface IBlocklyToolboxCategory {
     name: string
 }
 export interface IBlocklyToolbox {
-    itemsOnly: boolean
+    itemsOnly?: boolean
     items: IBlocklyToolboxItem[]
     categories: IBlocklyToolboxCategory[]
 }
@@ -132,7 +136,7 @@ export enum KnownBlocklyTypes {
     math_number_property = 'math_number_property',
     math_round = 'math_round',
     math_on_list = 'math_on_list',
-    math_modulomath_constrain = 'math_modulo',
+    math_modulo = 'math_modulo',
     math_constrain = 'math_constrain',
     math_random_int = 'math_random_int',
     math_random_float = 'math_random_float',

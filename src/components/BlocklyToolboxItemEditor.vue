@@ -53,9 +53,7 @@ export default class BlocklyToolboxItemEditor extends Vue {
             }
             return ret
         })
-        return [...PredefinedBlockTypes, ...custom].sort((a, b) =>
-            a.value == b.value ? 0 : a.value < b.value ? -1 : +1
-        )
+        return [...PredefinedBlockTypes, ...custom].sort((a, b) => a.label.localeCompare(b.label))
     }
 
     filteredBlockTypes: IListItemData[] = []
