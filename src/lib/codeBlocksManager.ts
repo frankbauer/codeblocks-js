@@ -526,16 +526,16 @@ class InternalCodeBlocksManager {
                             if (bl.header.uuid === undefined || bl.header.uuid === '') {
                                 bl.header.uuid = uuid.v4()
                             }
-                            if (bl.header.expanded === undefined) {
-                                bl.header.expanded = true
+                            if (bl.header.$expanded === undefined) {
+                                bl.header.$expanded = true
                             }
 
                             bl.additionalLines.forEach(l => {
                                 if (l.uuid === undefined || l.uuid === '') {
                                     l.uuid = uuid.v4()
                                 }
-                                if (l.expanded === undefined) {
-                                    l.expanded = false
+                                if (l.$expanded === undefined) {
+                                    l.$expanded = false
                                 }
                             })
 

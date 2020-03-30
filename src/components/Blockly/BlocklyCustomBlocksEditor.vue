@@ -15,7 +15,7 @@
         </div>
         <q-list dense bordered class="rounded-borders q-mt-sm ">
             <q-expansion-item
-                v-model="item.expanded"
+                v-model="item.$expanded"
                 v-for="item in customBlocks"
                 v-bind:key="item.uuid"
                 expand-separator
@@ -95,17 +95,17 @@ export default class BlocklyCustomBlocksEditor extends Vue {
     private _addBlock(type: string) {
         //close others
         this.customBlocks.forEach(item => {
-            item.expanded = false
+            item.$expanded = false
         })
 
         //start new one expanede
         const item: IBlockDefinition = {
             uuid: uuid.v4(),
             type: type,
-            expanded: true,
+            $expanded: true,
             header: {
                 uuid: uuid.v4(),
-                expanded: true,
+                $expanded: true,
                 message: type,
                 args: []
             },

@@ -166,5 +166,5 @@ export enum KnownBlocklyTypes {
 }
 
 export interface IBlockUIExtension {
-    expanded: boolean
+    $expanded: boolean
 }

@@ -181,7 +181,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
             message: '',
             args: [],
             uuid: uuid.v4(),
-            expanded: true
+            $expanded: true
         }
 
         this.blockDefinition.additionalLines.push(line)

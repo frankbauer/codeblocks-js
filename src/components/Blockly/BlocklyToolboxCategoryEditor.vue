@@ -45,7 +45,7 @@
             <q-list dense dark bordered class="rounded-borders q-mt-sm " style="max-width:400px">
                 <q-expansion-item
                     dense
-                    v-model="item.expanded"
+                    v-model="item.$expanded"
                     v-for="item in category.items"
                     v-bind:key="item.uuid"
                     expand-separator
@@ -104,14 +104,14 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
     addItem() {
         //close others
         this.category.items.forEach(item => {
-            item.expanded = false
+            item.$expanded = false
         })
 
         //start new one expanede
         const item: IBlocklyToolboxItem = {
             uuid: uuid.v4(),
             type: '',
-            expanded: true
+            $expanded: true
         }
         this.category.items.push(item)
     }
