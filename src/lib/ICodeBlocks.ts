@@ -46,7 +46,7 @@ export interface IBlockError {
 export interface IBlockDataBlockly {
     toolbox: IBlocklyToolbox
     blocks: IBlockDefinition[]
-    blockErrors: IBlockError[]
+    _blockErrors: IBlockError[]
     useOverride: boolean
     toolboxOverride?: string
 }

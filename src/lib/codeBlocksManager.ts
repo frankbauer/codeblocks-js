@@ -406,7 +406,7 @@ class InternalCodeBlocksManager {
                         categories: []
                     },
                     blocks: [],
-                    blockErrors: []
+                    _blockErrors: []
                 },
                 errors: [],
                 readonly:
@@ -526,16 +526,16 @@ class InternalCodeBlocksManager {
                             if (bl.header.uuid === undefined || bl.header.uuid === '') {
                                 bl.header.uuid = uuid.v4()
                             }
-                            if (bl.header.$expanded === undefined) {
-                                bl.header.$expanded = true
+                            if (bl.header._expanded === undefined) {
+                                bl.header._expanded = true
                             }
 
                             bl.additionalLines.forEach(l => {
                                 if (l.uuid === undefined || l.uuid === '') {
                                     l.uuid = uuid.v4()
                                 }
-                                if (l.$expanded === undefined) {
-                                    l.$expanded = false
+                                if (l._expanded === undefined) {
+                                    l._expanded = false
                                 }
                             })
 
@@ -700,7 +700,7 @@ class InternalCodeBlocksManager {
                                     categories: []
                                 },
                                 blocks: [],
-                                blockErrors: []
+                                _blockErrors: []
                             }
                         }
                         data.blocks.push(self.constructBlock(data, block))

@@ -246,13 +246,13 @@ export default class BlocklyBlock extends Vue {
                 }
             }
             if (bl.code === undefined) {
-                let err = this.block.blockly.blockErrors.find(e => e.uuid == bl.uuid)
+                let err = this.block.blockly._blockErrors.find(e => e.uuid == bl.uuid)
                 if (err === undefined) {
                     err = {
                         error: '',
                         uuid: bl.uuid
                     }
-                    this.block.blockly.blockErrors.push(err)
+                    this.block.blockly._blockErrors.push(err)
                 }
                 err.error = blocklyHelper.compile(bl, B)
             }

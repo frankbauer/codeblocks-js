@@ -52,7 +52,7 @@
                             </div>
                             <q-list dense bordered class="rounded-borders q-mt-sm ">
                                 <q-expansion-item
-                                    v-model="item.$expanded"
+                                    v-model="item._expanded"
                                     v-for="(item, index) in line.args"
                                     v-bind:key="item.uuid"
                                     expand-separator
@@ -110,24 +110,24 @@ export default class BlocklyCustomBlockLine extends Vue {
     }
 
     isRowExpanded(l: IBlockLine): boolean {
-        return l.$expanded
+        return l._expanded
     }
 
     toogleRowExpanded(l: IBlockLine): void {
-        l.$expanded = !l.$expanded
+        l._expanded = !l._expanded
     }
 
     addArgument(): void {
         //close others
         this.line.args.forEach(item => {
-            item.$expanded = false
+            item._expanded = false
         })
 
         const item: IBlockArgument = {
             uuid: uuid.v4(),
             type: BlockArgumentTypes.field_number,
             name: `VALUE_${this.line.args.length + 1}`,
-            $expanded: true
+            _expanded: true
         }
         this.line.args.push(item)
     }

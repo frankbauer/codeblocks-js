@@ -135,14 +135,14 @@ export default class BlocklyCustomBlockEditor extends Vue {
     }
 
     dismissError() {
-        const err = this.block.blockly.blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        const err = this.block.blockly._blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
         if (err != undefined) {
             err.error = ''
         }
     }
 
     get errorString(): string {
-        const err = this.block.blockly.blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        const err = this.block.blockly._blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
         if (err === undefined) {
             return ''
         }
@@ -150,7 +150,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
     }
 
     get hasError() {
-        const err = this.block.blockly.blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        const err = this.block.blockly._blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
         return err !== undefined && err.error !== undefined && err.error.trim() != ''
     }
 
@@ -181,7 +181,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
             message: '',
             args: [],
             uuid: uuid.v4(),
-            $expanded: true
+            _expanded: true
         }
 
         this.blockDefinition.additionalLines.push(line)

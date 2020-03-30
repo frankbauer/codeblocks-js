@@ -393,30 +393,47 @@ export default class CodeBlocksContainer extends Vue {
     get canMoveDown(): boolean {
         return !this.block.isLast
     }
-    get serializedOptions(): string {
+
+    filteredCopy(objIn: object, extended: boolean = true, path: string = 'this'): object {
         let obj = {}
-        Object.keys(this.block)
+        Object.keys(objIn)
             .filter(
                 k =>
                     k.indexOf('appSettings') != 0 &&
                     k.indexOf('$') != 0 &&
                     k.indexOf('_') != 0 &&
-                    k != 'obj' &&
-                    k != 'errors' &&
-                    k != 'content' &&
-                    k != 'firstLine' &&
-                    k != 'nextLine' &&
-                    k != 'lineCount' &&
-                    k != 'hasCode' &&
-                    k != 'isLast' &&
-                    k != 'readyCount' &&
-                    k != 'noContent' &&
+                    (!extended ||
+                        (k != 'obj' &&
+                            k != 'errors' &&
+                            k != 'content' &&
+                            k != 'firstLine' &&
+                            k != 'nextLine' &&
+                            k != 'lineCount' &&
+                            k != 'hasCode' &&
+                            k != 'isLast' &&
+                            k != 'readyCount' &&
+                            k != 'noContent')) &&
                     k != 'uuid' &&
                     k != 'scopeUUID'
             )
-            .forEach(k => (obj[k] = this.block[k]))
+            .forEach(k => {
+                let v = objIn[k]
+                if (v !== undefined && v !== null && typeof v === 'object') {
+                    if (Array.isArray(v)) {
+                        v = v.map((item, nr) =>
+                            this.filteredCopy(item, false, path + '.' + k + `[${nr}]`)
+                        )
+                    } else {
+                        v = this.filteredCopy(v, false, path + '.' + k)
+                    }
+                }
+                obj[k] = v
+            })
 
-        return JSON.stringify(obj)
+        return obj
+    }
+    get serializedOptions(): string {
+        return JSON.stringify(this.filteredCopy(this.block))
     }
     set serializedOptions(v: string) {}
 
@@ -599,9 +616,9 @@ export default class CodeBlocksContainer extends Vue {
     border-left-width : 4px !important
     border-left-style : solid !important
 textarea.blockoptions
-    display : none !important
-    width : 1px
-    height : 1px
+    display : block !important
+    width : 100%
+    height : 100px
 .highlightedCard
     background-image: linear-gradient(45deg, #d15151 25%, #5F5370 25%, #5F5370 50%, #d15151 50%, #d15151 75%, #5F5370 75%, #5F5370 100%)
     background-size: 56.57px 56.57px
