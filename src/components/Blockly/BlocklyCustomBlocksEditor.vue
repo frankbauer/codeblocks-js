@@ -25,7 +25,11 @@
                 :label="labelForBlock(item)"
                 :caption="item.type"
             >
-                <BlocklyCustomBlockEditor :block="item" :customBlocks="customBlocks" />
+                <BlocklyCustomBlockEditor
+                    :blockDefinition="item"
+                    :block="block"
+                    :customBlocks="customBlocks"
+                />
             </q-expansion-item>
         </q-list>
     </div>
@@ -45,6 +49,8 @@ import BlocklyCustomBlockEditor from '@/components/Blockly/BlocklyCustomBlockEdi
 @Component({ components: { BlocklyCustomBlockEditor } })
 export default class BlocklyCustomBlocksEditor extends Vue {
     @Prop({ required: true }) block!: BlockData
+
+    @Prop({ default: false }) editMode!: boolean
 
     get customBlocks(): IBlockDefinition[] {
         return this.block.blockly.blocks

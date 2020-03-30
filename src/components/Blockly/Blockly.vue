@@ -150,11 +150,19 @@ export default class BlocklyBlock extends Vue {
         }
     }
 
+    remoutTimer: number | null = null
     remountBlockly() {
-        if (this.workspace !== null) {
-            this.unmountBlockly()
+        if (this.remoutTimer != null) {
+            clearTimeout(this.remoutTimer)
+            this.remoutTimer = null
         }
-        this.mountBlockly()
+        this.remoutTimer = setTimeout(() => {
+            this.remoutTimer = null
+            if (this.workspace !== null) {
+                this.unmountBlockly()
+            }
+            this.mountBlockly()
+        }, 500)
     }
 
     mountBlockly() {

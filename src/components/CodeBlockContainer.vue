@@ -311,9 +311,9 @@ export default class CodeBlocksContainer extends Vue {
         ]
     }
 
-    mounted() {
-        console.log('Mounted', this)
-    }
+    // mounted() {
+    //     console.log('Mounted', this)
+    // }
 
     @Prop({ required: true }) block!: BlockData
     @Prop({ default: false }) editMode!: boolean
