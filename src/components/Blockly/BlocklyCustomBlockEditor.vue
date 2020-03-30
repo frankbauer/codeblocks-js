@@ -58,7 +58,27 @@
                 :icon="iconForIndex(index)"
             />
         </q-card-section>
+
         <q-card-section>
+            <q-slide-transition class="q-mb-xs q-mt-lg">
+                <q-banner
+                    inline-actions
+                    rounded
+                    class="text-white bg-red"
+                    v-show="blockDefinition.error !== '' && blockDefinition.error !== undefined"
+                >
+                    <div class="text-overline">{{ $t('Blockly.Block.CompileError') }}</div>
+                    <div class="q-pl-lg">{{ blockDefinition.error }}</div>
+                    <template v-slot:action>
+                        <q-btn
+                            flat
+                            color="white"
+                            label="Dismiss"
+                            @click="blockDefinition.error = ''"
+                        />
+                    </template>
+                </q-banner>
+            </q-slide-transition>
             <CodeBlock
                 :block="prefixCodeBlock"
                 :theme="staticCodeOptions.theme"

@@ -542,6 +542,7 @@ class InternalCodeBlocksManager {
                                 bl.codeString = bl.code.toString()
                             }
                             bl.code = undefined
+                            bl.error = ''
                         })
                         block.blockly.blocks = arr
                     } catch (e) {

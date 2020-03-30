@@ -158,16 +158,21 @@ export class BlocklyHelper {
         return `var Blockly = B;\nreturn (block)=> {\n ${cc}\n }`
     }
 
-    public compile(bl: IBlockDefinition, Blockly: any) {
+    public compile(bl: IBlockDefinition, Blockly: any): any | undefined {
         const cc = this.prepareBlocklyCode(bl.codeString)
+        bl.code = undefined
+        bl.error = undefined
         try {
             //console.log(cc, Blockly)
             const code = new Function('B', cc)
             bl.code = code(Blockly)
         } catch (e) {
             bl.code = undefined
+            bl.error = e
             console.error('Error Compiling', cc, e)
+            return e
         }
+        return undefined
     }
 
     public itemForValue(items: IListItemData[], value: string): IListItemData {
