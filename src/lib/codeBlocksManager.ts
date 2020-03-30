@@ -541,9 +541,7 @@ class InternalCodeBlocksManager {
                             if (bl.codeString === undefined && bl.code !== undefined) {
                                 bl.codeString = bl.code.toString()
                             }
-                            if (bl.codeString !== undefined) {
-                                blocklyHelper.compile(bl)
-                            }
+                            bl.code = undefined
                         })
                         block.blockly.blocks = arr
                     } catch (e) {

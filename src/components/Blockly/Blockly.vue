@@ -232,11 +232,13 @@ export default class BlocklyBlock extends Vue {
         }
         this.block.blockly.blocks.forEach(bl => {
             const B = Blockly as any
-            console.log(blocklyHelper.filterCustomBlock(bl))
             B.Blocks[bl.type] = {
                 init: function() {
                     this.jsonInit(blocklyHelper.filterCustomBlock(bl))
                 }
+            }
+            if (bl.code === undefined) {
+                blocklyHelper.compile(bl, B)
             }
 
             if (this.isPython) {
