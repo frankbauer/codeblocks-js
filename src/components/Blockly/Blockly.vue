@@ -428,6 +428,9 @@ export default class BlocklyBlock extends Vue {
         }
     }
     onBlocklyChange(e) {
+        if (!this.editMode) {
+            return
+        }
         this.tmpcode = this.code
         this.block.content = this.content
     }
@@ -451,6 +454,9 @@ export default class BlocklyBlock extends Vue {
 
     @Watch('block.width')
     onWidthChange(oldWidth: string, newWidth: string) {
+        if (!this.editMode) {
+            return
+        }
         this.$nextTick(() => {
             this.remountBlockly()
         })
@@ -458,6 +464,9 @@ export default class BlocklyBlock extends Vue {
 
     @Watch('block.height', { immediate: false })
     onHeightChange(oldHeight: string, newHeight: string) {
+        if (!this.editMode) {
+            return
+        }
         this.$nextTick(() => {
             this.remountBlockly()
         })
@@ -465,12 +474,18 @@ export default class BlocklyBlock extends Vue {
 
     @Watch('block.align')
     onAlignChange(oldAlign: string, newAlign: string) {
+        if (!this.editMode) {
+            return
+        }
         this.$nextTick(() => {
             this.remountBlockly()
         })
     }
 
     onToolboxOverrideChange(newCode) {
+        if (!this.editMode) {
+            return
+        }
         this.tbEditExpanded = this.tbEditExpanded && !this.useToolboxOverride
         this.$nextTick(() => {
             this.remountBlockly()
@@ -479,6 +494,9 @@ export default class BlocklyBlock extends Vue {
 
     @Watch('block.blockly.toolbox', { immediate: false, deep: true })
     onToolboxChanged() {
+        if (!this.editMode) {
+            return
+        }
         this.$nextTick(() => {
             this.remountBlockly()
         })
@@ -486,7 +504,22 @@ export default class BlocklyBlock extends Vue {
 
     @Watch('block.blockly.blocks', { immediate: false, deep: true })
     onBlocksChanged() {
+        if (!this.editMode) {
+            return
+        }
         console.log('Changed Blocks')
+        this.$nextTick(() => {
+            this.remountBlockly()
+        })
+    }
+
+    @Watch('block.appSettings.language', { immediate: false })
+    onLanguageChanged() {
+        if (!this.editMode) {
+            return
+        }
+        console.log('Changed Language')
+        this.block.blockly.blocks.forEach(b => (b._code = undefined))
         this.$nextTick(() => {
             this.remountBlockly()
         })
