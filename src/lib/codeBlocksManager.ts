@@ -522,6 +522,22 @@ class InternalCodeBlocksManager {
                             if (bl.uuid === undefined || bl.uuid === '') {
                                 bl.uuid = uuid.v4()
                             }
+
+                            if (bl.header.uuid === undefined || bl.header.uuid === '') {
+                                bl.header.uuid = uuid.v4()
+                            }
+                            if (bl.header.expanded === undefined) {
+                                bl.header.expanded = true
+                            }
+
+                            bl.additionalLines.forEach(l => {
+                                if (l.uuid === undefined || l.uuid === '') {
+                                    l.uuid = uuid.v4()
+                                }
+                                if (l.expanded === undefined) {
+                                    l.expanded = false
+                                }
+                            })
                         })
                         block.blockly.blocks = arr
                     } catch (e) {

@@ -64,7 +64,7 @@ export enum BlockArgumentTypes {
     input_dummy = 'input_dummy'
 }
 
-export interface IBlocklyToolboxItem {
+export interface IBlocklyToolboxItem extends IBlockUIExtension {
     uuid: string
     type: string
 }
@@ -80,7 +80,7 @@ export interface IBlocklyToolbox {
     categories: IBlocklyToolboxCategory[]
 }
 
-export interface IBlockArgument {
+export interface IBlockArgument extends IBlockUIExtension {
     uuid: string
     type: BlockArgumentTypes
     name: string
@@ -89,12 +89,13 @@ export interface IBlockArgument {
     variableTypes?: string[]
 }
 
-export interface IBlockLine {
+export interface IBlockLine extends IBlockUIExtension {
+    uuid: string
     message: string
     args: IBlockArgument[]
 }
 
-export interface IBlockDefinition {
+export interface IBlockDefinition extends IBlockUIExtension {
     uuid: string
     type: string
     header: IBlockLine
@@ -165,8 +166,3 @@ export enum KnownBlocklyTypes {
 export interface IBlockUIExtension {
     expanded: boolean
 }
-export interface IBlockDefinitionUI extends IBlockDefinition, IBlockUIExtension {}
-
-export interface IBlocklyToolboxItemUI extends IBlocklyToolboxItem, IBlockUIExtension {}
-
-export interface IBlockArgumentUI extends IBlockArgument, IBlockUIExtension {}

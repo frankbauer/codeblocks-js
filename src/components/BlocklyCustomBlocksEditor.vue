@@ -13,12 +13,13 @@
                 @click="addBlock"
             />
         </div>
-        <q-list dense dark bordered class="rounded-borders q-mt-sm ">
+        <q-list dense bordered class="rounded-borders q-mt-sm ">
             <q-expansion-item
                 v-model="item.expanded"
                 v-for="item in customBlocks"
                 v-bind:key="item.uuid"
                 expand-separator
+                dark
                 group="blockListing"
                 header-class="bg-blue-grey text-white"
                 :label="labelForBlock(item)"
@@ -38,7 +39,7 @@ import { uuid } from 'vue-uuid'
 
 import { blocklyHelper, PredefinedBlockTypes } from '@/lib/BlocklyHelper'
 import { BlockData } from '../lib/codeBlocksManager'
-import { IBlockDefinition, IBlockDefinitionUI, KnownBlocklyTypes } from '../lib/IBlocklyHelper'
+import { IBlockDefinition, KnownBlocklyTypes } from '../lib/IBlocklyHelper'
 
 import BlocklyCustomBlockEditor from '@/components/BlocklyCustomBlockEditor.vue'
 @Component({ components: { BlocklyCustomBlockEditor } })
@@ -87,16 +88,17 @@ export default class BlocklyCustomBlocksEditor extends Vue {
     private _addBlock(type: string) {
         //close others
         this.customBlocks.forEach(item => {
-            const i = item as IBlockDefinitionUI
-            i.expanded = false
+            item.expanded = false
         })
 
         //start new one expanede
-        const item: IBlockDefinitionUI = {
+        const item: IBlockDefinition = {
             uuid: uuid.v4(),
             type: type,
             expanded: true,
             header: {
+                uuid: uuid.v4(),
+                expanded: true,
                 message: type,
                 args: []
             },

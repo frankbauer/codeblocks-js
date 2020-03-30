@@ -98,7 +98,11 @@
             "CreateCustomTitle": "Create a new Block",
             "CreateCustomMessage": "Please specify a unique Type-Name (at least <b>three characters</b>) for your new Block.",
             "Arguments": "Argument List",
-            "ArgumentName": "Argument Name"
+            "ArgumentName": "Argument Name",
+            "Header": "Header",
+            "HeaderDescription": "The main Row of your Block",
+            "AdditionalLines": "Additional Lines",
+            "AddonLineTitle": "Additional Line {nr}"
         },
         "ArgumentTypeNames": {
             "field_input": "field_input",
