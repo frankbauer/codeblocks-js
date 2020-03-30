@@ -412,9 +412,11 @@ export default class CodeBlocksContainer extends Vue {
                             k != 'hasCode' &&
                             k != 'isLast' &&
                             k != 'readyCount' &&
-                            k != 'noContent')) &&
+                            k != 'noContent' &&
+                            (this.block.type === KnownBlockTypes.BLOCKLY || k != 'blockly'))) &&
                     k != 'uuid' &&
-                    k != 'scopeUUID'
+                    k != 'scopeUUID' &&
+                    k != 'scopeSelector'
             )
             .forEach(k => {
                 let v = objIn[k]
@@ -616,9 +618,9 @@ export default class CodeBlocksContainer extends Vue {
     border-left-width : 4px !important
     border-left-style : solid !important
 textarea.blockoptions
-    display : none !important
-    width : 1px
-    height : 1px
+    display : block !important
+    width : 100%
+    height : 500px
 .highlightedCard
     background-image: linear-gradient(45deg, #d15151 25%, #5F5370 25%, #5F5370 50%, #d15151 50%, #d15151 75%, #5F5370 75%, #5F5370 100%)
     background-size: 56.57px 56.57px
