@@ -448,23 +448,22 @@ export default class BlocklyBlock extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
-<style lang="sass" scoped>
+<style lang="stylus">
+@import '../styles/quasar.variables.styl'
 .blocklyContainer
     height: 100%
     width: 100%
     text-align: left
     border: 1px solid #eee
     border-radius: 3px
+    box-shadow: 1px 2px 8px #ddd
 .blocklyCanvas
-    overflow: hidden
     display: inline-block
     width:100%
     height:200px
     margin-top:4px
     margin-bottom:4px
     transition: opacity 600ms, visibility 600ms
-</style>
-<style lang="sass">
 .blocklyText
     font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif
     font-weight: 300
@@ -474,13 +473,10 @@ export default class BlocklyBlock extends Vue {
 .blocklyMainBackground
     stroke:#fff
 .blocklyScrollbarHandle
-    fill:#eee
+    fill:$blue-grey-1
 .blocklyToolboxDiv
-    padding:4px
-    border-top-right-radius: 3px
-    border-bottom-right-radius: 3px
-    background-color:#eee
-    box-shadow: 1px 2px 8px #ddd
+    padding:4px 16px 4px 8px
+    background-color:$blue-grey-1
 
 .blocklyTreeRow
     border-radius:3px
@@ -489,11 +485,11 @@ export default class BlocklyBlock extends Vue {
         font-weight: 900
 .blocklyTreeLabel
     font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif
-    color:#444
+    color:$blue-grey-10
     font-weight: 300
 .blocklyFlyoutBackground
-    fill:#eee
+    fill:$blue-grey-1
 .blocklyFlyoutScrollbar
     .blocklyScrollbarHandle
-        fill:#ddd
+        fill:$blue-grey-3
 </style>
