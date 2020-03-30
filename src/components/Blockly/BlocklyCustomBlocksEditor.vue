@@ -24,6 +24,7 @@
                 header-class="bg-blue-grey text-white"
                 :label="labelForBlock(item)"
                 :caption="item.type"
+                @show="onShowBlock"
             >
                 <BlocklyCustomBlockEditor
                     :blockDefinition="item"
@@ -117,6 +118,10 @@ export default class BlocklyCustomBlocksEditor extends Vue {
             codeString: ''
         }
         this.customBlocks.push(item)
+    }
+
+    onShowBlock() {
+        this.$CodeBlock.refreshAllCodeMirrors()
     }
 }
 </script>

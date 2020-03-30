@@ -161,16 +161,14 @@ export class BlocklyHelper {
     public compile(bl: IBlockDefinition, Blockly: any): any | undefined {
         const cc = this.prepareBlocklyCode(bl.codeString)
         bl.code = undefined
-        bl.error = undefined
         try {
             //console.log(cc, Blockly)
             const code = new Function('B', cc)
             bl.code = code(Blockly)
         } catch (e) {
             bl.code = undefined
-            bl.error = e
             console.error('Error Compiling', cc, e)
-            return e
+            return e + ''
         }
         return undefined
     }
@@ -205,6 +203,8 @@ export class BlocklyHelper {
         }
         return cl
     }
+
+    mounted() {}
 }
 
 export const blocklyHelper = new BlocklyHelper()

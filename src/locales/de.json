@@ -103,7 +103,8 @@
             "HeaderDescription": "The main Row of your Block",
             "AdditionalLines": "Additional Lines",
             "AddonLineTitle": "Additional Line {nr}",
-            "CompileError": "Error Compiling Block:"
+            "CompileError": "Error Compiling Block:",
+            "CodeGeneratorFunction": "Code-Generator Function"
         },
         "ArgumentTypeNames": {
             "field_input": "field_input",

@@ -109,7 +109,6 @@ export interface IBlockDefinition extends IBlockUIExtension {
     helpUrl?: string
     codeString: string
     code?: Function
-    error: any
 }
 
 export enum KnownBlocklyTypes {

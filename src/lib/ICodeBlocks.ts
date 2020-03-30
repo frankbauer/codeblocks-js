@@ -38,9 +38,15 @@ export interface IBlockDataPlayground {
     height: string
     align: string
 }
+
+export interface IBlockError {
+    error: string
+    uuid: string
+}
 export interface IBlockDataBlockly {
     toolbox: IBlocklyToolbox
     blocks: IBlockDefinition[]
+    blockErrors: IBlockError[]
     useOverride: boolean
     toolboxOverride?: string
 }

@@ -59,23 +59,18 @@
             />
         </q-card-section>
 
-        <q-card-section>
+        <q-card-section class="q-pb-xs q-pt-lg">
+            <div class="row no-wrap q-pa-none">
+                <div class="text-overline">{{ $t('Blockly.Block.CodeGeneratorFunction') }}</div>
+            </div>
+        </q-card-section>
+        <q-card-section class="q-mt-none q-pt-xs">
             <q-slide-transition class="q-mb-xs q-mt-lg">
-                <q-banner
-                    inline-actions
-                    rounded
-                    class="text-white bg-red"
-                    v-show="blockDefinition.error !== '' && blockDefinition.error !== undefined"
-                >
+                <q-banner inline-actions rounded class="text-white bg-red" v-show="hasError">
                     <div class="text-overline">{{ $t('Blockly.Block.CompileError') }}</div>
-                    <div class="q-pl-lg">{{ blockDefinition.error }}</div>
+                    <div class="q-pl-lg">{{ errorString }}</div>
                     <template v-slot:action>
-                        <q-btn
-                            flat
-                            color="white"
-                            label="Dismiss"
-                            @click="blockDefinition.error = ''"
-                        />
+                        <q-btn flat color="white" :label="$t('Dismiss')" @click="dismissError()" />
                     </template>
                 </q-banner>
             </q-slide-transition>
@@ -137,6 +132,26 @@ export default class BlocklyCustomBlockEditor extends Vue {
             nr = 'two'
         }
         return `looks_${nr}`
+    }
+
+    dismissError() {
+        const err = this.block.blockly.blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        if (err != undefined) {
+            err.error = ''
+        }
+    }
+
+    get errorString(): string {
+        const err = this.block.blockly.blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        if (err === undefined) {
+            return ''
+        }
+        return err.error
+    }
+
+    get hasError() {
+        const err = this.block.blockly.blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        return err !== undefined && err.error !== undefined && err.error.trim() != ''
     }
 
     get color() {
