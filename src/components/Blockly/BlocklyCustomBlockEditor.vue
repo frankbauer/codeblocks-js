@@ -65,7 +65,7 @@
             </div>
         </q-card-section>
         <q-card-section class="q-mt-none q-pt-xs">
-            <q-slide-transition class="q-mb-xs q-mt-lg">
+            <q-slide-transition class="q-mb-xs">
                 <q-banner inline-actions rounded class="text-white bg-red" v-show="hasError">
                     <div class="text-overline">{{ $t('Blockly.Block.CompileError') }}</div>
                     <div class="q-pl-lg">{{ errorString }}</div>
