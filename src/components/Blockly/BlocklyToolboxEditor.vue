@@ -37,53 +37,12 @@ import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import Blockly from '@/plugins/blocklyEnv'
 
-import BlocklyToolboxCategoryEditor from '@/components/BlocklyToolboxCategoryEditor.vue'
+import BlocklyToolboxCategoryEditor from '@/components/Blockly/BlocklyToolboxCategoryEditor.vue'
 import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IBlocklyToolboxCategory } from '@/lib/IBlocklyHelper'
 
 import { uuid } from 'vue-uuid'
-
-const sampleCategories: IBlocklyToolboxCategory[] = [
-    {
-        uuid: '0',
-        name: 'Logic',
-        items: [
-            {
-                uuid: '0',
-                type: 'controls_if'
-            },
-            {
-                uuid: '1',
-                type: 'logic_compare'
-            }
-        ],
-        color: ''
-    },
-    {
-        uuid: '1',
-        name: 'Math',
-        items: [
-            {
-                uuid: '3',
-                type: 'math_arithmetic'
-            },
-            {
-                uuid: '4',
-                type: 'math_single'
-            }
-        ],
-        color: '{!PrimaryColors.math}'
-    }
-]
-
-const vCat = new Vue({
-    data: () => {
-        return {
-            categories: sampleCategories
-        }
-    }
-})
 
 @Component({ components: { BlocklyToolboxCategoryEditor } })
 export default class BlocklyToolboxEditor extends Vue {

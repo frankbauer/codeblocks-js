@@ -87,10 +87,10 @@ import {
     IBlockLine,
     IBlockArgument,
     BlockArgumentTypes
-} from '../lib/IBlocklyHelper'
-import { blocklyHelper, PredefinedBlockTypes } from '../lib/BlocklyHelper'
-import { IListItemData } from '../lib/ICompilerRegistry'
-import BlocklyCustomBlockArgument from '@/components/BlocklyCustomBlockArgument.vue'
+} from '@/lib/IBlocklyHelper'
+import { blocklyHelper, PredefinedBlockTypes } from '@/lib/BlocklyHelper'
+import { IListItemData } from '@/lib/ICompilerRegistry'
+import BlocklyCustomBlockArgument from '@/components/Blockly/BlocklyCustomBlockArgument.vue'
 import { uuid } from 'vue-uuid'
 
 @Component({ components: { BlocklyCustomBlockArgument } })

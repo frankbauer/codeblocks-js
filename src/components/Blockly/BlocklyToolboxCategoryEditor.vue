@@ -67,12 +67,11 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import {
     IBlocklyToolboxCategory,
     IBlocklyToolboxItem,
-    IBlockDefinition,
-    IBlocklyToolboxItemUI
+    IBlockDefinition
 } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
-import BlocklyToolboxItemEditor from '@/components/BlocklyToolboxItemEditor.vue'
+import BlocklyToolboxItemEditor from '@/components/Blockly/BlocklyToolboxItemEditor.vue'
 
 import { uuid } from 'vue-uuid'
 
@@ -105,12 +104,11 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
     addItem() {
         //close others
         this.category.items.forEach(item => {
-            const i = item as IBlocklyToolboxItemUI
-            i.expanded = false
+            item.expanded = false
         })
 
         //start new one expanede
-        const item: IBlocklyToolboxItemUI = {
+        const item: IBlocklyToolboxItem = {
             uuid: uuid.v4(),
             type: '',
             expanded: true

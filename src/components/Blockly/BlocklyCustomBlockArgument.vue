@@ -28,9 +28,9 @@ import {
     IBlockLine,
     IBlockArgument,
     BlockArgumentTypes
-} from '../lib/IBlocklyHelper'
-import { blocklyHelper, PredefinedBlockTypes, PredefinedArgumentTypes } from '../lib/BlocklyHelper'
-import { IListItemData } from '../lib/ICompilerRegistry'
+} from '@/lib/IBlocklyHelper'
+import { blocklyHelper, PredefinedBlockTypes, PredefinedArgumentTypes } from '@/lib/BlocklyHelper'
+import { IListItemData } from '@/lib/ICompilerRegistry'
 
 @Component
 export default class BlocklyCustomBlockArgument extends Vue {

@@ -1,5 +1,9 @@
 <template>
-    <div :class="`codeblocks ${addonClass}  ${backgroundColorClass} q-mx-sm q-mb-md`" :data-question="blockInfo.id" :uuid="blockInfo.uuid">
+    <div
+        :class="`codeblocks ${addonClass}  ${backgroundColorClass} q-mx-sm q-mb-md`"
+        :data-question="blockInfo.id"
+        :uuid="blockInfo.uuid"
+    >
         <CodeBlocksSettings
             v-if="editMode"
             :options="options"
@@ -65,16 +69,31 @@
                 :language="language"
                 @ready="blockBecameReady"
             />
-            <Blockly v-else-if="block.type == 'BLOCKLY'" :block="block" :mode="mimeType" :theme="themeForBlock(block)" :editMode="editMode" :readonly="readonly" :tagSet="activeTagSet" />
+            <Blockly
+                v-else-if="block.type == 'BLOCKLY'"
+                :block="block"
+                :mode="mimeType"
+                :theme="themeForBlock(block)"
+                :editMode="editMode"
+                :readonly="readonly"
+                :tagSet="activeTagSet"
+            />
         </CodeBlockContainer>
 
         <div class="row justify-end" v-if="editMode">
             <div>
-                <q-btn @click="addNewBlock" push color="green">{{ $t('CodeBlocks.AddBlock') }} <q-icon name="library_add" class="q-ml-sm"/></q-btn>
+                <q-btn @click="addNewBlock" push color="green"
+                    >{{ $t('CodeBlocks.AddBlock') }} <q-icon name="library_add" class="q-ml-sm"
+                /></q-btn>
             </div>
         </div>
 
-        <div :class="`runner ${editMode ? 'q-pt-lg q-mx-lg' : ''}`" v-if="canRun" id="runContainer" :data-question="blockInfo.id">
+        <div
+            :class="`runner ${editMode ? 'q-pt-lg q-mx-lg' : ''}`"
+            v-if="canRun"
+            id="runContainer"
+            :data-question="blockInfo.id"
+        >
             <div class="row runnerState" id="stateBox" :data-question="blockInfo.id">
                 <q-btn
                     id="allow_run_button"
@@ -94,12 +113,27 @@
                     </q-tooltip>
                 </q-btn>
 
-                <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-                    <div class="globalState col-grow" style="align-self: center;" v-show="showGlobalMessages"><div id="message" v-html="$compilerState.globalStateMessage"></div></div>
+                <transition
+                    appear
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
+                >
+                    <div
+                        class="globalState col-grow"
+                        style="align-self: center;"
+                        v-show="showGlobalMessages"
+                    >
+                        <div id="message" v-html="$compilerState.globalStateMessage"></div>
+                    </div>
                 </transition>
             </div>
             <q-slide-transition>
-                <pre :id="`${blockInfo.id}Output`" ref="output" class="output" v-if="hasOutput"><div id="out" v-html="outputHTML"></div></pre>
+                <pre
+                    :id="`${blockInfo.id}Output`"
+                    ref="output"
+                    class="output"
+                    v-if="hasOutput"
+                ><div id="out" v-html="outputHTML"></div></pre>
             </q-slide-transition>
         </div>
     </div>
@@ -111,13 +145,18 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
-import Blockly from '@/components/Blockly.vue'
+import Blockly from '@/components/Blockly/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import { BlockData, IAppSettings, IMainBlock } from '@/lib/codeBlocksManager'
 import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import { ICompilerID, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
-import { CodeOutputTypes, IRandomizerSet, KnownBlockTypes, IBlockDataPlayground } from '@/lib/ICodeBlocks'
+import {
+    CodeOutputTypes,
+    IRandomizerSet,
+    KnownBlockTypes,
+    IBlockDataPlayground
+} from '@/lib/ICodeBlocks'
 
 export interface IOnTypeChangeInfo {
     type: KnownBlockTypes
@@ -258,7 +297,12 @@ export default class CodeBlocks extends Vue {
             return false
         }
 
-        return this.didInitialize && cmp.isReady && !cmp.isRunning && !this.$compilerState.runButtonForceHide
+        return (
+            this.didInitialize &&
+            cmp.isReady &&
+            !cmp.isRunning &&
+            !this.$compilerState.runButtonForceHide
+        )
     }
     get canRun(): boolean {
         let cmp = this.$compilerRegistry.getCompiler(this.compiler)
@@ -354,7 +398,9 @@ export default class CodeBlocks extends Vue {
             this.output = newOutput.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
                 this.outputHTML = this.output.substr(0, this.maxCharacters)
-                this.outputHTML += this.$CodeBlock.format_info('Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n')
+                this.outputHTML += this.$CodeBlock.format_info(
+                    'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
+                )
             } else {
                 this.outputHTML = this.output
             }
@@ -375,7 +421,9 @@ export default class CodeBlocks extends Vue {
         text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
         if (!this.didClip) {
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
-                this.outputHTML += this.$CodeBlock.format_info('Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n')
+                this.outputHTML += this.$CodeBlock.format_info(
+                    'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
+                )
                 this.didClip = true
             } else {
                 this.outputHTML += text
@@ -479,7 +527,10 @@ export default class CodeBlocks extends Vue {
                         self.$compilerState.setAllRunButtons(true)
                         return undefined
                     }
-                    let res = self.finishedExecution(overrideOutput ? overrideOutput : self.output, self.sansoutput)
+                    let res = self.finishedExecution(
+                        overrideOutput ? overrideOutput : self.output,
+                        self.sansoutput
+                    )
                     self.$compilerState.hideGlobalState()
                     self.$compilerState.setAllRunButtons(true)
                     return res
@@ -490,7 +541,11 @@ export default class CodeBlocks extends Vue {
         return true
     }
     onkey(event) {
-        if (this.editMode && (event.ctrlKey || event.metaKey) && (event.key === 'w' || event.key === 'j')) {
+        if (
+            this.editMode &&
+            (event.ctrlKey || event.metaKey) &&
+            (event.key === 'w' || event.key === 'j')
+        ) {
             this.run()
             event.preventDefault()
             return false

@@ -64,10 +64,10 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-import { IBlocklyToolboxItem, IBlockDefinition, IBlockLine } from '../lib/IBlocklyHelper'
-import { blocklyHelper, PredefinedBlockTypes, ColorSelectionWithNone } from '../lib/BlocklyHelper'
+import { IBlocklyToolboxItem, IBlockDefinition, IBlockLine } from '@/lib/IBlocklyHelper'
+import { blocklyHelper, PredefinedBlockTypes, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
-import BlocklyCustomBlockLine from '@/components/BlocklyCustomBlockLine.vue'
+import BlocklyCustomBlockLine from '@/components/Blockly/BlocklyCustomBlockLine.vue'
 import { uuid } from 'vue-uuid'
 
 @Component({ components: { BlocklyCustomBlockLine } })

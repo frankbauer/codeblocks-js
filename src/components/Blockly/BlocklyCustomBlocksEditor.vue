@@ -38,10 +38,10 @@ import Blockly from '@/plugins/blocklyEnv'
 import { uuid } from 'vue-uuid'
 
 import { blocklyHelper, PredefinedBlockTypes } from '@/lib/BlocklyHelper'
-import { BlockData } from '../lib/codeBlocksManager'
-import { IBlockDefinition, KnownBlocklyTypes } from '../lib/IBlocklyHelper'
+import { BlockData } from '@/lib/codeBlocksManager'
+import { IBlockDefinition, KnownBlocklyTypes } from '@/lib/IBlocklyHelper'
 
-import BlocklyCustomBlockEditor from '@/components/BlocklyCustomBlockEditor.vue'
+import BlocklyCustomBlockEditor from '@/components/Blockly/BlocklyCustomBlockEditor.vue'
 @Component({ components: { BlocklyCustomBlockEditor } })
 export default class BlocklyCustomBlocksEditor extends Vue {
     @Prop({ required: true }) block!: BlockData

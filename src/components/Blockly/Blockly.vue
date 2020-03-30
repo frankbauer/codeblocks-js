@@ -98,18 +98,14 @@ import Blockly from '@/plugins/blocklyEnv'
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 
-import CodeBlock from './CodeBlock.vue'
-import BlocklyCustomBlocksEditor from '@/components/BlocklyCustomBlocksEditor.vue'
-import BlocklyToolboxEditor from '@/components/BlocklyToolboxEditor.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import BlocklyCustomBlocksEditor from '@/components/Blockly/BlocklyCustomBlocksEditor.vue'
+import BlocklyToolboxEditor from '@/components/Blockly/BlocklyToolboxEditor.vue'
 
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
-import {
-    BlockPrimaryColors,
-    BlockSecondaryColors,
-    BlockTertiaryColors
-} from '../lib/IBlocklyHelper'
-import { blocklyHelper } from '../lib/BlocklyHelper'
+import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '@/lib/IBlocklyHelper'
+import { blocklyHelper } from '@/lib/BlocklyHelper'
 
 @Component({
     components: {
@@ -449,7 +445,7 @@ export default class BlocklyBlock extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style lang="stylus">
-@import '../styles/quasar.variables.styl'
+@import '../../styles/quasar.variables.styl'
 .blocklyContainer
     height: 100%
     width: 100%
