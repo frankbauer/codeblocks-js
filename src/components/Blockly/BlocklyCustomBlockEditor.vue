@@ -269,7 +269,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
 
     onBlockCodeChange() {
         this.blockDefinition.codeString = this.codeBlock.content
-        this.blockDefinition.code = undefined
+        this.blockDefinition._code = undefined
     }
 }
 </script>

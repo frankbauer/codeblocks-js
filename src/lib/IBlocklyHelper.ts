@@ -108,7 +108,7 @@ export interface IBlockDefinition extends IBlockUIExtension {
     tooltip?: string
     helpUrl?: string
     codeString: string
-    code?: Function
+    _code?: Function
 }
 
 export enum KnownBlocklyTypes {

@@ -539,10 +539,10 @@ class InternalCodeBlocksManager {
                                 }
                             })
 
-                            if (bl.codeString === undefined && bl.code !== undefined) {
-                                bl.codeString = bl.code.toString()
+                            if (bl.codeString === undefined && bl._code !== undefined) {
+                                bl.codeString = bl._code.toString()
                             }
-                            bl.code = undefined
+                            bl._code = undefined
                         })
                         block.blockly.blocks = arr
                     } catch (e) {

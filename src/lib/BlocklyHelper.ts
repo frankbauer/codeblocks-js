@@ -164,13 +164,13 @@ export class BlocklyHelper {
 
     public compile(bl: IBlockDefinition, Blockly: any): any | undefined {
         const cc = this.prepareBlocklyCode(bl.codeString)
-        bl.code = undefined
+        bl._code = undefined
         try {
             //console.log(cc, Blockly)
             const code = new Function('B', cc)
-            bl.code = code(Blockly)
+            bl._code = code(Blockly)
         } catch (e) {
-            bl.code = undefined
+            bl._code = undefined
             console.error('Error Compiling', cc, e)
             return e + ''
         }

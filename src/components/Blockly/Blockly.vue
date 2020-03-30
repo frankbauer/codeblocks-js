@@ -245,7 +245,7 @@ export default class BlocklyBlock extends Vue {
                     this.jsonInit(blocklyHelper.filterCustomBlock(bl))
                 }
             }
-            if (bl.code === undefined) {
+            if (bl._code === undefined) {
                 let err = this.block.blockly._blockErrors.find(e => e.uuid == bl.uuid)
                 if (err === undefined) {
                     err = {
@@ -258,11 +258,11 @@ export default class BlocklyBlock extends Vue {
             }
 
             if (this.isPython) {
-                B.Python[bl.type] = bl.code
+                B.Python[bl.type] = bl._code
             } else if (this.isJava) {
-                B.Java[bl.type] = bl.code
+                B.Java[bl.type] = bl._code
             } else {
-                B.JavaScript[bl.type] = bl.code
+                B.JavaScript[bl.type] = bl._code
             }
         })
 
