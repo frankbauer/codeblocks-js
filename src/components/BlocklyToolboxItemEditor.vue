@@ -48,7 +48,10 @@ export default class BlocklyToolboxItemEditor extends Vue {
     get blockTypes(): IListItemData[] {
         const custom: IListItemData[] = this.customBlocks.map(bl => {
             const ret: IListItemData = {
-                label: bl.message0,
+                label:
+                    bl.header.message && bl.header.message.trim() != ''
+                        ? bl.header.message
+                        : bl.type,
                 value: bl.type
             }
             return ret

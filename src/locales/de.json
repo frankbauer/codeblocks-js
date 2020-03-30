@@ -92,6 +92,12 @@
         "ToolboxItems": "Blöcke",
         "Properties": "Eigenschaften",
         "UseCustomToolbox": "Toolbox selbst definieren",
+        "Block": {
+            "TypeName": "Unique Type ID",
+            "MainDescription": "Main Description (use $1, $2... for Argument PlaceHolders)",
+            "CreateCustomTitle": "Create a new Block",
+            "CreateCustomMessage": "Please specify a unique Type-Name (at least <b>three characters</b>) for your new Block."
+        },
         "BlockTypeNames": {
             "controls_if": "Bedingung (if)",
             "logic_compare": "Vergleich",

@@ -64,14 +64,6 @@ export enum BlockArgumentTypes {
     input_dummy = 'input_dummy'
 }
 
-export interface IBlockArgument {
-    type: BlockArgumentTypes
-    name: string
-    check?: BlockOutputTypes
-    variable?: string
-    variableTypes?: string[]
-}
-
 export interface IBlocklyToolboxItem {
     uuid: string
     type: string
@@ -88,21 +80,24 @@ export interface IBlocklyToolbox {
     categories: IBlocklyToolboxCategory[]
 }
 
+export interface IBlockArgument {
+    type: BlockArgumentTypes
+    name: string
+    check?: BlockOutputTypes
+    variable?: string
+    variableTypes?: string[]
+}
+
+export interface IBlockLine {
+    message: string
+    args: IBlockArgument[]
+}
+
 export interface IBlockDefinition {
     uuid: string
     type: string
-    message0: string
-    arg0: IBlockArgument[]
-    message1?: string
-    arg1?: IBlockArgument[]
-    message2?: string
-    arg2?: IBlockArgument[]
-    message3?: string
-    arg3?: IBlockArgument[]
-    message4?: string
-    arg4?: IBlockArgument[]
-    message5?: string
-    arg5?: IBlockArgument[]
+    header: IBlockLine
+    additionalLines: IBlockLine[]
 
     output?: BlockOutputTypes
     previousStatement: BlockSequenceTypes | null

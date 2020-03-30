@@ -24,6 +24,7 @@
                 :label="labelForBlock(item)"
                 :caption="item.type"
             >
+                <BlocklyCustomBlockEditor :block="item" :customBlocks="customBlocks" />
             </q-expansion-item>
         </q-list>
     </div>
@@ -35,10 +36,12 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import Blockly from '@/plugins/blocklyEnv'
 import { uuid } from 'vue-uuid'
 
-import { blocklyHelper } from '@/lib/BlocklyHelper'
+import { blocklyHelper, PredefinedBlockTypes } from '@/lib/BlocklyHelper'
 import { BlockData } from '../lib/codeBlocksManager'
-import { IBlockDefinition, IBlockDefinitionUI } from '../lib/IBlocklyHelper'
-@Component
+import { IBlockDefinition, IBlockDefinitionUI, KnownBlocklyTypes } from '../lib/IBlocklyHelper'
+
+import BlocklyCustomBlockEditor from '@/components/BlocklyCustomBlockEditor.vue'
+@Component({ components: { BlocklyCustomBlockEditor } })
 export default class BlocklyCustomBlocksEditor extends Vue {
     @Prop({ required: true }) block!: BlockData
 
@@ -47,10 +50,41 @@ export default class BlocklyCustomBlocksEditor extends Vue {
     }
 
     labelForBlock(block: IBlockDefinition): string {
-        return block.message0
+        return block.header.message
     }
 
     addBlock() {
+        this.$q
+            .dialog({
+                title: Vue.$l('Blockly.Block.CreateCustomTitle'),
+                message: Vue.$l('Blockly.Block.CreateCustomMessage'),
+                html: true,
+                prompt: {
+                    model: '',
+                    isValid: val =>
+                        val.length > 2 &&
+                        this.customBlocks.find(bl => bl.type.toLowerCase() == val.toLowerCase()) ===
+                            undefined &&
+                        PredefinedBlockTypes.find(
+                            bl => bl.value.toLowerCase() == val.toLowerCase()
+                        ) === undefined,
+                    type: 'text'
+                },
+                persistent: true,
+                cancel: true,
+                ok: {
+                    push: true,
+                    color: 'positive'
+                }
+            })
+            .onOk((data: string) => {
+                this._addBlock(data)
+            })
+            .onCancel(() => {})
+            .onDismiss(() => {})
+    }
+
+    private _addBlock(type: string) {
         //close others
         this.customBlocks.forEach(item => {
             const i = item as IBlockDefinitionUI
@@ -60,18 +94,13 @@ export default class BlocklyCustomBlocksEditor extends Vue {
         //start new one expanede
         const item: IBlockDefinitionUI = {
             uuid: uuid.v4(),
-            type: '',
+            type: type,
             expanded: true,
-            message0: '',
-            arg0: [],
-            message1: '',
-            arg1: [],
-            message2: '',
-            arg2: [],
-            message3: '',
-            arg3: [],
-            message4: '',
-            arg4: [],
+            header: {
+                message: type,
+                args: []
+            },
+            additionalLines: [],
             previousStatement: null,
             nextStatement: null,
             color: '',

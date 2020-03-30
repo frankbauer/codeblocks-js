@@ -88,7 +88,9 @@ export default class Tagger extends Vue {
     processString(str: string, scopeUUID: string): string {
         return str.replace(randomAndTemplateTag, (m0, m1, m2) => {
             const className = m1 === ':' ? this.className.rnd : this.className.templ
-            return `<span class="q-mb-xs  tag-mark-start tag-mark-end ${className}" >` + m0 + '</span>'
+            return (
+                `<span class="q-mb-xs  tag-mark-start tag-mark-end ${className}" >` + m0 + '</span>'
+            )
         })
     }
     hookClick(el: HTMLElement, scopeUUID: string): void {
@@ -103,7 +105,11 @@ export default class Tagger extends Vue {
             }
         })
     }
-    replaceTemplateTag(scope: HTMLElement | Document | undefined, name: string, newValue: string): void {
+    replaceTemplateTag(
+        scope: HTMLElement | Document | undefined,
+        name: string,
+        newValue: string
+    ): void {
         if (scope === undefined) {
             scope = document
         }
@@ -133,11 +139,13 @@ export default class Tagger extends Vue {
         })
     }
     clickFunction(name: string, tagEl: HTMLElement, scopeUUID: string): void {
-        console.log(i18n)
+        //console.log(i18n)
         Vue.prototype.$q
             .dialog({
                 title: i18n.t('Tagger.ConfirmRepl'),
-                message: i18n.t('Tagger.ConfirmReplMsg', { name: '<span class="template-tag-placeholder-noclick">' + name + '</span>' }),
+                message: i18n.t('Tagger.ConfirmReplMsg', {
+                    name: '<span class="template-tag-placeholder-noclick">' + name + '</span>'
+                }),
                 html: true,
                 persistent: true,
                 prompt: {
