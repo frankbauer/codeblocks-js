@@ -162,7 +162,7 @@ export default class BlocklyBlock extends Vue {
                 this.unmountBlockly()
             }
             this.mountBlockly()
-        }, 500)
+        }, process.env.VUE_APP_BLOCKLY_TIMEOUT)
     }
 
     mountBlockly() {

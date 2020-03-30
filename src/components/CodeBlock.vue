@@ -7,7 +7,7 @@
             :class="`accqstXmlInput noRTEditor ${boxClass}`"
             @ready="onCodeReady"
             @focus="onCodeFocus"
-            @input="onCodeChange"
+            @input="onCodeChangeDefered"
             :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
             :id="`teQ${block.parentID}B${block.id}`"
             :data-question="block.parentID"
@@ -23,7 +23,7 @@
                 :class="`accqstXmlInput noRTEditor ${boxClass}`"
                 @ready="onAltCodeReady"
                 @focus="onAltCodeFocus"
-                @input="onAltCodeChange"
+                @input="onAltCodeChangeDefered"
                 :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
             >
             </codemirror>
@@ -72,6 +72,7 @@ import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { ITagReplaceAction } from '@/plugins/tagger'
+
 const ErrorTipCtor = Vue.extend(ErrorTip)
 
 @Component
@@ -172,6 +173,35 @@ export default class CodeBlock extends BaseBlock {
     }
     onCodeFocus(editor) {}
     onAltCodeFocus(editor) {}
+
+    codeUpdateTimer: number | null = null
+    codeUpdateStartTime: number = 0
+    onCodeChangeDefered(newCode) {
+        const now = new Date().getTime()
+
+        //clear an existing update timeout
+        if (this.codeUpdateTimer !== null) {
+            clearTimeout(this.codeUpdateTimer)
+            this.codeUpdateTimer = null
+        } else {
+            this.codeUpdateStartTime = now
+        }
+
+        const doIt = () => {
+            this.codeUpdateTimer = null
+            this.onCodeChange(newCode)
+        }
+
+        //did we wait for a maximum time? run
+        if (now - this.codeUpdateStartTime > process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
+            doIt()
+            return
+        }
+        this.codeUpdateTimer = setTimeout(() => {
+            doIt()
+        }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
+    }
+
     onCodeChange(newCode) {
         const tb = this.codeBox.$el.querySelector('textarea[name]') as HTMLTextAreaElement
         tb.value = newCode
@@ -181,6 +211,34 @@ export default class CodeBlock extends BaseBlock {
         if (this.editMode) {
             this.$emit('code-changed-in-edit-mode', undefined)
         }
+    }
+
+    altCodeUpdateTimer: number | null = null
+    altCodeUpdateStartTime: number = 0
+    onAltCodeChangeDefered(newCode) {
+        const now = new Date().getTime()
+
+        //clear an existing update timeout
+        if (this.altCodeUpdateTimer !== null) {
+            clearTimeout(this.altCodeUpdateTimer)
+            this.altCodeUpdateTimer = null
+        } else {
+            this.altCodeUpdateStartTime = now
+        }
+
+        const doIt = () => {
+            this.altCodeUpdateTimer = null
+            this.onAltCodeChange(newCode)
+        }
+
+        //did we wait for a maximum time? run
+        if (now - this.altCodeUpdateStartTime > process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
+            doIt()
+            return
+        }
+        this.altCodeUpdateTimer = setTimeout(() => {
+            doIt()
+        }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
     }
     onAltCodeChange(newCode) {
         if (this.altBox !== undefined) {
