@@ -515,9 +515,17 @@ class InternalCodeBlocksManager {
                     try {
                         const obj: IBlocklyToolbox = new Function(code)()
                         obj.categories.forEach(c => {
+                            if (c.uuid === undefined || c.uuid === '') {
+                                c.uuid = uuid.v4()
+                            }
                             if (c.color === undefined) {
                                 c.color = ''
                             }
+                            c.items.forEach(i => {
+                                if (i.uuid === undefined || i.uuid === '') {
+                                    i.uuid = uuid.v4()
+                                }
+                            })
                         })
                         block.blockly.toolbox = obj
                     } catch (e) {

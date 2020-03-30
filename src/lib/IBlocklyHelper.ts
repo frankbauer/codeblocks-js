@@ -76,10 +76,6 @@ export interface IBlocklyToolboxItem {
     uuid: string
     type: string
 }
-
-export interface IBlocklyToolboxItemUI extends IBlocklyToolboxItem {
-    expanded: boolean
-}
 export interface IBlocklyToolboxCategory {
     uuid: string
     items: IBlocklyToolboxItem[]
@@ -93,6 +89,7 @@ export interface IBlocklyToolbox {
 }
 
 export interface IBlockDefinition {
+    uuid: string
     type: string
     message0: string
     arg0: IBlockArgument[]
@@ -110,7 +107,7 @@ export interface IBlockDefinition {
     output?: BlockOutputTypes
     previousStatement: BlockSequenceTypes | null
     nextStatement: BlockSequenceTypes | null
-    colour: number
+    color: string
     tooltip?: string
     helpUrl?: string
 }
@@ -167,4 +164,12 @@ export enum KnownBlocklyTypes {
     colour_random = 'colour_random',
     colour_rgb = 'colour_rgb',
     colour_blend = 'colour_blend'
+}
+
+export interface IBlockDefinitionUI extends IBlockDefinition {
+    expanded: boolean
+}
+
+export interface IBlocklyToolboxItemUI extends IBlocklyToolboxItem {
+    expanded: boolean
 }
