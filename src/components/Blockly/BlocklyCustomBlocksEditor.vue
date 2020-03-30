@@ -107,7 +107,8 @@ export default class BlocklyCustomBlocksEditor extends Vue {
             nextStatement: null,
             color: '',
             tooltip: '',
-            helpUrl: ''
+            helpUrl: '',
+            codeString: ''
         }
         this.customBlocks.push(item)
     }

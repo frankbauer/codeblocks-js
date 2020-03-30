@@ -60,7 +60,7 @@
                                     group="lineArguments"
                                     header-class="bg-blue-grey text-white"
                                     :label="item.name"
-                                    :caption="labelForType(item.type) + ` = $${index + 1}`"
+                                    :caption="labelForType(item.type) + ` = %${index + 1}`"
                                 >
                                     <BlocklyCustomBlockArgument
                                         :block="block"

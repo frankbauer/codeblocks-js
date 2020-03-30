@@ -27,6 +27,7 @@ import {
     BlockArgumentTypes,
     IBlockDefinition
 } from './IBlocklyHelper'
+import { blocklyHelper } from './BlocklyHelper'
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
 export interface IAppSettings {
@@ -508,9 +509,7 @@ class InternalCodeBlocksManager {
                     ? inBlock.align
                     : 'center'
 
-                const buildCode = (cc: string): string => {
-                    return `"use strict"; const window = undefined; const Window = undefined; const document = undefined; return function(){ return {o: ${cc}}.o}.call({})`
-                }
+                const buildCode = blocklyHelper.prepareCode
 
                 const customBlocks = bl.getElementsByTagName('CUSTOMBLOCKS')
                 if (customBlocks.length > 0) {
@@ -538,6 +537,13 @@ class InternalCodeBlocksManager {
                                     l.expanded = false
                                 }
                             })
+
+                            if (bl.codeString === undefined && bl.code !== undefined) {
+                                bl.codeString = bl.code.toString()
+                            }
+                            if (bl.codeString !== undefined) {
+                                blocklyHelper.compile(bl)
+                            }
                         })
                         block.blockly.blocks = arr
                     } catch (e) {

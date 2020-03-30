@@ -230,6 +230,24 @@ export default class BlocklyBlock extends Vue {
             }
             options.theme = new Blockly.Theme(blockStyles as any, categoryStyles)
         }
+        this.block.blockly.blocks.forEach(bl => {
+            const B = Blockly as any
+            console.log(blocklyHelper.filterCustomBlock(bl))
+            B.Blocks[bl.type] = {
+                init: function() {
+                    this.jsonInit(blocklyHelper.filterCustomBlock(bl))
+                }
+            }
+
+            if (this.isPython) {
+                B.Python[bl.type] = bl.code
+            } else if (this.isJava) {
+                B.Java[bl.type] = bl.code
+            } else {
+                B.JavaScript[bl.type] = bl.code
+            }
+        })
+
         options.renderer = 'minimalist'
         this.workspace = Blockly.inject(this.blocklyContainer, options)
         this.workspace.addChangeListener(this.onBlocklyChange.bind(this))
@@ -331,20 +349,28 @@ export default class BlocklyBlock extends Vue {
         }
         return 'auto'
     }
+
+    get isPython(): boolean {
+        return this.mode == 'text/x-python' || this.mode == 'text/python' || this.mode == 'python'
+    }
+    get isJava(): boolean {
+        return this.mode == 'text/x-java' || this.mode == 'text/java' || this.mode == 'java'
+    }
+    get isJavaScript(): boolean {
+        return (
+            this.mode == 'text/javascript' ||
+            this.mode == 'javascript' ||
+            this.mode == 'application/javascript' ||
+            this.mode == 'application/ecmascript' ||
+            this.mode == 'text/ecmascript'
+        )
+    }
     get code() {
         if (this.workspace) {
             const BBlockly = Blockly as any
-            if (
-                this.mode == 'text/x-python' ||
-                this.mode == 'text/python' ||
-                this.mode == 'python'
-            ) {
+            if (this.isPython) {
                 return BBlockly.Python.workspaceToCode(this.workspace)
-            } else if (
-                this.mode == 'text/x-java' ||
-                this.mode == 'text/java' ||
-                this.mode == 'java'
-            ) {
+            } else if (this.isJava) {
                 return BBlockly.Java.workspaceToCode(this.workspace)
             }
             return BBlockly.JavaScript.workspaceToCode(this.workspace)
@@ -435,6 +461,14 @@ export default class BlocklyBlock extends Vue {
 
     @Watch('block.blockly.toolbox', { immediate: false, deep: true })
     onToolboxChanged() {
+        this.$nextTick(() => {
+            this.remountBlockly()
+        })
+    }
+
+    @Watch('block.blockly.blocks', { immediate: false, deep: true })
+    onBlocksChanged() {
+        console.log('Changed Blocks')
         this.$nextTick(() => {
             this.remountBlockly()
         })

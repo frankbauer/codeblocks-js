@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Blockly from '@/plugins/blocklyEnv'
 
 import {
     IBlocklyToolbox,
@@ -6,7 +7,10 @@ import {
     IBlocklyToolboxCategory,
     BlockPrimaryColors,
     KnownBlocklyTypes,
-    BlockArgumentTypes
+    BlockArgumentTypes,
+    IBlockDefinition,
+    IBlockLine,
+    IBlockArgument
 } from '@/lib/IBlocklyHelper'
 import { IListItemData } from './ICompilerRegistry'
 
@@ -102,6 +106,67 @@ export class BlocklyHelper {
             return `${this.serializeToolboxItems(toolbox.items)}`
         } else {
             return ''
+        }
+    }
+
+    public filterArgument(a: IBlockArgument): object {
+        const { type, name } = a
+        return { type, name }
+    }
+    public serializeArgument(bl: IBlockArgument): string {
+        return JSON.stringify(this.filterArgument(bl))
+    }
+
+    public filterLine(l: IBlockLine, nr: number): object {
+        const ret: any = {}
+        ret[`message${nr}`] = l.message
+        ret[`args${nr}`] = l.args.map(a => this.filterArgument(a))
+
+        return ret
+    }
+    public serializeLine(l: IBlockLine, nr: number): string {
+        return JSON.stringify(this.filterLine(l, nr))
+    }
+
+    public filterCustomBlock(bl: IBlockDefinition): object {
+        let ret: any = { ...bl, ...this.filterLine(bl.header, 0) }
+        delete ret.uuid
+        delete ret.type
+        delete ret.header
+        delete ret.additionalLines
+        delete ret.color
+        delete ret.code
+        delete ret.codeString
+
+        ret.colour = this.toHTMLColor(bl.color)
+        bl.additionalLines.forEach((l, i) => (ret = { ...ret, ...this.filterLine(l, i + 1) }))
+
+        return ret
+    }
+    public serializeCustomBlock(bl: IBlockDefinition): string {
+        return JSON.stringify(this.filterCustomBlock(bl))
+    }
+
+    public serializeCustomBlocks(bls: IBlockDefinition[]): string {
+        return JSON.stringify(bls.map(bl => this.filterCustomBlock(bl)))
+    }
+
+    public prepareCode(cc: string): string {
+        return `"use strict"; const window = undefined; const Window = undefined; const document = undefined; return function(){ return {o: ${cc}}.o}.call({})`
+    }
+
+    public prepareBlocklyCode(cc: string): string {
+        return `return ${cc}`
+    }
+
+    public compile(bl: IBlockDefinition) {
+        try {
+            console.log(this.prepareBlocklyCode(bl.codeString))
+            const code = new Function('BlocklyIn', this.prepareBlocklyCode(bl.codeString))
+            bl.code = code(Blockly)
+        } catch (e) {
+            bl.code = undefined
+            console.error('Error Compiling', bl.codeString, e)
         }
     }
 
