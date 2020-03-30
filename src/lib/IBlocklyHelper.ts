@@ -81,6 +81,7 @@ export interface IBlocklyToolbox {
 }
 
 export interface IBlockArgument {
+    uuid: string
     type: BlockArgumentTypes
     name: string
     check?: BlockOutputTypes
@@ -161,10 +162,11 @@ export enum KnownBlocklyTypes {
     colour_blend = 'colour_blend'
 }
 
-export interface IBlockDefinitionUI extends IBlockDefinition {
+export interface IBlockUIExtension {
     expanded: boolean
 }
+export interface IBlockDefinitionUI extends IBlockDefinition, IBlockUIExtension {}
 
-export interface IBlocklyToolboxItemUI extends IBlocklyToolboxItem {
-    expanded: boolean
-}
+export interface IBlocklyToolboxItemUI extends IBlocklyToolboxItem, IBlockUIExtension {}
+
+export interface IBlockArgumentUI extends IBlockArgument, IBlockUIExtension {}

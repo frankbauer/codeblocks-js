@@ -96,7 +96,24 @@
             "TypeName": "Unique Type ID",
             "MainDescription": "Main Description (use $1, $2... for Argument PlaceHolders)",
             "CreateCustomTitle": "Create a new Block",
-            "CreateCustomMessage": "Please specify a unique Type-Name (at least <b>three characters</b>) for your new Block."
+            "CreateCustomMessage": "Please specify a unique Type-Name (at least <b>three characters</b>) for your new Block.",
+            "Arguments": "Argument List",
+            "ArgumentName": "Argument Name"
+        },
+        "ArgumentTypeNames": {
+            "field_input": "field_input",
+            "field_dropdown": "field_dropdown",
+            "field_checkbox": "field_checkbox",
+            "field_colour": "Farbe",
+            "field_number": "Zahl",
+            "field_angle": "Winkel",
+            "field_variable": "field_variable",
+            "field_date": "Datum",
+            "field_label": "field_label",
+            "field_image": "Bild",
+            "input_value": "input_value",
+            "input_statement": "input_statement",
+            "input_dummy": "input_dummy"
         },
         "BlockTypeNames": {
             "controls_if": "Bedingung (if)",

@@ -5,20 +5,21 @@ import {
     IBlocklyToolboxItem,
     IBlocklyToolboxCategory,
     BlockPrimaryColors,
-    KnownBlocklyTypes
+    KnownBlocklyTypes,
+    BlockArgumentTypes
 } from '@/lib/IBlocklyHelper'
 import { IListItemData } from './ICompilerRegistry'
 
 export const ColorThemeSelection: IListItemData[] = [
-    { label: 'Colors', value: '{!PrimaryColors.colour}' },
-    { label: 'Arrays', value: '{!PrimaryColors.list}' },
-    { label: 'Logic', value: '{!PrimaryColors.logic}' },
-    { label: 'Loops', value: '{!PrimaryColors.loop}' },
-    { label: 'Math', value: '{!PrimaryColors.math}' },
-    { label: 'Procedures', value: '{!PrimaryColors.procedure}' },
-    { label: 'String', value: '{!PrimaryColors.text}' },
-    { label: 'Variables', value: '{!PrimaryColors.variable}' },
-    { label: 'Variables (dynamic)', value: '{!PrimaryColors.variable_dynamic}' }
+    { label: 'Colors', value: '{!PrimaryColors.Colour}' },
+    { label: 'Arrays', value: '{!PrimaryColors.List}' },
+    { label: 'Logic', value: '{!PrimaryColors.Logic}' },
+    { label: 'Loops', value: '{!PrimaryColors.Loop}' },
+    { label: 'Math', value: '{!PrimaryColors.Math}' },
+    { label: 'Procedures', value: '{!PrimaryColors.Procedure}' },
+    { label: 'String', value: '{!PrimaryColors.Text}' },
+    { label: 'Variables', value: '{!PrimaryColors.Variable}' },
+    { label: 'Variables (dynamic)', value: '{!PrimaryColors.Variable_dynamic}' }
 ]
 
 export const ColorHues: IListItemData[] = [
@@ -63,7 +64,19 @@ export const ColorSelectionWithNone: IListItemData[] = [
     ...ColorSelection
 ]
 
+export const PredefinedArgumentTypes: IListItemData[] = Object.keys(BlockArgumentTypes).map(key => {
+    const ret: IListItemData = {
+        label: Vue.$l(`Blockly.ArgumentTypeNames.${key}`),
+        value: key
+    }
+    return ret
+})
+
 export class BlocklyHelper {
+    public toArgumentDescription(a: BlockArgumentTypes) {
+        const n = Vue.$l(`Blockly.ArgumentTypeNames.${a}`)
+        return n ? `${n} (${a})` : a
+    }
     private serializeToolboxItem(i: IBlocklyToolboxItem): string {
         return `<block type="${i.type}"></block>`
     }

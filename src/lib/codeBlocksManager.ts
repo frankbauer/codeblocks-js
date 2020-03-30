@@ -21,7 +21,12 @@ import {
     IBlockDataBase,
     IBlockDataBlockly
 } from './ICodeBlocks'
-import { IBlocklyToolbox } from './IBlocklyHelper'
+import {
+    IBlocklyToolbox,
+    BlockPrimaryColors,
+    BlockArgumentTypes,
+    IBlockDefinition
+} from './IBlocklyHelper'
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
 export interface IAppSettings {
@@ -503,17 +508,35 @@ class InternalCodeBlocksManager {
                     ? inBlock.align
                     : 'center'
 
-                const toolboxInput = bl.getElementsByTagName('TOOLBOX')
+                const buildCode = (cc: string): string => {
+                    return `"use strict"; const window = undefined; const Window = undefined; const document = undefined; return function(){ return {o: ${cc}}.o}.call({})`
+                }
 
+                const customBlocks = bl.getElementsByTagName('CUSTOMBLOCKS')
+                if (customBlocks.length > 0) {
+                    const str: string = customBlocks[0].innerHTML ? customBlocks[0].innerHTML : '{}'
+
+                    try {
+                        const arr: IBlockDefinition[] = new Function(buildCode(str))()
+                        arr.forEach(bl => {
+                            if (bl.uuid === undefined || bl.uuid === '') {
+                                bl.uuid = uuid.v4()
+                            }
+                        })
+                        block.blockly.blocks = arr
+                    } catch (e) {
+                        console.error('Error parsing Blocks JSON', e)
+                    }
+                }
+
+                const toolboxInput = bl.getElementsByTagName('TOOLBOX')
                 if (toolboxInput.length > 0) {
-                    let toolboxStr: string = toolboxInput[0].innerHTML
+                    const toolboxStr: string = toolboxInput[0].innerHTML
                         ? toolboxInput[0].innerHTML
                         : '{}'
 
-                    const code = `"use strict"; const window = undefined; const Window = undefined; const document = undefined; return function(){ return {o: ${toolboxStr}}.o}.call({})`
-
                     try {
-                        const obj: IBlocklyToolbox = new Function(code)()
+                        const obj: IBlocklyToolbox = new Function(buildCode(toolboxStr))()
                         obj.categories.forEach(c => {
                             if (c.uuid === undefined || c.uuid === '') {
                                 c.uuid = uuid.v4()
@@ -529,7 +552,7 @@ class InternalCodeBlocksManager {
                         })
                         block.blockly.toolbox = obj
                     } catch (e) {
-                        console.error(e)
+                        console.error('Error Parsing ToolboxJSON', e)
                     }
                 }
 
