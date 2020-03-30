@@ -1,6 +1,10 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription, ErrorSeverity } from '../lib/ICompilerRegistry'
+import {
+    ICompilerInstance,
+    ICompilerErrorDescription,
+    ErrorSeverity
+} from '@/lib/ICompilerRegistry'
 
 //function runJavaScriptWorker( code, log_callback, max_ms, questionID){
 function runJavaScriptWorker(
@@ -17,7 +21,9 @@ function runJavaScriptWorker(
     log_callback('')
 
     if (!window.Worker) {
-        err_callback('CRITICAL-ERROR: your browser does not support WebWorkers!! (please consult a Tutor).')
+        err_callback(
+            'CRITICAL-ERROR: your browser does not support WebWorkers!! (please consult a Tutor).'
+        )
         return
     }
 
@@ -25,7 +31,11 @@ function runJavaScriptWorker(
     for (var key in not_allowed_keywords) {
         if (code.indexOf(not_allowed_keywords[key]) != -1) {
             // the user is not allowed to use the functionallity of the WebWorker
-            err_callback("PermissionError: The usage of '" + not_allowed_keywords[key] + "' is not allowed (reserved keyword)!")
+            err_callback(
+                "PermissionError: The usage of '" +
+                    not_allowed_keywords[key] +
+                    "' is not allowed (reserved keyword)!"
+            )
             return
         }
     }
@@ -74,7 +84,11 @@ function runJavaScriptWorker(
     var start = Date.now()
     var testTimeout = function() {
         var time = Date.now() - start
-        worker.end('TimeoutError:  Execution took too long (>' + time + 'ms) and was terminated. There might be an endless loop in your code.')
+        worker.end(
+            'TimeoutError:  Execution took too long (>' +
+                time +
+                'ms) and was terminated. There might be an endless loop in your code.'
+        )
     }
 
     var testTimeoutIntern = function() {
@@ -100,7 +114,9 @@ function runJavaScriptWorker(
         } else if (e.data[0] == 'err') {
             err_callback(e.data[1] + '\n')
         } else {
-            worker.end('HackerError: Great! You invaded our System. Sadly this will lead you nowhere. Please focus on the Test.')
+            worker.end(
+                'HackerError: Great! You invaded our System. Sadly this will lead you nowhere. Please focus on the Test.'
+            )
         }
     }
     worker.onerror = function(e) {
@@ -156,7 +172,17 @@ export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
     ): void {
-        return runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB)
+        return runJavaScriptWorker(
+            questionID,
+            code,
+            callingCodeBlocks,
+            max_ms,
+            log_callback,
+            info_callback,
+            err_callback,
+            compileFailedCallback,
+            finishedExecutionCB
+        )
     }
 }
 export const javascriptCompiler_V100 = new JavascriptV100Compiler()

@@ -1,6 +1,10 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription, ErrorSeverity } from '../lib/ICompilerRegistry'
+import {
+    ICompilerInstance,
+    ICompilerErrorDescription,
+    ErrorSeverity
+} from '@/lib/ICompilerRegistry'
 
 function runPythonWorker(
     questionID: string,
@@ -20,7 +24,9 @@ function runPythonWorker(
     prog = prog.replaceAll('\t', '    ')
 
     if (!window.Worker) {
-        errCallback('CRITICAL-ERROR: your browser does not support WebWorkers!! (please consult a Tutor).')
+        errCallback(
+            'CRITICAL-ERROR: your browser does not support WebWorkers!! (please consult a Tutor).'
+        )
         return
     }
 
@@ -40,7 +46,11 @@ function runPythonWorker(
 
     var testTimeout = function() {
         var time = Date.now() - start
-        worker.end('TimeoutError:  Execution took too long (> ' + time + ' ms) and was terminated. There might be an endless loop in your code.')
+        worker.end(
+            'TimeoutError:  Execution took too long (> ' +
+                time +
+                ' ms) and was terminated. There might be an endless loop in your code.'
+        )
     }
 
     var testTimeoutIntern = function() {
@@ -139,7 +149,18 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean) => void
     ): void {
-        return runPythonWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, true)
+        return runPythonWorker(
+            questionID,
+            code,
+            callingCodeBlocks,
+            max_ms,
+            log_callback,
+            info_callback,
+            err_callback,
+            compileFailedCallback,
+            finishedExecutionCB,
+            true
+        )
     }
 }
 
@@ -165,7 +186,18 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
     ): void {
-        return runPythonWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, false)
+        return runPythonWorker(
+            questionID,
+            code,
+            callingCodeBlocks,
+            max_ms,
+            log_callback,
+            info_callback,
+            err_callback,
+            compileFailedCallback,
+            finishedExecutionCB,
+            false
+        )
     }
 }
 

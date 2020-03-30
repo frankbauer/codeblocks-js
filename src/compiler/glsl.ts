@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInfo } from '../lib/ICompilerRegistry'
+import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 
 //load all versions
 import { v100 } from './glsl.v100'

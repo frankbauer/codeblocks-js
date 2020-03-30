@@ -57,7 +57,7 @@ import 'codemirror/mode/perl/perl.js'
 import 'codemirror/mode/python/python.js'
 import 'codemirror/mode/r/r.js'
 import 'codemirror/mode/ruby/ruby.js'
-import '../lib/glsl/glsl'
+import '@/lib/glsl/glsl'
 
 //plugins
 import 'codemirror/addon/edit/closebrackets.js'
@@ -104,7 +104,10 @@ export default class CodeBlock extends BaseBlock {
 
         let allMarks = this.codemirror.getDoc().getAllMarks()
         allMarks.forEach(e => {
-            if (e.className == Vue.$tagger.className.rnd || e.className == Vue.$tagger.className.templ) {
+            if (
+                e.className == Vue.$tagger.className.rnd ||
+                e.className == Vue.$tagger.className.templ
+            ) {
                 e.clear()
             }
         })
@@ -112,7 +115,10 @@ export default class CodeBlock extends BaseBlock {
         if (this.altcodemirror) {
             allMarks = this.altcodemirror.getDoc().getAllMarks()
             allMarks.forEach(e => {
-                if (e.className == Vue.$tagger.className.rnd || e.className == Vue.$tagger.className.templ) {
+                if (
+                    e.className == Vue.$tagger.className.rnd ||
+                    e.className == Vue.$tagger.className.templ
+                ) {
                     e.clear()
                 }
             })
@@ -198,7 +204,10 @@ export default class CodeBlock extends BaseBlock {
                 this.codemirror.setSize(null, Math.round(20 * Math.max(1, this.visibleLines)) + 9)
             }
             if (this.altcodemirror) {
-                this.altcodemirror.setSize(null, Math.round(20 * Math.max(1, this.visibleLines)) + 9)
+                this.altcodemirror.setSize(
+                    null,
+                    Math.round(20 * Math.max(1, this.visibleLines)) + 9
+                )
             }
         }
     }
@@ -209,7 +218,11 @@ export default class CodeBlock extends BaseBlock {
         if (o.scopeUUID != this.block.scopeUUID) {
             return
         }
-        this.block.content = Vue.$tagger.replaceTemplateTagInString(this.block.content, o.name, o.newValue)
+        this.block.content = Vue.$tagger.replaceTemplateTagInString(
+            this.block.content,
+            o.name,
+            o.newValue
+        )
     }
     updateTagDisplay() {
         if (!this.editMode) {
@@ -274,13 +287,16 @@ export default class CodeBlock extends BaseBlock {
 
                 //read existing gutter marker or create a new one
                 let info = this.codemirror.getDoc().lineInfo(error.start.line - first)
-                let element = info && info.gutterMarkers ? info.gutterMarkers['diagnostics'].$component : null
+                let element =
+                    info && info.gutterMarkers ? info.gutterMarkers['diagnostics'].$component : null
                 if (element == null) {
                     //console.log("Gutter", this.block.type, error.start.line, error.message, first);
                     element = document.createElement('span')
 
                     //place the updated element
-                    this.codemirror.getDoc().setGutterMarker(error.start.line - first, 'diagnostics', element)
+                    this.codemirror
+                        .getDoc()
+                        .setGutterMarker(error.start.line - first, 'diagnostics', element)
 
                     element.$component = new ErrorTipCtor({
                         propsData: {
@@ -387,7 +403,9 @@ export default class CodeBlock extends BaseBlock {
             tabSize: 4,
             indentUnit: 4,
             autoCloseBrackets: true,
-            readOnly: !this.editMode && (this.block.readonly || this.block.static || this.block.hidden || this.readonly),
+            readOnly:
+                !this.editMode &&
+                (this.block.readonly || this.block.static || this.block.hidden || this.readonly),
             firstLineNumber: this.block.firstLine,
             gutters: ['diagnostics', 'CodeMirror-linenumbers']
         }

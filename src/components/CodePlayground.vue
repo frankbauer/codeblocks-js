@@ -13,7 +13,16 @@
             @did-init="onDidInit"
         />
         <div class="row justify-end">
-            <q-btn icon color="secondary" small flat round style="margin-right:-9px; margin-bottom:-10px" v-if="editMode" @click="toggleExpanded">
+            <q-btn
+                icon
+                color="secondary"
+                small
+                flat
+                round
+                style="margin-right:-9px; margin-bottom:-10px"
+                v-if="editMode"
+                @click="toggleExpanded"
+            >
                 <q-icon :name="block.codeExpanded ? 'expand_less' : 'expand_more'" size="24" />
             </q-btn>
         </div>
@@ -44,9 +53,9 @@ import BaseBlock from '@/components/BaseBlock.vue'
 const PlaygroundCanvasCtor = Vue.extend(PlaygroundCanvas)
 
 import CodeBlock from '@/components/CodeBlock.vue'
-import { BlockData } from '../lib/codeBlocksManager'
-import { IRandomizerSet } from '../lib/ICodeBlocks'
-import { IScriptOutputObject } from '../lib/IScriptBlock'
+import { BlockData } from '@/lib/codeBlocksManager'
+import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { IScriptOutputObject } from '@/lib/IScriptBlock'
 
 export interface ICodePlaygroundOptions {
     mode: string
@@ -176,7 +185,11 @@ export default class CodePlayground extends BaseBlock {
         if (this.block && this.block.obj) {
             if (this.block.shouldAutoreset || rebuildCode) {
                 if (this.canvas !== undefined) {
-                    console.log('Will Re-Initialize', this.canvas, $(this.canvas).css('background-color'))
+                    console.log(
+                        'Will Re-Initialize',
+                        this.canvas,
+                        $(this.canvas).css('background-color')
+                    )
                 } else {
                     console.log('Will Re-Initialize', 'Without Canvas')
                 }
@@ -215,7 +228,10 @@ export default class CodePlayground extends BaseBlock {
             this.initAndRebuildErrors = []
             let doInit = () => {
                 if (this.block.obj !== null && this.canvas !== undefined) {
-                    this.block.obj.init($(this.canvas) as JQuery<HTMLElement>, $(this.block.scopeSelector) as JQuery<HTMLElement>)
+                    this.block.obj.init(
+                        $(this.canvas) as JQuery<HTMLElement>,
+                        $(this.block.scopeSelector) as JQuery<HTMLElement>
+                    )
                     if (this.updateErrors()) {
                         this.initAndRebuildErrors = this.block.obj.err
                         this.block.obj.invalidate()
@@ -259,7 +275,10 @@ export default class CodePlayground extends BaseBlock {
             this.block.obj.err = []
             try {
                 if (val.parseError != null) {
-                    if (!this.block.obj.onParseError(initialOutput, val.parseError) && this.editMode) {
+                    if (
+                        !this.block.obj.onParseError(initialOutput, val.parseError) &&
+                        this.editMode
+                    ) {
                         let jStr = initialOutput
                         if (val.parseError.parsedString !== undefined) {
                             jStr = val.parseError.parsedString

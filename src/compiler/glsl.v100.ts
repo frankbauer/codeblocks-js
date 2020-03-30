@@ -1,6 +1,10 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry } from '../lib/ICompilerRegistry'
+import {
+    ICompilerInstance,
+    ICompilerErrorDescription,
+    ICompilerRegistry
+} from '@/lib/ICompilerRegistry'
 
 function runGLSLWorker(
     questionID: string,
@@ -48,7 +52,17 @@ export class GLSLV100Compiler extends Vue implements ICompilerInstance {
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
     ): void {
-        return runGLSLWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB)
+        return runGLSLWorker(
+            questionID,
+            code,
+            callingCodeBlocks,
+            max_ms,
+            log_callback,
+            info_callback,
+            err_callback,
+            compileFailedCallback,
+            finishedExecutionCB
+        )
     }
 }
 export const v100 = new GLSLV100Compiler()

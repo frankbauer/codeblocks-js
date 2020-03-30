@@ -1,8 +1,15 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import CodeBlocks, { IOnTypeChangeInfo, IOnVisibleLinesChangeInfo, IOnPlacementChangeInfo, IOnScriptVersionChangeInfo, IOnSetAutoResetInfo, IOnThemeChangeInfo } from '@/components/CodeBlocks.vue'
-import { KnownBlockTypes, CodeOutputTypes } from '../lib/ICodeBlocks'
+import CodeBlocks, {
+    IOnTypeChangeInfo,
+    IOnVisibleLinesChangeInfo,
+    IOnPlacementChangeInfo,
+    IOnScriptVersionChangeInfo,
+    IOnSetAutoResetInfo,
+    IOnThemeChangeInfo
+} from '@/components/CodeBlocks.vue'
+import { KnownBlockTypes, CodeOutputTypes } from '@/lib/ICodeBlocks'
 
 var mixin = {
     created: function() {
@@ -59,7 +66,10 @@ export default class CodeBlocksEditor extends CodeBlocks {
     }
     onCompilerVersionChange(v: string): void {
         console.log('Selected Version', v, this.blockInfo.compiler.languageType)
-        const c = this.$compilerRegistry.getCompiler({ languageType: this.blockInfo.compiler.languageType, version: v })
+        const c = this.$compilerRegistry.getCompiler({
+            languageType: this.blockInfo.compiler.languageType,
+            version: v
+        })
         this.blockInfo.compiler.version = v
 
         if (c !== undefined) {

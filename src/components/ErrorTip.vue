@@ -22,7 +22,7 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-import { ErrorSeverity, ICompilerErrorDescription } from '../lib/ICompilerRegistry'
+import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 
 @Component
 export default class ErrorTip extends Vue {

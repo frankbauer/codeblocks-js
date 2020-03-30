@@ -15,7 +15,7 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-import { IRandomizerSet } from '../lib/ICodeBlocks'
+import { IRandomizerSet } from '@/lib/ICodeBlocks'
 
 @Component
 export default class RandomizerSetEditor extends Vue {

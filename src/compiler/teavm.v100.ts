@@ -1,6 +1,11 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry, ErrorSeverity } from '../lib/ICompilerRegistry'
+import {
+    ICompilerInstance,
+    ICompilerErrorDescription,
+    ICompilerRegistry,
+    ErrorSeverity
+} from '@/lib/ICompilerRegistry'
 
 const teaVMRunOverhead = 30000
 
@@ -37,7 +42,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             this.$compilerState.setAllRunButtons(false)
             this.$compilerState.displayGlobalState('Initializing Runtime')
             try {
-                this.teaworker = new Worker(`${this.$CodeBlock.baseurl}js/teavm/v${this.version}/worker.js`)
+                this.teaworker = new Worker(
+                    `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/worker.js`
+                )
             } catch (e) {
                 //this should throw in the offline environment, thus we look for the worker at a different
                 this.teaworker = new Worker('../assCodeQuestion/js/teavm/worker.js')
@@ -50,7 +57,8 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         this.teaworker.postMessage({
                             command: 'compile',
                             id: 'prep',
-                            text: 'public class Bootstrap { public static void main(String[] args){}}',
+                            text:
+                                'public class Bootstrap { public static void main(String[] args){}}',
                             mainClass: 'Bootstrap'
                         })
                     }
@@ -105,7 +113,18 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             if (
                 this.createTeaWorker(() => {
                     this.isRunning = false
-                    this.compileAndRun(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB, false)
+                    this.compileAndRun(
+                        questionID,
+                        code,
+                        callingCodeBlocks,
+                        max_ms,
+                        log_callback,
+                        info_callback,
+                        err_callback,
+                        compileFailedCallback,
+                        finishedExecutionCB,
+                        false
+                    )
                 })
             ) {
                 return
@@ -113,7 +132,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }
 
         if (!this.isReady) {
-            err_callback('System is not yet ready. Please wait until Initialization finishes or call a tutor.')
+            err_callback(
+                'System is not yet ready. Please wait until Initialization finishes or call a tutor.'
+            )
             return
         }
 
@@ -123,7 +144,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
 
                 if (this.teaworker) {
                     this.teaworker.end(
-                        'TimeoutError:  Compilation took too long (>' + time + 'ms) and was terminated. Trying to reset the System. Please re-run your code and call a Tutor if this Problem persists.'
+                        'TimeoutError:  Compilation took too long (>' +
+                            time +
+                            'ms) and was terminated. Trying to reset the System. Please re-run your code and call a Tutor if this Problem persists.'
                     )
                 }
 
@@ -153,13 +176,21 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             if (e.data.id == '' + questionID) {
                 if (e.data.command == 'phase') {
                     if (e.data.phase == 'DEPENDENCY_ANALYSIS') {
-                        this.$compilerState.displayGlobalState('Compiling & Analyzing <b>' + mainClass + '.java</b>')
+                        this.$compilerState.displayGlobalState(
+                            'Compiling & Analyzing <b>' + mainClass + '.java</b>'
+                        )
                     } else if (e.data.phase == 'LINKING') {
-                        this.$compilerState.displayGlobalState('Linking <b>' + mainClass + '.java</b>')
+                        this.$compilerState.displayGlobalState(
+                            'Linking <b>' + mainClass + '.java</b>'
+                        )
                     } else if (e.data.phase == 'OPTIMIZATION') {
-                        this.$compilerState.displayGlobalState('Optimizing <b>' + mainClass + '.java</b>')
+                        this.$compilerState.displayGlobalState(
+                            'Optimizing <b>' + mainClass + '.java</b>'
+                        )
                     } else if (e.data.phase == 'RENDERING') {
-                        this.$compilerState.displayGlobalState('Creating <b>' + mainClass + '.class</b>')
+                        this.$compilerState.displayGlobalState(
+                            'Creating <b>' + mainClass + '.class</b>'
+                        )
                     }
                 } else if (e.data.command == 'diagnostic') {
                     if (compileFailedCallback) {
@@ -173,7 +204,10 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                                 line: e.data.lineNumber,
                                 column: 0
                             },
-                            severity: e.data.severity == 'ERROR' ? ErrorSeverity.Error : ErrorSeverity.Warning
+                            severity:
+                                e.data.severity == 'ERROR'
+                                    ? ErrorSeverity.Error
+                                    : ErrorSeverity.Warning
                         })
                     }
 
@@ -195,7 +229,8 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                                 line: e.data.endLineNumber,
                                 column: e.data.endColumn
                             },
-                            severity: e.data.kind == 'ERROR' ? ErrorSeverity.Error : ErrorSeverity.Warning
+                            severity:
+                                e.data.kind == 'ERROR' ? ErrorSeverity.Error : ErrorSeverity.Warning
                         })
                     }
 
@@ -218,7 +253,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                     }
                     try {
                         clearTimeout(compilerTimeout)
-                    } catch (e) {}
+                    } catch (e) {
+                        /* nothing to report */
+                    }
 
                     if (e.data.status == 'errors') {
                         finishedExecutionCB(false)
@@ -230,7 +267,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                                 //Nothing to do here
                             } else if (ee.data.command == 'run-completed') {
                                 finishedExecutionCB(true)
-                                info_callback('Info: Execution finished in ' + (Date.now() - start) + ' ms\n')
+                                info_callback(
+                                    'Info: Execution finished in ' + (Date.now() - start) + ' ms\n'
+                                )
                                 executionFinished = true
                                 this.isRunning = false
                                 workerrun.end()
@@ -241,7 +280,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             }
                         }
                         this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
-                        let workerrun = new Worker(`${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js`)
+                        let workerrun = new Worker(
+                            `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js`
+                        )
                         workerrun.addEventListener('message', runListener.bind(this))
 
                         workerrun.postMessage({
@@ -257,7 +298,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                                 if (runTimeout) {
                                     clearTimeout(runTimeout)
                                 }
-                            } catch (e) {}
+                            } catch (e) {
+                                /* nothing to report */
+                            }
 
                             if (executionFinished) {
                                 return
@@ -273,7 +316,11 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         var runStart = Date.now()
                         runTimeout = setTimeout(function() {
                             var time = Date.now() - runStart
-                            workerrun.end('TimeoutError:  Execution took too long (>' + time + 'ms) and was terminated. There might be an endless loop in your code.')
+                            workerrun.end(
+                                'TimeoutError:  Execution took too long (>' +
+                                    time +
+                                    'ms) and was terminated. There might be an endless loop in your code.'
+                            )
                         }, max_ms)
                     }
                 }
@@ -285,7 +332,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }
         //console.log(code);
         this.$compilerState.setAllRunButtons(false)
-        this.$compilerState.displayGlobalState('Starting Compiler for <b>' + mainClass + '.java</b>')
+        this.$compilerState.displayGlobalState(
+            'Starting Compiler for <b>' + mainClass + '.java</b>'
+        )
 
         if (this.teaworker) {
             this.teaworker.postMessage({

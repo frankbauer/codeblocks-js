@@ -155,7 +155,7 @@ import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import RandomizerSettings from '@/components/RandomizerSettings.vue'
 import { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
-import { CodeOutputTypes, IRandomizerSettings } from '../lib/ICodeBlocks'
+import { CodeOutputTypes, IRandomizerSettings } from '@/lib/ICodeBlocks'
 
 export interface ICodeBlockSettingsOptions {
     language: string

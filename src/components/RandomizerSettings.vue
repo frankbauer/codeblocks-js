@@ -157,8 +157,8 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import RandomizerSetEditor from '@/components/RandomizerSetEditor.vue'
-import { IRandomizerSet } from '../lib/ICodeBlocks'
-import { ICodeBlockSettingsOptions } from './CodeBlocksSettings.vue'
+import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 
 @Component({ components: { RandomizerSetEditor } })
 export default class RandomizerSettings extends Vue {

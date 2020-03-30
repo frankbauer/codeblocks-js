@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInfo } from '../lib/ICompilerRegistry'
+import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 
 //load all versions
 import v100 from './python.v100'
@@ -30,4 +30,7 @@ export class Python3CompilerInfo extends Vue implements ICompilerInfo {
     default = v101.python3
 }
 
-export const PythonCompilers: ICompilerInfo[] | ICompilerInfo = [new PythonCompilerInfo(), new Python3CompilerInfo()]
+export const PythonCompilers: ICompilerInfo[] | ICompilerInfo = [
+    new PythonCompilerInfo(),
+    new Python3CompilerInfo()
+]

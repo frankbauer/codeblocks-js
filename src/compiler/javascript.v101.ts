@@ -1,6 +1,11 @@
 import 'reflect-metadata'
 import { Vue, Component } from 'vue-property-decorator'
-import { ICompilerInstance, ICompilerErrorDescription, ICompilerRegistry, ErrorSeverity } from '../lib/ICompilerRegistry'
+import {
+    ICompilerInstance,
+    ICompilerErrorDescription,
+    ICompilerRegistry,
+    ErrorSeverity
+} from '@/lib/ICompilerRegistry'
 
 declare global {
     interface Worker {
@@ -21,7 +26,9 @@ function runJavaScriptWorker(
 ) {
     //WebWorkers need to be supported
     if (!window.Worker) {
-        err_callback('CRITICAL-ERROR: your browser does not support WebWorkers! (please consult a Tutor).')
+        err_callback(
+            'CRITICAL-ERROR: your browser does not support WebWorkers! (please consult a Tutor).'
+        )
         return
     }
 
@@ -55,7 +62,9 @@ function runJavaScriptWorker(
                 err_callback(msg.data[1] + '\n')
                 break
             default:
-                worker.end('HackerError: Great! You invaded our System. Sadly this will lead you nowhere. Please focus on the Test.')
+                worker.end(
+                    'HackerError: Great! You invaded our System. Sadly this will lead you nowhere. Please focus on the Test.'
+                )
                 break
         }
     }
@@ -84,7 +93,11 @@ function runJavaScriptWorker(
     }
 
     function triggerTimeout() {
-        worker.end('TimeoutError:  Execution took too long (>' + (performance.now() - startTime) + 'ms) and was terminated. There might be an endless loop in your code.')
+        worker.end(
+            'TimeoutError:  Execution took too long (>' +
+                (performance.now() - startTime) +
+                'ms) and was terminated. There might be an endless loop in your code.'
+        )
     }
 
     let startExecution = function() {
@@ -99,10 +112,13 @@ function runJavaScriptWorker(
     callingCodeBlocks.workerLibraries.forEach(l => {
         if (l === 'd3-101') {
             willStartExecution = true
-            callingCodeBlocks.$compilerRegistry.loadLibraries(['d3-5.13.4', 'd3proxy-101'], function() {
-                worker.postMessage(['importD3'])
-                startExecution()
-            })
+            callingCodeBlocks.$compilerRegistry.loadLibraries(
+                ['d3-5.13.4', 'd3proxy-101'],
+                function() {
+                    worker.postMessage(['importD3'])
+                    startExecution()
+                }
+            )
         }
     })
 
@@ -147,7 +163,17 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
     ): void {
-        return runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_callback, info_callback, err_callback, compileFailedCallback, finishedExecutionCB)
+        return runJavaScriptWorker(
+            questionID,
+            code,
+            callingCodeBlocks,
+            max_ms,
+            log_callback,
+            info_callback,
+            err_callback,
+            compileFailedCallback,
+            finishedExecutionCB
+        )
     }
 }
 
