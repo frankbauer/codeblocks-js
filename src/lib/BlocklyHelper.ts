@@ -150,12 +150,16 @@ export class BlocklyHelper {
         return JSON.stringify(bls.map(bl => this.filterCustomBlock(bl)))
     }
 
+    get codeUndefines(): string {
+        return 'const window = undefined; const Window = undefined; const document = undefined;const $ = undefined;const _ = undefined;'
+    }
+
     public prepareCode(cc: string): string {
-        return `"use strict"; const window = undefined; const Window = undefined; const document = undefined; return function(){ return {o: ${cc}}.o}.call({})`
+        return `"use strict"; ${this.codeUndefines} return function(){ return {o: ${cc}}.o}.call({})`
     }
 
     public prepareBlocklyCode(cc: string): string {
-        return `var Blockly = B;\nreturn (block)=> {\n ${cc}\n }`
+        return `var Blockly = B;${this.codeUndefines}return { o:function(block) { ${cc} }}.o`
     }
 
     public compile(bl: IBlockDefinition, Blockly: any): any | undefined {

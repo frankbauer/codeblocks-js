@@ -510,14 +510,14 @@ class InternalCodeBlocksManager {
                     ? inBlock.align
                     : 'center'
 
-                const buildCode = blocklyHelper.prepareCode
-
                 const customBlocks = bl.getElementsByTagName('CUSTOMBLOCKS')
                 if (customBlocks.length > 0) {
                     const str: string = customBlocks[0].innerHTML ? customBlocks[0].innerHTML : '{}'
 
                     try {
-                        const arr: IBlockDefinition[] = new Function(buildCode(str))()
+                        const arr: IBlockDefinition[] = new Function(
+                            blocklyHelper.prepareCode(str)
+                        )()
                         arr.forEach(bl => {
                             if (bl.uuid === undefined || bl.uuid === '') {
                                 bl.uuid = uuid.v4()
@@ -557,7 +557,9 @@ class InternalCodeBlocksManager {
                         : '{}'
 
                     try {
-                        const obj: IBlocklyToolbox = new Function(buildCode(toolboxStr))()
+                        const obj: IBlocklyToolbox = new Function(
+                            blocklyHelper.prepareCode(toolboxStr)
+                        )()
                         obj.categories.forEach(c => {
                             if (c.uuid === undefined || c.uuid === '') {
                                 c.uuid = uuid.v4()
