@@ -326,6 +326,7 @@ export default class CodeBlocksContainer extends Vue {
         return true
     }
     toggleExpanded(): void {
+        this.$CodeBlock.refreshAllCodeMirrors()
         this.expanded = !this.expanded
     }
     moveUp(): void {

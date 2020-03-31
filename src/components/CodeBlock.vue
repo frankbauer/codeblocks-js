@@ -250,7 +250,7 @@ export default class CodeBlock extends BaseBlock {
         this.updateTagDisplay()
     }
     updateHeight() {
-        if (this.visibleLines === 'auto') {
+        if (this.visibleLines === 'auto' || this.block.static) {
             if (this.codemirror) {
                 this.codemirror.setSize('height', 'auto')
             }
