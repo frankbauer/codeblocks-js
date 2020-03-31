@@ -115,7 +115,7 @@ export default class BlocklyCustomBlocksEditor extends Vue {
             color: '',
             tooltip: '',
             helpUrl: '',
-            codeString: ''
+            codeString: 'return ""'
         }
         this.customBlocks.push(item)
     }

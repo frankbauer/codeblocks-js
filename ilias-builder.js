@@ -18,11 +18,22 @@ const vuecli = exec('vue-cli-service build --dest ' + dest, function(code, stdou
     shell.echo('<?php ').to(conffile)
     shell.echo('define("CODEBLOCKS_VERSION",     "' + conf.version + '");').toEnd(conffile)
     shell.echo('define("CODEBLOCKS_BASE_URI",     "./' + vueconf.publicPath + '");').toEnd(conffile)
-    shell.echo('define("CODEBLOCKS_REL_PATH",     "' + path.join('codeblocks', conf.version) + '/");').toEnd(conffile)
-    shell.echo('define("CODEBLOCKS_TAG_REGEX",     "/{:([\\w]+)}/");').toEnd(conffile) /* /{:([\w]+)}/  */
+    shell
+        .echo(
+            'define("CODEBLOCKS_REL_PATH",     "' + path.join('codeblocks', conf.version) + '/");'
+        )
+        .toEnd(conffile)
+    shell
+        .echo('define("CODEBLOCKS_TAG_REGEX",     "/{:([\\w]+)}/");')
+        .toEnd(conffile) /* /{:([\w]+)}/  */
     shell.echo('?> ').toEnd(conffile)
 
-    const targetconf = path.join('..', 'classes', 'support', 'codeblocks-conf-' + conf.version + '.php')
+    const targetconf = path.join(
+        '..',
+        'classes',
+        'support',
+        'codeblocks-conf-' + conf.version + '.php'
+    )
     console.log(conffile, targetconf)
     shell.cp(conffile, targetconf)
 })

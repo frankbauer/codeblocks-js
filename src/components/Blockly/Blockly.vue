@@ -41,7 +41,7 @@
 
                 <q-expansion-item
                     expand-separator
-                    :default-opened="true"
+                    :default-opened="false"
                     icon="developer_board"
                     :label="$t('Blockly.CustomBlocksLabel')"
                     :caption="$t('Blockly.CustomBlocksCaption')"
@@ -53,7 +53,7 @@
                 <q-expansion-item
                     v-model="tbEditExpanded"
                     expand-separator
-                    :default-opened="true"
+                    :default-opened="false"
                     :disable="useToolboxOverride"
                     icon="ballot"
                     :label="$t('Blockly.ToolboxLabel')"
@@ -82,7 +82,7 @@
                         :theme="tboptions.theme"
                         :mode="tboptions.mode"
                         :visibleLines="visibleLinesNow"
-                        :editMode="this.block.blockly.toolboxOverride"
+                        :editMode="this.block.blockly.useOverride"
                         :muteReadyState="true"
                         namePrefix="toolbox_"
                         @code-changed-in-edit-mode="onToolboxOverrideChange"
@@ -486,6 +486,8 @@ export default class BlocklyBlock extends Vue {
         if (!this.editMode) {
             return
         }
+        console.log(this.tbblock.content)
+        this.block.blockly.toolboxOverride = this.tbblock.content
         this.tbEditExpanded = this.tbEditExpanded && !this.useToolboxOverride
         this.$nextTick(() => {
             this.remountBlockly()
