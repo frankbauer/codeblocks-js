@@ -48,7 +48,7 @@ export interface IBlockDataBlockly {
     blocks: IBlockDefinition[]
     _blockErrors: IBlockError[]
     useOverride: boolean
-    toolboxOverride?: string
+    toolboxOverride: string
 }
 
 export interface ICodeBlockDataState {

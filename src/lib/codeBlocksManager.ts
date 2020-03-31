@@ -405,6 +405,7 @@ class InternalCodeBlocksManager {
                         items: [],
                         categories: []
                     },
+                    toolboxOverride: '',
                     blocks: [],
                     _blockErrors: []
                 },
@@ -583,7 +584,7 @@ class InternalCodeBlocksManager {
                 if (toolboxOverride.length > 0) {
                     block.blockly.toolboxOverride = toolboxOverride[0].innerHTML
                         ? toolboxOverride[0].innerHTML
-                        : '{}'
+                        : ''
 
                     block.blockly.useOverride =
                         toolboxOverride[0].hasAttribute('use') &&
@@ -696,6 +697,7 @@ class InternalCodeBlocksManager {
                             shouldAutoreset: false,
                             blockly: {
                                 useOverride: false,
+                                toolboxOverride: '',
                                 toolbox: {
                                     itemsOnly: false,
                                     items: [],
