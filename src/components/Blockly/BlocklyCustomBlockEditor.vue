@@ -82,6 +82,7 @@
                 :editMode="false"
                 :muteReadyState="true"
                 namePrefix="blockCodePre"
+                :canBookmark="false"
             />
             <CodeBlock
                 :block="codeBlock"
@@ -101,6 +102,7 @@
                 :editMode="false"
                 :muteReadyState="true"
                 namePrefix="blockCodePost"
+                :canBookmark="false"
             />
         </q-card-section>
     </q-card>

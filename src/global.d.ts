@@ -26,6 +26,7 @@ declare module 'vue/types/vue' {
         $CodeBlock: any
         $SEVERITY_ERROR: number
         $SEVERITY_WARNING: number
+        $GlobalEventHub: Vue
     }
     interface Vue {
         $l: (key: string, values?: any[]) => string

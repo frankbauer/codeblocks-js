@@ -1,5 +1,6 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
+        <CodeBlockButton :block="block" v-show="canBookmark" :isBookmarkPanel="isBookmarkPanel" />
         <codemirror
             ref="codeBox"
             :value="code"
@@ -32,6 +33,15 @@
 </template>
 
 <script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import ErrorTip from './ErrorTip.vue'
+import BaseBlock from './BaseBlock.vue'
+import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
+import { BlockData } from '@/lib/codeBlocksManager'
+import { ITagReplaceAction } from '@/plugins/tagger'
+
 import codemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 
@@ -63,21 +73,14 @@ import '@/lib/glsl/glsl'
 import 'codemirror/addon/edit/closebrackets.js'
 
 //helper to create tooltips at runtime
-
-import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-import ErrorTip from './ErrorTip.vue'
-import BaseBlock from './BaseBlock.vue'
-import { IRandomizerSet } from '@/lib/ICodeBlocks'
-import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
-import { BlockData } from '@/lib/codeBlocksManager'
-import { ITagReplaceAction } from '@/plugins/tagger'
-
+import CodeBlockButton from '@/components/CodeBlockButton.vue'
 const ErrorTipCtor = Vue.extend(ErrorTip)
 
-@Component
+@Component({ components: { CodeBlockButton } })
 export default class CodeBlock extends BaseBlock {
     @Prop({ default: '' }) namePrefix!: string
+    @Prop({ default: true }) canBookmark!: boolean
+    @Prop({ default: false }) isBookmarkPanel!: boolean
     @Prop({ default: false }) readonly!: boolean
     @Prop({ default: false }) editMode!: boolean
     @Prop({ default: 'auto' }) visibleLines!: number | 'auto'
@@ -87,7 +90,7 @@ export default class CodeBlock extends BaseBlock {
     @Prop({
         required: true,
         validator: function(b) {
-            if (b.content === undefined) {
+            if (b === null || b.content === undefined) {
                 return false
             }
             if (b.firstLine === undefined) {

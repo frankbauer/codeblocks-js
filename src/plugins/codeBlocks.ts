@@ -162,3 +162,5 @@ export class GlobalState implements IGlobalState {
 export const globalState = new GlobalState()
 Vue.prototype.$CodeBlock = globalState
 Vue.$CodeBlock = globalState
+
+Vue.$GlobalEventHub = new Vue()

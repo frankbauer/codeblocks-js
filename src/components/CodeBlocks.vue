@@ -4,6 +4,12 @@
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"
     >
+        <CodePanel
+            v-show="hasBookmark"
+            :editMode="editMode"
+            visibleLines="auto"
+            :block="panelBlock"
+        />
         <CodeBlocksSettings
             v-if="editMode"
             :options="options"
@@ -145,6 +151,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import CodePanel from '@/components/CodePanel.vue'
 import Blockly from '@/components/Blockly/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
@@ -197,7 +204,8 @@ export interface IOnThemeChangeInfo {
         CodeBlock,
         CodePlayground,
         SimpleText,
-        Blockly
+        Blockly,
+        CodePanel
     }
 })
 export default class CodeBlocks extends Vue {
@@ -566,14 +574,32 @@ export default class CodeBlocks extends Vue {
         if (this.editMode) {
             window.addEventListener('keydown', this.onkey, false)
         }
+
+        Vue.$GlobalEventHub.$on('bookmark-block', this.onBookmarkBlock)
     }
     beforeDestroy() {
         window.removeEventListener('keydown', this.onkey)
+        Vue.$GlobalEventHub.$off('bookmark-block')
+    }
+
+    bookmarkedBlock: BlockData | null = null
+
+    get hasBookmark(): boolean {
+        return this.bookmarkedBlock !== null && this.editMode
+    }
+
+    get panelBlock(): BlockData | null {
+        return this.bookmarkedBlock
+    }
+    onBookmarkBlock(block: BlockData | null) {
+        console.log('Bookmark', block)
+        this.bookmarkedBlock = block
     }
 }
 </script>
 
 <style lang="sass">
+
 div.codeblocks.editmode
     box-shadow: 3px 3px 6px rgba(0,0,0,0.1)
     border-radius: 5px
