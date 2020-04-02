@@ -169,15 +169,15 @@ export class ScriptBlock implements IScriptBlock {
                 if (this.obj.update.length == 2 || this.requestsOriginalVersion()) {
                     const o = this.obj as ILegacyPlaygroundObject
                     if (outputObject.processedOutput.type == 'json') {
-                        console.log('!!! UPDATE (org, json) !!!')
+                        console.i('!!! UPDATE (org, json) !!!')
                         return o.update(outputObject.processedOutput.json, canvasElement)
                     } else {
-                        console.log('!!! UPDATE (org, text) !!!')
+                        console.i('!!! UPDATE (org, text) !!!')
                         return o.update(outputObject.output, canvasElement)
                     }
                 } else {
                     const o = this.obj as IPlaygroundObject
-                    console.log('!!! UPDATE (v' + this.version + ')!!!')
+                    console.i('!!! UPDATE (v' + this.version + ')!!!')
                     return o.update(
                         outputObject.processedOutput.text,
                         outputObject.processedOutput.json,

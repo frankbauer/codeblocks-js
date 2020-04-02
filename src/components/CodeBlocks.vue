@@ -497,7 +497,6 @@ export default class CodeBlocks extends Vue {
             }
         }
 
-        console.log('Assign _finalOutputObject')
         this._finalOutputObject = {
             initialOutput: output,
             output: output,
@@ -521,7 +520,7 @@ export default class CodeBlocks extends Vue {
         const self = this
         this.loadLibraries(() => {
             self.eventHub.$emit('before-run', {})
-            console.log('compileAndRun')
+            console.d('compileAndRun')
             cmp.compileAndRun(
                 '' + self.blockid,
                 self.completeSource,

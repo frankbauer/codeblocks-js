@@ -274,7 +274,7 @@ export default class CodePlayground extends BaseBlock {
     onFinalOutputObject(val) {
         const initialOutput = val.output
 
-        console.log('onFinalOutputObject', val, this.block.obj)
+        console.d('onFinalOutputObject', val, this.block.obj)
         if (this.block.obj !== null) {
             this.block.obj.err = []
             try {
@@ -321,7 +321,7 @@ export default class CodePlayground extends BaseBlock {
 
                 const self = this
                 this.$nextTick(() => {
-                    console.log('Ticked', self.block.obj, self.canvas)
+                    console.d('Ticked', self.block.obj, self.canvas)
                     if (self.block.obj !== null && self.canvas !== undefined) {
                         let result = self.block.obj.update(val, $(self.canvas))
                         if (self.updateErrors()) {

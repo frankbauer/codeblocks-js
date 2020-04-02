@@ -51,7 +51,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             }
 
             this.teaworker.addEventListener('message', (e: any) => {
-                console.log('teastuff', e.data)
+                //console.log('teastuff', e.data)
                 if (e.data.command == 'ok' && e.data.id == 'didload-classlib') {
                     if (this.teaworker) {
                         this.teaworker.postMessage({
