@@ -32,6 +32,11 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '../lib/codeBlocksManager'
 import { IBlockData, KnownBlockTypes } from '../lib/ICodeBlocks'
 
+interface IBlockDataExtended extends IBlockData {
+    firstLine: number
+    actualContent: string
+    actualAltContent: string
+}
 @Component({ components: { CodeBlock } })
 export default class CodePanel extends Vue {
     @Prop({ default: false }) editMode!: boolean
@@ -40,10 +45,15 @@ export default class CodePanel extends Vue {
     @Prop({ default: 400 }) panelWidth!: number = 400
 
     get saveBlock(): IBlockData {
-        if (this.block !== null && this.block !== undefined) {
+        if (
+            this.block !== null &&
+            this.block !== undefined &&
+            this.block.content !== null &&
+            this.block.content !== undefined
+        ) {
             return this.block
         }
-        const ret: IBlockData = {
+        const ret: IBlockDataExtended = {
             hasCode: false,
             type: KnownBlockTypes.BLOCKSTATIC,
             content: '',
@@ -51,7 +61,7 @@ export default class CodePanel extends Vue {
             noContent: true,
             id: -1,
             uuid: '',
-            parentID: '-2',
+            parentID: -2,
             expanded: true,
             codeExpanded: true,
             obj: null,
@@ -61,7 +71,9 @@ export default class CodePanel extends Vue {
             visibleLines: 'auto',
             hasAlternativeContent: false,
             shouldAutoreset: false,
-            firstLine: 1
+            firstLine: 1,
+            actualContent: '',
+            actualAltContent: ''
         }
         return ret
     }

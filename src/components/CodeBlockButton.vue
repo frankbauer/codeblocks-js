@@ -14,7 +14,7 @@
 <script lang="ts">
 import 'reflect-metadata'
 import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
-import { BlockData } from '@/lib/codeBlocksManager'
+import { BlockData, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
 
 @Component
 export default class CodeBlockButton extends Vue {
@@ -34,7 +34,11 @@ export default class CodeBlockButton extends Vue {
 
     bookmarked: boolean = false
     bookmarkMe() {
-        Vue.$GlobalEventHub.$emit('bookmark-block', this.isBookmarkPanel ? null : this.block)
+        const data: IBlockBookmarkPayload = {
+            uuid: this.block.appSettings.uuid,
+            block: this.isBookmarkPanel ? null : this.block
+        }
+        Vue.$GlobalEventHub.$emit('bookmark-block', data)
     }
     onClick() {
         this.bookmarkMe()

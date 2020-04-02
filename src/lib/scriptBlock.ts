@@ -89,7 +89,7 @@ export class ScriptBlock implements IScriptBlock {
         if (code !== undefined) {
             try {
                 this.err = []
-                console.log('!!! REBUILDING !!!')
+                console.i('!!! REBUILDING !!!')
                 this.src = code
 
                 //wrap the users code in a helper object, otherwise
@@ -124,7 +124,7 @@ export class ScriptBlock implements IScriptBlock {
             return
         }
         try {
-            console.log('!!! INIT !!!')
+            console.i('!!! INIT CANVAS !!!')
             if (this.requestsOriginalVersion()) {
                 const o = this.obj as ILegacyPlaygroundObject
                 o.init(canvasElement)

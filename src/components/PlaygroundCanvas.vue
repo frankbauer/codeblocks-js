@@ -34,9 +34,9 @@ export default class PlaygroundCanvas extends Vue {
     }
 
     whenMounted(): void {
-        //console.log("MOUNTED");
+        //console.d("MOUNTED");
         if (this.obj) {
-            //console.log("Will Init", this.canvas, $(this.canvas).css('background-color'));
+            //console.d('Will Init', this.canvas, $(this.canvas).css('background-color'))
 
             this.$compilerRegistry.loadLibraries(this.block.domLibs, () => {
                 this.$nextTick(() => {

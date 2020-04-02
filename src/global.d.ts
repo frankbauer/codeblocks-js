@@ -4,6 +4,11 @@ import { IGlobalState } from './lib/ICodeBlocks'
 declare global {
     const MathJax: any
 
+    interface Console {
+        d: (message?: any, ...optionalParams: any[]) => void
+        i: (message?: any, ...optionalParams: any[]) => void
+    }
+
     interface Window {
         hljs: any
         mountInElement(element: any): void

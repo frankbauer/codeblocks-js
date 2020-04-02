@@ -10,6 +10,18 @@ String.prototype.replaceRec = function(pattern: string | RegExp, replacement: st
     return newstr.replaceRec(pattern, replacement)
 }
 
+console.d = function(...lines) {
+    if (process.env.NODE_ENV == 'development') {
+        console.debug('[DEBUG]', ...lines)
+    }
+}
+
+console.i = function(...lines) {
+    if (process.env.NODE_ENV == 'development') {
+        console.log('[INFO]', ...lines)
+    }
+}
+
 import Vue from 'vue'
 import 'reflect-metadata'
 import './plugins/uuid'

@@ -3,7 +3,7 @@
         <div v-if="!editMode" v-html="previewValue" v-highlight="language"></div>
         <TipTap
             v-else
-            :value="text"
+            :value="value"
             @input="updatedContent"
             class="editor q-my-3"
             :name="name"
@@ -27,14 +27,6 @@ export default class SimpleText extends BaseBlock {
     @Prop({ default: '' }) scopeUUID!: string
     @Prop({ default: false }) editMode!: boolean
     @Prop({ default: '' }) previewValue!: string
-
-    get text(): string {
-        return this.value
-    }
-
-    set text(v: string) {
-        //this.updatedContent(v)
-    }
 
     updatedContent(v: string) {
         this.$emit('input', v)

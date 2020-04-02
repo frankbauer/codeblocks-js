@@ -155,7 +155,7 @@ import CodePanel from '@/components/CodePanel.vue'
 import Blockly from '@/components/Blockly/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
-import { BlockData, IAppSettings, IMainBlock } from '@/lib/codeBlocksManager'
+import { BlockData, IAppSettings, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
 import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import { ICompilerID, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import {
@@ -497,6 +497,7 @@ export default class CodeBlocks extends Vue {
             }
         }
 
+        console.log('Assign _finalOutputObject')
         this._finalOutputObject = {
             initialOutput: output,
             output: output,
@@ -505,6 +506,7 @@ export default class CodeBlocks extends Vue {
             parseError: parseError,
             outputElement: $(this.outputElement) as JQuery<HTMLElement>
         }
+        this.eventHub.$emit('output-updated', this._finalOutputObject)
     }
 
     run(): boolean {
@@ -591,9 +593,11 @@ export default class CodeBlocks extends Vue {
     get panelBlock(): BlockData | null {
         return this.bookmarkedBlock
     }
-    onBookmarkBlock(block: BlockData | null) {
-        console.log('Bookmark', block)
-        this.bookmarkedBlock = block
+    onBookmarkBlock(data: IBlockBookmarkPayload) {
+        console.log('Bookmark', data)
+        if (this.blockInfo.uuid == data.uuid) {
+            this.bookmarkedBlock = data.block
+        }
     }
 }
 </script>

@@ -1,6 +1,10 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
-        <CodeBlockButton :block="block" v-show="canBookmark" :isBookmarkPanel="isBookmarkPanel" />
+        <CodeBlockButton
+            :block="block"
+            v-show="showBookmarkButton"
+            :isBookmarkPanel="isBookmarkPanel"
+        />
         <codemirror
             ref="codeBox"
             :value="code"
@@ -101,6 +105,10 @@ export default class CodeBlock extends BaseBlock {
     })
     block!: BlockData
 
+    get showBookmarkButton(): boolean {
+        return this.canBookmark && this.editMode
+    }
+
     clearTagMarkers() {
         if (this.codemirror === undefined) {
             return
@@ -162,7 +170,7 @@ export default class CodeBlock extends BaseBlock {
         this.whenBlockIsReady()
     }
     onAltCodeReady(editor) {
-        console.log('READY')
+        console.d('READY')
         //we need this for StudON to make sure tinyMCE is not taking over :D
         this.altcodemirror.display.input.textarea.className = 'noRTEditor'
         this.altBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
@@ -446,6 +454,9 @@ export default class CodeBlock extends BaseBlock {
         return s
     }
     get altCode() {
+        if (this.block.alternativeContent === null) {
+            return ''
+        }
         return this.block.alternativeContent
     }
     get code() {
@@ -498,14 +509,14 @@ export default class CodeBlock extends BaseBlock {
     }
 
     created() {
-        console.log('[DEBUG] ReadyWhenMounted in CodeBlock', this.readyWhenMounted)
+        console.d('ReadyWhenMounted in CodeBlock', this.readyWhenMounted)
         //this.$options.readyWhenMounted = false;
     }
     mounted() {
         this.updateHeight()
 
         if (this.editMode && this.codemirror) {
-            console.log('Attach')
+            console.d('Attach')
             const buildIt = () => {
                 console.log('EMIT')
                 this.$emit('build')

@@ -88,6 +88,11 @@ interface IBlockElementData {
     scopeSelector?: string
 }
 
+export interface IBlockBookmarkPayload {
+    uuid: string
+    block: BlockData | null
+}
+
 @Component
 export class BlockData extends Vue implements IBlockData {
     appSettings!: IAppSettings
@@ -161,11 +166,11 @@ export class BlockData extends Vue implements IBlockData {
         return this.content
     }
     recreateScriptObject() {
-        console.log('[Debug] recreateScriptObject')
+        console.i('recreateScriptObject')
         if (this.type === KnownBlockTypes.PLAYGROUND) {
             const so = new ScriptBlock(this.actualContent(), this.version)
             this.obj = so
-            console.log('Block Rebuild', this.obj, this.uuid)
+            console.i('Block Rebuild', this.obj, this.uuid)
         }
     }
     created() {
@@ -600,7 +605,7 @@ class InternalCodeBlocksManager {
                 }
                 block.hasCode = true
             } else if (block.type != 'TEXT') {
-                console.log('Skipping', block.type)
+                console.i('Skipping', block.type)
                 return
             }
 
@@ -608,7 +613,7 @@ class InternalCodeBlocksManager {
         })
         this.data = data
 
-        console.log('DATA', data)
+        console.d('DATA', data)
     }
 
     instantiateVue() {

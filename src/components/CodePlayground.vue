@@ -129,10 +129,12 @@ export default class CodePlayground extends BaseBlock {
         if (hasErrors) {
             this.updateErrors()
         }
+        this.eventHub.$on('output-updated', this.onFinalOutputObject)
     }
     beforeDestroy() {
         this.eventHub.$off('before-run', this.resetBeforeRun)
         this.eventHub.$off('render-diagnostics', this.updateErrors)
+        this.eventHub.$off('output-updated', this.onFinalOutputObject)
     }
     isPreparingRun: boolean = false
     lastRun: Date = new Date()
@@ -267,10 +269,12 @@ export default class CodePlayground extends BaseBlock {
         this.updateErrors()
     }
 
-    @Watch('finalOutputObject')
+    //we emit an event to the global event hub
+    //@Watch('finalOutputObject')
     onFinalOutputObject(val) {
         const initialOutput = val.output
 
+        console.log('onFinalOutputObject', val, this.block.obj)
         if (this.block.obj !== null) {
             this.block.obj.err = []
             try {
@@ -317,6 +321,7 @@ export default class CodePlayground extends BaseBlock {
 
                 const self = this
                 this.$nextTick(() => {
+                    console.log('Ticked', self.block.obj, self.canvas)
                     if (self.block.obj !== null && self.canvas !== undefined) {
                         let result = self.block.obj.update(val, $(self.canvas))
                         if (self.updateErrors()) {
