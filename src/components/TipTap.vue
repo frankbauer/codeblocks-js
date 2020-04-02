@@ -1,11 +1,23 @@
 <template>
     <div class="row q-ma-0 q-pa-0">
         <div class="col-xs-12 col-md-6 q-px-sm">
-            <q-input ref="editBox" type="textarea" autogrow filled :name="name" label="HTML Source" background-color="blue-grey darken-3" v-model="text" class="plain accqstXmlInput noRTEditor">
+            <q-input
+                ref="editBox"
+                type="textarea"
+                autogrow
+                filled
+                :name="name"
+                label="HTML Source"
+                background-color="blue-grey darken-3"
+                v-model="text"
+                class="plain accqstXmlInput noRTEditor"
+            >
             </q-input>
         </div>
         <div class="col-xs-12 col-md-6 q-px-sm">
-            <div class="q-field__label no-pointer-events ellipsis text-caption wysiwyg">Preview</div>
+            <div class="q-field__label no-pointer-events ellipsis text-caption wysiwyg">
+                Preview
+            </div>
             <div v-html="text" v-highlight="language" v-tagged="scopeUUID"></div>
         </div>
     </div>
@@ -17,6 +29,12 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { ITagReplaceAction } from '../plugins/tagger'
 @Component
 export default class TipTap extends Vue {
+    @Prop({ default: '' }) value!: string
+    @Prop({ default: '' }) name!: string
+    @Prop({ default: '' }) scopeUUID!: string
+    @Prop({ default: false }) editMode!: boolean
+    @Prop({ default: 'javascript' }) language!: string
+
     get text(): string {
         return this.value
     }
@@ -36,12 +54,6 @@ export default class TipTap extends Vue {
         }
         this.updatedContent(Vue.$tagger.replaceTemplateTagInString(this.text, o.name, o.newValue))
     }
-
-    @Prop({ default: '' }) value: string = ''
-    @Prop({ default: '' }) name: string = ''
-    @Prop({ default: '' }) scopeUUID: string = ''
-    @Prop({ default: false }) editMode: boolean = false
-    @Prop() langauge!: string
 
     mounted() {
         const eb: any = this.$refs.editBox
