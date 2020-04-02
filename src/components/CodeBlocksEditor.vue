@@ -40,7 +40,7 @@ export default class CodeBlocksEditor extends CodeBlocks {
             return
         }
 
-        bl.visibleLines = nfo.visibleLines
+        bl.visibleLines = +nfo.visibleLines
     }
     onPlacementChange(nfo: IOnPlacementChangeInfo): void {
         let bl = this.blockById(nfo.id)
