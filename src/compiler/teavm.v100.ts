@@ -33,7 +33,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             this.isRunning = false
             this.$compilerState.hideGlobalState()
             this.$compilerState.setAllRunButtons(true)
-            console.log('setAllRun', true)
+            //console.log('setAllRun', true)
         })
     }
 
