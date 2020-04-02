@@ -1,11 +1,11 @@
 <template>
     <div>
         <div
-            class="row ma-0 pa-0 block-blockly"
+            class="row q-ma-none q-pa-none block-blockly"
             :data-question="block.parentID"
             :data-nr="block.id"
         >
-            <div :class="`col-12 text-${block.align}`">
+            <div :class="`col-12 text-${block.align} q-mx-none q-pa-none`" style="padding-top:6px">
                 <div class="blocklyCanvas" :style="`width:${block.width};height:${block.height}`">
                     <div class="blocklyContainer" ref="blocklyContainer"></div>
                 </div>
@@ -537,15 +537,14 @@ export default class BlocklyBlock extends Vue {
     height: 100%
     width: 100%
     text-align: left
-    border: 1px solid #eee
-    border-radius: 3px
-    box-shadow: 1px 2px 8px #ddd
+    border: 0px solid #eee
+    border-radius: 0px
 .blocklyCanvas
     display: inline-block
     width:100%
     height:200px
-    margin-top:4px
-    margin-bottom:4px
+    margin-top:0px
+    margin-bottom:0px
     transition: opacity 600ms, visibility 600ms
 .blocklyText
     font-family: 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif
@@ -556,10 +555,11 @@ export default class BlocklyBlock extends Vue {
 .blocklyMainBackground
     stroke:#fff
 .blocklyScrollbarHandle
-    fill:$blue-grey-1
+    fill:#f7f7f7
 .blocklyToolboxDiv
     padding:4px 16px 4px 8px
-    background-color:$blue-grey-1
+    background-color:#f7f7f7
+    border-right:1px solid rgb(221, 221, 221)
 
 .blocklyTreeRow
     border-radius:3px
@@ -571,8 +571,8 @@ export default class BlocklyBlock extends Vue {
     color:$blue-grey-10
     font-weight: 300
 .blocklyFlyoutBackground
-    fill:$blue-grey-1
+    fill:#f7f7f7
 .blocklyFlyoutScrollbar
     .blocklyScrollbarHandle
-        fill:$blue-grey-3
+        fill:rgb(221, 221, 221)
 </style>
