@@ -102,7 +102,7 @@ export default class CodePanel extends Vue {
     }
 
     themeForBlock(bl: BlockData | null): string {
-        if (bl === null) {
+        if (bl === null || bl === undefined) {
             return ''
         }
         return bl.themeForCodeBlock

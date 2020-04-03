@@ -110,9 +110,10 @@ function runPythonWorker(
 //ICompilerInstance
 @Component
 export class PythonV100Compiler extends Vue implements ICompilerInstance {
-    version = '100'
-    language = 'python'
-    canRun = true
+    readonly version = '100'
+    readonly language = 'python'
+    readonly canRun = true
+    readonly canStop = false
     isReady = true
     isRunning = false
 

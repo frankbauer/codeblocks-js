@@ -17,7 +17,7 @@ function runPythonWorker(
     compileFailedCallback: (info: ICompilerErrorDescription) => void,
     finishCallback: (success: boolean, overrideOutput?: any) => void,
     legacy: boolean
-) {
+): Worker | undefined {
     console.log('Python Version:', legacy ? '2.7' : '3')
 
     // the Python program
@@ -125,19 +125,22 @@ function runPythonWorker(
     }
     // in any case use the window timeout to terminate the worker
     setTimeout(testTimeout, maxRuntime)
+
+    return worker
 }
 
 //ICompilerInstance
 @Component
 export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
-    version = '101'
-    language = 'python'
-    canRun = true
+    readonly version = '101'
+    readonly language = 'python'
+    readonly canRun = true
+    readonly canStop = true
     isReady = true
     isRunning = false
 
     preload() {}
-
+    private worker: Worker | undefined = undefined
     compileAndRun(
         questionID: string,
         code: string,
@@ -149,7 +152,7 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean) => void
     ): void {
-        return runPythonWorker(
+        this.worker = runPythonWorker(
             questionID,
             code,
             callingCodeBlocks,
@@ -162,19 +165,28 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
             true
         )
     }
+
+    stop() {
+        console.d('FORCE STOPPING')
+        if (this.worker) {
+            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+        }
+    }
 }
 
 //ICompilerInstance
 @Component
 export class PythonV101Compiler extends Vue implements ICompilerInstance {
-    version = '101'
-    language = 'python'
-    canRun = true
+    readonly version = '101'
+    readonly language = 'python'
+    readonly canRun = true
+    readonly canStop = true
     isReady = true
     isRunning = false
 
     preload() {}
 
+    private worker: Worker | undefined = undefined
     compileAndRun(
         questionID: string,
         code: string,
@@ -186,7 +198,7 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
     ): void {
-        return runPythonWorker(
+        this.worker = runPythonWorker(
             questionID,
             code,
             callingCodeBlocks,
@@ -198,6 +210,13 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
             finishedExecutionCB,
             false
         )
+    }
+
+    stop() {
+        console.d('FORCE STOPPING')
+        if (this.worker) {
+            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+        }
     }
 }
 

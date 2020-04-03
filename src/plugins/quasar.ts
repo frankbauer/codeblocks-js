@@ -31,6 +31,7 @@ Vue.use(Quasar, {
     plugins: {
         Dialog
     },
+    animations: ['fadeIn', 'fadeOut'],
     lang: lang == 'de' ? langDe : langEn
 })
 Quasar.lang.set(lang == 'de' ? langDe : langEn)

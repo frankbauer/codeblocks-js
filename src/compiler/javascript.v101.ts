@@ -23,7 +23,7 @@ function runJavaScriptWorker(
     err_callback: (txt: string) => void,
     compileFailedCallback: (info: ICompilerErrorDescription) => void,
     finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
-) {
+): Worker | undefined {
     //WebWorkers need to be supported
     if (!window.Worker) {
         err_callback(
@@ -131,14 +131,17 @@ function runJavaScriptWorker(
     if (!willStartExecution) {
         startExecution()
     }
+
+    return worker
 }
 @Component
 export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
-    version = '101'
-    language = 'javascript'
-    canRun = true
-    isReady = true
+    readonly version = '101'
+    readonly language = 'javascript'
+    readonly canRun = true
+    readonly isReady = true
     isRunning = false
+    canStop = true
     libraries = [
         {
             key: 'd3-101',
@@ -164,6 +167,7 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
         )
     }
     preload() {}
+    private worker: Worker | undefined = undefined
     compileAndRun(
         questionID: string,
         code: string,
@@ -175,7 +179,7 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
     ): void {
-        return runJavaScriptWorker(
+        this.worker = runJavaScriptWorker(
             questionID,
             code,
             callingCodeBlocks,
@@ -186,6 +190,13 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
             compileFailedCallback,
             finishedExecutionCB
         )
+    }
+
+    stop() {
+        console.d('FORCE STOPPING')
+        if (this.worker) {
+            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+        }
     }
 }
 

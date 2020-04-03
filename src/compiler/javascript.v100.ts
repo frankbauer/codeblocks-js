@@ -154,9 +154,10 @@ function runJavaScriptWorker(
 //ICompilerInstance
 @Component
 export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
-    version = '100'
-    language = 'javascript'
-    canRun = true
+    readonly version = '100'
+    readonly language = 'javascript'
+    readonly canRun = true
+    readonly canStop = false
     isReady = true
     isRunning = false
 

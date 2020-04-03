@@ -54,7 +54,14 @@ export interface ICompilerRegistry {
 
     versionsForLanguage(languageType: string): string[] | ['none']
 
-    registerDOMLib(uri: string[], name: string, version: string, displayName: string, utility?: boolean, order?: number): void
+    registerDOMLib(
+        uri: string[],
+        name: string,
+        version: string,
+        displayName: string,
+        utility?: boolean,
+        order?: number
+    ): void
 
     getLibObjects(domLibs: string[]): IDomLibraray[]
     urisForDOMLibs(domLibs: string[]): string[]
@@ -65,6 +72,7 @@ export interface ICompilerInstance {
     readonly version: string
     readonly language: string
     readonly canRun: boolean
+    readonly canStop: boolean
     isReady: boolean
     isRunning: boolean
     readonly libraries?: ICompilerLibraryInfo[]
@@ -83,6 +91,7 @@ export interface ICompilerInstance {
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
         runCreate?: boolean
     ): void
+    stop?(): void
 }
 
 export interface ICompilerLibraryInfo {

@@ -118,7 +118,26 @@
                         <span v-html="$t('CodeBlocks.run_hint')"></span>
                     </q-tooltip>
                 </q-btn>
-
+                <div class="animated fadeIn"></div>
+                <transition
+                    appear
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
+                >
+                    <div class="q-pl-sm" v-show="canStop">
+                        <q-btn
+                            id="cancel_button"
+                            color="negative"
+                            :ripple="{ center: true }"
+                            style="border-radius:0px"
+                            :data-question="blockInfo.id"
+                            @click="stop"
+                        >
+                            {{ $t('CodeBlocks.stop') }}
+                            <q-icon right dark name="stop"></q-icon>
+                        </q-btn>
+                    </div>
+                </transition>
                 <transition
                     appear
                     enter-active-class="animated fadeIn"
@@ -508,6 +527,18 @@ export default class CodeBlocks extends Vue {
         this.eventHub.$emit('output-updated', this._finalOutputObject)
     }
 
+    get canStop(): boolean {
+        return !this.isReady && this.didRunOnce
+    }
+    stop(): void {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp === undefined || cmp.stop === undefined) {
+            return
+        }
+        cmp.stop()
+    }
+
+    didRunOnce: boolean = false
     run(): boolean {
         const cmp = this.$compilerRegistry.getCompiler(this.compiler)
         if (cmp === undefined) {
@@ -521,6 +552,7 @@ export default class CodeBlocks extends Vue {
         this.loadLibraries(() => {
             self.eventHub.$emit('before-run', {})
             console.d('compileAndRun')
+            self.didRunOnce = true
             cmp.compileAndRun(
                 '' + self.blockid,
                 self.completeSource,

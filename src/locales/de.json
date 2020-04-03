@@ -41,7 +41,9 @@
     "CodeBlocks": {
         "run_hint": "<code>Ctrl</code>+<code>W</code> oder <code>Ctrl</code>+<code>J</code> drücken um Code auszuführen",
         "run": "Ausführen",
-        "AddBlock": "Neuen Block Anlegen"
+        "stop": "Anhalten",
+        "AddBlock": "Neuen Block Anlegen",
+        "UserCanceled": "Vom Benutzer Abgebrochen"
     },
     "CodeBlocksSettings": {
         "Language": "Sprache",

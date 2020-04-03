@@ -12,9 +12,10 @@ const teaVMRunOverhead = 30000
 //ICompilerInstance
 @Component
 export class JavaV100Compiler extends Vue implements ICompilerInstance {
-    version = '100'
-    language = 'java'
-    canRun = true
+    readonly version = '100'
+    readonly language = 'java'
+    readonly canRun = true
+    readonly canStop = true
     didPreload: boolean = false
     teaworker: Worker | undefined = undefined
     isReady = false
@@ -366,6 +367,13 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                     err_callback(msg + '\n')
                 }
             }
+        }
+    }
+
+    stop() {
+        console.d('FORCE STOPPING')
+        if (this.teaworker) {
+            this.teaworker.end(Vue.$l('CodeBlocks.UserCanceled'))
         }
     }
 }
