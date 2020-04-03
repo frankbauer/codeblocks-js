@@ -141,7 +141,8 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
     readonly canRun = true
     readonly isReady = true
     isRunning = false
-    canStop = true
+    readonly canStop = true
+    readonly canCompileOnType = true
     libraries = [
         {
             key: 'd3-101',

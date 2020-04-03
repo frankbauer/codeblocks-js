@@ -83,6 +83,7 @@ const ErrorTipCtor = Vue.extend(ErrorTip)
 @Component({ components: { CodeBlockButton } })
 export default class CodeBlock extends BaseBlock {
     @Prop({ default: '' }) namePrefix!: string
+    @Prop({ default: false }) emitWhenTypingInViewMode!: boolean
     @Prop({ default: true }) canBookmark!: boolean
     @Prop({ default: false }) isBookmarkPanel!: boolean
     @Prop({ default: false }) readonly!: boolean
@@ -213,6 +214,7 @@ export default class CodeBlock extends BaseBlock {
         }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
     }
 
+    continousCodeUpdateTimer: number | null = null
     onCodeChange(newCode) {
         const tb = this.codeBox.$el.querySelector('textarea[name]') as HTMLTextAreaElement
         tb.value = newCode
@@ -221,6 +223,14 @@ export default class CodeBlock extends BaseBlock {
         this.updateTagDisplay()
         if (this.editMode) {
             this.$emit('code-changed-in-edit-mode', undefined)
+        } else if (this.emitWhenTypingInViewMode) {
+            if (this.continousCodeUpdateTimer !== null) {
+                clearTimeout(this.continousCodeUpdateTimer)
+                this.continousCodeUpdateTimer = null
+            }
+            this.continousCodeUpdateTimer = setTimeout(() => {
+                this.$emit('code-changed-in-view-mode', undefined)
+            }, process.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT)
         }
     }
 

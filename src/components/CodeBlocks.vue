@@ -16,6 +16,7 @@
             @compiler-change="onCompilerChange"
             @compiler-version-change="onCompilerVersionChange"
             @run-state-change="onRunStateChange"
+            @continous-compile-change="onContinousCompileStateChange"
             @language-change="onLanguageChange"
             @character-limit-change="onCharacterLimitChange"
             @timeout-change="onTimeoutChange"
@@ -47,8 +48,10 @@
                 :editMode="editMode"
                 :readonly="readonly"
                 :tagSet="activeTagSet"
+                :emitWhenTypingInViewMode="continousCompile"
                 @ready="blockBecameReady"
                 @build="run"
+                @code-changed-in-view-mode="onViewCodeChange"
             />
 
             <CodePlayground
@@ -236,6 +239,17 @@ export default class CodeBlocks extends Vue {
     _finalOutputObject: IScriptOutputObject | null = null
     eventHub: Vue = new Vue()
 
+    get continousCompile(): boolean {
+        if (this.editMode) {
+            return false
+        }
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            return cmp.canCompileOnType
+        }
+        return false
+    }
+
     get finalOutputObject(): IScriptOutputObject {
         if (this._finalOutputObject === null || this._finalOutputObject === undefined) {
             return {
@@ -266,7 +280,8 @@ export default class CodeBlocks extends Vue {
             codeTheme: this.codeTheme,
             solutionTheme: this.solutionTheme,
             outputParser: this.outputParser,
-            randomizer: this.blockInfo.randomizer
+            randomizer: this.blockInfo.randomizer,
+            continousCompilation: this.blockInfo.continousCompilation
         }
     }
     get blocks(): BlockData[] {
@@ -406,6 +421,7 @@ export default class CodeBlocks extends Vue {
     onCompilerChange(v: string): void {}
     onCompilerVersionChange(v: string): void {}
     onRunStateChange(v: boolean): void {}
+    onContinousCompileStateChange(v: boolean): void {}
     onLanguageChange(v: string): void {}
     onCharacterLimitChange(v: number): void {}
     onTimeoutChange(v: number): void {}
@@ -525,6 +541,8 @@ export default class CodeBlocks extends Vue {
             outputElement: $(this.outputElement) as JQuery<HTMLElement>
         }
         this.eventHub.$emit('output-updated', this._finalOutputObject)
+
+        this.onRunFinished()
     }
 
     get canStop(): boolean {
@@ -628,6 +646,29 @@ export default class CodeBlocks extends Vue {
         console.i('Bookmark', data)
         if (this.blockInfo.uuid == data.uuid) {
             this.bookmarkedBlock = data.block
+        }
+    }
+
+    triggerRecompileWhenFinished: boolean = false
+    onViewCodeChange() {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        console.d('Continuous Compile - ', cmp)
+        if (cmp && cmp.canCompileOnType) {
+            if (!cmp.isRunning && cmp.isReady) {
+                console.d('Continuous Compile - ', 'RUN')
+                this.run()
+            } else {
+                console.d('Continuous Compile - ', 'DEFER')
+                this.triggerRecompileWhenFinished = true
+            }
+        }
+    }
+
+    onRunFinished() {
+        if (this.triggerRecompileWhenFinished) {
+            console.d('Continuous Compile - ', 'RE-RUN')
+            this.triggerRecompileWhenFinished = false
+            this.onViewCodeChange()
         }
     }
 }

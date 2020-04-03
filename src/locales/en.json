@@ -63,7 +63,8 @@
         "PText": "Text Passthrough",
         "PJSON": "JSON",
         "PMagic": "Text+JSON (seperated by '\\n\\n&lt;JSON>\\n')",
-        "NumberErr": "Muss ein gültiger Zahlenwert sein"
+        "NumberErr": "Muss ein gültiger Zahlenwert sein",
+        "ContinousCompile": "Automatic Compilation (while typing)"
     },
     "CodePlayground": {
         "InvalidJson": "Output is not a valid JSON-Object",

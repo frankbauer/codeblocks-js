@@ -14,6 +14,14 @@
                                 :label="$t('CodeBlocksSettings.AllowExec')"
                             />
                         </div>
+                        <div class="col-12">
+                            <q-toggle
+                                v-model="continousCompile"
+                                :disabled="!canContinousCompile"
+                                :label="$t('CodeBlocksSettings.ContinousCompile')"
+                            />
+                        </div>
+
                         <div
                             :class="
                                 `col-xs-12 col-md-${runCode ? 8 : 12} ${
@@ -170,6 +178,7 @@ export interface ICodeBlockSettingsOptions {
     solutionTheme: string
     outputParser: CodeOutputTypes
     randomizer: IRandomizerSettings
+    continousCompilation: boolean
 }
 
 @Component({ components: { RandomizerSettings } })
@@ -351,6 +360,31 @@ export default class CodeBlocksSettings extends Vue {
     }
     set outputParser(v: IListItemData) {
         this.$emit('output-parser-change', v.value)
+    }
+
+    get continousCompile(): boolean {
+        return this.options.continousCompilation
+    }
+    set continousCompile(v: boolean) {
+        this.$emit('continous-compile-change', v)
+    }
+    get compiler(): ICompilerID {
+        return this.options.compiler
+    }
+    get canContinousCompile(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        console.d(
+            'Continuous Compile - ',
+            'can',
+            cmp,
+            cmp ? cmp.canCompileOnType : false,
+            cmp ? cmp.canRun : false
+        )
+        if (cmp) {
+            console.d('Continuous Compile - ', 'can', cmp.canCompileOnType && cmp.canRun)
+            return cmp.canCompileOnType && cmp.canRun
+        }
+        return false
     }
 }
 </script>

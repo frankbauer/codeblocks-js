@@ -63,7 +63,8 @@
         "PText": "Als Text",
         "PJSON": "Als JSON",
         "PMagic": "Text+JSON (getrennt mit '\\n\\n&lt;JSON>\\n')",
-        "NumberErr": "Must be a valid Number."
+        "NumberErr": "Must be a valid Number.",
+        "ContinousCompile": "Automatisch Kompilieren"
     },
     "CodePlayground": {
         "InvalidJson": "Ausgabe ist nicht JSON-Formatiert",

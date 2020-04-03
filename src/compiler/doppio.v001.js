@@ -134,6 +134,7 @@ const singleton = new Vue({
             language: 'java',
             canRun: true,
             canStop: true,
+            canCompileOnType: false,
             didPreload: false,
             requestedPreload: false,
             isReady: false,

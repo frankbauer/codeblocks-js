@@ -55,6 +55,7 @@ export interface IAppSettings {
     maxCharacters: number
     scopeUUID?: string
     scopeSelector?: string
+    continousCompilation: boolean
 }
 
 interface IAppElementData {
@@ -74,6 +75,7 @@ interface IAppElementData {
     maxCharacters?: string
     scopeUUID?: string
     scopeSelector?: string
+    continousCompilation?: string
 }
 
 export interface IBlockBookmarkPayload {
@@ -197,6 +199,11 @@ export interface IMainBlock extends IAppSettings {
     addNewBlock(): void
 }
 
+function isTrue(val: any): boolean {
+    //return val !== undefined || val == 'true' || val == '1'
+    return val !== undefined && val != 'false' && val != '0'
+}
+
 //this will handle the vue mounting on the dom
 class InternalCodeBlocksManager {
     constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
@@ -245,12 +252,12 @@ class InternalCodeBlocksManager {
             codeTheme: 'xq-light',
             uuid: 'is-set-below',
             executionTimeout: 5000,
-            maxCharacters: 1000
+            maxCharacters: 1000,
+            continousCompilation: isTrue(inData.continousCompilation)
         }
 
         if (inData.randomizerActive !== undefined) {
-            data.randomizer.active =
-                inData.randomizerActive == 'true' || inData.randomizerActive == '1'
+            data.randomizer.active = isTrue(inData.randomizerActive)
         }
         if (inData.randomizerPreviewIndex !== undefined) {
             data.randomizer.previewIndex = Number(inData.randomizerPreviewIndex)
@@ -292,7 +299,7 @@ class InternalCodeBlocksManager {
                 data.runCode = false
                 data.language = data.compiler.languageType
             } else {
-                data.runCode = inData.runCode == 'true' || inData.runCode == '1'
+                data.runCode = isTrue(inData.runCode)
                 data.language = c.language
                 data.compiler.version = c.version
             }
@@ -306,8 +313,7 @@ class InternalCodeBlocksManager {
             if (data.editMode) {
                 data.readonly = false
             } else {
-                data.readonly =
-                    inData.readonly == 'true' || inData.readonly == '1' || inData.readonly == ''
+                data.readonly = isTrue(inData.readonly)
             }
         }
 
@@ -373,34 +379,20 @@ class InternalCodeBlocksManager {
                     _blockErrors: []
                 },
                 errors: [],
-                readonly:
-                    inBlock.readonly !== undefined &&
-                    inBlock.readonly != 'false' &&
-                    inBlock.readonly != '0',
-                static:
-                    inBlock.static !== undefined &&
-                    inBlock.static != 'false' &&
-                    inBlock.static != '0',
-                hidden:
-                    inBlock.hidden !== undefined &&
-                    inBlock.hidden != 'false' &&
-                    inBlock.hidden != '0',
+                readonly: isTrue(inBlock.readonly),
+                static: isTrue(inBlock.static),
+                hidden: isTrue(inBlock.hidden),
                 visibleLines:
                     inBlock.visibleLines === undefined ? 'auto' : Number(inBlock.visibleLines),
-                shouldAutoreset:
-                    inBlock.shouldAutoreset !== undefined &&
-                    inBlock.shouldAutoreset != 'false' &&
-                    inBlock.shouldAutoreset != '0',
+                shouldAutoreset: isTrue(inBlock.shouldAutoreset),
+
                 expanded:
                     inBlock.expanded === undefined ||
                     (inBlock.expanded != 'false' && inBlock.expanded != '0'),
                 codeExpanded:
                     inBlock.codeExpanded === undefined ||
                     (inBlock.codeExpanded != 'false' && inBlock.codeExpanded != '0'),
-                noContent:
-                    inBlock.noContent !== undefined &&
-                    inBlock.noContent != 'false' &&
-                    inBlock.noContent != '0',
+                noContent: isTrue(inBlock.noContent),
                 scopeUUID: inBlock.scopeUUID,
                 scopeSelector: inBlock.scopeSelector
             }
@@ -466,6 +458,7 @@ class InternalCodeBlocksManager {
                     maxCharacters!: number
                     scopeUUID?: string
                     scopeSelector?: string
+                    continousCompilation!: boolean
 
                     swap(id1: number, id2: number) {
                         const a = this.blocks[id1]

@@ -73,6 +73,7 @@ export interface ICompilerInstance {
     readonly language: string
     readonly canRun: boolean
     readonly canStop: boolean
+    readonly canCompileOnType: boolean
     isReady: boolean
     isRunning: boolean
     readonly libraries?: ICompilerLibraryInfo[]

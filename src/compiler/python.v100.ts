@@ -114,6 +114,7 @@ export class PythonV100Compiler extends Vue implements ICompilerInstance {
     readonly language = 'python'
     readonly canRun = true
     readonly canStop = false
+    readonly canCompileOnType = false
     isReady = true
     isRunning = false
 

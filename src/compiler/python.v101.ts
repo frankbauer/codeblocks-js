@@ -136,6 +136,7 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
     readonly language = 'python'
     readonly canRun = true
     readonly canStop = true
+    readonly canCompileOnType = true
     isReady = true
     isRunning = false
 
@@ -181,6 +182,7 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
     readonly language = 'python'
     readonly canRun = true
     readonly canStop = true
+    readonly canCompileOnType = true
     isReady = true
     isRunning = false
 
