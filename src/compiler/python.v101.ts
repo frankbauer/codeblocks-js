@@ -152,7 +152,8 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
         info_callback: (txt: string) => void,
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: (success: boolean) => void
+        finishedExecutionCB: (success: boolean) => void,
+        args: object
     ): void {
         this.worker = runPythonWorker(
             questionID,
@@ -200,7 +201,8 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
         info_callback: (txt: string) => void,
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
+        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        args: object
     ): void {
         this.worker = runPythonWorker(
             questionID,

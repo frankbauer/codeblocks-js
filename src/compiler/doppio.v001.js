@@ -205,6 +205,7 @@ const singleton = new Vue({
             err_callback,
             compileFailedCallback,
             finishedExecutionCB,
+            args,
             runCreate = false
         ) {
             if (!this.isReady) {

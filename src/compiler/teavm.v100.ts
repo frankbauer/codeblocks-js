@@ -101,6 +101,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        args: object,
         runCreate: boolean = true
     ): void {
         var start = Date.now()
@@ -126,6 +127,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         err_callback,
                         compileFailedCallback,
                         finishedExecutionCB,
+                        args,
                         false
                     )
                 })

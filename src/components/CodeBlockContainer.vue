@@ -561,7 +561,7 @@ export default class CodeBlocksContainer extends Vue {
                     '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
             } else {
                 this.block.content =
-                    '{\n    init: function(canvasElement, outputElement, scope, runner) {\n\n    },\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
+                    '{\n    init: function(canvasElement, outputElement, scope, runner) {\n\n    },\n    addArgumentsTo(args) {},\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
             }
         } else if (
             ret.type == KnownBlockTypes.BLOCKLY &&

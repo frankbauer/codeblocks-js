@@ -118,6 +118,14 @@ export class ScriptBlock implements IScriptBlock {
     pushError(e: any) {
         this.err.push(jsErrorParser(e))
     }
+    addArgumentsTo(args: object) {
+        if (this.obj && !this.requestsOriginalVersion()) {
+            const o = this.obj as IPlaygroundObject
+            if (o.addArgumentsTo) {
+                o.addArgumentsTo(args)
+            }
+        }
+    }
 
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void {
         if (this.obj === undefined) {

@@ -50,6 +50,17 @@
                                 maxlength="6"
                             />
                         </div>
+                        <div class="col-12 text-body2" v-if="runCode && accepstArguments">
+                            {{ $t('CodeBlocksSettings.AllowArguments') }}
+                            <q-btn
+                                flat
+                                round
+                                color="primary"
+                                icon="info"
+                                size="xs"
+                                @click="showArgsInfoDialog"
+                            ></q-btn>
+                        </div>
                     </div>
                 </q-card-section>
             </q-card>
@@ -385,6 +396,32 @@ export default class CodeBlocksSettings extends Vue {
             return cmp.allowsContinousCompilation && cmp.canRun
         }
         return false
+    }
+
+    get accepstArguments(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            return cmp.acceptsJSONArgument
+        }
+        return false
+    }
+    showArgsInfoDialog(): void {
+        this.$q
+            .dialog({
+                title: this.$l('CodeBlocksSettings.AllowArgumentsCaption'),
+                message: this.$l('CodeBlocksSettings.AllowArgumentsHint'),
+                html: true,
+                style: 'width:75%'
+            })
+            .onOk(() => {
+                // console.log('OK')
+            })
+            .onCancel(() => {
+                // console.log('Cancel')
+            })
+            .onDismiss(() => {
+                // console.log('I am triggered on both OK and Cancel')
+            })
     }
 }
 </script>

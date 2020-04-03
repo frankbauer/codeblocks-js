@@ -91,6 +91,7 @@ export interface ICompilerInstance {
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
         finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        args: object,
         runCreate?: boolean
     ): void
     stop?(): void

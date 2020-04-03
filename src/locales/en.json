@@ -64,7 +64,10 @@
         "PJSON": "JSON",
         "PMagic": "Text+JSON (seperated by '\\n\\n&lt;JSON>\\n')",
         "NumberErr": "Muss ein gültiger Zahlenwert sein",
-        "ContinousCompile": "Automatic Compilation (while typing)"
+        "ContinousCompile": "Automatic Compilation (while typing)",
+        "AllowArguments": "Supports Runtime-Arguments",
+        "AllowArgumentsCaption": "Send Runtime-Arguments",
+        "AllowArgumentsHint": "Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can add data to the passed argument-object. The object is available in the students as a variable named <code>args</code>."
     },
     "CodePlayground": {
         "InvalidJson": "Output is not a valid JSON-Object",

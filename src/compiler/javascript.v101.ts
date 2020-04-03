@@ -22,7 +22,8 @@ function runJavaScriptWorker(
     info_callback: (txt: string) => void,
     err_callback: (txt: string) => void,
     compileFailedCallback: (info: ICompilerErrorDescription) => void,
-    finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
+    finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+    args: object
 ): Worker | undefined {
     //WebWorkers need to be supported
     if (!window.Worker) {
@@ -100,9 +101,9 @@ function runJavaScriptWorker(
         )
     }
 
-    let startExecution = function() {
+    let startExecution = function(args: object) {
         //start worker execution
-        worker.postMessage(['start', code])
+        worker.postMessage(['start', { code: code, args: args }])
 
         //stop Worker execution when the time limit is exceeded;
         setTimeout(triggerTimeout, max_ms)
@@ -116,20 +117,20 @@ function runJavaScriptWorker(
                 ['d3-5.13.4', 'd3proxy-101'],
                 function() {
                     worker.postMessage(['importD3'])
-                    startExecution()
+                    startExecution(args)
                 }
             )
         } else if (l === 'brain-2.0.0') {
             willStartExecution = true
             callingCodeBlocks.$compilerRegistry.loadLibraries([], function() {
                 worker.postMessage(['importBrain'])
-                startExecution()
+                startExecution(args)
             })
         }
     })
 
     if (!willStartExecution) {
-        startExecution()
+        startExecution(args)
     }
 
     return worker
@@ -179,7 +180,8 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
         info_callback: (txt: string) => void,
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
+        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        args: object
     ): void {
         this.worker = runJavaScriptWorker(
             questionID,
@@ -190,7 +192,8 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
             info_callback,
             err_callback,
             compileFailedCallback,
-            finishedExecutionCB
+            finishedExecutionCB,
+            args
         )
     }
 
