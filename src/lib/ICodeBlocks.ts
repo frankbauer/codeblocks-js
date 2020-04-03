@@ -17,6 +17,17 @@ export enum CodeOutputTypes {
     JSON = 'json',
     MAGIC = 'magic'
 }
+
+export interface IBlockloadManager {
+    readonly blockTag: string
+    loadFromDatablock: (
+        bl: HTMLElement,
+        inBlock: IBlockElementData,
+        block: IBlockDataBase,
+        editMode: boolean
+    ) => void
+}
+
 export interface IRandomizerSet {
     uuid: string
     values: IRandomizerSetTag[]
@@ -43,6 +54,25 @@ export interface IBlockError {
     error: string
     uuid: string
 }
+
+export interface IBlockElementData {
+    readonly?: string
+    static?: string
+    hidden?: string
+    visibleLines?: string
+    shouldAutoreset?: string
+    expanded?: string
+    codeExpanded?: string
+    noContent?: string
+    alternativeContent?: string
+    width?: string
+    height?: string
+    align?: string
+    version?: string
+    scopeUUID?: string
+    scopeSelector?: string
+}
+
 export interface IBlockDataBlockly {
     toolbox: IBlocklyToolbox
     blocks: IBlockDefinition[]

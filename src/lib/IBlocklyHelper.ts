@@ -72,6 +72,7 @@ export interface IBlocklyToolboxCategory {
     uuid: string
     items: IBlocklyToolboxItem[]
     color?: string
+    custom?: string
     name: string
 }
 export interface IBlocklyToolbox {

@@ -19,15 +19,21 @@ import {
     IRandomizerSetTag,
     ICodeBlockDataState,
     IBlockDataBase,
-    IBlockDataBlockly
+    IBlockDataBlockly,
+    IBlockloadManager,
+    IBlockElementData
 } from './ICodeBlocks'
-import {
-    IBlocklyToolbox,
-    BlockPrimaryColors,
-    BlockArgumentTypes,
-    IBlockDefinition
-} from './IBlocklyHelper'
-import { blocklyHelper } from './BlocklyHelper'
+
+//get loaders
+import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
+import blocklyInstaller from '@/lib/BlockloadManagers/BlocklyManager'
+import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
+
+const loaders: { [index: string]: IBlockloadManager } = {}
+blockInstaller(loaders)
+blocklyInstaller(loaders)
+playgroundInstaller(loaders)
+
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
 export interface IAppSettings {
@@ -70,24 +76,6 @@ interface IAppElementData {
     scopeSelector?: string
 }
 
-interface IBlockElementData {
-    readonly?: string
-    static?: string
-    hidden?: string
-    visibleLines?: string
-    shouldAutoreset?: string
-    expanded?: string
-    codeExpanded?: string
-    noContent?: string
-    alternativeContent?: string
-    width?: string
-    height?: string
-    align?: string
-    version?: string
-    scopeUUID?: string
-    scopeSelector?: string
-}
-
 export interface IBlockBookmarkPayload {
     uuid: string
     block: BlockData | null
@@ -123,37 +111,6 @@ export class BlockData extends Vue implements IBlockData {
     align!: string
     blockly!: IBlockDataBlockly
     _oac?: () => string //used by Blockly to re-place the actuakContent-Method while keeping the old implementation around
-
-    // constructor(appSettings: IAppSettings, data: IBlockData) {
-    //     super()
-    //     this.appSettings = appSettings
-    //     this.hasCode = data.hasCode
-    //     this.type = data.type
-    //     this.content = data.content
-    //     this.alternativeContent = data.alternativeContent
-    //     this.noContent = data.noContent
-    //     this.id = data.id
-    //     this.uuid = data.uuid
-    //     this.parentID = data.parentID
-    //     this.expanded = data.expanded
-    //     this.codeExpanded = data.codeExpanded
-    //     this.obj = data.obj
-    //     this.readonly = data.readonly
-    //     this.static = data.static
-    //     this.hidden = data.hidden
-    //     this.version = data.version
-    //     this.readyCount = data.readyCount
-    //     this.errors = data.errors
-    //     this.scopeUUID = data.scopeUUID
-    //     this.scopeSelector = data.scopeSelector
-    //     this.visibleLines = data.visibleLines
-    //     this.hasAlternativeContent = data.hasAlternativeContent
-    //     this.shouldAutoreset = data.shouldAutoreset
-    //     this.width = data.width
-    //     this.height = data.height
-    //     this.align = data.align
-    //     this.toolbox = data.toolbox
-    // }
 
     actualContent() {
         if (this.appSettings.randomizer.active) {
@@ -460,154 +417,15 @@ class InternalCodeBlocksManager {
                 block.hasAlternativeContent = false
             }
 
-            if (block.type === KnownBlockTypes.PLAYGROUND) {
-                block.obj = null
-
-                block.width = bl.getAttribute('width')
-                    ? bl.getAttribute('width')!
-                    : inBlock.width
-                    ? inBlock.width
-                    : '100%'
-                block.height = bl.getAttribute('height')
-                    ? bl.getAttribute('height')!
-                    : inBlock.height
-                    ? inBlock.height
-                    : '200px'
-                block.align = bl.getAttribute('align')
-                    ? bl.getAttribute('align')!
-                    : inBlock.align
-                    ? inBlock.align
-                    : 'center'
-                block.version = bl.getAttribute('data-version')
-                    ? bl.getAttribute('data-version')!
-                    : block.version
-            } else if (block.type == KnownBlockTypes.BLOCK) {
-                const alts = bl.getElementsByTagName('ALTERNATIVE')
-                const codes = bl.getElementsByTagName('CODE')
-                if (codes.length > 0) {
-                    block.content = codes[0].textContent ? codes[0].textContent : ''
-                }
-
-                if (alts.length > 0) {
-                    block.hasAlternativeContent = true
-                    block.alternativeContent = alts[0].textContent
-                    if (!data.editMode && block.noContent) {
-                        block.content = block.alternativeContent ? block.alternativeContent : ''
-                    }
-                }
-
-                block.hasCode = true
-            } else if (block.type == KnownBlockTypes.BLOCKLY) {
-                block.obj = null
-
-                block.width = bl.getAttribute('width')
-                    ? bl.getAttribute('width')!
-                    : inBlock.width
-                    ? inBlock.width
-                    : '100%'
-                block.height = bl.getAttribute('height')
-                    ? bl.getAttribute('height')!
-                    : inBlock.height
-                    ? inBlock.height
-                    : '300px'
-                block.align = bl.getAttribute('align')
-                    ? bl.getAttribute('align')!
-                    : inBlock.align
-                    ? inBlock.align
-                    : 'center'
-
-                const customBlocks = bl.getElementsByTagName('CUSTOMBLOCKS')
-                if (customBlocks.length > 0) {
-                    const str: string = customBlocks[0].innerHTML ? customBlocks[0].innerHTML : '{}'
-
-                    try {
-                        const arr: IBlockDefinition[] = new Function(
-                            blocklyHelper.prepareCode(str)
-                        )()
-                        arr.forEach(bl => {
-                            if (bl.uuid === undefined || bl.uuid === '') {
-                                bl.uuid = uuid.v4()
-                            }
-
-                            if (bl.header.uuid === undefined || bl.header.uuid === '') {
-                                bl.header.uuid = uuid.v4()
-                            }
-                            if (bl.header._expanded === undefined) {
-                                bl.header._expanded = true
-                            }
-
-                            bl.additionalLines.forEach(l => {
-                                if (l.uuid === undefined || l.uuid === '') {
-                                    l.uuid = uuid.v4()
-                                }
-                                if (l._expanded === undefined) {
-                                    l._expanded = false
-                                }
-                            })
-
-                            if (bl.codeString === undefined && bl._code !== undefined) {
-                                bl.codeString = bl._code.toString()
-                            }
-                            bl._code = undefined
-                        })
-                        block.blockly.blocks = arr
-                    } catch (e) {
-                        console.error('Error parsing Blocks JSON', e)
-                    }
-                }
-
-                const toolboxInput = bl.getElementsByTagName('TOOLBOX')
-                if (toolboxInput.length > 0) {
-                    const toolboxStr: string = toolboxInput[0].innerHTML
-                        ? toolboxInput[0].innerHTML
-                        : '{}'
-
-                    try {
-                        const obj: IBlocklyToolbox = new Function(
-                            blocklyHelper.prepareCode(toolboxStr)
-                        )()
-                        obj.categories.forEach(c => {
-                            if (c.uuid === undefined || c.uuid === '') {
-                                c.uuid = uuid.v4()
-                            }
-                            if (c.color === undefined) {
-                                c.color = ''
-                            }
-                            c.items.forEach(i => {
-                                if (i.uuid === undefined || i.uuid === '') {
-                                    i.uuid = uuid.v4()
-                                }
-                            })
-                        })
-                        block.blockly.toolbox = obj
-                    } catch (e) {
-                        console.error('Error Parsing ToolboxJSON', e)
-                    }
-                }
-
-                const toolboxOverride = bl.getElementsByTagName('TOOLBOXOVERRIDE')
-                if (toolboxOverride.length > 0) {
-                    block.blockly.toolboxOverride = toolboxOverride[0].innerHTML
-                        ? toolboxOverride[0].innerHTML
-                        : ''
-
-                    block.blockly.useOverride =
-                        toolboxOverride[0].hasAttribute('use') &&
-                        toolboxOverride[0].getAttribute('use') != 'false' &&
-                        toolboxOverride[0].getAttribute('use') != '0'
-                }
-
-                const codes = bl.getElementsByTagName('SCRIPT')
-
-                if (codes.length > 0) {
-                    block.content = codes[0].innerHTML ? codes[0].innerHTML : ''
+            if (block.type != 'TEXT') {
+                const loader = loaders[block.type]
+                console.d('LOADER', loader, loaders, block.type)
+                if (loader === undefined) {
+                    console.i('Skipping', block.type)
+                    return
                 } else {
-                    block.content = '<xml xmlns="https://developers.google.com/blockly/xml"></xml>'
+                    loader.loadFromDatablock(bl, inBlock, block, data.editMode)
                 }
-                block.hasCode = true
-            } else if (block.type != 'TEXT') {
-                console.i('Skipping', block.type)
-                return
             }
 
             data.blocks.push(this.constructBlock(data, block))

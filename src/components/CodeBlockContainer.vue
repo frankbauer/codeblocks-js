@@ -247,6 +247,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
+import { blocklyLoader } from '@/lib/BlockloadManagers/BlocklyManager'
 
 @Component
 export default class CodeBlocksContainer extends Vue {
@@ -562,6 +563,13 @@ export default class CodeBlocksContainer extends Vue {
                 this.block.content =
                     '{\n    init: function(canvasElement, outputElement, scope) {\n\n    },\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
             }
+        } else if (
+            ret.type == KnownBlockTypes.BLOCKLY &&
+            this.block.blockly.toolbox.items.length === 0 &&
+            this.block.blockly.toolbox.categories.length === 0 &&
+            this.editMode
+        ) {
+            this.block.blockly.toolbox = blocklyLoader.defaultToolbox
         }
 
         this.$emit('type-change', ret)

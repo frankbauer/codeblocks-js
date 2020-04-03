@@ -88,8 +88,11 @@ export class BlocklyHelper {
     }
     private serializeToolboxCategory(i: IBlocklyToolboxCategory): string {
         let res = `<category name="${i.name}"`
-        if (i.color) {
+        if (i.color && i.color != '') {
             res += ` colour="${i.color}"`
+        }
+        if (i.custom && i.custom != '') {
+            res += ` custom="${i.custom}"`
         }
         res += `>${this.serializeToolboxItems(i.items)}</category>`
         return res

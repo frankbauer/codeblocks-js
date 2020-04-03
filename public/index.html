@@ -35,7 +35,8 @@
    
   
 <div codeblockseditor data-compiler="javascript" data-compiler-version="default" data-question="53" data-dom-libs='[]' data-worker-libs='["d3-101"]' data-execution-timeout="10000" data-max-characters="4000" data-run-code="true" data-scope-selector="#master" data-randomizer-active="true" data-randomizer-known-tags='["init", "randomized", "color"]' data-randomizer-sets='[{"init":"This was init", "randomized":14, "color":"#fefab0"}, {"init":"Second", "randomized":42, "color":"#000001", "other":"..."}, {"init":"me"}]'>
-  <loading><div></div><div></div></loading>    
+  <loading><div></div><div></div></loading>  
+  <Block data-static>// Fixed</Block>  
   <Blockly height="300px">
     <CustomBlocks>
       [
@@ -156,10 +157,48 @@
       </category>
       <category name="Procedures" custom="PROCEDURE"  colour="{!PrimaryColors.Procedure}">
       </category>
-    </ToolboxOverride>
-    <Code>
-      <xml xmlns="https://developers.google.com/blockly/xml"><variables><variable id="jdG#t8[]mlM`z)kFuNjx">ab</variable></variables><block type="variables_set" id="ItB9PY0E][:MB/Uh/,;=" x="36" y="5"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field><value name="VALUE"><block type="math_number" id="9Voy@$$#Dhka,=?3!g[7"><field name="NUM">123</field></block></value><next><block type="controls_if" id="`Oj.KaccwlI!+J66YD!|"><value name="IF0"><block type="logic_compare" id="tRS@jPrw=~BAu4[k82V9"><field name="OP">EQ</field><value name="A"><block type="variables_get" id="~U[n#w.dv9!PS0b07rJP"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field></block></value><value name="B"><block type="math_number" id="9TT_AEK=QRTC:xo7=Zhs"><field name="NUM">123</field></block></value></block></value><statement name="DO0"><block type="controls_repeat_ext" id="uZ9l8c{.(cJin.8ahABj"><value name="TIMES"><block type="math_number" id="8|}Grg%43z|R.Ur.7*a8"><field name="NUM">10</field></block></value><statement name="DO"><block type="math_change" id="(?=Sb]PLV)01D,o;7drb"><field name="VAR" id="jdG#t8[]mlM`z)kFuNjx">ab</field><value name="DELTA"><shadow type="math_number" id="f3LLAO*NBY)S6MzYn?OG"><field name="NUM">1</field></shadow></value></block></statement><next><block type="test_block" id="khfkasdfhsf"><field name="MYVAL">10</field><field name="MYANGLE">45</field><field name="MYCOLOR">#ffffff</field></block></next></block></statement></block></next></block></xml>
-    </Code>
+    </ToolboxOverride>    
+      <script id="myxml" type="text/xmldata">
+      <xml xmlns="https://developers.google.com/blockly/xml">
+        
+          <block type="controls_if" id="sk$h@#dmRdM.uBDd.KGB" x="179" y="22">
+              <mutation else="1"/>
+              <value name="IF0">
+                  <block type="logic_compare" id="P?.IX@cuX}pfM,]lbK%R">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                      <block type="math_number" id="yEc%@J#//@^/=Y($-|%i">
+                        <field name="NUM">123</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="math_number" id="7J+#=dgDePlR[iXFj#)*">
+                        <field name="NUM">123</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="text_print" id=".`6r*HA-7@m]+/$PRlh!">
+                    <value name="TEXT">
+                      <block type="text" id="n4=NLse7R/xu7gLC2%wA">
+                        <field name="TEXT">Hello World</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="text_print" id="ws{W^jVpod_{lM*t.cHY">
+                    <value name="TEXT">
+                      <block type="text" id="uPX?Dlv#gTg@9S3R~wzD">
+                        <field name="TEXT">Test</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </xml>
+          </script>
   </Blockly>
   <Block><Code>console.log("Hello World");console.log(ab);console.log(4)</Code><Alternative>console.log("...", ab, 3);</Alternative></Block>
   <Block data-static>// Test</Block>
