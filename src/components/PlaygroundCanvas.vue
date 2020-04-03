@@ -27,6 +27,7 @@ export default class PlaygroundCanvas extends Vue {
     @Prop({ required: true }) obj!: IScriptBlock
     @Prop({ required: true }) block!: BlockData
     @Prop({ required: true }) eventHub!: Vue
+    @Prop({ default: () => {} }) runner!: () => void
     @Prop() tagSet?: IRandomizerSet
 
     get canvas(): HTMLElement {
@@ -42,7 +43,7 @@ export default class PlaygroundCanvas extends Vue {
                 this.$nextTick(() => {
                     this.obj.rebuild() //we need to rebuild the script to make sure its context is the current state of the DOM
 
-                    this.obj.init($(this.canvas), $(this.block.scopeSelector))
+                    this.obj.init($(this.canvas), $(this.block.scopeSelector), this.runner)
                     this.$emit('did-init', this.canvas)
                 })
             })

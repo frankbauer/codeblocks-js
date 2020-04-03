@@ -230,7 +230,7 @@ export default class CodeBlock extends BaseBlock {
             }
             this.continousCodeUpdateTimer = setTimeout(() => {
                 this.$emit('code-changed-in-view-mode', undefined)
-            }, process.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT)
+            }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
         }
     }
 

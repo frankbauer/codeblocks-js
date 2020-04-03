@@ -7,13 +7,26 @@ export interface IParsedError {
 export interface ILegacyPlaygroundObject {
     init(canvasElement: JQuery<HTMLElement>): void
     reset?(canvasElement: JQuery<HTMLElement>): void
-    update(output: string | object | undefined, canvasElement: JQuery<HTMLElement>): string | undefined
+    update(
+        output: string | object | undefined,
+        canvasElement: JQuery<HTMLElement>
+    ): string | undefined
     onParseError?(initialOutput: string, parseError: string): void
 }
 export interface IPlaygroundObject {
-    init(canvasElement: JQuery<HTMLElement>, outputElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void
+    init(
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>,
+        scope: JQuery<HTMLElement>,
+        runner: () => void
+    ): void
     reset?(canvasElement: JQuery<HTMLElement>): void
-    update(txt: string, json: object | undefined, canvasElement: JQuery<HTMLElement>, outputElement: JQuery<HTMLElement>): string | undefined
+    update(
+        txt: string,
+        json: object | undefined,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>
+    ): string | undefined
     onParseError?(initialOutput: string, parseError: string): void
 }
 
@@ -39,8 +52,11 @@ export interface IScriptBlock {
     rebuild(code?: string): void
     pushError(e: any): void
 
-    init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void
+    init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void
     reset(canvasElement: JQuery<HTMLElement>): void
-    update(outputObject: IScriptOutputObject, canvasElement: JQuery<HTMLElement>): string | undefined
+    update(
+        outputObject: IScriptOutputObject,
+        canvasElement: JQuery<HTMLElement>
+    ): string | undefined
     onParseError(initialOutput: string, parseError: string): boolean
 }

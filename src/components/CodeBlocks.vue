@@ -63,6 +63,7 @@
                 :tagSet="activeTagSet"
                 @changeOutput="onPlaygroundChangedOutput"
                 @ready="blockBecameReady"
+                @run="onRunFromPlayground"
                 :eventHub="eventHub"
             />
 
@@ -651,23 +652,37 @@ export default class CodeBlocks extends Vue {
 
     triggerRecompileWhenFinished: boolean = false
     onViewCodeChange() {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        console.d('Continuous Compile - ', cmp)
-        if (cmp && cmp.canCompileOnType) {
-            if (!cmp.isRunning && cmp.isReady) {
-                console.d('Continuous Compile - ', 'RUN')
-                this.run()
-            } else {
-                console.d('Continuous Compile - ', 'DEFER')
-                this.triggerRecompileWhenFinished = true
-            }
+        if (this.continousCodeUpdateTimer !== null) {
+            clearTimeout(this.continousCodeUpdateTimer)
+            this.continousCodeUpdateTimer = null
         }
+        this.continousCodeUpdateTimer = setTimeout(() => {
+            const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+            console.d('Continuous Compile - ', cmp)
+            if (cmp && cmp.canCompileOnType) {
+                if (!cmp.isRunning && cmp.isReady) {
+                    console.d('Continuous Compile - ', 'RUN')
+                    this.run()
+                } else {
+                    console.d('Continuous Compile - ', 'DEFER')
+                    this.triggerRecompileWhenFinished = true
+                }
+            }
+        }, process.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT)
     }
 
     onRunFinished() {
         if (this.triggerRecompileWhenFinished) {
             console.d('Continuous Compile - ', 'RE-RUN')
             this.triggerRecompileWhenFinished = false
+            this.onViewCodeChange()
+        }
+    }
+
+    continousCodeUpdateTimer: number | null = null
+    onRunFromPlayground() {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp && cmp.canRun && cmp.canCompileOnType && this.blockInfo.continousCompilation) {
             this.onViewCodeChange()
         }
     }

@@ -9,6 +9,7 @@
             :eventHub="eventHub"
             :tagSet="tagSet"
             :data-question="block.parentID"
+            :runner="emitRun"
             @canvas-change="onCanvasChange"
             @did-init="onDidInit"
         />
@@ -232,7 +233,8 @@ export default class CodePlayground extends BaseBlock {
                 if (this.block.obj !== null && this.canvas !== undefined) {
                     this.block.obj.init(
                         $(this.canvas) as JQuery<HTMLElement>,
-                        $(this.block.scopeSelector) as JQuery<HTMLElement>
+                        $(this.block.scopeSelector) as JQuery<HTMLElement>,
+                        this.emitRun
                     )
                     if (this.updateErrors()) {
                         this.initAndRebuildErrors = this.block.obj.err
@@ -252,6 +254,9 @@ export default class CodePlayground extends BaseBlock {
                 }
             }
         }
+    }
+    emitRun() {
+        this.$emit('run', this.block)
     }
     onCanvasChange(can) {
         this.canvas = can

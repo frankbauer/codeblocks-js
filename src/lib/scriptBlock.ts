@@ -119,7 +119,7 @@ export class ScriptBlock implements IScriptBlock {
         this.err.push(jsErrorParser(e))
     }
 
-    init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void {
+    init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void {
         if (this.obj === undefined) {
             return
         }
@@ -141,7 +141,7 @@ export class ScriptBlock implements IScriptBlock {
                     this.pushError('[Internal Error] No Output Element found!')
                 } else {
                     const o = this.obj as IPlaygroundObject
-                    o.init(canvasElement, outputElement, scope)
+                    o.init(canvasElement, outputElement, scope, runner)
                 }
             }
         } catch (e) {
