@@ -246,7 +246,7 @@ export default class CodeBlocks extends Vue {
         }
         const cmp = this.$compilerRegistry.getCompiler(this.compiler)
         if (cmp) {
-            return cmp.canCompileOnType
+            return cmp.allowsContinousCompilation
         }
         return false
     }
@@ -659,7 +659,7 @@ export default class CodeBlocks extends Vue {
         this.continousCodeUpdateTimer = setTimeout(() => {
             const cmp = this.$compilerRegistry.getCompiler(this.compiler)
             console.d('Continuous Compile - ', cmp)
-            if (cmp && cmp.canCompileOnType) {
+            if (cmp && cmp.allowsContinousCompilation) {
                 if (!cmp.isRunning && cmp.isReady) {
                     console.d('Continuous Compile - ', 'RUN')
                     this.run()
@@ -682,7 +682,12 @@ export default class CodeBlocks extends Vue {
     continousCodeUpdateTimer: number | null = null
     onRunFromPlayground() {
         const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp && cmp.canRun && cmp.canCompileOnType && this.blockInfo.continousCompilation) {
+        if (
+            cmp &&
+            cmp.canRun &&
+            cmp.allowsContinousCompilation &&
+            this.blockInfo.continousCompilation
+        ) {
             this.onViewCodeChange()
         }
     }

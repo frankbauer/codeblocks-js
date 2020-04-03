@@ -377,12 +377,12 @@ export default class CodeBlocksSettings extends Vue {
             'Continuous Compile - ',
             'can',
             cmp,
-            cmp ? cmp.canCompileOnType : false,
+            cmp ? cmp.allowsContinousCompilation : false,
             cmp ? cmp.canRun : false
         )
         if (cmp) {
-            console.d('Continuous Compile - ', 'can', cmp.canCompileOnType && cmp.canRun)
-            return cmp.canCompileOnType && cmp.canRun
+            console.d('Continuous Compile - ', 'can', cmp.allowsContinousCompilation && cmp.canRun)
+            return cmp.allowsContinousCompilation && cmp.canRun
         }
         return false
     }

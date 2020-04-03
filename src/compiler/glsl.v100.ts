@@ -38,7 +38,8 @@ export class GLSLV100Compiler extends Vue implements ICompilerInstance {
     readonly language = 'glsl'
     readonly canRun = true
     readonly canStop = false
-    readonly canCompileOnType = false
+    readonly allowsContinousCompilation = false
+    readonly acceptsJSONArgument = false
     isReady = true
     isRunning = false
 
