@@ -597,7 +597,8 @@ class InternalCodeBlocksManager {
                         toolboxOverride[0].getAttribute('use') != '0'
                 }
 
-                const codes = bl.getElementsByTagName('CODE')
+                const codes = bl.getElementsByTagName('SCRIPT')
+
                 if (codes.length > 0) {
                     block.content = codes[0].innerHTML ? codes[0].innerHTML : ''
                 } else {
