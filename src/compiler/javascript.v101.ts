@@ -119,6 +119,12 @@ function runJavaScriptWorker(
                     startExecution()
                 }
             )
+        } else if (l === 'brain-2.0.0') {
+            willStartExecution = true
+            callingCodeBlocks.$compilerRegistry.loadLibraries([], function() {
+                worker.postMessage(['importBrain'])
+                startExecution()
+            })
         }
     })
 
@@ -139,6 +145,12 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
             name: 'd3',
             version: '5.14.3',
             displayName: 'D3 - Proxy'
+        },
+        {
+            key: 'brain-2.0.0',
+            name: 'Brain.js',
+            version: '2.0.0-alpha',
+            displayName: 'Brain.js'
         }
     ]
 

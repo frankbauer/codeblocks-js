@@ -1,4 +1,5 @@
 const __whitelist = new Set(['close', 'postMessage', 'console', 'performance', 'setTimeout'])
+var window = {}
 
 onmessage = function(input) {
     switch (input.data[0]) {
@@ -8,6 +9,15 @@ onmessage = function(input) {
             importScripts('../../d3/5.3.8/d3.v5.min.js')
             __whitelist.add('d3')
             __whitelist.add('document')
+            break
+        case 'importBrain':
+            console.log('[Importing Brain.JS]')
+            importScripts('../../brain.js/2.0.0-alpha/brain-browser.min.js')
+
+            var brain = window.brain
+            this.brain = window.brain
+            __whitelist.add('brain')
+            __whitelist.add('window')
             break
         case 'start':
             //erase all worker functionality from the global scope (except whitelist)

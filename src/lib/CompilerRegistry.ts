@@ -1,6 +1,15 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { ICompilerHashMap, IDomLibraray, ICompilerID, ICompilerInfo, IListItemData, ICompilerInstance, ICompilerRegistry, ICompilerIDQuery } from './ICompilerRegistry'
+import {
+    ICompilerHashMap,
+    IDomLibraray,
+    ICompilerID,
+    ICompilerInfo,
+    IListItemData,
+    ICompilerInstance,
+    ICompilerRegistry,
+    ICompilerIDQuery
+} from './ICompilerRegistry'
 
 //prepare Compiler Registry
 @Component
@@ -68,7 +77,14 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
         return c.versions.map(v => v.version)
     }
 
-    registerDOMLib(uri: string[], name: string, version: string, displayName: string, utility: boolean = false, order: number = 0): void {
+    registerDOMLib(
+        uri: string[],
+        name: string,
+        version: string,
+        displayName: string,
+        utility: boolean = false,
+        order: number = 0
+    ): void {
         this.libraries.push({
             key: name + '-' + version,
             uri: uri,
@@ -199,7 +215,17 @@ compilerRegistry.register(PythonCompilers)
 import { GLSLCompilers } from '../compiler/glsl'
 compilerRegistry.register(GLSLCompilers)
 
-compilerRegistry.registerDOMLib([Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js', Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js'], 'd3', '5.13.4', 'D3', false, 1000)
+compilerRegistry.registerDOMLib(
+    [
+        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js',
+        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js'
+    ],
+    'd3',
+    '5.13.4',
+    'D3',
+    false,
+    1000
+)
 
 compilerRegistry.registerDOMLib(
     [
@@ -215,4 +241,14 @@ compilerRegistry.registerDOMLib(
     false,
     2000
 )
+
+compilerRegistry.registerDOMLib(
+    [Vue.$CodeBlock.baseurl + 'js/brain.js/2.0.0-alpha/brain-browser.min.js'],
+    'brain',
+    '2.0.0',
+    'Brain.JS',
+    false,
+    1000
+)
+
 export default compilerRegistry
