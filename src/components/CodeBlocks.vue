@@ -593,7 +593,7 @@ export default class CodeBlocks extends Vue {
         return this.bookmarkedBlock
     }
     onBookmarkBlock(data: IBlockBookmarkPayload) {
-        console.log('Bookmark', data)
+        console.i('Bookmark', data)
         if (this.blockInfo.uuid == data.uuid) {
             this.bookmarkedBlock = data.block
         }

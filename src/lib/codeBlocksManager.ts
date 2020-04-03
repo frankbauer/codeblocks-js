@@ -123,8 +123,9 @@ export class BlockData extends Vue implements IBlockData {
         return this.content
     }
     recreateScriptObject() {
-        console.i('recreateScriptObject')
         if (this.type === KnownBlockTypes.PLAYGROUND) {
+            console.i('recreateScriptObject')
+
             const so = new ScriptBlock(this.actualContent(), this.version)
             this.obj = so
             console.i('Block Rebuild', this.obj, this.uuid)
