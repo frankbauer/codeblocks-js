@@ -44,8 +44,9 @@ export default class CodeBlockButton extends Vue {
         this.bookmarkMe()
     }
 
-    onBookmark(block: BlockData | null) {
-        this.bookmarked = this.block === block
+    onBookmark(data: IBlockBookmarkPayload) {
+        this.bookmarked =
+            data.block === null || this.block === null ? false : this.block.uuid === data.block.uuid
     }
 
     mounted() {
