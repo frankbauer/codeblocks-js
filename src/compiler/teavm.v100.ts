@@ -272,9 +272,11 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                                 //Nothing to do here
                             } else if (ee.data.command == 'run-completed') {
                                 finishedExecutionCB(true)
-                                info_callback(
-                                    'Info: Execution finished in ' + (Date.now() - start) + ' ms\n'
-                                )
+
+                                console.i('Execution finished in ' + (Date.now() - start) + ' ms\n')
+                                // info_callback(
+                                //     'Info: Execution finished in ' + (Date.now() - start) + ' ms\n'
+                                // )
                                 executionFinished = true
                                 this.isRunning = false
                                 workerrun.end()

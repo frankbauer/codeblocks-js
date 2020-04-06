@@ -53,7 +53,8 @@ function runJavaScriptWorker(
             case 'finished':
                 executionFinished = true
                 finishedExecutionCB(true)
-                info_callback('Info: Execution finished in ' + time + ' ms\n')
+                console.i('Execution finished in ' + time + ' ms\n')
+                //info_callback('Info: Execution finished in ' + time + ' ms\n')
                 worker.end()
                 break
             case 'log':

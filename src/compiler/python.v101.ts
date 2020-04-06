@@ -85,7 +85,8 @@ function runPythonWorker(
         if (e.data[0] == 'finished') {
             logCallback(e.data[1].stdOut)
             finishCallback(true)
-            infoCallback('Info: Execution finished in : ' + (Date.now() - start) + ' ms')
+            console.i('Execution finished in ' + (Date.now() - start) + ' ms\n')
+            //infoCallback('Info: Execution finished in : ' + (Date.now() - start) + ' ms')
             worker.end()
         } else if (e.data[0] === 'err') {
             const err = JSON.parse(e.data[2])
