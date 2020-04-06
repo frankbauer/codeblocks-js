@@ -197,6 +197,8 @@ export interface IMainBlock extends IAppSettings {
     moveDown(id: number): void
     removeBlock(idx: number): void
     addNewBlock(): void
+
+    initArgsForLanguage(): object | string[]
 }
 
 function isTrue(val: any): boolean {
@@ -457,6 +459,14 @@ class InternalCodeBlocksManager {
                     scopeUUID?: string
                     scopeSelector?: string
                     continuousCompilation!: boolean
+
+                    initArgsForLanguage() {
+                        console.d('Constructing args for', this.language)
+                        if (this.language === 'java') {
+                            return []
+                        }
+                        return {}
+                    }
 
                     swap(id1: number, id2: number) {
                         const a = this.blocks[id1]

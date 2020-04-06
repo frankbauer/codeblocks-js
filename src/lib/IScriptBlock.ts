@@ -28,7 +28,7 @@ export interface IPlaygroundObject {
         outputElement: JQuery<HTMLElement>
     ): string | undefined
     onParseError?(initialOutput: string, parseError: string): void
-    addArgumentsTo?(args: object): void
+    addArgumentsTo?(args: object | string[]): void
 }
 
 export interface IProcessedScriptOutput {
@@ -59,6 +59,6 @@ export interface IScriptBlock {
         outputObject: IScriptOutputObject,
         canvasElement: JQuery<HTMLElement>
     ): string | undefined
-    addArgumentsTo(args: object): void
+    addArgumentsTo(args: object | string[]): void
     onParseError(initialOutput: string, parseError: string): boolean
 }

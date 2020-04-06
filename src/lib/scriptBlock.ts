@@ -118,7 +118,7 @@ export class ScriptBlock implements IScriptBlock {
     pushError(e: any) {
         this.err.push(jsErrorParser(e))
     }
-    addArgumentsTo(args: object) {
+    addArgumentsTo(args: object | string[]) {
         if (this.obj && !this.requestsOriginalVersion()) {
             const o = this.obj as IPlaygroundObject
             if (o.addArgumentsTo) {

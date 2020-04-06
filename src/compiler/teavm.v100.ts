@@ -17,7 +17,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
     readonly canRun = true
     readonly canStop = true
     readonly allowsContinousCompilation = false
-    readonly acceptsJSONArgument = false
+    readonly acceptsJSONArgument = true
     didPreload: boolean = false
     teaworker: Worker | undefined = undefined
     isReady = false
@@ -295,7 +295,8 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         workerrun.postMessage({
                             command: 'run',
                             id: '' + questionID,
-                            code: e.data.script
+                            code: e.data.script,
+                            args: args
                         })
 
                         workerrun.end = (msg: string) => {
