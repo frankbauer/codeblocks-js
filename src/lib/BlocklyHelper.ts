@@ -102,10 +102,12 @@ export class BlocklyHelper {
     }
 
     public serializeToolbox(toolbox: IBlocklyToolbox): string {
-        if (toolbox.categories) {
+        const catCount = toolbox.categories.length
+        if (toolbox.categories && catCount > 1) {
             return `${this.serializeToolboxCategories(toolbox.categories)}`
-        } else if (toolbox.items) {
-            return `${this.serializeToolboxItems(toolbox.items)}`
+        } else if (catCount === 1) {
+            const cat = toolbox.categories[0]
+            return '' + this.serializeToolboxItems(cat.items)
         } else {
             return ''
         }

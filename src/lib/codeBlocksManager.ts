@@ -370,8 +370,6 @@ class InternalCodeBlocksManager {
                 blockly: {
                     useOverride: false,
                     toolbox: {
-                        itemsOnly: false,
-                        items: [],
                         categories: []
                     },
                     toolboxOverride: '',
@@ -517,8 +515,6 @@ class InternalCodeBlocksManager {
                                 useOverride: false,
                                 toolboxOverride: '',
                                 toolbox: {
-                                    itemsOnly: false,
-                                    items: [],
                                     categories: []
                                 },
                                 blocks: [],
