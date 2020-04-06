@@ -16,7 +16,7 @@
                         </div>
                         <div class="col-12">
                             <q-toggle
-                                v-model="continousCompile"
+                                v-model="continuousCompile"
                                 :disabled="!canContinousCompile"
                                 :label="$t('CodeBlocksSettings.ContinousCompile')"
                             />
@@ -189,7 +189,7 @@ export interface ICodeBlockSettingsOptions {
     solutionTheme: string
     outputParser: CodeOutputTypes
     randomizer: IRandomizerSettings
-    continousCompilation: boolean
+    continuousCompilation: boolean
 }
 
 @Component({ components: { RandomizerSettings } })
@@ -373,11 +373,11 @@ export default class CodeBlocksSettings extends Vue {
         this.$emit('output-parser-change', v.value)
     }
 
-    get continousCompile(): boolean {
-        return this.options.continousCompilation
+    get continuousCompile(): boolean {
+        return this.options.continuousCompilation
     }
-    set continousCompile(v: boolean) {
-        this.$emit('continous-compile-change', v)
+    set continuousCompile(v: boolean) {
+        this.$emit('continuous-compile-change', v)
     }
     get compiler(): ICompilerID {
         return this.options.compiler

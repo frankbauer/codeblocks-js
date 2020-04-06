@@ -55,7 +55,7 @@ export interface IAppSettings {
     maxCharacters: number
     scopeUUID?: string
     scopeSelector?: string
-    continousCompilation: boolean
+    continuousCompilation: boolean
 }
 
 interface IAppElementData {
@@ -75,7 +75,7 @@ interface IAppElementData {
     maxCharacters?: string
     scopeUUID?: string
     scopeSelector?: string
-    continousCompilation?: string
+    continuousCompilation?: string
 }
 
 export interface IBlockBookmarkPayload {
@@ -253,7 +253,7 @@ class InternalCodeBlocksManager {
             uuid: 'is-set-below',
             executionTimeout: 5000,
             maxCharacters: 1000,
-            continousCompilation: isTrue(inData.continousCompilation)
+            continuousCompilation: isTrue(inData.continuousCompilation)
         }
 
         if (inData.randomizerActive !== undefined) {
@@ -456,7 +456,7 @@ class InternalCodeBlocksManager {
                     maxCharacters!: number
                     scopeUUID?: string
                     scopeSelector?: string
-                    continousCompilation!: boolean
+                    continuousCompilation!: boolean
 
                     swap(id1: number, id2: number) {
                         const a = this.blocks[id1]

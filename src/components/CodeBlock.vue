@@ -214,7 +214,7 @@ export default class CodeBlock extends BaseBlock {
         }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
     }
 
-    continousCodeUpdateTimer: number | null = null
+    continuousCodeUpdateTimer: number | null = null
     onCodeChange(newCode) {
         const tb = this.codeBox.$el.querySelector('textarea[name]') as HTMLTextAreaElement
         tb.value = newCode
@@ -224,11 +224,11 @@ export default class CodeBlock extends BaseBlock {
         if (this.editMode) {
             this.$emit('code-changed-in-edit-mode', undefined)
         } else if (this.emitWhenTypingInViewMode) {
-            if (this.continousCodeUpdateTimer !== null) {
-                clearTimeout(this.continousCodeUpdateTimer)
-                this.continousCodeUpdateTimer = null
+            if (this.continuousCodeUpdateTimer !== null) {
+                clearTimeout(this.continuousCodeUpdateTimer)
+                this.continuousCodeUpdateTimer = null
             }
-            this.continousCodeUpdateTimer = setTimeout(() => {
+            this.continuousCodeUpdateTimer = setTimeout(() => {
                 this.$emit('code-changed-in-view-mode', undefined)
             }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
         }
