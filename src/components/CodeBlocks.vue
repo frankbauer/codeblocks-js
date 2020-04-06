@@ -87,6 +87,8 @@
                 :editMode="editMode"
                 :readonly="readonly"
                 :tagSet="activeTagSet"
+                :emitWhenTypingInViewMode="continousCompile"
+                @code-changed-in-view-mode="onViewCodeChange"
             />
         </CodeBlockContainer>
 

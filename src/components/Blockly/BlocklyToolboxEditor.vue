@@ -63,7 +63,7 @@ export default class BlocklyToolboxEditor extends Vue {
         if (this.block.blockly.toolbox.categories) {
             const cat: IBlocklyToolboxCategory = {
                 uuid: uuid.v4(),
-                name: 'None',
+                name: '',
                 items: [],
                 color: ''
             }

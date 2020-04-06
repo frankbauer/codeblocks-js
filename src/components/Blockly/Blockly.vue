@@ -123,6 +123,7 @@ export default class BlocklyBlock extends Vue {
     @Prop({ default: 'text/javascript' }) mode!: string
     @Prop({ default: undefined }) tagSet!: IRandomizerSet
     @Prop({ required: true }) block!: BlockData
+    @Prop({ default: false }) emitWhenTypingInViewMode!: boolean
 
     workspace: Blockly.Workspace | null = null
     tmpcode: string = ''
@@ -162,6 +163,7 @@ export default class BlocklyBlock extends Vue {
                 this.unmountBlockly()
             }
             this.mountBlockly()
+            this.onBlocklyChange(null)
         }, process.env.VUE_APP_BLOCKLY_TIMEOUT)
     }
 
@@ -427,8 +429,19 @@ export default class BlocklyBlock extends Vue {
             //Nothing to do yet
         }
     }
+    continousCodeUpdateTimer: number | null = null
     onBlocklyChange(e) {
         if (!this.editMode) {
+            if (this.emitWhenTypingInViewMode) {
+                if (this.continousCodeUpdateTimer !== null) {
+                    clearTimeout(this.continousCodeUpdateTimer)
+                    this.continousCodeUpdateTimer = null
+                }
+                this.continousCodeUpdateTimer = setTimeout(() => {
+                    this.$emit('code-changed-in-view-mode', undefined)
+                }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
+            }
+
             return
         }
         this.tmpcode = this.code
