@@ -16,7 +16,7 @@
             @compiler-change="onCompilerChange"
             @compiler-version-change="onCompilerVersionChange"
             @run-state-change="onRunStateChange"
-            @continous-compile-change="onContinousCompileStateChange"
+            @continuous-compile-change="onContinousCompileStateChange"
             @language-change="onLanguageChange"
             @character-limit-change="onCharacterLimitChange"
             @timeout-change="onTimeoutChange"
@@ -48,7 +48,7 @@
                 :editMode="editMode"
                 :readonly="readonly"
                 :tagSet="activeTagSet"
-                :emitWhenTypingInViewMode="continousCompile"
+                :emitWhenTypingInViewMode="continuousCompile"
                 @ready="blockBecameReady"
                 @build="run"
                 @code-changed-in-view-mode="onViewCodeChange"
@@ -87,6 +87,8 @@
                 :editMode="editMode"
                 :readonly="readonly"
                 :tagSet="activeTagSet"
+                :emitWhenTypingInViewMode="continuousCompile"
+                @code-changed-in-view-mode="onViewCodeChange"
             />
         </CodeBlockContainer>
 
@@ -240,7 +242,7 @@ export default class CodeBlocks extends Vue {
     _finalOutputObject: IScriptOutputObject | null = null
     eventHub: Vue = new Vue()
 
-    get continousCompile(): boolean {
+    get continuousCompile(): boolean {
         if (this.editMode) {
             return false
         }
@@ -282,7 +284,7 @@ export default class CodeBlocks extends Vue {
             solutionTheme: this.solutionTheme,
             outputParser: this.outputParser,
             randomizer: this.blockInfo.randomizer,
-            continousCompilation: this.blockInfo.continousCompilation
+            continuousCompilation: this.blockInfo.continuousCompilation
         }
     }
     get blocks(): BlockData[] {
@@ -659,11 +661,11 @@ export default class CodeBlocks extends Vue {
 
     triggerRecompileWhenFinished: boolean = false
     onViewCodeChange() {
-        if (this.continousCodeUpdateTimer !== null) {
-            clearTimeout(this.continousCodeUpdateTimer)
-            this.continousCodeUpdateTimer = null
+        if (this.continuousCodeUpdateTimer !== null) {
+            clearTimeout(this.continuousCodeUpdateTimer)
+            this.continuousCodeUpdateTimer = null
         }
-        this.continousCodeUpdateTimer = setTimeout(() => {
+        this.continuousCodeUpdateTimer = setTimeout(() => {
             const cmp = this.$compilerRegistry.getCompiler(this.compiler)
             console.d('Continuous Compile - ', cmp)
             if (cmp && cmp.allowsContinousCompilation) {
@@ -686,14 +688,14 @@ export default class CodeBlocks extends Vue {
         }
     }
 
-    continousCodeUpdateTimer: number | null = null
+    continuousCodeUpdateTimer: number | null = null
     onRunFromPlayground() {
         const cmp = this.$compilerRegistry.getCompiler(this.compiler)
         if (
             cmp &&
             cmp.canRun &&
             cmp.allowsContinousCompilation &&
-            this.blockInfo.continousCompilation
+            this.blockInfo.continuousCompilation
         ) {
             this.onViewCodeChange()
         }

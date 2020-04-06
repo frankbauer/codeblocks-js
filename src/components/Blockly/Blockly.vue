@@ -427,8 +427,19 @@ export default class BlocklyBlock extends Vue {
             //Nothing to do yet
         }
     }
+    continuousCodeUpdateTimer: number | null = null
     onBlocklyChange(e) {
         if (!this.editMode) {
+            if (this.emitWhenTypingInViewMode) {
+                if (this.continuousCodeUpdateTimer !== null) {
+                    clearTimeout(this.continuousCodeUpdateTimer)
+                    this.continuousCodeUpdateTimer = null
+                }
+                this.continuousCodeUpdateTimer = setTimeout(() => {
+                    this.$emit('code-changed-in-view-mode', undefined)
+                }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
+            }
+
             return
         }
         this.tmpcode = this.code
