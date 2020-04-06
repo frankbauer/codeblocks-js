@@ -660,7 +660,11 @@ export default class CodeBlocks extends Vue {
     }
 
     triggerRecompileWhenFinished: boolean = false
-    onViewCodeChange() {
+    onViewCodeChange(forceRun: boolean = false) {
+        if (!forceRun && !this.blockInfo.continuousCompilation) {
+            return
+        }
+
         if (this.continuousCodeUpdateTimer !== null) {
             clearTimeout(this.continuousCodeUpdateTimer)
             this.continuousCodeUpdateTimer = null
@@ -694,10 +698,11 @@ export default class CodeBlocks extends Vue {
         if (
             cmp &&
             cmp.canRun &&
-            cmp.allowsContinousCompilation &&
-            this.blockInfo.continuousCompilation
+            !this.editMode &&
+            cmp.allowsContinousCompilation // &&
+            // this.blockInfo.continuousCompilation
         ) {
-            this.onViewCodeChange()
+            this.onViewCodeChange(true)
         }
     }
 }
