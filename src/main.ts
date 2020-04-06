@@ -34,7 +34,7 @@ import './plugins/highlight'
 import './plugins/tagger'
 import './plugins/blocklyEnv'
 //remove "noImplicitAny": false from tsconfig when this file goes ts
-import { CodeBlocksManager } from './lib/codeBlocksManager'
+import { CodeBlocksManager, MountableArray } from './lib/codeBlocksManager'
 
 Vue.config.productionTip = false
 CodeBlocksManager.find(document).mount()
@@ -43,4 +43,8 @@ window.mountInElement = function(element: any): void {
     Vue.$hljs.$vue.processElements(element)
     Vue.$tagger.processElements(element)
     CodeBlocksManager.find(element).mount()
+}
+
+window.mountCodeBlocks = function(scope: HTMLElement | Document | undefined) {
+    return CodeBlocksManager.find(scope).mount()
 }

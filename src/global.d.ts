@@ -12,6 +12,7 @@ declare global {
     interface Window {
         hljs: any
         mountInElement(element: any): void
+        mountCodeBlocks(scope: HTMLElement | Document | undefined): void
         MathJax: any
         highlightAll(): void
         highlightElement(element: HTMLElement): void
