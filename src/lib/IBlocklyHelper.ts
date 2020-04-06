@@ -76,8 +76,6 @@ export interface IBlocklyToolboxCategory {
     name: string
 }
 export interface IBlocklyToolbox {
-    itemsOnly?: boolean
-    items: IBlocklyToolboxItem[]
     categories: IBlocklyToolboxCategory[]
 }
 

@@ -123,6 +123,7 @@ export default class BlocklyBlock extends Vue {
     @Prop({ default: 'text/javascript' }) mode!: string
     @Prop({ default: undefined }) tagSet!: IRandomizerSet
     @Prop({ required: true }) block!: BlockData
+    @Prop({ default: false }) emitWhenTypingInViewMode!: boolean
 
     workspace: Blockly.Workspace | null = null
     tmpcode: string = ''
@@ -162,6 +163,7 @@ export default class BlocklyBlock extends Vue {
                 this.unmountBlockly()
             }
             this.mountBlockly()
+            this.onBlocklyChange(null)
         }, process.env.VUE_APP_BLOCKLY_TIMEOUT)
     }
 

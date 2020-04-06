@@ -135,8 +135,6 @@ export class BlocklyLoadManager implements IBlockloadManager {
 
     get defaultToolbox(): IBlocklyToolbox {
         const tb: IBlocklyToolbox = {
-            itemsOnly: false,
-            items: [],
             categories: [
                 {
                     uuid: uuid.v4(),
