@@ -107,7 +107,11 @@ export class BlocklyHelper {
             return `${this.serializeToolboxCategories(toolbox.categories)}`
         } else if (catCount === 1) {
             const cat = toolbox.categories[0]
-            return '' + this.serializeToolboxItems(cat.items)
+            if (cat.color === undefined || cat.color == '' || cat.name == '') {
+                return '' + this.serializeToolboxItems(cat.items)
+            } else {
+                return '' + this.serializeToolboxCategories(toolbox.categories)
+            }
         } else {
             return ''
         }
