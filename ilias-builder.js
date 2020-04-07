@@ -26,7 +26,7 @@ const vuecli = exec('vue-cli-service build --dest ' + dest, function(code, stdou
     shell
         .echo('define("CODEBLOCKS_TAG_REGEX",     "/{:([\\w]+)}/");')
         .toEnd(conffile) /* /{:([\w]+)}/  */
-    shell.echo('?> ').toEnd(conffile)
+    shell.echo('-n', '?>').toEnd(conffile)
 
     const targetconf = path.join(
         '..',
