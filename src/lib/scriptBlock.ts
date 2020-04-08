@@ -122,7 +122,11 @@ export class ScriptBlock implements IScriptBlock {
         if (this.obj && !this.requestsOriginalVersion()) {
             const o = this.obj as IPlaygroundObject
             if (o.addArgumentsTo) {
-                o.addArgumentsTo(args)
+                try {
+                    o.addArgumentsTo(args)
+                } catch (e) {
+                    this.pushError(e)
+                }
             }
         }
     }
