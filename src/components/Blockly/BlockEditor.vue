@@ -88,6 +88,8 @@
                 <div class="col-12">
                     <div class="blocklyPreviewContainer" ref="blocklyPreviewContainer"></div>
                 </div>
+
+                <pre class="col-12">{{ blockXML }}</pre>
                 <pre class="col-12">{{ blockJSON }}</pre>
                 <pre class="col-12">{{ blockStub }}</pre>
             </div>
@@ -108,6 +110,7 @@ import { uuid } from 'vue-uuid'
 const STARTER_BLOCK_XML_TEXT =
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="factory_base" deletable="false" movable="false">' +
+    '<field name="NAME">block_typesss</field>' +
     '<value name="TOOLTIP">' +
     '<block type="text" deletable="false" movable="false">' +
     '<field name="TEXT"></field></block></value>' +
@@ -133,6 +136,7 @@ export default class BlockEditor extends Vue {
     @Prop({ required: false }) blockDefinition!: IBlockDefinition
     @Prop({ required: false, default: '' }) blockJSON!: string
     @Prop({ required: false, default: '' }) blockStub!: string
+    @Prop({ required: false, default: '' }) blockXML!: string
 
     previewWorkspace: Blockly.Workspace | undefined = undefined
     mainWorkspace: Blockly.Workspace | undefined = undefined
@@ -147,6 +151,16 @@ export default class BlockEditor extends Vue {
     }
     get blocklyToolboxXML(): Element {
         return this.$refs.toolbox as Element
+    }
+
+    private buildBlocklyXML(): string {
+        if (this.mainWorkspace) {
+            let xml = Blockly.Xml.workspaceToDom(this.mainWorkspace)
+            if (xml) {
+                return Blockly.Xml.domToText(xml)
+            }
+        }
+        return '<xml></xml>'
     }
 
     mounted() {
@@ -737,6 +751,8 @@ export default class BlockEditor extends Vue {
         } finally {
             Blockly.Blocks = backupBlocks
         }
+
+        this.blockXML = this.buildBlocklyXML().replaceAll('>', '>\n')
     }
 
     /**
