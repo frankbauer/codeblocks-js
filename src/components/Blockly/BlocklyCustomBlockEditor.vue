@@ -21,6 +21,7 @@
                 </div>
             </div>
         </q-card-section>
+        <q-card-section><BlockPreview :blockJSON="jsonDefinition"/></q-card-section>
         <q-card-section class="q-pb-xs">
             <div class="row no-wrap q-pa-none">
                 <div class="text-overline">{{ $t('Blockly.Block.AdditionalLines') }}</div>
@@ -115,11 +116,12 @@ import { IBlocklyToolboxItem, IBlockDefinition, IBlockLine } from '@/lib/IBlockl
 import { blocklyHelper, PredefinedBlockTypes, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 import BlocklyCustomBlockLine from '@/components/Blockly/BlocklyCustomBlockLine.vue'
+import BlockPreview from '@/components/Blockly/BlockPreview.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { uuid } from 'vue-uuid'
 import { BlockData } from '../../lib/codeBlocksManager'
 
-@Component({ components: { BlocklyCustomBlockLine, CodeBlock } })
+@Component({ components: { BlocklyCustomBlockLine, CodeBlock, BlockPreview } })
 export default class BlocklyCustomBlockEditor extends Vue {
     @Prop() customBlocks!: IBlockDefinition[]
     @Prop() blockDefinition!: IBlockDefinition
@@ -141,6 +143,10 @@ export default class BlocklyCustomBlockEditor extends Vue {
         if (err != undefined) {
             err.error = ''
         }
+    }
+
+    get jsonDefinition(): string {
+        return blocklyHelper.serializeCustomBlock(this.blockDefinition)
     }
 
     get errorString(): string {

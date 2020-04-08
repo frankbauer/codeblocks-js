@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -21,6 +22,10 @@
  */
 
 export = Blockly;
+
+declare module Blockly{
+    let Blocks:{[index:string]:any}
+}
 
 declare module Blockly {
 

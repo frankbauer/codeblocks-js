@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import Blockly from './blockly/blockly'
 import {
     IBlocklyToolbox,
     IBlocklyToolboxItem,
@@ -9,7 +9,9 @@ import {
     BlockArgumentTypes,
     IBlockDefinition,
     IBlockLine,
-    IBlockArgument
+    IBlockArgument,
+    BlockSecondaryColors,
+    BlockTertiaryColors
 } from '@/lib/IBlocklyHelper'
 import { IListItemData } from './ICompilerRegistry'
 
@@ -74,6 +76,74 @@ export const PredefinedArgumentTypes: IListItemData[] = Object.keys(BlockArgumen
     }
     return ret
 })
+
+export const blockStyles = {
+    colour_blocks: {
+        colourPrimary: BlockPrimaryColors.Colour,
+        colourSecondary: BlockSecondaryColors.Colour,
+        colourTertiary: BlockTertiaryColors.Colour
+    },
+    list_blocks: {
+        colourPrimary: BlockPrimaryColors.List,
+        colourSecondary: BlockSecondaryColors.List,
+        colourTertiary: BlockTertiaryColors.List
+    },
+    logic_blocks: {
+        colourPrimary: BlockPrimaryColors.Logic,
+        colourSecondary: BlockSecondaryColors.Logic,
+        colourTertiary: BlockTertiaryColors.Logic
+    },
+    loop_blocks: {
+        colourPrimary: BlockPrimaryColors.Loop,
+        colourSecondary: BlockSecondaryColors.Loop,
+        colourTertiary: BlockTertiaryColors.Loop
+    },
+    math_blocks: {
+        colourPrimary: BlockPrimaryColors.Math,
+        colourSecondary: BlockSecondaryColors.Math,
+        colourTertiary: BlockTertiaryColors.Math
+    },
+    procedure_blocks: {
+        colourPrimary: BlockPrimaryColors.Procedure,
+        colourSecondary: BlockSecondaryColors.Procedure,
+        colourTertiary: BlockTertiaryColors.Procedure
+    },
+    text_blocks: {
+        colourPrimary: BlockPrimaryColors.Text,
+        colourSecondary: BlockSecondaryColors.Text,
+        colourTertiary: BlockTertiaryColors.Text
+    },
+    variable_blocks: {
+        colourPrimary: BlockPrimaryColors.Variable,
+        colourSecondary: BlockSecondaryColors.Variable,
+        colourTertiary: BlockTertiaryColors.Variable
+    },
+    variable_dynamic_blocks: {
+        colourPrimary: BlockPrimaryColors.Variable_dynamic,
+        colourSecondary: BlockSecondaryColors.Variable_dynamic,
+        colourTertiary: BlockTertiaryColors.Variable_dynamic
+    },
+    hat_blocks: {
+        colourPrimary: '330',
+        hat: 'cap'
+    }
+}
+
+export const categoryStyles = {
+    colour_category: { colour: blockStyles.colour_blocks.colourPrimary },
+    list_category: { colour: blockStyles.list_blocks.colourPrimary },
+    logic_category: { colour: blockStyles.logic_blocks.colourPrimary },
+    loop_category: { colour: blockStyles.loop_blocks.colourPrimary },
+    math_category: { colour: blockStyles.math_blocks.colourPrimary },
+    procedure_category: { colour: blockStyles.procedure_blocks.colourPrimary },
+    text_category: { colour: blockStyles.text_blocks.colourPrimary },
+    variable_category: { colour: blockStyles.variable_blocks.colourPrimary },
+    variable_dynamic_category: {
+        colour: blockStyles.variable_dynamic_blocks.colourPrimary
+    }
+}
+
+export const theme = new Blockly.Theme(blockStyles as any, categoryStyles)
 
 export class BlocklyHelper {
     public toArgumentDescription(a: BlockArgumentTypes) {
