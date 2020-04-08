@@ -1,6 +1,10 @@
 <template>
     <div class="q-ml-lg q-pb-sm q-pl-lg">
-        <div class="blocklyBlockContainer" ref="blocklyPreviewContainer"></div>
+        <div
+            class="blocklyBlockContainer"
+            ref="blocklyPreviewContainer"
+            :style="`width:${width}; height:${height}`"
+        ></div>
     </div>
 </template>
 
@@ -23,6 +27,8 @@ const UNNAMED = 'unnamed'
 @Component
 export default class BlockEditor extends Vue {
     @Prop({ required: false, default: '' }) blockJSON!: string
+    @Prop({ default: '100%' }) width!: string
+    @Prop({ default: '100px' }) height!: string
 
     previewWorkspace: Blockly.Workspace | undefined = undefined
 
@@ -110,8 +116,6 @@ export default class BlockEditor extends Vue {
 @import '../../styles/quasar.variables.styl'
 
 .blocklyBlockContainer
-    width: 100%
-    height: 200px
     .blocklySvg
         width: 100%
         height: 100%

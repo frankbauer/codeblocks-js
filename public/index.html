@@ -71,7 +71,27 @@
               codeString: 
                 "console.log('bbl', Blockly, $, _, window, document, Window, this)\nlet code = 'console.log(\\'Hello World\\', ' + block.getFieldValue('MYVAL') +', \\'with\\', ' + block.getFieldValue('MYANGLE') +', \\'° and \\', \\'' + block.getFieldValue('MYCOLOR') +'\\')';\nreturn code;"
               
-          }
+          },
+          {
+            uuid: '123',
+            type: 'test_block2',
+            header: {
+                message: 'Say "Hello World" %1',
+                args: [
+                    {
+                        type: 'field_number',
+                        name: 'MYVAL'
+                    }
+                ]
+            },
+            additionalLines: [],
+            nextStatement: null,
+            previousStatement: null,
+            color: '{!PrimaryColors.Procedure}',
+            codeString: 
+              "console.log('bbl', Blockly, $, _, window, document, Window, this)\nlet code = 'console.log(\\'Hello World\\', ' + block.getFieldValue('MYVAL')  +'\\')';\nreturn code;"
+            
+        }
       ]
     </CustomBlocks>
     <Toolbox>
@@ -160,7 +180,6 @@
     </ToolboxOverride>    
       <script id="myxml" type="text/xmldata">
       <xml xmlns="https://developers.google.com/blockly/xml">
-        
           <block type="controls_if" id="sk$h@#dmRdM.uBDd.KGB" x="179" y="22">
               <mutation else="1"/>
               <value name="IF0">
