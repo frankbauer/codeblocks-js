@@ -147,9 +147,6 @@
                 <div class="blocklyPreviewContainer" ref="blocklyPreviewContainer"></div>
             </div>
         </q-card-section>
-        <q-card-section>
-            <pre>{{ JSON.stringify(this.blockDefinition.XML) }}</pre>
-        </q-card-section>
     </q-card>
 </template>
 
@@ -883,9 +880,9 @@ export default class BlockEditor extends Vue {
     private showStarterBlock() {
         console.d('GENERATING STARTER BLOCK')
         if (this.mainWorkspace) {
-            // this.mainWorkspace.clear()
-            // const xml = Blockly.Xml.textToDom(STARTER_BLOCK_XML_TEXT)
-            // Blockly.Xml.domToWorkspace(xml, this.mainWorkspace)
+            this.mainWorkspace.clear()
+            const xml = Blockly.Xml.textToDom(STARTER_BLOCK_XML_TEXT)
+            Blockly.Xml.domToWorkspace(xml, this.mainWorkspace)
         }
     }
 }

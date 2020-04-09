@@ -22,6 +22,16 @@ export class BlocklyLoadManager implements IBlockloadManager {
             try {
                 const arr: IBlockDefinition[] = new Function(blocklyHelper.prepareCode(str))()
                 arr.forEach(bl => {
+                    if (bl.JSON === undefined) {
+                        bl.JSON = {
+                            type: '',
+                            message0: '',
+                            args0: [],
+                            nextStatement: null,
+                            previousStatement: null,
+                            colour: ''
+                        }
+                    }
                     if (bl.uuid === undefined || bl.uuid === '') {
                         bl.uuid = uuid.v4()
                     }
