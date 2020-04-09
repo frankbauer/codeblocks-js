@@ -49,7 +49,7 @@ export class BlocklyLoadManager implements IBlockloadManager {
     }
 
     private loadToolbox(bl: HTMLElement, inBlock: IBlockElementData, block: IBlockDataBase) {
-        const toolboxInput = bl.getElementsByTagName('TOOLBOX')
+        const toolboxInput = bl.querySelectorAll('script#toolbox') //bl.getElementsByTagName('TOOLBOX')
         if (toolboxInput.length > 0) {
             const toolboxStr: string = toolboxInput[0].innerHTML ? toolboxInput[0].innerHTML : ''
 
@@ -88,7 +88,7 @@ export class BlocklyLoadManager implements IBlockloadManager {
         inBlock: IBlockElementData,
         block: IBlockDataBase
     ) {
-        const toolboxOverride = bl.getElementsByTagName('TOOLBOXOVERRIDE')
+        const toolboxOverride = bl.querySelectorAll('script#toolboxoverride') //bl.getElementsByTagName('TOOLBOXOVERRIDE')
         if (toolboxOverride.length > 0) {
             block.blockly.toolboxOverride = toolboxOverride[0].innerHTML
                 ? toolboxOverride[0].innerHTML
