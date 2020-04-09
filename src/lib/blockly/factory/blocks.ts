@@ -29,9 +29,10 @@ Blockly.Blocks['factory_base'] = {
     // Base of new block.
     init: function() {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Text))
-        this.appendDummyInput()
-            .appendField(Vue.$l('Blockly.Block.TypeName'))
-            .appendField(new Blockly.FieldTextInput('block_type'), 'NAME')
+        this.appendDummyInput().appendField(Vue.$l('Blockly.Block.DesignBlockName'))
+        // this.appendDummyInput()
+        //     .appendField(Vue.$l('Blockly.Block.TypeName'))
+        //     .appendField(new Blockly.FieldTextInput('block_type'), 'NAME')
         this.appendStatementInput('INPUTS')
             .setCheck('Input')
             .appendField('inputs')
@@ -62,9 +63,9 @@ Blockly.Blocks['factory_base'] = {
         this.appendValueInput('HELPURL')
             .setCheck('String')
             .appendField('help url')
-        this.appendValueInput('COLOUR')
-            .setCheck('Colour')
-            .appendField('colour')
+        // this.appendValueInput('COLOUR')
+        //     .setCheck('Colour')
+        //     .appendField('colour')
         this.setTooltip(
             'Build a custom block by plugging\n' + 'fields, inputs and other blocks here.'
         )
@@ -138,7 +139,7 @@ Blockly.Blocks['factory_base'] = {
         this.appendValueInput(name)
             .setCheck('Type')
             .appendField(label)
-        this.moveInputBefore(name, 'COLOUR')
+        //this.moveInputBEFORE(name, 'COLOUR')
     }
 }
 

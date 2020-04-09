@@ -1,100 +1,156 @@
+<!--/** This file is based on factory.js from the Blockly Sample. Roginal copyright below: **/
+/**
+ * @license
+ * Copyright 2016 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * @fileoverview JavaScript for Blockly's Block Factory application through
+ * which users can build blocks using a visual interface and dynamically
+ * generate a preview block and starter code for the block (block definition and
+ * generator stub. Uses the Block Factory namespace. Depends on the FactoryUtils
+ * for its code generation functions.
+ *
+ * @author fraser@google.com (Neil Fraser), quachtina96 (Tina Quach)
+ */-->
+
 <template>
-    <div class="q-ml-lg q-pb-sm q-pl-lg">
-        <xml
-            xmlns="https://developers.google.com/blockly/xml"
-            id="blockfactory_toolbox"
-            class="toolbox"
-            ref="toolbox"
-        >
-            <category name="Input" :colour="toHTMLColor(blockPrimaryColors.Math)">
-                <block type="input_value">
-                    <value name="TYPE">
-                        <shadow type="type_null"></shadow>
-                    </value>
-                </block>
-                <block type="input_statement">
-                    <value name="TYPE">
-                        <shadow type="type_null"></shadow>
-                    </value>
-                </block>
-                <block type="input_dummy"></block>
-            </category>
-            <category name="Field" :colour="toHTMLColor(blockPrimaryColors.Text)">
-                <block type="field_static"></block>
-                <block type="field_label_serializable"></block>
-                <block type="field_input"></block>
-                <block type="field_number"></block>
-                <block type="field_angle"></block>
-                <block type="field_dropdown"></block>
-                <block type="field_checkbox"></block>
-                <block type="field_colour"></block>
-                <!--
+    <q-card flat>
+        <q-item>
+            <q-item-section avatar>
+                <q-icon :dark="false" name="build"></q-icon>
+            </q-item-section>
+
+            <q-item-section>
+                <q-item-label>{{ $t('Blockly.Block.BlockEditTitle') }}</q-item-label>
+                <q-item-label caption>
+                    {{ $t('Blockly.Block.BlockEditDescription') }}
+                </q-item-label>
+            </q-item-section>
+
+            <q-item-section side>
+                <q-btn
+                    color="grey"
+                    round
+                    flat
+                    dense
+                    :icon="isEditorExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+                    @click="toogleEditorExpanded()"
+                />
+            </q-item-section>
+        </q-item>
+        <q-card-section style="display:none">
+            <xml
+                xmlns="https://developers.google.com/blockly/xml"
+                id="blockfactory_toolbox"
+                class="toolbox"
+                ref="toolbox"
+            >
+                <category name="Input" :colour="toHTMLColor(blockPrimaryColors.Math)">
+                    <block type="input_value">
+                        <value name="TYPE">
+                            <shadow type="type_null"></shadow>
+                        </value>
+                    </block>
+                    <block type="input_statement">
+                        <value name="TYPE">
+                            <shadow type="type_null"></shadow>
+                        </value>
+                    </block>
+                    <block type="input_dummy"></block>
+                </category>
+                <category name="Field" :colour="toHTMLColor(blockPrimaryColors.Text)">
+                    <block type="field_static"></block>
+                    <block type="field_label_serializable"></block>
+                    <block type="field_input"></block>
+                    <block type="field_number"></block>
+                    <block type="field_angle"></block>
+                    <block type="field_dropdown"></block>
+                    <block type="field_checkbox"></block>
+                    <block type="field_colour"></block>
+                    <!--
       Date picker commented out since it increases footprint by 60%.
       Add it only if you need it.  See also goog.require in blockly.js.
       <block type="field_date"></block>
       -->
-                <block type="field_variable"></block>
-                <block type="field_image"></block>
-            </category>
-            <category name="Type" :colour="toHTMLColor(blockPrimaryColors.List)">
-                <block type="type_group"></block>
-                <block type="type_null"></block>
-                <block type="type_boolean"></block>
-                <block type="type_number"></block>
-                <block type="type_string"></block>
-                <block type="type_list"></block>
-                <block type="type_other"></block>
-            </category>
-            <category
-                name="Colour"
-                id="colourCategory"
-                :colour="toHTMLColor(blockPrimaryColors.Colour)"
-            >
-                <block type="colour_constants"></block>
-                <block type="colour_hue"
-                    ><mutation colour="20"></mutation><field name="HUE">20</field></block
+                    <block type="field_variable"></block>
+                    <block type="field_image"></block>
+                </category>
+                <category name="Type" :colour="toHTMLColor(blockPrimaryColors.List)">
+                    <block type="type_group"></block>
+                    <block type="type_null"></block>
+                    <block type="type_boolean"></block>
+                    <block type="type_number"></block>
+                    <block type="type_string"></block>
+                    <block type="type_list"></block>
+                    <block type="type_other"></block>
+                </category>
+                <!-- <category
+                    name="Colour"
+                    id="colourCategory"
+                    :colour="toHTMLColor(blockPrimaryColors.Colour)"
                 >
-                <block type="colour_hue"
-                    ><mutation colour="65"></mutation><field name="HUE">65</field></block
-                >
-                <block type="colour_hue"
-                    ><mutation colour="120"></mutation><field name="HUE">120</field></block
-                >
-                <block type="colour_hue"
-                    ><mutation colour="160"></mutation><field name="HUE">160</field></block
-                >
-                <block type="colour_hue"
-                    ><mutation colour="210"></mutation><field name="HUE">210</field></block
-                >
-                <block type="colour_hue"
-                    ><mutation colour="230"></mutation><field name="HUE">230</field></block
-                >
-                <block type="colour_hue"
-                    ><mutation colour="260"></mutation><field name="HUE">260</field></block
-                >
-                <block type="colour_hue"
-                    ><mutation colour="290"></mutation><field name="HUE">290</field></block
-                >
-                <block type="colour_hue"
-                    ><mutation colour="330"></mutation><field name="HUE">330</field></block
-                >
-            </category>
-        </xml>
-        <div class="row">
-            <div class="col-8">
-                <div class="blocklyMainContainer" ref="blocklyMainContainer"></div>
+                    <block type="colour_constants"></block>
+                    <block type="colour_hue"
+                        ><mutation colour="20"></mutation><field name="HUE">20</field></block
+                    >
+                    <block type="colour_hue"
+                        ><mutation colour="65"></mutation><field name="HUE">65</field></block
+                    >
+                    <block type="colour_hue"
+                        ><mutation colour="120"></mutation><field name="HUE">120</field></block
+                    >
+                    <block type="colour_hue"
+                        ><mutation colour="160"></mutation><field name="HUE">160</field></block
+                    >
+                    <block type="colour_hue"
+                        ><mutation colour="210"></mutation><field name="HUE">210</field></block
+                    >
+                    <block type="colour_hue"
+                        ><mutation colour="230"></mutation><field name="HUE">230</field></block
+                    >
+                    <block type="colour_hue"
+                        ><mutation colour="260"></mutation><field name="HUE">260</field></block
+                    >
+                    <block type="colour_hue"
+                        ><mutation colour="290"></mutation><field name="HUE">290</field></block
+                    >
+                    <block type="colour_hue"
+                        ><mutation colour="330"></mutation><field name="HUE">330</field></block
+                    >
+                </category> -->
+            </xml>
+        </q-card-section>
+        <q-card-section v-show="isEditorExpanded">
+            <div class="blocklyMainContainerParent" ref="blocklyMainContainerParent">
+                <div
+                    class="blocklyMainContainer"
+                    ref="blocklyMainContainer"
+                    width="100%"
+                    height="300px"
+                ></div>
             </div>
-            <div class="row col-4">
-                <div class="col-12">
-                    <div class="blocklyPreviewContainer" ref="blocklyPreviewContainer"></div>
-                </div>
 
-                <pre class="col-12">{{ blockXML }}</pre>
-                <pre class="col-12">{{ blockJSON }}</pre>
-                <pre class="col-12">{{ blockStub }}</pre>
+            <div style="display:none">
+                <div class="blocklyPreviewContainer" ref="blocklyPreviewContainer"></div>
             </div>
-        </div>
-    </div>
+        </q-card-section>
+        <q-card-section>
+            <pre>{{ JSON.stringify(this.blockDefinition.XML) }}</pre>
+        </q-card-section>
+    </q-card>
 </template>
 
 <script lang="ts">
@@ -110,20 +166,21 @@ import { uuid } from 'vue-uuid'
 const STARTER_BLOCK_XML_TEXT =
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
     '<block type="factory_base" deletable="false" movable="false">' +
-    '<field name="NAME">block_typesss</field>' +
+    // '<field name="NAME">block_typesss</field>' +
     '<value name="TOOLTIP">' +
     '<block type="text" deletable="false" movable="false">' +
     '<field name="TEXT"></field></block></value>' +
     '<value name="HELPURL">' +
     '<block type="text" deletable="false" movable="false">' +
     '<field name="TEXT"></field></block></value>' +
-    '<value name="COLOUR">' +
-    '<block type="colour_constants">' +
-    '<mutation colour="' +
-    blocklyHelper.toHTMLColor(BlockPrimaryColors.Procedure) +
-    '"></mutation>' +
-    '<field name="CATEGORY">{!PrimaryColors.Procedure}</field>' +
-    '</block></value></block></xml>'
+    // '<value name="COLOUR">' +
+    // '<block type="colour_constants">' +
+    // '<mutation colour="' +
+    // blocklyHelper.toHTMLColor(BlockPrimaryColors.Procedure) +
+    // '"></mutation>' +
+    // '<field name="CATEGORY">{!PrimaryColors.Procedure}</field>' +
+    // '</block></value>' +
+    '</block></xml>'
 
 /**
  * Name of block if not named.
@@ -133,10 +190,7 @@ const UNNAMED = 'unnamed'
 
 @Component
 export default class BlockEditor extends Vue {
-    @Prop({ required: false }) blockDefinition!: IBlockDefinition
-    @Prop({ required: false, default: '' }) blockJSON!: string
-    @Prop({ required: false, default: '' }) blockStub!: string
-    @Prop({ required: false, default: '' }) blockXML!: string
+    @Prop({ required: true }) blockDefinition!: IBlockDefinition
 
     previewWorkspace: Blockly.Workspace | undefined = undefined
     mainWorkspace: Blockly.Workspace | undefined = undefined
@@ -149,24 +203,67 @@ export default class BlockEditor extends Vue {
     get blocklyMainContainer(): Element {
         return this.$refs.blocklyMainContainer as Element
     }
+    get blocklyMainContainerParent(): HTMLElement {
+        return this.$refs.blocklyMainContainerParent as HTMLElement
+    }
     get blocklyToolboxXML(): Element {
         return this.$refs.toolbox as Element
+    }
+
+    editorExpanded: boolean = false
+    get isEditorExpanded(): boolean {
+        return this.editorExpanded
+    }
+
+    toogleEditorExpanded(): void {
+        this.editorExpanded = !this.editorExpanded
+        if (this.editorExpanded) {
+            this.onBeforeShow()
+            this.$nextTick(this.onResize)
+            setTimeout(this.onResize, 500)
+        }
+    }
+
+    onBeforeShow() {
+        this.updateMain()
+        this.updatePreview()
+    }
+
+    onResize() {
+        // Compute the absolute coordinates and dimensions of blocklyArea.
+        if (this.mainWorkspace) {
+            console.d('RESIZE')
+            const blocklyDiv = this.blocklyMainContainer as HTMLElement
+
+            blocklyDiv.style.width = this.blocklyMainContainerParent.offsetWidth + 'px'
+            blocklyDiv.style.height = this.blocklyMainContainerParent.offsetHeight + 'px'
+            Blockly.svgResize(this.mainWorkspace as Blockly.WorkspaceSvg)
+            const xml = Blockly.Xml.workspaceToDom(this.mainWorkspace)
+            this.mainWorkspace.clear()
+            Blockly.Xml.domToWorkspace(xml, this.mainWorkspace)
+
+            const block = this.getRootBlock(this.mainWorkspace)
+            if (block) {
+                block.render()
+            }
+        }
     }
 
     private buildBlocklyXML(): string {
         if (this.mainWorkspace) {
             let xml = Blockly.Xml.workspaceToDom(this.mainWorkspace)
             if (xml) {
-                return Blockly.Xml.domToText(xml)
+                return blocklyHelper.removeSelfClosingTags(Blockly.Xml.domToText(xml))
             }
         }
         return '<xml></xml>'
     }
 
     mounted() {
-        this.updateMain()
-        this.showStarterBlock()
-        this.updatePreview()
+        if (this.isEditorExpanded) {
+            this.updateMain()
+            this.updatePreview()
+        }
     }
 
     get blockPrimaryColors(): any {
@@ -186,7 +283,7 @@ export default class BlockEditor extends Vue {
     private getGeneratorStub(block, generatorLanguage) {
         function makeVar(root, name) {
             name = name.toLowerCase().replace(/\W/g, '_')
-            return '  const ' + root + '_' + name
+            return '    const ' + root + '_' + name
         }
         // The makevar function lives in the original update generator.
         let language = generatorLanguage
@@ -208,29 +305,29 @@ export default class BlockEditor extends Vue {
                             language +
                             ".variableDB_.getName(block.getFieldValue('" +
                             name +
-                            "'), Blockly.Variables.NAME_TYPE);"
+                            "'), Blockly.Variables.NAME_TYPE)"
                     )
                 } else if (field instanceof Blockly.FieldAngle) {
                     // Subclass of Blockly.FieldTextInput, must test first.
-                    code.push(makeVar('angle', name) + " = block.getFieldValue('" + name + "');")
+                    code.push(makeVar('angle', name) + " = block.getFieldValue('" + name + "')")
                 } else if (Blockly.FieldDate && field instanceof Blockly.FieldDate) {
                     // Blockly.FieldDate may not be compiled into Blockly.
-                    code.push(makeVar('date', name) + " = block.getFieldValue('" + name + "');")
+                    code.push(makeVar('date', name) + " = block.getFieldValue('" + name + "')")
                 } else if (field instanceof Blockly.FieldColour) {
-                    code.push(makeVar('colour', name) + " = block.getFieldValue('" + name + "');")
+                    code.push(makeVar('colour', name) + " = block.getFieldValue('" + name + "')")
                 } else if (field instanceof Blockly.FieldCheckbox) {
                     code.push(
                         makeVar('checkbox', name) +
                             " = block.getFieldValue('" +
                             name +
-                            "') == 'TRUE';"
+                            "') == 'TRUE'"
                     )
                 } else if (field instanceof Blockly.FieldDropdown) {
-                    code.push(makeVar('dropdown', name) + " = block.getFieldValue('" + name + "');")
+                    code.push(makeVar('dropdown', name) + " = block.getFieldValue('" + name + "')")
                 } else if (field instanceof Blockly.FieldNumber) {
-                    code.push(makeVar('number', name) + " = block.getFieldValue('" + name + "');")
+                    code.push(makeVar('number', name) + " = block.getFieldValue('" + name + "')")
                 } else if (field instanceof Blockly.FieldTextInput) {
-                    code.push(makeVar('text', name) + " = block.getFieldValue('" + name + "');")
+                    code.push(makeVar('text', name) + " = block.getFieldValue('" + name + "')")
                 }
             }
             let name = input.name
@@ -244,7 +341,7 @@ export default class BlockEditor extends Vue {
                             name +
                             "', Blockly." +
                             language +
-                            '.ORDER_ATOMIC);'
+                            '.ORDER_ATOMIC)'
                     )
                 } else if (input.type == Blockly.NEXT_STATEMENT) {
                     code.push(
@@ -253,14 +350,14 @@ export default class BlockEditor extends Vue {
                             language +
                             ".statementToCode(block, '" +
                             name +
-                            "');"
+                            "')"
                     )
                 }
             }
         }
         // Most languages end lines with a semicolon.  Python & Lua do not.
         let lineEnd = {
-            JavaScript: ';',
+            JavaScript: '',
             Python: '',
             PHP: ';',
             Lua: '',
@@ -268,12 +365,12 @@ export default class BlockEditor extends Vue {
         }
         code.push('  // TODO: Assemble ' + language + ' into code variable.')
         if (block.outputConnection) {
-            code.push("  let code = '...';")
-            code.push('  // TODO: Change ORDER_NONE to the correct strength.')
-            code.push('  return [code, Blockly.' + language + '.ORDER_NONE];')
+            code.push("    let code = '...'")
+            code.push('    // TODO: Change ORDER_NONE to the correct strength.')
+            code.push('    return [code, Blockly.' + language + '.ORDER_NONE]')
         } else {
-            code.push("  let code = '..." + (lineEnd[language] || '') + "\\n';")
-            code.push('  return code;')
+            code.push("    let code = '..." + (lineEnd[language] || '') + "\\n'")
+            code.push('    return code')
         }
 
         return code.join('\n')
@@ -298,15 +395,16 @@ export default class BlockEditor extends Vue {
     /**
      * Get block definition code for the current block.
      * @param {string} blockType Type of block.
+     * @param {string} colour Color of block.
      * @param {!Blockly.Block} rootBlock RootBlock from main workspace in which
      *    user uses Block Factory Blocks to create a custom block.
      * @param {string} format 'JSON' or 'JavaScript'.
      * @param {!Blockly.Workspace} workspace Where the root block lives.
      * @return {string} Block definition.
      */
-    private getBlockDefinition(blockType, rootBlock, workspace) {
+    private getBlockDefinition(blockType, colour, rootBlock, workspace) {
         blockType = this.cleanBlockType(blockType)
-        return this.formatJson_(blockType, rootBlock)
+        return this.formatJson_(blockType, colour, rootBlock)
     }
 
     /**
@@ -522,11 +620,12 @@ export default class BlockEditor extends Vue {
     /**
      * Update the language code as JSON.
      * @param {string} blockType Name of block.
+     * @param {string} colour Color of block.
      * @param {!Blockly.Block} rootBlock Factory_base block.
      * @return {string} Generanted language code.
      * @private
      */
-    private formatJson_(blockType, rootBlock) {
+    private formatJson_(blockType, colour, rootBlock) {
         var JS: any = {}
         // Type is not used by Blockly, but may be used by a loader.
         JS.type = blockType
@@ -619,11 +718,12 @@ export default class BlockEditor extends Vue {
                 break
         }
         // Generate colour.
-        var colourBlock = rootBlock.getInputTargetBlock('COLOUR')
-        if (colourBlock && !colourBlock.disabled) {
-            const cat = colourBlock.getFieldValue('CATEGORY')
-            JS.colour = blocklyHelper.toHTMLColor(cat)
-        }
+        // var colourBlock = rootBlock.getInputTargetBlock('COLOUR')
+        // if (colourBlock && !colourBlock.disabled) {
+        //     const cat = colourBlock.getFieldValue('CATEGORY')
+        //     JS.colour = blocklyHelper.toHTMLColor(cat)
+        // }
+        JS.colour = colour
 
         JS.tooltip = this.getTooltipFromRootBlock_(rootBlock)
         JS.helpUrl = this.getHelpUrlFromRootBlock_(rootBlock)
@@ -639,10 +739,20 @@ export default class BlockEditor extends Vue {
                 collapse: false,
                 comments: false,
                 disable: false,
-                tehem: theme,
                 renderer: 'minimalist',
+                theme: theme,
                 scrollbars: true
             })
+
+            if (this.blockDefinition.XML && this.blockDefinition.XML.trim() != '') {
+                const xml = Blockly.Xml.textToDom(
+                    blocklyHelper.removeSelfClosingTags(this.blockDefinition.XML)
+                )
+                console.d('LOADING LAYOUT', this.blockDefinition.XML, xml.outerHTML)
+                Blockly.Xml.domToWorkspace(xml, this.mainWorkspace)
+            } else {
+                this.showStarterBlock()
+            }
 
             // Update code on changes to block being edited.
             this.mainWorkspace.addChangeListener(this.updateLanguage)
@@ -661,17 +771,24 @@ export default class BlockEditor extends Vue {
         if (!rootBlock) {
             return
         }
-        let blockType = rootBlock
-            .getFieldValue('NAME')
-            .trim()
-            .toLowerCase()
+        // let blockType = rootBlock
+        //     .getFieldValue('NAME')
+        //     .trim()
+        //     .toLowerCase()
+        let blockType = this.blockDefinition.JSON.type
         if (!blockType) {
             blockType = UNNAMED
         }
 
         if (!this.updateBlocksFlag) {
-            var code = this.getBlockDefinition(blockType, rootBlock, this.mainWorkspace)
-            this.blockJSON = code
+            var code = this.getBlockDefinition(
+                blockType,
+                this.blockDefinition.JSON.colour,
+                rootBlock,
+                this.mainWorkspace
+            )
+
+            this.blockDefinition.JSON = JSON.parse(code)
             if (!this.updateBlocksFlagDelayed) {
                 // const languagePre = document.getElementById('languagePre')
                 // const languageTA = document.getElementById('languageTA')
@@ -697,7 +814,7 @@ export default class BlockEditor extends Vue {
 
         const code = this.blockDefinition
             ? blocklyHelper.serializeCustomBlock(this.blockDefinition)
-            : this.blockJSON
+            : '{}'
         if (!code.trim()) {
             return
         }
@@ -720,7 +837,7 @@ export default class BlockEditor extends Vue {
             }
 
             // Look for a block on Blockly.Blocks that does not match the backup.
-            let blockType = null
+            let blockType: string | null = null
             for (let type in Blockly.Blocks) {
                 if (
                     typeof Blockly.Blocks[type].init == 'function' &&
@@ -752,7 +869,7 @@ export default class BlockEditor extends Vue {
             Blockly.Blocks = backupBlocks
         }
 
-        this.blockXML = this.buildBlocklyXML().replaceAll('>', '>\n')
+        this.blockDefinition.XML = this.buildBlocklyXML()
     }
 
     /**
@@ -760,14 +877,15 @@ export default class BlockEditor extends Vue {
      * @param {!Blockly.Block} block Rendered block in preview workspace.
      */
     private updateGenerator(block) {
-        this.blockStub = this.getGeneratorStub(block, 'Javascript')
+        this.blockDefinition.codeStub = this.getGeneratorStub(block, 'Javascript')
     }
 
     private showStarterBlock() {
+        console.d('GENERATING STARTER BLOCK')
         if (this.mainWorkspace) {
-            this.mainWorkspace.clear()
-            const xml = Blockly.Xml.textToDom(STARTER_BLOCK_XML_TEXT)
-            Blockly.Xml.domToWorkspace(xml, this.mainWorkspace)
+            // this.mainWorkspace.clear()
+            // const xml = Blockly.Xml.textToDom(STARTER_BLOCK_XML_TEXT)
+            // Blockly.Xml.domToWorkspace(xml, this.mainWorkspace)
         }
     }
 }
@@ -776,8 +894,19 @@ export default class BlockEditor extends Vue {
 <style lang="sass">
 #blockfactory_toolbox
     display: none
+.blocklyMainContainerParent
+    overflow: hidden
+    position: relative
+    width: 100%
+    height: 350px
+    min-height: 350px
+    min-width: 200px
 .blocklyMainContainer
-    height: 500px
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
 .blocklyPreviewContainer
     width: 100%
     height: 200px

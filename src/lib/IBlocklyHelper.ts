@@ -94,20 +94,34 @@ export interface IBlockLine extends IBlockUIExtension {
     args: IBlockArgument[]
 }
 
-export interface IBlockDefinition extends IBlockUIExtension {
-    uuid: string
+export interface IBlockDefinitionJSON {
     type: string
-    header: IBlockLine
-    additionalLines: IBlockLine[]
+    message0: string
+    args0: IBlockArgument[]
+    message1?: string
+    args1?: IBlockArgument[]
+    message2?: string
+    args2?: IBlockArgument[]
+    message3?: string
+    args3?: IBlockArgument[]
+    message4?: string
+    args4?: IBlockArgument[]
 
     output?: BlockOutputTypes
     previousStatement: BlockSequenceTypes | null
     nextStatement: BlockSequenceTypes | null
-    color: string
+    colour: string
     tooltip?: string
     helpUrl?: string
-    codeString: string
+}
+
+export interface IBlockDefinition extends IBlockUIExtension {
+    uuid: string
     _code?: Function
+    JSON: IBlockDefinitionJSON
+    XML?: string
+    codeStub?: string
+    codeString: string
 }
 
 export enum KnownBlocklyTypes {

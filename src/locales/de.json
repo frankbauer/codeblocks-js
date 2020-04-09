@@ -111,7 +111,11 @@
             "AdditionalLines": "Additional Lines",
             "AddonLineTitle": "Additional Line {nr}",
             "CompileError": "Error Compiling Block:",
-            "CodeGeneratorFunction": "Code-Generator Function"
+            "CodeGeneratorFunction": "Code-Generator Function",
+            "Properties": "Block-Eigenschaften",
+            "BlockEditTitle": "Block Designer",
+            "BlockEditDescription": "Define the Properties of Your Block with a simple Blockly-Interface.",
+            "DesignBlockName": "DESIGNER BLOCK"
         },
         "ArgumentTypeNames": {
             "field_input": "field_input",

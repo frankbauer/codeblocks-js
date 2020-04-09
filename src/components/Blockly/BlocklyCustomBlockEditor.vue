@@ -2,13 +2,13 @@
     <q-card class="bg-blue-grey-2 q-pl-lg">
         <q-card-section>
             <div class="row q-pa-none">
-                <q-input
-                    class="col-3 q-pl-lg col-sm-6 col-xs-12"
-                    v-model="blockDefinition.type"
-                    :label="$t('Blockly.Block.TypeName')"
-                />
-                <div class="col-3 q-pl-lg col-sm-6 col-xs-12">
-                    <q-select v-model="color" :options="colors" label="Color">
+                <div class="col-md-7 q-pl-lg col-sm-6 col-xs-12">
+                    <q-input
+                        v-model="blockDefinition.JSON.type"
+                        :label="$t('Blockly.Block.TypeName')"
+                    />
+
+                    <q-select v-model="color" :options="colors" label="Color" class="q-mt-md ">
                         <template v-slot:before>
                             <div class="colorBlockContainer">
                                 <div
@@ -19,46 +19,24 @@
                         </template>
                     </q-select>
                 </div>
+
+                <div class="col-md-5 col-sm-6 col-xs-12 q-pl-lg previewBoxContainer">
+                    <div class="previewBox">
+                        <BlockPreview
+                            :blockDefinition="blockDefinition"
+                            width="1000px"
+                            height="200px"
+                        />
+                    </div>
+                </div>
             </div>
         </q-card-section>
-        <q-card-section><BlockPreview :blockJSON="jsonDefinition"/></q-card-section>
-        <q-card-section class="q-pb-xs">
+        <q-card-section class="q-pb-xs q-pt-lg">
             <div class="row no-wrap q-pa-none">
-                <div class="text-overline">{{ $t('Blockly.Block.AdditionalLines') }}</div>
-                <q-btn
-                    color="primary"
-                    class="gt-xs"
-                    size="12px"
-                    flat
-                    dense
-                    round
-                    icon="add"
-                    @click="addLine"
-                />
+                <div class="text-overline">{{ $t('Blockly.Block.Properties') }}</div>
             </div>
         </q-card-section>
-        <q-card-section class="q-pt-xs q-pb-xs">
-            <BlocklyCustomBlockLine
-                :block="blockDefinition"
-                :line="blockDefinition.header"
-                :customBlocks="customBlocks"
-                :title="$t('Blockly.Block.Header')"
-                icon="title"
-            />
-        </q-card-section>
-        <q-card-section
-            v-for="(line, index) in blockDefinition.additionalLines"
-            :key="line.uuid"
-            class="q-mt-none q-pt-xs q-pb-xs"
-        >
-            <BlocklyCustomBlockLine
-                :block="blockDefinition"
-                :line="line"
-                :customBlocks="customBlocks"
-                :title="$t('Blockly.Block.AddonLineTitle', { nr: indexForLine(index) })"
-                :icon="iconForIndex(index)"
-            />
-        </q-card-section>
+        <q-card-section><BlockEditor :blockDefinition="blockDefinition"/></q-card-section>
 
         <q-card-section class="q-pb-xs q-pt-lg">
             <div class="row no-wrap q-pa-none">
@@ -115,13 +93,13 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { IBlocklyToolboxItem, IBlockDefinition, IBlockLine } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, PredefinedBlockTypes, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
-import BlocklyCustomBlockLine from '@/components/Blockly/BlocklyCustomBlockLine.vue'
 import BlockPreview from '@/components/Blockly/BlockPreview.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import BlockEditor from '@/components/Blockly/BlockEditor.vue'
 import { uuid } from 'vue-uuid'
 import { BlockData } from '../../lib/codeBlocksManager'
 
-@Component({ components: { BlocklyCustomBlockLine, CodeBlock, BlockPreview } })
+@Component({ components: { CodeBlock, BlockPreview, BlockEditor } })
 export default class BlocklyCustomBlockEditor extends Vue {
     @Prop() customBlocks!: IBlockDefinition[]
     @Prop() blockDefinition!: IBlockDefinition
@@ -145,10 +123,6 @@ export default class BlocklyCustomBlockEditor extends Vue {
         }
     }
 
-    get jsonDefinition(): string {
-        return blocklyHelper.serializeCustomBlock(this.blockDefinition)
-    }
-
     get errorString(): string {
         const err = this.block.blockly._blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
         if (err === undefined) {
@@ -163,7 +137,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
     }
 
     get color() {
-        let cl = this.blockDefinition.color
+        let cl = this.blockDefinition.JSON.colour
         if (cl === undefined) {
             cl = ''
         }
@@ -173,7 +147,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
 
     set color(v) {
         const cc = blocklyHelper.toColorCode(v.value)
-        this.blockDefinition.color = cc !== undefined ? cc : ''
+        this.blockDefinition.JSON.colour = cc !== undefined ? cc : ''
     }
 
     get colors(): IListItemData[] {
@@ -181,18 +155,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
     }
 
     get htmlColor() {
-        return blocklyHelper.toHTMLColor(this.blockDefinition.color)
-    }
-
-    addLine() {
-        const line: IBlockLine = {
-            message: '',
-            args: [],
-            uuid: uuid.v4(),
-            _expanded: true
-        }
-
-        this.blockDefinition.additionalLines.push(line)
+        return blocklyHelper.toHTMLColor(this.blockDefinition.JSON.colour)
     }
 
     get codeOptions() {
@@ -208,10 +171,19 @@ export default class BlocklyCustomBlockEditor extends Vue {
             gutters: []
         }
     }
+    get codeString(): string {
+        if (this.blockDefinition.codeString && this.blockDefinition.codeString.trim() != '') {
+            return this.blockDefinition.codeString
+        }
+        if (this.blockDefinition.codeStub) {
+            return this.blockDefinition.codeStub
+        }
+        return 'return ""'
+    }
     get codeBlock() {
         return {
             type: 'appplication/javascript',
-            content: this.blockDefinition.codeString,
+            content: this.codeString,
             scopeUUID: this.block.scopeUUID,
             firstLine: 2,
             hidden: false,
@@ -282,4 +254,11 @@ export default class BlocklyCustomBlockEditor extends Vue {
 }
 </script>
 
-<style></style>
+<style lang="stylus" scoped>
+.previewBoxContainer
+    overflow: hidden
+    height: 100px
+.previewBox
+    transform: scale(0.5)
+    transform-origin: top left
+</style>

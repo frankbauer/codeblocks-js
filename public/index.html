@@ -38,24 +38,23 @@
   <loading><div></div><div></div></loading>  
   <Block data-static>// Fixed</Block>  
   <Blockly height="300px">
-    <CustomBlocks>
+    <script id="customblocks">
       [
           {
               uuid: '123',
-              type: 'test_block',
-              header: {
-                  message: 'Say "Hello World" %1',
-                  args: [
-                      {
-                          type: 'field_number',
-                          name: 'MYVAL'
-                      }
-                  ]
-              },
-              additionalLines: [
-              {
-                message: 'with %1 and %2',
-                args: [
+              JSON: {
+                type: 'test_block',
+                
+                
+                message0: 'Say "Hello World" %1',
+                args0: [
+                    {
+                        type: 'field_number',
+                        name: 'MYVAL'
+                    }
+                ],
+                message1: 'with %1 and %2',
+                args1: [
                     {
                         type: 'field_angle',
                         name: 'MYANGLE'
@@ -63,37 +62,47 @@
                       type: 'field_colour',
                       name: 'MYCOLOR'
                   }
-                ]
-            }],
-              nextStatement: null,
-              previousStatement: null,
-              color: '{!PrimaryColors.Procedure}',
-              codeString: 
-                "console.log('bbl', Blockly, $, _, window, document, Window, this)\nlet code = 'console.log(\\'Hello World\\', ' + block.getFieldValue('MYVAL') +', \\'with\\', ' + block.getFieldValue('MYANGLE') +', \\'° and \\', \\'' + block.getFieldValue('MYCOLOR') +'\\')';\nreturn code;"
-              
+                ],
+                nextStatement: null,
+                previousStatement: null,
+                colour: '{!PrimaryColors.Procedure}'
+              },
+              XML: '',
+              codeStub: '',
+              codeString: "console.log('bbl', Blockly, $, _, window, document, Window, this)\nlet code = 'console.log(\\'Hello World\\', ' + block.getFieldValue('MYVAL') +', \\'with\\', ' + block.getFieldValue('MYANGLE') +', \\'° and \\', \\'' + block.getFieldValue('MYCOLOR') +'\\')';\nreturn code;"
           },
           {
-            uuid: '123',
-            type: 'test_block2',
-            header: {
-                message: 'Say "Hello World" %1',
-                args: [
-                    {
-                        type: 'field_number',
-                        name: 'MYVAL'
-                    }
-                ]
+            uuid: '1256',
+            JSON: {
+              "type": "test_block",
+              "message0": "Say %1 %2 with Value %3",
+              "args0": [
+                {
+                  "type": "field_input",
+                  "name": "MYSTR",
+                  "text": "Hello World"
+                },
+                {
+                  "type": "input_dummy"
+                },
+                {
+                  "type": "field_number",
+                  "name": "MYVAL",
+                  "value": 0
+                }
+              ],
+              "previousStatement": null,
+              "nextStatement": null,
+              "colour": "{!PrimaryColors.Procedure}",
+              "tooltip": "",
+              "helpUrl": ""
             },
-            additionalLines: [],
-            nextStatement: null,
-            previousStatement: null,
-            color: '{!PrimaryColors.Procedure}',
-            codeString: 
-              "console.log('bbl', Blockly, $, _, window, document, Window, this)\nlet code = 'console.log(\\'Hello World\\', ' + block.getFieldValue('MYVAL')  +'\\')';\nreturn code;"
-            
+            XML: '<xml xmlns="https://developers.google.com/blockly/xml">\n    <block type="factory_base" id="p(m~fiHm|^_~U20IYg43" deletable="false" movable="false" x="10" y="10">\n    <mutation connections="BOTH"/>\n    <field name="INLINE">\n    AUTO</field>\n    <field name="CONNECTIONS">\n    BOTH</field>\n    <statement name="INPUTS">\n    <block type="input_dummy" id="54*.WYur;wqY4$R_4m_5">\n    <field name="ALIGN">\n    LEFT</field>\n    <statement name="FIELDS">\n    <block type="field_static" id="a-%;-Ec3.dbg~q;=YZkt">\n    <field name="TEXT">\n    Say</field>\n    <next>\n    <block type="field_input" id="rIdJ%}Vr{#^@P`5!7k8_">\n    <field name="TEXT">\n    Hello World</field>\n    <field name="FIELDNAME">\n    MYSTR</field>\n    </block>\n    </next>\n    </block>\n    </statement>\n    <next>\n    <block type="input_dummy" id="n9*@SCD%@_6Sa=3]$)?U">\n    <field name="ALIGN">\n    LEFT</field>\n    <statement name="FIELDS">\n    <block type="field_static" id=".X_~{hk[L]=zMhz[h4O9">\n    <field name="TEXT">\n    with Value</field>\n    <next>\n    <block type="field_number" id="KA,4)+ebT}XM}V{gXw6!">\n    <field name="VALUE">\n    0</field>\n    <field name="FIELDNAME">\n    MYVAL</field>\n    <field name="MIN">\n    -Infinity</field>\n    <field name="MAX">\n    Infinity</field>\n    <field name="PRECISION">\n    0</field>\n    </block>\n    </next>\n    </block>\n    </statement>\n    </block>\n    </next>\n    </block>\n    </statement>\n    <value name="TOOLTIP">\n    <block type="text" id="l0y_vh^SF2}Z2KV1RY=t" deletable="false" movable="false">\n    <field name="TEXT"/>\n    </block>\n    </value>\n    <value name="HELPURL">\n    <block type="text" id="d+x2XfrEb%YT16B$YWbf" deletable="false" movable="false">\n    <field name="TEXT"/>\n    </block>\n    </value>\n    <value name="BOTTOMTYPE">\n    <shadow type="type_null" id="fiTW5YD04Yom,x(JE~|9"/>\n    </value>\n    <value name="TOPTYPE">\n    <shadow type="type_null" id="-O/~$6gSw0aR!|!xq,iA"/>\n    </value>\n    </block>\n    </xml>',
+            codeStub: "    const text_mystr = block.getFieldValue('MYSTR')\n    const number_myval = block.getFieldValue('MYVAL')\n    // TODO: Assemble Javascript into code variable.\n    let code = '...\\n'\n    return code",
+            codeString: ""
         }
       ]
-    </CustomBlocks>
+    </script>
     <Toolbox>
       {
         items:[],
@@ -178,7 +187,7 @@
       <category name="Procedures" custom="PROCEDURE"  colour="{!PrimaryColors.Procedure}">
       </category>
     </ToolboxOverride>    
-      <script id="myxml" type="text/xmldata">
+      <script id="content" type="text/xmldata">
       <xml xmlns="https://developers.google.com/blockly/xml">
           <block type="controls_if" id="sk$h@#dmRdM.uBDd.KGB" x="179" y="22">
               <mutation else="1"/>

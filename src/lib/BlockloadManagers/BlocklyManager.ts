@@ -15,7 +15,7 @@ export class BlocklyLoadManager implements IBlockloadManager {
     }
 
     private loadCustomBlocks(bl: HTMLElement, inBlock: IBlockElementData, block: IBlockDataBase) {
-        const customBlocks = bl.getElementsByTagName('CUSTOMBLOCKS')
+        const customBlocks = bl.querySelectorAll('script#customblocks') //bl.getElementsByTagName('CUSTOMBLOCKS')
         if (customBlocks.length > 0) {
             const str: string = customBlocks[0].innerHTML ? customBlocks[0].innerHTML : '{}'
 
@@ -25,22 +25,6 @@ export class BlocklyLoadManager implements IBlockloadManager {
                     if (bl.uuid === undefined || bl.uuid === '') {
                         bl.uuid = uuid.v4()
                     }
-
-                    if (bl.header.uuid === undefined || bl.header.uuid === '') {
-                        bl.header.uuid = uuid.v4()
-                    }
-                    if (bl.header._expanded === undefined) {
-                        bl.header._expanded = true
-                    }
-
-                    bl.additionalLines.forEach(l => {
-                        if (l.uuid === undefined || l.uuid === '') {
-                            l.uuid = uuid.v4()
-                        }
-                        if (l._expanded === undefined) {
-                            l._expanded = false
-                        }
-                    })
 
                     if (bl.codeString === undefined && bl._code !== undefined) {
                         bl.codeString = bl._code.toString()
@@ -108,7 +92,7 @@ export class BlocklyLoadManager implements IBlockloadManager {
     }
 
     private loadCode(bl: HTMLElement, inBlock: IBlockElementData, block: IBlockDataBase) {
-        const codes = bl.getElementsByTagName('SCRIPT')
+        const codes = bl.querySelectorAll('script#content') //bl.getElementsByTagName('SCRIPT')
 
         if (codes.length > 0) {
             block.content = codes[0].innerHTML ? codes[0].innerHTML : ''

@@ -1,6 +1,5 @@
 <template>
     <div>
-        <BlockEditor />
         <div
             class="row q-ma-none q-pa-none block-blockly"
             :data-question="block.parentID"
@@ -107,14 +106,12 @@ import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, theme } from '@/lib/BlocklyHelper'
-import BlockEditor from '@/components/Blockly/BlockEditor.vue'
 
 @Component({
     components: {
         CodeBlock,
         BlocklyCustomBlocksEditor,
-        BlocklyToolboxEditor,
-        BlockEditor
+        BlocklyToolboxEditor
     }
 })
 export default class BlocklyBlock extends Vue {
@@ -180,9 +177,9 @@ export default class BlocklyBlock extends Vue {
         }
         this.block.blockly.blocks.forEach(bl => {
             const B = Blockly as any
-            B.Blocks[bl.type] = {
+            B.Blocks[bl.JSON.type] = {
                 init: function() {
-                    this.jsonInit(blocklyHelper.filterCustomBlock(bl))
+                    this.jsonInit(blocklyHelper.getBlockDescription(bl))
                 }
             }
             if (bl._code === undefined) {
@@ -198,11 +195,11 @@ export default class BlocklyBlock extends Vue {
             }
 
             if (this.isPython) {
-                B.Python[bl.type] = bl._code
+                B.Python[bl.JSON.type] = bl._code
             } else if (this.isJava) {
-                B.Java[bl.type] = bl._code
+                B.Java[bl.JSON.type] = bl._code
             } else {
-                B.JavaScript[bl.type] = bl._code
+                B.JavaScript[bl.JSON.type] = bl._code
             }
         })
 

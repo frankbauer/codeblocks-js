@@ -187,50 +187,27 @@ export class BlocklyHelper {
         }
     }
 
-    public filterArgument(a: IBlockArgument): object {
-        const { type, name } = a
-        return { type, name }
-    }
-    public serializeArgument(bl: IBlockArgument): string {
-        return JSON.stringify(this.filterArgument(bl))
+    public getBlockDescription(bl: IBlockDefinition): object {
+        const cp = { ...bl.JSON }
+        cp.colour = this.toHTMLColor(cp.colour)
+        return cp
     }
 
-    public filterLine(l: IBlockLine, nr: number): object {
-        const ret: any = {}
-        ret[`message${nr}`] = l.message
-        ret[`args${nr}`] = l.args.map(a => this.filterArgument(a))
-
-        return ret
-    }
-    public serializeLine(l: IBlockLine, nr: number): string {
-        return JSON.stringify(this.filterLine(l, nr))
-    }
-
-    public filterCustomBlock(bl: IBlockDefinition): object {
-        let ret: any = { ...bl, ...this.filterLine(bl.header, 0) }
-        delete ret.uuid
-        delete ret.type
-        delete ret.header
-        delete ret.additionalLines
-        delete ret.color
-        delete ret.code
-        delete ret.codeString
-
-        ret.colour = this.toHTMLColor(bl.color)
-        bl.additionalLines.forEach((l, i) => (ret = { ...ret, ...this.filterLine(l, i + 1) }))
-
-        return ret
-    }
     public serializeCustomBlock(bl: IBlockDefinition): string {
-        return JSON.stringify(this.filterCustomBlock(bl))
+        return JSON.stringify(this.getBlockDescription(bl))
     }
 
     public serializeCustomBlocks(bls: IBlockDefinition[]): string {
-        return JSON.stringify(bls.map(bl => this.filterCustomBlock(bl)))
+        return JSON.stringify(bls.map(bl => this.getBlockDescription(bl)))
     }
 
     get codeUndefines(): string {
         return 'const window = undefined; const Window = undefined; const document = undefined;const $ = undefined;const _ = undefined;'
+    }
+
+    public removeSelfClosingTags(xml: string): string {
+        console.log(xml, '\n', xml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>'))
+        return xml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>')
     }
 
     public prepareCode(cc: string): string {

@@ -26,7 +26,7 @@ const UNNAMED = 'unnamed'
 
 @Component
 export default class BlockEditor extends Vue {
-    @Prop({ required: false, default: '' }) blockJSON!: string
+    @Prop({ required: true }) blockDefinition!: IBlockDefinition
     @Prop({ default: '100%' }) width!: string
     @Prop({ default: '100px' }) height!: string
 
@@ -40,7 +40,7 @@ export default class BlockEditor extends Vue {
         this.updatePreview()
     }
 
-    @Watch('blockJSON')
+    @Watch('blockDefinition.JSON', { immediate: false, deep: true })
     onJSONUpdate() {
         this.updatePreview()
     }
@@ -49,7 +49,7 @@ export default class BlockEditor extends Vue {
         if (!this.previewWorkspace) {
             console.d('INJECT BLOCKLY PREVIEW', this.blocklyPreviewContainer)
             this.previewWorkspace = Blockly.inject(this.blocklyPreviewContainer, {
-                scrollbars: true,
+                scrollbars: false,
                 theme: theme,
                 renderer: 'minimalist'
             })
@@ -57,7 +57,7 @@ export default class BlockEditor extends Vue {
 
         this.previewWorkspace.clear()
 
-        const code = this.blockJSON
+        const code = blocklyHelper.serializeCustomBlock(this.blockDefinition)
         if (!code.trim()) {
             return
         }
@@ -80,7 +80,7 @@ export default class BlockEditor extends Vue {
             }
 
             // Look for a block on Blockly.Blocks that does not match the backup.
-            let blockType = null
+            let blockType: string | null = null
             for (let type in Blockly.Blocks) {
                 if (
                     typeof Blockly.Blocks[type].init == 'function' &&

@@ -58,7 +58,7 @@ export default class BlocklyCustomBlocksEditor extends Vue {
     }
 
     labelForBlock(block: IBlockDefinition): string {
-        return block.header.message
+        return block.JSON.message0
     }
 
     addBlock() {
@@ -71,8 +71,9 @@ export default class BlocklyCustomBlocksEditor extends Vue {
                     model: '',
                     isValid: val =>
                         val.length > 2 &&
-                        this.customBlocks.find(bl => bl.type.toLowerCase() == val.toLowerCase()) ===
-                            undefined &&
+                        this.customBlocks.find(
+                            bl => bl.JSON.type.toLowerCase() == val.toLowerCase()
+                        ) === undefined &&
                         PredefinedBlockTypes.find(
                             bl => bl.value.toLowerCase() == val.toLowerCase()
                         ) === undefined,
@@ -101,20 +102,18 @@ export default class BlocklyCustomBlocksEditor extends Vue {
         //start new one expanede
         const item: IBlockDefinition = {
             uuid: uuid.v4(),
-            type: type,
             _expanded: true,
-            header: {
-                uuid: uuid.v4(),
-                _expanded: true,
-                message: type,
-                args: []
+            XML: '',
+            JSON: {
+                type: type,
+                message0: type,
+                args0: [],
+                previousStatement: null,
+                nextStatement: null,
+                colour: '',
+                tooltip: '',
+                helpUrl: ''
             },
-            additionalLines: [],
-            previousStatement: null,
-            nextStatement: null,
-            color: '',
-            tooltip: '',
-            helpUrl: '',
             codeString: 'return ""'
         }
         this.customBlocks.push(item)
