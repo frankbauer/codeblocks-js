@@ -738,7 +738,15 @@ export default class BlockEditor extends Vue {
                 disable: false,
                 renderer: 'minimalist',
                 theme: theme,
-                scrollbars: true
+                scrollbars: true,
+                zoom: {
+                    controls: true,
+                    wheel: false,
+                    startScale: 0.75,
+                    maxScale: 2,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2
+                }
             })
 
             if (this.blockDefinition.XML && this.blockDefinition.XML.trim() != '') {

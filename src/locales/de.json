@@ -99,6 +99,7 @@
         "ToolboxItems": "Blöcke",
         "Properties": "Eigenschaften",
         "UseCustomToolbox": "Toolbox selbst definieren",
+        "ShowControls": "Kontrolleiste Anzeigen",
         "Block": {
             "TypeName": "Unique Type ID",
             "MainDescription": "Main Description (use %1, %2... for Argument PlaceHolders)",

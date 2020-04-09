@@ -204,6 +204,14 @@ export default class BlocklyBlock extends Vue {
         })
 
         options.renderer = 'minimalist'
+        options.zoom = {
+            controls: this.block.blockly.showControls,
+            wheel: false,
+            startScale: 1.0,
+            maxScale: 2,
+            minScale: 0.3,
+            scaleSpeed: 1.2
+        }
         if (this.workspace) {
             this.workspace.dispose()
         }
@@ -461,6 +469,16 @@ export default class BlocklyBlock extends Vue {
             return
         }
         console.log('Changed Blocks')
+        this.$nextTick(() => {
+            this.remountBlockly()
+        })
+    }
+    @Watch('block.blockly.showControls', { immediate: false, deep: false })
+    onShowControlsChanged() {
+        if (!this.editMode) {
+            return
+        }
+        console.log('Changed Show Controls')
         this.$nextTick(() => {
             this.remountBlockly()
         })

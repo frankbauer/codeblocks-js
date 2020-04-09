@@ -1,6 +1,12 @@
 <template>
     <div class="q-ml-lg q-pb-sm q-pl-lg">
         <div class="row no-wrap q-pa-none">
+            <div class="text-overline">{{ $t('Blockly.Properties') }}</div>
+        </div>
+        <div>
+            <q-toggle v-model="showControls" :label="$t('Blockly.ShowControls')" />
+        </div>
+        <div class="row no-wrap q-pa-none">
             <div class="text-overline">{{ $t('Blockly.ToolboxCategories') }}</div>
             <q-btn
                 color="primary"
@@ -97,6 +103,13 @@ export default class BlocklyToolboxEditor extends Vue {
         if (idx >= 0) {
             this.block.blockly.toolbox.categories.splice(idx, 1)
         }
+    }
+
+    get showControls(): boolean {
+        return this.block.blockly.showControls
+    }
+    set showControls(v: boolean) {
+        this.block.blockly.showControls = v
     }
 }
 </script>

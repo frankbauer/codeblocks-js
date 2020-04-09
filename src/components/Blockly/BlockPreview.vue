@@ -51,7 +51,15 @@ export default class BlockEditor extends Vue {
             this.previewWorkspace = Blockly.inject(this.blocklyPreviewContainer, {
                 scrollbars: false,
                 theme: theme,
-                renderer: 'minimalist'
+                renderer: 'minimalist',
+                zoom: {
+                    controls: false,
+                    wheel: false,
+                    startScale: 0.75,
+                    maxScale: 2,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2
+                }
             })
         }
 

@@ -71,6 +71,7 @@ export interface IBlockElementData {
     version?: string
     scopeUUID?: string
     scopeSelector?: string
+    showControls?: boolean
 }
 
 export interface IBlockDataBlockly {
@@ -79,6 +80,7 @@ export interface IBlockDataBlockly {
     _blockErrors: IBlockError[]
     useOverride: boolean
     toolboxOverride: string
+    showControls: boolean
 }
 
 export interface ICodeBlockDataState {

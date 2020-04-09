@@ -112,6 +112,10 @@ export class BlocklyLoadManager implements IBlockloadManager {
         block.hasCode = true
     }
 
+    private isTrue(val: any): boolean {
+        return val !== undefined && val != 'false' && val != '0'
+    }
+
     loadFromDatablock(
         bl: HTMLElement,
         inBlock: IBlockElementData,
@@ -120,6 +124,8 @@ export class BlocklyLoadManager implements IBlockloadManager {
     ): void {
         block.obj = null
         positioninLoadManager.loadFromDatablock(bl, inBlock, block)
+
+        block.blockly.showControls = this.isTrue(inBlock.showControls)
 
         this.loadCustomBlocks(bl, inBlock, block)
         this.loadToolbox(bl, inBlock, block)

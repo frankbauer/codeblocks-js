@@ -24,7 +24,7 @@
                     <div class="previewBox">
                         <BlockPreview
                             :blockDefinition="blockDefinition"
-                            width="1000px"
+                            width="100%"
                             height="200px"
                         />
                     </div>
@@ -262,7 +262,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
 .previewBoxContainer
     overflow: hidden
     height: 100px
-.previewBox
+.previewBoxs
     transform: scale(0.75)
     transform-origin: top left
 </style>
