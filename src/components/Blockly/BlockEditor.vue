@@ -360,7 +360,7 @@ export default class BlockEditor extends Vue {
             Lua: '',
             Dart: ';'
         }
-        code.push('  // TODO: Assemble ' + language + ' into code variable.')
+        code.push('    // TODO: Assemble ' + language + ' into code variable.')
         if (block.outputConnection) {
             code.push("    let code = '...'")
             code.push('    // TODO: Change ORDER_NONE to the correct strength.')
