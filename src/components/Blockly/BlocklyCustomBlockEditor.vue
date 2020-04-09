@@ -248,7 +248,11 @@ export default class BlocklyCustomBlockEditor extends Vue {
     }
 
     onBlockCodeChange() {
-        this.blockDefinition.codeString = this.codeBlock.content
+        if (this.codeBlock.content === this.blockDefinition.codeStub) {
+            this.blockDefinition.codeString = ''
+        } else {
+            this.blockDefinition.codeString = this.codeBlock.content
+        }
         this.blockDefinition._code = undefined
     }
 }
@@ -259,6 +263,6 @@ export default class BlocklyCustomBlockEditor extends Vue {
     overflow: hidden
     height: 100px
 .previewBox
-    transform: scale(0.5)
+    transform: scale(0.75)
     transform-origin: top left
 </style>

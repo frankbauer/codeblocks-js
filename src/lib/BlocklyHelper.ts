@@ -206,7 +206,7 @@ export class BlocklyHelper {
     }
 
     public removeSelfClosingTags(xml: string): string {
-        console.log(xml, '\n', xml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>'))
+        //console.log(xml, '\n', xml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>'))
         return xml.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>')
     }
 

@@ -54,6 +54,27 @@
                     :label="labelForItem(item.type)"
                     :caption="item.type"
                 >
+                    <template v-slot:header>
+                        <q-item style="width:100%">
+                            <q-item-section>
+                                <q-item-label>{{ labelForItem(item.type) }}</q-item-label>
+                                <q-item-label caption>
+                                    {{ item.type }}
+                                </q-item-label>
+                            </q-item-section>
+                            <q-item-section top side>
+                                <q-btn
+                                    @click="removeItem(item)"
+                                    icon="delete"
+                                    flat
+                                    dense
+                                    color="red-3"
+                                    right
+                                    :ripple="{ center: true }"
+                                ></q-btn>
+                            </q-item-section>
+                        </q-item>
+                    </template>
                     <BlocklyToolboxItemEditor :item="item" :customBlocks="customBlocks" />
                 </q-expansion-item>
             </q-list>
@@ -99,6 +120,13 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
 
     get htmlColor() {
         return blocklyHelper.toHTMLColor(this.category.color)
+    }
+
+    removeItem(item) {
+        const idx = this.category.items.indexOf(item)
+        if (idx >= 0) {
+            this.category.items.splice(idx, 1)
+        }
     }
 
     addItem() {

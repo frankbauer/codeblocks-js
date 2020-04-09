@@ -23,6 +23,27 @@
                 :label="category.name"
                 :caption="descriptionForCategory(category)"
             >
+                <template v-slot:header>
+                    <q-item style="width:100%">
+                        <q-item-section>
+                            <q-item-label>{{ category.name }}</q-item-label>
+                            <q-item-label caption>
+                                {{ descriptionForCategory(category) }}
+                            </q-item-label>
+                        </q-item-section>
+                        <q-item-section top side>
+                            <q-btn
+                                @click="removeCategory(category)"
+                                icon="delete"
+                                flat
+                                dense
+                                color="red-3"
+                                right
+                                :ripple="{ center: true }"
+                            ></q-btn>
+                        </q-item-section>
+                    </q-item>
+                </template>
                 <BlocklyToolboxCategoryEditor
                     :category="category"
                     :customBlocks="block.blockly.blocks"
@@ -68,6 +89,13 @@ export default class BlocklyToolboxEditor extends Vue {
                 color: ''
             }
             this.block.blockly.toolbox.categories.push(cat)
+        }
+    }
+
+    removeCategory(category) {
+        const idx = this.block.blockly.toolbox.categories.indexOf(category)
+        if (idx >= 0) {
+            this.block.blockly.toolbox.categories.splice(idx, 1)
         }
     }
 }

@@ -745,7 +745,7 @@ export default class BlockEditor extends Vue {
                 const xml = Blockly.Xml.textToDom(
                     blocklyHelper.removeSelfClosingTags(this.blockDefinition.XML)
                 )
-                console.d('LOADING LAYOUT', this.blockDefinition.XML, xml.outerHTML)
+                console.d('LOADING LAYOUT')
                 Blockly.Xml.domToWorkspace(xml, this.mainWorkspace)
             } else {
                 this.showStarterBlock()

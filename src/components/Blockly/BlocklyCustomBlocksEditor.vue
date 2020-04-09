@@ -23,9 +23,30 @@
                 group="blockListing"
                 header-class="bg-blue-grey text-white"
                 :label="labelForBlock(item)"
-                :caption="item.type"
+                :caption="item.JSON.type"
                 @show="onShowBlock"
             >
+                <template v-slot:header>
+                    <q-item style="width:100%">
+                        <q-item-section>
+                            <q-item-label>{{ labelForBlock(item) }}</q-item-label>
+                            <q-item-label caption>
+                                {{ item.JSON.type }}
+                            </q-item-label>
+                        </q-item-section>
+                        <q-item-section top side>
+                            <q-btn
+                                @click="removeBlock(item)"
+                                icon="delete"
+                                flat
+                                dense
+                                color="red-3"
+                                right
+                                :ripple="{ center: true }"
+                            ></q-btn>
+                        </q-item-section>
+                    </q-item>
+                </template>
                 <BlocklyCustomBlockEditor
                     :blockDefinition="item"
                     :block="block"
@@ -59,6 +80,13 @@ export default class BlocklyCustomBlocksEditor extends Vue {
 
     labelForBlock(block: IBlockDefinition): string {
         return block.JSON.message0
+    }
+
+    removeBlock(item) {
+        const idx = this.customBlocks.indexOf(item)
+        if (idx >= 0) {
+            this.customBlocks.splice(idx, 1)
+        }
     }
 
     addBlock() {

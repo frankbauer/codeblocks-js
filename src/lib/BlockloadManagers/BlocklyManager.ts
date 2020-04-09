@@ -49,7 +49,7 @@ export class BlocklyLoadManager implements IBlockloadManager {
     }
 
     private loadToolbox(bl: HTMLElement, inBlock: IBlockElementData, block: IBlockDataBase) {
-        const toolboxInput = bl.querySelectorAll('script#toolbox') //bl.getElementsByTagName('TOOLBOX')
+        const toolboxInput = bl.getElementsByTagName('TOOLBOX')
         if (toolboxInput.length > 0) {
             const toolboxStr: string = toolboxInput[0].innerHTML ? toolboxInput[0].innerHTML : ''
 
