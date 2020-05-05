@@ -38,3 +38,6 @@ npm run build-ilias
 ```
 
 The command deploys the app to`../codeblocks/<version>/` (relative to the root folder of this project).
+
+## More Info
+Please refer to our Wiki for more Infos:  https://github.com/frankbauer/codeblocks-js/wiki 
