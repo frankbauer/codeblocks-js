@@ -5,6 +5,19 @@
   <title>codeblocks - simple</title>
 
   <style>
+    h1{
+      font-size:24pt!important;
+      margin-bottom:5px!important;
+      margin-top:30px!important;
+      height:fit-content;
+      line-height: 3rem!important;
+    }
+    div#content{
+      position:absolute;
+      left: calc(50% - 300px);
+      right: calc(50% - 300px);
+      width: 600px;
+    }
     codeblockseditor > *,  codeblocks > *, [codeblockseditor] > *,  [codeblocks] > *{
       display:none;        
     }
@@ -15,15 +28,40 @@
 </head>
 
 <body>
-  <div codeblocks data-compiler="javascript" data-run-code="true">
-    <loading><div></div><div></div></loading> 
-    <block data-static>console.log("Welcome to codeblocks-js")
+  <div id="content">
+  <h1>This is JavaScript:</h1>
+    <div codeblocks data-compiler="javascript" data-run-code="true">
+      <loading><div></div><div></div></loading> 
+      <block data-static>console.log("Welcome to codeblocks-js")
 // Please type some code below
-    </block>
-    <block data-visible-lines="5">//your code goes here</block>
-    <block data-static>console.log("Thanks :)")</block>
-  </div>
+      </block>
+      <block data-visible-lines="5">//your code goes here</block>
+      <block data-static>console.log("Thanks :)")</block>
+    </div>
 
+    <h1>This is Java:</h1>
+    <div codeblocks data-compiler="java" data-run-code="true">
+      <loading><div></div><div></div></loading> 
+      <block data-static>public class Test {
+    public static void main(String[] args) {
+        System.out.println("Welcome to codeblocks-js");
+        // Please type some code below</block>
+      <block data-visible-lines="5">        // your code goes here</block>
+      <block data-static>        System.out.println("Thanks :)");
+    }
+}</block>
+    </div>
+
+
+    <h1>This is Python:</h1>
+    <div codeblocks data-compiler="python" data-run-code="true">
+      <loading><div></div><div></div></loading> 
+      <block data-static>print("Welcome to codeblocks-js")
+# Please type some code below</block>
+      <block data-visible-lines="5"># your code goes here</block>
+      <block data-static>print("Thanks :)")</block>
+    </div>
+  </div>
   <script>
     document.body.onload = () => {
       import ("./js/codeblocks-js/codeblocks.umd.min.js")
