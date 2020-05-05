@@ -23,9 +23,9 @@ npm run serve
 ### Compiles and minifies for production
 You can build all required files for distribution using
 ```
-npm run build
+npm run build-lib
 ```
-The build command will (by default) deploy the app to the `./dist`-Folder.
+The build command will (by default) deploy the lib to the `./dist`-Folder. Please ignore the generated `demo.html`-File. It is generated automatically by vue and does NOT relate to the project.
 
 ### Customize base-configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
