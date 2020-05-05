@@ -50,7 +50,7 @@ Blockly.Blocks['factory_base'] = {
                 ['↑ top connection', 'TOP'],
                 ['↓ bottom connection', 'BOTTOM']
             ],
-            function(option) {
+            function(this: any, option) {
                 this.getSourceBlock().updateShape_(option)
                 // Connect a shadow block to this new input.
                 this.getSourceBlock().spawnOutputShadow_(option)
@@ -407,7 +407,7 @@ Blockly.Blocks['field_dropdown'] = {
         var optionBlock = containerBlock.getInputTargetBlock('STACK')
         // Count number of inputs.
         this.optionList_.length = 0
-        var data = []
+        var data: any[] = []
         while (optionBlock) {
             if (optionBlock.type == 'field_dropdown_option_text') {
                 this.optionList_.push('text')
@@ -693,7 +693,7 @@ Blockly.Blocks['type_group'] = {
         // Reconfigure this block based on the mutator dialog's components.
         var typeBlock = containerBlock.getInputTargetBlock('STACK')
         // Count number of inputs.
-        var connections = []
+        var connections: any[] = []
         while (typeBlock) {
             connections.push(typeBlock.valueConnection_)
             typeBlock = typeBlock.nextConnection && typeBlock.nextConnection.targetBlock()

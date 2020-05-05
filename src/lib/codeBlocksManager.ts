@@ -336,7 +336,7 @@ class InternalCodeBlocksManager {
             data.executionTimeout = Number(inData.executionTimeout)
         }
 
-        if (inData.maxCharacters === undefined) {
+        if (inData.maxCharacters !== undefined) {
             data.maxCharacters = Number(inData.maxCharacters)
         }
 
@@ -370,6 +370,7 @@ class InternalCodeBlocksManager {
                 readyCount: 0,
                 obj: null,
                 blockly: {
+                    showControls: false,
                     useOverride: false,
                     toolbox: {
                         categories: []
@@ -522,6 +523,7 @@ class InternalCodeBlocksManager {
                             hasAlternativeContent: false,
                             shouldAutoreset: false,
                             blockly: {
+                                showControls: false,
                                 useOverride: false,
                                 toolboxOverride: '',
                                 toolbox: {

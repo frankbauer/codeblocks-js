@@ -565,7 +565,6 @@ export default class CodeBlocksContainer extends Vue {
             }
         } else if (
             ret.type == KnownBlockTypes.BLOCKLY &&
-            this.block.blockly.toolbox.items.length === 0 &&
             this.block.blockly.toolbox.categories.length === 0 &&
             this.editMode
         ) {

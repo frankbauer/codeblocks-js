@@ -153,7 +153,9 @@ export default class CodeBlock extends BaseBlock {
     }
     onCodeReady(editor) {
         //we need this for StudON to make sure tinyMCE is not taking over :D
-        this.codemirror.display.input.textarea.className = 'noRTEditor'
+        if (this.codemirror && this.codemirror.display && this.codemirror.display.input && this.codemirror.display.input.textarea) {
+            this.codemirror.display.input.textarea.className = 'noRTEditor'
+        }
         this.codeBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
             el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
             el.id = this.codeBox!.$el.id
@@ -173,7 +175,9 @@ export default class CodeBlock extends BaseBlock {
     onAltCodeReady(editor) {
         console.d('READY')
         //we need this for StudON to make sure tinyMCE is not taking over :D
-        this.altcodemirror.display.input.textarea.className = 'noRTEditor'
+        if (this.altcodemirror && this.altcodemirror.display && this.altcodemirror.display.input && this.altcodemirror.display.input.textarea) {
+            this.altcodemirror.display.input.textarea.className = 'noRTEditor'
+        }
         this.altBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
             el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
         })

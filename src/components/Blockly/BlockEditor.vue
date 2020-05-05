@@ -501,12 +501,9 @@ export default class BlockEditor extends Vue {
                         })
                         break
                     case 'field_dropdown':
-                        var options = []
+                        var options: any[] = []
                         for (var i = 0; i < block.optionList_.length; i++) {
-                            options[i] = [
-                                block.getUserData(i) as any,
-                                block.getFieldValue('CPU' + i)
-                            ]
+                            options[i] = [block.getUserData(i), block.getFieldValue('CPU' + i)]
                         }
                         if (options.length) {
                             fields.push({

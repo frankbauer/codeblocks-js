@@ -30,7 +30,7 @@ import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '../lib/codeBlocksManager'
-import { IBlockData, KnownBlockTypes } from '../lib/ICodeBlocks'
+import { IBlockData, KnownBlockTypes, ICodeBlockDataState } from '../lib/ICodeBlocks'
 
 interface IBlockDataExtended extends IBlockData {
     firstLine: number
@@ -42,7 +42,7 @@ export default class CodePanel extends Vue {
     @Prop({ default: false }) editMode!: boolean
     @Prop({ default: 'auto' }) visibleLines!: number | 'auto'
     @Prop({ required: true }) block!: BlockData | null
-    @Prop({ default: 400 }) panelWidth!: number = 400
+    @Prop({ default: 400 }) panelWidth!: number
 
     get saveBlock(): IBlockData {
         if (
@@ -73,7 +73,27 @@ export default class CodePanel extends Vue {
             shouldAutoreset: false,
             firstLine: 1,
             actualContent: '',
-            actualAltContent: ''
+            actualAltContent: '',
+            width: '100%',
+            height: '200px',
+            align: 'center',
+            readonly: true,
+            static: true,
+            hidden: false,
+            themeForCodeBlock: '',
+            getThemeForBlock: (bl: ICodeBlockDataState) => {
+                return ''
+            },
+            blockly: {
+                _blockErrors: [],
+                useOverride: false,
+                toolbox: {
+                    categories: []
+                },
+                showControls: false,
+                toolboxOverride: '',
+                blocks: []
+            }
         }
         return ret
     }
