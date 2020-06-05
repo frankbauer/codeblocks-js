@@ -3,7 +3,8 @@ import { Vue, Component } from 'vue-property-decorator'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
-    ErrorSeverity
+    ErrorSeverity,
+    finishedCallbackSignatur
 } from '@/lib/ICompilerRegistry'
 
 //function runJavaScriptWorker( code, log_callback, max_ms, questionID){
@@ -16,7 +17,7 @@ function runJavaScriptWorker(
     info_callback: (txt: string) => void,
     err_callback: (txt: string) => void,
     compileFailedCallback: (info: ICompilerErrorDescription) => void,
-    finishedExecutionCB: (success: boolean, overrideOutput?: any) => void
+    finishedExecutionCB: finishedCallbackSignatur
 ) {
     log_callback('')
 
@@ -159,6 +160,7 @@ export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
     readonly canRun = true
     readonly canStop = false
     readonly allowsContinousCompilation = false
+    readonly allowsPersistentArguments = false
     readonly acceptsJSONArgument = false
     isReady = true
     isRunning = false
@@ -173,7 +175,7 @@ export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
         info_callback: (txt: string) => void,
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        finishedExecutionCB: finishedCallbackSignatur,
         args: object
     ): void {
         return runJavaScriptWorker(

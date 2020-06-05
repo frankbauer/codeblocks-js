@@ -65,6 +65,7 @@
         "PMagic": "Text+JSON (seperated by '\\n\\n&lt;JSON>\\n')",
         "NumberErr": "Muss ein gültiger Zahlenwert sein",
         "ContinousCompile": "Automatic Compilation (while typing)",
+        "PersistentArguments": "Persistente Arguments (between calls)",
         "AllowArguments": "Supports Runtime-Arguments",
         "AllowArgumentsCaption": "Send Runtime-Arguments",
         "AllowArgumentsHint": "Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can add data to the passed argument-object. The object is available in the students as a variable named <code>args</code>."

@@ -3,7 +3,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
-    ICompilerRegistry
+    ICompilerRegistry,
+    finishedCallbackSignatur
 } from '@/lib/ICompilerRegistry'
 
 function runGLSLWorker(
@@ -15,7 +16,7 @@ function runGLSLWorker(
     infoCallback: (txt: string) => void,
     errCallback: (txt: string) => void,
     compileFailedCallback: (info: ICompilerErrorDescription) => void,
-    finishCallback: (success: boolean, overrideOutput?: any) => void
+    finishCallback: finishedCallbackSignatur
 ) {
     var outputData: string[] = []
     callingCodeBlocks.blocks.filter(b => b.hasCode).forEach(block => outputData.push(block.content))
@@ -39,6 +40,7 @@ export class GLSLV100Compiler extends Vue implements ICompilerInstance {
     readonly canRun = true
     readonly canStop = false
     readonly allowsContinousCompilation = false
+    readonly allowsPersistentArguments = false
     readonly acceptsJSONArgument = false
     isReady = true
     isRunning = false
@@ -53,7 +55,7 @@ export class GLSLV100Compiler extends Vue implements ICompilerInstance {
         info_callback: (txt: string) => void,
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        finishedExecutionCB: finishedCallbackSignatur,
         args: object
     ): void {
         return runGLSLWorker(

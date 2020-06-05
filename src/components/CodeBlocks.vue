@@ -17,6 +17,7 @@
             @compiler-version-change="onCompilerVersionChange"
             @run-state-change="onRunStateChange"
             @continuous-compile-change="onContinousCompileStateChange"
+            @persistent-arguments-change="onPersistentArgumentsChange"
             @language-change="onLanguageChange"
             @character-limit-change="onCharacterLimitChange"
             @timeout-change="onTimeoutChange"
@@ -284,7 +285,8 @@ export default class CodeBlocks extends Vue {
             solutionTheme: this.solutionTheme,
             outputParser: this.outputParser,
             randomizer: this.blockInfo.randomizer,
-            continuousCompilation: this.blockInfo.continuousCompilation
+            continuousCompilation: this.blockInfo.continuousCompilation,
+            persistentArguments: this.blockInfo.persistentArguments
         }
     }
     get blocks(): BlockData[] {
@@ -425,6 +427,7 @@ export default class CodeBlocks extends Vue {
     onCompilerVersionChange(v: string): void {}
     onRunStateChange(v: boolean): void {}
     onContinousCompileStateChange(v: boolean): void {}
+    onPersistentArgumentsChange(v: boolean): void {}
     onLanguageChange(v: string): void {}
     onCharacterLimitChange(v: number): void {}
     onTimeoutChange(v: number): void {}
@@ -595,7 +598,8 @@ export default class CodeBlocks extends Vue {
                 self.logInfo.bind(this),
                 self.logError.bind(this),
                 self.processDiagnostics.bind(this),
-                (success = true, overrideOutput = undefined) => {
+                (success = true, overrideOutput = undefined, returnState = undefined) => {
+                    console.d('returnState:', returnState, _args)
                     if (!success) {
                         self.$compilerState.hideGlobalState()
                         self.$compilerState.setAllRunButtons(true)
@@ -605,6 +609,10 @@ export default class CodeBlocks extends Vue {
                         overrideOutput ? overrideOutput : self.output,
                         self.sansoutput
                     )
+
+                    if (returnState !== undefined && this.blockInfo.persistentArguments) {
+                        this.blockInfo.storeDefaultArgs(returnState)
+                    }
                     self.$compilerState.hideGlobalState()
                     self.$compilerState.setAllRunButtons(true)
                     return res

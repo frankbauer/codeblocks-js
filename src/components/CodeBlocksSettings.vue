@@ -21,6 +21,13 @@
                                 :label="$t('CodeBlocksSettings.ContinousCompile')"
                             />
                         </div>
+                        <div class="col-12">
+                            <q-toggle
+                                v-model="persistentArguments"
+                                :disabled="!canPersistentArguments"
+                                :label="$t('CodeBlocksSettings.PersistentArguments')"
+                            />
+                        </div>
 
                         <div
                             :class="
@@ -190,6 +197,7 @@ export interface ICodeBlockSettingsOptions {
     outputParser: CodeOutputTypes
     randomizer: IRandomizerSettings
     continuousCompilation: boolean
+    persistentArguments: boolean
 }
 
 @Component({ components: { RandomizerSettings } })
@@ -394,6 +402,21 @@ export default class CodeBlocksSettings extends Vue {
         if (cmp) {
             console.d('Continuous Compile - ', 'can', cmp.allowsContinousCompilation && cmp.canRun)
             return cmp.allowsContinousCompilation && cmp.canRun
+        }
+        return false
+    }
+
+    get persistentArguments(): boolean {
+        return this.options.persistentArguments
+    }
+    set persistentArguments(v: boolean) {
+        this.$emit('persistent-arguments-change', v)
+    }
+    get canPersistentArguments(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            console.d('Persistent Arguments - ', 'can', cmp.allowsPersistentArguments && cmp.canRun)
+            return cmp.allowsPersistentArguments && cmp.canRun
         }
         return false
     }

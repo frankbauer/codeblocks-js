@@ -85,6 +85,9 @@ export default class CodeBlocksEditor extends CodeBlocks {
     onContinousCompileStateChange(v: boolean): void {
         this.blockInfo.continuousCompilation = v
     }
+    onPersistentArgumentsChange(v: boolean): void {
+        this.blockInfo.persistentArguments = v
+    }
     onLanguageChange(v: string): void {
         this.blockInfo.language = v
     }

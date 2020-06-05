@@ -56,6 +56,7 @@ export interface IAppSettings {
     scopeUUID?: string
     scopeSelector?: string
     continuousCompilation: boolean
+    persistentArguments: boolean
 }
 
 interface IAppElementData {
@@ -76,6 +77,7 @@ interface IAppElementData {
     scopeUUID?: string
     scopeSelector?: string
     continuousCompilation?: string
+    persistentArguments?: string
 }
 
 export interface IBlockBookmarkPayload {
@@ -199,6 +201,7 @@ export interface IMainBlock extends IAppSettings {
     addNewBlock(): void
 
     initArgsForLanguage(): object | string[]
+    storeDefaultArgs(args: object | string[]): void
 }
 
 function isTrue(val: any): boolean {
@@ -255,7 +258,8 @@ class InternalCodeBlocksManager {
             uuid: 'is-set-below',
             executionTimeout: 5000,
             maxCharacters: 1000,
-            continuousCompilation: isTrue(inData.continuousCompilation)
+            continuousCompilation: isTrue(inData.continuousCompilation),
+            persistentArguments: isTrue(inData.persistentArguments)
         }
 
         if (inData.randomizerActive !== undefined) {
@@ -460,13 +464,23 @@ class InternalCodeBlocksManager {
                     scopeUUID?: string
                     scopeSelector?: string
                     continuousCompilation!: boolean
+                    persistentArguments!: boolean
 
                     initArgsForLanguage() {
-                        console.d('Constructing args for', this.language)
+                        console.d('Constructing args for', this.language, this.defaultArgs)
                         if (this.language === 'java') {
                             return []
                         }
-                        return {}
+                        if (this.defaultArgs === undefined) {
+                            return {}
+                        } else {
+                            return this.defaultArgs
+                        }
+                    }
+
+                    defaultArgs!: object | string[] | undefined
+                    storeDefaultArgs(args: object | string[]) {
+                        this.defaultArgs = args
                     }
 
                     swap(id1: number, id2: number) {

@@ -4,7 +4,8 @@ import {
     ICompilerInstance,
     ICompilerErrorDescription,
     ICompilerRegistry,
-    ErrorSeverity
+    ErrorSeverity,
+    finishedCallbackSignatur
 } from '@/lib/ICompilerRegistry'
 
 declare global {
@@ -22,7 +23,7 @@ function runJavaScriptWorker(
     info_callback: (txt: string) => void,
     err_callback: (txt: string) => void,
     compileFailedCallback: (info: ICompilerErrorDescription) => void,
-    finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+    finishedExecutionCB: finishedCallbackSignatur,
     args: object
 ): Worker | undefined {
     //WebWorkers need to be supported
@@ -51,8 +52,14 @@ function runJavaScriptWorker(
 
         switch (msg.data[0]) {
             case 'finished':
+                if (msg && msg.data && msg.data.length >= 3) {
+                    args['return'] = msg.data[2]
+                } else {
+                    args['return'] = {}
+                }
+                console.d('returned msg:', msg, ', args:', args)
                 executionFinished = true
-                finishedExecutionCB(true)
+                finishedExecutionCB(true, undefined, args['return'])
                 console.i('Execution finished in ' + time + ' ms\n')
                 //info_callback('Info: Execution finished in ' + time + ' ms\n')
                 worker.end()
@@ -145,6 +152,7 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
     isRunning = false
     readonly canStop = true
     readonly allowsContinousCompilation = true
+    readonly allowsPersistentArguments = true
     readonly acceptsJSONArgument = true
     libraries = [
         {
@@ -181,7 +189,7 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
         info_callback: (txt: string) => void,
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        finishedExecutionCB: finishedCallbackSignatur,
         args: object
     ): void {
         this.worker = runJavaScriptWorker(

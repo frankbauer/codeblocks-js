@@ -1,3 +1,9 @@
+export type finishedCallbackSignatur = (
+    success: boolean,
+    overrideOutput?: any,
+    returnState?: any
+) => void
+
 export interface IListItemData {
     readonly label: string
     readonly value: string
@@ -74,6 +80,7 @@ export interface ICompilerInstance {
     readonly canRun: boolean
     readonly canStop: boolean
     readonly allowsContinousCompilation: boolean
+    readonly allowsPersistentArguments: boolean
     readonly acceptsJSONArgument: boolean
     isReady: boolean
     isRunning: boolean
@@ -90,7 +97,7 @@ export interface ICompilerInstance {
         info_callback: (txt: string) => void,
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        finishedExecutionCB: finishedCallbackSignatur,
         args: object,
         runCreate?: boolean
     ): void

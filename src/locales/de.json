@@ -65,6 +65,7 @@
         "PMagic": "Text+JSON (getrennt mit '\\n\\n&lt;JSON>\\n')",
         "NumberErr": "Must be a valid Number.",
         "ContinousCompile": "Automatisch Kompilieren",
+        "PersistentArguments": "Persistente Argumente",
         "AllowArguments": "Untersützt das Senden von Argumenten",
         "AllowArgumentsCaption": "Senden von Argumenten",
         "AllowArgumentsHint": "Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein JSON-Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden."

@@ -4,7 +4,8 @@ import {
     ICompilerInstance,
     ICompilerErrorDescription,
     ICompilerRegistry,
-    ErrorSeverity
+    ErrorSeverity,
+    finishedCallbackSignatur
 } from '@/lib/ICompilerRegistry'
 
 const teaVMRunOverhead = 30000
@@ -17,6 +18,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
     readonly canRun = true
     readonly canStop = true
     readonly allowsContinousCompilation = false
+    readonly allowsPersistentArguments = false
     readonly acceptsJSONArgument = true
     didPreload: boolean = false
     teaworker: Worker | undefined = undefined
@@ -100,7 +102,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         info_callback: (txt: string) => void,
         err_callback: (txt: string) => void,
         compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: (success: boolean, overrideOutput?: any) => void,
+        finishedExecutionCB: finishedCallbackSignatur,
         args: object,
         runCreate: boolean = true
     ): void {
