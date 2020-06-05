@@ -64,5 +64,5 @@ export default class CodeBlockButton extends Vue {
     position: absolute
     right: 8px
     top: 8px
-    z-index:5000
+    z-index:1020
 </style>
