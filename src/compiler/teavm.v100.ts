@@ -159,7 +159,6 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             }
         }, teaVMRunOverhead)
 
-        var mainClass = 'Unknown'
         let text = code
             .replace(/"(?:[^"\\]|\\.)*"|\/\*[\s\S]*?\*\//gm, '')
             .replace(/(^.*)\/\/.*$/gm, '$1') //replace strings and comments
@@ -167,14 +166,23 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
 
         text = text.replaceRec(/(\{[^{}]*\})/gm, '[]') //replace parentheses
 
-        //above replaces all {} with [], so look for public class <name> []
-        let regexpMainClass = /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
-        let match: RegExpExecArray | null
-        while ((match = regexpMainClass.exec(text)) !== null) {
-            if (match[1]) {
-                mainClass = match[1]
-                break
+        const getMainClass = (_code: string) => {
+            let ret = 'Unknown'
+            //above replaces all {} with [], so look for public class <name> []
+            let regexpMainClass = /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
+            let match: RegExpExecArray | null
+            while ((match = regexpMainClass.exec(_code)) !== null) {
+                if (match[1]) {
+                    ret = match[1]
+                    break
+                }
             }
+            return ret
+        }
+        let mainClass = getMainClass(text)
+        //fallback if the above regExps mangled the student code and we can not find the main class
+        if (mainClass == 'Unknown') {
+            mainClass = getMainClass(code.replace('{', '['))
         }
 
         //console.log(mainClass, code);
