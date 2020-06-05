@@ -160,7 +160,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }, teaVMRunOverhead)
 
         var mainClass = 'Unknown'
-        let text = code.replace(/"(?:[^"\\]|\\.)*"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, '') //replace strings and comments
+        let text = code
+            .replace(/"(?:[^"\\]|\\.)*"|\/\*[\s\S]*?\*\//gm, '')
+            .replace(/(^.*)\/\/.*$/gm, '$1') //replace strings and comments
         //let text = code.replace(/"(?:[^"\\]+?|(?!")"|\\{2}|\\[\s\S])*?"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments
 
         text = text.replaceRec(/(\{[^{}]*\})/gm, '[]') //replace parentheses
