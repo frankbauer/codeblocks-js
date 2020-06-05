@@ -21,13 +21,6 @@
                                 :label="$t('CodeBlocksSettings.ContinousCompile')"
                             />
                         </div>
-                        <div class="col-12">
-                            <q-toggle
-                                v-model="persistentArguments"
-                                :disabled="!canPersistentArguments"
-                                :label="$t('CodeBlocksSettings.PersistentArguments')"
-                            />
-                        </div>
 
                         <div
                             :class="
@@ -67,6 +60,14 @@
                                 size="xs"
                                 @click="showArgsInfoDialog"
                             ></q-btn>
+                        </div>
+
+                        <div class="col-12" v-if="runCode && accepstArguments">
+                            <q-toggle
+                                v-model="persistentArguments"
+                                :disabled="!canPersistentArguments"
+                                :label="$t('CodeBlocksSettings.PersistentArguments')"
+                            />
                         </div>
                     </div>
                 </q-card-section>
@@ -415,8 +416,12 @@ export default class CodeBlocksSettings extends Vue {
     get canPersistentArguments(): boolean {
         const cmp = this.$compilerRegistry.getCompiler(this.compiler)
         if (cmp) {
-            console.d('Persistent Arguments - ', 'can', cmp.allowsPersistentArguments && cmp.canRun)
-            return cmp.allowsPersistentArguments && cmp.canRun
+            console.d(
+                'Persistent Arguments - ',
+                'can',
+                cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
+            )
+            return cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
         }
         return false
     }
