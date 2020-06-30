@@ -16,49 +16,60 @@
                 </ul>
             </div>
         </q-tooltip>
-    </q-icon>    
+    </q-icon>
 </template>
 
-<script>
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 
-export default {
-    props: ['errors', 'severity'],
-    computed: {
-        severityClass() { return this.classForSeverity(this.severity); },
-        severityIcon() { return this.iconForSeverity(this.severity); }
-    },
-    methods:{
-        classForSeverity(s){
-            if (s == this.SEVERITY_ERROR) return "gutter-error";
-            return "gutter-warning";
-        },
-        iconForSeverity(s){
-            if (s == this.SEVERITY_ERROR) return "report";
-            return "warning"
+@Component
+export default class ErrorTip extends Vue {
+    @Prop() errors!: ICompilerErrorDescription
+    @Prop() severity!: ErrorSeverity
+
+    get severityClass(): string {
+        return this.classForSeverity(this.severity)
+    }
+    get severityIcon(): string {
+        return this.iconForSeverity(this.severity)
+    }
+
+    classForSeverity(s: ErrorSeverity): string {
+        if (s == ErrorSeverity.Error) {
+            return 'gutter-error'
         }
+        return 'gutter-warning'
+    }
+    iconForSeverity(s: ErrorSeverity): string {
+        if (s == ErrorSeverity.Error) {
+            return 'report'
+        }
+        return 'warning'
     }
 }
 </script>
 
 <style lang="sass">
-    .mainTipIcon
-        margin-top: -1px
-    .tiplist
-        font-size: 0.9rem
-        list-style-type: none
-        padding-left: 0px !important
-        max-width: 480px
-        min-width: 300px
-        li:first-of-type
-            padding: 0px 0px 0px 0px
-        li
-            padding: 10px 0px 0px 0px
-            margin: 0px 0px 0px 0px
-            .tipicon 
-                display: inline
-                color: white !important
-                vertical-align: top
-            .tipper
-                vertical-align: top
-                font-family: monospace
+.mainTipIcon
+    margin-top: -1px
+.tiplist
+    font-size: 0.9rem
+    list-style-type: none
+    padding-left: 0px !important
+    max-width: 480px
+    min-width: 300px
+    li:first-of-type
+        padding: 0px 0px 0px 0px
+    li
+        padding: 10px 0px 0px 0px
+        margin: 0px 0px 0px 0px
+        .tipicon
+            display: inline
+            color: white !important
+            vertical-align: top
+        .tipper
+            vertical-align: top
+            font-family: monospace
 </style>

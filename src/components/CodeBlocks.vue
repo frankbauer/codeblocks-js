@@ -1,24 +1,35 @@
 <template>
-    <div :class="`codeblocks ${addonClass}  ${backgroundColorClass} q-mx-sm q-mb-md`" :data-question="blockInfo.id"
-    :uuid="blockInfo.uuid">  
-        <CodeBlocksSettings 
-            v-if="editMode" 
-            :options="options" 
-            @compiler-change="onCompilerChange"
-            @compiler-version-change="onCompilerVersionChange" 
-            @run-state-change="onRunStateChange"
-            @language-change="onLanguageChange" 
-            @character-limit-change="onCharacterLimitChange"
-            @timeout-change="onTimeoutChange" 
-            @worker-libs-change="onWorkerLibChange"
-            @dom-libs-change="onDomLibChange" 
-            @theme-change="onThemeChange" 
-            @output-parser-change="onOutputParserChange" 
+    <div
+        :class="`codeblocks ${addonClass}  ${backgroundColorClass} q-mx-sm q-mb-md`"
+        :data-question="blockInfo.id"
+        :uuid="blockInfo.uuid"
+    >
+        <CodePanel
+            v-show="hasBookmark"
+            :editMode="editMode"
+            visibleLines="auto"
+            :block="panelBlock"
         />
-        <CodeBlockContainer 
-            :block="block" 
-            :editMode="editMode"              
-            v-for="block in blocks" 
+        <CodeBlocksSettings
+            v-if="editMode"
+            :options="options"
+            @compiler-change="onCompilerChange"
+            @compiler-version-change="onCompilerVersionChange"
+            @run-state-change="onRunStateChange"
+            @continuous-compile-change="onContinousCompileStateChange"
+            @persistent-arguments-change="onPersistentArgumentsChange"
+            @language-change="onLanguageChange"
+            @character-limit-change="onCharacterLimitChange"
+            @timeout-change="onTimeoutChange"
+            @worker-libs-change="onWorkerLibChange"
+            @dom-libs-change="onDomLibChange"
+            @theme-change="onThemeChange"
+            @output-parser-change="onOutputParserChange"
+        />
+        <CodeBlockContainer
+            :block="block"
+            :editMode="editMode"
+            v-for="block in blocks"
             :key="block.id"
             @type-change="onTypeChange"
             @visible-lines-change="onVisibleLinesChange"
@@ -26,441 +37,730 @@
             @script-version-change="onScriptVersionChange"
             @move-up="moveUp"
             @move-down="moveDown"
-            @remove-block="removeBlock"            
-            @auto-reset-change="onSetAutoReset">              
-            
-                <CodeBlock 
-                    v-if="block.hasCode" 
-                    :block="block" 
-                    :theme="themeForBlock(block)" 
-                    :mode="mimeType"
-                    :visibleLines="block.visibleLines" 
-                    :editMode="editMode" 
-                    :readonly="readonly"
-                    :tagSet="activeTagSet" 
-                    @ready="blockBecameReady"                   
-                    @build="run" />
+            @remove-block="removeBlock"
+            @auto-reset-change="onSetAutoReset"
+        >
+            <CodeBlock
+                v-if="block.hasCode && block.type != 'BLOCKLY'"
+                :block="block"
+                :theme="themeForBlock(block)"
+                :mode="mimeType"
+                :visibleLines="block.visibleLines"
+                :editMode="editMode"
+                :readonly="readonly"
+                :tagSet="activeTagSet"
+                :emitWhenTypingInViewMode="continuousCompile"
+                @ready="blockBecameReady"
+                @build="run"
+                @code-changed-in-view-mode="onViewCodeChange"
+            />
 
-                <CodePlayground 
-                    v-else-if="block.type=='PLAYGROUND'" 
-                    :block="block" 
-                    :editMode="editMode" 
-                    :finalOutputObject="finalOutputObject" 
-                    :theme="themeForBlock(block)" 
-                    :tagSet="activeTagSet"
-                    @changeOutput="onPlaygroundChangedOutput" 
-                    @ready="blockBecameReady" 
-                    :eventHub="eventHub" />
+            <CodePlayground
+                v-else-if="block.type == 'PLAYGROUND'"
+                :block="block"
+                :editMode="editMode"
+                :finalOutputObject="finalOutputObject"
+                :theme="themeForBlock(block)"
+                :tagSet="activeTagSet"
+                @changeOutput="onPlaygroundChangedOutput"
+                @ready="blockBecameReady"
+                @run="onRunFromPlayground"
+                :eventHub="eventHub"
+            />
 
-                <SimpleText 
-                    v-else-if="block.type=='TEXT'" 
-                    v-model="block.content" 
-                    :block="block" 
-                    :previewValue="block.actualContent()"
-                    :editMode="editMode"
-                    :name="`block[${block.parentID}][${block.id}]`"
-                    :scopeUUID="block.scopeUUID"
-                    :tagSet="activeTagSet"
-                    :language="language"
-                    @ready="blockBecameReady"  />
+            <SimpleText
+                v-else-if="block.type == 'TEXT'"
+                v-model="block.content"
+                :block="block"
+                :previewValue="block.actualContent()"
+                :editMode="editMode"
+                :name="`block[${block.parentID}][${block.id}]`"
+                :scopeUUID="block.scopeUUID"
+                :tagSet="activeTagSet"
+                :language="language"
+                @ready="blockBecameReady"
+            />
+            <Blockly
+                v-else-if="block.type == 'BLOCKLY'"
+                :block="block"
+                :mode="mimeType"
+                :theme="themeForBlock(block)"
+                :editMode="editMode"
+                :readonly="readonly"
+                :tagSet="activeTagSet"
+                :emitWhenTypingInViewMode="continuousCompile"
+                @code-changed-in-view-mode="onViewCodeChange"
+            />
         </CodeBlockContainer>
 
         <div class="row justify-end" v-if="editMode">
-            <div >
-                <q-btn @click="addNewBlock" push color="green">{{$t('CodeBlocks.AddBlock')}} <q-icon name="library_add" class="q-ml-sm"/></q-btn>
+            <div>
+                <q-btn @click="addNewBlock" push color="green"
+                    >{{ $t('CodeBlocks.AddBlock') }} <q-icon name="library_add" class="q-ml-sm"
+                /></q-btn>
             </div>
         </div>
-        
-        <div :class="`runner ${editMode?'q-pt-lg q-mx-lg':''}`" v-if="canRun" id="runContainer" :data-question="blockInfo.id">
+
+        <div
+            :class="`runner ${editMode ? 'q-pt-lg q-mx-lg' : ''}`"
+            v-if="canRun"
+            id="runContainer"
+            :data-question="blockInfo.id"
+        >
             <div class="row runnerState" id="stateBox" :data-question="blockInfo.id">
-                <q-btn id="allow_run_button" :loading="!isReady" :disabled="!isReady" color="primary" class="white--text" @click="run" :ripple="{ center: true }" style="border-radius:0px" :data-question="blockInfo.id">
-                    {{$t('CodeBlocks.run')}}
-                    <q-icon right dark name="play_arrow"></q-icon> 
-                     <q-tooltip :delay="200" v-if="editMode">
+                <q-btn
+                    id="allow_run_button"
+                    :loading="!isReady"
+                    :disabled="!isReady"
+                    color="primary"
+                    class="white--text"
+                    @click="run"
+                    :ripple="{ center: true }"
+                    style="border-radius:0px"
+                    :data-question="blockInfo.id"
+                >
+                    {{ $t('CodeBlocks.run') }}
+                    <q-icon right dark name="play_arrow"></q-icon>
+                    <q-tooltip :delay="200" v-if="editMode">
                         <span v-html="$t('CodeBlocks.run_hint')"></span>
-                     </q-tooltip>                   
+                    </q-tooltip>
                 </q-btn>
-                
+                <div class="animated fadeIn"></div>
                 <transition
                     appear
                     enter-active-class="animated fadeIn"
                     leave-active-class="animated fadeOut"
                 >
-                    <div class="globalState col-grow" style="align-self: center;" v-show="showGlobalMessages"><div id="message" v-html="$compilerState.globalStateMessage"> </div></div>        
-                </transition>  
+                    <div class="q-pl-sm" v-show="canStop">
+                        <q-btn
+                            id="cancel_button"
+                            color="negative"
+                            :ripple="{ center: true }"
+                            style="border-radius:0px"
+                            :data-question="blockInfo.id"
+                            @click="stop"
+                        >
+                            {{ $t('CodeBlocks.stop') }}
+                            <q-icon right dark name="stop"></q-icon>
+                        </q-btn>
+                    </div>
+                </transition>
+                <transition
+                    appear
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
+                >
+                    <div
+                        class="globalState col-grow"
+                        style="align-self: center;"
+                        v-show="showGlobalMessages"
+                    >
+                        <div id="message" v-html="$compilerState.globalStateMessage"></div>
+                    </div>
+                </transition>
             </div>
             <q-slide-transition>
-                <pre :id="`${blockInfo.id}Output`"  ref="output" class="output" v-if="hasOutput" ><div id="out" v-html="outputHTML"></div></pre>
+                <pre
+                    :id="`${blockInfo.id}Output`"
+                    ref="output"
+                    class="output"
+                    v-if="hasOutput"
+                ><div id="out" v-html="outputHTML"></div></pre>
             </q-slide-transition>
         </div>
     </div>
 </template>
 
-<script>
-    import Vue from 'vue'
-    import CodeBlockContainer from './CodeBlockContainer';
-    import CodeBlocksSettings from './CodeBlocksSettings';
-    import CodeBlock from './CodeBlock';
-    import CodePlayground from './CodePlayground';
-    import SimpleText from './SimpleText';
+<script lang="ts">
+import 'reflect-metadata'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
+import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import CodePanel from '@/components/CodePanel.vue'
+import Blockly from '@/components/Blockly/Blockly.vue'
+import CodePlayground from '@/components/CodePlayground.vue'
+import SimpleText from '@/components/SimpleText.vue'
+import { BlockData, IAppSettings, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
+import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
+import { ICompilerID, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
+import {
+    CodeOutputTypes,
+    IRandomizerSet,
+    KnownBlockTypes,
+    IBlockDataPlayground
+} from '@/lib/ICodeBlocks'
 
-    export default {
-        name: 'CodeBlocks',
-        components: {
-            CodeBlockContainer,
-            CodeBlocksSettings,
-            CodeBlock,
-            CodePlayground,
-            SimpleText
-        },
-        data:function(){
+export interface IOnTypeChangeInfo {
+    type: KnownBlockTypes
+    hidden: boolean
+    static: boolean
+    id: number
+    hasCode: boolean
+}
+
+export interface IOnVisibleLinesChangeInfo {
+    visibleLines: 'auto' | number
+    id: number
+}
+
+export interface IOnPlacementChangeInfo extends IBlockDataPlayground {
+    id: number
+}
+
+export interface IOnScriptVersionChangeInfo {
+    version: string
+    id: number
+}
+
+export interface IOnSetAutoResetInfo {
+    shouldAutoreset: boolean
+    id: number
+}
+
+export interface IOnThemeChangeInfo {
+    solution: string
+    code: string
+}
+
+@Component({
+    components: {
+        CodeBlockContainer,
+        CodeBlocksSettings,
+        CodeBlock,
+        CodePlayground,
+        SimpleText,
+        Blockly,
+        CodePanel
+    }
+})
+export default class CodeBlocks extends Vue {
+    didInitialize: boolean = false
+    outputHTML: string = ''
+    output: string = ''
+    sansoutput: string = ''
+    didClip: boolean = false
+    _finalOutputObject: IScriptOutputObject | null = null
+    eventHub: Vue = new Vue()
+
+    get continuousCompile(): boolean {
+        if (this.editMode) {
+            return false
+        }
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            return cmp.allowsContinousCompilation
+        }
+        return false
+    }
+
+    get finalOutputObject(): IScriptOutputObject {
+        if (this._finalOutputObject === null || this._finalOutputObject === undefined) {
             return {
-                didInitialize: false,
-                outputHTML:"",
-                output:"",
-                sansoutput:"",
-                didClip:false,
-                finalOutputObject:{ output:"", sansoutput:"", parseError:undefined },
-                eventHub:new Vue()
+                initialOutput: '',
+                output: '',
+                processedOutput: {
+                    type: 'text',
+                    text: '',
+                    json: undefined
+                },
+                sansoutput: '',
+                outputElement: $(this.outputElement) as JQuery<HTMLElement>
             }
-        },
-        props: {
-            'blockInfo':{ type:Object, required:true}
-        },
-        computed: {
-            options(){
-                return {
-                    language:this.language,
-                    compiler:this.compiler,
-                    executionTimeout:this.executionTimeout,
-                    maxCharacters:this.maxCharacters,
-                    runCode:this.runCode,
-                    domLibs:this.domLibraries,
-                    workerLibs:this.workerLibraries,
-                    id:this.blockInfo.id,
-                    codeTheme:this.codeTheme,
-                    solutionTheme:this.solutionTheme,
-                    outputParser:this.outputParser,
-                    randomizer:this.blockInfo.randomizer
-                }
-            },
-            blocks() { return this.blockInfo.blocks },
-            language() { return this.blockInfo.language},
-            blockid() { return this.blockInfo.id},
-            executionTimeout() { return this.blockInfo.executionTimeout},
-            maxCharacters() { return this.blockInfo.maxCharacters},
-            compiler() { return this.blockInfo.compiler},
-            runCode() { return this.blockInfo.runCode},
-            domLibraries() { return this.blockInfo.domLibs},
-            workerLibraries() { return this.blockInfo.workerLibs},
-            solutionTheme() { return this.blockInfo.solutionTheme},
-            codeTheme() { return this.blockInfo.codeTheme},
-            readonly() { return this.blockInfo.readonly},
-            outputParser() { return this.blockInfo.outputParser},
-            
-            editMode() {
-                return false;
-            },
-            hasOutput(){
-                return this.outputHTML!==undefined && this.outputHTML!=""
-            },
-            mimeType() {
-                return this.$CodeBlock.mimeType(this.language);
-            },
-            isReady() {
-                let cmp = this.$compilerRegistry.getCompiler(this.compiler);
-                if (!cmp) return false;
-
-                return this.didInitialize && cmp.isReady && !cmp.isRunning && !this.$compilerState.runButtonForceHide;
-            },
-            canRun() {
-                let cmp = this.$compilerRegistry.getCompiler(this.compiler);
-                if (!cmp) return false;
-                return cmp.canRun && this.runCode;
-            },
-            randomizerActive(){
-                return  this.blockInfo.randomizer.active;
-            },
-            activeTagSet(){
-                if (!this. randomizerActive) return undefined;
-                return this.tagSet(this.blockInfo.randomizer.previewIndex);
-            },
-            completeSource() {
-                return this.blocks
-                            .filter(b => b.hasCode)
-                            .map(b => b.actualContent())
-                            .reduce((p, c) => {
-                                return p + "\n" + c                                
-                            }, "");                      
-            },
-            showGlobalMessages() {
-                return !this.$compilerState.globalStateHidden;
-            },
-            playgrounds() {
-                return this.blocks.filter(b => b.type=='PLAYGROUND');
-            },
-            outputElement(){
-                return this.$refs.output;           
-            },
-            addonClass() {
-                let cl = "";
-                if (this.editMode) cl += "editmode ";
-                if (this.readonly) cl += "block-readonly ";
-                return cl;
-            },
-            backgroundColorClass(){
-                return this.editMode?'blue-grey darken-4':''
-            }
-        },
-        methods: {
-            blockBecameReady(){
-                let readyCount = this.blockInfo.blocks.map(b => b.readyCount).reduce((p,c) => p+c, 0);
-                if (readyCount == this.blockInfo.blocks.length){
-                    this.$nextTick(()=>{
-                        this.eventHub.$emit('all-mounted', {  })
-                    })
-                }
-                //console.log("Ready", readyCount, this.blockInfo.blocks.length);
-            },
-            tagSet(nr){
-                return this.blockInfo.randomizer.sets[nr]
-            },
-            themeForBlock(bl){
-                if (bl.static || bl.readonly || bl.hidden) {
-                    return this.blockInfo.codeTheme;
-                } 
-                        
-                return this.blockInfo.solutionTheme;    
-            },
-            blockById(id){
-                return this.blocks.find( block => block.id == id);
-            },
-            onTypeChange(nfo){},
-            onVisibleLinesChange(nfo){},
-            onPlacementChange(nfo){},
-            onScriptVersionChange(nfo){},
-            onSetAutoReset(nfo){},
-            onCompilerChange(v){},
-            onCompilerVersionChange(v){},
-            onRunStateChange(v){},
-            onLanguageChange(v){},
-            onCharacterLimitChange(v){},
-            onTimeoutChange(v){},
-            onWorkerLibChange(v){},
-            onDomLibChange(v){},
-            onThemeChange(nfo){},
-            onOutputParserChange(v){},
-            moveUp(idx){},
-            moveDown(idx){},
-            removeBlock(idx){},
-            addNewBlock(){},
-            onPlaygroundChangedOutput(newOutput){
-                if (newOutput===undefined) return;
-                if (this.output != newOutput) {
-                    this.output = newOutput.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-                    if (this.maxCharacters>0 && this.output.length > this.maxCharacters) {
-                        this.outputHTML = this.output.substr(0, this.maxCharacters);
-                        this.outputHTML += this.$CodeBlock.format_info('Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n');                        
-                    } else {
-                        this.outputHTML = this.output;
-                    }
-                    this.outputHTML += this.sansoutput;
-                }
-            },            
-
-            resetOutput(){
-                this.output = '';
-                this.sansoutput = '';
-                this.didClip = false;
-                this.outputHTML = '';                                 
-            },
-
-
-            log(text){
-                //console.log("log", text);
-                this.output += text;
-                text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-                if (!this.didClip) {
-                    if (this.maxCharacters>0 && this.output.length > this.maxCharacters) {
-                        this.outputHTML += this.$CodeBlock.format_info('Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n');
-                        this.didClip = true;
-                    } else {
-                        this.outputHTML += text;
-                    }
-                }
-            },
-
-
-            logError(text){
-                text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-                text = this.$CodeBlock.format_error(text);
-                //console.log("err", text);
-                this.sansoutput += text; 
-                this.outputHTML += text; 
-            },
-
-
-            logInfo(text){
-                text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
-                text = this.$CodeBlock.format_info(text);
-                //console.log("nfo", text);
-                this.sansoutput += text; 
-                this.outputHTML += text;  
-            },
-
-
-            processDiagnostics(error) {
-                const line = error.start.line;
-                this.blocks.forEach( block => {
-                    if (!block.hasCode) return;                    
-                    
-                    const first = block.firstLine;
-                    const last = block.nextLine - 1;
-                    
-                    if (error.start.line >= first && error.start.line <= last) {
-                        block.errors.push(error);                        
-                    }
-                });
-            },
-
-
-            clearDiagnostics(){
-                this.blocks.forEach( block => block.errors = []);  
-                this.eventHub.$emit('render-diagnostics', {  })                            
-            }, 
-            
-            
-            loadLibraries(whenLoaded){
-                this.$compilerRegistry.loadLibraries(this.domLibraries, whenLoaded);                
-            },
-            
-            
-            /**
-             * Call when the program finished executing and pass the output string. We will send the output to all embeded canvas elements
-             * @param {*} output 
-             * @param {*} infoErrorOutput output generated by info or error messages
-             */
-            finishedExecution(output, infoErrorOutput){
-                let parseError = null
-                let processed = {type:'text', json:undefined, text:output}
-                
-                if (output !== undefined && this.playgrounds.length>0){  
-                    try {
-                        processed = this.$CodeBlock.processMixedOutput(output, this.outputParser);
-                    } catch (e) {
-                        parseError = e;        
-                    }
-                }
-
-                this.finalOutputObject = {
-                    output: output,
-                    processedOutput: processed,
-                    sansoutput: this.sansoutput,
-                    parseError: parseError,
-                    outputElement: $(this.outputElement)
-                }                                
-            },
-
-
-            run() {
-                let cmp = this.$compilerRegistry.getCompiler(this.compiler);
-                if (!cmp) return false;
-
-                this.$compilerState.setAllRunButtons(false);                  
-                this.resetOutput();
-                this.clearDiagnostics();
-                this.loadLibraries(function(){
-                    this.eventHub.$emit('before-run', {  })
-                    console.log("compileAndRun")
-                    cmp.compileAndRun(
-                        this.blocks.id,
-                        this.completeSource,
-                        this,
-                        this.executionTimeout,
-                        this.log.bind(this),
-                        this.logInfo.bind(this),
-                        this.logError.bind(this),
-                        this.processDiagnostics.bind(this),
-                        function (success = true, overrideOutput = undefined) {
-                            if (!success) {
-                                this.$compilerState.hideGlobalState();
-                                this.$compilerState.setAllRunButtons(true);
-                                return undefined;
-                            }
-                            let res = this.finishedExecution(overrideOutput?overrideOutput:this.output, this.sansoutput);
-                            this.$compilerState.hideGlobalState();
-                            this.$compilerState.setAllRunButtons(true);
-                            return res;
-                        }.bind(this)
-                    )
-                    }.bind(this)
-                )
-            },
-            onkey(event){
-                if (this.editMode && (event.ctrlKey || event.metaKey) && (event.key==='w' || event.key==='j')){
-                    this.run();
-                    event.preventDefault();
-                    return false;
-                }
-            }
-        },
-        mounted() {
-            let cmp = this.$compilerRegistry.getCompiler(this.compiler);
-            if (cmp) {
-                cmp.preload();
-            }
-            this.loadLibraries(function(){
-                    this.eventHub.$emit('initialized-libraries', {  })
-            }.bind(this));
-            this.didInitialize = true;
-
-            if (this.editMode)
-                window.addEventListener('keydown', this.onkey, false)
-        },
-        beforeDestroy(){
-            window.removeEventListener('keydown', this.onkey)
+        }
+        return this._finalOutputObject
+    }
+    @Prop({ required: true }) blockInfo!: IMainBlock
+    get options(): ICodeBlockSettingsOptions {
+        return {
+            language: this.language,
+            compiler: this.compiler,
+            executionTimeout: this.executionTimeout,
+            maxCharacters: this.maxCharacters,
+            runCode: this.runCode,
+            domLibs: this.domLibraries,
+            workerLibs: this.workerLibraries,
+            id: this.blockInfo.id,
+            codeTheme: this.codeTheme,
+            solutionTheme: this.solutionTheme,
+            outputParser: this.outputParser,
+            randomizer: this.blockInfo.randomizer,
+            continuousCompilation: this.blockInfo.continuousCompilation,
+            persistentArguments: this.blockInfo.persistentArguments
         }
     }
+    get blocks(): BlockData[] {
+        return this.blockInfo.blocks
+    }
+    get language(): string {
+        return this.blockInfo.language
+    }
+    get blockid(): number {
+        return this.blockInfo.id
+    }
+    get executionTimeout(): number {
+        return this.blockInfo.executionTimeout
+    }
+    get maxCharacters(): number {
+        return this.blockInfo.maxCharacters
+    }
+    get compiler(): ICompilerID {
+        return this.blockInfo.compiler
+    }
+    get runCode(): boolean {
+        return this.blockInfo.runCode
+    }
+    get domLibraries(): string[] {
+        return this.blockInfo.domLibs
+    }
+    get workerLibraries(): string[] {
+        return this.blockInfo.workerLibs
+    }
+    get solutionTheme(): string {
+        return this.blockInfo.solutionTheme
+    }
+    get codeTheme(): string {
+        return this.blockInfo.codeTheme
+    }
+    get readonly(): boolean {
+        return this.blockInfo.readonly
+    }
+    get outputParser(): CodeOutputTypes {
+        return this.blockInfo.outputParser
+    }
+
+    get editMode(): boolean {
+        return false
+    }
+    get hasOutput(): boolean {
+        return this.outputHTML !== undefined && this.outputHTML != ''
+    }
+    get mimeType(): string {
+        return this.$CodeBlock.mimeType(this.language)
+    }
+    get isReady(): boolean {
+        let cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (!cmp) {
+            return false
+        }
+
+        return (
+            this.didInitialize &&
+            cmp.isReady &&
+            !cmp.isRunning &&
+            !this.$compilerState.runButtonForceHide
+        )
+    }
+    get canRun(): boolean {
+        let cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (!cmp) {
+            return false
+        }
+        return cmp.canRun && this.runCode
+    }
+    get randomizerActive(): boolean {
+        return this.blockInfo.randomizer.active
+    }
+    get activeTagSet(): IRandomizerSet | undefined {
+        if (!this.randomizerActive) {
+            return undefined
+        }
+        return this.tagSet(this.blockInfo.randomizer.previewIndex)
+    }
+    get completeSource(): string {
+        return this.blocks
+            .filter(b => b.hasCode)
+            .map(b => b.actualContent())
+            .reduce((p, c) => {
+                return p + '\n' + c
+            }, '')
+    }
+    get showGlobalMessages(): boolean {
+        return !this.$compilerState.globalStateHidden
+    }
+    get playgrounds(): BlockData[] {
+        return this.blocks.filter(b => b.type == 'PLAYGROUND')
+    }
+    get outputElement(): HTMLElement {
+        return this.$refs.output as HTMLElement
+    }
+    get addonClass(): string {
+        let cl = ''
+        if (this.editMode) {
+            cl += 'editmode '
+        }
+        if (this.readonly) {
+            cl += 'block-readonly '
+        }
+        return cl
+    }
+    get backgroundColorClass(): string {
+        return this.editMode ? 'blue-grey darken-4' : ''
+    }
+
+    blockBecameReady(): void {
+        let readyCount = this.blockInfo.blocks.map(b => b.readyCount).reduce((p, c) => p + c, 0)
+        if (readyCount == this.blockInfo.blocks.length) {
+            this.$nextTick(() => {
+                this.eventHub.$emit('all-mounted', {})
+            })
+        }
+        //console.log("Ready", readyCount, this.blockInfo.blocks.length);
+    }
+
+    tagSet(nr: number): IRandomizerSet {
+        return this.blockInfo.randomizer.sets[nr]
+    }
+
+    themeForBlock(bl: BlockData): string {
+        return bl.themeForCodeBlock
+    }
+    public blockById(id: number): BlockData | undefined {
+        return this.blocks.find(block => block.id == id)
+    }
+    onTypeChange(nfo: IOnTypeChangeInfo): void {}
+    onVisibleLinesChange(nfo: IOnVisibleLinesChangeInfo): void {}
+    onPlacementChange(nfo: IOnPlacementChangeInfo): void {}
+    onScriptVersionChange(nfo: IOnScriptVersionChangeInfo): void {}
+    onSetAutoReset(nfo: IOnSetAutoResetInfo): void {}
+    onCompilerChange(v: string): void {}
+    onCompilerVersionChange(v: string): void {}
+    onRunStateChange(v: boolean): void {}
+    onContinousCompileStateChange(v: boolean): void {}
+    onPersistentArgumentsChange(v: boolean): void {}
+    onLanguageChange(v: string): void {}
+    onCharacterLimitChange(v: number): void {}
+    onTimeoutChange(v: number): void {}
+    onWorkerLibChange(v: string[]): void {}
+    onDomLibChange(v: string[]): void {}
+    onThemeChange(nfo: IOnThemeChangeInfo): void {}
+    onOutputParserChange(v: CodeOutputTypes): void {}
+    moveUp(idx: number): void {}
+    moveDown(idx: number): void {}
+    removeBlock(idx: number): void {}
+    addNewBlock(): void {}
+    onPlaygroundChangedOutput(newOutput: string | undefined): void {
+        if (newOutput === undefined) {
+            return
+        }
+        if (this.output != newOutput) {
+            this.output = newOutput.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+            if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
+                this.outputHTML = this.output.substr(0, this.maxCharacters)
+                this.outputHTML += this.$CodeBlock.format_info(
+                    'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
+                )
+            } else {
+                this.outputHTML = this.output
+            }
+            this.outputHTML += this.sansoutput
+        }
+    }
+
+    resetOutput(): void {
+        this.output = ''
+        this.sansoutput = ''
+        this.didClip = false
+        this.outputHTML = ''
+    }
+
+    log(text: string): void {
+        //console.log("log", text);
+        this.output += text
+        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        if (!this.didClip) {
+            if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
+                this.outputHTML += this.$CodeBlock.format_info(
+                    'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
+                )
+                this.didClip = true
+            } else {
+                this.outputHTML += text
+            }
+        }
+    }
+
+    logError(text: string): void {
+        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        text = this.$CodeBlock.format_error(text)
+        //console.log("err", text);
+        this.sansoutput += text
+        this.outputHTML += text
+    }
+
+    logInfo(text: string): void {
+        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        text = this.$CodeBlock.format_info(text)
+        //console.log("nfo", text);
+        this.sansoutput += text
+        this.outputHTML += text
+    }
+
+    processDiagnostics(error: ICompilerErrorDescription) {
+        const line = error.start.line
+        this.blocks.forEach(block => {
+            if (!block.hasCode) {
+                return
+            }
+
+            const first = block.firstLine
+            const last = block.nextLine - 1
+
+            if (error.start.line >= first && error.start.line <= last) {
+                block.errors.push(error)
+            }
+        })
+    }
+
+    clearDiagnostics(): void {
+        this.blocks.forEach(block => (block.errors = []))
+        this.eventHub.$emit('render-diagnostics', {})
+    }
+
+    loadLibraries(whenLoaded: () => void): void {
+        this.$compilerRegistry.loadLibraries(this.domLibraries, whenLoaded)
+    }
+
+    /**
+     * Call when the program finished executing and pass the output string. We will send the output to all embeded canvas elements
+     * @param {*} output
+     * @param {*} infoErrorOutput output generated by info or error messages
+     */
+    finishedExecution(output: string, infoErrorOutput: string): void {
+        let parseError = undefined
+        let processed: IProcessedScriptOutput = { type: 'text', json: undefined, text: output }
+
+        if (output !== undefined && this.playgrounds.length > 0) {
+            try {
+                processed = this.$CodeBlock.processMixedOutput(output, this.outputParser)
+            } catch (e) {
+                parseError = e
+            }
+        }
+
+        this._finalOutputObject = {
+            initialOutput: output,
+            output: output,
+            processedOutput: processed,
+            sansoutput: this.sansoutput,
+            parseError: parseError,
+            outputElement: $(this.outputElement) as JQuery<HTMLElement>
+        }
+        this.eventHub.$emit('output-updated', this._finalOutputObject)
+
+        this.onRunFinished()
+    }
+
+    get canStop(): boolean {
+        return !this.isReady && this.didRunOnce
+    }
+    stop(): void {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp === undefined || cmp.stop === undefined) {
+            return
+        }
+        cmp.stop()
+    }
+
+    didRunOnce: boolean = false
+    run(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp === undefined) {
+            return false
+        }
+
+        this.$compilerState.setAllRunButtons(false)
+
+        this.resetOutput()
+        this.clearDiagnostics()
+        const self = this
+
+        let _args: object | string[] = {}
+        if (cmp.acceptsJSONArgument) {
+            _args = this.blockInfo.initArgsForLanguage()
+            this.blocks.forEach(bl => {
+                if (bl.obj) {
+                    bl.obj.addArgumentsTo(_args)
+                }
+            })
+        }
+
+        this.loadLibraries(() => {
+            self.eventHub.$emit('before-run', {})
+            console.d('compileAndRun')
+            self.didRunOnce = true
+            cmp.compileAndRun(
+                '' + self.blockid,
+                self.completeSource,
+                self,
+                self.executionTimeout,
+                self.log.bind(this),
+                self.logInfo.bind(this),
+                self.logError.bind(this),
+                self.processDiagnostics.bind(this),
+                (success = true, overrideOutput = undefined, returnState = undefined) => {
+                    console.d('returnState:', returnState, _args)
+                    if (!success) {
+                        self.$compilerState.hideGlobalState()
+                        self.$compilerState.setAllRunButtons(true)
+                        return undefined
+                    }
+                    let res = self.finishedExecution(
+                        overrideOutput ? overrideOutput : self.output,
+                        self.sansoutput
+                    )
+
+                    if (returnState !== undefined && this.blockInfo.persistentArguments) {
+                        this.blockInfo.storeDefaultArgs(returnState)
+                    }
+                    self.$compilerState.hideGlobalState()
+                    self.$compilerState.setAllRunButtons(true)
+                    return res
+                },
+                _args
+            )
+        })
+
+        return true
+    }
+    onkey(event) {
+        if (
+            this.editMode &&
+            (event.ctrlKey || event.metaKey) &&
+            (event.key === 'w' || event.key === 'j')
+        ) {
+            this.run()
+            event.preventDefault()
+            return false
+        }
+    }
+
+    mounted() {
+        let cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            cmp.preload()
+        }
+        const self = this
+        this.loadLibraries(() => {
+            self.eventHub.$emit('initialized-libraries', {})
+        })
+        this.didInitialize = true
+
+        if (this.editMode) {
+            window.addEventListener('keydown', this.onkey, false)
+        }
+
+        Vue.$GlobalEventHub.$on('bookmark-block', this.onBookmarkBlock)
+    }
+    beforeDestroy() {
+        window.removeEventListener('keydown', this.onkey)
+        Vue.$GlobalEventHub.$off('bookmark-block')
+    }
+
+    bookmarkedBlock: BlockData | null = null
+
+    get hasBookmark(): boolean {
+        return this.bookmarkedBlock !== null && this.editMode
+    }
+
+    get panelBlock(): BlockData | null {
+        return this.bookmarkedBlock
+    }
+    onBookmarkBlock(data: IBlockBookmarkPayload) {
+        console.i('Bookmark', data)
+        if (this.blockInfo.uuid == data.uuid) {
+            this.bookmarkedBlock = data.block
+        }
+    }
+
+    triggerRecompileWhenFinished: boolean = false
+    onViewCodeChange(forceRun: boolean = false) {
+        if (!forceRun && !this.blockInfo.continuousCompilation) {
+            return
+        }
+
+        if (this.continuousCodeUpdateTimer !== null) {
+            clearTimeout(this.continuousCodeUpdateTimer)
+            this.continuousCodeUpdateTimer = null
+        }
+        this.continuousCodeUpdateTimer = setTimeout(() => {
+            const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+            console.d('Continuous Compile - ', cmp)
+            if (cmp && cmp.allowsContinousCompilation) {
+                if (!cmp.isRunning && cmp.isReady) {
+                    console.d('Continuous Compile - ', 'RUN')
+                    this.run()
+                } else {
+                    console.d('Continuous Compile - ', 'DEFER')
+                    this.triggerRecompileWhenFinished = true
+                }
+            }
+        }, process.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT)
+    }
+
+    onRunFinished() {
+        if (this.triggerRecompileWhenFinished) {
+            console.d('Continuous Compile - ', 'RE-RUN')
+            this.triggerRecompileWhenFinished = false
+            this.onViewCodeChange()
+        }
+    }
+
+    continuousCodeUpdateTimer: number | null = null
+    onRunFromPlayground() {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (
+            cmp &&
+            cmp.canRun &&
+            !this.editMode &&
+            cmp.allowsContinousCompilation // &&
+            // this.blockInfo.continuousCompilation
+        ) {
+            this.onViewCodeChange(true)
+        }
+    }
+}
 </script>
 
-<style lang="sass">   
-    div.codeblocks.editmode
-        box-shadow: 3px 3px 6px rgba(0,0,0,0.1)
-        border-radius: 5px        
-        background-repeat: repeat
-        background-image: linear-gradient(45deg, #ffffff 25%, #ebf2f5 25%, #ebf2f5 50%, #ffffff 50%, #ffffff 75%, #ebf2f5 75%, #ebf2f5 100%)
-        background-size: 56.57px 56.57px
-        
-    div.codeblocks  
-        height: fit-content
-        margin: 4px
-        padding: 8px        
-        .block
-            padding: 0px
-            margin: 0px
-    div.runner
-        margin: 8px 0px !important
-        .runnerState
-            margin: 0px !important
-            padding: 0px !important
-            button
-                margin: 0px!important            
-            .globalState
-                margin-left: 10px
-                color: gray
-                padding-left: 4px
-                padding-right: 4px
-                vertical-align: middle
-        .output
-            display: block
-            font-family: monospace
-            border: 1px solid #ccc
-            border-radius: 0px
-            background-color: #f5f5f5
-            margin: 0 0 10px
-            padding: 9.5px
-            line-height: 1.42857143
-            color: #333333
-            word-break: break-all
-            word-wrap: break-word
+<style lang="sass">
+
+div.codeblocks.editmode
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.1)
+    border-radius: 5px
+    background-repeat: repeat
+    background-image: linear-gradient(45deg, #ffffff 25%, #ebf2f5 25%, #ebf2f5 50%, #ffffff 50%, #ffffff 75%, #ebf2f5 75%, #ebf2f5 100%)
+    background-size: 56.57px 56.57px
+
+div.codeblocks
+    height: fit-content
+    margin: 4px
+    padding: 8px
+    .block
+        padding: 0px
+        margin: 0px
+div.runner
+    margin: 8px 0px !important
+    .runnerState
+        margin: 0px !important
+        padding: 0px !important
+        button
+            margin: 0px!important
+        .globalState
+            margin-left: 10px
+            color: gray
+            padding-left: 4px
+            padding-right: 4px
+            vertical-align: middle
+    .output
+        display: block
+        font-family: monospace
+        border: 1px solid #ccc
+        border-radius: 0px
+        background-color: #f5f5f5
+        margin: 0 0 10px
+        padding: 9.5px
+        line-height: 1.42857143
+        color: #333333
+        word-break: break-all
+        word-wrap: break-word
 </style>
