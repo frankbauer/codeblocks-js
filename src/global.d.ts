@@ -11,6 +11,7 @@ declare global {
 
     interface Window {
         hljs: any
+        CodeBlocksManager: any
         mountInElement(element: any): void
         mountCodeBlocks(scope: HTMLElement | Document | undefined): void
         MathJax: any

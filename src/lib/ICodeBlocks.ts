@@ -25,7 +25,7 @@ export interface IBlockloadManager {
         inBlock: IBlockElementData,
         block: IBlockDataBase,
         editMode: boolean
-    ) => void
+    ) => boolean
 }
 
 export interface IRandomizerSet {

@@ -1,7 +1,7 @@
 import { IBlockloadManager, IBlockElementData, IBlockDataBase } from '@/lib/ICodeBlocks'
 
 export class PositioninLoadManager {
-    loadFromDatablock(bl: HTMLElement, inBlock: IBlockElementData, block: IBlockDataBase): void {
+    loadFromDatablock(bl: HTMLElement, inBlock: IBlockElementData, block: IBlockDataBase): boolean {
         block.width = bl.getAttribute('width')
             ? bl.getAttribute('width')!
             : inBlock.width
@@ -17,6 +17,8 @@ export class PositioninLoadManager {
             : inBlock.align
             ? inBlock.align
             : 'center'
+
+        return true
     }
 }
 

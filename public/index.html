@@ -16,227 +16,57 @@
 				display:none;        
       }
     </style>
+
+<script type="text/javascript">
+  console.log("register event")
+  const onLoad = (cbm) => {
+    console.log("have", cbm)
+  }
+  if (window.CodeBlocksManager){
+    console.error("CodeBlocksManager is already initialized!")
+    onLoad(window.CodeBlocksManager)
+  } else {
+    window.addEventListener('codeblocks-started', (e) => onLoad(e.manager))
+  }
+  window.addEventListener('codeblocks-fetch', (e) => {
+    e.promise = new Promise((res, rej) => {
+      res('Hello World')
+    })
+  })
+</script>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div style="padding-left:50px;padding-right:50px">
-            
-    <div id="master">
-    
-    <p highlight="javascript" tagged>
-      This is {:init}, {!init} just a <b>test</b>:
-      With some inline [hl]class Foo {}[/hl] code.
-    [code]update: function(text, json, canvasElement, outputElement) {<br />        canvasElement.removeClass('hiddenBlock');<br />        console.log("FOO", text, json);
-        return "New Text is here\n\n";<br />    } //update[/code]
-    </p>
+      <noscript>
+        <div class="ilc_Paragraph ilc_text_block_Attention">You need to enable JavaScript in your Browser to see and use this content!</div>
+    </noscript>
+    <div codeblockseditor data-question="137614" data-compiler="javascript" data-compiler-version="101" data-language="javascript" data-execution-timeout="5000" data-max-characters="6000" data-run-code="true" data-solution-theme="solarized light" data-code-theme="xq-light" data-continuous-compilation="false" data-persistent-arguments="false" data-dom-libs='["d3-5.13.4"]' data-worker-libs='[]' data-output-parser="auto" data-scope-selector="[id='1980ca5c-363b-41b0-92dd-a3764f0b60ee-137614']">
+        <loading>
+            <div></div>
+            <div></div>
+        </loading>
+        <block data-static data-visible-lines="auto">console.log("Test")</block>
+        <block data-visible-lines="5">console.log(1)</block>        
 
-   
-  
-<div codeblockseditor data-compiler="javascript" data-compiler-version="default" data-question="53" data-dom-libs='[]' data-worker-libs='["brain-2.0.0"]' data-execution-timeout="10000" data-max-characters="4000" data-run-code="true" data-scope-selector="#master" data-randomizer-active="true" data-randomizer-known-tags='["init", "randomized", "color"]' data-randomizer-sets='[{"init":"This was init", "randomized":14, "color":"#fefab0"}, {"init":"Second", "randomized":42, "color":"#000001", "other":"..."}, {"init":"me"}]'>
-  <loading><div></div><div></div></loading>  
-  <Block data-static>// Fixed</Block>  
-  <Blockly height="300px">
-    <script id="customblocks">
-      [
+        <lib>      
           {
-              uuid: '123',
-              JSON: {
-                type: 'test_block',
-                
-                
-                message0: 'Say "Hello World" %1',
-                args0: [
-                    {
-                        type: 'field_number',
-                        name: 'MYVAL'
-                    }
-                ],
-                message1: 'with %1 and %2',
-                args1: [
-                    {
-                        type: 'field_angle',
-                        name: 'MYANGLE'
-                    },{
-                      type: 'field_colour',
-                      name: 'MYCOLOR'
-                  }
-                ],
-                nextStatement: null,
-                previousStatement: null,
-                colour: '{!PrimaryColors.Procedure}'
-              },
-              XML: '',
-              codeStub: '',
-              codeString: "console.log('bbl', Blockly, $, _, window, document, Window, this)\nlet code = 'console.log(\\'Hello World\\', ' + block.getFieldValue('MYVAL') +', \\'with\\', ' + block.getFieldValue('MYANGLE') +', \\'° and \\', \\'' + block.getFieldValue('MYCOLOR') +'\\')';\nreturn code;"
-          },
-          {
-            uuid: '1256',
-            JSON: {
-              "type": "test_block2",
-              "message0": "Say %1 %2 with Value %3",
-              "args0": [
-                {
-                  "type": "field_input",
-                  "name": "MYSTR",
-                  "text": "Hello World"
-                },
-                {
-                  "type": "input_dummy"
-                },
-                {
-                  "type": "field_number",
-                  "name": "MYVAL",
-                  "value": 0
-                }
-              ],
-              "previousStatement": null,
-              "nextStatement": null,
-              "colour": "{!PrimaryColors.Procedure}",
-              "tooltip": "",
-              "helpUrl": ""
-            },
-            XML: '<xml xmlns="https://developers.google.com/blockly/xml">\n    <block type="factory_base" id="p(m~fiHm|^_~U20IYg43" deletable="false" movable="false" x="10" y="10">\n    <mutation connections="BOTH"/>\n    <field name="INLINE">\n    AUTO</field>\n    <field name="CONNECTIONS">\n    BOTH</field>\n    <statement name="INPUTS">\n    <block type="input_dummy" id="54*.WYur;wqY4$R_4m_5">\n    <field name="ALIGN">\n    LEFT</field>\n    <statement name="FIELDS">\n    <block type="field_static" id="a-%;-Ec3.dbg~q;=YZkt">\n    <field name="TEXT">\n    Say</field>\n    <next>\n    <block type="field_input" id="rIdJ%}Vr{#^@P`5!7k8_">\n    <field name="TEXT">\n    Hello World</field>\n    <field name="FIELDNAME">\n    MYSTR</field>\n    </block>\n    </next>\n    </block>\n    </statement>\n    <next>\n    <block type="input_dummy" id="n9*@SCD%@_6Sa=3]$)?U">\n    <field name="ALIGN">\n    LEFT</field>\n    <statement name="FIELDS">\n    <block type="field_static" id=".X_~{hk[L]=zMhz[h4O9">\n    <field name="TEXT">\n    with Value</field>\n    <next>\n    <block type="field_number" id="KA,4)+ebT}XM}V{gXw6!">\n    <field name="VALUE">\n    0</field>\n    <field name="FIELDNAME">\n    MYVAL</field>\n    <field name="MIN">\n    -Infinity</field>\n    <field name="MAX">\n    Infinity</field>\n    <field name="PRECISION">\n    0</field>\n    </block>\n    </next>\n    </block>\n    </statement>\n    </block>\n    </next>\n    </block>\n    </statement>\n    <value name="TOOLTIP">\n    <block type="text" id="l0y_vh^SF2}Z2KV1RY=t" deletable="false" movable="false">\n    <field name="TEXT"/>\n    </block>\n    </value>\n    <value name="HELPURL">\n    <block type="text" id="d+x2XfrEb%YT16B$YWbf" deletable="false" movable="false">\n    <field name="TEXT"/>\n    </block>\n    </value>\n    <value name="BOTTOMTYPE">\n    <shadow type="type_null" id="fiTW5YD04Yom,x(JE~|9"/>\n    </value>\n    <value name="TOPTYPE">\n    <shadow type="type_null" id="-O/~$6gSw0aR!|!xq,iA"/>\n    </value>\n    </block>\n    </xml>',
-            codeStub: "    const text_mystr = block.getFieldValue('MYSTR')\n    const number_myval = block.getFieldValue('MYVAL')\n    // TODO: Assemble Javascript into code variable.\n    let code = '...\\n'\n    return code",
-            codeString: ""
-        }
-      ]
-    </script>
-    <Toolbox>
-      {
-        items:[],
-        categories:[
-          {
-            name:"Math",
-            color:"{!PrimaryColors.Math}",
-            items:[
-            { type: 'test_block'},
-            { type: 'math_number'},
-            { type: 'math_arithmetic'},
-            { type: 'math_single'},
-            { type: 'math_trig'},
-            { type: 'math_constant'},
-            { type: 'math_number_property'},
-            { type: 'math_round'},
-            { type: 'math_on_list'},
-            { type: 'math_modulo'},
-            { type: 'math_constrain'},
-            { type: 'math_random_int'},
-            { type: 'math_random_float'}
-            ]
-          },
-          {
-            name:"Text",
-            color:"{!PrimaryColors.Text}",
-            items:[
-            {type: "text"},
-            {type: "text_join"},
-            {type: "text_append"},
-            {type: "text_length"},
-            {type: "text_isEmpty"},
-            {type: "text_indexOf"},
-            {type: "variables_get"},
-            {type: "text_charAt"},
-            {type: "text_getSubstring"},
-            {type: "text_changeCase"},
-            {type: "text_trim"},
-            {type: "text_print"},
-            {type: "text_prompt_ext"}
-            ]
+            name:"Test Library",
+            language:"javascript" ,
+            purpose:"playground",
+            version:"101", 
+            uid:"123-123-123-123"
           }
-        ]
-      }
-    </Toolbox>
-    <script id="toolboxoverride" use="0" type="text/xmldata">      
-      <category name="Logic" colour="{!PrimaryColors.Logic}">
-        <block type="controls_if"></block>
-        <block type="logic_compare"></block>
-        <block type="logic_operation"></block>
-        <block type="logic_negate"></block>
-        <block type="logic_boolean"></block>
-        <block type="math_arithmetic"></block>
-        <block type="lists_create_empty"></block>
-      </category>
-      <category name="Loops" colour="{!PrimaryColors.Loop}">
-        <block type="controls_repeat_ext">
-          <value name="TIMES">
-            <block type="math_number">
-              <field name="NUM">10</field>
-            </block>
-          </value>
-        </block>
-        <block type="controls_whileUntil"></block>
-      </category>
-      <category name="Math" colour="{!PrimaryColors.Math}">
-        <block type="math_number">
-          <field name="NUM">123</field>
-        </block>
-        <block type="math_arithmetic"></block>
-        <block type="math_single"></block>
-      </category>
-      <category name="Text"  colour="{!PrimaryColors.Text}">
-        <block type="text"></block>
-        <block type="text_length"></block>
-        <block type="text_print"></block>
-
-        <block type="colour_rgb"></block>
-      </category>
-      <category name="Variables" custom="VARIABLE" colour="{!PrimaryColors.Variable}" >
-      </category>
-      <category name="Procedures" custom="PROCEDURE"  colour="{!PrimaryColors.Procedure}">
-      </category>
-    </script>    
-      <script id="content" type="text/xmldata">
-      <xml xmlns="https://developers.google.com/blockly/xml">
-          <block type="controls_if" id="sk$h@#dmRdM.uBDd.KGB" x="179" y="22">
-              <mutation else="1"/>
-              <value name="IF0">
-                  <block type="logic_compare" id="P?.IX@cuX}pfM,]lbK%R">
-                    <field name="OP">EQ</field>
-                    <value name="A">
-                      <block type="math_number" id="yEc%@J#//@^/=Y($-|%i">
-                        <field name="NUM">123</field>
-                      </block>
-                    </value>
-                    <value name="B">
-                      <block type="math_number" id="7J+#=dgDePlR[iXFj#)*">
-                        <field name="NUM">123</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <statement name="DO0">
-                  <block type="text_print" id=".`6r*HA-7@m]+/$PRlh!">
-                    <value name="TEXT">
-                      <block type="text" id="n4=NLse7R/xu7gLC2%wA">
-                        <field name="TEXT">Hello World</field>
-                      </block>
-                    </value>
-                  </block>
-                </statement>
-                <statement name="ELSE">
-                  <block type="text_print" id="ws{W^jVpod_{lM*t.cHY">
-                    <value name="TEXT">
-                      <block type="text" id="uPX?Dlv#gTg@9S3R~wzD">
-                        <field name="TEXT">Test</field>
-                      </block>
-                    </value>
-                  </block>
-                </statement>
-              </block>
-            </xml>
-          </script>
-  </Blockly>
-  <Block><Code>console.log("Hello World");console.log(brain);console.log(4)</Code><Alternative>console.log("...", brain, 3);</Alternative></Block>
-  <Block data-static>// Test</Block>
-</div>
-</div>
-
+        </lib>
+    </div>
     
-  </div>
-  <script>  
-</script>
+</div>
+</div>
+    </div>
     <!-- built files will be auto injected -->
   </body>
+
+  
 </html>

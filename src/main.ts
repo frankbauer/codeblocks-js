@@ -35,9 +35,7 @@ import './plugins/tagger'
 import './plugins/blocklyEnv'
 //remove "noImplicitAny": false from tsconfig when this file goes ts
 import { CodeBlocksManager, MountableArray } from './lib/codeBlocksManager'
-
 Vue.config.productionTip = false
-CodeBlocksManager.find(document).mount()
 
 window.mountInElement = function(element: any): void {
     Vue.$hljs.$vue.processElements(element)
@@ -48,3 +46,11 @@ window.mountInElement = function(element: any): void {
 window.mountCodeBlocks = function(scope: HTMLElement | Document | undefined) {
     return CodeBlocksManager.find(scope).mount()
 }
+
+window.CodeBlocksManager = CodeBlocksManager
+const event: any = new Event('codeblocks-started')
+event.manager = CodeBlocksManager
+window.dispatchEvent(event)
+console.log('dispatech', event)
+
+CodeBlocksManager.find(document).mount()

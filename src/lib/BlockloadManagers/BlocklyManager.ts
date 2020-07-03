@@ -121,7 +121,7 @@ export class BlocklyLoadManager implements IBlockloadManager {
         inBlock: IBlockElementData,
         block: IBlockDataBase,
         editMode: boolean
-    ): void {
+    ): boolean {
         block.obj = null
         positioninLoadManager.loadFromDatablock(bl, inBlock, block)
 
@@ -131,6 +131,8 @@ export class BlocklyLoadManager implements IBlockloadManager {
         this.loadToolbox(bl, inBlock, block)
         this.loadOverrideToolbox(bl, inBlock, block)
         this.loadCode(bl, inBlock, block)
+
+        return true
     }
 
     get defaultToolbox(): IBlocklyToolbox {

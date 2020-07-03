@@ -11,7 +11,7 @@ export class BlockLoadManager implements IBlockloadManager {
         inBlock: IBlockElementData,
         block: IBlockDataBase,
         editMode: boolean
-    ): void {
+    ): boolean {
         const alts = bl.getElementsByTagName('ALTERNATIVE')
         const codes = bl.getElementsByTagName('CODE')
         if (codes.length > 0) {
@@ -27,6 +27,7 @@ export class BlockLoadManager implements IBlockloadManager {
         }
 
         block.hasCode = true
+        return true
     }
 }
 

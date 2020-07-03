@@ -28,11 +28,17 @@ import {
 import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
 import blocklyInstaller from '@/lib/BlockloadManagers/BlocklyManager'
 import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
+import {
+    customLibLoader,
+    ICustomLibDefinition,
+    libInstaller
+} from '@/lib/BlockloadManagers/LibManager'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
 blocklyInstaller(loaders)
 playgroundInstaller(loaders)
+libInstaller(loaders)
 
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
@@ -422,7 +428,9 @@ class InternalCodeBlocksManager {
                     console.i('Skipping', block.type)
                     return
                 } else {
-                    loader.loadFromDatablock(bl, inBlock, block, data.editMode)
+                    if (!loader.loadFromDatablock(bl, inBlock, block, data.editMode)) {
+                        return
+                    }
                 }
             }
 
@@ -570,6 +578,10 @@ export class MountableArray extends Array<InternalCodeBlocksManager> {
 }
 
 export const CodeBlocksManager = {
+    version: require('../../package.json').version,
+    addCustomLib(libDef: ICustomLibDefinition) {
+        customLibLoader.addCustomLibrary(libDef)
+    },
     find(scope: HTMLElement | Document | undefined) {
         if (scope === undefined) {
             scope = document

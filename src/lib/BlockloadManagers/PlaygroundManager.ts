@@ -11,12 +11,14 @@ export class PlaygroundLoadManager implements IBlockloadManager {
         inBlock: IBlockElementData,
         block: IBlockDataBase,
         editMode: boolean
-    ): void {
+    ): boolean {
         block.obj = null
         positioninLoadManager.loadFromDatablock(bl, inBlock, block)
         block.version = bl.getAttribute('data-version')
             ? bl.getAttribute('data-version')!
             : block.version
+
+        return true
     }
 }
 
