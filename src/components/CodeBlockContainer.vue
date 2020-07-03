@@ -574,11 +574,20 @@ export default class CodeBlocksContainer extends Vue {
         this.$emit('type-change', ret)
     }
     get visibleLines(): number | 'auto' {
-        return this.block.visibleLines
+        const v = this.block.visibleLines
+        if (v == 'auto' || isNaN(v)) {
+            return 'auto'
+        }
+        return v
     }
     set visibleLines(v: number | 'auto') {
+        if (v == 'auto' || isNaN(v)) {
+            v = 'auto'
+        }
+        console.log('set', v)
+
         this.$emit('visible-lines-change', {
-            visibleLines: v == 'auto' || isNaN(v) ? v : new Number(v),
+            visibleLines: v,
             id: this.block.id
         })
     }
