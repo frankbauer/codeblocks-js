@@ -93,6 +93,8 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         return false
     }
 
+    sessionCompileListener: ((e: any) => void) | undefined = undefined
+    sessionID: string = '-1'
     compileAndRun(
         questionID: string,
         code: string,
@@ -188,7 +190,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }
 
         //console.log(mainClass, code);
-        var myListener = (e: any) => {
+        let myListener = (e: any) => {
             //console.log('this.teaworker', questionID, e.data);
             if (e.data.id == '' + questionID) {
                 if (e.data.command == 'phase') {
@@ -267,6 +269,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                     let runTimeout: number | undefined = undefined
                     if (this.teaworker) {
                         this.teaworker.removeEventListener('message', myListener)
+                        this.sessionCompileListener = undefined
                     }
                     try {
                         clearTimeout(compilerTimeout)
@@ -348,6 +351,8 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }
 
         if (this.teaworker) {
+            this.sessionID = questionID
+            this.sessionCompileListener = myListener
             this.teaworker.addEventListener('message', myListener)
         }
         //console.log(code);
@@ -366,7 +371,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }
 
         if (this.teaworker) {
-            this.teaworker.end = (msg: string) => {
+            this.teaworker.end = (msg: string, terminate: boolean = true) => {
                 try {
                     clearTimeout(compilerTimeout)
                 } catch (e) {
@@ -376,7 +381,8 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                 if (booted) {
                     return
                 }
-                if (this.teaworker) {
+                if (this.teaworker && terminate) {
+                    console.log('TERMINATING')
                     this.teaworker.terminate()
                 }
                 finishedExecutionCB(false)
@@ -392,7 +398,19 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.teaworker) {
-            this.teaworker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            if (this.sessionCompileListener) {
+                // this.sessionCompileListener({
+                //     data: {
+                //         id: '' + this.sessionID,
+                //         command: 'compilation-complete',
+                //         status: 'errors',
+                //         errors: [Vue.$l('CodeBlocks.UserCanceled')]
+                //     }
+                // })
+                this.teaworker.removeEventListener('message', this.sessionCompileListener)
+                this.sessionCompileListener = undefined
+            }
+            this.teaworker.end(Vue.$l('CodeBlocks.UserCanceled'), false)
         }
     }
 }
