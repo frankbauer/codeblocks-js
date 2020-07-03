@@ -95,6 +95,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
 
     sessionCompileListener: ((e: any) => void) | undefined = undefined
     sessionID: string = '-1'
+    sessionWorker: any = undefined
     compileAndRun(
         questionID: string,
         code: string,
@@ -305,6 +306,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         let workerrun = new Worker(
                             `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js`
                         )
+                        this.sessionWorker = workerrun
                         workerrun.addEventListener('message', runListener.bind(this))
 
                         workerrun.postMessage({
@@ -315,6 +317,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         })
 
                         workerrun.end = (msg: string) => {
+                            this.sessionWorker = undefined
                             //when we end it IS over, no matter how often we tried :)
                             try {
                                 workerrun.terminate()
@@ -397,7 +400,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
 
     stop() {
         console.d('FORCE STOPPING')
-        if (this.teaworker) {
+        if (this.sessionWorker) {
+            this.sessionWorker.end(Vue.$l('CodeBlocks.UserCanceled'))
+        } else if (this.teaworker) {
             if (this.sessionCompileListener) {
                 // this.sessionCompileListener({
                 //     data: {
