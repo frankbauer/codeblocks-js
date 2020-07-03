@@ -72,6 +72,7 @@ export interface IBlockElementData {
     scopeUUID?: string
     scopeSelector?: string
     showControls?: boolean
+    link?: string
 }
 
 export interface IBlockDataBlockly {
@@ -109,6 +110,7 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
     hasAlternativeContent: boolean
     shouldAutoreset: boolean
     blockly: IBlockDataBlockly
+    link: string | null
 }
 
 export interface IBlockData extends IBlockDataBase {

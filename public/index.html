@@ -21,6 +21,13 @@
   console.log("register event")
   const onLoad = (cbm) => {
     console.log("have", cbm)
+    cbm.addCustomLib({
+            name:"Inline Library",
+            language:"javascript" ,
+            purpose:"playground",
+            version:"101", 
+            uid:"ABC-123-123-123"
+          })
   }
   if (window.CodeBlocksManager){
     console.error("CodeBlocksManager is already initialized!")
@@ -28,9 +35,15 @@
   } else {
     window.addEventListener('codeblocks-started', (e) => onLoad(e.manager))
   }
+
   window.addEventListener('codeblocks-fetch', (e) => {
     e.promise = new Promise((res, rej) => {
-      res('Hello World')
+      if (e.libDefinition.uid === "123-123-123-123"){
+        res("console.log('123');");
+        return;
+      }
+      //rej("Unknown...")
+      res('console.log("Hello World")')
     })
   })
 </script>
@@ -49,7 +62,9 @@
             <div></div>
         </loading>
         <block data-static data-visible-lines="auto">console.log("Test")</block>
-        <block data-visible-lines="5">console.log(1)</block>        
+        <block data-visible-lines="5">console.log(1)</block>    
+        <block data-static data-link="ABC-123-123-123">console.log("Test ABC")</block>
+        <block data-static data-link="123-123-123-123">console.log("Test 123")</block>    
 
         <lib>      
           {

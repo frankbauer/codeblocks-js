@@ -13,7 +13,7 @@ export interface ICustomLibDefinition {
     version: string
     purpose: LibPurpose
     _content?: string
-    content: () => Promise<string>
+    getContent: () => Promise<string>
 }
 export class LibLoadManager implements IBlockloadManager {
     get blockTag(): string {
@@ -22,16 +22,43 @@ export class LibLoadManager implements IBlockloadManager {
 
     libs: ICustomLibDefinition[] = []
 
+    public get(uid: string): ICustomLibDefinition | undefined {
+        return this.libs[uid]
+    }
+
     public addCustomLibrary(libDef: ICustomLibDefinition) {
         libDef._content = undefined
-        libDef.content = () => {
+        libDef.getContent = () => {
             return this.getContentFor(libDef.uid)
         }
 
         this.libs[libDef.uid] = libDef
     }
 
+    public invalidateCustomLibraryContent(uid: string) {
+        const l = this.libs[uid]
+        if (l !== undefined) {
+            l._content = undefined
+        }
+    }
+
+    public prepareCustom(uids: string[] | undefined, whenLoaded: () => void) {
+        console.d('LOADING', uids)
+        if (uids === undefined || uids.length === 0) {
+            whenLoaded()
+            return
+        }
+
+        const uid = uids.shift() as string
+        this.getContentFor(uid)
+            .catch(err => {
+                console.error(`Could not resolve library '${uid}': ${err}`)
+            })
+            .finally(() => this.prepareCustom(uids, whenLoaded))
+    }
+
     private async getContentFor(uid: string): Promise<string> {
+        console.d('FETCHING', uid)
         const l = this.libs[uid]
         if (l === undefined) {
             return new Promise<string>((resolve, reject) => {
@@ -40,9 +67,10 @@ export class LibLoadManager implements IBlockloadManager {
         }
 
         if (l._content === undefined) {
+            console.log(`[Loading custom Library '${l.name}' (v${l.version})]`)
             const event: any = new Event('codeblocks-fetch')
             l._content = ''
-            event.data = l
+            event.libDefinition = l
             event.promise = null
             window.dispatchEvent(event)
 
@@ -56,7 +84,8 @@ export class LibLoadManager implements IBlockloadManager {
                         })
                     })
                     .catch((err: any) => {
-                        console.error(`Failed fetching ${l.name}, ${l.uid}: ${err}`)
+                        l._content = undefined
+                        console.error(`[Failed fetching '${l.name}', '${l.uid}': ${err}]`)
                         return new Promise<string>((resolve, reject) => {
                             reject(err)
                         })

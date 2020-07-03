@@ -120,6 +120,7 @@ export class BlockData extends Vue implements IBlockData {
     height!: string
     align!: string
     blockly!: IBlockDataBlockly
+    link!: string | null
     _oac?: () => string //used by Blockly to re-place the actuakContent-Method while keeping the old implementation around
 
     actualContent() {
@@ -379,6 +380,7 @@ class InternalCodeBlocksManager {
                 align: 'center',
                 readyCount: 0,
                 obj: null,
+                link: null,
                 blockly: {
                     showControls: false,
                     useOverride: false,
@@ -553,7 +555,8 @@ class InternalCodeBlocksManager {
                                 },
                                 blocks: [],
                                 _blockErrors: []
-                            }
+                            },
+                            link: null
                         }
                         data.blocks.push(self.constructBlock(data, block))
                     }
@@ -581,6 +584,9 @@ export const CodeBlocksManager = {
     version: require('../../package.json').version,
     addCustomLib(libDef: ICustomLibDefinition) {
         customLibLoader.addCustomLibrary(libDef)
+    },
+    invalidateCutsomLibraryContent(uid: string) {
+        customLibLoader.invalidateCustomLibraryContent(uid)
     },
     find(scope: HTMLElement | Document | undefined) {
         if (scope === undefined) {

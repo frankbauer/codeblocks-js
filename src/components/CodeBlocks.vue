@@ -190,6 +190,7 @@ import {
     KnownBlockTypes,
     IBlockDataPlayground
 } from '@/lib/ICodeBlocks'
+import { customLibLoader } from '@/lib/BlockloadManagers/LibManager'
 
 export interface IOnTypeChangeInfo {
     type: KnownBlockTypes
@@ -370,7 +371,21 @@ export default class CodeBlocks extends Vue {
     get completeSource(): string {
         return this.blocks
             .filter(b => b.hasCode)
-            .map(b => b.actualContent())
+            .map(b => {
+                if (b.link !== null) {
+                    const l = customLibLoader.get(b.link)
+                    if (l === undefined) {
+                        return ''
+                    }
+                    const c = l._content
+                    if (c === undefined) {
+                        return ''
+                    }
+                    return c
+                } else {
+                    return b.actualContent()
+                }
+            })
             .reduce((p, c) => {
                 return p + '\n' + c
             }, '')
@@ -517,8 +532,22 @@ export default class CodeBlocks extends Vue {
         this.eventHub.$emit('render-diagnostics', {})
     }
 
+    get linkedUIDs(): string[] {
+        return this.blocks
+            .map(bl => bl.link)
+            .filter((uid: string | null) => uid !== null) as string[]
+    }
+
     loadLibraries(whenLoaded: () => void): void {
-        this.$compilerRegistry.loadLibraries(this.domLibraries, whenLoaded)
+        const self = this
+        this.$compilerRegistry.loadLibraries(this.domLibraries, () => {
+            // console.log(
+            //     'LL',
+            //     self.linkedUIDs,
+            //     self.blocks.map(bl => bl.link)
+            // )
+            customLibLoader.prepareCustom([...self.linkedUIDs], whenLoaded)
+        })
     }
 
     /**

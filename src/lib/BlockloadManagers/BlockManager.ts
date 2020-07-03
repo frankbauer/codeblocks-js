@@ -26,6 +26,12 @@ export class BlockLoadManager implements IBlockloadManager {
             }
         }
 
+        if (inBlock.link) {
+            block.link = inBlock.link
+        } else {
+            block.link = null
+        }
+
         block.hasCode = true
         return true
     }
