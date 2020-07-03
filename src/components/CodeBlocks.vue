@@ -761,6 +761,7 @@ div.runner
         padding: 9.5px
         line-height: 1.42857143
         color: #333333
+        white-space: pre-wrap
         word-break: break-all
         word-wrap: break-word
 </style>
