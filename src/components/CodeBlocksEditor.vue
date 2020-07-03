@@ -40,7 +40,11 @@ export default class CodeBlocksEditor extends CodeBlocks {
             return
         }
 
-        bl.visibleLines = +nfo.visibleLines
+        if (nfo.visibleLines != 'auto' && isNaN(nfo.visibleLines)) {
+            bl.visibleLines = 'auto'
+        } else {
+            bl.visibleLines = nfo.visibleLines
+        }
     }
     onPlacementChange(nfo: IOnPlacementChangeInfo): void {
         let bl = this.blockById(nfo.id)
