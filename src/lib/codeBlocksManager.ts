@@ -114,7 +114,8 @@ export class BlockData extends Vue implements IBlockData {
     height!: string
     align!: string
     blockly!: IBlockDataBlockly
-    _oac?: () => string //used by Blockly to re-place the actuakContent-Method while keeping the old implementation around
+    lineCountHint!: number
+    _oac?: () => string //used by Blockly to re-place the actualContent-Method while keeping the old implementation around
 
     actualContent() {
         if (this.appSettings.randomizer.active) {
@@ -164,12 +165,23 @@ export class BlockData extends Vue implements IBlockData {
         }
         return this.appSettings.blocks[this.id - 1].nextLine
     }
+
     get lineCount(): number {
         if (!this.hasCode) {
             return 0
         }
-        return this.content.split('\n').length
+        if (this.lineCountHint >= 0) {
+            return this.lineCountHint
+        }
+
+        let ct = 0
+        this.content.replace(/\n/, m => {
+            ct++
+            return m
+        })
+        return ct
     }
+
     get nextLine(): number {
         if (!this.hasCode) {
             return this.firstLine
@@ -373,6 +385,7 @@ class InternalCodeBlocksManager {
                 align: 'center',
                 readyCount: 0,
                 obj: null,
+                lineCountHint: -1,
                 blockly: {
                     showControls: false,
                     useOverride: false,
@@ -545,7 +558,8 @@ class InternalCodeBlocksManager {
                                 },
                                 blocks: [],
                                 _blockErrors: []
-                            }
+                            },
+                            lineCountHint: -1
                         }
                         data.blocks.push(self.constructBlock(data, block))
                     }

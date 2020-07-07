@@ -109,6 +109,7 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
     hasAlternativeContent: boolean
     shouldAutoreset: boolean
     blockly: IBlockDataBlockly
+    lineCountHint: number
 }
 
 export interface IBlockData extends IBlockDataBase {

@@ -153,7 +153,12 @@ export default class CodeBlock extends BaseBlock {
     }
     onCodeReady(editor) {
         //we need this for StudON to make sure tinyMCE is not taking over :D
-        if (this.codemirror && this.codemirror.display && this.codemirror.display.input && this.codemirror.display.input.textarea) {
+        if (
+            this.codemirror &&
+            this.codemirror.display &&
+            this.codemirror.display.input &&
+            this.codemirror.display.input.textarea
+        ) {
             this.codemirror.display.input.textarea.className = 'noRTEditor'
         }
         this.codeBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
@@ -175,7 +180,12 @@ export default class CodeBlock extends BaseBlock {
     onAltCodeReady(editor) {
         console.d('READY')
         //we need this for StudON to make sure tinyMCE is not taking over :D
-        if (this.altcodemirror && this.altcodemirror.display && this.altcodemirror.display.input && this.altcodemirror.display.input.textarea) {
+        if (
+            this.altcodemirror &&
+            this.altcodemirror.display &&
+            this.altcodemirror.display.input &&
+            this.altcodemirror.display.input.textarea
+        ) {
             this.altcodemirror.display.input.textarea.className = 'noRTEditor'
         }
         this.altBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
@@ -193,6 +203,11 @@ export default class CodeBlock extends BaseBlock {
     codeUpdateTimer: number | null = null
     codeUpdateStartTime: number = 0
     onCodeChangeDefered(newCode) {
+        if (!this.editMode) {
+            this.onCodeChange(newCode)
+            return
+        }
+
         const now = new Date().getTime()
 
         //clear an existing update timeout
@@ -220,11 +235,21 @@ export default class CodeBlock extends BaseBlock {
 
     continuousCodeUpdateTimer: number | null = null
     onCodeChange(newCode) {
+        //update line numbers manually (changing in options takes too long)
+        this.block.lineCountHint = this.codemirror.doc.size
+        this.codemirror.options.firstLineNumber = this.block.firstLine
+
+        //copy the content to the actual textbox processed by StudON
         const tb = this.codeBox.$el.querySelector('textarea[name]') as HTMLTextAreaElement
         tb.value = newCode
 
+        //copy code to the block structure
         this.block.content = newCode
+
+        //find all tags
         this.updateTagDisplay()
+
+        //send out the event for processing
         if (this.editMode) {
             this.$emit('code-changed-in-edit-mode', undefined)
         } else if (this.emitWhenTypingInViewMode) {
@@ -492,14 +517,15 @@ export default class CodeBlock extends BaseBlock {
             readOnly:
                 !this.editMode &&
                 (this.block.readonly || this.block.static || this.block.hidden || this.readonly),
-            firstLineNumber: this.block.firstLine,
+            //firstLineNumber: this.block.firstLine, //make sure to change altOptions as well when activating this
             gutters: ['diagnostics', 'CodeMirror-linenumbers']
         }
     }
     get altOptions() {
-        let o = { ...this.options }
-        o.firstLineNumber = 1
-        return o
+        return this.options
+        // let o = { ...this.options }
+        // o.firstLineNumber = 1
+        // return o
     }
     get codemirror(): any | undefined {
         return (this.codeBox as any).codemirror
@@ -512,6 +538,15 @@ export default class CodeBlock extends BaseBlock {
     }
     get readyWhenMounted() {
         return false
+    }
+    @Watch('block.firstLine')
+    onFirstLineChanged(val) {
+        if (this.codemirror) {
+            if (this.codemirror.options.firstLineNumber != this.block.firstLine) {
+                this.codemirror.options.firstLineNumber = this.block.firstLine
+                this.codemirror.refresh()
+            }
+        }
     }
     @Watch('visibleLines')
     onVisibleLinesChanged(val) {
