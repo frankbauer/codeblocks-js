@@ -211,7 +211,7 @@
                             :ripple="{ center: true }"
                         ></q-btn>
                         <q-btn
-                            icon
+                            :icon="expanded ? 'expand_less' : 'expand_more'"
                             color="primary"
                             small
                             flat
@@ -219,7 +219,6 @@
                             style="margin-right:-9px"
                             @click="toggleExpanded"
                         >
-                            <q-icon :name="expanded ? 'expand_less' : 'expand_more'" size="24" />
                         </q-btn>
                     </div>
                 </div>
