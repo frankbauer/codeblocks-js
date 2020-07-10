@@ -5,7 +5,7 @@
         :uuid="blockInfo.uuid"
     >
         <CodePanel
-            v-show="hasBookmark"
+            v-show="hasBookmark && editMode"
             :editMode="editMode"
             visibleLines="auto"
             :block="panelBlock"
