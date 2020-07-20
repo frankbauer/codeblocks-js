@@ -547,7 +547,6 @@ export default class CodeBlocks extends Vue {
             //outputElement: $(this.outputElement) as JQuery<HTMLElement> //This line soes not work here, looks like the update did not yet happen?
             outputElement: $(this.$refs.output) as JQuery<HTMLElement>
         }
-        console.log('OE', this.outputElement, this.$refs.output as HTMLElement)
         this.eventHub.$emit('output-updated', this._finalOutputObject)
 
         this.onRunFinished()
