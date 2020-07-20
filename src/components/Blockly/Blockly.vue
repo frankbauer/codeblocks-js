@@ -396,16 +396,22 @@ export default class BlocklyBlock extends Vue {
 
     private parseToolboxCode(toolboxXML: string) {
         Object.keys(BlockPrimaryColors).forEach(key => {
-            toolboxXML = toolboxXML.replaceAll(`{!PrimaryColors.${key}}`, BlockPrimaryColors[key])
+            toolboxXML = toolboxXML.replaceAllPoly(
+                `{!PrimaryColors.${key}}`,
+                BlockPrimaryColors[key]
+            )
         })
         Object.keys(BlockSecondaryColors).forEach(key => {
-            toolboxXML = toolboxXML.replaceAll(
+            toolboxXML = toolboxXML.replaceAllPoly(
                 `{!SecondaryColors.${key}}`,
                 BlockSecondaryColors[key]
             )
         })
         Object.keys(BlockTertiaryColors).forEach(key => {
-            toolboxXML = toolboxXML.replaceAll(`{!TertiaryColors.${key}}`, BlockTertiaryColors[key])
+            toolboxXML = toolboxXML.replaceAllPoly(
+                `{!TertiaryColors.${key}}`,
+                BlockTertiaryColors[key]
+            )
         })
 
         return toolboxXML

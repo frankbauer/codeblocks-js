@@ -19,7 +19,7 @@ declare global {
     }
 
     interface String {
-        replaceAll(search: string, replacement: string): string
+        replaceAllPoly(search: string, replacement: string): string
         replaceRec(pattern: string | RegExp, replacement: string): string
     }
 }

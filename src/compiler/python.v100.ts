@@ -19,7 +19,7 @@ function runPythonWorker(
     finishCallback: finishedCallbackSignatur
 ) {
     // the Python program
-    prog = prog.replaceAll('\t', '    ')
+    prog = prog.replaceAllPoly('\t', '    ')
 
     if (!window.Worker) {
         errCallback(

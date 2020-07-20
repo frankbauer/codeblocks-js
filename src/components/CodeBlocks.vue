@@ -467,7 +467,7 @@ export default class CodeBlocks extends Vue {
     log(text: string): void {
         //console.log("log", text);
         this.output += text
-        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         if (!this.didClip) {
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
                 this.outputHTML += this.$CodeBlock.format_info(
@@ -481,7 +481,7 @@ export default class CodeBlocks extends Vue {
     }
 
     logError(text: string): void {
-        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         text = this.$CodeBlock.format_error(text)
         //console.log("err", text);
         this.sansoutput += text
@@ -489,7 +489,7 @@ export default class CodeBlocks extends Vue {
     }
 
     logInfo(text: string): void {
-        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         text = this.$CodeBlock.format_info(text)
         //console.log("nfo", text);
         this.sansoutput += text

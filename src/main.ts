@@ -1,4 +1,4 @@
-String.prototype.replaceAll = function(search: string, replacement: string): string {
+String.prototype.replaceAllPoly = function(search: string, replacement: string): string {
     var target = this
     return target.replace(new RegExp(search, 'g'), replacement)
 }
