@@ -444,7 +444,7 @@ export default class CodeBlocks extends Vue {
             return
         }
         if (this.output != newOutput) {
-            this.output = newOutput.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+            this.output = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
                 this.outputHTML = this.output.substr(0, this.maxCharacters)
                 this.outputHTML += this.$CodeBlock.format_info(
@@ -544,8 +544,10 @@ export default class CodeBlocks extends Vue {
             processedOutput: processed,
             sansoutput: this.sansoutput,
             parseError: parseError,
-            outputElement: $(this.outputElement) as JQuery<HTMLElement>
+            //outputElement: $(this.outputElement) as JQuery<HTMLElement> //This line soes not work here, looks like the update did not yet happen?
+            outputElement: $(this.$refs.output) as JQuery<HTMLElement>
         }
+        console.log('OE', this.outputElement, this.$refs.output as HTMLElement)
         this.eventHub.$emit('output-updated', this._finalOutputObject)
 
         this.onRunFinished()
