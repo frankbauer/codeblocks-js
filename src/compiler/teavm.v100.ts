@@ -8,6 +8,12 @@ import {
     finishedCallbackSignatur
 } from '@/lib/ICompilerRegistry'
 
+declare global {
+    interface Worker {
+        end(msg?: string, terminate?: boolean): void
+    }
+}
+
 const teaVMRunOverhead = 30000
 
 //ICompilerInstance
