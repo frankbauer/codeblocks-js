@@ -78,6 +78,9 @@ interface IAppElementData {
     scopeSelector?: string
     continuousCompilation?: string
     persistentArguments?: string
+    outputParser?: CodeOutputTypes
+    solutionTheme?: string
+    codeTheme?: string
 }
 
 export interface IBlockBookmarkPayload {
@@ -361,6 +364,18 @@ class InternalCodeBlocksManager {
         }
         if (inData.scopeSelector !== undefined) {
             data.scopeSelector = inData.scopeSelector
+        }
+
+        if (inData.outputParser !== undefined) {
+            data.outputParser = inData.outputParser
+        }
+
+        if (inData.solutionTheme !== undefined) {
+            data.solutionTheme = inData.solutionTheme
+        }
+
+        if (inData.codeTheme !== undefined) {
+            data.codeTheme = inData.codeTheme
         }
 
         el.querySelectorAll('*').forEach(blIn => {
