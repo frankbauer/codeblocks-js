@@ -4,7 +4,7 @@
         <TipTap
             v-else
             :value="value"
-            @input="updatedContent"
+            @input="updatedContentDefered"
             class="editor q-my-3"
             :name="name"
             :language="language"
@@ -28,7 +28,42 @@ export default class SimpleText extends BaseBlock {
     @Prop({ default: false }) editMode!: boolean
     @Prop({ default: '' }) previewValue!: string
 
+    textUpdateTimer: number | null = null
+    textUpdateStartTime: number = 0
+    updatedContentDefered(newVal: string) {
+        if (!this.editMode) {
+            this.updatedContent(newVal)
+            return
+        }
+
+        const now = new Date().getTime()
+
+        //clear an existing update timeout
+        if (this.textUpdateTimer !== null) {
+            clearTimeout(this.textUpdateTimer)
+            this.textUpdateTimer = null
+        } else {
+            this.textUpdateStartTime = now
+        }
+
+        const doIt = () => {
+            this.textUpdateTimer = null
+            this.updatedContent(newVal)
+        }
+
+        //did we wait for a maximum time? run
+        if (now - this.textUpdateStartTime > process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
+            doIt()
+            return
+        }
+        this.textUpdateTimer = setTimeout(() => {
+            doIt()
+        }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
+    }
+
     updatedContent(v: string) {
+        //console.log('Updating')
+        //this.value = v
         this.$emit('input', v)
     }
 }
