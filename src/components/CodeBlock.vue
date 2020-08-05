@@ -9,13 +9,16 @@
             ref="codeBox"
             :value="code"
             :options="options"
-            :class="`accqstXmlInput noRTEditor ${boxClass}`"
+            :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"
             @ready="onCodeReady"
             @focus="onCodeFocus"
             @input="onCodeChangeDefered"
+            @input-read="onCodeKeyHandle"
+            @keyup="onCodeKeyHandle"
             :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
             :id="`teQ${block.parentID}B${block.id}`"
             :data-question="block.parentID"
+            :events="['keyup']"
         >
         </codemirror>
 
@@ -263,6 +266,36 @@ export default class CodeBlock extends BaseBlock {
         }
     }
 
+    codeNeedsTagUpdate: boolean = true
+    didAddText(t: string): void {
+        //console.log('    ', t)
+        if (
+            t.indexOf('!') >= 0 ||
+            t.indexOf('+') >= 0 ||
+            t.indexOf('{') >= 0 ||
+            t.indexOf('{') >= 0 ||
+            t.indexOf('\n') >= 0
+        ) {
+            this.codeNeedsTagUpdate = true
+        }
+    }
+    onCodeKeyHandle(e) {
+        //console.log('IR', e, arguments)
+        if (arguments.length > 1 && arguments[1] !== undefined) {
+            if (arguments[1].text !== undefined) {
+                arguments[1].text.forEach(t => {
+                    this.didAddText(t)
+                })
+            } else if (arguments[1].key !== undefined) {
+                if (arguments[1].keyCode == 13) {
+                    this.didAddText('\n')
+                } else {
+                    this.didAddText(arguments[1].key)
+                }
+            }
+        }
+    }
+
     altCodeUpdateTimer: number | null = null
     altCodeUpdateStartTime: number = 0
     onAltCodeChangeDefered(newCode) {
@@ -333,10 +366,19 @@ export default class CodeBlock extends BaseBlock {
         )
     }
     updateTagDisplay() {
-        if (!this.editMode) {
+        if (
+            !this.editMode ||
+            this.block === undefined ||
+            this.block.appSettings === undefined ||
+            this.block.appSettings.randomizer === undefined ||
+            !this.block.appSettings.randomizer.active ||
+            !this.codeNeedsTagUpdate
+        ) {
             return
         }
 
+        this.codeNeedsTagUpdate = false
+        //console.log('Updating Tags')
         this.clearTagMarkers()
         Vue.$tagger.getMarkers(this.block.content).forEach(m => {
             this.codemirror.getDoc().markText(m.start, m.end, {
@@ -588,6 +630,7 @@ export default class CodeBlock extends BaseBlock {
         }
 
         Vue.$tagger.$on('replace-template-tag', this.replaceTemplateTags)
+        this.codeNeedsTagUpdate = true
         this.updateTagDisplay()
     }
     beforeDestroy() {
