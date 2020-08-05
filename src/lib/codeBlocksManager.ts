@@ -21,7 +21,8 @@ import {
     IBlockDataBase,
     IBlockDataBlockly,
     IBlockloadManager,
-    IBlockElementData
+    IBlockElementData,
+    CodeExpansionType
 } from './ICodeBlocks'
 
 //get loaders
@@ -100,7 +101,7 @@ export class BlockData extends Vue implements IBlockData {
     uuid!: string
     parentID!: number
     expanded!: boolean
-    codeExpanded!: boolean
+    codeExpanded!: CodeExpansionType
     obj!: ScriptBlock | null
     readonly!: boolean
     static!: boolean
@@ -422,12 +423,25 @@ class InternalCodeBlocksManager {
                 expanded:
                     inBlock.expanded === undefined ||
                     (inBlock.expanded != 'false' && inBlock.expanded != '0'),
-                codeExpanded:
-                    inBlock.codeExpanded === undefined ||
-                    (inBlock.codeExpanded != 'false' && inBlock.codeExpanded != '0'),
+                codeExpanded: CodeExpansionType.AUTO,
                 noContent: isTrue(inBlock.noContent),
                 scopeUUID: inBlock.scopeUUID,
                 scopeSelector: inBlock.scopeSelector
+            }
+
+            if (inBlock.codeExpanded !== undefined) {
+                if (
+                    inBlock.codeExpanded.toUpperCase() == 'TINY' ||
+                    inBlock.codeExpanded == 'false' ||
+                    inBlock.codeExpanded == '0'
+                ) {
+                    block.codeExpanded = CodeExpansionType.SMALL
+                } else if (
+                    inBlock.codeExpanded.toUpperCase() == 'LARGE' ||
+                    inBlock.codeExpanded == '2'
+                ) {
+                    block.codeExpanded = CodeExpansionType.LARGE
+                }
             }
 
             if (!data.editMode && block.noContent) {
@@ -548,7 +562,7 @@ class InternalCodeBlocksManager {
                             uuid: uuid.v4(),
                             parentID: data.id,
                             expanded: true,
-                            codeExpanded: true,
+                            codeExpanded: CodeExpansionType.AUTO,
                             width: '100%',
                             height: '200px',
                             align: 'center',

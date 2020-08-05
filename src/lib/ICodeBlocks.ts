@@ -18,6 +18,12 @@ export enum CodeOutputTypes {
     MAGIC = 'magic'
 }
 
+export enum CodeExpansionType {
+    LARGE = 2,
+    AUTO = 1,
+    TINY = 0
+}
+
 export interface IBlockloadManager {
     readonly blockTag: string
     loadFromDatablock: (
@@ -98,7 +104,7 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
     uuid: string
     parentID: number
     expanded: boolean
-    codeExpanded: boolean
+    codeExpanded: CodeExpansionType
     obj: object | null
     version: string
     readyCount: number
