@@ -429,13 +429,14 @@ class InternalCodeBlocksManager {
                 scopeSelector: inBlock.scopeSelector
             }
 
+            console.log(inBlock.codeExpanded)
             if (inBlock.codeExpanded !== undefined) {
                 if (
                     inBlock.codeExpanded.toUpperCase() == 'TINY' ||
                     inBlock.codeExpanded == 'false' ||
                     inBlock.codeExpanded == '0'
                 ) {
-                    block.codeExpanded = CodeExpansionType.SMALL
+                    block.codeExpanded = CodeExpansionType.TINY
                 } else if (
                     inBlock.codeExpanded.toUpperCase() == 'LARGE' ||
                     inBlock.codeExpanded == '2'
