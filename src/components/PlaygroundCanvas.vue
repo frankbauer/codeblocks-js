@@ -74,7 +74,7 @@ export default class PlaygroundCanvas extends Vue {
     height:200px
     border:1px dashed rgb(128, 48, 48, 0.66)
     border-radius: 3px
-    background-color:rgba(255, 255, 255, 0.63766)
+    background-color: rgba(255, 255, 255, 0.63766)
     margin-top:4px
     margin-bottom:4px
     transition: opacity 600ms, visibility 600ms
