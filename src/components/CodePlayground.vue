@@ -178,7 +178,7 @@ export default class CodePlayground extends BaseBlock {
     setExpanded(val: CodeExpansionType): void {
         this.block.codeExpanded = val
 
-        if (this.block.codeExpanded != CodeExpansionType.SMALL) {
+        if (this.block.codeExpanded != CodeExpansionType.TINY) {
             this.$CodeBlock.refreshAllCodeMirrors()
         }
     }
