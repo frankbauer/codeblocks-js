@@ -8,7 +8,7 @@ import {
     IListItemData,
     ICompilerInstance,
     ICompilerRegistry,
-    ICompilerIDQuery,
+    ICompilerIDQuery
 } from './ICompilerRegistry'
 
 //prepare Compiler Registry
@@ -22,8 +22,8 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
 
     get languages(): IListItemData[] {
         const langs = Object.keys(this.compilers)
-            .map((k) => this.compilers[k])
-            .map((c) => {
+            .map(k => this.compilers[k])
+            .map(c => {
                 return { label: c.displayName, value: c.type }
             })
             .sort((a, b) => (a.label < b.label ? -1 : 1))
@@ -31,15 +31,15 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
     }
 
     get domLibraries(): IListItemData[] {
-        const libs: IDomLibraray[] = this.libraries.filter((l) => !l.utility)
-        return libs.map((l) => {
+        const libs: IDomLibraray[] = this.libraries.filter(l => !l.utility)
+        return libs.map(l => {
             return { label: l.displayName + ' (' + l.version + ')', value: l.key }
         })
     }
 
     register(compilers: ICompilerInfo[] | ICompilerInfo): void {
         if (Array.isArray(compilers)) {
-            compilers.forEach((c) => this.registerSingle(c))
+            compilers.forEach(c => this.registerSingle(c))
         } else {
             this.registerSingle(compilers)
         }
@@ -47,7 +47,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
 
     registerSingle(c: ICompilerInfo): void {
         this.compilers[c.type] = c
-        c.versions.forEach((v) => {
+        c.versions.forEach(v => {
             if (v.registerLibs) {
                 v.registerLibs(this)
             }
@@ -62,7 +62,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
         if (compilerInfo.version === undefined) {
             return cmps.default
         }
-        let res = cmps.versions.find((e) => e.version == compilerInfo.version)
+        let res = cmps.versions.find(e => e.version == compilerInfo.version)
         if (res === undefined) {
             res = cmps.default
         }
@@ -74,7 +74,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
         if (c === undefined) {
             return ['none']
         }
-        return c.versions.map((v) => v.version)
+        return c.versions.map(v => v.version)
     }
 
     registerDOMLib(
@@ -93,20 +93,20 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             displayName: displayName,
             didLoad: false,
             utility: utility,
-            order: order,
+            order: order
         })
     }
 
     getLibObjects(domLibs: string[]): IDomLibraray[] {
-        return this.libraries.filter((l) => domLibs.indexOf(l.key) >= 0)
+        return this.libraries.filter(l => domLibs.indexOf(l.key) >= 0)
     }
 
     urisForDOMLibs(domLibs: string[]): string[] {
         const libs = this.getLibObjects(domLibs)
         const uris = libs
-            .filter((l) => !l.didLoad)
+            .filter(l => !l.didLoad)
             .sort((a, b) => (a.order < b.order ? 1 : -1))
-            .map((l) => l.uri)
+            .map(l => l.uri)
             .reduce((p, c) => c.concat(p), [])
 
         return uris
@@ -116,8 +116,8 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
         const dlibs = this.getLibObjects(domLibraries)
         this.loadURIs(
             libs,
-            function () {
-                dlibs.forEach((l) => (l.didLoad = true))
+            function() {
+                dlibs.forEach(l => (l.didLoad = true))
                 whenLoaded()
             }.bind(this)
         )
@@ -141,7 +141,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             const script = document.createElement('script')
             script.src = uri
             console.log('[Loading Library from ' + uri + ']')
-            script.onload = function () {
+            script.onload = function() {
                 console.log('[Loaded ' + uri + ']')
                 didLoad(uri)
             }
@@ -162,7 +162,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
 
         const self = this
 
-        const loadLib = function (uris, idx) {
+        const loadLib = function(uris, idx) {
             if (idx >= uris.length) {
                 whenLoaded()
 
@@ -190,7 +190,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             const script = document.createElement('script')
             script.src = uri
             console.log('[Loading Library from ' + uri + ']')
-            script.onload = function () {
+            script.onload = function() {
                 loadLib(uris, idx + 1)
             }
             document.head.appendChild(script)
@@ -218,7 +218,7 @@ compilerRegistry.register(GLSLCompilers)
 compilerRegistry.registerDOMLib(
     [
         Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js',
-        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js',
+        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js'
     ],
     'd3',
     '5.13.4',
@@ -229,8 +229,8 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/d3.v6.min.js',
-        //Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js',
+        Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/d3.v6.min.js'
+        //Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js'
     ],
     'd3',
     '6.2.0',
@@ -245,7 +245,7 @@ compilerRegistry.registerDOMLib(
         Vue.$CodeBlock.baseurl + 'js/three.js/r0/controls/OrbitControls.js',
         Vue.$CodeBlock.baseurl + 'js/three.js/r0/controls/TrackballControls.js',
         Vue.$CodeBlock.baseurl + 'js/three.js/r0/Detector.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/helper.r0.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/helper.r0.js'
     ],
     '3js',
     'r0',
