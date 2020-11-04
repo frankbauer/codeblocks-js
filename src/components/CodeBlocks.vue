@@ -576,20 +576,21 @@ export default class CodeBlocks extends Vue {
         this.clearDiagnostics()
         const self = this
 
-        let _args: object | string[] = {}
-        if (cmp.acceptsJSONArgument) {
-            _args = this.blockInfo.initArgsForLanguage()
-            this.blocks.forEach(bl => {
-                if (bl.obj) {
-                    bl.obj.addArgumentsTo(_args)
-                }
-            })
-        }
-
         this.loadLibraries(() => {
             self.eventHub.$emit('before-run', {})
             console.d('compileAndRun')
             self.didRunOnce = true
+
+            let _args: object | string[] = {}
+            if (cmp.acceptsJSONArgument) {
+                _args = this.blockInfo.initArgsForLanguage()
+                this.blocks.forEach(bl => {
+                    if (bl.obj) {
+                        console.i('!!! ADD ARGUMENTS TO !!!')
+                        bl.obj.addArgumentsTo(_args)
+                    }
+                })
+            }
             cmp.compileAndRun(
                 '' + self.blockid,
                 self.completeSource,
