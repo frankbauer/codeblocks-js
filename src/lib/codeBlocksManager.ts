@@ -22,13 +22,14 @@ import {
     IBlockDataBlockly,
     IBlockloadManager,
     IBlockElementData,
-    CodeExpansionType
+    CodeExpansionType,
 } from './ICodeBlocks'
 
 //get loaders
 import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
 import blocklyInstaller from '@/lib/BlockloadManagers/BlocklyManager'
 import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
+import { trim } from 'jquery'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -179,7 +180,7 @@ export class BlockData extends Vue implements IBlockData {
         }
 
         let ct = 0
-        this.content.replace(/\n/, m => {
+        this.content.replace(/\n/, (m) => {
             ct++
             return m
         })
@@ -238,9 +239,9 @@ class InternalCodeBlocksManager {
             data: () => {
                 return {
                     ...bl,
-                    appSettings: data
+                    appSettings: data,
                 }
-            }
+            },
         })
     }
 
@@ -249,20 +250,20 @@ class InternalCodeBlocksManager {
     constructor(el: HTMLElement) {
         this.element = el
         const inData = el.dataset as IAppElementData
-        let data: IAppSettings = {
+        const data: IAppSettings = {
             id: -1,
             editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor'),
             runCode: false,
             language: 'javascript',
             compiler: {
                 languageType: 'javascript',
-                version: '101'
+                version: '101',
             },
             randomizer: {
                 active: false,
                 previewIndex: 0,
                 knownTags: [],
-                sets: []
+                sets: [],
             },
             domLibs: [],
             workerLibs: [],
@@ -275,7 +276,7 @@ class InternalCodeBlocksManager {
             executionTimeout: 5000,
             maxCharacters: 1000,
             continuousCompilation: isTrue(inData.continuousCompilation),
-            persistentArguments: isTrue(inData.persistentArguments)
+            persistentArguments: isTrue(inData.persistentArguments),
         }
 
         if (inData.randomizerActive !== undefined) {
@@ -291,12 +292,12 @@ class InternalCodeBlocksManager {
             data.randomizer.sets = JSON.parse(inData.randomizerSets).map((o: object, i: number) => {
                 const ret: IRandomizerSet = {
                     uuid: uuid.v4(),
-                    values: []
+                    values: [],
                 }
-                Object.keys(o).forEach(tag => {
+                Object.keys(o).forEach((tag) => {
                     const item: IRandomizerSetTag = {
                         tag: tag,
-                        value: o[tag]
+                        value: o[tag],
                     }
                     ret.values.push(item)
                 })
@@ -312,7 +313,7 @@ class InternalCodeBlocksManager {
         if (inData.compiler !== undefined) {
             const cInfo: ICompilerID = {
                 languageType: inData.compiler,
-                version: inData.compilerVersion!
+                version: inData.compilerVersion!,
             }
             data.compiler = cInfo
 
@@ -379,14 +380,14 @@ class InternalCodeBlocksManager {
             data.codeTheme = inData.codeTheme
         }
 
-        el.querySelectorAll('*').forEach(blIn => {
+        el.querySelectorAll('*').forEach((blIn) => {
             const bl = blIn as HTMLElement
             //only first level children
             if (bl.parentElement != el) {
                 return
             }
-            let inBlock = bl.dataset as IBlockElementData
-            let block: IBlockDataBase = {
+            const inBlock = bl.dataset as IBlockElementData
+            const block: IBlockDataBase = {
                 hasCode: false,
                 version: '101',
                 type: bl.tagName as KnownBlockTypes,
@@ -406,11 +407,11 @@ class InternalCodeBlocksManager {
                     showControls: false,
                     useOverride: false,
                     toolbox: {
-                        categories: []
+                        categories: [],
                     },
                     toolboxOverride: '',
                     blocks: [],
-                    _blockErrors: []
+                    _blockErrors: [],
                 },
                 errors: [],
                 readonly: isTrue(inBlock.readonly),
@@ -426,8 +427,9 @@ class InternalCodeBlocksManager {
                 codeExpanded: CodeExpansionType.AUTO,
                 noContent: isTrue(inBlock.noContent),
                 scopeUUID: inBlock.scopeUUID,
-                scopeSelector: inBlock.scopeSelector
+                scopeSelector: inBlock.scopeSelector,
             }
+            console.log(block)
 
             console.log(inBlock.codeExpanded)
             if (inBlock.codeExpanded !== undefined) {
@@ -481,11 +483,11 @@ class InternalCodeBlocksManager {
         const self = this
         new Vue({
             i18n,
-            render: function(h) {
+            render: function (h) {
                 @Component({
-                    data: function() {
+                    data: function () {
                         return data
-                    }
+                    },
                 })
                 class MainBlock extends Vue implements IMainBlock {
                     id!: number
@@ -553,7 +555,7 @@ class InternalCodeBlocksManager {
                         }
                     }
                     addNewBlock() {
-                        let block: IBlockDataBase = {
+                        const block: IBlockDataBase = {
                             noContent: false,
                             alternativeContent: null,
                             hasCode: true,
@@ -584,12 +586,12 @@ class InternalCodeBlocksManager {
                                 useOverride: false,
                                 toolboxOverride: '',
                                 toolbox: {
-                                    categories: []
+                                    categories: [],
                                 },
                                 blocks: [],
-                                _blockErrors: []
+                                _blockErrors: [],
                             },
-                            lineCountHint: -1
+                            lineCountHint: -1,
                         }
                         data.blocks.push(self.constructBlock(data, block))
                     }
@@ -598,18 +600,18 @@ class InternalCodeBlocksManager {
                     props: {
                         language: data.language,
                         id: data.id,
-                        blocks: new MainBlock()
-                    }
+                        blocks: new MainBlock(),
+                    },
                 }
                 return h(data.editMode ? AppEditor : App, context)
-            }
+            },
         }).$mount(this.element)
     }
 }
 
 export class MountableArray extends Array<InternalCodeBlocksManager> {
     mount() {
-        this.forEach(el => el.instantiateVue())
+        this.forEach((el) => el.instantiateVue())
     }
 }
 
@@ -621,8 +623,8 @@ export const CodeBlocksManager = {
         const allCodeBlockParents = scope.querySelectorAll(
             'codeblocks, codeblockseditor, div[codeblocks], div[codeblockseditor]'
         )
-        let result = new MountableArray()
-        allCodeBlockParents.forEach(el => {
+        const result = new MountableArray()
+        allCodeBlockParents.forEach((el) => {
             const cbm = new InternalCodeBlocksManager(el as HTMLElement)
             let scope = cbm.data.scopeSelector
                 ? document.querySelector(cbm.data.scopeSelector)
@@ -638,7 +640,7 @@ export const CodeBlocksManager = {
                 cbm.data.scopeUUID = scope.getAttribute('uuid')
                     ? scope.getAttribute('uuid')!
                     : undefined
-                cbm.data.blocks.forEach(b => {
+                cbm.data.blocks.forEach((b) => {
                     b.scopeUUID = cbm.data.scopeUUID
                     b.scopeSelector = cbm.data.scopeSelector
                         ? cbm.data.scopeSelector
@@ -649,5 +651,5 @@ export const CodeBlocksManager = {
             result.push(cbm)
         })
         return result
-    }
+    },
 }
