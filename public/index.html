@@ -22,53 +22,49 @@
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div style="padding-left:50px;padding-right:50px">
-      <div codeblocks data-compiler="javascript" data-run-code="true" data-max-characters="10000000">
+      <div codeblockseditor data-compiler="javascript" data-run-code="true" data-max-characters="10000000" data-dom-libs='["phaser-3.24"]'>
         <loading><div></div><div></div></loading> 
         
-        <block>console.log('Hello You')
+        <block data-visible-lines="auto">console.log('Hello You')
 console.log('\n&lt;JSON>\n\n')
 console.log('[{"x":0, "y":0, "color":10}]')
-        </block>              
-        
-        <text>
-            &lt;style>
-                table#paintersCanvas {
-                    border-collapse:collapse;
-                    border-spacing: 0px;
-                    background-color:white;
-                    box-shadow: 1px 1px 3px rgba(0,0,0,0.1)            
-                }
-                table#paintersCanvas tr{
-        
-                }
-                table#paintersCanvas tr td{
-                    font-family:Roboto, -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
-                    border:1px dashed #e0e0e0;
-                    color:#bbb;
-                    width:32px;
-                    height:32px;
-                }
-                div#controlplane {
-                    width:100%;
-                    display:flex;       
-                }
-                div#controlplane div{            
-                    width:30%;
-                    padding-right:8px;
-                }
-                input#speed{            
-                    width:100%;            
-                }
-            &lt;/style>
-        </text>
+        </block>                     
         
         <playground>{ 
             scope:undefined,
             init: function(canvasElement, outputElement, scope, runner) {
+                console.log("init")
                 const self = this
                 this.scope = scope
                 
-                console.log("outputElement (INIT)", outputElement)                
+                var config = {
+                    type: Phaser.AUTO,
+                    scale: {
+                        parent: canvasElement[0],
+                        mode: Phaser.Scale.RESIZE,
+                        width: canvasElement.width(),
+                        height: canvasElement.height(),
+                    },
+                    scene: {
+                        preload: preload,
+                        create: create,
+                        update: update
+                    }
+                };
+                
+                var game = new Phaser.Game(config);
+                
+                function preload ()
+                {
+                }
+                
+                function create ()
+                {
+                }
+                
+                function update ()
+                {
+                }                
             },
             addArgumentsTo(args) {        
             },
@@ -83,19 +79,6 @@ console.log('[{"x":0, "y":0, "color":10}]')
                 return txt + "\n\nResult:"
             }
         }</playground>
-        
-        
-        
-        
-        <text>&lt;div id="controlplane">
-            &lt;div>Type: &lt;br>&lt;select id="paintstyle">
-                &lt;option value="RED_SQUARE">Rotes Rechteck (RED_SQUARE)&lt;/option>
-                &lt;option value="TREE (TREE)">Baum (TREE)&lt;/option>
-                &lt;option value="RAINBOW" >Regenbogen (RAINBOW)&lt;/option>
-            &lt;/select>&lt;/div>
-            &lt;div>Speed: &lt;br>&lt;input type="range" class="custom-range" id="speed" value="40">&lt;/div>
-            &lt;div>Speed: &lt;br>&lt;input type="range" class="custom-range" id="speed2" style="width:30%">&lt;/div>
-        &lt;/div></text>
         
         
         </div>
