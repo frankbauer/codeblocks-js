@@ -11,7 +11,7 @@ import {
     IBlockLine,
     IBlockArgument,
     BlockSecondaryColors,
-    BlockTertiaryColors
+    BlockTertiaryColors,
 } from '@/lib/IBlocklyHelper'
 import { IListItemData } from './ICompilerRegistry'
 
@@ -24,7 +24,7 @@ export const ColorThemeSelection: IListItemData[] = [
     { label: 'Procedures', value: '{!PrimaryColors.Procedure}' },
     { label: 'String', value: '{!PrimaryColors.Text}' },
     { label: 'Variables', value: '{!PrimaryColors.Variable}' },
-    { label: 'Variables (dynamic)', value: '{!PrimaryColors.Variable_dynamic}' }
+    { label: 'Variables (dynamic)', value: '{!PrimaryColors.Variable_dynamic}' },
 ]
 
 export const ColorHues: IListItemData[] = [
@@ -51,13 +51,13 @@ export const ColorHues: IListItemData[] = [
     { label: '300°', value: '300' },
     { label: '315°', value: '315' },
     { label: '330°', value: '330' },
-    { label: '345°', value: '345' }
+    { label: '345°', value: '345' },
 ]
 
-export const PredefinedBlockTypes: IListItemData[] = Object.keys(KnownBlocklyTypes).map(key => {
+export const PredefinedBlockTypes: IListItemData[] = Object.keys(KnownBlocklyTypes).map((key) => {
     const ret: IListItemData = {
         label: Vue.$l(`Blockly.BlockTypeNames.${key}`),
-        value: KnownBlocklyTypes[key]
+        value: KnownBlocklyTypes[key],
     }
     return ret
 })
@@ -66,67 +66,69 @@ export const ColorSelection: IListItemData[] = [...ColorThemeSelection, ...Color
 
 export const ColorSelectionWithNone: IListItemData[] = [
     { label: 'None', value: '' },
-    ...ColorSelection
+    ...ColorSelection,
 ]
 
-export const PredefinedArgumentTypes: IListItemData[] = Object.keys(BlockArgumentTypes).map(key => {
-    const ret: IListItemData = {
-        label: Vue.$l(`Blockly.ArgumentTypeNames.${key}`),
-        value: key
+export const PredefinedArgumentTypes: IListItemData[] = Object.keys(BlockArgumentTypes).map(
+    (key) => {
+        const ret: IListItemData = {
+            label: Vue.$l(`Blockly.ArgumentTypeNames.${key}`),
+            value: key,
+        }
+        return ret
     }
-    return ret
-})
+)
 
 export const blockStyles = {
     colour_blocks: {
         colourPrimary: BlockPrimaryColors.Colour,
         colourSecondary: BlockSecondaryColors.Colour,
-        colourTertiary: BlockTertiaryColors.Colour
+        colourTertiary: BlockTertiaryColors.Colour,
     },
     list_blocks: {
         colourPrimary: BlockPrimaryColors.List,
         colourSecondary: BlockSecondaryColors.List,
-        colourTertiary: BlockTertiaryColors.List
+        colourTertiary: BlockTertiaryColors.List,
     },
     logic_blocks: {
         colourPrimary: BlockPrimaryColors.Logic,
         colourSecondary: BlockSecondaryColors.Logic,
-        colourTertiary: BlockTertiaryColors.Logic
+        colourTertiary: BlockTertiaryColors.Logic,
     },
     loop_blocks: {
         colourPrimary: BlockPrimaryColors.Loop,
         colourSecondary: BlockSecondaryColors.Loop,
-        colourTertiary: BlockTertiaryColors.Loop
+        colourTertiary: BlockTertiaryColors.Loop,
     },
     math_blocks: {
         colourPrimary: BlockPrimaryColors.Math,
         colourSecondary: BlockSecondaryColors.Math,
-        colourTertiary: BlockTertiaryColors.Math
+        colourTertiary: BlockTertiaryColors.Math,
     },
     procedure_blocks: {
         colourPrimary: BlockPrimaryColors.Procedure,
         colourSecondary: BlockSecondaryColors.Procedure,
-        colourTertiary: BlockTertiaryColors.Procedure
+        colourTertiary: BlockTertiaryColors.Procedure,
     },
     text_blocks: {
         colourPrimary: BlockPrimaryColors.Text,
         colourSecondary: BlockSecondaryColors.Text,
-        colourTertiary: BlockTertiaryColors.Text
+        colourTertiary: BlockTertiaryColors.Text,
     },
     variable_blocks: {
         colourPrimary: BlockPrimaryColors.Variable,
         colourSecondary: BlockSecondaryColors.Variable,
-        colourTertiary: BlockTertiaryColors.Variable
+        colourTertiary: BlockTertiaryColors.Variable,
     },
     variable_dynamic_blocks: {
         colourPrimary: BlockPrimaryColors.Variable_dynamic,
         colourSecondary: BlockSecondaryColors.Variable_dynamic,
-        colourTertiary: BlockTertiaryColors.Variable_dynamic
+        colourTertiary: BlockTertiaryColors.Variable_dynamic,
     },
     hat_blocks: {
         colourPrimary: '330',
-        hat: 'cap'
-    }
+        hat: 'cap',
+    },
 }
 
 export const categoryStyles = {
@@ -139,8 +141,8 @@ export const categoryStyles = {
     text_category: { colour: blockStyles.text_blocks.colourPrimary },
     variable_category: { colour: blockStyles.variable_blocks.colourPrimary },
     variable_dynamic_category: {
-        colour: blockStyles.variable_dynamic_blocks.colourPrimary
-    }
+        colour: blockStyles.variable_dynamic_blocks.colourPrimary,
+    },
 }
 
 export const theme = new Blockly.Theme(blockStyles as any, categoryStyles)
@@ -154,7 +156,7 @@ export class BlocklyHelper {
         return `<block type="${i.type}"></block>`
     }
     private serializeToolboxItems(items: IBlocklyToolboxItem[]): string {
-        return items.map(item => this.serializeToolboxItem(item)).join('\n')
+        return items.map((item) => this.serializeToolboxItem(item)).join('\n')
     }
     private serializeToolboxCategory(i: IBlocklyToolboxCategory): string {
         let res = `<category name="${i.name}"`
@@ -168,7 +170,7 @@ export class BlocklyHelper {
         return res
     }
     private serializeToolboxCategories(items: IBlocklyToolboxCategory[]): string {
-        return items.map(item => this.serializeToolboxCategory(item)).join('\n')
+        return items.map((item) => this.serializeToolboxCategory(item)).join('\n')
     }
 
     public serializeToolbox(toolbox: IBlocklyToolbox): string {
@@ -198,7 +200,7 @@ export class BlocklyHelper {
     }
 
     public serializeCustomBlocks(bls: IBlockDefinition[]): string {
-        return JSON.stringify(bls.map(bl => this.getBlockDescription(bl)))
+        return JSON.stringify(bls.map((bl) => this.getBlockDescription(bl)))
     }
 
     get codeUndefines(): string {
@@ -248,7 +250,7 @@ export class BlocklyHelper {
         if (color === undefined) {
             return ''
         }
-        Object.keys(BlockPrimaryColors).forEach(key => {
+        Object.keys(BlockPrimaryColors).forEach((key) => {
             if (color == `{!PrimaryColors.${key}}`) {
                 color = BlockPrimaryColors[key]
             }
