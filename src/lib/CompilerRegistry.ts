@@ -224,7 +224,7 @@ compilerRegistry.registerDOMLib(
     '5.13.4',
     'D3',
     false,
-    1000
+    10000
 )
 
 compilerRegistry.registerDOMLib(
@@ -260,7 +260,16 @@ compilerRegistry.registerDOMLib(
     '2.0.0',
     'Brain.JS',
     false,
-    1000
+    3000
+)
+
+compilerRegistry.registerDOMLib(
+    [Vue.$CodeBlock.baseurl + 'js/phaser/3.24.1/phaser.min.js'],
+    'phaser',
+    '3.24',
+    'Phaser',
+    false,
+    4000
 )
 
 export default compilerRegistry
