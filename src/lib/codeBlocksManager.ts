@@ -432,9 +432,7 @@ class InternalCodeBlocksManager {
                 scopeUUID: inBlock.scopeUUID,
                 scopeSelector: inBlock.scopeSelector,
             }
-            console.log(block)
 
-            console.log(inBlock.codeExpanded)
             if (inBlock.codeExpanded !== undefined) {
                 if (
                     inBlock.codeExpanded.toUpperCase() == 'TINY' ||
