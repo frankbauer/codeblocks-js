@@ -8,6 +8,12 @@ import {
     finishedCallbackSignatur
 } from '@/lib/ICompilerRegistry'
 
+declare global {
+    interface Worker {
+        end(msg?: string, terminate?: boolean): void
+    }
+}
+
 const teaVMRunOverhead = 30000
 
 //ICompilerInstance
@@ -283,6 +289,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         this.isRunning = false
                     } else {
                         let runListener = (ee: any) => {
+                            //console.log('JAVA-WORKER-MSG', ee.data)
                             //console.log('tearunner', questionID, ee.data);
                             if (ee.data.command == 'run-finished-setup') {
                                 //Nothing to do here
@@ -304,7 +311,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         }
                         this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
                         let workerrun = new Worker(
-                            `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js`
+                            `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
                         )
                         this.sessionWorker = workerrun
                         workerrun.addEventListener('message', runListener.bind(this))

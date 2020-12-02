@@ -30,7 +30,12 @@ import 'reflect-metadata'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '../lib/codeBlocksManager'
-import { IBlockData, KnownBlockTypes, ICodeBlockDataState } from '../lib/ICodeBlocks'
+import {
+    IBlockData,
+    KnownBlockTypes,
+    ICodeBlockDataState,
+    CodeExpansionType
+} from '../lib/ICodeBlocks'
 
 interface IBlockDataExtended extends IBlockData {
     firstLine: number
@@ -63,7 +68,7 @@ export default class CodePanel extends Vue {
             uuid: '',
             parentID: -2,
             expanded: true,
-            codeExpanded: true,
+            codeExpanded: CodeExpansionType.AUTO,
             obj: null,
             version: '',
             readyCount: 0,
@@ -81,6 +86,7 @@ export default class CodePanel extends Vue {
             static: true,
             hidden: false,
             themeForCodeBlock: '',
+            lineCountHint: -0,
             getThemeForBlock: (bl: ICodeBlockDataState) => {
                 return ''
             },

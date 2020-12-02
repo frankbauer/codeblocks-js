@@ -103,7 +103,7 @@ import BlocklyCustomBlocksEditor from '@/components/Blockly/BlocklyCustomBlocksE
 import BlocklyToolboxEditor from '@/components/Blockly/BlocklyToolboxEditor.vue'
 
 import { BlockData } from '@/lib/codeBlocksManager'
-import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, theme } from '@/lib/BlocklyHelper'
 
@@ -310,8 +310,10 @@ export default class BlocklyBlock extends Vue {
         return this.parseToolboxCode(this.unparsedToolboxContent)
     }
     get visibleLinesNow() {
-        if (!this.block.codeExpanded) {
+        if (this.block.codeExpanded == CodeExpansionType.TINY) {
             return '5.2'
+        } else if (this.block.codeExpanded == CodeExpansionType.LARGE) {
+            return '40.2'
         }
         return 'auto'
     }
@@ -396,16 +398,22 @@ export default class BlocklyBlock extends Vue {
 
     private parseToolboxCode(toolboxXML: string) {
         Object.keys(BlockPrimaryColors).forEach(key => {
-            toolboxXML = toolboxXML.replaceAll(`{!PrimaryColors.${key}}`, BlockPrimaryColors[key])
+            toolboxXML = toolboxXML.replaceAllPoly(
+                `{!PrimaryColors.${key}}`,
+                BlockPrimaryColors[key]
+            )
         })
         Object.keys(BlockSecondaryColors).forEach(key => {
-            toolboxXML = toolboxXML.replaceAll(
+            toolboxXML = toolboxXML.replaceAllPoly(
                 `{!SecondaryColors.${key}}`,
                 BlockSecondaryColors[key]
             )
         })
         Object.keys(BlockTertiaryColors).forEach(key => {
-            toolboxXML = toolboxXML.replaceAll(`{!TertiaryColors.${key}}`, BlockTertiaryColors[key])
+            toolboxXML = toolboxXML.replaceAllPoly(
+                `{!TertiaryColors.${key}}`,
+                BlockTertiaryColors[key]
+            )
         })
 
         return toolboxXML

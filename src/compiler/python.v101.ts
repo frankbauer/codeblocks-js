@@ -22,7 +22,7 @@ function runPythonWorker(
     console.log('Python Version:', legacy ? '2.7' : '3')
 
     // the Python program
-    prog = prog.replaceAll('\t', '    ')
+    prog = prog.replaceAllPoly('\t', '    ')
 
     if (!window.Worker) {
         errCallback(

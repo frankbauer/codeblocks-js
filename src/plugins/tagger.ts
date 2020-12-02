@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import i18n from './i18n'
 //!!! make sure to also change the expression in ilias-builder.js !!!
-const randomAndTemplateTag = /\{(:|!)([\w]+)}/g
+const randomAndTemplateTag = /\{(:|!)([\w]*)}/g
 
 import '../styles/tagger.styl'
 import { DirectiveBinding } from 'vue/types/options'

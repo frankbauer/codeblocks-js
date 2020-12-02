@@ -381,7 +381,7 @@ module.exports = function (fn, that, length) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
- * Quasar Framework v1.9.12
+ * Quasar Framework v1.12.8
  * (c) 2015-present Razvan Stoenescu
  * Released under the MIT License.
  */
@@ -1487,13 +1487,6 @@ module.exports = function(hljs) {
 
 /***/ }),
 
-/***/ "26f6":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "274a":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1674,7 +1667,7 @@ var INVALID_HOST = 'Invalid host';
 var INVALID_PORT = 'Invalid port';
 
 var ALPHA = /[A-Za-z]/;
-var ALPHANUMERIC = /[\d+\-.A-Za-z]/;
+var ALPHANUMERIC = /[\d+-.A-Za-z]/;
 var DIGIT = /\d/;
 var HEX_START = /^(0x|0X)/;
 var OCT = /^[0-7]+$/;
@@ -2652,6 +2645,17 @@ $({ global: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
 
 /***/ }),
 
+/***/ "2b86":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlockButton_vue_vue_type_style_index_0_id_0bd2a5d9_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("e740");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlockButton_vue_vue_type_style_index_0_id_0bd2a5d9_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlockButton_vue_vue_type_style_index_0_id_0bd2a5d9_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlockButton_vue_vue_type_style_index_0_id_0bd2a5d9_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "2d00":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3078,6 +3082,13 @@ exports.uptime = exports.memoryUsage =
 exports.uvCounters = function() {};
 exports.features = {};
 
+
+/***/ }),
+
+/***/ "4396":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -6166,7 +6177,7 @@ var store = __webpack_require__("c6cd");
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.6.4',
+  version: '3.6.5',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2020 Denis Pushkarev (zloirock.ru)'
 });
@@ -16649,13 +16660,6 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ "64a3":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "6547":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16947,17 +16951,6 @@ module.exports = function(hljs) {
 
 /***/ }),
 
-/***/ "6a5a":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlockButton_vue_vue_type_style_index_0_id_f832fcd2_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("8ce8");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlockButton_vue_vue_type_style_index_0_id_f832fcd2_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlockButton_vue_vue_type_style_index_0_id_f832fcd2_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlockButton_vue_vue_type_style_index_0_id_f832fcd2_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "6ba3":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16971,7 +16964,7 @@ module.exports = v35('v5', 0x50, sha1);
 /***/ "6ce2":
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"Dismiss\":\"Verwerfen\",\"CodeBlock\":{\"Initial_Content\":\"Lösungsvorgabe\"},\"CodeBlockContainer\":{\"Display\":\"Darstellung\",\"Lines\":\"Zeilen\",\"Lines_detail\":\"Anzahl sichtbarer Zeilen oder <b>auto</b>.\",\"Prepopulate\":\"Antwort Vorbelegen\",\"Prepopulate_detail\":\"Lösungsvorgabe für neue Fragen angeben.\",\"Behaviour\":\"Verhalten\",\"ScriptV\":\"Script-Version\",\"ScriptV_detail\":\"API-Version des Visualisierungsobjektes.\",\"AutoReset\":\"Autom. Reset\",\"AutoReset_detail\":\"Canvas-Element bei jeder Ausführung neu erzeugen.\",\"Positioning\":\"Positionierung\",\"Width\":\"Breite\",\"Width_detail\":\"CSS-Eigenschaft für die Breite\",\"Height\":\"Höhe\",\"Height_detail\":\"CSS-Eigenschaft für die Höhe\",\"Alignment\":\"Ausrichtung\",\"Alignment_detail\":\"Horizontale Ausrichtung des Canvas-Element\",\"Delete\":\"Löschen\",\"Start\":\"Anfang\",\"Center\":\"Mitte\",\"End\":\"Ende\",\"ScriptVersion_1\":\"1.0 (original)\",\"ScriptVersion_2\":\"2.0 (seit 2020)\",\"Canvas\":\"Visualisierungsbereich\",\"Text\":\"Text\",\"Hidden\":\"Quellcode (Versteckt)\",\"Static\":\"Quellcode (Angabe)\",\"Block\":\"Antwortfeld/Lösung\",\"Blockly\":\"Blockly (Experimental!!!)\",\"Confirm\":\"Bestätigung\",\"DeleteQuestion\":\"Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?\",\"TypesCaption\":\"Blocktypen\",\"Types\":\"Die Frage wird aus den folgenden Blöcken zusammengestellt. Möglichen Typen sind:<ul><li><b>Text</b>: Text der wie der ursprüngliche Fragetext ohne Syntax highlighting angezeigt wird. Die <b>[code][/code]</b> und <b>[hl][/hl]</b> können verwendet werden</li><li><b>Quellcode (Angabe)</b>: Nicht veränderbarer Quellcode mit Syntax highlighting. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Quellcode (Versteckt)</b>: Der Quellcode ist teil der ausgelieferten Webseite, wird jedoch nicht angezeigt. Diese Variante kann code enthalten der Hilfsmethoden o.ä. definiert. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Antwortfeld/Lösung</b>: Quellcode mit Syntax highlighting. Hier sollte die Musterlösung angegeben werden. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Visualisierungsbereich</b>: Eine Zeichenfläche die nutzbar ist um die Ergebnisse der Studenten zu visualisieren. Der Code (für Version 2.0) <b> muss ein JavaScript Object</b> mit den Methoden <ul><li><code>init(canvasElement, outputElement, scope)</code> und </li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> definieren</b>.</li></ul>\"},\"CodeBlocks\":{\"run_hint\":\"<code>Ctrl</code>+<code>W</code> oder <code>Ctrl</code>+<code>J</code> drücken um Code auszuführen\",\"run\":\"Ausführen\",\"stop\":\"Anhalten\",\"AddBlock\":\"Neuen Block Anlegen\",\"UserCanceled\":\"Vom Benutzer Abgebrochen\"},\"CodeBlocksSettings\":{\"Language\":\"Sprache\",\"AllowExec\":\"Ausführung zulassen\",\"CVersion\":\"Version\",\"RunTime\":\"Max. Laufzeit in ms.\",\"Output\":\"Ausgabe\",\"MaxCharacters\":\"Max. Textlänge\",\"Parser\":\"Ausgabe Behandlung\",\"Themes\":\"Stile\",\"TGeneral\":\"Allgemeine Darstellung\",\"TSolution\":\"Lösungsdarstellung\",\"Libraries\":\"Bibliotheken\",\"DomLibs\":\"DOM-Bibliotheken\",\"WorkLibs\":\"Worker-Bibliotheken\",\"PAutomatic\":\"Automatisch\",\"PText\":\"Als Text\",\"PJSON\":\"Als JSON\",\"PMagic\":\"Text+JSON (getrennt mit '\\\\n\\\\n&lt;JSON>\\\\n')\",\"NumberErr\":\"Must be a valid Number.\",\"ContinousCompile\":\"Automatisch Kompilieren\",\"AllowArguments\":\"Untersützt das Senden von Argumenten\",\"AllowArgumentsCaption\":\"Senden von Argumenten\",\"AllowArgumentsHint\":\"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein JSON-Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden.\"},\"CodePlayground\":{\"InvalidJson\":\"Ausgabe ist nicht JSON-Formatiert\",\"Output\":\"Ausgabe:\",\"Message\":\"Meldung:\"},\"Tagger\":{\"ConfirmRepl\":\"Ersetzung Bestätigen\",\"ConfirmReplMsg\":\"Sollen <b>alle</b> vorkomnisse von {name} mit dem untenstehenden Wert ersetzt werden?\"},\"RandomizerSetEditor\":{\"Caption\":\"Bearbeit Zusammenstellung {nr}\"},\"RandomizerSettings\":{\"Caption\":\"Würfler\",\"Available\":\"Definierte Platzhalter\",\"Sets\":\"Zusammenstellungen\"},\"Blockly\":{\"CodePreviewLabel\":\"Code-Vorschau\",\"CodePreviewCaption\":\"Der durch die Sequenz erzeugte Quellcode\",\"RAWToolboxLabel\":\"RAW Toolbox Definition\",\"RAWToolboxCaption\":\"Die Toolbox Definition als XML Quelltext\",\"CustomBlocksLabel\":\"Angepasste Blöcke\",\"CustomBlocksCaption\":\"Erstellen und Anpassen von eigenen Blöcken\",\"ToolboxLabel\":\"Toolbox Anpassen\",\"ToolboxCaption\":\"Die Toolbox mit einer UI verwalten und gestalten\",\"ToolboxCategories\":\"Kategorien\",\"ToolboxItems\":\"Blöcke\",\"Properties\":\"Eigenschaften\",\"UseCustomToolbox\":\"Toolbox selbst definieren\",\"ShowControls\":\"Kontrolleiste Anzeigen\",\"Block\":{\"TypeName\":\"Unique Type ID\",\"MainDescription\":\"Main Description (use %1, %2... for Argument PlaceHolders)\",\"CreateCustomTitle\":\"Create a new Block\",\"CreateCustomMessage\":\"Please specify a unique Type-Name (at least <b>three characters</b>) for your new Block.\",\"Arguments\":\"Argument List\",\"ArgumentName\":\"Argument Name\",\"Header\":\"Header\",\"HeaderDescription\":\"The main Row of your Block\",\"AdditionalLines\":\"Additional Lines\",\"AddonLineTitle\":\"Additional Line {nr}\",\"CompileError\":\"Error Compiling Block:\",\"CodeGeneratorFunction\":\"Code-Generator Function\",\"Properties\":\"Block-Eigenschaften\",\"BlockEditTitle\":\"Block Designer\",\"BlockEditDescription\":\"Define the Properties of Your Block with a simple Blockly-Interface.\",\"DesignBlockName\":\"DESIGNER BLOCK\"},\"ArgumentTypeNames\":{\"field_input\":\"field_input\",\"field_dropdown\":\"field_dropdown\",\"field_checkbox\":\"field_checkbox\",\"field_colour\":\"Farbe\",\"field_number\":\"Zahl\",\"field_angle\":\"Winkel\",\"field_variable\":\"field_variable\",\"field_date\":\"Datum\",\"field_label\":\"field_label\",\"field_image\":\"Bild\",\"input_value\":\"input_value\",\"input_statement\":\"input_statement\",\"input_dummy\":\"input_dummy\"},\"BlockTypeNames\":{\"controls_if\":\"Kontrolle: Bedingung (if)\",\"logic_compare\":\"Logik: Vergleich\",\"logic_operation\":\"Logik: Logische Operation\",\"logic_negate\":\"Logik: Logisches Nicht\",\"logic_boolean\":\"Logik: Wahrheitswert\",\"logic_null\":\"Logik: null\",\"logic_ternary\":\"Logik: Ternäre Logikoperation (?:)\",\"controls_repeat_ext\":\"Kontrolle: Schleife: n-Mal Wiederholen\",\"controls_whileUntil\":\"Kontrolle: Schleife: While-Until\",\"controls_for\":\"Kontrolle: Schleife: For\",\"controls_forEach\":\"Kontrolle: Schleife: For-Each\",\"controls_flow_statements\":\"Kontrolle: Schliefen Operationen (continue/break)\",\"math_number\":\"Mathe: Zahl\",\"math_arithmetic\":\"Mathe: Arithmetische Operation\",\"math_single\":\"Mathe: Unöre Operation\",\"math_trig\":\"Mathe: Trigonometrische Funktionen\",\"math_constant\":\"Mathe: Konstanten (pi, ...)\",\"math_number_property\":\"Mathe: Zahleigenschaften (gerade, prim...)\",\"math_round\":\"Mathe: Runden\",\"math_on_list\":\"Mathe: Reduktion auf Liste (summe, min/max, ...)\",\"math_modulo\":\"Mathe: Rest (Modulo)\",\"math_constrain\":\"Mathe: Intervall Begrenzen\",\"math_random_int\":\"Mathe: Zufallszahl (Ganzzahlig)\",\"math_random_float\":\"Mathe: Zufallszahl\",\"text\":\"Text\",\"text_join\":\"text_join\",\"text_append\":\"text_append\",\"text_length\":\"text_length\",\"text_isEmpty\":\"text_isEmpty\",\"text_indexOf\":\"text_indexOf\",\"variables_get\":\"variables_get\",\"text_charAt\":\"text_charAt\",\"text_getSubstring\":\"text_getSubstring\",\"text_changeCase\":\"text_changeCase\",\"text_trim\":\"text_trim\",\"text_print\":\"text_print\",\"text_prompt_ext\":\"text_prompt_ext\",\"lists_create_with\":\"lists_create_with\",\"lists_repeat\":\"lists_repeat\",\"lists_length\":\"lists_length\",\"lists_isEmpty\":\"lists_isEmpty\",\"lists_indexOf\":\"lists_indexOf\",\"lists_getIndex\":\"lists_getIndex\",\"lists_setIndex\":\"lists_setIndex\",\"lists_getSublist\":\"lists_getSublist\",\"lists_split\":\"lists_split\",\"lists_sort\":\"lists_sort\",\"colour_picker\":\"colour_picker\",\"colour_random\":\"colour_random\",\"colour_rgb\":\"colour_rgb\",\"colour_blend\":\"colour_blend\"}}}");
+module.exports = JSON.parse("{\"Dismiss\":\"Verwerfen\",\"CodeBlock\":{\"Initial_Content\":\"Lösungsvorgabe\"},\"CodeBlockContainer\":{\"Display\":\"Darstellung\",\"Lines\":\"Zeilen\",\"Lines_detail\":\"Anzahl sichtbarer Zeilen oder <b>auto</b>.\",\"Prepopulate\":\"Antwort Vorbelegen\",\"Prepopulate_detail\":\"Lösungsvorgabe für neue Fragen angeben.\",\"Behaviour\":\"Verhalten\",\"ScriptV\":\"Script-Version\",\"ScriptV_detail\":\"API-Version des Visualisierungsobjektes.\",\"AutoReset\":\"Autom. Reset\",\"AutoReset_detail\":\"Canvas-Element bei jeder Ausführung neu erzeugen.\",\"Positioning\":\"Positionierung\",\"Width\":\"Breite\",\"Width_detail\":\"CSS-Eigenschaft für die Breite\",\"Height\":\"Höhe\",\"Height_detail\":\"CSS-Eigenschaft für die Höhe\",\"Alignment\":\"Ausrichtung\",\"Alignment_detail\":\"Horizontale Ausrichtung des Canvas-Element\",\"Delete\":\"Löschen\",\"Start\":\"Anfang\",\"Center\":\"Mitte\",\"End\":\"Ende\",\"ScriptVersion_1\":\"1.0 (original)\",\"ScriptVersion_2\":\"2.0 (seit 2020)\",\"Canvas\":\"Visualisierungsbereich\",\"Text\":\"Text\",\"Hidden\":\"Quellcode (Versteckt)\",\"Static\":\"Quellcode (Angabe)\",\"Block\":\"Antwortfeld/Lösung\",\"Blockly\":\"Blockly (Experimental!!!)\",\"Confirm\":\"Bestätigung\",\"DeleteQuestion\":\"Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?\",\"TypesCaption\":\"Blocktypen\",\"Types\":\"Die Frage wird aus den folgenden Blöcken zusammengestellt. Möglichen Typen sind:<ul><li><b>Text</b>: Text der wie der ursprüngliche Fragetext ohne Syntax highlighting angezeigt wird. Die <b>[code][/code]</b> und <b>[hl][/hl]</b> können verwendet werden</li><li><b>Quellcode (Angabe)</b>: Nicht veränderbarer Quellcode mit Syntax highlighting. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Quellcode (Versteckt)</b>: Der Quellcode ist teil der ausgelieferten Webseite, wird jedoch nicht angezeigt. Diese Variante kann code enthalten der Hilfsmethoden o.ä. definiert. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Antwortfeld/Lösung</b>: Quellcode mit Syntax highlighting. Hier sollte die Musterlösung angegeben werden. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Visualisierungsbereich</b>: Eine Zeichenfläche die nutzbar ist um die Ergebnisse der Studenten zu visualisieren. Der Code (für Version 2.0) <b> muss ein JavaScript Object</b> mit den Methoden <ul><li><code>init(canvasElement, outputElement, scope)</code> und </li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> definieren</b>.</li></ul>\"},\"CodeBlocks\":{\"run_hint\":\"<code>Ctrl</code>+<code>W</code> oder <code>Ctrl</code>+<code>J</code> drücken um Code auszuführen\",\"run\":\"Ausführen\",\"stop\":\"Anhalten\",\"AddBlock\":\"Neuen Block Anlegen\",\"UserCanceled\":\"Vom Benutzer Abgebrochen\"},\"CodeBlocksSettings\":{\"Language\":\"Sprache\",\"AllowExec\":\"Ausführung zulassen\",\"CVersion\":\"Version\",\"RunTime\":\"Max. Laufzeit in ms.\",\"Output\":\"Ausgabe\",\"MaxCharacters\":\"Max. Textlänge\",\"Parser\":\"Ausgabe Behandlung\",\"Themes\":\"Stile\",\"TGeneral\":\"Allgemeine Darstellung\",\"TSolution\":\"Lösungsdarstellung\",\"Libraries\":\"Bibliotheken\",\"DomLibs\":\"DOM-Bibliotheken\",\"WorkLibs\":\"Worker-Bibliotheken\",\"PAutomatic\":\"Automatisch\",\"PText\":\"Als Text\",\"PJSON\":\"Als JSON\",\"PMagic\":\"Text+JSON (getrennt mit '\\\\n\\\\n&lt;JSON>\\\\n')\",\"NumberErr\":\"Must be a valid Number.\",\"ContinousCompile\":\"Automatisch Kompilieren\",\"PersistentArguments\":\"Persistente Argumente\",\"AllowArguments\":\"Untersützt das Senden von Argumenten\",\"AllowArgumentsCaption\":\"Senden von Argumenten\",\"AllowArgumentsHint\":\"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein JSON-Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden.\"},\"CodePlayground\":{\"InvalidJson\":\"Ausgabe ist nicht JSON-Formatiert\",\"Output\":\"Ausgabe:\",\"Message\":\"Meldung:\"},\"Tagger\":{\"ConfirmRepl\":\"Ersetzung Bestätigen\",\"ConfirmReplMsg\":\"Sollen <b>alle</b> vorkomnisse von {name} mit dem untenstehenden Wert ersetzt werden?\"},\"RandomizerSetEditor\":{\"Caption\":\"Bearbeit Zusammenstellung {nr}\"},\"RandomizerSettings\":{\"Caption\":\"Würfler\",\"Available\":\"Definierte Platzhalter\",\"Sets\":\"Zusammenstellungen\"},\"Blockly\":{\"CodePreviewLabel\":\"Code-Vorschau\",\"CodePreviewCaption\":\"Der durch die Sequenz erzeugte Quellcode\",\"RAWToolboxLabel\":\"RAW Toolbox Definition\",\"RAWToolboxCaption\":\"Die Toolbox Definition als XML Quelltext\",\"CustomBlocksLabel\":\"Angepasste Blöcke\",\"CustomBlocksCaption\":\"Erstellen und Anpassen von eigenen Blöcken\",\"ToolboxLabel\":\"Toolbox Anpassen\",\"ToolboxCaption\":\"Die Toolbox mit einer UI verwalten und gestalten\",\"ToolboxCategories\":\"Kategorien\",\"ToolboxItems\":\"Blöcke\",\"Properties\":\"Eigenschaften\",\"UseCustomToolbox\":\"Toolbox selbst definieren\",\"ShowControls\":\"Kontrolleiste Anzeigen\",\"Block\":{\"TypeName\":\"Unique Type ID\",\"MainDescription\":\"Main Description (use %1, %2... for Argument PlaceHolders)\",\"CreateCustomTitle\":\"Create a new Block\",\"CreateCustomMessage\":\"Please specify a unique Type-Name (at least <b>three characters</b>) for your new Block.\",\"Arguments\":\"Argument List\",\"ArgumentName\":\"Argument Name\",\"Header\":\"Header\",\"HeaderDescription\":\"The main Row of your Block\",\"AdditionalLines\":\"Additional Lines\",\"AddonLineTitle\":\"Additional Line {nr}\",\"CompileError\":\"Error Compiling Block:\",\"CodeGeneratorFunction\":\"Code-Generator Function\",\"Properties\":\"Block-Eigenschaften\",\"BlockEditTitle\":\"Block Designer\",\"BlockEditDescription\":\"Define the Properties of Your Block with a simple Blockly-Interface.\",\"DesignBlockName\":\"DESIGNER BLOCK\"},\"ArgumentTypeNames\":{\"field_input\":\"field_input\",\"field_dropdown\":\"field_dropdown\",\"field_checkbox\":\"field_checkbox\",\"field_colour\":\"Farbe\",\"field_number\":\"Zahl\",\"field_angle\":\"Winkel\",\"field_variable\":\"field_variable\",\"field_date\":\"Datum\",\"field_label\":\"field_label\",\"field_image\":\"Bild\",\"input_value\":\"input_value\",\"input_statement\":\"input_statement\",\"input_dummy\":\"input_dummy\"},\"BlockTypeNames\":{\"controls_if\":\"Kontrolle: Bedingung (if)\",\"logic_compare\":\"Logik: Vergleich\",\"logic_operation\":\"Logik: Logische Operation\",\"logic_negate\":\"Logik: Logisches Nicht\",\"logic_boolean\":\"Logik: Wahrheitswert\",\"logic_null\":\"Logik: null\",\"logic_ternary\":\"Logik: Ternäre Logikoperation (?:)\",\"controls_repeat_ext\":\"Kontrolle: Schleife: n-Mal Wiederholen\",\"controls_whileUntil\":\"Kontrolle: Schleife: While-Until\",\"controls_for\":\"Kontrolle: Schleife: For\",\"controls_forEach\":\"Kontrolle: Schleife: For-Each\",\"controls_flow_statements\":\"Kontrolle: Schliefen Operationen (continue/break)\",\"math_number\":\"Mathe: Zahl\",\"math_arithmetic\":\"Mathe: Arithmetische Operation\",\"math_single\":\"Mathe: Unöre Operation\",\"math_trig\":\"Mathe: Trigonometrische Funktionen\",\"math_constant\":\"Mathe: Konstanten (pi, ...)\",\"math_number_property\":\"Mathe: Zahleigenschaften (gerade, prim...)\",\"math_round\":\"Mathe: Runden\",\"math_on_list\":\"Mathe: Reduktion auf Liste (summe, min/max, ...)\",\"math_modulo\":\"Mathe: Rest (Modulo)\",\"math_constrain\":\"Mathe: Intervall Begrenzen\",\"math_random_int\":\"Mathe: Zufallszahl (Ganzzahlig)\",\"math_random_float\":\"Mathe: Zufallszahl\",\"text\":\"Text\",\"text_join\":\"text_join\",\"text_append\":\"text_append\",\"text_length\":\"text_length\",\"text_isEmpty\":\"text_isEmpty\",\"text_indexOf\":\"text_indexOf\",\"variables_get\":\"variables_get\",\"text_charAt\":\"text_charAt\",\"text_getSubstring\":\"text_getSubstring\",\"text_changeCase\":\"text_changeCase\",\"text_trim\":\"text_trim\",\"text_print\":\"text_print\",\"text_prompt_ext\":\"text_prompt_ext\",\"lists_create_with\":\"lists_create_with\",\"lists_repeat\":\"lists_repeat\",\"lists_length\":\"lists_length\",\"lists_isEmpty\":\"lists_isEmpty\",\"lists_indexOf\":\"lists_indexOf\",\"lists_getIndex\":\"lists_getIndex\",\"lists_setIndex\":\"lists_setIndex\",\"lists_getSublist\":\"lists_getSublist\",\"lists_split\":\"lists_split\",\"lists_sort\":\"lists_sort\",\"colour_picker\":\"colour_picker\",\"colour_random\":\"colour_random\",\"colour_rgb\":\"colour_rgb\",\"colour_blend\":\"colour_blend\"}}}");
 
 /***/ }),
 
@@ -17092,17 +17085,6 @@ module.exports = [
   'valueOf'
 ];
 
-
-/***/ }),
-
-/***/ "7885":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePanel_vue_vue_type_style_index_0_id_952b797a_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("26f6");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePanel_vue_vue_type_style_index_0_id_952b797a_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePanel_vue_vue_type_style_index_0_id_952b797a_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePanel_vue_vue_type_style_index_0_id_952b797a_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -17920,6 +17902,91 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "8875":
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// addapted from the document.currentScript polyfill by Adam Miller
+// MIT license
+// source: https://github.com/amiller-gh/currentScript-polyfill
+
+// added support for Firefox https://bugzilla.mozilla.org/show_bug.cgi?id=1620505
+
+(function (root, factory) {
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+}(typeof self !== 'undefined' ? self : this, function () {
+  function getCurrentScript () {
+    var descriptor = Object.getOwnPropertyDescriptor(document, 'currentScript')
+    // for chrome
+    if (!descriptor && 'currentScript' in document && document.currentScript) {
+      return document.currentScript
+    }
+
+    // for other browsers with native support for currentScript
+    if (descriptor && descriptor.get !== getCurrentScript && document.currentScript) {
+      return document.currentScript
+    }
+  
+    // IE 8-10 support script readyState
+    // IE 11+ & Firefox support stack trace
+    try {
+      throw new Error();
+    }
+    catch (err) {
+      // Find the second match for the "at" string to get file src url from stack.
+      var ieStackRegExp = /.*at [^(]*\((.*):(.+):(.+)\)$/ig,
+        ffStackRegExp = /@([^@]*):(\d+):(\d+)\s*$/ig,
+        stackDetails = ieStackRegExp.exec(err.stack) || ffStackRegExp.exec(err.stack),
+        scriptLocation = (stackDetails && stackDetails[1]) || false,
+        line = (stackDetails && stackDetails[2]) || false,
+        currentLocation = document.location.href.replace(document.location.hash, ''),
+        pageSource,
+        inlineScriptSourceRegExp,
+        inlineScriptSource,
+        scripts = document.getElementsByTagName('script'); // Live NodeList collection
+  
+      if (scriptLocation === currentLocation) {
+        pageSource = document.documentElement.outerHTML;
+        inlineScriptSourceRegExp = new RegExp('(?:[^\\n]+?\\n){0,' + (line - 2) + '}[^<]*<script>([\\d\\D]*?)<\\/script>[\\d\\D]*', 'i');
+        inlineScriptSource = pageSource.replace(inlineScriptSourceRegExp, '$1').trim();
+      }
+  
+      for (var i = 0; i < scripts.length; i++) {
+        // If ready state is interactive, return the script tag
+        if (scripts[i].readyState === 'interactive') {
+          return scripts[i];
+        }
+  
+        // If src matches, return the script tag
+        if (scripts[i].src === scriptLocation) {
+          return scripts[i];
+        }
+  
+        // If inline source matches, return the script tag
+        if (
+          scriptLocation === currentLocation &&
+          scripts[i].innerHTML &&
+          scripts[i].innerHTML.trim() === inlineScriptSource
+        ) {
+          return scripts[i];
+        }
+      }
+  
+      // If no match, return null
+      return null;
+    }
+  };
+
+  return getCurrentScript
+}));
+
+
+/***/ }),
+
 /***/ "8925":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17970,13 +18037,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
 /***/ }),
 
 /***/ "8c2e":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "8ce8":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
@@ -19486,6 +19546,17 @@ module.exports = function(hljs) {
 
 /***/ }),
 
+/***/ "985a":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_4c24fc88_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c327");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_4c24fc88_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_4c24fc88_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_4c24fc88_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "9861":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19909,7 +19980,7 @@ var Reflect;
         };
         // Load global or shim versions of Map, Set, and WeakMap
         var functionPrototype = Object.getPrototypeOf(Function);
-        var usePolyfill = typeof process === "object" && Object({"NODE_ENV":"production","VUE_APP_I18N_LOCALE":"en","VUE_APP_I18N_FALLBACK_LOCALE":"en","VUE_APP_CODE_BLOCK_TIMEOUT":"200","VUE_APP_CODE_BLOCK_MAX_TIMEOUT":"500","VUE_APP_BLOCKLY_TIMEOUT":"200","VUE_APP_CONTINOUS_COMPILE_TIMEOUT":"800","BASE_URL":"/Customizing/global/plugins/Modules/TestQuestionPool/Questions/assCodeQuestion/codeblocks/0.2.2/"}) && Object({"NODE_ENV":"production","VUE_APP_I18N_LOCALE":"en","VUE_APP_I18N_FALLBACK_LOCALE":"en","VUE_APP_CODE_BLOCK_TIMEOUT":"200","VUE_APP_CODE_BLOCK_MAX_TIMEOUT":"500","VUE_APP_BLOCKLY_TIMEOUT":"200","VUE_APP_CONTINOUS_COMPILE_TIMEOUT":"800","BASE_URL":"/Customizing/global/plugins/Modules/TestQuestionPool/Questions/assCodeQuestion/codeblocks/0.2.2/"})["REFLECT_METADATA_USE_MAP_POLYFILL"] === "true";
+        var usePolyfill = typeof process === "object" && Object({"NODE_ENV":"production","VUE_APP_I18N_LOCALE":"en","VUE_APP_I18N_FALLBACK_LOCALE":"en","VUE_APP_CODE_BLOCK_TIMEOUT":"150","VUE_APP_CODE_BLOCK_MAX_TIMEOUT":"800","VUE_APP_BLOCKLY_TIMEOUT":"200","VUE_APP_CONTINOUS_COMPILE_TIMEOUT":"800","BASE_URL":"/Customizing/global/plugins/Modules/TestQuestionPool/Questions/assCodeQuestion/codeblocks/0.2.6/"}) && Object({"NODE_ENV":"production","VUE_APP_I18N_LOCALE":"en","VUE_APP_I18N_FALLBACK_LOCALE":"en","VUE_APP_CODE_BLOCK_TIMEOUT":"150","VUE_APP_CODE_BLOCK_MAX_TIMEOUT":"800","VUE_APP_BLOCKLY_TIMEOUT":"200","VUE_APP_CONTINOUS_COMPILE_TIMEOUT":"800","BASE_URL":"/Customizing/global/plugins/Modules/TestQuestionPool/Questions/assCodeQuestion/codeblocks/0.2.6/"})["REFLECT_METADATA_USE_MAP_POLYFILL"] === "true";
         var _Map = !usePolyfill && typeof Map === "function" && typeof Map.prototype.entries === "function" ? Map : CreateMapPolyfill();
         var _Set = !usePolyfill && typeof Set === "function" && typeof Set.prototype.entries === "function" ? Set : CreateSetPolyfill();
         var _WeakMap = !usePolyfill && typeof WeakMap === "function" ? WeakMap : CreateWeakMapPolyfill();
@@ -20977,6 +21048,17 @@ var Reflect;
 })(Reflect || (Reflect = {}));
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("4362"), __webpack_require__("c8ba")))
+
+/***/ }),
+
+/***/ "995c":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePanel_vue_vue_type_style_index_0_id_4d95ff90_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("4396");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePanel_vue_vue_type_style_index_0_id_4d95ff90_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePanel_vue_vue_type_style_index_0_id_4d95ff90_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePanel_vue_vue_type_style_index_0_id_4d95ff90_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -23357,17 +23439,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
-/***/ "b48a":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_63a21932_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("64a3");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_63a21932_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_63a21932_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_63a21932_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "b622":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -23410,17 +23481,6 @@ $({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES }, {
   }
 });
 
-
-/***/ }),
-
-/***/ "b665":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlock_vue_vue_type_style_index_0_id_2df9e21e_scoped_true_lang_sass___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c8a8");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlock_vue_vue_type_style_index_0_id_2df9e21e_scoped_true_lang_sass___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlock_vue_vue_type_style_index_0_id_2df9e21e_scoped_true_lang_sass___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlock_vue_vue_type_style_index_0_id_2df9e21e_scoped_true_lang_sass___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -23751,7 +23811,7 @@ module.exports = function (input, PREFERRED_STRING) {
 /***/ "c0a8":
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"a\":\"1.9.12\"}");
+module.exports = JSON.parse("{\"a\":\"1.12.8\"}");
 
 /***/ }),
 
@@ -24732,6 +24792,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   Blockly.Python.variables_set_dynamic = Blockly.Python.variables_set;
   return Blockly.Python;
 });
+
+/***/ }),
+
+/***/ "c327":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -27442,13 +27509,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
-/***/ "c8a8":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "c8ba":
 /***/ (function(module, exports) {
 
@@ -28852,6 +28912,13 @@ $({ target: 'Object', stat: true, forced: Object.assign !== assign }, {
 
 /***/ }),
 
+/***/ "cd2d":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "ce4e":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29241,6 +29308,17 @@ $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT || !USES_TO_LENGT
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "da3c":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlock_vue_vue_type_style_index_0_id_6a2aa410_scoped_true_lang_sass___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("cd2d");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlock_vue_vue_type_style_index_0_id_6a2aa410_scoped_true_lang_sass___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlock_vue_vue_type_style_index_0_id_6a2aa410_scoped_true_lang_sass___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlock_vue_vue_type_style_index_0_id_6a2aa410_scoped_true_lang_sass___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -30506,6 +30584,13 @@ module.exports = function (target, src, options) {
 
 /***/ }),
 
+/***/ "e740":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "e893":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -30589,7 +30674,7 @@ module.exports = function (it) {
 /***/ "edd4":
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"Dismiss\":\"Dismiss\",\"CodeBlock\":{\"Initial_Content\":\"Initial Content\"},\"CodeBlockContainer\":{\"Display\":\"Display\",\"Lines\":\"Lines\",\"Lines_detail\":\"Number of Visible lines or <b>auto</b>.\",\"Prepopulate\":\"Prepopulate Answer\",\"Prepopulate_detail\":\"Define content that is displayed in a new answer.\",\"Behaviour\":\"Behaviour\",\"ScriptV\":\"Script Version\",\"ScriptV_detail\":\"API-Version for the Visualization Object.\",\"AutoReset\":\"Auto Reset\",\"AutoReset_detail\":\"Recreate Canvas-Element for each run\",\"Positioning\":\"Positioning\",\"Width\":\"Width\",\"Width_detail\":\"CSS Property for the canvas-width.\",\"Height\":\"Height\",\"Height_detail\":\"CSS Property for the canvas-height.\",\"Alignment\":\"Alignment\",\"Alignment_detail\":\"Horizontal Positioning of the canvas.\",\"Delete\":\"Delete\",\"Start\":\"Start\",\"Center\":\"Center\",\"End\":\"End\",\"ScriptVersion_1\":\"1.0 (original)\",\"ScriptVersion_2\":\"2.0 (since 2020)\",\"Canvas\":\"Visualization Canvas\",\"Text\":\"Plain Text\",\"Hidden\":\"Code (Hidden)\",\"Static\":\"Code (Static)\",\"Block\":\"Solution\",\"Blockly\":\"Blockly (Experimental!!!)\",\"Confirm\":\"Confirm\",\"DeleteQuestion\":\"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?\",\"TypesCaption\":\"Block-Types\",\"Types\":\"The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Visualization Canvas</b>: A 2D-drawing area you may use to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>\"},\"CodeBlocks\":{\"run_hint\":\"Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.\",\"run\":\"Run\",\"stop\":\"Stop\",\"AddBlock\":\"Add new Block\",\"UserCanceled\":\"Stopped By User\"},\"CodeBlocksSettings\":{\"Language\":\"Language\",\"AllowExec\":\"Allow Code Execution\",\"CVersion\":\"Version\",\"RunTime\":\"Max. Runtime in ms.\",\"Output\":\"Output\",\"MaxCharacters\":\"Max. Output Characters\",\"Parser\":\"Output Parser\",\"Themes\":\"Themes\",\"TGeneral\":\"General Theme\",\"TSolution\":\"Solution Theme\",\"Libraries\":\"Libraries\",\"DomLibs\":\"DOM-Libraries\",\"WorkLibs\":\"Worker-Libraries\",\"PAutomatic\":\"Automatisch\",\"PText\":\"Text Passthrough\",\"PJSON\":\"JSON\",\"PMagic\":\"Text+JSON (seperated by '\\\\n\\\\n&lt;JSON>\\\\n')\",\"NumberErr\":\"Muss ein gültiger Zahlenwert sein\",\"ContinousCompile\":\"Automatic Compilation (while typing)\",\"AllowArguments\":\"Supports Runtime-Arguments\",\"AllowArgumentsCaption\":\"Send Runtime-Arguments\",\"AllowArgumentsHint\":\"Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can add data to the passed argument-object. The object is available in the students as a variable named <code>args</code>.\"},\"CodePlayground\":{\"InvalidJson\":\"Output is not a valid JSON-Object\",\"Output\":\"Output:\",\"Message\":\"Message:\"},\"Tagger\":{\"ConfirmRepl\":\"Confirm Tag Replacement\",\"ConfirmReplMsg\":\"Do you really want to replace <b>all</b> occurrences of {name} with the below value?\"},\"RandomizerSetEditor\":{\"Caption\":\"Edit Set {nr}\"},\"RandomizerSettings\":{\"Caption\":\"Randomizer\",\"Available\":\"Available Tags\",\"Sets\":\"Defined Sets\"},\"Blockly\":{\"CodePreviewLabel\":\"Code Preview\",\"CodePreviewCaption\":\"The source-code generated by the above sequence\",\"RAWToolboxLabel\":\"RAW Toolbox Definition\",\"RAWToolboxCaption\":\"The raw XML-Definition of your toolbox\",\"CustomBlocksLabel\":\"Custom Blocks\",\"CustomBlocksCaption\":\"Create and manage Custom Blocks\",\"ToolboxLabel\":\"Customize Toolbox\",\"ToolboxCaption\":\"Manage Categories and the general look of your toolbox\",\"ToolboxCategories\":\"Categories\",\"ToolboxItems\":\"Blocks\",\"Properties\":\"Properties\",\"UseCustomToolbox\":\"Define Customized Toolbox XML\",\"BlockTypeNames\":{\"controls_if\":\"controls_if\",\"logic_compare\":\"logic_compare\",\"logic_operation\":\"logic_operation\",\"logic_negate\":\"logic_negate\",\"logic_boolean\":\"logic_boolean\",\"logic_null\":\"logic_null\",\"logic_ternary\":\"logic_ternary\",\"controls_repeat_ext\":\"controls_repeat_ext\",\"controls_whileUntil\":\"controls_whileUntil\",\"controls_for\":\"controls_for\",\"controls_forEach\":\"controls_forEach\",\"controls_flow_statements\":\"controls_flow_statements\",\"math_number\":\"math_number\",\"math_arithmetic\":\"math_arithmetic\",\"math_single\":\"math_single\",\"math_trig\":\"math_trig\",\"math_constant\":\"math_constant\",\"math_number_property\":\"math_number_property\",\"math_round\":\"math_round\",\"math_on_list\":\"math_on_list\",\"math_modulo\":\"math_modulo\",\"math_constrain\":\"math_constrain\",\"math_random_int\":\"math_random_int\",\"math_random_float\":\"math_random_float\",\"text\":\"text\",\"text_join\":\"text_join\",\"text_append\":\"text_append\",\"text_length\":\"text_length\",\"text_isEmpty\":\"text_isEmpty\",\"text_indexOf\":\"text_indexOf\",\"variables_get\":\"variables_get\",\"text_charAt\":\"text_charAt\",\"text_getSubstring\":\"text_getSubstring\",\"text_changeCase\":\"text_changeCase\",\"text_trim\":\"text_trim\",\"text_print\":\"text_print\",\"text_prompt_ext\":\"text_prompt_ext\",\"lists_create_with\":\"lists_create_with\",\"lists_repeat\":\"lists_repeat\",\"lists_length\":\"lists_length\",\"lists_isEmpty\":\"lists_isEmpty\",\"lists_indexOf\":\"lists_indexOf\",\"lists_getIndex\":\"lists_getIndex\",\"lists_setIndex\":\"lists_setIndex\",\"lists_getSublist\":\"lists_getSublist\",\"lists_split\":\"lists_split\",\"lists_sort\":\"lists_sort\",\"colour_picker\":\"colour_picker\",\"colour_random\":\"colour_random\",\"colour_rgb\":\"colour_rgb\",\"colour_blend\":\"colour_blend\"}}}");
+module.exports = JSON.parse("{\"Dismiss\":\"Dismiss\",\"CodeBlock\":{\"Initial_Content\":\"Initial Content\"},\"CodeBlockContainer\":{\"Display\":\"Display\",\"Lines\":\"Lines\",\"Lines_detail\":\"Number of Visible lines or <b>auto</b>.\",\"Prepopulate\":\"Prepopulate Answer\",\"Prepopulate_detail\":\"Define content that is displayed in a new answer.\",\"Behaviour\":\"Behaviour\",\"ScriptV\":\"Script Version\",\"ScriptV_detail\":\"API-Version for the Visualization Object.\",\"AutoReset\":\"Auto Reset\",\"AutoReset_detail\":\"Recreate Canvas-Element for each run\",\"Positioning\":\"Positioning\",\"Width\":\"Width\",\"Width_detail\":\"CSS Property for the canvas-width.\",\"Height\":\"Height\",\"Height_detail\":\"CSS Property for the canvas-height.\",\"Alignment\":\"Alignment\",\"Alignment_detail\":\"Horizontal Positioning of the canvas.\",\"Delete\":\"Delete\",\"Start\":\"Start\",\"Center\":\"Center\",\"End\":\"End\",\"ScriptVersion_1\":\"1.0 (original)\",\"ScriptVersion_2\":\"2.0 (since 2020)\",\"Canvas\":\"Visualization Canvas\",\"Text\":\"Plain Text\",\"Hidden\":\"Code (Hidden)\",\"Static\":\"Code (Static)\",\"Block\":\"Solution\",\"Blockly\":\"Blockly (Experimental!!!)\",\"Confirm\":\"Confirm\",\"DeleteQuestion\":\"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?\",\"TypesCaption\":\"Block-Types\",\"Types\":\"The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Visualization Canvas</b>: A 2D-drawing area you may use to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>\"},\"CodeBlocks\":{\"run_hint\":\"Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.\",\"run\":\"Run\",\"stop\":\"Stop\",\"AddBlock\":\"Add new Block\",\"UserCanceled\":\"Stopped By User\"},\"CodeBlocksSettings\":{\"Language\":\"Language\",\"AllowExec\":\"Allow Code Execution\",\"CVersion\":\"Version\",\"RunTime\":\"Max. Runtime in ms.\",\"Output\":\"Output\",\"MaxCharacters\":\"Max. Output Characters\",\"Parser\":\"Output Parser\",\"Themes\":\"Themes\",\"TGeneral\":\"General Theme\",\"TSolution\":\"Solution Theme\",\"Libraries\":\"Libraries\",\"DomLibs\":\"DOM-Libraries\",\"WorkLibs\":\"Worker-Libraries\",\"PAutomatic\":\"Automatisch\",\"PText\":\"Text Passthrough\",\"PJSON\":\"JSON\",\"PMagic\":\"Text+JSON (seperated by '\\\\n\\\\n&lt;JSON>\\\\n')\",\"NumberErr\":\"Muss ein gültiger Zahlenwert sein\",\"ContinousCompile\":\"Automatic Compilation (while typing)\",\"PersistentArguments\":\"Persistente Arguments (between calls)\",\"AllowArguments\":\"Supports Runtime-Arguments\",\"AllowArgumentsCaption\":\"Send Runtime-Arguments\",\"AllowArgumentsHint\":\"Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can add data to the passed argument-object. The object is available in the students as a variable named <code>args</code>.\"},\"CodePlayground\":{\"InvalidJson\":\"Output is not a valid JSON-Object\",\"Output\":\"Output:\",\"Message\":\"Message:\"},\"Tagger\":{\"ConfirmRepl\":\"Confirm Tag Replacement\",\"ConfirmReplMsg\":\"Do you really want to replace <b>all</b> occurrences of {name} with the below value?\"},\"RandomizerSetEditor\":{\"Caption\":\"Edit Set {nr}\"},\"RandomizerSettings\":{\"Caption\":\"Randomizer\",\"Available\":\"Available Tags\",\"Sets\":\"Defined Sets\"},\"Blockly\":{\"CodePreviewLabel\":\"Code Preview\",\"CodePreviewCaption\":\"The source-code generated by the above sequence\",\"RAWToolboxLabel\":\"RAW Toolbox Definition\",\"RAWToolboxCaption\":\"The raw XML-Definition of your toolbox\",\"CustomBlocksLabel\":\"Custom Blocks\",\"CustomBlocksCaption\":\"Create and manage Custom Blocks\",\"ToolboxLabel\":\"Customize Toolbox\",\"ToolboxCaption\":\"Manage Categories and the general look of your toolbox\",\"ToolboxCategories\":\"Categories\",\"ToolboxItems\":\"Blocks\",\"Properties\":\"Properties\",\"UseCustomToolbox\":\"Define Customized Toolbox XML\",\"BlockTypeNames\":{\"controls_if\":\"controls_if\",\"logic_compare\":\"logic_compare\",\"logic_operation\":\"logic_operation\",\"logic_negate\":\"logic_negate\",\"logic_boolean\":\"logic_boolean\",\"logic_null\":\"logic_null\",\"logic_ternary\":\"logic_ternary\",\"controls_repeat_ext\":\"controls_repeat_ext\",\"controls_whileUntil\":\"controls_whileUntil\",\"controls_for\":\"controls_for\",\"controls_forEach\":\"controls_forEach\",\"controls_flow_statements\":\"controls_flow_statements\",\"math_number\":\"math_number\",\"math_arithmetic\":\"math_arithmetic\",\"math_single\":\"math_single\",\"math_trig\":\"math_trig\",\"math_constant\":\"math_constant\",\"math_number_property\":\"math_number_property\",\"math_round\":\"math_round\",\"math_on_list\":\"math_on_list\",\"math_modulo\":\"math_modulo\",\"math_constrain\":\"math_constrain\",\"math_random_int\":\"math_random_int\",\"math_random_float\":\"math_random_float\",\"text\":\"text\",\"text_join\":\"text_join\",\"text_append\":\"text_append\",\"text_length\":\"text_length\",\"text_isEmpty\":\"text_isEmpty\",\"text_indexOf\":\"text_indexOf\",\"variables_get\":\"variables_get\",\"text_charAt\":\"text_charAt\",\"text_getSubstring\":\"text_getSubstring\",\"text_changeCase\":\"text_changeCase\",\"text_trim\":\"text_trim\",\"text_print\":\"text_print\",\"text_prompt_ext\":\"text_prompt_ext\",\"lists_create_with\":\"lists_create_with\",\"lists_repeat\":\"lists_repeat\",\"lists_length\":\"lists_length\",\"lists_isEmpty\":\"lists_isEmpty\",\"lists_indexOf\":\"lists_indexOf\",\"lists_getIndex\":\"lists_getIndex\",\"lists_setIndex\":\"lists_setIndex\",\"lists_getSublist\":\"lists_getSublist\",\"lists_split\":\"lists_split\",\"lists_sort\":\"lists_sort\",\"colour_picker\":\"colour_picker\",\"colour_random\":\"colour_random\",\"colour_rgb\":\"colour_rgb\",\"colour_blend\":\"colour_blend\"}}}");
 
 /***/ }),
 
@@ -30775,7 +30860,7 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
- * Quasar Framework v1.9.12
+ * Quasar Framework v1.12.8
  * (c) 2015-present Razvan Stoenescu
  * Released under the MIT License.
  */
@@ -30875,49 +30960,6 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
     }
   };
 });
-
-/***/ }),
-
-/***/ "f6fd":
-/***/ (function(module, exports) {
-
-// document.currentScript polyfill by Adam Miller
-
-// MIT license
-
-(function(document){
-  var currentScript = "currentScript",
-      scripts = document.getElementsByTagName('script'); // Live NodeList collection
-
-  // If browser needs currentScript polyfill, add get currentScript() to the document object
-  if (!(currentScript in document)) {
-    Object.defineProperty(document, currentScript, {
-      get: function(){
-
-        // IE 6-10 supports script readyState
-        // IE 10+ support stack trace
-        try { throw new Error(); }
-        catch (err) {
-
-          // Find the second match for the "at" string to get file src url from stack.
-          // Specifically works with the format of stack traces in IE.
-          var i, res = ((/.*at [^\(]*\((.*):.+:.+\)$/ig).exec(err.stack) || [false])[1];
-
-          // For all scripts on the page, if src matches or if ready state is interactive, return the script tag
-          for(i in scripts){
-            if(scripts[i].src == res || scripts[i].readyState == "interactive"){
-              return scripts[i];
-            }
-          }
-
-          // If no match, return null
-          return null;
-        }
-      }
-    });
-  }
-})(document);
-
 
 /***/ }),
 
@@ -32039,13 +32081,20 @@ __webpack_require__.d(plugins_namespaceObject, "SessionStorage", function() { re
 // This file is imported into lib/wc client bundles.
 
 if (typeof window !== 'undefined') {
+  var currentScript = window.document.currentScript
   if (true) {
-    __webpack_require__("f6fd")
+    var getCurrentScript = __webpack_require__("8875")
+    currentScript = getCurrentScript()
+
+    // for backward compatibility, because previously we directly included the polyfill
+    if (!('currentScript' in document)) {
+      Object.defineProperty(document, 'currentScript', { get: getCurrentScript })
+    }
   }
 
-  var setPublicPath_i
-  if ((setPublicPath_i = window.document.currentScript) && (setPublicPath_i = setPublicPath_i.src.match(/(.+\/)[^/]+\.js(\?.*)?$/))) {
-    __webpack_require__.p = setPublicPath_i[1] // eslint-disable-line
+  var setPublicPath_src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
+  if (setPublicPath_src) {
+    __webpack_require__.p = setPublicPath_src[1] // eslint-disable-line
   }
 }
 
@@ -32203,7 +32252,8 @@ const hasTouch = isSSR === false ? 'ontouchstart' in window || window.navigator.
 
 function applyIosCorrection(is) {
   iosCorrection = {
-    is: Object.assign({}, is)
+    is: { ...is
+    }
   };
   delete is.mac;
   delete is.desktop;
@@ -32216,8 +32266,9 @@ function applyIosCorrection(is) {
   });
 }
 
-function getPlatform(userAgent) {
-  const platformMatch = getPlatformMatch(userAgent),
+function getPlatform(UA) {
+  const userAgent = UA.toLowerCase(),
+        platformMatch = getPlatformMatch(userAgent),
         matched = getMatch(userAgent, platformMatch),
         browser = {};
 
@@ -32325,26 +32376,30 @@ function getPlatform(userAgent) {
       browser.electron = true;
     } else if (document.location.href.indexOf('-extension://') > -1) {
       browser.bex = true;
-    } else if (window.Capacitor !== void 0) {
-      browser.capacitor = true;
-      browser.nativeMobile = true;
-      browser.nativeMobileWrapper = 'capacitor';
-    } else if (window._cordovaNative !== void 0 || window.cordova !== void 0) {
-      browser.cordova = true;
-      browser.nativeMobile = true;
-      browser.nativeMobileWrapper = 'cordova';
-    } else if (hasTouch === true && browser.desktop === true && browser.mac === true && browser.safari === true) {
-      /*
-       * Correction needed for iOS since the default
-       * setting on iPad is to request desktop view; if we have
-       * touch support and the user agent says it's a
-       * desktop, we infer that it's an iPhone/iPad with desktop view
-       * so we must fix the false positives
-       */
-      applyIosCorrection(browser);
+    } else {
+      if (window.Capacitor !== void 0) {
+        browser.capacitor = true;
+        browser.nativeMobile = true;
+        browser.nativeMobileWrapper = 'capacitor';
+      } else if (window._cordovaNative !== void 0 || window.cordova !== void 0) {
+        browser.cordova = true;
+        browser.nativeMobile = true;
+        browser.nativeMobileWrapper = 'cordova';
+      }
+
+      if (hasTouch === true && browser.mac === true && (browser.desktop === true && browser.safari === true || browser.nativeMobile === true && browser.android !== true && browser.ios !== true && browser.ipad !== true)) {
+        /*
+        * Correction needed for iOS since the default
+        * setting on iPad is to request desktop view; if we have
+        * touch support and the user agent says it's a
+        * desktop, we infer that it's an iPhone/iPad with desktop view
+        * so we must fix the false positives
+        */
+        applyIosCorrection(browser);
+      }
     }
 
-    fromSSR = browser.nativeMobile === void 0 && browser.electron === void 0 && !!document.querySelector('[data-server-rendered]');
+    fromSSR = browser.nativeMobile === void 0 && browser.electron === void 0 && document.querySelector('[data-server-rendered]') !== null;
 
     if (fromSSR === true) {
       onSSR = true;
@@ -32354,7 +32409,7 @@ function getPlatform(userAgent) {
   return browser;
 }
 
-const userAgent = isSSR === false ? (navigator.userAgent || navigator.vendor || window.opera).toLowerCase() : '';
+const userAgent = isSSR !== true ? navigator.userAgent || navigator.vendor || window.opera : '';
 const ssrClient = {
   has: {
     touch: false,
@@ -32427,7 +32482,7 @@ if (isSSR === true) {
   Platform.parseSSR =
   /* ssrContext */
   ssr => {
-    const userAgent = (ssr.req.headers['user-agent'] || ssr.req.headers['User-Agent'] || '').toLowerCase();
+    const userAgent = ssr.req.headers['user-agent'] || ssr.req.headers['User-Agent'] || '';
     return { ...client,
       userAgent,
       is: getPlatform(userAgent)
@@ -32582,6 +32637,23 @@ function create(name, {
     return evt;
   }
 }
+function addEvt(ctx, targetName, events) {
+  const name = `__q_${targetName}_evt`;
+  ctx[name] = ctx[name] !== void 0 ? ctx[name].concat(events) : events;
+  events.forEach(evt => {
+    evt[0].addEventListener(evt[1], ctx[evt[2]], listenOpts[evt[3]]);
+  });
+}
+function cleanEvt(ctx, targetName) {
+  const name = `__q_${targetName}_evt`;
+
+  if (ctx[name] !== void 0) {
+    ctx[name].forEach(evt => {
+      evt[0].removeEventListener(evt[1], ctx[evt[2]], listenOpts[evt[3]]);
+    });
+    ctx[name] = void 0;
+  }
+}
 /*
  * also update /types/utils/event.d.ts
  */
@@ -32605,6 +32677,33 @@ function create(name, {
 
 
 const getTrue = () => true;
+
+function filterInvalidPath(path) {
+  return typeof path === 'string' && path !== '' && path !== '/' && path !== '#/';
+}
+
+function normalizeExitPath(path) {
+  path.startsWith('#') === true && (path = path.substr(1));
+  path.startsWith('/') === false && (path = '/' + path);
+  path.endsWith('/') === true && (path = path.substr(0, path.length - 1));
+  return '#' + path;
+}
+
+function getShouldExitFn(cfg) {
+  if (cfg.backButtonExit === false) {
+    return () => false;
+  }
+
+  if (cfg.backButtonExit === '*') {
+    return getTrue;
+  } // Add default root path
+
+
+  const exitPaths = ['#/']; // Add custom exit paths
+
+  Array.isArray(cfg.backButtonExit) === true && exitPaths.push(...cfg.backButtonExit.filter(filterInvalidPath).map(normalizeExitPath));
+  return () => exitPaths.includes(window.location.hash);
+}
 
 /* harmony default export */ var src_history = ({
   __history: [],
@@ -32641,7 +32740,11 @@ const getTrue = () => true;
       }
     };
 
-    const fn = () => {
+    const shouldExit = getShouldExitFn(Object.assign({
+      backButtonExit: true
+    }, cfg[cordova === true ? 'cordova' : 'capacitor']));
+
+    const backHandler = () => {
       if (this.__history.length) {
         const entry = this.__history[this.__history.length - 1];
 
@@ -32650,22 +32753,19 @@ const getTrue = () => true;
 
           entry.handler();
         }
-      } else if (exit && window.location.hash === '#/') {
+      } else if (shouldExit() === true) {
         navigator.app.exitApp();
       } else {
         window.history.back();
       }
     };
 
-    const prop = cordova === true ? 'cordova' : 'capacitor';
-    const exit = cfg[prop] === void 0 || cfg[prop].backButtonExit !== false;
-
     if (cordova === true) {
       document.addEventListener('deviceready', () => {
-        document.addEventListener('backbutton', fn, false);
+        document.addEventListener('backbutton', backHandler, false);
       });
     } else {
-      window.Capacitor.Plugins.App.addListener('backButton', fn);
+      window.Capacitor.Plugins.App.addListener('backButton', backHandler);
     }
   }
 
@@ -32739,11 +32839,58 @@ const getTrue = () => true;
   }
 
 });
+// CONCATENATED MODULE: ./node_modules/quasar/src/utils/cache.js
+
+function cache(vm, key, obj) {
+  if (isSSR === true) return obj;
+  const k = `__qcache_${key}`;
+  return vm[k] === void 0 ? vm[k] = obj : vm[k];
+}
+function getPropCacheMixin(propName, proxyPropName) {
+  return {
+    data() {
+      return {
+        [proxyPropName]: {}
+      };
+    },
+
+    watch: {
+      [propName]: {
+        immediate: true,
+
+        handler(newObj, oldObj) {
+          const target = this[proxyPropName];
+
+          if (oldObj !== void 0) {
+            // we first delete obsolete events
+            for (const prop in oldObj) {
+              if (newObj[prop] === void 0) {
+                this.$delete(target, prop);
+              }
+            }
+          }
+
+          for (const prop in newObj) {
+            // we then update changed events
+            if (target[prop] !== newObj[prop]) {
+              this.$set(target, prop, newObj[prop]);
+            }
+          }
+        }
+
+      }
+    }
+  };
+}
+// CONCATENATED MODULE: ./node_modules/quasar/src/mixins/listeners.js
+
+/* harmony default export */ var listeners = (getPropCacheMixin('$listeners', 'qListeners'));
 // CONCATENATED MODULE: ./node_modules/quasar/src/mixins/model-toggle.js
 
 
+
 /* harmony default export */ var model_toggle = ({
-  mixins: [timeout],
+  mixins: [timeout, listeners],
   props: {
     value: {
       type: Boolean,
@@ -32777,7 +32924,7 @@ const getTrue = () => true;
         return;
       }
 
-      if (this.$listeners.input !== void 0 && isSSR === false) {
+      if (this.qListeners.input !== void 0 && isSSR === false) {
         this.$emit('input', true);
         this.payload = evt;
         this.$nextTick(() => {
@@ -32787,7 +32934,7 @@ const getTrue = () => true;
         });
       }
 
-      if (this.value === void 0 || this.$listeners.input === void 0 || isSSR === true) {
+      if (this.value === void 0 || this.qListeners.input === void 0 || isSSR === true) {
         this.__processShow(evt);
       }
     },
@@ -32819,7 +32966,7 @@ const getTrue = () => true;
         return;
       }
 
-      if (this.$listeners.input !== void 0 && isSSR === false) {
+      if (this.qListeners.input !== void 0 && isSSR === false) {
         this.$emit('input', false);
         this.payload = evt;
         this.$nextTick(() => {
@@ -32829,7 +32976,7 @@ const getTrue = () => true;
         });
       }
 
-      if (this.value === void 0 || this.$listeners.input === void 0 || isSSR === true) {
+      if (this.value === void 0 || this.qListeners.input === void 0 || isSSR === true) {
         this.__processHide(evt);
       }
     },
@@ -32855,101 +33002,13 @@ const getTrue = () => true;
 
     __processModelChange(val) {
       if (this.disable === true && val === true) {
-        this.$listeners.input !== void 0 && this.$emit('input', false);
+        this.qListeners.input !== void 0 && this.$emit('input', false);
       } else if (val === true !== this.showing) {
         this[`__process${val === true ? 'Show' : 'Hide'}`](this.payload);
       }
     }
 
   }
-});
-// CONCATENATED MODULE: ./node_modules/quasar/src/mixins/portal.js
-
-function closePortalMenus(vm, evt) {
-  do {
-    if (vm.$options.name === 'QMenu') {
-      vm.hide(evt); // is this a point of separation?
-
-      if (vm.separateClosePopup === true) {
-        return vm.$parent;
-      }
-    } else if (vm.__renderPortal !== void 0) {
-      // treat it as point of separation if parent is QPopupProxy
-      // (so mobile matches desktop behavior)
-      // and hide it too
-      if (vm.$parent !== void 0 && vm.$parent.$options.name === 'QPopupProxy') {
-        vm.hide(evt);
-        return vm.$parent;
-      } else {
-        return vm;
-      }
-    }
-
-    vm = vm.$parent;
-  } while (vm !== void 0);
-}
-function closePortals(vm, evt, depth) {
-  while (depth !== 0 && vm !== void 0) {
-    if (vm.__renderPortal !== void 0) {
-      depth--;
-
-      if (vm.$options.name === 'QMenu') {
-        vm = closePortalMenus(vm, evt);
-        continue;
-      }
-
-      vm.hide(evt);
-    }
-
-    vm = vm.$parent;
-  }
-}
-/* harmony default export */ var portal = ({
-  inheritAttrs: false,
-  props: {
-    contentClass: [Array, String, Object],
-    contentStyle: [Array, String, Object]
-  },
-  methods: {
-    __showPortal() {
-      if (this.__portal !== void 0) {
-        document.body.appendChild(this.__portal.$el);
-      }
-    },
-
-    __hidePortal() {
-      if (this.__portal !== void 0) {
-        this.__portal.$destroy();
-
-        this.__portal.$el.remove();
-
-        this.__portal = void 0;
-      }
-    },
-
-    __preparePortal() {
-      if (this.__portal === void 0) {
-        this.__portal = new external_commonjs_vue_commonjs2_vue_root_Vue_default.a({
-          name: 'QPortal',
-          parent: this,
-          inheritAttrs: false,
-          render: h => this.__renderPortal(h),
-          components: this.$options.components,
-          directives: this.$options.directives
-        }).$mount();
-      }
-    }
-
-  },
-
-  render() {
-    this.__portal !== void 0 && this.__portal.$forceUpdate();
-  },
-
-  beforeDestroy() {
-    this.__hidePortal();
-  }
-
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/utils/dom.js
 function dom_offset(el) {
@@ -32997,7 +33056,8 @@ function ready(fn) {
   }
 
   document.addEventListener('DOMContentLoaded', fn, false);
-}
+} // internal
+
 function childHasFocus(el, focusedEl) {
   if (el === void 0 || el.contains(focusedEl) === true) {
     return true;
@@ -33010,6 +33070,10 @@ function childHasFocus(el, focusedEl) {
   }
 
   return false;
+} // internal
+
+function getBodyFullscreenElement(isFullscreen, activeEl) {
+  return isFullscreen === true ? activeEl === document.documentElement ? document.body : activeEl : document.body;
 }
 /* harmony default export */ var utils_dom = ({
   offset: dom_offset,
@@ -33020,6 +33084,156 @@ function childHasFocus(el, focusedEl) {
   cssBatch,
   ready
 });
+// CONCATENATED MODULE: ./node_modules/quasar/src/mixins/portal.js
+
+
+
+function closePortalMenus(vm, evt) {
+  do {
+    if (vm.$options.name === 'QMenu') {
+      vm.hide(evt); // is this a point of separation?
+
+      if (vm.separateClosePopup === true) {
+        return vm.$parent;
+      }
+    } else if (vm.__renderPortal !== void 0) {
+      // treat it as point of separation if parent is QPopupProxy
+      // (so mobile matches desktop behavior)
+      // and hide it too
+      if (vm.$parent !== void 0 && vm.$parent.$options.name === 'QPopupProxy') {
+        vm.hide(evt);
+        return vm.$parent;
+      } else {
+        return vm;
+      }
+    }
+
+    vm = vm.$parent;
+  } while (vm !== void 0);
+}
+function closePortals(vm, evt, depth) {
+  while (depth !== 0 && vm !== void 0) {
+    if (vm.__renderPortal !== void 0) {
+      depth--;
+
+      if (vm.$options.name === 'QMenu') {
+        vm = closePortalMenus(vm, evt);
+        continue;
+      }
+
+      vm.hide(evt);
+    }
+
+    vm = vm.$parent;
+  }
+}
+
+function isOnGlobalDialog(vm) {
+  while (vm !== void 0) {
+    if (vm.$options.name === 'QGlobalDialog') {
+      return true;
+    }
+
+    if (vm.$options.name === 'QDialog') {
+      return false;
+    }
+
+    vm = vm.$parent;
+  }
+
+  return false;
+}
+
+const Portal = {
+  inheritAttrs: false,
+  props: {
+    contentClass: [Array, String, Object],
+    contentStyle: [Array, String, Object]
+  },
+  methods: {
+    __showPortal() {
+      if (this.$q.fullscreen !== void 0 && this.$q.fullscreen.isCapable === true) {
+        const append = isFullscreen => {
+          if (this.__portal === void 0) {
+            return;
+          }
+
+          const newParent = getBodyFullscreenElement(isFullscreen, this.$q.fullscreen.activeEl);
+
+          if (this.__portal.$el.parentElement !== newParent && newParent.contains(this.$el) === (this.__onGlobalDialog === false)) {
+            newParent.appendChild(this.__portal.$el);
+          }
+        };
+
+        this.unwatchFullscreen = this.$watch('$q.fullscreen.isActive', append);
+        const isActive = this.$q.fullscreen.isActive;
+
+        if (this.__onGlobalDialog === false || isActive === true) {
+          append(isActive);
+        }
+      } else if (this.__portal !== void 0 && this.__onGlobalDialog === false) {
+        document.body.appendChild(this.__portal.$el);
+      }
+    },
+
+    __hidePortal() {
+      if (this.__portal !== void 0) {
+        if (this.unwatchFullscreen !== void 0) {
+          this.unwatchFullscreen();
+          this.unwatchFullscreen = void 0;
+        }
+
+        if (this.__onGlobalDialog === false) {
+          this.__portal.$destroy();
+
+          this.__portal.$el.remove();
+        }
+
+        this.__portal = void 0;
+      }
+    },
+
+    __preparePortal() {
+      if (this.__portal === void 0) {
+        this.__portal = this.__onGlobalDialog === true ? {
+          $el: this.$el,
+          $refs: this.$refs
+        } : new external_commonjs_vue_commonjs2_vue_root_Vue_default.a({
+          name: 'QPortal',
+          parent: this,
+          inheritAttrs: false,
+          render: h => this.__renderPortal(h),
+          components: this.$options.components,
+          directives: this.$options.directives
+        }).$mount();
+      }
+    }
+
+  },
+
+  render(h) {
+    if (this.__onGlobalDialog === true) {
+      return this.__renderPortal(h);
+    }
+
+    if (this.__portal !== void 0) {
+      this.__portal.$forceUpdate();
+    }
+  },
+
+  beforeDestroy() {
+    this.__hidePortal();
+  }
+
+};
+
+if (isSSR === false) {
+  Portal.created = function () {
+    this.__onGlobalDialog = isOnGlobalDialog(this.$parent);
+  };
+}
+
+/* harmony default export */ var portal = (Portal);
 // CONCATENATED MODULE: ./node_modules/quasar/src/utils/scroll.js
 
 
@@ -33136,10 +33350,10 @@ function setHorizontalScrollPosition(scrollTarget, offset, duration) {
 
   setHorizontalScroll(scrollTarget, offset);
 }
-let scroll_size;
+let size;
 function getScrollbarWidth() {
-  if (scroll_size !== undefined) {
-    return scroll_size;
+  if (size !== undefined) {
+    return size;
   }
 
   const inner = document.createElement('p'),
@@ -33168,8 +33382,8 @@ function getScrollbarWidth() {
   }
 
   outer.remove();
-  scroll_size = w1 - w2;
-  return scroll_size;
+  size = w1 - w2;
+  return size;
 }
 function hasScrollbar(el, onY = true) {
   if (!el || el.nodeType !== Node.ELEMENT_NODE) {
@@ -33192,6 +33406,7 @@ function hasScrollbar(el, onY = true) {
   hasScrollbar
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/mixins/prevent-scroll.js
+
 
 
 let registered = 0,
@@ -33265,7 +33480,7 @@ function onAppleResize(evt) {
   });
 }
 
-function apply(action, is) {
+function apply(action) {
   const body = document.body,
         hasViewport = window.visualViewport !== void 0;
 
@@ -33283,8 +33498,9 @@ function apply(action, is) {
     }
 
     body.classList.add('q-body--prevent-scroll');
+    document.qScrollPrevented = true;
 
-    if (is.ios === true) {
+    if (client.is.ios === true) {
       if (hasViewport === true) {
         window.scrollTo(0, 0);
         window.visualViewport.addEventListener('resize', onAppleResize, listenOpts.passiveCapture);
@@ -33296,13 +33512,13 @@ function apply(action, is) {
     }
   }
 
-  if (is.desktop === true && is.mac === true) {
+  if (client.is.desktop === true && client.is.mac === true) {
     // ref. https://developers.google.com/web/updates/2017/01/scrolling-intervention
     window[`${action}EventListener`]('wheel', onWheel, listenOpts.notPassive);
   }
 
   if (action === 'remove') {
-    if (is.ios === true) {
+    if (client.is.ios === true) {
       if (hasViewport === true) {
         window.visualViewport.removeEventListener('resize', onAppleResize, listenOpts.passiveCapture);
         window.visualViewport.removeEventListener('scroll', onAppleResize, listenOpts.passiveCapture);
@@ -33313,6 +33529,7 @@ function apply(action, is) {
 
     body.classList.remove('q-body--prevent-scroll');
     body.classList.remove('q-body--force-scrollbar');
+    document.qScrollPrevented = false;
     body.style.left = bodyLeft;
     body.style.top = bodyTop;
     window.scrollTo(scrollPositionX, scrollPositionY);
@@ -33320,7 +33537,7 @@ function apply(action, is) {
   }
 }
 
-function preventScroll(state, is) {
+function preventScroll(state) {
   let action = 'add';
 
   if (state === true) {
@@ -33348,29 +33565,32 @@ function preventScroll(state, is) {
 
     action = 'remove';
 
-    if (is.ios === true && is.nativeMobile === true) {
+    if (client.is.ios === true && client.is.nativeMobile === true) {
       clearTimeout(closeTimer);
       closeTimer = setTimeout(() => {
-        apply(action, is);
+        apply(action);
         closeTimer = void 0;
       }, 100);
       return;
     }
   }
 
-  apply(action, is);
+  apply(action);
 }
 /* harmony default export */ var prevent_scroll = ({
   methods: {
     __preventScroll(state) {
       if (state !== this.preventedScroll && (this.preventedScroll !== void 0 || state === true)) {
         this.preventedScroll = state;
-        preventScroll(state, this.$q.platform.is);
+        preventScroll(state);
       }
     }
 
   }
 });
+// CONCATENATED MODULE: ./node_modules/quasar/src/mixins/attrs.js
+
+/* harmony default export */ var mixins_attrs = (getPropCacheMixin('$attrs', 'qAttrs'));
 // CONCATENATED MODULE: ./node_modules/quasar/src/utils/key-composition.js
 let lastKeyCompositionStatus = false;
 function onKeyDownComposition(evt) {
@@ -33444,42 +33664,8 @@ function mergeSlotSafely(source, vm, slotName) {
   const slot = vm.$scopedSlots[slotName]();
   return source !== void 0 ? source.concat(slot) : slot;
 }
-// CONCATENATED MODULE: ./node_modules/quasar/src/utils/vm.js
-
-function getAllChildren(vm, children = []) {
-  vm.$children.forEach(function (child) {
-    children.push(child);
-    child.$children.length > 0 && getAllChildren(child, children);
-  });
-  return children;
-}
-function getVmOfNode(el) {
-  for (let node = el; node !== null; node = node.parentNode) {
-    // node.__vue__ can be null if the instance was destroyed
-    if (node.__vue__ === null) {
-      return;
-    }
-
-    if (node.__vue__ !== void 0) {
-      return node.__vue__;
-    }
-  }
-}
-function isVmChildOf(childVm, parentVm) {
-  for (let vm = childVm; vm !== void 0; vm = vm.$parent) {
-    if (vm === parentVm) {
-      return true;
-    }
-  }
-
-  return false;
-}
-function cache(vm, key, obj) {
-  if (isSSR === true) return obj;
-  const k = `__qcache_${key}`;
-  return vm[k] === void 0 ? vm[k] = obj : vm[k];
-}
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/dialog/QDialog.js
+
 
 
 
@@ -33507,7 +33693,7 @@ const transitions = {
 };
 /* harmony default export */ var QDialog = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QDialog',
-  mixins: [mixins_history, model_toggle, portal, prevent_scroll],
+  mixins: [mixins_attrs, mixins_history, model_toggle, portal, prevent_scroll],
   props: {
     persistent: Boolean,
     autoClose: Boolean,
@@ -33545,12 +33731,8 @@ const transitions = {
       }
     },
 
-    maximized(newV, oldV) {
-      if (this.showing === true) {
-        this.__updateState(false, oldV);
-
-        this.__updateState(true, newV);
-      }
+    maximized(state) {
+      this.showing === true && this.__updateMaximized(state);
     },
 
     useBackdrop(v) {
@@ -33583,6 +33765,21 @@ const transitions = {
 
     hideOnRouteChange() {
       return this.persistent !== true && this.noRouteDismiss !== true && this.seamless !== true;
+    },
+
+    onEvents() {
+      const on = { ...this.qListeners,
+        // stop propagating these events from children
+        input: event_stop,
+        'popup-show': event_stop,
+        'popup-hide': event_stop
+      };
+
+      if (this.autoClose === true) {
+        on.click = this.__onAutoClose;
+      }
+
+      return on;
     }
 
   },
@@ -33600,6 +33797,7 @@ const transitions = {
 
     shake() {
       this.focus();
+      this.$emit('shake');
 
       const node = this.__getInnerNode();
 
@@ -33626,7 +33824,7 @@ const transitions = {
         bubbles: true
       }));
 
-      this.__updateState(true, this.maximized);
+      this.__updateMaximized(this.maximized);
 
       escape_key.register(this, () => {
         if (this.seamless !== true) {
@@ -33649,37 +33847,40 @@ const transitions = {
       }
 
       this.__setTimeout(() => {
-        if (this.$q.platform.is.ios === true && document.activeElement) {
-          const {
-            top,
-            bottom
-          } = document.activeElement.getBoundingClientRect(),
-                {
-            innerHeight
-          } = window,
-                height = window.visualViewport !== void 0 ? window.visualViewport.height : innerHeight;
+        if (this.$q.platform.is.ios === true) {
+          if (this.seamless !== true && document.activeElement) {
+            const {
+              top,
+              bottom
+            } = document.activeElement.getBoundingClientRect(),
+                  {
+              innerHeight
+            } = window,
+                  height = window.visualViewport !== void 0 ? window.visualViewport.height : innerHeight;
 
-          if (top > 0 && bottom > height / 2) {
-            const scrollTop = Math.min(document.scrollingElement.scrollHeight - height, bottom >= innerHeight ? Infinity : Math.ceil(document.scrollingElement.scrollTop + bottom - height / 2));
+            if (top > 0 && bottom > height / 2) {
+              const scrollTop = Math.min(document.scrollingElement.scrollHeight - height, bottom >= innerHeight ? Infinity : Math.ceil(document.scrollingElement.scrollTop + bottom - height / 2));
 
-            const fn = () => {
-              requestAnimationFrame(() => {
-                document.scrollingElement.scrollTop += Math.ceil((scrollTop - document.scrollingElement.scrollTop) / 8);
+              const fn = () => {
+                requestAnimationFrame(() => {
+                  document.scrollingElement.scrollTop += Math.ceil((scrollTop - document.scrollingElement.scrollTop) / 8);
 
-                if (document.scrollingElement.scrollTop !== scrollTop) {
-                  fn();
-                }
-              });
-            };
+                  if (document.scrollingElement.scrollTop !== scrollTop) {
+                    fn();
+                  }
+                });
+              };
 
-            fn();
-          }
+              fn();
+            }
 
-          document.activeElement.scrollIntoView();
-        } // required in order to avoid the "double-tap needed" issue
+            document.activeElement.scrollIntoView();
+          } // required in order to avoid the "double-tap needed" issue
 
 
-        this.$q.platform.is.ios === true && this.__portal.$el.click();
+          this.__portal.$el.click();
+        }
+
         this.$emit('show', evt);
       }, 300);
     },
@@ -33711,7 +33912,7 @@ const transitions = {
       if (hiding === true || this.showing === true) {
         escape_key.pop(this);
 
-        this.__updateState(false, this.maximized);
+        this.__updateMaximized(false);
 
         if (this.seamless !== true) {
           this.__preventScroll(false);
@@ -33721,15 +33922,20 @@ const transitions = {
       }
     },
 
-    __updateState(opening, maximized) {
-      if (maximized === true) {
-        if (opening === true) {
+    __updateMaximized(active) {
+      if (active === true) {
+        if (this.isMaximized !== true) {
           maximizedModals < 1 && document.body.classList.add('q-body--dialog');
-        } else if (maximizedModals < 2) {
+          maximizedModals++;
+          this.isMaximized = true;
+        }
+      } else if (this.isMaximized === true) {
+        if (maximizedModals < 2) {
           document.body.classList.remove('q-body--dialog');
         }
 
-        maximizedModals += opening === true ? 1 : -1;
+        maximizedModals--;
+        this.isMaximized = false;
       }
     },
 
@@ -33742,7 +33948,7 @@ const transitions = {
 
     __onAutoClose(e) {
       this.hide(e);
-      this.$listeners.click !== void 0 && this.$emit('click', e);
+      this.qListeners.click !== void 0 && this.$emit('click', e);
     },
 
     __onBackdropClick(e) {
@@ -33761,22 +33967,11 @@ const transitions = {
     },
 
     __renderPortal(h) {
-      const on = { ...this.$listeners,
-        // stop propagating these events from children
-        input: event_stop,
-        'popup-show': event_stop,
-        'popup-hide': event_stop
-      };
-
-      if (this.autoClose === true) {
-        on.click = this.__onAutoClose;
-      }
-
       return h('div', {
         staticClass: 'q-dialog fullscreen no-pointer-events',
         class: this.contentClass,
         style: this.contentStyle,
-        attrs: this.$attrs
+        attrs: this.qAttrs
       }, [h('transition', {
         props: {
           name: 'q-transition--fade'
@@ -33797,7 +33992,7 @@ const transitions = {
         attrs: {
           tabindex: -1
         },
-        on
+        on: this.onEvents
       }, slot_slot(this, 'default')) : null])]);
     }
 
@@ -33839,7 +34034,7 @@ function getSizeMixin(sizes) {
 }
 /* harmony default export */ var mixins_size = (getSizeMixin(sizes));
 // CONCATENATED MODULE: ./node_modules/quasar/src/mixins/tag.js
-/* harmony default export */ var mixins_tag = ({
+/* harmony default export */ var tag = ({
   props: {
     tag: {
       type: String,
@@ -33852,9 +34047,10 @@ function getSizeMixin(sizes) {
 
 
 
+
 /* harmony default export */ var QIcon = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QIcon',
-  mixins: [mixins_size, mixins_tag],
+  mixins: [listeners, mixins_size, tag],
   props: {
     tag: {
       default: 'i'
@@ -33898,12 +34094,21 @@ function getSizeMixin(sizes) {
       }
 
       if (icon.startsWith('M') === true) {
-        const cfg = icon.split('|');
+        const [def, viewBox] = icon.split('|');
         return {
           svg: true,
           cls: this.classes,
-          path: cfg[0],
-          viewBox: cfg[1] !== void 0 ? cfg[1] : '0 0 24 24'
+          nodes: def.split('&&').map(path => {
+            const [d, style, transform] = path.split('@@');
+            return this.$createElement('path', {
+              attrs: {
+                d,
+                transform
+              },
+              style
+            });
+          }),
+          viewBox: viewBox !== void 0 ? viewBox : '0 0 24 24'
         };
       }
 
@@ -33962,7 +34167,8 @@ function getSizeMixin(sizes) {
     const data = {
       class: this.type.cls,
       style: this.sizeStyle,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         'aria-hidden': 'true',
         role: 'presentation'
@@ -33983,11 +34189,7 @@ function getSizeMixin(sizes) {
       /* needed for IE11 */
 
       data.attrs.viewBox = this.type.viewBox;
-      return h('svg', data, mergeSlot([h('path', {
-        attrs: {
-          d: this.type.path
-        }
-      })], this, 'default'));
+      return h('svg', data, mergeSlot(this.type.nodes, this, 'default'));
     }
 
     return h(this.tag, data, mergeSlot([this.type.content], this, 'default'));
@@ -33996,7 +34198,9 @@ function getSizeMixin(sizes) {
 }));
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/spinner/spinner-mixin.js
 
+
 /* harmony default export */ var spinner_mixin = ({
+  mixins: [listeners],
   props: {
     color: String,
     size: {
@@ -34034,7 +34238,8 @@ function getSizeMixin(sizes) {
     return h('svg', {
       staticClass: 'q-spinner q-spinner-mat',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -34084,89 +34289,6 @@ const alignMap = {
 
   }
 });
-// CONCATENATED MODULE: ./node_modules/quasar/src/utils/touch.js
-
-
-const directions = ['left', 'right', 'up', 'down', 'horizontal', 'vertical'];
-const modifiersAll = {
-  left: true,
-  right: true,
-  up: true,
-  down: true,
-  horizontal: true,
-  vertical: true,
-  all: true
-};
-function getModifierDirections(mod) {
-  let dir = {};
-  directions.forEach(direction => {
-    if (mod[direction]) {
-      dir[direction] = true;
-    }
-  });
-
-  if (Object.keys(dir).length === 0) {
-    return modifiersAll;
-  }
-
-  if (dir.horizontal === true) {
-    dir.left = dir.right = true;
-  }
-
-  if (dir.vertical === true) {
-    dir.up = dir.down = true;
-  }
-
-  if (dir.left === true && dir.right === true) {
-    dir.horizontal = true;
-  }
-
-  if (dir.up === true && dir.down === true) {
-    dir.vertical = true;
-  }
-
-  if (dir.horizontal === true && dir.vertical === true) {
-    dir.all = true;
-  }
-
-  return dir;
-}
-function updateModifiers(ctx, {
-  oldValue,
-  value,
-  modifiers
-}) {
-  if (oldValue !== value) {
-    typeof value !== 'function' && ctx.end();
-    ctx.handler = value;
-  }
-
-  if (ctx.modifiers.mouseAllDir !== modifiers.mouseAllDir || directions.some(direction => modifiers[direction] !== ctx.modifiers[direction])) {
-    ctx.modifiers = modifiers;
-    ctx.direction = getModifierDirections(modifiers);
-  }
-}
-function addEvt(ctx, target, events) {
-  target += 'Evt';
-  ctx[target] = ctx[target] !== void 0 ? ctx[target].concat(events) : events;
-  events.forEach(evt => {
-    evt[0].addEventListener(evt[1], ctx[evt[2]], listenOpts[evt[3]]);
-  });
-}
-function cleanEvt(ctx, target) {
-  target += 'Evt';
-
-  if (ctx[target] !== void 0) {
-    ctx[target].forEach(evt => {
-      evt[0].removeEventListener(evt[1], ctx[evt[2]], listenOpts[evt[3]]);
-    });
-    ctx[target] = void 0;
-  }
-}
-const getTouchTarget = isSSR === false && iosEmulated !== true && (client.is.ios === true || window.navigator.vendor.toLowerCase().indexOf('apple') > -1) ? () => document : target => target;
-function shouldStart(evt, ctx) {
-  return ctx.event === void 0 && evt.target !== void 0 && evt.target.draggable !== true && typeof ctx.handler === 'function' && evt.target.nodeName.toUpperCase() !== 'INPUT' && (evt.qClonedBy === void 0 || evt.qClonedBy.indexOf(ctx.uid) === -1);
-}
 // CONCATENATED MODULE: ./node_modules/quasar/src/utils/throttle.js
 /* harmony default export */ var throttle = (function (fn, limit = 250) {
   let wait = false,
@@ -34555,63 +34677,79 @@ const Dark = {
 
 
 
+
+function getLocale() {
+  if (isSSR === true) {
+    return;
+  }
+
+  let val = navigator.language || navigator.languages[0] || navigator.browserLanguage || navigator.userLanguage || navigator.systemLanguage;
+
+  if (val) {
+    return val.toLowerCase();
+  }
+}
+
 /* harmony default export */ var src_lang = ({
+  getLocale,
+
   install($q, queues, lang) {
-    if (isSSR === true) {
-      queues.server.push((q, ctx) => {
-        const opt = {
-          lang: q.lang.isoName,
-          dir: q.lang.rtl === true ? 'rtl' : 'ltr'
-        },
-              fn = ctx.ssr.setHtmlAttrs;
+    const initialLang = lang || en_us;
 
-        if (typeof fn === 'function') {
-          fn(opt);
-        } else {
-          ctx.ssr.Q_HTML_ATTRS = Object.keys(opt).map(key => `${key}=${opt[key]}`).join(' ');
+    this.set = (langObject = en_us, ssrContext) => {
+      const lang = { ...langObject,
+        rtl: langObject.rtl === true,
+        getLocale
+      };
+
+      if (isSSR === true) {
+        if (ssrContext === void 0) {
+          console.error('SSR ERROR: second param required: Quasar.lang.set(lang, ssrContext)');
+          return;
         }
-      });
-    }
 
-    this.set = (lang = en_us) => {
-      lang.set = this.set;
-      lang.getLocale = this.getLocale;
-      lang.rtl = lang.rtl === true || false;
-
-      if (isSSR === false) {
-        const el = document.documentElement;
-        el.setAttribute('dir', lang.rtl ? 'rtl' : 'ltr');
-        el.setAttribute('lang', lang.isoName);
-      }
-
-      if (isSSR === true || $q.lang !== void 0) {
-        $q.lang = lang;
+        const dir = lang.rtl === true ? 'rtl' : 'ltr';
+        const attrs = `lang=${lang.isoName} dir=${dir}`;
+        lang.set = ssrContext.$q.lang.set;
+        ssrContext.Q_HTML_ATTRS = ssrContext.Q_PREV_LANG !== void 0 ? ssrContext.Q_HTML_ATTRS.replace(ssrContext.Q_PREV_LANG, attrs) : attrs;
+        ssrContext.Q_PREV_LANG = attrs;
+        ssrContext.$q.lang = lang;
       } else {
-        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.util.defineReactive($q, 'lang', lang);
-      }
+        if (fromSSR === false) {
+          const el = document.documentElement;
+          el.setAttribute('dir', lang.rtl === true ? 'rtl' : 'ltr');
+          el.setAttribute('lang', lang.isoName);
+        }
 
-      this.isoName = lang.isoName;
-      this.nativeName = lang.nativeName;
-      this.props = lang;
+        lang.set = this.set;
+        $q.lang = this.props = lang;
+        this.isoName = lang.isoName;
+        this.nativeName = lang.nativeName;
+      }
     };
 
-    this.set(lang);
-  },
-
-  getLocale() {
     if (isSSR === true) {
-      return;
-    }
+      queues.server.push((q, ctx) => {
+        q.lang = {};
 
-    let val = navigator.language || navigator.languages[0] || navigator.browserLanguage || navigator.userLanguage || navigator.systemLanguage;
+        q.lang.set = langObject => {
+          this.set(langObject, ctx.ssr);
+        };
 
-    if (val) {
-      return val.toLowerCase();
+        q.lang.set(initialLang);
+      });
+      this.isoName = initialLang.isoName;
+      this.nativeName = initialLang.nativeName;
+      this.props = initialLang;
+    } else {
+      external_commonjs_vue_commonjs2_vue_root_Vue_default.a.util.defineReactive($q, 'lang', {});
+      this.set(initialLang);
     }
   }
 
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/utils/colors.js
+const reRGBA = /^rgb(a)?\((\d{1,3}),(\d{1,3}),(\d{1,3}),?([01]?\.?\d*?)?\)$/;
 function rgbToHex({
   r,
   g,
@@ -34637,25 +34775,6 @@ function rgbToString({
   a
 }) {
   return `rgb${a !== void 0 ? 'a' : ''}(${r},${g},${b}${a !== void 0 ? ',' + a / 100 : ''})`;
-}
-function stringToRgb(str) {
-  if (typeof str !== 'string') {
-    throw new TypeError('Expected a string');
-  }
-
-  str = str.replace(/ /g, '');
-
-  if (str.startsWith('#')) {
-    return hexToRgb(str);
-  }
-
-  const model = str.substring(str.indexOf('(') + 1, str.length - 1).split(',');
-  return {
-    r: parseInt(model[0], 10),
-    g: parseInt(model[1], 10),
-    b: parseInt(model[2], 10),
-    a: model[3] !== void 0 ? parseFloat(model[3]) * 100 : void 0
-  };
 }
 function hexToRgb(hex) {
   if (typeof hex !== 'string') {
@@ -34784,7 +34903,6 @@ function rgbToHsv({
     a
   };
 }
-const reRGBA = /^rgb(a)?\((\d{1,3}),(\d{1,3}),(\d{1,3}),?([01]?\.?\d*?)?\)$/;
 function textToRgb(str) {
   if (typeof str !== 'string') {
     throw new TypeError('Expected a string');
@@ -34931,6 +35049,20 @@ function getBrand(color, element = document.body) {
 
   return getComputedStyle(element).getPropertyValue(`--q-color-${color}`).trim() || null;
 }
+function getPaletteColor(colorName) {
+  if (typeof colorName !== 'string') {
+    throw new TypeError('Expected a string as color');
+  }
+
+  const el = document.createElement('div');
+  el.className = `text-${colorName} invisible fixed no-pointer-events`;
+  document.body.appendChild(el);
+  const result = getComputedStyle(el).getPropertyValue('color');
+  el.remove();
+  return rgbToHex(textToRgb(result));
+} // TODO: remove in v2
+
+const stringToRgb = textToRgb;
 /* harmony default export */ var utils_colors = ({
   rgbToHex,
   hexToRgb,
@@ -34943,7 +35075,8 @@ function getBrand(color, element = document.body) {
   blend,
   changeAlpha,
   setBrand,
-  getBrand
+  getBrand,
+  getPaletteColor
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/body.js
 
@@ -35169,8 +35302,10 @@ function setColors(brand) {
   table: {
     arrowUp: 'arrow_upward',
     warning: 'warning',
+    firstPage: 'first_page',
     prevPage: 'chevron_left',
-    nextPage: 'chevron_right'
+    nextPage: 'chevron_right',
+    lastPage: 'last_page'
   },
   tree: {
     icon: 'play_arrow'
@@ -35189,24 +35324,41 @@ function setColors(brand) {
 
 
 /* harmony default export */ var icon_set = ({
-  install($q, iconSet) {
-    this.set = (iconDef = icon_set_material_icons) => {
-      iconDef.set = this.set;
+  install($q, queues, iconSet) {
+    const initialSet = iconSet || icon_set_material_icons;
 
-      if (isSSR === true || $q.iconSet !== void 0) {
-        $q.iconSet = iconDef;
+    this.set = (setObject, ssrContext) => {
+      const def = { ...setObject
+      };
+
+      if (isSSR === true) {
+        if (ssrContext === void 0) {
+          console.error('SSR ERROR: second param required: Quasar.iconSet.set(iconSet, ssrContext)');
+          return;
+        }
+
+        def.set = ssrContext.$q.iconSet.set;
+        ssrContext.$q.iconSet = def;
       } else {
-        external_commonjs_vue_commonjs2_vue_root_Vue_default.a.util.defineReactive($q, 'iconSet', iconDef);
+        def.set = this.set;
+        $q.iconSet = def;
       }
-
-      this.name = iconDef.name;
-      this.def = iconDef;
     };
 
-    this.set(iconSet);
+    if (isSSR === true) {
+      queues.server.push((q, ctx) => {
+        q.iconSet = {};
 
-    if (isSSR !== true) {
+        q.iconSet.set = setObject => {
+          this.set(setObject, ctx.ssr);
+        };
+
+        q.iconSet.set(initialSet);
+      });
+    } else {
       external_commonjs_vue_commonjs2_vue_root_Vue_default.a.util.defineReactive($q, 'iconMapFn', void 0);
+      external_commonjs_vue_commonjs2_vue_root_Vue_default.a.util.defineReactive($q, 'iconSet', {});
+      this.set(initialSet);
     }
   }
 
@@ -35245,7 +35397,7 @@ const install_$q = {
   Screen.install(install_$q, install_queues, cfg);
   src_history.install(cfg);
   src_lang.install(install_$q, install_queues, opts.lang);
-  icon_set.install(install_$q, opts.iconSet);
+  icon_set.install(install_$q, install_queues, opts.iconSet);
 
   if (isSSR === true) {
     Vue.mixin({
@@ -35289,7 +35441,6 @@ const install_$q = {
   }
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/directives/Ripple.js
-
 
 
 
@@ -35437,8 +35588,17 @@ function updateCtx(ctx, {
 
 
 
+
+const padding = {
+  none: 0,
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32
+};
 /* harmony default export */ var mixins_btn = ({
-  mixins: [ripple, align, getSizeMixin({
+  mixins: [listeners, ripple, align, getSizeMixin({
     xs: 8,
     sm: 10,
     md: 14,
@@ -35462,6 +35622,7 @@ function updateCtx(ctx, {
     size: String,
     fab: Boolean,
     fabMini: Boolean,
+    padding: String,
     color: String,
     textColor: String,
     noCaps: Boolean,
@@ -35534,7 +35695,7 @@ function updateCtx(ctx, {
         attrs.role = 'progressbar';
         attrs['aria-valuemin'] = 0;
         attrs['aria-valuemax'] = 100;
-        attrs['aria-valuenow'] = this.computedPercentage;
+        attrs['aria-valuenow'] = this.percentage;
       }
 
       if (this.disable === true) {
@@ -35564,10 +35725,85 @@ function updateCtx(ctx, {
 
     innerClasses() {
       return this.alignClass + (this.stack === true ? ' column' : ' row') + (this.noWrap === true ? ' no-wrap text-no-wrap' : '') + (this.loading === true ? ' q-btn__content--hidden' : '');
+    },
+
+    wrapperStyle() {
+      if (this.padding !== void 0) {
+        return {
+          padding: this.padding.split(/\s+/).map(v => v in padding ? padding[v] + 'px' : v).join(' '),
+          minWidth: '0',
+          minHeight: '0'
+        };
+      }
     }
 
   }
 });
+// CONCATENATED MODULE: ./node_modules/quasar/src/utils/touch.js
+
+const directions = ['left', 'right', 'up', 'down', 'horizontal', 'vertical'];
+const modifiersAll = {
+  left: true,
+  right: true,
+  up: true,
+  down: true,
+  horizontal: true,
+  vertical: true,
+  all: true
+};
+function getModifierDirections(mod) {
+  let dir = {};
+  directions.forEach(direction => {
+    if (mod[direction]) {
+      dir[direction] = true;
+    }
+  });
+
+  if (Object.keys(dir).length === 0) {
+    return modifiersAll;
+  }
+
+  if (dir.horizontal === true) {
+    dir.left = dir.right = true;
+  }
+
+  if (dir.vertical === true) {
+    dir.up = dir.down = true;
+  }
+
+  if (dir.left === true && dir.right === true) {
+    dir.horizontal = true;
+  }
+
+  if (dir.up === true && dir.down === true) {
+    dir.vertical = true;
+  }
+
+  if (dir.horizontal === true && dir.vertical === true) {
+    dir.all = true;
+  }
+
+  return dir;
+}
+function updateModifiers(ctx, {
+  oldValue,
+  value,
+  modifiers
+}) {
+  if (oldValue !== value) {
+    typeof value !== 'function' && ctx.end();
+    ctx.handler = value;
+  }
+
+  if (ctx.modifiers.mouseAllDir !== modifiers.mouseAllDir || directions.some(direction => modifiers[direction] !== ctx.modifiers[direction])) {
+    ctx.modifiers = modifiers;
+    ctx.direction = getModifierDirections(modifiers);
+  }
+}
+const getTouchTarget = isSSR === false && iosEmulated !== true && (client.is.ios === true || window.navigator.vendor.toLowerCase().indexOf('apple') > -1) ? () => document : target => target;
+function shouldStart(evt, ctx) {
+  return ctx.event === void 0 && evt.target !== void 0 && evt.target.draggable !== true && typeof ctx.handler === 'function' && evt.target.nodeName.toUpperCase() !== 'INPUT' && (evt.qClonedBy === void 0 || evt.qClonedBy.indexOf(ctx.uid) === -1);
+}
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/btn/QBtn.js
 
 
@@ -35600,9 +35836,10 @@ const iconAttrs = {
     },
 
     computedRipple() {
-      return this.ripple === false ? false : Object.assign({
-        keyCodes: this.isLink === true ? [13, 32] : [13]
-      }, this.ripple === true ? {} : this.ripple);
+      return this.ripple === false ? false : {
+        keyCodes: this.isLink === true ? [13, 32] : [13],
+        ...(this.ripple === true ? {} : this.ripple)
+      };
     },
 
     percentageStyle() {
@@ -35616,14 +35853,42 @@ const iconAttrs = {
       }
     },
 
-    onLoadingEvents() {
-      return {
-        mousedown: this.__onLoadingEvt,
-        touchstart: this.__onLoadingEvt,
-        click: this.__onLoadingEvt,
-        keydown: this.__onLoadingEvt,
-        keyup: this.__onLoadingEvt
-      };
+    onEvents() {
+      if (this.loading === true) {
+        return {
+          mousedown: this.__onLoadingEvt,
+          touchstart: this.__onLoadingEvt,
+          click: this.__onLoadingEvt,
+          keydown: this.__onLoadingEvt,
+          keyup: this.__onLoadingEvt
+        };
+      } else if (this.isActionable === true) {
+        const on = { ...this.qListeners,
+          click: this.click,
+          keydown: this.__onKeydown,
+          mousedown: this.__onMousedown
+        };
+
+        if (this.$q.platform.has.touch === true) {
+          on.touchstart = this.__onTouchstart;
+        }
+
+        return on;
+      }
+
+      return {};
+    },
+
+    directives() {
+      if (this.disable !== true && this.ripple !== false) {
+        return [{
+          name: 'ripple',
+          value: this.computedRipple,
+          modifiers: {
+            center: this.round
+          }
+        }];
+      }
     }
 
   },
@@ -35752,8 +36017,11 @@ const iconAttrs = {
     },
 
     __cleanup(destroying) {
-      if (destroying !== true && (touchTarget === this.$el || mouseTarget === this.$el) && this.$refs.blurTarget !== void 0 && this.$refs.blurTarget !== document.activeElement) {
-        this.$refs.blurTarget.focus();
+      const blurTarget = this.$refs.blurTarget;
+
+      if (destroying !== true && (touchTarget === this.$el || mouseTarget === this.$el) && blurTarget !== void 0 && blurTarget !== document.activeElement) {
+        blurTarget.setAttribute('tabindex', -1);
+        blurTarget.focus();
       }
 
       if (touchTarget === this.$el) {
@@ -35790,35 +36058,6 @@ const iconAttrs = {
 
   render(h) {
     let inner = [];
-    const data = {
-      staticClass: 'q-btn q-btn-item non-selectable no-outline',
-      class: this.classes,
-      style: this.style,
-      attrs: this.attrs
-    };
-
-    if (this.isActionable === true) {
-      data.on = { ...this.$listeners,
-        click: this.click,
-        keydown: this.__onKeydown,
-        mousedown: this.__onMousedown
-      };
-
-      if (this.$q.platform.has.touch === true) {
-        data.on.touchstart = this.__onTouchstart;
-      }
-    }
-
-    if (this.disable !== true && this.ripple !== false) {
-      data.directives = [{
-        name: 'ripple',
-        value: this.computedRipple,
-        modifiers: {
-          center: this.round
-        }
-      }];
-    }
-
     this.icon !== void 0 && inner.push(h(QIcon, {
       attrs: iconAttrs,
       props: {
@@ -35826,7 +36065,9 @@ const iconAttrs = {
         left: this.stack === false && this.hasLabel === true
       }
     }));
-    this.hasLabel === true && inner.push(h('div', [this.label]));
+    this.hasLabel === true && inner.push(h('span', {
+      staticClass: 'block'
+    }, [this.label]));
     inner = mergeSlot(inner, this, 'default');
 
     if (this.iconRight !== void 0 && this.round === false) {
@@ -35839,29 +36080,25 @@ const iconAttrs = {
       }));
     }
 
-    const child = [h('div', {
+    const child = [h('span', {
       staticClass: 'q-focus-helper',
-      ref: 'blurTarget',
-      attrs: {
-        tabindex: -1
-      }
+      ref: 'blurTarget'
     })];
 
-    if (this.loading === true) {
-      // stop propagation and ripple
-      data.on = this.onLoadingEvents;
-      this.percentage !== void 0 && child.push(h('div', {
+    if (this.loading === true && this.percentage !== void 0) {
+      child.push(h('span', {
         staticClass: 'q-btn__progress absolute-full overflow-hidden'
-      }, [h('div', {
-        staticClass: 'q-btn__progress-indicator fit',
+      }, [h('span', {
+        staticClass: 'q-btn__progress-indicator fit block',
         class: this.darkPercentage === true ? 'q-btn__progress--dark' : '',
         style: this.percentageStyle
       })]));
     }
 
-    child.push(h('div', {
-      staticClass: 'q-btn__wrapper col row q-anchor--skip'
-    }, [h('div', {
+    child.push(h('span', {
+      staticClass: 'q-btn__wrapper col row q-anchor--skip',
+      style: this.wrapperStyle
+    }, [h('span', {
       staticClass: 'q-btn__content text-center col items-center q-anchor--skip',
       class: this.innerClasses
     }, inner)]));
@@ -35869,11 +36106,18 @@ const iconAttrs = {
       props: {
         name: 'q-transition--fade'
       }
-    }, this.loading === true ? [h('div', {
+    }, this.loading === true ? [h('span', {
       key: 'loading',
       staticClass: 'absolute-full flex flex-center'
     }, this.$scopedSlots.loading !== void 0 ? this.$scopedSlots.loading() : [h(QSpinner)])] : void 0));
-    return h(this.isLink === true ? 'a' : 'button', data, child);
+    return h(this.isLink === true ? 'a' : 'button', {
+      staticClass: 'q-btn q-btn-item non-selectable no-outline',
+      class: this.classes,
+      style: this.style,
+      attrs: this.attrs,
+      on: this.onEvents,
+      directives: this.directives
+    }, child);
   }
 
 }));
@@ -35905,9 +36149,10 @@ const iconAttrs = {
 
 
 
+
 /* harmony default export */ var QCard = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QCard',
-  mixins: [mixins_dark, mixins_tag],
+  mixins: [listeners, mixins_dark, tag],
   props: {
     square: Boolean,
     flat: Boolean,
@@ -35923,7 +36168,8 @@ const iconAttrs = {
   render(h) {
     return h(this.tag, {
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -35932,9 +36178,10 @@ const iconAttrs = {
 
 
 
+
 /* harmony default export */ var QCardSection = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QCardSection',
-  mixins: [mixins_tag],
+  mixins: [listeners, tag],
   props: {
     horizontal: Boolean
   },
@@ -35948,7 +36195,8 @@ const iconAttrs = {
   render(h) {
     return h(this.tag, {
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -35957,9 +36205,10 @@ const iconAttrs = {
 
 
 
+
 /* harmony default export */ var QCardActions = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QCardActions',
-  mixins: [align],
+  mixins: [listeners, align],
   props: {
     vertical: Boolean
   },
@@ -35974,8 +36223,89 @@ const iconAttrs = {
     return h('div', {
       staticClass: 'q-card__actions',
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
+  }
+
+}));
+// CONCATENATED MODULE: ./node_modules/quasar/src/components/separator/QSeparator.js
+
+
+
+const insetMap = {
+  true: 'inset',
+  item: 'item-inset',
+  'item-thumbnail': 'item-thumbnail-inset'
+};
+const margins = {
+  xs: 2,
+  sm: 4,
+  md: 8,
+  lg: 16,
+  xl: 24
+};
+/* harmony default export */ var QSeparator = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
+  name: 'QSeparator',
+  mixins: [mixins_dark, listeners],
+  props: {
+    spaced: [Boolean, String],
+    inset: [Boolean, String],
+    vertical: Boolean,
+    color: String,
+    size: String
+  },
+  computed: {
+    orientation() {
+      return this.vertical === true ? 'vertical' : 'horizontal';
+    },
+
+    classPrefix() {
+      return ` q-separator--${this.orientation}`;
+    },
+
+    insetClass() {
+      return this.inset !== false ? `${this.classPrefix}-${insetMap[this.inset]}` : '';
+    },
+
+    classes() {
+      return `q-separator${this.classPrefix}${this.insetClass}` + (this.color !== void 0 ? ` bg-${this.color}` : '') + (this.isDark === true ? ' q-separator--dark' : '');
+    },
+
+    style() {
+      const style = {};
+
+      if (this.size !== void 0) {
+        style[this.vertical === true ? 'width' : 'height'] = this.size;
+      }
+
+      if (this.spaced !== false) {
+        const size = this.spaced === true ? `${margins.md}px` : this.spaced in margins ? `${margins[this.spaced]}px` : this.spaced;
+        const props = this.vertical === true ? ['Left', 'Right'] : ['Top', 'Bottom'];
+        style[`margin${props[0]}`] = style[`margin${props[1]}`] = size;
+      }
+
+      return style;
+    },
+
+    attrs() {
+      return {
+        role: 'separator',
+        'aria-orientation': this.orientation
+      };
+    }
+
+  },
+
+  render(h) {
+    return h('hr', {
+      staticClass: 'q-separator',
+      class: this.classes,
+      style: this.style,
+      attrs: this.attrs,
+      on: { ...this.qListeners
+      }
+    });
   }
 
 }));
@@ -36006,6 +36336,7 @@ const testPattern = {
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/mixins/validate.js
 
+const lazyRulesValues = [true, false, 'ondemand'];
 /* harmony default export */ var validate = ({
   props: {
     value: {},
@@ -36016,7 +36347,11 @@ const testPattern = {
     errorMessage: String,
     noErrorIcon: Boolean,
     rules: Array,
-    lazyRules: Boolean
+    reactiveRules: Boolean,
+    lazyRules: {
+      type: [Boolean, String],
+      validator: v => lazyRulesValues.includes(v)
+    }
   },
 
   data() {
@@ -36028,28 +36363,46 @@ const testPattern = {
   },
 
   watch: {
-    value(v) {
-      if (this.rules === void 0) {
-        return;
-      }
+    value() {
+      this.__validateIfNeeded();
+    },
 
-      if (this.lazyRules === true && this.isDirty !== true) {
-        return;
-      }
+    reactiveRules: {
+      handler(val) {
+        if (val === true) {
+          if (this.unwatchRules === void 0) {
+            this.unwatchRules = this.$watch('rules', () => {
+              this.__validateIfNeeded(true);
+            });
+          }
+        } else if (this.unwatchRules !== void 0) {
+          this.unwatchRules();
+          this.unwatchRules = void 0;
+        }
+      },
 
-      this.validate(v);
+      immediate: true
     },
 
     focused(focused) {
-      if (focused === true) {
-        this.__initDirty();
-      } else {
-        this.__triggerValidation();
+      if (this.lazyRules !== 'ondemand') {
+        if (focused === true) {
+          if (this.isDirty === null) {
+            this.isDirty = false;
+          }
+        } else if (this.isDirty === false && this.hasRules === true) {
+          this.isDirty = true;
+          this.validate();
+        }
       }
     }
 
   },
   computed: {
+    hasRules() {
+      return this.rules !== void 0 && this.rules !== null && this.rules.length > 0;
+    },
+
     hasError() {
       return this.error === true || this.innerError === true;
     },
@@ -36062,18 +36415,10 @@ const testPattern = {
 
   mounted() {
     this.validateIndex = 0;
-
-    if (this.focused === void 0) {
-      this.$el.addEventListener('focusin', this.__initDirty);
-      this.$el.addEventListener('focusout', this.__triggerValidation);
-    }
   },
 
   beforeDestroy() {
-    if (this.focused === void 0) {
-      this.$el.removeEventListener('focusin', this.__initDirty);
-      this.$el.removeEventListener('focusout', this.__triggerValidation);
-    }
+    this.unwatchRules !== void 0 && this.unwatchRules();
   },
 
   methods: {
@@ -36092,7 +36437,7 @@ const testPattern = {
      *   - Promise (pending async validation)
      */
     validate(val = this.value) {
-      if (!this.rules || this.rules.length === 0) {
+      if (this.hasRules !== true) {
         return true;
       }
 
@@ -36172,16 +36517,9 @@ const testPattern = {
       });
     },
 
-    __initDirty() {
-      if (this.isDirty === null) {
-        this.isDirty = false;
-      }
-    },
-
-    __triggerValidation() {
-      if (this.isDirty === false && this.rules !== void 0) {
-        this.isDirty = true;
-        this.validate(this.value);
+    __validateIfNeeded(changedRules) {
+      if (this.hasRules === true && this.lazyRules !== 'ondemand' && (this.isDirty === true || this.lazyRules !== true && changedRules !== true)) {
+        this.validate();
       }
     }
 
@@ -36241,12 +36579,13 @@ const BUFFER_SIZE = 4096;
     buf = randomBytes(BUFFER_SIZE);
   }
 
-  const b = buf.slice(bufIdx, bufIdx += 16);
+  const b = Array.prototype.slice.call(buf, bufIdx, bufIdx += 16);
   b[6] = b[6] & 0x0f | 0x40;
   b[8] = b[8] & 0x3f | 0x80;
   return hexBytes[b[0]] + hexBytes[b[1]] + hexBytes[b[2]] + hexBytes[b[3]] + '-' + hexBytes[b[4]] + hexBytes[b[5]] + '-' + hexBytes[b[6]] + hexBytes[b[7]] + '-' + hexBytes[b[8]] + hexBytes[b[9]] + '-' + hexBytes[b[10]] + hexBytes[b[11]] + hexBytes[b[12]] + hexBytes[b[13]] + hexBytes[b[14]] + hexBytes[b[15]];
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/field/QField.js
+
 
 
 
@@ -36263,7 +36602,7 @@ function getTargetUid(val) {
 
 /* harmony default export */ var QField = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QField',
-  mixins: [mixins_dark, validate],
+  mixins: [mixins_dark, validate, mixins_attrs],
   inheritAttrs: false,
   props: {
     label: String,
@@ -36339,7 +36678,7 @@ function getTargetUid(val) {
     },
 
     shouldRenderBottom() {
-      return this.bottomSlots === true || this.hint !== void 0 || this.rules !== void 0 || this.counter === true || this.error !== null;
+      return this.bottomSlots === true || this.hint !== void 0 || this.hasRules === true || this.counter === true || this.error !== null;
     },
 
     classes() {
@@ -36497,7 +36836,8 @@ function getTargetUid(val) {
             name: this.clearIcon || this.$q.iconSet.field.clear
           },
           attrs: {
-            tabindex: 0
+            tabindex: 0,
+            type: 'button'
           },
           on: this.clearableEvents
         })]));
@@ -36514,6 +36854,10 @@ function getTargetUid(val) {
         staticClass: 'q-field__prefix no-pointer-events row items-center'
       }, [this.prefix]));
 
+      if (this.hasShadow === true && this.__getShadowControl !== void 0) {
+        node.push(this.__getShadowControl(h));
+      }
+
       if (this.__getControl !== void 0) {
         node.push(this.__getControl(h));
       } // internal usage only:
@@ -36523,7 +36867,7 @@ function getTargetUid(val) {
           node.push(h('div', {
             ref: 'target',
             staticClass: 'q-field__native row',
-            attrs: { ...this.$attrs,
+            attrs: { ...this.qAttrs,
               'data-autofocus': this.autofocus
             }
           }, this.$scopedSlots.control(this.controlSlotScope)));
@@ -36630,13 +36974,13 @@ function getTargetUid(val) {
     __clearValue(e) {
       // prevent activating the field but keep focus on desktop
       stopAndPrevent(e);
-      this.$el.focus();
+      const el = this.$refs.target || this.$el;
+      el.focus();
 
       if (this.type === 'file') {
         // do not let focus be triggered
         // as it will make the native file dialog
         // appear for another selection
-        prevent(e);
         this.$refs.input.value = null;
       }
 
@@ -36654,7 +36998,7 @@ function getTargetUid(val) {
     this.__onPreRender !== void 0 && this.__onPreRender();
     this.__onPostRender !== void 0 && this.$nextTick(this.__onPostRender);
     return h('label', {
-      staticClass: 'q-field row no-wrap items-start',
+      staticClass: 'q-field q-validation-component row no-wrap items-start',
       class: this.classes,
       attrs: this.attrs
     }, [this.$scopedSlots.before !== void 0 ? h('div', {
@@ -36746,12 +37090,30 @@ const FormFieldMixin = {
 // CONCATENATED MODULE: ./node_modules/quasar/src/mixins/file.js
 
 
+
+function filterFiles(files, rejectedFiles, failedPropValidation, filterFn) {
+  const acceptedFiles = [];
+  files.forEach(file => {
+    if (filterFn(file) === true) {
+      acceptedFiles.push(file);
+    } else {
+      rejectedFiles.push({
+        failedPropValidation,
+        file
+      });
+    }
+  });
+  return acceptedFiles;
+}
+
 /* harmony default export */ var mixins_file = ({
   props: {
     multiple: Boolean,
     accept: String,
-    maxFileSize: Number,
-    maxTotalSize: Number,
+    capture: String,
+    maxFileSize: [Number, String],
+    maxTotalSize: [Number, String],
+    maxFiles: [Number, String],
     filter: Function
   },
   computed: {
@@ -36764,15 +37126,23 @@ const FormFieldMixin = {
             ext = ext.slice(0, ext.length - 1);
           }
 
-          return ext;
+          return ext.toUpperCase();
         });
       }
+    },
+
+    maxFilesNumber() {
+      return parseInt(this.maxFiles, 10);
+    },
+
+    maxTotalSizeNumber() {
+      return parseInt(this.maxTotalSize, 10);
     }
 
   },
   methods: {
     pickFiles(e) {
-      if (this.editable === true) {
+      if (this.editable) {
         const input = this.__getFileInput();
 
         input && input.click(e);
@@ -36785,25 +37155,36 @@ const FormFieldMixin = {
       }
     },
 
-    __processFiles(e, files) {
-      files = Array.from(files || e.target.files); // filter file types
+    __processFiles(e, filesToProcess, currentFileList, append) {
+      let files = Array.from(filesToProcess || e.target.files);
+      const rejectedFiles = [];
+
+      const done = () => {
+        if (rejectedFiles.length > 0) {
+          this.$emit('rejected', rejectedFiles);
+        }
+      }; // filter file types
+
 
       if (this.accept !== void 0) {
-        files = files.filter(file => {
-          return this.extensions.some(ext => file.type.toUpperCase().startsWith(ext.toUpperCase()) || file.name.toUpperCase().endsWith(ext.toUpperCase()));
+        files = filterFiles(files, rejectedFiles, 'accept', file => {
+          return this.extensions.some(ext => file.type.toUpperCase().startsWith(ext) || file.name.toUpperCase().endsWith(ext));
         });
 
         if (files.length === 0) {
-          return;
+          return done();
         }
       } // filter max file size
 
 
       if (this.maxFileSize !== void 0) {
-        files = files.filter(file => file.size <= this.maxFileSize);
+        const maxFileSize = parseInt(this.maxFileSize, 10);
+        files = filterFiles(files, rejectedFiles, 'max-file-size', file => {
+          return file.size <= maxFileSize;
+        });
 
         if (files.length === 0) {
-          return;
+          return done();
         }
       } // Cordova/iOS allows selecting multiple files even when the
       // multiple attribute is not specified. We also normalize drag'n'dropped
@@ -36815,30 +37196,38 @@ const FormFieldMixin = {
       }
 
       if (this.maxTotalSize !== void 0) {
-        let size = 0;
-
-        for (let i = 0; i < files.length; i++) {
-          size += files[i].size;
-
-          if (size > this.maxTotalSize) {
-            if (i > 0) {
-              files = files.slice(0, i);
-              break;
-            } else {
-              return;
-            }
-          }
-        }
+        let size = append === true ? currentFileList.reduce((total, file) => total + file.size, 0) : 0;
+        files = filterFiles(files, rejectedFiles, 'max-total-size', file => {
+          size += file.size;
+          return size <= this.maxTotalSizeNumber;
+        });
 
         if (files.length === 0) {
-          return;
+          return done();
         }
       } // do we have custom filter function?
 
 
       if (typeof this.filter === 'function') {
-        files = this.filter(files);
+        const filteredFiles = this.filter(files);
+        files = filterFiles(files, rejectedFiles, 'filter', file => {
+          return filteredFiles.includes(file);
+        });
       }
+
+      if (this.maxFiles !== void 0) {
+        let filesNumber = append === true ? currentFileList.length : 0;
+        files = filterFiles(files, rejectedFiles, 'max-files', () => {
+          filesNumber++;
+          return filesNumber <= this.maxFilesNumber;
+        });
+
+        if (files.length === 0) {
+          return done();
+        }
+      }
+
+      done();
 
       if (files.length > 0) {
         return files;
@@ -37135,7 +37524,7 @@ const MARKER = String.fromCharCode(1);
 
       inp.value !== masked && (inp.value = masked);
       changed === true && (this.innerValue = masked);
-      this.$nextTick(() => {
+      document.activeElement === inp && this.$nextTick(() => {
         if (masked === this.maskReplaced) {
           const cursor = this.reverseFillMask === true ? this.maskReplaced.length : 0;
           inp.setSelectionRange(cursor, cursor, 'forward');
@@ -37405,13 +37794,15 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
 
 
 
+
 /* harmony default export */ var QInput = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QInput',
-  mixins: [QField, mixins_mask, composition, FormFieldMixin, FileValueMixin],
+  mixins: [QField, mixins_mask, composition, FormFieldMixin, FileValueMixin, listeners],
   props: {
     value: {
       required: false
     },
+    shadowText: String,
     type: {
       type: String,
       default: 'text'
@@ -37452,7 +37843,7 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
       if (autogrow === true) {
         this.$nextTick(this.__adjustHeight);
       } // if it has a number of rows set respect it
-      else if (this.$attrs.rows > 0 && this.$refs.input !== void 0) {
+      else if (this.qAttrs.rows > 0 && this.$refs.input !== void 0) {
           const inp = this.$refs.input;
           inp.style.height = 'auto';
         }
@@ -37477,6 +37868,57 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
 
     fieldClass() {
       return `q-${this.isTextarea === true ? 'textarea' : 'input'}` + (this.autogrow === true ? ' q-textarea--autogrow' : '');
+    },
+
+    hasShadow() {
+      return this.type !== 'file' && typeof this.shadowText === 'string' && this.shadowText.length > 0;
+    },
+
+    onEvents() {
+      const on = { ...this.qListeners,
+        input: this.__onInput,
+        paste: this.__onPaste,
+        // Safari < 10.2 & UIWebView doesn't fire compositionend when
+        // switching focus before confirming composition choice
+        // this also fixes the issue where some browsers e.g. iOS Chrome
+        // fires "change" instead of "input" on autocomplete.
+        change: this.__onChange,
+        blur: this.__onFinishEditing,
+        focus: event_stop
+      };
+      on.compositionstart = on.compositionupdate = on.compositionend = this.__onComposition;
+
+      if (this.hasMask === true) {
+        on.keydown = this.__onMaskedKeydown;
+      }
+
+      if (this.autogrow === true) {
+        on.animationend = this.__adjustHeight;
+      }
+
+      return on;
+    },
+
+    inputAttrs() {
+      const attrs = {
+        tabindex: 0,
+        'data-autofocus': this.autofocus,
+        rows: this.type === 'textarea' ? 6 : void 0,
+        'aria-label': this.label,
+        name: this.nameProp,
+        ...this.qAttrs,
+        id: this.targetUid,
+        type: this.type,
+        maxlength: this.maxlength,
+        disabled: this.disable === true,
+        readonly: this.readonly === true
+      };
+
+      if (this.autogrow === true) {
+        attrs.rows = 1;
+      }
+
+      return attrs;
     }
 
   },
@@ -37500,6 +37942,8 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
 
         this.__moveCursorForPaste(inp, inp.selectionStart, inp.selectionEnd);
       }
+
+      this.$emit('paste', e);
     },
 
     __onInput(e) {
@@ -37590,58 +38034,28 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
       });
     },
 
+    __getCurValue() {
+      return this.hasOwnProperty('tempValue') === true ? this.tempValue : this.innerValue !== void 0 ? this.innerValue : '';
+    },
+
+    __getShadowControl(h) {
+      return h('div', {
+        staticClass: 'q-field__native q-field__shadow absolute-full no-pointer-events'
+      }, [h('span', {
+        staticClass: 'invisible'
+      }, this.__getCurValue()), h('span', this.shadowText)]);
+    },
+
     __getControl(h) {
-      const on = { ...this.$listeners,
-        input: this.__onInput,
-        paste: this.__onPaste,
-        // Safari < 10.2 & UIWebView doesn't fire compositionend when
-        // switching focus before confirming composition choice
-        // this also fixes the issue where some browsers e.g. iOS Chrome
-        // fires "change" instead of "input" on autocomplete.
-        change: this.__onChange,
-        blur: this.__onFinishEditing,
-        focus: event_stop
-      };
-      on.compositionstart = on.compositionupdate = on.compositionend = this.__onComposition;
-
-      if (this.hasMask === true) {
-        on.keydown = this.__onMaskedKeydown;
-      }
-
-      const attrs = {
-        tabindex: 0,
-        'data-autofocus': this.autofocus,
-        rows: this.type === 'textarea' ? 6 : void 0,
-        'aria-label': this.label,
-        name: this.nameProp,
-        ...this.$attrs,
-        id: this.targetUid,
-        type: this.type,
-        maxlength: this.maxlength
-      };
-
-      if (this.disable === true) {
-        attrs.disabled = '';
-        attrs['aria-disabled'] = '';
-      } else if (this.readonly === true) {
-        attrs.readonly = '';
-        attrs['aria-readonly'] = '';
-      }
-
-      if (this.autogrow === true) {
-        attrs.rows = 1;
-        on.animationend = this.__adjustHeight;
-      }
-
       return h(this.isTextarea === true ? 'textarea' : 'input', {
         ref: 'input',
         staticClass: 'q-field__native q-placeholder',
         style: this.inputStyle,
         class: this.inputClass,
-        attrs,
-        on,
+        attrs: this.inputAttrs,
+        on: this.onEvents,
         domProps: this.type !== 'file' ? {
-          value: this.hasOwnProperty('tempValue') === true ? this.tempValue : this.innerValue !== void 0 ? this.innerValue : ''
+          value: this.__getCurValue()
         } : this.formDomProps
       });
     }
@@ -37785,7 +38199,7 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
       }
 
       if (this.disable !== true && this.isTrue !== true) {
-        this.$emit('input', this.val);
+        this.$emit('input', this.val, e);
       }
     }
 
@@ -37867,10 +38281,14 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
     falseValue: {
       default: false
     },
-    toggleIndeterminate: Boolean,
     indeterminateValue: {
       default: null
     },
+    toggleOrder: {
+      type: String,
+      validator: v => v === 'tf' || v === 'ft'
+    },
+    toggleIndeterminate: Boolean,
     label: String,
     leftLabel: Boolean,
     fontSize: String,
@@ -37890,7 +38308,7 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
     },
 
     isIndeterminate() {
-      return this.value === this.indeterminateValue && this.value !== this.falseValue;
+      return this.isTrue === false && this.isFalse === false;
     },
 
     index() {
@@ -37961,28 +38379,35 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
         this.__refocusTarget(e);
       }
 
-      if (this.disable === true) {
-        return;
+      if (this.disable !== true) {
+        this.$emit('input', this.__getNextValue(), e);
       }
+    },
 
-      let val;
-
+    __getNextValue() {
       if (this.modelIsArray === true) {
         if (this.isTrue === true) {
-          val = this.value.slice();
+          const val = this.value.slice();
           val.splice(this.index, 1);
-        } else {
-          val = this.value.concat([this.val]);
+          return val;
         }
-      } else if (this.isTrue === true) {
-        val = this.toggleIndeterminate === true ? this.indeterminateValue : this.falseValue;
-      } else if (this.isFalse === true) {
-        val = this.trueValue;
-      } else {
-        val = this.falseValue;
+
+        return this.value.concat([this.val]);
       }
 
-      this.$emit('input', val);
+      if (this.isTrue === true) {
+        if (this.toggleOrder !== 'ft' || this.toggleIndeterminate === false) {
+          return this.falseValue;
+        }
+      } else if (this.isFalse === true) {
+        if (this.toggleOrder === 'ft' || this.toggleIndeterminate === false) {
+          return this.trueValue;
+        }
+      } else {
+        return this.toggleOrder !== 'ft' ? this.trueValue : this.falseValue;
+      }
+
+      return this.indeterminateValue;
     },
 
     __onKeydown(e) {
@@ -38122,15 +38547,16 @@ const isKorean = /[\u3131-\u314e\u314f-\u3163\uac00-\ud7a3]/;
 
 
 
-const QOptionGroup_components = {
+
+const components = {
   radio: QRadio,
   checkbox: QCheckbox,
   toggle: QToggle
 };
-const typeValues = Object.keys(QOptionGroup_components);
+const typeValues = Object.keys(components);
 /* harmony default export */ var QOptionGroup = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QOptionGroup',
-  mixins: [mixins_dark],
+  mixins: [mixins_dark, listeners],
   props: {
     value: {
       required: true
@@ -38158,7 +38584,7 @@ const typeValues = Object.keys(QOptionGroup_components);
   },
   computed: {
     component() {
-      return QOptionGroup_components[this.type];
+      return components[this.type];
     },
 
     model() {
@@ -38207,7 +38633,8 @@ const typeValues = Object.keys(QOptionGroup_components);
     return h('div', {
       class: this.classes,
       attrs: this.attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, this.options.map(opt => h('div', [h(this.component, {
       props: {
         value: this.value,
@@ -38244,9 +38671,11 @@ const typeValues = Object.keys(QOptionGroup_components);
 
 
 
+
+
 /* harmony default export */ var DialogPlugin = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'DialogPlugin',
-  mixins: [mixins_dark],
+  mixins: [mixins_dark, mixins_attrs],
   inheritAttrs: false,
   props: {
     title: String,
@@ -38297,25 +38726,26 @@ const typeValues = Object.keys(QOptionGroup_components);
     },
 
     okProps() {
-      return Object.assign({
+      return {
         color: this.vmColor,
         label: this.okLabel,
-        ripple: false
-      }, Object(this.ok) === this.ok ? this.ok : {
-        flat: true
-      }, {
+        ripple: false,
+        ...(Object(this.ok) === this.ok ? this.ok : {
+          flat: true
+        }),
         disable: this.okDisabled
-      });
+      };
     },
 
     cancelProps() {
-      return Object.assign({
+      return {
         color: this.vmColor,
         label: this.cancelLabel,
-        ripple: false
-      }, Object(this.cancel) === this.cancel ? this.cancel : {
-        flat: true
-      });
+        ripple: false,
+        ...(Object(this.cancel) === this.cancel ? this.cancel : {
+          flat: true
+        })
+      };
     }
 
   },
@@ -38338,6 +38768,12 @@ const typeValues = Object.keys(QOptionGroup_components);
           outlined: this.prompt.outlined,
           filled: this.prompt.filled,
           standout: this.prompt.standout,
+          rounded: this.prompt.rounded,
+          square: this.prompt.square,
+          counter: this.prompt.counter,
+          maxlength: this.prompt.maxlength,
+          prefix: this.prompt.prefix,
+          suffix: this.prompt.suffix,
           color: this.vmColor,
           dense: true,
           autofocus: true,
@@ -38437,10 +38873,25 @@ const typeValues = Object.keys(QOptionGroup_components);
   render(h) {
     const child = [];
     this.title && child.push(this.getSection(h, 'q-dialog__title', this.title));
-    this.message && child.push(this.getSection(h, 'q-dialog__message scroll', this.message));
-    this.hasForm === true && child.push(h(QCardSection, {
-      staticClass: 'scroll'
-    }, this.prompt !== void 0 ? this.getPrompt(h) : this.getOptions(h)));
+    this.message && child.push(this.getSection(h, 'q-dialog__message', this.message));
+
+    if (this.prompt !== void 0) {
+      child.push(h(QCardSection, {
+        staticClass: 'scroll q-dialog-plugin__form'
+      }, this.getPrompt(h)));
+    } else if (this.options !== void 0) {
+      child.push(h(QSeparator, {
+        props: {
+          dark: this.isDark
+        }
+      }), h(QCardSection, {
+        staticClass: 'scroll q-dialog-plugin__form'
+      }, this.getOptions(h)), h(QSeparator, {
+        props: {
+          dark: this.isDark
+        }
+      }));
+    }
 
     if (this.ok || this.cancel) {
       child.push(this.getButtons(h));
@@ -38448,7 +38899,7 @@ const typeValues = Object.keys(QOptionGroup_components);
 
     return h(QDialog, {
       ref: 'dialog',
-      props: { ...this.$attrs,
+      props: { ...this.qAttrs,
         value: this.value
       },
       on: cache(this, 'hide', {
@@ -38586,17 +39037,18 @@ const mixin = {
 };
 /* harmony default export */ var ssr_update = (function (ctx) {
   if (ctx.ssr) {
-    const q = { ...install_$q
+    const q = { ...install_$q,
+      ssrContext: ctx.ssr
     };
     Object.assign(ctx.ssr, {
       Q_HEAD_TAGS: '',
       Q_BODY_ATTRS: '',
       Q_BODY_TAGS: ''
     });
+    ctx.app.$q = ctx.ssr.$q = q;
     install_queues.server.forEach(run => {
       run(q, ctx);
     });
-    ctx.app.$q = q;
   } else {
     const mixins = ctx.app.mixins || [];
 
@@ -39194,6 +39646,51 @@ var es_string_split = __webpack_require__("1276");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
 var web_dom_collections_iterator = __webpack_require__("ddb0");
 
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/isNativeReflectConstruct.js
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
 function _typeof(obj) {
   "@babel/helpers - typeof";
@@ -39228,37 +39725,25 @@ function _possibleConstructorReturn(self, call) {
 
   return _assertThisInitialized(self);
 }
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/createSuper.js
 
-  return _setPrototypeOf(o, p);
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inherits.js
 
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
 
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
     }
-  });
-  if (superClass) _setPrototypeOf(subClass, superClass);
+
+    return _possibleConstructorReturn(this, result);
+  };
 }
 // CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
 /*! *****************************************************************************
@@ -39794,7 +40279,7 @@ vue_class_component_esm_Component.registerHooks = function registerHooks(keys) {
 
 
 // CONCATENATED MODULE: ./node_modules/vue-property-decorator/lib/vue-property-decorator.js
-/** vue-property-decorator verson 8.4.1 MIT LICENSE copyright 2019 kaorun343 */
+/** vue-property-decorator verson 8.5.1 MIT LICENSE copyright 2020 kaorun343 */
 /// <reference types='reflect-metadata'/>
 
 
@@ -39852,12 +40337,10 @@ function produceProvide(original) {
         }
         var _loop_1 = function (i) {
             rv[provide.managedReactive[i]] = this_1[i]; // Duplicates the behavior of `@Provide`
-            if (!rv[reactiveInjectKey].hasOwnProperty(provide.managedReactive[i])) {
-                Object.defineProperty(rv[reactiveInjectKey], provide.managedReactive[i], {
-                    enumerable: true,
-                    get: function () { return _this[i]; },
-                });
-            }
+            Object.defineProperty(rv[reactiveInjectKey], provide.managedReactive[i], {
+                enumerable: true,
+                get: function () { return _this[i]; },
+            });
         };
         var this_1 = this;
         for (var i in provide.managedReactive) {
@@ -40032,18 +40515,24 @@ function Emit(event) {
                         _this.$emit(emitName, args[0]);
                     }
                     else {
-                        _this.$emit(emitName, args);
+                        _this.$emit.apply(_this, [emitName].concat(args));
                     }
                 }
                 else {
-                    _this.$emit(emitName, returnValue);
+                    if (args.length === 0) {
+                        _this.$emit(emitName, returnValue);
+                    }
+                    else if (args.length === 1) {
+                        _this.$emit(emitName, returnValue, args[0]);
+                    }
+                    else {
+                        _this.$emit.apply(_this, [emitName, returnValue].concat(args));
+                    }
                 }
             };
             var returnValue = original.apply(this, args);
             if (isPromise(returnValue)) {
-                returnValue.then(function (returnValue) {
-                    emit(returnValue);
-                });
+                returnValue.then(emit);
             }
             else {
                 emit(returnValue);
@@ -40076,7 +40565,7 @@ var es_string_match = __webpack_require__("466d");
 
 // CONCATENATED MODULE: ./node_modules/vue-i18n/dist/vue-i18n.esm.js
 /*!
- * vue-i18n v8.16.0 
+ * vue-i18n v8.18.2 
  * (c) 2020 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -40125,8 +40614,18 @@ function error (msg, err) {
   }
 }
 
+var isArray = Array.isArray;
+
 function isObject (obj) {
   return obj !== null && typeof obj === 'object'
+}
+
+function isBoolean (val) {
+  return typeof val === 'boolean'
+}
+
+function isString (val) {
+  return typeof val === 'string'
 }
 
 var vue_i18n_esm_toString = Object.prototype.toString;
@@ -40175,6 +40674,10 @@ function vue_i18n_esm_remove (arr, item) {
       return arr.splice(index, 1)
     }
   }
+}
+
+function includes (arr, item) {
+  return !!~arr.indexOf(item)
 }
 
 var vue_i18n_esm_hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -40311,16 +40814,19 @@ var vue_i18n_esm_mixin = {
         this._i18n = options.i18n;
         this._i18nWatcher = this._i18n.watchI18nData();
       } else if (isPlainObject(options.i18n)) {
+        var rootI18n = this.$root && this.$root.$i18n && this.$root.$i18n instanceof VueI18n
+          ? this.$root.$i18n
+          : null;
         // component local i18n
-        if (this.$root && this.$root.$i18n && this.$root.$i18n instanceof VueI18n) {
+        if (rootI18n) {
           options.i18n.root = this.$root;
-          options.i18n.formatter = this.$root.$i18n.formatter;
-          options.i18n.fallbackLocale = this.$root.$i18n.fallbackLocale;
-          options.i18n.formatFallbackMessages = this.$root.$i18n.formatFallbackMessages;
-          options.i18n.silentTranslationWarn = this.$root.$i18n.silentTranslationWarn;
-          options.i18n.silentFallbackWarn = this.$root.$i18n.silentFallbackWarn;
-          options.i18n.pluralizationRules = this.$root.$i18n.pluralizationRules;
-          options.i18n.preserveDirectiveContent = this.$root.$i18n.preserveDirectiveContent;
+          options.i18n.formatter = rootI18n.formatter;
+          options.i18n.fallbackLocale = rootI18n.fallbackLocale;
+          options.i18n.formatFallbackMessages = rootI18n.formatFallbackMessages;
+          options.i18n.silentTranslationWarn = rootI18n.silentTranslationWarn;
+          options.i18n.silentFallbackWarn = rootI18n.silentFallbackWarn;
+          options.i18n.pluralizationRules = rootI18n.pluralizationRules;
+          options.i18n.preserveDirectiveContent = rootI18n.preserveDirectiveContent;
         }
 
         // init locale messages via custom blocks
@@ -40347,6 +40853,10 @@ var vue_i18n_esm_mixin = {
 
         if (options.i18n.sync === undefined || !!options.i18n.sync) {
           this._localeWatcher = this.$i18n.watchLocale();
+        }
+
+        if (rootI18n) {
+          rootI18n.onComponentInstanceCreated(this._i18n);
         }
       } else {
         if (false) {}
@@ -40404,8 +40914,6 @@ var vue_i18n_esm_mixin = {
         self._localeWatcher();
         delete self._localeWatcher;
       }
-
-      self._i18n = null;
     });
   }
 };
@@ -40417,7 +40925,8 @@ var interpolationComponent = {
   functional: true,
   props: {
     tag: {
-      type: String
+      type: [String, Boolean],
+      default: 'span'
     },
     path: {
       type: String,
@@ -40454,7 +40963,7 @@ var interpolationComponent = {
         : params
     );
 
-    var tag = props.tag || 'span';
+    var tag = (!!props.tag && props.tag !== true) || props.tag === false ? props.tag : 'span';
     return tag ? h(tag, data, children) : children
   }
 };
@@ -40517,7 +41026,7 @@ var numberComponent = {
   functional: true,
   props: {
     tag: {
-      type: String,
+      type: [String, Boolean],
       default: 'span'
     },
     value: {
@@ -40546,7 +41055,7 @@ var numberComponent = {
     var key = null;
     var options = null;
 
-    if (typeof props.format === 'string') {
+    if (isString(props.format)) {
       key = props.format;
     } else if (isObject(props.format)) {
       if (props.format.key) {
@@ -40557,7 +41066,7 @@ var numberComponent = {
       options = Object.keys(props.format).reduce(function (acc, prop) {
         var obj;
 
-        if (numberFormatKeys.includes(prop)) {
+        if (includes(numberFormatKeys, prop)) {
           return Object.assign({}, acc, ( obj = {}, obj[prop] = props.format[prop], obj ))
         }
         return acc
@@ -40574,11 +41083,14 @@ var numberComponent = {
       return slot ? slot(( obj = {}, obj[part.type] = part.value, obj.index = index, obj.parts = parts, obj )) : part.value
     });
 
-    return h(props.tag, {
-      attrs: data.attrs,
-      'class': data['class'],
-      staticClass: data.staticClass
-    }, values)
+    var tag = (!!props.tag && props.tag !== true) || props.tag === false ? props.tag : 'span';
+    return tag
+      ? h(tag, {
+        attrs: data.attrs,
+        'class': data['class'],
+        staticClass: data.staticClass
+      }, values)
+      : values
   }
 };
 
@@ -40661,7 +41173,7 @@ function vue_i18n_esm_t (el, binding, vnode) {
   }
 
   var vm = vnode.context;
-  if (choice) {
+  if (choice != null) {
     el._vt = el.textContent = (ref$1 = vm.$i18n).tc.apply(ref$1, [ path, choice ].concat( makeParams(locale, args) ));
   } else {
     el._vt = el.textContent = (ref$2 = vm.$i18n).t.apply(ref$2, [ path ].concat( makeParams(locale, args) ));
@@ -40676,7 +41188,7 @@ function parseValue (value) {
   var args;
   var choice;
 
-  if (typeof value === 'string') {
+  if (isString(value)) {
     path = value;
   } else if (isPlainObject(value)) {
     path = value.path;
@@ -41155,7 +41667,9 @@ var VueI18n = function VueI18n (options) {
   }
 
   var locale = options.locale || 'en-US';
-  var fallbackLocale = options.fallbackLocale || 'en-US';
+  var fallbackLocale = options.fallbackLocale === false
+    ? false
+    : options.fallbackLocale || 'en-US';
   var messages = options.messages || {};
   var dateTimeFormats = options.dateTimeFormats || {};
   var numberFormats = options.numberFormats || {};
@@ -41182,12 +41696,48 @@ var VueI18n = function VueI18n (options) {
   this._numberFormatters = {};
   this._path = new I18nPath();
   this._dataListeners = [];
+  this._componentInstanceCreatedListener = options.componentInstanceCreatedListener || null;
   this._preserveDirectiveContent = options.preserveDirectiveContent === undefined
     ? false
     : !!options.preserveDirectiveContent;
   this.pluralizationRules = options.pluralizationRules || {};
   this._warnHtmlInMessage = options.warnHtmlInMessage || 'off';
   this._postTranslation = options.postTranslation || null;
+
+  /**
+   * @param choice {number} a choice index given by the input to $tc: `$tc('path.to.rule', choiceIndex)`
+   * @param choicesLength {number} an overall amount of available choices
+   * @returns a final choice index
+  */
+  this.getChoiceIndex = function (choice, choicesLength) {
+    var thisPrototype = Object.getPrototypeOf(this$1);
+    if (thisPrototype && thisPrototype.getChoiceIndex) {
+      var prototypeGetChoiceIndex = (thisPrototype.getChoiceIndex);
+      return (prototypeGetChoiceIndex).call(this$1, choice, choicesLength)
+    }
+
+    // Default (old) getChoiceIndex implementation - english-compatible
+    var defaultImpl = function (_choice, _choicesLength) {
+      _choice = Math.abs(_choice);
+
+      if (_choicesLength === 2) {
+        return _choice
+          ? _choice > 1
+            ? 1
+            : 0
+          : 1
+      }
+
+      return _choice ? Math.min(_choice, 2) : 0
+    };
+
+    if (this$1.locale in this$1.pluralizationRules) {
+      return this$1.pluralizationRules[this$1.locale].apply(this$1, [choice, choicesLength])
+    } else {
+      return defaultImpl(choice, choicesLength)
+    }
+  };
+
 
   this._exist = function (message, key) {
     if (!message || !key) { return false }
@@ -41247,7 +41797,7 @@ VueI18n.prototype._checkLocaleMessage = function _checkLocaleMessage (locale, le
           paths.pop();
         }
       });
-    } else if (typeof message === 'string') {
+    } else if (isString(message)) {
       var ret = htmlTagMatcher.test(message);
       if (ret) {
         var msg = "Detected HTML in message '" + message + "' of keypath '" + (paths.join('')) + "' at '" + locale + "'. Consider component interpolation with '<i18n>' to avoid XSS. See https://bit.ly/2ZqJzkp";
@@ -41304,6 +41854,12 @@ VueI18n.prototype.watchLocale = function watchLocale () {
   }, { immediate: true })
 };
 
+VueI18n.prototype.onComponentInstanceCreated = function onComponentInstanceCreated (newI18n) {
+  if (this._componentInstanceCreatedListener) {
+    this._componentInstanceCreatedListener(newI18n, this);
+  }
+};
+
 prototypeAccessors.vm.get = function () { return this._vm };
 
 prototypeAccessors.messages.get = function () { return looseClone(this._getMessages()) };
@@ -41318,6 +41874,7 @@ prototypeAccessors.locale.set = function (locale) {
 
 prototypeAccessors.fallbackLocale.get = function () { return this._vm.fallbackLocale };
 prototypeAccessors.fallbackLocale.set = function (locale) {
+  this._localeChainCache = {};
   this._vm.$set(this._vm, 'fallbackLocale', locale);
 };
 
@@ -41364,7 +41921,7 @@ VueI18n.prototype._warnDefault = function _warnDefault (locale, key, result, vm,
   if (!isNull(result)) { return result }
   if (this._missing) {
     var missingRet = this._missing.apply(null, [locale, key, vm, values]);
-    if (typeof missingRet === 'string') {
+    if (isString(missingRet)) {
       return missingRet
     }
   } else {
@@ -41418,7 +41975,7 @@ VueI18n.prototype._interpolate = function _interpolate (
     /* istanbul ignore else */
     if (isPlainObject(message)) {
       ret = message[key];
-      if (typeof ret !== 'string') {
+      if (!isString(ret)) {
         if (false) {}
         return null
       }
@@ -41427,7 +41984,7 @@ VueI18n.prototype._interpolate = function _interpolate (
     }
   } else {
     /* istanbul ignore else */
-    if (typeof pathRet === 'string') {
+    if (isString(pathRet)) {
       ret = pathRet;
     } else {
       if (false) {}
@@ -41472,7 +42029,7 @@ VueI18n.prototype._link = function _link (
     // Remove the leading @:, @.case: and the brackets
     var linkPlaceholder = link.replace(linkPrefix, '').replace(bracketsMatcher, '');
 
-    if (visitedLinkStack.includes(linkPlaceholder)) {
+    if (includes(visitedLinkStack, linkPlaceholder)) {
       if (false) {}
       return ret
     }
@@ -41527,7 +42084,104 @@ VueI18n.prototype._render = function _render (message, interpolateMode, values, 
 
   // if interpolateMode is **not** 'string' ('row'),
   // return the compiled data (e.g. ['foo', VNode, 'bar']) with formatter
-  return interpolateMode === 'string' && typeof ret !== 'string' ? ret.join('') : ret
+  return interpolateMode === 'string' && !isString(ret) ? ret.join('') : ret
+};
+
+VueI18n.prototype._appendItemToChain = function _appendItemToChain (chain, item, blocks) {
+  var follow = false;
+  if (!includes(chain, item)) {
+    follow = true;
+    if (item) {
+      follow = item[item.length - 1] !== '!';
+      item = item.replace(/!/g, '');
+      chain.push(item);
+      if (blocks && blocks[item]) {
+        follow = blocks[item];
+      }
+    }
+  }
+  return follow
+};
+
+VueI18n.prototype._appendLocaleToChain = function _appendLocaleToChain (chain, locale, blocks) {
+  var follow;
+  var tokens = locale.split('-');
+  do {
+    var item = tokens.join('-');
+    follow = this._appendItemToChain(chain, item, blocks);
+    tokens.splice(-1, 1);
+  } while (tokens.length && (follow === true))
+  return follow
+};
+
+VueI18n.prototype._appendBlockToChain = function _appendBlockToChain (chain, block, blocks) {
+  var follow = true;
+  for (var i = 0; (i < block.length) && (isBoolean(follow)); i++) {
+    var locale = block[i];
+    if (isString(locale)) {
+      follow = this._appendLocaleToChain(chain, locale, blocks);
+    }
+  }
+  return follow
+};
+
+VueI18n.prototype._getLocaleChain = function _getLocaleChain (start, fallbackLocale) {
+  if (start === '') { return [] }
+
+  if (!this._localeChainCache) {
+    this._localeChainCache = {};
+  }
+
+  var chain = this._localeChainCache[start];
+  if (!chain) {
+    if (!fallbackLocale) {
+      fallbackLocale = this.fallbackLocale;
+    }
+    chain = [];
+
+    // first block defined by start
+    var block = [start];
+
+    // while any intervening block found
+    while (isArray(block)) {
+      block = this._appendBlockToChain(
+        chain,
+        block,
+        fallbackLocale
+      );
+    }
+
+    // last block defined by default
+    var defaults;
+    if (isArray(fallbackLocale)) {
+      defaults = fallbackLocale;
+    } else if (isObject(fallbackLocale)) {
+      /* $FlowFixMe */
+      if (fallbackLocale['default']) {
+        defaults = fallbackLocale['default'];
+      } else {
+        defaults = null;
+      }
+    } else {
+      defaults = fallbackLocale;
+    }
+
+    // convert defaults to array
+    if (isString(defaults)) {
+      block = [defaults];
+    } else {
+      block = defaults;
+    }
+    if (block) {
+      this._appendBlockToChain(
+        chain,
+        block,
+        null
+      );
+    }
+    this._localeChainCache[start] = chain;
+  }
+  return chain
 };
 
 VueI18n.prototype._translate = function _translate (
@@ -41539,17 +42193,20 @@ VueI18n.prototype._translate = function _translate (
   interpolateMode,
   args
 ) {
-  var res =
-    this._interpolate(locale, messages[locale], key, host, interpolateMode, args, [key]);
-  if (!isNull(res)) { return res }
-
-  res = this._interpolate(fallback, messages[fallback], key, host, interpolateMode, args, [key]);
-  if (!isNull(res)) {
-    if (false) {}
-    return res
-  } else {
-    return null
+  var chain = this._getLocaleChain(locale, fallback);
+  var res;
+  for (var i = 0; i < chain.length; i++) {
+    var step = chain[i];
+    res =
+      this._interpolate(step, messages[step], key, host, interpolateMode, args, [key]);
+    if (!isNull(res)) {
+      if (step !== locale && "production" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+        vue_i18n_esm_warn(("Fall back to translate the keypath '" + key + "' with '" + step + "' locale."));
+      }
+      return res
+    }
   }
+  return null
 };
 
 VueI18n.prototype._t = function _t (key, _locale, messages, host) {
@@ -41573,8 +42230,8 @@ VueI18n.prototype._t = function _t (key, _locale, messages, host) {
     return (ref = this._root).$t.apply(ref, [ key ].concat( values ))
   } else {
     ret = this._warnDefault(locale, key, ret, host, values, 'string');
-    if (this._postTranslation) {
-      ret = this._postTranslation(ret);
+    if (this._postTranslation && ret !== null && ret !== undefined) {
+      ret = this._postTranslation(ret, key);
     }
     return ret
   }
@@ -41604,7 +42261,7 @@ VueI18n.prototype.i = function i (key, locale, values) {
   /* istanbul ignore if */
   if (!key) { return '' }
 
-  if (typeof locale !== 'string') {
+  if (!isString(locale)) {
     locale = this.locale;
   }
 
@@ -41636,40 +42293,12 @@ VueI18n.prototype._tc = function _tc (
 
 VueI18n.prototype.fetchChoice = function fetchChoice (message, choice) {
   /* istanbul ignore if */
-  if (!message && typeof message !== 'string') { return null }
+  if (!message && !isString(message)) { return null }
   var choices = message.split('|');
 
   choice = this.getChoiceIndex(choice, choices.length);
   if (!choices[choice]) { return message }
   return choices[choice].trim()
-};
-
-/**
- * @param choice {number} a choice index given by the input to $tc: `$tc('path.to.rule', choiceIndex)`
- * @param choicesLength {number} an overall amount of available choices
- * @returns a final choice index
-*/
-VueI18n.prototype.getChoiceIndex = function getChoiceIndex (choice, choicesLength) {
-  // Default (old) getChoiceIndex implementation - english-compatible
-  var defaultImpl = function (_choice, _choicesLength) {
-    _choice = Math.abs(_choice);
-
-    if (_choicesLength === 2) {
-      return _choice
-        ? _choice > 1
-          ? 1
-          : 0
-        : 1
-    }
-
-    return _choice ? Math.min(_choice, 2) : 0
-  };
-
-  if (this.locale in this.pluralizationRules) {
-    return this.pluralizationRules[this.locale].apply(this, [choice, choicesLength])
-  } else {
-    return defaultImpl(choice, choicesLength)
-  }
 };
 
 VueI18n.prototype.tc = function tc (key, choice) {
@@ -41716,10 +42345,24 @@ VueI18n.prototype.getDateTimeFormat = function getDateTimeFormat (locale) {
 
 VueI18n.prototype.setDateTimeFormat = function setDateTimeFormat (locale, format) {
   this._vm.$set(this._vm.dateTimeFormats, locale, format);
+  this._clearDateTimeFormat(locale, format);
 };
 
 VueI18n.prototype.mergeDateTimeFormat = function mergeDateTimeFormat (locale, format) {
   this._vm.$set(this._vm.dateTimeFormats, locale, merge(this._vm.dateTimeFormats[locale] || {}, format));
+  this._clearDateTimeFormat(locale, format);
+};
+
+VueI18n.prototype._clearDateTimeFormat = function _clearDateTimeFormat (locale, format) {
+  for (var key in format) {
+    var id = locale + "__" + key;
+
+    if (!this._dateTimeFormatters.hasOwnProperty(id)) {
+      continue
+    }
+
+    delete this._dateTimeFormatters[id];
+  }
 };
 
 VueI18n.prototype._localizeDateTime = function _localizeDateTime (
@@ -41732,11 +42375,20 @@ VueI18n.prototype._localizeDateTime = function _localizeDateTime (
   var _locale = locale;
   var formats = dateTimeFormats[_locale];
 
-  // fallback locale
-  if (isNull(formats) || isNull(formats[key])) {
-    if (false) {}
-    _locale = fallback;
-    formats = dateTimeFormats[_locale];
+  var chain = this._getLocaleChain(locale, fallback);
+  for (var i = 0; i < chain.length; i++) {
+    var current = _locale;
+    var step = chain[i];
+    formats = dateTimeFormats[step];
+    _locale = step;
+    // fallback locale
+    if (isNull(formats) || isNull(formats[key])) {
+      if (step !== locale && "production" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+        vue_i18n_esm_warn(("Fall back to '" + step + "' datetime formats from '" + current + "' datetime formats."));
+      }
+    } else {
+      break
+    }
   }
 
   if (isNull(formats) || isNull(formats[key])) {
@@ -41780,7 +42432,7 @@ VueI18n.prototype.d = function d (value) {
   var key = null;
 
   if (args.length === 1) {
-    if (typeof args[0] === 'string') {
+    if (isString(args[0])) {
       key = args[0];
     } else if (isObject(args[0])) {
       if (args[0].locale) {
@@ -41791,10 +42443,10 @@ VueI18n.prototype.d = function d (value) {
       }
     }
   } else if (args.length === 2) {
-    if (typeof args[0] === 'string') {
+    if (isString(args[0])) {
       key = args[0];
     }
-    if (typeof args[1] === 'string') {
+    if (isString(args[1])) {
       locale = args[1];
     }
   }
@@ -41839,11 +42491,20 @@ VueI18n.prototype._getNumberFormatter = function _getNumberFormatter (
   var _locale = locale;
   var formats = numberFormats[_locale];
 
-  // fallback locale
-  if (isNull(formats) || isNull(formats[key])) {
-    if (false) {}
-    _locale = fallback;
-    formats = numberFormats[_locale];
+  var chain = this._getLocaleChain(locale, fallback);
+  for (var i = 0; i < chain.length; i++) {
+    var current = _locale;
+    var step = chain[i];
+    formats = numberFormats[step];
+    _locale = step;
+    // fallback locale
+    if (isNull(formats) || isNull(formats[key])) {
+      if (step !== locale && "production" !== 'production' && !this._isSilentTranslationWarn(key) && !this._isSilentFallbackWarn(key)) {
+        vue_i18n_esm_warn(("Fall back to '" + step + "' number formats from '" + current + "' number formats."));
+      }
+    } else {
+      break
+    }
   }
 
   if (isNull(formats) || isNull(formats[key])) {
@@ -41899,7 +42560,7 @@ VueI18n.prototype.n = function n (value) {
   var options = null;
 
   if (args.length === 1) {
-    if (typeof args[0] === 'string') {
+    if (isString(args[0])) {
       key = args[0];
     } else if (isObject(args[0])) {
       if (args[0].locale) {
@@ -41913,17 +42574,17 @@ VueI18n.prototype.n = function n (value) {
       options = Object.keys(args[0]).reduce(function (acc, key) {
           var obj;
 
-        if (numberFormatKeys.includes(key)) {
+        if (includes(numberFormatKeys, key)) {
           return Object.assign({}, acc, ( obj = {}, obj[key] = args[0][key], obj ))
         }
         return acc
       }, null);
     }
   } else if (args.length === 2) {
-    if (typeof args[0] === 'string') {
+    if (isString(args[0])) {
       key = args[0];
     }
-    if (typeof args[1] === 'string') {
+    if (isString(args[1])) {
       locale = args[1];
     }
   }
@@ -41974,12 +42635,11 @@ Object.defineProperty(VueI18n, 'availabilities', {
 });
 
 VueI18n.install = vue_i18n_esm_install;
-VueI18n.version = '8.16.0';
+VueI18n.version = '8.18.2';
 
 /* harmony default export */ var vue_i18n_esm = (VueI18n);
 
 // CONCATENATED MODULE: ./src/plugins/i18n.ts
-
 
 
 
@@ -42020,12 +42680,14 @@ function loadLocaleMessages() {
 var i18n_I18n = /*#__PURE__*/function (_VueI18n) {
   _inherits(I18n, _VueI18n);
 
+  var _super = _createSuper(I18n);
+
   function I18n(options) {
     var _this;
 
     _classCallCheck(this, I18n);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(I18n).call(this, options));
+    _this = _super.call(this, options);
     _this.$v = vue_i18n_esm;
     return _this;
   }
@@ -42067,7 +42729,6 @@ var tagger = __webpack_require__("ea5a");
 
 
 
-
  //!!! make sure to also change the expression in ilias-builder.js !!!
 
 var randomAndTemplateTag = /\{(:|!)([\w]+)}/g;
@@ -42076,12 +42737,14 @@ var randomAndTemplateTag = /\{(:|!)([\w]+)}/g;
 var tagger_Tagger = /*#__PURE__*/function (_Vue) {
   _inherits(Tagger, _Vue);
 
+  var _super = _createSuper(Tagger);
+
   function Tagger() {
     var _this;
 
     _classCallCheck(this, Tagger);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Tagger).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.className = {
       rnd: 'random-tag-placeholder',
       templ: 'template-tag-placeholder'
@@ -42323,30 +42986,46 @@ var es_function_name = __webpack_require__("b0c0");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
 var es_object_assign = __webpack_require__("cca6");
 
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
-function arrayWithoutHoles_arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
 
-    return arr2;
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
   }
+
+  return arr2;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
+
+function arrayWithoutHoles_arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
 function iterableToArray_iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
 function nonIterableSpread_nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
 
 
 
+
 function toConsumableArray_toConsumableArray(arr) {
-  return arrayWithoutHoles_arrayWithoutHoles(arr) || iterableToArray_iterableToArray(arr) || nonIterableSpread_nonIterableSpread();
+  return arrayWithoutHoles_arrayWithoutHoles(arr) || iterableToArray_iterableToArray(arr) || _unsupportedIterableToArray(arr) || nonIterableSpread_nonIterableSpread();
 }
 // CONCATENATED MODULE: ./src/lib/IBlocklyHelper.ts
 var BlockPrimaryColors;
@@ -43767,21 +44446,8 @@ function _isNativeFunction(fn) {
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/construct.js
 
 
-function isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-  if (Reflect.construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
 function construct_construct(Parent, args, Class) {
-  if (isNativeReflectConstruct()) {
+  if (_isNativeReflectConstruct()) {
     construct_construct = Reflect.construct;
   } else {
     construct_construct = function _construct(Parent, args, Class) {
@@ -44075,19 +44741,19 @@ var scriptBlock_ScriptBlock = /*#__PURE__*/function () {
 
   return ScriptBlock;
 }();
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=eaf51832&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=eaf51832&
 var Appvue_type_template_id_eaf51832_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-layout',{staticStyle:{"min-height":"0"},attrs:{"view":"hHh lpR fFf"}},[_c('q-page-container',[_c('CodeBlocks',{attrs:{"blockInfo":_vm.blocks}})],1)],1)}
 var staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=eaf51832&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocks.vue?vue&type=template&id=7e2a6277&
-var CodeBlocksvue_type_template_id_7e2a6277_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:("codeblocks " + _vm.addonClass + "  " + _vm.backgroundColorClass + " q-mx-sm q-mb-md"),attrs:{"data-question":_vm.blockInfo.id,"uuid":_vm.blockInfo.uuid}},[_c('CodePanel',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasBookmark),expression:"hasBookmark"}],attrs:{"editMode":_vm.editMode,"visibleLines":"auto","block":_vm.panelBlock}}),(_vm.editMode)?_c('CodeBlocksSettings',{attrs:{"options":_vm.options},on:{"compiler-change":_vm.onCompilerChange,"compiler-version-change":_vm.onCompilerVersionChange,"run-state-change":_vm.onRunStateChange,"continuous-compile-change":_vm.onContinousCompileStateChange,"language-change":_vm.onLanguageChange,"character-limit-change":_vm.onCharacterLimitChange,"timeout-change":_vm.onTimeoutChange,"worker-libs-change":_vm.onWorkerLibChange,"dom-libs-change":_vm.onDomLibChange,"theme-change":_vm.onThemeChange,"output-parser-change":_vm.onOutputParserChange}}):_vm._e(),_vm._l((_vm.blocks),function(block){return _c('CodeBlockContainer',{key:block.id,attrs:{"block":block,"editMode":_vm.editMode},on:{"type-change":_vm.onTypeChange,"visible-lines-change":_vm.onVisibleLinesChange,"placement-change":_vm.onPlacementChange,"script-version-change":_vm.onScriptVersionChange,"move-up":_vm.moveUp,"move-down":_vm.moveDown,"remove-block":_vm.removeBlock,"auto-reset-change":_vm.onSetAutoReset}},[(block.hasCode && block.type != 'BLOCKLY')?_c('CodeBlock',{attrs:{"block":block,"theme":_vm.themeForBlock(block),"mode":_vm.mimeType,"visibleLines":block.visibleLines,"editMode":_vm.editMode,"readonly":_vm.readonly,"tagSet":_vm.activeTagSet,"emitWhenTypingInViewMode":_vm.continuousCompile},on:{"ready":_vm.blockBecameReady,"build":_vm.run,"code-changed-in-view-mode":_vm.onViewCodeChange}}):(block.type == 'PLAYGROUND')?_c('CodePlayground',{attrs:{"block":block,"editMode":_vm.editMode,"finalOutputObject":_vm.finalOutputObject,"theme":_vm.themeForBlock(block),"tagSet":_vm.activeTagSet,"eventHub":_vm.eventHub},on:{"changeOutput":_vm.onPlaygroundChangedOutput,"ready":_vm.blockBecameReady,"run":_vm.onRunFromPlayground}}):(block.type == 'TEXT')?_c('SimpleText',{attrs:{"block":block,"previewValue":block.actualContent(),"editMode":_vm.editMode,"name":("block[" + (block.parentID) + "][" + (block.id) + "]"),"scopeUUID":block.scopeUUID,"tagSet":_vm.activeTagSet,"language":_vm.language},on:{"ready":_vm.blockBecameReady},model:{value:(block.content),callback:function ($$v) {_vm.$set(block, "content", $$v)},expression:"block.content"}}):(block.type == 'BLOCKLY')?_c('Blockly',{attrs:{"block":block,"mode":_vm.mimeType,"theme":_vm.themeForBlock(block),"editMode":_vm.editMode,"readonly":_vm.readonly,"tagSet":_vm.activeTagSet,"emitWhenTypingInViewMode":_vm.continuousCompile},on:{"code-changed-in-view-mode":_vm.onViewCodeChange}}):_vm._e()],1)}),(_vm.editMode)?_c('div',{staticClass:"row justify-end"},[_c('div',[_c('q-btn',{attrs:{"push":"","color":"green"},on:{"click":_vm.addNewBlock}},[_vm._v(_vm._s(_vm.$t('CodeBlocks.AddBlock'))+" "),_c('q-icon',{staticClass:"q-ml-sm",attrs:{"name":"library_add"}})],1)],1)]):_vm._e(),(_vm.canRun)?_c('div',{class:("runner " + (_vm.editMode ? 'q-pt-lg q-mx-lg' : '')),attrs:{"id":"runContainer","data-question":_vm.blockInfo.id}},[_c('div',{staticClass:"row runnerState",attrs:{"id":"stateBox","data-question":_vm.blockInfo.id}},[_c('q-btn',{staticClass:"white--text",staticStyle:{"border-radius":"0px"},attrs:{"id":"allow_run_button","loading":!_vm.isReady,"disabled":!_vm.isReady,"color":"primary","ripple":{ center: true },"data-question":_vm.blockInfo.id},on:{"click":_vm.run}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocks.run'))+" "),_c('q-icon',{attrs:{"right":"","dark":"","name":"play_arrow"}}),(_vm.editMode)?_c('q-tooltip',{attrs:{"delay":200}},[_c('span',{domProps:{"innerHTML":_vm._s(_vm.$t('CodeBlocks.run_hint'))}})]):_vm._e()],1),_c('div',{staticClass:"animated fadeIn"}),_c('transition',{attrs:{"appear":"","enter-active-class":"animated fadeIn","leave-active-class":"animated fadeOut"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.canStop),expression:"canStop"}],staticClass:"q-pl-sm"},[_c('q-btn',{staticStyle:{"border-radius":"0px"},attrs:{"id":"cancel_button","color":"negative","ripple":{ center: true },"data-question":_vm.blockInfo.id},on:{"click":_vm.stop}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocks.stop'))+" "),_c('q-icon',{attrs:{"right":"","dark":"","name":"stop"}})],1)],1)]),_c('transition',{attrs:{"appear":"","enter-active-class":"animated fadeIn","leave-active-class":"animated fadeOut"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showGlobalMessages),expression:"showGlobalMessages"}],staticClass:"globalState col-grow",staticStyle:{"align-self":"center"}},[_c('div',{attrs:{"id":"message"},domProps:{"innerHTML":_vm._s(_vm.$compilerState.globalStateMessage)}})])])],1),_c('q-slide-transition',[(_vm.hasOutput)?_c('pre',{ref:"output",staticClass:"output",attrs:{"id":((_vm.blockInfo.id) + "Output")}},[_c('div',{attrs:{"id":"out"},domProps:{"innerHTML":_vm._s(_vm.outputHTML)}})]):_vm._e()])],1):_vm._e()],2)}
-var CodeBlocksvue_type_template_id_7e2a6277_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocks.vue?vue&type=template&id=52c0afcc&
+var CodeBlocksvue_type_template_id_52c0afcc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:("codeblocks " + _vm.addonClass + "  " + _vm.backgroundColorClass + " q-mx-sm q-mb-md"),attrs:{"data-question":_vm.blockInfo.id,"uuid":_vm.blockInfo.uuid}},[_c('CodePanel',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasBookmark && _vm.editMode),expression:"hasBookmark && editMode"}],attrs:{"editMode":_vm.editMode,"visibleLines":"auto","block":_vm.panelBlock}}),(_vm.editMode)?_c('CodeBlocksSettings',{attrs:{"options":_vm.options},on:{"compiler-change":_vm.onCompilerChange,"compiler-version-change":_vm.onCompilerVersionChange,"run-state-change":_vm.onRunStateChange,"continuous-compile-change":_vm.onContinousCompileStateChange,"persistent-arguments-change":_vm.onPersistentArgumentsChange,"language-change":_vm.onLanguageChange,"character-limit-change":_vm.onCharacterLimitChange,"timeout-change":_vm.onTimeoutChange,"worker-libs-change":_vm.onWorkerLibChange,"dom-libs-change":_vm.onDomLibChange,"theme-change":_vm.onThemeChange,"output-parser-change":_vm.onOutputParserChange}}):_vm._e(),_vm._l((_vm.blocks),function(block){return _c('CodeBlockContainer',{key:block.id,attrs:{"block":block,"editMode":_vm.editMode},on:{"type-change":_vm.onTypeChange,"visible-lines-change":_vm.onVisibleLinesChange,"placement-change":_vm.onPlacementChange,"script-version-change":_vm.onScriptVersionChange,"move-up":_vm.moveUp,"move-down":_vm.moveDown,"remove-block":_vm.removeBlock,"auto-reset-change":_vm.onSetAutoReset}},[(block.hasCode && block.type != 'BLOCKLY')?_c('CodeBlock',{attrs:{"block":block,"theme":_vm.themeForBlock(block),"mode":_vm.mimeType,"visibleLines":block.visibleLines,"editMode":_vm.editMode,"readonly":_vm.readonly,"tagSet":_vm.activeTagSet,"emitWhenTypingInViewMode":_vm.continuousCompile},on:{"ready":_vm.blockBecameReady,"build":_vm.run,"code-changed-in-view-mode":_vm.onViewCodeChange}}):(block.type == 'PLAYGROUND')?_c('CodePlayground',{attrs:{"block":block,"editMode":_vm.editMode,"finalOutputObject":_vm.finalOutputObject,"theme":_vm.themeForBlock(block),"tagSet":_vm.activeTagSet,"eventHub":_vm.eventHub},on:{"changeOutput":_vm.onPlaygroundChangedOutput,"ready":_vm.blockBecameReady,"run":_vm.onRunFromPlayground}}):(block.type == 'TEXT')?_c('SimpleText',{attrs:{"block":block,"previewValue":block.actualContent(),"editMode":_vm.editMode,"name":("block[" + (block.parentID) + "][" + (block.id) + "]"),"scopeUUID":block.scopeUUID,"tagSet":_vm.activeTagSet,"language":_vm.language},on:{"ready":_vm.blockBecameReady},model:{value:(block.content),callback:function ($$v) {_vm.$set(block, "content", $$v)},expression:"block.content"}}):(block.type == 'BLOCKLY')?_c('Blockly',{attrs:{"block":block,"mode":_vm.mimeType,"theme":_vm.themeForBlock(block),"editMode":_vm.editMode,"readonly":_vm.readonly,"tagSet":_vm.activeTagSet,"emitWhenTypingInViewMode":_vm.continuousCompile},on:{"code-changed-in-view-mode":_vm.onViewCodeChange}}):_vm._e()],1)}),(_vm.editMode)?_c('div',{staticClass:"row justify-end"},[_c('div',[_c('q-btn',{attrs:{"push":"","color":"green"},on:{"click":_vm.addNewBlock}},[_vm._v(_vm._s(_vm.$t('CodeBlocks.AddBlock'))+" "),_c('q-icon',{staticClass:"q-ml-sm",attrs:{"name":"library_add"}})],1)],1)]):_vm._e(),(_vm.canRun)?_c('div',{class:("runner " + (_vm.editMode ? 'q-pt-lg q-mx-lg' : '')),attrs:{"id":"runContainer","data-question":_vm.blockInfo.id}},[_c('div',{staticClass:"row runnerState",attrs:{"id":"stateBox","data-question":_vm.blockInfo.id}},[_c('q-btn',{staticClass:"white--text",staticStyle:{"border-radius":"0px"},attrs:{"id":"allow_run_button","loading":!_vm.isReady,"disabled":!_vm.isReady,"color":"primary","ripple":{ center: true },"data-question":_vm.blockInfo.id},on:{"click":_vm.run}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocks.run'))+" "),_c('q-icon',{attrs:{"right":"","dark":"","name":"play_arrow"}}),(_vm.editMode)?_c('q-tooltip',{attrs:{"delay":200}},[_c('span',{domProps:{"innerHTML":_vm._s(_vm.$t('CodeBlocks.run_hint'))}})]):_vm._e()],1),_c('div',{staticClass:"animated fadeIn"}),_c('transition',{attrs:{"appear":"","enter-active-class":"animated fadeIn","leave-active-class":"animated fadeOut"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.canStop),expression:"canStop"}],staticClass:"q-pl-sm"},[_c('q-btn',{staticStyle:{"border-radius":"0px"},attrs:{"id":"cancel_button","color":"negative","ripple":{ center: true },"data-question":_vm.blockInfo.id},on:{"click":_vm.stop}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocks.stop'))+" "),_c('q-icon',{attrs:{"right":"","dark":"","name":"stop"}})],1)],1)]),_c('transition',{attrs:{"appear":"","enter-active-class":"animated fadeIn","leave-active-class":"animated fadeOut"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showGlobalMessages),expression:"showGlobalMessages"}],staticClass:"globalState col-grow",staticStyle:{"align-self":"center"}},[_c('div',{attrs:{"id":"message"},domProps:{"innerHTML":_vm._s(_vm.$compilerState.globalStateMessage)}})])])],1),_c('q-slide-transition',[(_vm.hasOutput)?_c('pre',{ref:"output",staticClass:"output",attrs:{"id":((_vm.blockInfo.id) + "Output")}},[_c('div',{attrs:{"id":"out"},domProps:{"innerHTML":_vm._s(_vm.outputHTML)}})]):_vm._e()])],1):_vm._e()],2)}
+var CodeBlocksvue_type_template_id_52c0afcc_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodeBlocks.vue?vue&type=template&id=7e2a6277&
+// CONCATENATED MODULE: ./src/components/CodeBlocks.vue?vue&type=template&id=52c0afcc&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
 var es_array_filter = __webpack_require__("4de4");
@@ -44095,12 +44761,12 @@ var es_array_filter = __webpack_require__("4de4");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.reduce.js
 var es_array_reduce = __webpack_require__("13d5");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockContainer.vue?vue&type=template&id=24c2bdef&
-var CodeBlockContainervue_type_template_id_24c2bdef_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"block-container",attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id,"uuid":_vm.block.uuid}},[(_vm.editMode)?_c('q-card',{class:("q-mx-none q-my-xs q-pa-none editModeBlockContainer " + _vm.colorClass + " " + _vm.bgClass)},[_c('q-card-section',{staticClass:"q-mb-none q-pb-sm q-pt-sm "},[_c('div',{staticClass:"row q-my-none q-py-none",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none"},[_c('q-select',{staticStyle:{"margin-top":"-5px !important"},attrs:{"options":_vm.types,"dense":""},scopedSlots:_vm._u([{key:"after",fn:function(){return [_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showTypeInfoDialog}})]},proxy:true}],null,false,3671508059),model:{value:(_vm.typeObj),callback:function ($$v) {_vm.typeObj=$$v},expression:"typeObj"}})],1),_c('div',{staticClass:"col-grow"}),_c('div',{staticClass:"order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right"},[(_vm.hasExtendedSettings)?_c('q-btn',{attrs:{"icon":"settings","color":"blue-7","push":"","dense":""}},[_c('q-popup-proxy',[(_vm.canSetLineNumbers)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Display'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Lines'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4",domProps:{"innerHTML":_vm._s(_vm.$l('CodeBlockContainer.Lines_detail'))}})]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{staticStyle:{"width":"132px"},attrs:{"rules":[_vm.validNumber],"maxlength":"4"},model:{value:(_vm.visibleLines),callback:function ($$v) {_vm.visibleLines=$$v},expression:"visibleLines"}})],1)]),(_vm.canHaveAlternativeContent)?_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Prepopulate'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4",attrs:{"lines":"2"}},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Prepopulate_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-toggle',{model:{value:(_vm.hasAltComntent),callback:function ($$v) {_vm.hasAltComntent=$$v},expression:"hasAltComntent"}})],1)]):_vm._e()]):_vm._e(),(_vm.isVersionedPlayground)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Behaviour'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.ScriptV'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.ScriptV_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-select',{attrs:{"options":_vm.scriptVersions},model:{value:(_vm.scriptVersionObj),callback:function ($$v) {_vm.scriptVersionObj=$$v},expression:"scriptVersionObj"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.AutoReset'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.AutoReset_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-toggle',{model:{value:(_vm.shouldAutoReset),callback:function ($$v) {_vm.shouldAutoReset=$$v},expression:"shouldAutoReset"}})],1)])]):_vm._e(),(_vm.canDefinePlacement)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Positioning'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md q-pb-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Width'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Width_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{attrs:{"maxlength":"7","dense":""},model:{value:(_vm.width),callback:function ($$v) {_vm.width=$$v},expression:"width"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md q-pb-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Height'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Height_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{attrs:{"maxlength":"7","dense":""},model:{value:(_vm.height),callback:function ($$v) {_vm.height=$$v},expression:"height"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Alignment'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Alignment_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-select',{attrs:{"options":_vm.alignments,"dense":""},model:{value:(_vm.align),callback:function ($$v) {_vm.align=$$v},expression:"align"}})],1)])]):_vm._e()])],1):_vm._e(),_c('q-btn',{staticClass:"q-ml-md q-mr-xs",attrs:{"disable":!_vm.canMoveUp,"icon":"arrow_drop_up","push":"","dense":"","color":"orange-6","ripple":{ center: true }},on:{"click":_vm.moveUp}}),_c('q-btn',{staticClass:"q-mr-md",attrs:{"disabled":!_vm.canMoveDown,"icon":"arrow_drop_down","push":"","dense":"","color":"orange-6","ripple":{ center: true }},on:{"click":_vm.moveDown}}),_c('q-btn',{staticClass:"gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm",attrs:{"label":_vm.$l('CodeBlockContainer.Delete'),"icon":"warning","push":"","dense":"","color":"red-6","right":"","ripple":{ center: true }},on:{"click":_vm.removeBlock}}),_c('q-btn',{staticClass:"lt-sm q-mr-lg q-pr-none",attrs:{"icon":"warning","push":"","dense":"","color":"red-6","right":"","ripple":{ center: true }},on:{"click":_vm.removeBlock}}),_c('q-btn',{staticStyle:{"margin-right":"-9px"},attrs:{"icon":"","color":"primary","small":"","flat":"","round":""},on:{"click":_vm.toggleExpanded}},[_c('q-icon',{attrs:{"name":_vm.expanded ? 'expand_less' : 'expand_more',"size":"24"}})],1)],1)]),_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.serializedOptions),expression:"serializedOptions"}],staticClass:"blockoptions",attrs:{"name":("block_options[" + (this.block.parentID) + "][" + (this.block.id) + "]")},domProps:{"value":(_vm.serializedOptions)},on:{"input":function($event){if($event.target.composing){ return; }_vm.serializedOptions=$event.target.value}}})]),_c('q-slide-transition',[_c('q-card-section',{directives:[{name:"show",rawName:"v-show",value:(_vm.expanded),expression:"expanded"}],staticClass:"my-0 q-pt-1 q-pb-0"},[_vm._t("default")],2)],1)],1):_c('div',{staticClass:"ma-0 pa-0"},[_vm._t("default")],2)],1)}
-var CodeBlockContainervue_type_template_id_24c2bdef_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockContainer.vue?vue&type=template&id=4c024626&
+var CodeBlockContainervue_type_template_id_4c024626_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"block-container",attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id,"uuid":_vm.block.uuid}},[(_vm.editMode)?_c('q-card',{class:("q-mx-none q-my-xs q-pa-none editModeBlockContainer " + _vm.colorClass + " " + _vm.bgClass)},[_c('q-card-section',{staticClass:"q-mb-none q-pb-sm q-pt-sm "},[_c('div',{staticClass:"row q-my-none q-py-none",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none"},[_c('q-select',{staticStyle:{"margin-top":"-5px !important"},attrs:{"options":_vm.types,"dense":""},scopedSlots:_vm._u([{key:"after",fn:function(){return [_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showTypeInfoDialog}})]},proxy:true}],null,false,3671508059),model:{value:(_vm.typeObj),callback:function ($$v) {_vm.typeObj=$$v},expression:"typeObj"}})],1),_c('div',{staticClass:"col-grow"}),_c('div',{staticClass:"order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right"},[(_vm.hasExtendedSettings)?_c('q-btn',{attrs:{"icon":"settings","color":"blue-7","push":"","dense":""}},[_c('q-popup-proxy',[(_vm.canSetLineNumbers)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Display'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Lines'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4",domProps:{"innerHTML":_vm._s(_vm.$l('CodeBlockContainer.Lines_detail'))}})]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{staticStyle:{"width":"132px"},attrs:{"rules":[_vm.validNumber],"maxlength":"4"},model:{value:(_vm.visibleLines),callback:function ($$v) {_vm.visibleLines=$$v},expression:"visibleLines"}})],1)]),(_vm.canHaveAlternativeContent)?_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Prepopulate'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4",attrs:{"lines":"2"}},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Prepopulate_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-toggle',{model:{value:(_vm.hasAltComntent),callback:function ($$v) {_vm.hasAltComntent=$$v},expression:"hasAltComntent"}})],1)]):_vm._e()]):_vm._e(),(_vm.isVersionedPlayground)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Behaviour'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.ScriptV'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.ScriptV_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-select',{attrs:{"options":_vm.scriptVersions},model:{value:(_vm.scriptVersionObj),callback:function ($$v) {_vm.scriptVersionObj=$$v},expression:"scriptVersionObj"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.AutoReset'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.AutoReset_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-toggle',{model:{value:(_vm.shouldAutoReset),callback:function ($$v) {_vm.shouldAutoReset=$$v},expression:"shouldAutoReset"}})],1)])]):_vm._e(),(_vm.canDefinePlacement)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Positioning'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md q-pb-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Width'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Width_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{attrs:{"maxlength":"7","dense":""},model:{value:(_vm.width),callback:function ($$v) {_vm.width=$$v},expression:"width"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md q-pb-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Height'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Height_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{attrs:{"maxlength":"7","dense":""},model:{value:(_vm.height),callback:function ($$v) {_vm.height=$$v},expression:"height"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Alignment'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Alignment_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-select',{attrs:{"options":_vm.alignments,"dense":""},model:{value:(_vm.align),callback:function ($$v) {_vm.align=$$v},expression:"align"}})],1)])]):_vm._e()])],1):_vm._e(),_c('q-btn',{staticClass:"q-ml-md q-mr-xs",attrs:{"disable":!_vm.canMoveUp,"icon":"arrow_drop_up","push":"","dense":"","color":"orange-6","ripple":{ center: true }},on:{"click":_vm.moveUp}}),_c('q-btn',{staticClass:"q-mr-md",attrs:{"disabled":!_vm.canMoveDown,"icon":"arrow_drop_down","push":"","dense":"","color":"orange-6","ripple":{ center: true }},on:{"click":_vm.moveDown}}),_c('q-btn',{staticClass:"gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm",attrs:{"label":_vm.$l('CodeBlockContainer.Delete'),"icon":"warning","push":"","dense":"","color":"red-6","right":"","ripple":{ center: true }},on:{"click":_vm.removeBlock}}),_c('q-btn',{staticClass:"lt-sm q-mr-lg q-pr-none",attrs:{"icon":"warning","push":"","dense":"","color":"red-6","right":"","ripple":{ center: true }},on:{"click":_vm.removeBlock}}),_c('q-btn',{staticStyle:{"margin-right":"-9px"},attrs:{"icon":_vm.expanded ? 'expand_less' : 'expand_more',"color":"primary","small":"","flat":"","round":""},on:{"click":_vm.toggleExpanded}})],1)]),_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.serializedOptions),expression:"serializedOptions"}],staticClass:"blockoptions",attrs:{"name":("block_options[" + (this.block.parentID) + "][" + (this.block.id) + "]")},domProps:{"value":(_vm.serializedOptions)},on:{"input":function($event){if($event.target.composing){ return; }_vm.serializedOptions=$event.target.value}}})]),_c('q-slide-transition',[_c('q-card-section',{directives:[{name:"show",rawName:"v-show",value:(_vm.expanded),expression:"expanded"}],staticClass:"my-0 q-pt-1 q-pb-0"},[_vm._t("default")],2)],1)],1):_c('div',{staticClass:"ma-0 pa-0"},[_vm._t("default")],2)],1)}
+var CodeBlockContainervue_type_template_id_4c024626_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodeBlockContainer.vue?vue&type=template&id=24c2bdef&
+// CONCATENATED MODULE: ./src/components/CodeBlockContainer.vue?vue&type=template&id=4c024626&
 
 // CONCATENATED MODULE: ./src/lib/BlockloadManagers/PositioningManager.ts
 
@@ -44388,17 +45054,17 @@ var blocklyLoader = new BlocklyManager_BlocklyLoadManager();
 
 
 
-
-
 var CodeBlockContainervue_type_script_lang_ts_CodeBlocksContainer = /*#__PURE__*/function (_Vue) {
   _inherits(CodeBlocksContainer, _Vue);
+
+  var _super = _createSuper(CodeBlocksContainer);
 
   function CodeBlocksContainer() {
     var _this;
 
     _classCallCheck(this, CodeBlocksContainer);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CodeBlocksContainer).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.frank = 'hello';
     _this.settingsMenu = false;
     _this.highlighted = false;
@@ -44719,11 +45385,22 @@ var CodeBlockContainervue_type_script_lang_ts_CodeBlocksContainer = /*#__PURE__*
   }, {
     key: "visibleLines",
     get: function get() {
-      return this.block.visibleLines;
+      var v = this.block.visibleLines;
+
+      if (v == 'auto' || isNaN(v)) {
+        return 'auto';
+      }
+
+      return v;
     },
     set: function set(v) {
+      if (v == 'auto' || isNaN(v)) {
+        v = 'auto';
+      }
+
+      console.log('set', v);
       this.$emit('visible-lines-change', {
-        visibleLines: v == 'auto' || isNaN(v) ? v : new Number(v),
+        visibleLines: v,
         id: this.block.id
       });
     }
@@ -44851,7 +45528,12 @@ function normalizeComponent (
     options._ssrRegister = hook
   } else if (injectStyles) {
     hook = shadowMode
-      ? function () { injectStyles.call(this, this.$root.$options.shadowRoot) }
+      ? function () {
+        injectStyles.call(
+          this,
+          (options.functional ? this.parent : this).$root.$options.shadowRoot
+        )
+      }
       : injectStyles
   }
 
@@ -44891,7 +45573,7 @@ function humanStorageSize(bytes) {
     ++u;
   }
 
-  return `${bytes.toFixed(1)} ${units[u]}`;
+  return `${bytes.toFixed(1)}${units[u]}`;
 }
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -45200,9 +45882,10 @@ function restoreAjax(start, stop) {
 
 
 
+
 /* harmony default export */ var QAvatar = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QAvatar',
-  mixins: [mixins_size],
+  mixins: [listeners, mixins_size],
   props: {
     fontSize: String,
     color: String,
@@ -45240,7 +45923,8 @@ function restoreAjax(start, stop) {
     return h('div', {
       staticClass: 'q-avatar',
       style: this.sizeStyle,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [h('div', {
       staticClass: 'q-avatar__content row flex-center overflow-hidden',
       class: this.contentClass,
@@ -45255,8 +45939,10 @@ function restoreAjax(start, stop) {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/badge/QBadge.js
 
 
+
 /* harmony default export */ var QBadge = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QBadge',
+  mixins: [listeners],
   props: {
     color: String,
     textColor: String,
@@ -45298,7 +45984,8 @@ function restoreAjax(start, stop) {
       style: this.style,
       class: this.classes,
       attrs: this.attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, this.label !== void 0 ? [this.label] : slot_slot(this, 'default'));
   }
 
@@ -45310,12 +45997,13 @@ function restoreAjax(start, stop) {
 
 
 
+
 const QBanner_attrs = {
   role: 'alert'
 };
 /* harmony default export */ var QBanner = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QBanner',
-  mixins: [mixins_dark],
+  mixins: [listeners, mixins_dark],
   props: {
     inlineActions: Boolean,
     dense: Boolean,
@@ -45342,7 +46030,8 @@ const QBanner_attrs = {
         'rounded-borders': this.rounded
       },
       attrs: QBanner_attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, child);
   }
 
@@ -45354,12 +46043,13 @@ const QBanner_attrs = {
 
 
 
+
 const QBar_attrs = {
   role: 'toolbar'
 };
 /* harmony default export */ var QBar = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QBar',
-  mixins: [mixins_dark],
+  mixins: [listeners, mixins_dark],
   props: {
     dense: Boolean
   },
@@ -45375,7 +46065,8 @@ const QBar_attrs = {
       staticClass: 'q-bar row no-wrap items-center',
       class: this.classes,
       attrs: QBar_attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -45387,9 +46078,10 @@ const QBar_attrs = {
 
 
 
+
 /* harmony default export */ var QBreadcrumbs = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QBreadcrumbs',
-  mixins: [align],
+  mixins: [listeners, align],
   props: {
     separator: {
       type: String,
@@ -45455,7 +46147,8 @@ const QBar_attrs = {
     });
     return h('div', {
       staticClass: 'q-breadcrumbs',
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [h('div', {
       staticClass: 'flex items-center',
       class: this.classes
@@ -45499,9 +46192,10 @@ const RouterLinkMixin = {
 
 
 
+
 /* harmony default export */ var QBreadcrumbsEl = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QBreadcrumbsEl',
-  mixins: [RouterLinkMixin],
+  mixins: [listeners, RouterLinkMixin],
   props: {
     label: String,
     icon: String
@@ -45520,7 +46214,8 @@ const RouterLinkMixin = {
     return h(this.hasRouterLink === true ? 'router-link' : 'span', {
       staticClass: 'q-breadcrumbs__el q-link flex inline items-center relative-position',
       props: this.hasRouterLink === true ? this.routerLinkProps : null,
-      [this.hasRouterLink === true ? 'nativeOn' : 'on']: this.$listeners
+      [this.hasRouterLink === true ? 'nativeOn' : 'on']: { ...this.qListeners
+      }
     }, mergeSlot(child, this, 'default'));
   }
 
@@ -45535,8 +46230,10 @@ const RouterLinkMixin = {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/btn-group/QBtnGroup.js
 
 
+
 /* harmony default export */ var QBtnGroup = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QBtnGroup',
+  mixin: [listeners],
   props: {
     unelevated: Boolean,
     outline: Boolean,
@@ -45558,7 +46255,8 @@ const RouterLinkMixin = {
     return h('div', {
       staticClass: 'q-btn-group row no-wrap ' + (this.spread === true ? 'q-btn-group--spread' : 'inline'),
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -45813,6 +46511,28 @@ function clearSelection() {
 
   }
 });
+// CONCATENATED MODULE: ./node_modules/quasar/src/utils/vm.js
+function getVmOfNode(el) {
+  for (let node = el; node !== null; node = node.parentNode) {
+    // node.__vue__ can be null if the instance was destroyed
+    if (node.__vue__ === null) {
+      return;
+    }
+
+    if (node.__vue__ !== void 0) {
+      return node.__vue__;
+    }
+  }
+}
+function isVmChildOf(childVm, parentVm) {
+  for (let vm = childVm; vm !== void 0; vm = vm.$parent) {
+    if (vm === parentVm) {
+      return true;
+    }
+  }
+
+  return false;
+}
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/menu/ClickOutside.js
 
 
@@ -46094,12 +46814,12 @@ function setPosition(cfg) {
   };
   applyBoundaries(props, anchorProps, targetProps, cfg.anchorOrigin, cfg.selfOrigin);
   elStyle = {
-    top: Math.floor(props.top) + 'px',
-    left: Math.floor(props.left) + 'px'
+    top: props.top + 'px',
+    left: props.left + 'px'
   };
 
   if (props.maxHeight !== void 0) {
-    elStyle.maxHeight = Math.floor(props.maxHeight) + 'px';
+    elStyle.maxHeight = props.maxHeight + 'px';
 
     if (anchorProps.height > props.maxHeight) {
       elStyle.minHeight = elStyle.maxHeight;
@@ -46107,7 +46827,7 @@ function setPosition(cfg) {
   }
 
   if (props.maxWidth !== void 0) {
-    elStyle.maxWidth = Math.floor(props.maxWidth) + 'px';
+    elStyle.maxWidth = props.maxWidth + 'px';
 
     if (anchorProps.width > props.maxWidth) {
       elStyle.minWidth = elStyle.maxWidth;
@@ -46174,9 +46894,10 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
 
 
 
+
 /* harmony default export */ var QMenu = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QMenu',
-  mixins: [mixins_dark, mixins_anchor, model_toggle, portal, transition],
+  mixins: [mixins_attrs, mixins_dark, mixins_anchor, model_toggle, portal, transition],
   directives: {
     ClickOutside: ClickOutside
   },
@@ -46233,6 +46954,28 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
 
     hideOnRouteChange() {
       return this.persistent !== true;
+    },
+
+    onEvents() {
+      const on = { ...this.qListeners,
+        // stop propagating these events from children
+        input: event_stop,
+        'popup-show': event_stop,
+        'popup-hide': event_stop
+      };
+
+      if (this.autoClose === true) {
+        on.click = this.__onAutoClose;
+      }
+
+      return on;
+    },
+
+    attrs() {
+      return {
+        tabindex: -1,
+        ...this.qAttrs
+      };
     }
 
   },
@@ -46278,7 +47021,7 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
       }
 
       if (this.unwatch === void 0) {
-        this.unwatch = this.$watch(() => this.$q.screen.width + '|' + this.$q.screen.height, this.updatePosition);
+        this.unwatch = this.$watch(() => this.$q.screen.width + '|' + this.$q.screen.height + '|' + this.self + '|' + this.anchor, this.updatePosition);
       }
 
       this.$el.dispatchEvent(create('popup-show', {
@@ -46366,7 +47109,7 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
       // issues a click should not close the menu
       if (this.__avoidAutoClose !== true) {
         closePortalMenus(this, e);
-        this.$listeners.click !== void 0 && this.$emit('click', e);
+        this.qListeners.click !== void 0 && this.$emit('click', e);
       } else {
         this.__avoidAutoClose = false;
       }
@@ -46415,17 +47158,6 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
     },
 
     __renderPortal(h) {
-      const on = { ...this.$listeners,
-        // stop propagating these events from children
-        input: event_stop,
-        'popup-show': event_stop,
-        'popup-hide': event_stop
-      };
-
-      if (this.autoClose === true) {
-        on.click = this.__onAutoClose;
-      }
-
       return h('transition', {
         props: {
           name: this.transition
@@ -46435,11 +47167,8 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
         staticClass: 'q-menu q-position-engine scroll' + this.menuClass,
         class: this.contentClass,
         style: this.contentStyle,
-        attrs: {
-          tabindex: -1,
-          ...this.$attrs
-        },
-        on,
+        attrs: this.attrs,
+        on: this.onEvents,
         directives: [{
           name: 'click-outside',
           value: this.__onClickOutside,
@@ -46495,7 +47224,8 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
     },
     menuOffset: Array,
     disableMainBtn: Boolean,
-    disableDropdown: Boolean
+    disableDropdown: Boolean,
+    noIconAnimation: Boolean
   },
 
   data() {
@@ -46517,15 +47247,16 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
       'aria-expanded': this.showing === true ? 'true' : 'false',
       'aria-haspopup': true
     };
+
+    if (this.disable === true || this.split === false && this.disableMainBtn === true || this.disableDropdown === true) {
+      attrs['aria-disabled'] = '';
+    }
+
     const Arrow = [h(QIcon, {
       props: {
         name: this.dropdownIcon || this.$q.iconSet.arrow.dropdown
       },
-      staticClass: 'q-btn-dropdown__arrow',
-      class: {
-        'rotate-180': this.showing,
-        'q-btn-dropdown__arrow-container': this.split === false
-      }
+      class: 'q-btn-dropdown__arrow' + (this.showing === true && this.noIconAnimation === false ? ' rotate-180' : '') + (this.split === false ? ' q-btn-dropdown__arrow-container' : '')
     })];
     this.disableDropdown !== true && Arrow.push(h(QMenu, {
       ref: 'menu',
@@ -46655,9 +47386,10 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
 
 
 
+
 /* harmony default export */ var QBtnToggle = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QBtnToggle',
-  mixins: [ripple, mixins_form],
+  mixins: [listeners, ripple, mixins_form],
   props: {
     value: {
       required: true
@@ -46707,7 +47439,7 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
 
   },
   methods: {
-    __set(value, opt) {
+    __set(value, opt, e) {
       if (this.readonly !== true) {
         if (this.value === value) {
           if (this.clearable === true) {
@@ -46717,6 +47449,8 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
         } else {
           this.$emit('input', value, opt);
         }
+
+        this.$emit('click', e);
       }
     }
 
@@ -46726,8 +47460,8 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
     const child = this.options.map((opt, i) => {
       return h(QBtn, {
         key: i,
-        on: {
-          click: () => this.__set(opt.value, opt)
+        on: { ...this.qListeners,
+          click: e => this.__set(opt.value, opt, e)
         },
         props: {
           disable: this.disable || opt.disable,
@@ -46769,8 +47503,7 @@ function applyBoundaries(props, anchorProps, targetProps, anchorOrigin, selfOrig
         unelevated: this.unelevated,
         glossy: this.glossy,
         spread: this.spread
-      },
-      on: this.$listeners
+      }
     }, child);
   }
 
@@ -46997,6 +47730,7 @@ function parseArg(arg) {
 
 
 
+
 const PanelWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QTabPanelWrapper',
 
@@ -47016,6 +47750,7 @@ const PanelWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exte
 
 });
 const PanelParentMixin = {
+  mixins: [listeners],
   directives: {
     TouchSwipe: TouchSwipe
   },
@@ -47206,6 +47941,7 @@ const PanelParentMixin = {
 
 };
 const PanelChildMixin = {
+  mixins: [listeners],
   props: {
     name: {
       required: true
@@ -47452,7 +48188,7 @@ function isRegexp(v) {
 function isNumber(v) {
   return typeof v === 'number' && isFinite(v);
 }
-function isString(v) {
+function is_isString(v) {
   return typeof v === 'string';
 }
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/carousel/QCarousel.js
@@ -47578,10 +48314,11 @@ function isString(v) {
           return h(QBtn, {
             key: name,
             class: `q-carousel__navigation-icon q-carousel__navigation-icon--${name === this.value ? '' : 'in'}active`,
-            props: Object.assign({
+            props: {
               icon: this.navIcon,
-              size: 'sm'
-            }, this.controlProps),
+              size: 'sm',
+              ...this.controlProps
+            },
             on: cache(this, 'nav#' + name, {
               click: () => {
                 this.goTo(name);
@@ -47612,18 +48349,20 @@ function isString(v) {
         node.push(h('div', {
           staticClass: `q-carousel__control q-carousel__arrow q-carousel__prev-arrow q-carousel__prev-arrow--${this.direction} absolute flex flex-center`
         }, [h(QBtn, {
-          props: Object.assign({
-            icon: this.arrowIcons[0]
-          }, this.controlProps),
+          props: {
+            icon: this.arrowIcons[0],
+            ...this.controlProps
+          },
           on: cache(this, 'prev', {
             click: this.previous
           })
         })]), h('div', {
           staticClass: `q-carousel__control q-carousel__arrow q-carousel__next-arrow q-carousel__next-arrow--${this.direction} absolute flex flex-center`
         }, [h(QBtn, {
-          props: Object.assign({
-            icon: this.arrowIcons[1]
-          }, this.controlProps),
+          props: {
+            icon: this.arrowIcons[1],
+            ...this.controlProps
+          },
           on: cache(this, 'next', {
             click: this.next
           })
@@ -47637,7 +48376,8 @@ function isString(v) {
       return h('div', {
         style: this.style,
         class: this.classes,
-        on: this.$listeners
+        on: { ...this.qListeners
+        }
       }, [h('div', {
         staticClass: 'q-carousel__slides-container',
         directives: this.panelDirectives
@@ -47669,7 +48409,7 @@ function isString(v) {
     style() {
       if (this.imgSrc) {
         return {
-          backgroundImage: `url(${this.imgSrc})`
+          backgroundImage: `url("${this.imgSrc}")`
         };
       }
     }
@@ -47680,7 +48420,8 @@ function isString(v) {
     return h('div', {
       staticClass: 'q-carousel__slide',
       style: this.style,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -47688,8 +48429,10 @@ function isString(v) {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/carousel/QCarouselControl.js
 
 
+
 /* harmony default export */ var QCarouselControl = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QCarouselControl',
+  mixins: [listeners],
   props: {
     position: {
       type: String,
@@ -47720,7 +48463,8 @@ function isString(v) {
       staticClass: 'q-carousel__control absolute',
       style: this.style,
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -47733,8 +48477,10 @@ function isString(v) {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/chat/QChatMessage.js
 
 
+
 /* harmony default export */ var QChatMessage = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QChatMessage',
+  mixins: [listeners],
   props: {
     sent: Boolean,
     label: String,
@@ -47852,7 +48598,8 @@ function isString(v) {
     }, container));
     return h('div', {
       class: `q-message q-message-${this.op}`,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, child);
   }
 
@@ -47888,6 +48635,7 @@ function isString(v) {
     dense: Boolean,
     icon: String,
     iconRight: String,
+    iconRemove: String,
     label: [String, Number],
     color: String,
     textColor: String,
@@ -47930,8 +48678,13 @@ function isString(v) {
       return this.disable === false && (this.clickable === true || this.selected !== null);
     },
 
-    computedTabindex() {
-      return this.disable === true ? -1 : this.tabindex || 0;
+    attrs() {
+      return this.disable === true ? {
+        tabindex: -1,
+        'aria-disabled': ''
+      } : {
+        tabindex: this.tabindex || 0
+      };
     }
 
   },
@@ -47979,18 +48732,16 @@ function isString(v) {
           name: this.iconRight
         }
       }));
-      this.removable && child.push(h(QIcon, {
+      this.removable === true && child.push(h(QIcon, {
         staticClass: 'q-chip__icon q-chip__icon--remove cursor-pointer',
         props: {
-          name: this.$q.iconSet.chip.remove
+          name: this.iconRemove || this.$q.iconSet.chip.remove
         },
-        attrs: {
-          tabindex: this.computedTabindex
-        },
-        nativeOn: {
+        attrs: this.attrs,
+        on: cache(this, 'non', {
           click: this.__onRemove,
           keyup: this.__onRemove
-        }
+        })
       }));
       return child;
     }
@@ -48008,9 +48759,7 @@ function isString(v) {
       style: this.sizeStyle
     };
     this.isClickable === true && Object.assign(data, {
-      attrs: {
-        tabindex: this.computedTabindex
-      },
+      attrs: this.attrs,
       on: cache(this, 'click', {
         click: this.__onClick,
         keyup: this.__onKeyup
@@ -48031,13 +48780,15 @@ function isString(v) {
 
 
 
+
+
 const QCircularProgress_radius = 50,
       QCircularProgress_diameter = 2 * QCircularProgress_radius,
       circumference = QCircularProgress_diameter * Math.PI,
       strokeDashArray = Math.round(circumference * 1000) / 1000;
 /* harmony default export */ var QCircularProgress = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QCircularProgress',
-  mixins: [mixins_size],
+  mixins: [listeners, mixins_size],
   props: {
     value: {
       type: Number,
@@ -48068,10 +48819,13 @@ const QCircularProgress_radius = 50,
     indeterminate: Boolean,
     showValue: Boolean,
     reverse: Boolean,
-    instantFeedback: Boolean // used by QKnob, private
-
+    instantFeedback: Boolean
   },
   computed: {
+    normalizedValue() {
+      return between(this.value, this.min, this.max);
+    },
+
     svgStyle() {
       return {
         transform: `rotate3d(0, 0, 1, ${this.angle - 90}deg)`
@@ -48099,7 +48853,7 @@ const QCircularProgress_radius = 50,
     },
 
     strokeDashOffset() {
-      const progress = 1 - (this.value - this.min) / (this.max - this.min);
+      const progress = 1 - (this.normalizedValue - this.min) / (this.max - this.min);
       return this.dir * progress * circumference;
     },
 
@@ -48112,7 +48866,7 @@ const QCircularProgress_radius = 50,
         role: 'progressbar',
         'aria-valuemin': this.min,
         'aria-valuemax': this.max,
-        'aria-valuenow': this.indeterminate === true ? void 0 : this.value
+        'aria-valuenow': this.indeterminate === true ? void 0 : this.normalizedValue
       };
     }
 
@@ -48182,12 +48936,13 @@ const QCircularProgress_radius = 50,
       style: {
         fontSize: this.fontSize
       }
-    }, this.$scopedSlots.default !== void 0 ? this.$scopedSlots.default() : [h('div', [this.value])]));
+    }, this.$scopedSlots.default !== void 0 ? this.$scopedSlots.default() : [h('div', [this.normalizedValue])]));
     return h('div', {
       staticClass: 'q-circular-progress',
       class: `q-circular-progress--${this.indeterminate === true ? 'in' : ''}determinate`,
       style: this.sizeStyle,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: this.attrs
     }, mergeSlotSafely(child, this, 'internal'));
   }
@@ -48407,7 +49162,7 @@ let TouchPan_uid = 0;
           document.body.classList.add('non-selectable');
           clearSelection();
 
-          ctx.styleCleanup = withDelay => {
+          ctx.styleCleanup = withDelayedFn => {
             ctx.styleCleanup = void 0;
             document.documentElement.style.cursor = '';
             document.body.classList.remove('non-selectable');
@@ -48417,11 +49172,16 @@ let TouchPan_uid = 0;
                 document.body.classList.remove('no-pointer-events--children');
               };
 
-              if (withDelay === true) {
-                setTimeout(remove, 50);
+              if (withDelayedFn !== void 0) {
+                setTimeout(() => {
+                  remove();
+                  withDelayedFn();
+                }, 50);
               } else {
                 remove();
               }
+            } else if (withDelayedFn !== void 0) {
+              withDelayedFn();
             }
           };
         };
@@ -48481,15 +49241,28 @@ let TouchPan_uid = 0;
 
         cleanEvt(ctx, 'temp');
         client.is.firefox === true && preventDraggable(el, false);
-        ctx.styleCleanup !== void 0 && ctx.styleCleanup(true);
 
         if (abort === true) {
+          ctx.styleCleanup !== void 0 && ctx.styleCleanup();
+
           if (ctx.event.detected !== true && ctx.initialEvent !== void 0) {
             ctx.initialEvent.target.dispatchEvent(ctx.initialEvent.event);
           }
         } else if (ctx.event.detected === true) {
           ctx.event.isFirst === true && ctx.handler(getChanges(evt === void 0 ? ctx.lastEvt : evt, ctx).payload);
-          ctx.handler(getChanges(evt === void 0 ? ctx.lastEvt : evt, ctx, true).payload);
+          const {
+            payload
+          } = getChanges(evt === void 0 ? ctx.lastEvt : evt, ctx, true);
+
+          const fn = () => {
+            ctx.handler(payload);
+          };
+
+          if (ctx.styleCleanup !== void 0) {
+            ctx.styleCleanup(fn);
+          } else {
+            fn();
+          }
         }
 
         ctx.event = void 0;
@@ -48516,6 +49289,10 @@ let TouchPan_uid = 0;
     const ctx = el.__qtouchpan_old || el.__qtouchpan;
 
     if (ctx !== void 0) {
+      // emit the end event when the directive is destroyed while active
+      // this is only needed in TouchPan because the rest of the touch directives do not emit an end event
+      // the condition is also checked in the start of function but we avoid the call
+      ctx.event !== void 0 && ctx.end();
       cleanEvt(ctx, 'main');
       cleanEvt(ctx, 'temp');
       client.is.firefox === true && preventDraggable(el, false);
@@ -48529,12 +49306,13 @@ let TouchPan_uid = 0;
 
 
 
+
  // PGDOWN, LEFT, DOWN, PGUP, RIGHT, UP
 
 const keyCodes = [34, 37, 40, 33, 39, 38];
-function getRatio(evt, dragging, reverse) {
+function getRatio(evt, dragging, reverse, vertical) {
   const pos = event_position(evt),
-        val = between((pos.left - dragging.left) / dragging.width, 0, 1);
+        val = vertical === true ? between((pos.top - dragging.top) / dragging.height, 0, 1) : between((pos.left - dragging.left) / dragging.width, 0, 1);
   return reverse === true ? 1.0 - val : val;
 }
 function getModel(ratio, min, max, step, decimals) {
@@ -48551,7 +49329,6 @@ function getModel(ratio, min, max, step, decimals) {
 
   return between(model, min, max);
 }
-
 let SliderMixin = {
   mixins: [mixins_dark, mixins_form],
   directives: {
@@ -48579,6 +49356,7 @@ let SliderMixin = {
     labelAlways: Boolean,
     markers: Boolean,
     snap: Boolean,
+    vertical: Boolean,
     reverse: Boolean,
     disable: Boolean,
     readonly: Boolean,
@@ -48598,12 +49376,16 @@ let SliderMixin = {
   },
 
   computed: {
+    axis() {
+      return this.vertical === true ? '--v' : '--h';
+    },
+
     classes() {
-      return `q-slider q-slider--${this.active === true ? '' : 'in'}active` + (this.isReversed === true ? ' q-slider--reversed' : '') + (this.color !== void 0 ? ` text-${this.color}` : '') + (this.disable === true ? ' disabled' : '') + (this.editable === true ? ' q-slider--editable' : '') + (this.focus === 'both' ? ' q-slider--focus' : '') + (this.label || this.labelAlways === true ? ' q-slider--label' : '') + (this.labelAlways === true ? ' q-slider--label-always' : '') + (this.isDark === true ? ' q-slider--dark' : '') + (this.dense === true ? ' q-slider--dense' : '');
+      return `q-slider q-slider${this.axis} q-slider--${this.active === true ? '' : 'in'}active` + (this.isReversed === true ? ' q-slider--reversed' : '') + (this.color !== void 0 ? ` text-${this.color}` : '') + (this.disable === true ? ' disabled' : '') + (this.editable === true ? ' q-slider--editable' : '') + (this.focus === 'both' ? ' q-slider--focus' : '') + (this.label || this.labelAlways === true ? ' q-slider--label' : '') + (this.labelAlways === true ? ' q-slider--label-always' : '') + (this.isDark === true ? ' q-slider--dark' : '') + (this.dense === true ? ' q-slider--dense q-slider--dense' + this.axis : '');
     },
 
     editable() {
-      return !this.disable && !this.readonly;
+      return this.disable !== true && this.readonly !== true;
     },
 
     decimals() {
@@ -48616,7 +49398,7 @@ let SliderMixin = {
 
     markerStyle() {
       return {
-        backgroundSize: 100 * this.computedStep / (this.max - this.min) + '% 2px'
+        backgroundSize: this.vertical === true ? '2px ' + 100 * this.computedStep / (this.max - this.min) + '%' : 100 * this.computedStep / (this.max - this.min) + '% 2px'
       };
     },
 
@@ -48625,11 +49407,23 @@ let SliderMixin = {
     },
 
     isReversed() {
-      return this.reverse !== (this.$q.lang.rtl === true);
+      return this.vertical === true ? this.reverse === true : this.reverse !== (this.$q.lang.rtl === true);
     },
 
-    horizProp() {
+    positionProp() {
+      if (this.vertical === true) {
+        return this.isReversed === true ? 'bottom' : 'top';
+      }
+
       return this.isReversed === true ? 'right' : 'left';
+    },
+
+    sizeProp() {
+      return this.vertical === true ? 'height' : 'width';
+    },
+
+    orientation() {
+      return this.vertical === true ? 'vertical' : 'horizontal';
     },
 
     attrs() {
@@ -48637,15 +49431,31 @@ let SliderMixin = {
         role: 'slider',
         'aria-valuemin': this.min,
         'aria-valuemax': this.max,
-        'aria-orientation': 'horizontal',
+        'aria-orientation': this.orientation,
         'data-step': this.step
       };
 
       if (this.disable === true) {
         attrs['aria-disabled'] = '';
+      } else if (this.readonly === true) {
+        attrs['aria-readonly'] = '';
       }
 
       return attrs;
+    },
+
+    panDirectives() {
+      return this.editable === true ? [{
+        name: 'touch-pan',
+        value: this.__pan,
+        modifiers: {
+          [this.orientation]: true,
+          prevent: true,
+          stop: true,
+          mouse: true,
+          mouseAllDir: true
+        }
+      }] : null;
     }
 
   },
@@ -48654,9 +49464,9 @@ let SliderMixin = {
       return h('svg', {
         staticClass: 'q-slider__thumb absolute',
         attrs: {
-          focusable: 'false'
+          focusable: 'false',
+
           /* needed for IE11 */
-          ,
           viewBox: '0 0 20 20',
           width: '20',
           height: '20'
@@ -48669,6 +49479,10 @@ let SliderMixin = {
     },
 
     __getPinStyle(percent, ratio) {
+      if (this.vertical === true) {
+        return {};
+      }
+
       const offset = `${Math.ceil(20 * Math.abs(0.5 - ratio))}px`;
       return {
         pin: {
@@ -48683,12 +49497,12 @@ let SliderMixin = {
 
     __pan(event) {
       if (event.isFinal) {
-        if (this.dragging) {
+        if (this.dragging !== void 0) {
           this.__updatePosition(event.evt); // only if touch, because we also have mousedown/up:
 
 
           event.touch === true && this.__updateValue(true);
-          this.dragging = false;
+          this.dragging = void 0;
         }
 
         this.active = false;
@@ -48723,7 +49537,10 @@ let SliderMixin = {
 
     __deactivate() {
       this.preventFocus = false;
-      this.active = false;
+
+      if (this.dragging === void 0) {
+        this.active = false;
+      }
 
       this.__updateValue(true);
 
@@ -48752,7 +49569,6 @@ let SliderMixin = {
 
 };
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/slider/QSlider.js
-
 
 
 
@@ -48801,14 +49617,14 @@ let SliderMixin = {
 
     trackStyle() {
       return {
-        [this.horizProp]: 0,
-        width: 100 * this.ratio + '%'
+        [this.positionProp]: 0,
+        [this.sizeProp]: `${100 * this.ratio}%`
       };
     },
 
     thumbStyle() {
       return {
-        [this.horizProp]: 100 * this.ratio + '%'
+        [this.positionProp]: `${100 * this.ratio}%`
       };
     },
 
@@ -48866,7 +49682,7 @@ let SliderMixin = {
     },
 
     __updatePosition(event, dragging = this.dragging) {
-      const ratio = getRatio(event, dragging, this.isReversed);
+      const ratio = getRatio(event, dragging, this.isReversed, this.vertical);
       this.model = getModel(ratio, this.min, this.max, this.step, this.decimals);
       this.curRatio = this.snap !== true || this.step === 0 ? ratio : (this.model - this.min) / (this.max - this.min);
     },
@@ -48897,17 +49713,17 @@ let SliderMixin = {
 
     if (this.label === true || this.labelAlways === true) {
       child.push(h('div', {
-        staticClass: 'q-slider__pin absolute',
+        staticClass: `q-slider__pin q-slider__pin${this.axis} absolute`,
         style: this.pinStyle.pin,
         class: this.pinClass
       }, [h('div', {
-        staticClass: 'q-slider__pin-text-container',
+        staticClass: `q-slider__pin-text-container q-slider__pin-text-container${this.axis}`,
         style: this.pinStyle.pinTextContainer
       }, [h('span', {
         staticClass: 'q-slider__pin-text',
         class: this.pinTextClass
       }, [this.computedLabel])])]), h('div', {
-        staticClass: 'q-slider__arrow',
+        staticClass: `q-slider__arrow q-slider__arrow${this.axis}`,
         class: this.pinClass
       }));
     }
@@ -48917,11 +49733,11 @@ let SliderMixin = {
     }
 
     const track = [h('div', {
-      staticClass: 'q-slider__track absolute',
+      staticClass: `q-slider__track q-slider__track${this.axis} absolute`,
       style: this.trackStyle
     })];
     this.markers === true && track.push(h('div', {
-      staticClass: 'q-slider__track-markers absolute-full fit',
+      staticClass: `q-slider__track-markers q-slider__track-markers${this.axis} absolute-full fit`,
       style: this.markerStyle
     }));
     return h('div', {
@@ -48932,21 +49748,11 @@ let SliderMixin = {
       },
       class: this.classes,
       on: this.events,
-      directives: this.editable === true ? cache(this, 'dir', [{
-        name: 'touch-pan',
-        value: this.__pan,
-        modifiers: {
-          horizontal: true,
-          prevent: true,
-          stop: true,
-          mouse: true,
-          mouseAllDir: true
-        }
-      }]) : null
+      directives: this.panDirectives
     }, [h('div', {
-      staticClass: 'q-slider__track-container absolute'
+      staticClass: `q-slider__track-container q-slider__track-container${this.axis} absolute`
     }, track), h('div', {
-      staticClass: 'q-slider__thumb-container absolute non-selectable',
+      staticClass: `q-slider__thumb-container q-slider__thumb-container${this.axis} absolute non-selectable`,
       class: this.thumbClass,
       style: this.thumbStyle
     }, child)]);
@@ -49104,7 +49910,10 @@ let SliderMixin = {
     clearTimeout(this.timer);
 
     if (this.hasObserver === true) {
-      this.$el.parentNode && this.observer.unobserve(this.$el.parentNode);
+      if (this.observer !== void 0 && this.$el.parentNode) {
+        this.observer.unobserve(this.$el.parentNode);
+      }
+
       return;
     }
 
@@ -49113,6 +49922,7 @@ let SliderMixin = {
 
 }));
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/tabs/QTabs.js
+
 
 
 
@@ -49139,27 +49949,11 @@ function bufferCleanSelected(t) {
   return t;
 }
 
-const bufferFilters = [function (t) {
-  return t.selected === true && t.exact === true && t.redirected !== true;
-}, function (t) {
-  return t.selected === true && t.exact === true;
-}, function (t) {
-  return t.selected === true && t.redirected !== true;
-}, function (t) {
-  return t.selected === true;
-}, function (t) {
-  return t.exact === true && t.redirected !== true;
-}, function (t) {
-  return t.redirected !== true;
-}, function (t) {
-  return t.exact === true;
-}, function (t) {
-  return true;
-}],
+const bufferFilters = [t => t.selected === true && t.exact === true && t.redirected !== true, t => t.selected === true && t.exact === true, t => t.selected === true && t.redirected !== true, t => t.selected === true, t => t.exact === true && t.redirected !== true, t => t.redirected !== true, t => t.exact === true, t => true],
       bufferFiltersLen = bufferFilters.length;
 /* harmony default export */ var QTabs = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QTabs',
-  mixins: [timeout],
+  mixins: [timeout, listeners],
 
   provide() {
     return {
@@ -49193,7 +49987,8 @@ const bufferFilters = [function (t) {
     narrowIndicator: Boolean,
     inlineLabel: Boolean,
     noCaps: Boolean,
-    dense: Boolean
+    dense: Boolean,
+    contentClass: String
   },
 
   data() {
@@ -49262,6 +50057,10 @@ const bufferFilters = [function (t) {
       return `q-tabs--${this.scrollable === true ? '' : 'not-'}scrollable` + ` q-tabs--${this.vertical === true ? 'vertical' : 'horizontal'}` + (this.dense === true ? ' q-tabs--dense' : '') + (this.shrink === true ? ' col-shrink' : '') + (this.stretch === true ? ' self-stretch' : '');
     },
 
+    innerClass() {
+      return this.alignClass + (this.contentClass !== void 0 ? ` ${this.contentClass}` : '');
+    },
+
     domProps() {
       return this.vertical === true ? {
         container: 'height',
@@ -49274,6 +50073,13 @@ const bufferFilters = [function (t) {
         posLeft: 'left',
         posRight: 'right'
       };
+    },
+
+    onEvents() {
+      return {
+        input: event_stop,
+        ...this.qListeners
+      };
     }
 
   },
@@ -49282,7 +50088,7 @@ const bufferFilters = [function (t) {
       if (this.tabs.current !== name) {
         skipEmit !== true && this.$emit('input', name);
 
-        if (setCurrent === true || this.$listeners.input === void 0) {
+        if (setCurrent === true || this.qListeners.input === void 0) {
           this.__animate(this.tabs.current, name);
 
           this.tabs.current = name;
@@ -49483,7 +50289,7 @@ const bufferFilters = [function (t) {
     }), h('div', {
       ref: 'content',
       staticClass: 'q-tabs__content row no-wrap items-center self-stretch hide-scrollbar',
-      class: this.alignClass
+      class: this.innerClass
     }, slot_slot(this, 'default'))];
     this.$q.platform.is.desktop === true && child.push(h(QIcon, {
       staticClass: 'q-tabs__arrow q-tabs__arrow--left absolute q-tab__icon',
@@ -49491,34 +50297,31 @@ const bufferFilters = [function (t) {
       props: {
         name: this.leftIcon || (this.vertical === true ? this.$q.iconSet.tabs.up : this.$q.iconSet.tabs.left)
       },
-      nativeOn: {
+      on: cache(this, 'onL', {
         mousedown: this.__scrollToStart,
         touchstart: this.__scrollToStart,
         mouseup: this.__stopAnimScroll,
         mouseleave: this.__stopAnimScroll,
         touchend: this.__stopAnimScroll
-      }
+      })
     }), h(QIcon, {
       staticClass: 'q-tabs__arrow q-tabs__arrow--right absolute q-tab__icon',
       class: this.rightArrow === true ? '' : 'q-tabs__arrow--faded',
       props: {
         name: this.rightIcon || (this.vertical === true ? this.$q.iconSet.tabs.down : this.$q.iconSet.tabs.right)
       },
-      nativeOn: {
+      on: cache(this, 'onR', {
         mousedown: this.__scrollToEnd,
         touchstart: this.__scrollToEnd,
         mouseup: this.__stopAnimScroll,
         mouseleave: this.__stopAnimScroll,
         touchend: this.__stopAnimScroll
-      }
+      })
     }));
     return h('div', {
       staticClass: 'q-tabs row no-wrap items-center',
       class: this.classes,
-      on: {
-        input: event_stop,
-        ...this.$listeners
-      },
+      on: this.onEvents,
       attrs: {
         role: 'tablist'
       }
@@ -49533,10 +50336,11 @@ const bufferFilters = [function (t) {
 
 
 
+
 let QTab_uid = 0;
 /* harmony default export */ var QTab = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QTab',
-  mixins: [ripple],
+  mixins: [ripple, listeners],
   inject: {
     tabs: {
       default() {
@@ -49551,13 +50355,15 @@ let QTab_uid = 0;
     icon: String,
     label: [Number, String],
     alert: [Boolean, String],
+    alertIcon: String,
     name: {
       type: [Number, String],
       default: () => `t_${QTab_uid++}`
     },
     noCaps: Boolean,
     tabindex: [String, Number],
-    disable: Boolean
+    disable: Boolean,
+    contentClass: String
   },
   computed: {
     isActive() {
@@ -49576,8 +50382,35 @@ let QTab_uid = 0;
       };
     },
 
+    innerClass() {
+      return (this.tabs.inlineLabel === true ? 'row no-wrap q-tab__content--inline' : 'column') + (this.contentClass !== void 0 ? ` ${this.contentClass}` : '');
+    },
+
     computedTabIndex() {
       return this.disable === true || this.isActive === true ? -1 : this.tabindex || 0;
+    },
+
+    onEvents() {
+      return {
+        input: event_stop,
+        ...this.qListeners,
+        click: this.__activate,
+        keyup: this.__onKeyup
+      };
+    },
+
+    attrs() {
+      const attrs = {
+        tabindex: this.computedTabIndex,
+        role: 'tab',
+        'aria-selected': this.isActive
+      };
+
+      if (this.disable === true) {
+        attrs['aria-disabled'] = '';
+      }
+
+      return attrs;
     }
 
   },
@@ -49586,7 +50419,7 @@ let QTab_uid = 0;
       keyboard !== true && this.$refs.blurTarget !== void 0 && this.$refs.blurTarget.focus();
 
       if (this.disable !== true) {
-        this.$listeners.click !== void 0 && this.$emit('click', e);
+        this.qListeners.click !== void 0 && this.$emit('click', e);
 
         this.__activateTab(this.name);
       }
@@ -49612,11 +50445,17 @@ let QTab_uid = 0;
       this.label !== void 0 && content.push(h('div', {
         staticClass: 'q-tab__label'
       }, [this.label]));
-      this.alert !== false && content.push(h('div', {
+      this.alert !== false && content.push(this.alertIcon !== void 0 ? h(QIcon, {
+        staticClass: 'q-tab__alert-icon',
+        props: {
+          color: this.alert !== true ? this.alert : void 0,
+          name: this.alertIcon
+        }
+      }) : h('div', {
         staticClass: 'q-tab__alert',
         class: this.alert !== true ? `text-${this.alert}` : null
       }));
-      narrow && content.push(indicator);
+      narrow === true && content.push(indicator);
       const node = [h('div', {
         staticClass: 'q-focus-helper',
         attrs: {
@@ -49625,9 +50464,9 @@ let QTab_uid = 0;
         ref: 'blurTarget'
       }), h('div', {
         staticClass: 'q-tab__content self-stretch flex-center relative-position q-anchor--skip non-selectable',
-        class: this.tabs.inlineLabel === true ? 'row no-wrap q-tab__content--inline' : 'column'
+        class: this.innerClass
       }, mergeSlot(content, this, 'default'))];
-      !narrow && node.push(indicator);
+      narrow === false && node.push(indicator);
       return node;
     },
 
@@ -49635,21 +50474,12 @@ let QTab_uid = 0;
       const data = {
         staticClass: 'q-tab relative-position self-stretch flex flex-center text-center',
         class: this.classes,
-        attrs: {
-          tabindex: this.computedTabIndex,
-          role: 'tab',
-          'aria-selected': this.isActive
-        },
+        attrs: this.attrs,
         directives: this.ripple !== false && this.disable === true ? null : [{
           name: 'ripple',
           value: this.ripple
         }],
-        [tag === 'div' ? 'on' : 'nativeOn']: {
-          input: event_stop,
-          ...this.$listeners,
-          click: this.__activate,
-          keyup: this.__onKeyup
-        }
+        [tag === 'div' ? 'on' : 'nativeOn']: this.onEvents
       };
 
       if (props !== void 0) {
@@ -49692,7 +50522,8 @@ let QTab_uid = 0;
       return h('div', {
         class: this.classes,
         directives: this.panelDirectives,
-        on: this.$listeners
+        on: { ...this.qListeners
+        }
       }, this.__getPanelContent(h));
     }
 
@@ -49709,7 +50540,8 @@ let QTab_uid = 0;
   render(h) {
     return h('div', {
       staticClass: 'q-tab-panel',
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -49730,10 +50562,11 @@ let QTab_uid = 0;
 
 
 
+
 const palette = ['rgb(255,204,204)', 'rgb(255,230,204)', 'rgb(255,255,204)', 'rgb(204,255,204)', 'rgb(204,255,230)', 'rgb(204,255,255)', 'rgb(204,230,255)', 'rgb(204,204,255)', 'rgb(230,204,255)', 'rgb(255,204,255)', 'rgb(255,153,153)', 'rgb(255,204,153)', 'rgb(255,255,153)', 'rgb(153,255,153)', 'rgb(153,255,204)', 'rgb(153,255,255)', 'rgb(153,204,255)', 'rgb(153,153,255)', 'rgb(204,153,255)', 'rgb(255,153,255)', 'rgb(255,102,102)', 'rgb(255,179,102)', 'rgb(255,255,102)', 'rgb(102,255,102)', 'rgb(102,255,179)', 'rgb(102,255,255)', 'rgb(102,179,255)', 'rgb(102,102,255)', 'rgb(179,102,255)', 'rgb(255,102,255)', 'rgb(255,51,51)', 'rgb(255,153,51)', 'rgb(255,255,51)', 'rgb(51,255,51)', 'rgb(51,255,153)', 'rgb(51,255,255)', 'rgb(51,153,255)', 'rgb(51,51,255)', 'rgb(153,51,255)', 'rgb(255,51,255)', 'rgb(255,0,0)', 'rgb(255,128,0)', 'rgb(255,255,0)', 'rgb(0,255,0)', 'rgb(0,255,128)', 'rgb(0,255,255)', 'rgb(0,128,255)', 'rgb(0,0,255)', 'rgb(128,0,255)', 'rgb(255,0,255)', 'rgb(245,0,0)', 'rgb(245,123,0)', 'rgb(245,245,0)', 'rgb(0,245,0)', 'rgb(0,245,123)', 'rgb(0,245,245)', 'rgb(0,123,245)', 'rgb(0,0,245)', 'rgb(123,0,245)', 'rgb(245,0,245)', 'rgb(214,0,0)', 'rgb(214,108,0)', 'rgb(214,214,0)', 'rgb(0,214,0)', 'rgb(0,214,108)', 'rgb(0,214,214)', 'rgb(0,108,214)', 'rgb(0,0,214)', 'rgb(108,0,214)', 'rgb(214,0,214)', 'rgb(163,0,0)', 'rgb(163,82,0)', 'rgb(163,163,0)', 'rgb(0,163,0)', 'rgb(0,163,82)', 'rgb(0,163,163)', 'rgb(0,82,163)', 'rgb(0,0,163)', 'rgb(82,0,163)', 'rgb(163,0,163)', 'rgb(92,0,0)', 'rgb(92,46,0)', 'rgb(92,92,0)', 'rgb(0,92,0)', 'rgb(0,92,46)', 'rgb(0,92,92)', 'rgb(0,46,92)', 'rgb(0,0,92)', 'rgb(46,0,92)', 'rgb(92,0,92)', 'rgb(255,255,255)', 'rgb(205,205,205)', 'rgb(178,178,178)', 'rgb(153,153,153)', 'rgb(127,127,127)', 'rgb(102,102,102)', 'rgb(76,76,76)', 'rgb(51,51,51)', 'rgb(25,25,25)', 'rgb(0,0,0)'];
 /* harmony default export */ var QColor = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QColor',
-  mixins: [mixins_dark, mixins_form],
+  mixins: [listeners, mixins_dark, mixins_form],
   directives: {
     TouchPan: TouchPan
   },
@@ -49899,7 +50732,8 @@ const palette = ['rgb(255,204,204)', 'rgb(255,230,204)', 'rgb(255,255,204)', 'rg
     return h('div', {
       class: this.classes,
       attrs: this.attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, child);
   },
 
@@ -50447,7 +51281,7 @@ const palette = ['rgb(255,204,204)', 'rgb(255,230,204)', 'rgb(255,255,204)', 'rg
         };
       }
 
-      const model = stringToRgb(v);
+      const model = textToRgb(v);
 
       if (forceAlpha === true && model.a === void 0) {
         model.a = 100;
@@ -50792,8 +51626,9 @@ function date_persian_mod(a, b) {
 
 
 
+
 /* harmony default export */ var datetime = ({
-  mixins: [mixins_dark, mixins_form],
+  mixins: [mixins_dark, mixins_form, listeners],
   props: {
     value: {
       required: true
@@ -51365,11 +52200,11 @@ function endOfDate(date, unit) {
 
   return t;
 }
-function getMaxDate()
-/* date, ...args */
-{
-  let t = 0;
-  Array.prototype.slice.call(arguments).forEach(d => {
+function getMaxDate(date
+/* , ...args */
+) {
+  let t = new Date(date);
+  Array.prototype.slice.call(arguments, 1).forEach(d => {
     t = Math.max(t, new Date(d));
   });
   return t;
@@ -51794,6 +52629,7 @@ const viewIsValid = v => ['Calendar', 'Years', 'Months'].includes(v);
       type: String,
       validator: v => /^-?[\d]+\/[0-1]\d$/.test(v)
     },
+    yearsInMonthView: Boolean,
     events: [Array, Function],
     eventColor: [String, Function],
     options: [Array, Function],
@@ -51818,7 +52654,7 @@ const viewIsValid = v => ['Calendar', 'Years', 'Months'].includes(v);
       view: this.defaultView,
       monthDirection: direction,
       yearDirection: direction,
-      startYear: inner.year - inner.year % yearsInterval,
+      startYear: inner.year - inner.year % yearsInterval - (inner.year < 0 ? yearsInterval : 0),
       innerModel: inner,
       extModel: external
     };
@@ -51843,7 +52679,7 @@ const viewIsValid = v => ['Calendar', 'Years', 'Months'].includes(v);
         }
 
         this.$nextTick(() => {
-          this.startYear = inner.year - inner.year % yearsInterval;
+          this.startYear = inner.year - inner.year % yearsInterval - (inner.year < 0 ? yearsInterval : 0);
           this.innerModel = inner;
         });
       }
@@ -52284,11 +53120,11 @@ const viewIsValid = v => ['Calendar', 'Years', 'Months'].includes(v);
         }, [h(QBtn, {
           staticClass: currentYear === true && this.today.month === i + 1 ? 'q-date__today' : null,
           props: {
-            flat: !active,
+            flat: active !== true,
             label: month,
             unelevated: active,
-            color: active ? this.computedColor : null,
-            textColor: active ? this.computedTextColor : null,
+            color: active === true ? this.computedColor : null,
+            textColor: active === true ? this.computedTextColor : null,
             tabindex: this.computedTabindex
           },
           on: cache(this, 'month#' + i, {
@@ -52298,6 +53134,16 @@ const viewIsValid = v => ['Calendar', 'Years', 'Months'].includes(v);
           })
         })]);
       });
+      this.yearsInMonthView === true && content.unshift(h('div', {
+        staticClass: 'row no-wrap full-width'
+      }, [this.__getNavigation(h, {
+        label: this.innerModel.year,
+        view: 'Years',
+        key: this.innerModel.year,
+        dir: this.yearDirection,
+        goTo: this.__goToYear,
+        cls: ' col'
+      })]));
       return h('div', {
         key: 'months-view',
         staticClass: 'q-date__view q-date__months flex flex-center'
@@ -52453,7 +53299,7 @@ const viewIsValid = v => ['Calendar', 'Years', 'Months'].includes(v);
           }
 
           this.$nextTick(() => {
-            this.startYear = date.year - date.year % yearsInterval;
+            this.startYear = date.year - date.year % yearsInterval - (date.year < 0 ? yearsInterval : 0);
             Object.assign(this.innerModel, {
               year: date.year,
               month: date.month,
@@ -52487,7 +53333,8 @@ const viewIsValid = v => ['Calendar', 'Years', 'Months'].includes(v);
     return h('div', {
       class: this.classes,
       attrs: this.attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [this.__getHeader(h), h('div', {
       staticClass: 'q-date__main col column',
       attrs: {
@@ -52740,7 +53587,7 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
     },
 
     classes() {
-      return `q-drawer--${this.side}` + (this.bordered === true ? ' q-drawer--bordered' : '') + (this.isDark === true ? ' q-drawer--dark q-dark' : '') + (this.belowBreakpoint === true ? ' fixed q-drawer--on-top q-drawer--mobile q-drawer--top-padding' : ` q-drawer--${this.isMini === true ? 'mini' : 'standard'}` + (this.fixed === true || this.onLayout !== true ? ' fixed' : '') + (this.overlay === true || this.miniToOverlay === true ? ' q-drawer--on-top' : '') + (this.headerSlot === true ? ' q-drawer--top-padding' : ''));
+      return `q-drawer--${this.side}` + (this.bordered === true ? ' q-drawer--bordered' : '') + (this.isDark === true ? ' q-drawer--dark q-dark' : '') + (this.showing !== true ? ' q-layout--prevent-focus' : '') + (this.belowBreakpoint === true ? ' fixed q-drawer--on-top q-drawer--mobile q-drawer--top-padding' : ` q-drawer--${this.isMini === true ? 'mini' : 'standard'}` + (this.fixed === true || this.onLayout !== true ? ' fixed' : '') + (this.overlay === true || this.miniToOverlay === true ? ' q-drawer--on-top' : '') + (this.headerSlot === true ? ' q-drawer--top-padding' : ''));
     },
 
     stateDirection() {
@@ -52760,7 +53607,7 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
         };
         mouseEvents.forEach(name => {
           evt[name] = e => {
-            this.$listeners[name] !== void 0 && this.$emit(name, e);
+            this.qListeners[name] !== void 0 && this.$emit(name, e);
           };
         });
         return evt;
@@ -52889,6 +53736,7 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
           this.__applyPosition(this.stateDirection * width);
 
           el.classList.remove('q-drawer--delimiter');
+          el.classList.add('q-layout--prevent-focus');
         }
 
         return;
@@ -52902,6 +53750,7 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
         const el = this.$refs.content;
         el.classList.add('no-transition');
         el.classList.add('q-drawer--delimiter');
+        el.classList.remove('q-layout--prevent-focus');
       }
     },
 
@@ -53020,7 +53869,7 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
 
     this.__update('offset', this.offset);
 
-    if (this.showIfAbove === true && this.value !== true && this.showing === true && this.$listeners.input !== void 0) {
+    if (this.showIfAbove === true && this.value !== true && this.showing === true && this.qListeners.input !== void 0) {
       this.$emit('input', true);
     }
   },
@@ -53028,6 +53877,7 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
   mounted() {
     this.$emit('on-layout', this.onLayout);
     this.$emit('mini-state', this.isMini);
+    this.lastDesktopState = this.showIfAbove === true;
 
     const fn = () => {
       const action = this.showing === true ? 'show' : 'hide';
@@ -53035,7 +53885,9 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
     };
 
     if (this.layout.totalWidth !== 0) {
-      fn();
+      // make sure that all computed properties
+      // have been updated before calling __show/__hide()
+      this.$nextTick(fn);
       return;
     }
 
@@ -53119,6 +53971,7 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
 
 
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/tooltip/QTooltip.js
+
 
 
 
@@ -53338,9 +54191,10 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
 
 
 
+
 /* harmony default export */ var QList = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QList',
-  mixins: [mixins_dark],
+  mixins: [listeners, mixins_dark],
   props: {
     bordered: Boolean,
     dense: Boolean,
@@ -53357,7 +54211,8 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
   render(h) {
     return h('div', {
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -53370,9 +54225,10 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
 
 
 
+
 /* harmony default export */ var QItem = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QItem',
-  mixins: [mixins_dark, RouterLinkMixin, mixins_tag],
+  mixins: [mixins_dark, RouterLinkMixin, tag, listeners],
   props: {
     active: Boolean,
     clickable: Boolean,
@@ -53383,8 +54239,12 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
     manualFocus: Boolean
   },
   computed: {
+    isActionable() {
+      return this.clickable === true || this.hasRouterLink === true || this.tag === 'a' || this.tag === 'label';
+    },
+
     isClickable() {
-      return this.disable !== true && (this.clickable === true || this.hasRouterLink === true || this.tag === 'a' || this.tag === 'label');
+      return this.disable !== true && this.isActionable === true;
     },
 
     classes() {
@@ -53408,6 +54268,13 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
           ['padding' + dir]: 16 + this.insetLevel * 56 + 'px'
         };
       }
+    },
+
+    onEvents() {
+      return { ...this.qListeners,
+        click: this.__onClick,
+        keyup: this.__onKeyup
+      };
     }
 
   },
@@ -53458,17 +54325,17 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
     const data = {
       staticClass: 'q-item q-item-type row no-wrap',
       class: this.classes,
-      style: this.style
-    };
-    const evtProp = this.hasRouterLink === true ? 'nativeOn' : 'on';
-    data[evtProp] = { ...this.$listeners,
-      click: this.__onClick,
-      keyup: this.__onKeyup
+      style: this.style,
+      [this.hasRouterLink === true ? 'nativeOn' : 'on']: this.onEvents
     };
 
     if (this.isClickable === true) {
       data.attrs = {
         tabindex: this.tabindex || '0'
+      };
+    } else if (this.isActionable === true) {
+      data.attrs = {
+        'aria-disabled': ''
       };
     }
 
@@ -53485,8 +54352,10 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/item/QItemSection.js
 
 
+
 /* harmony default export */ var QItemSection = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QItemSection',
+  mixins: [listeners],
   props: {
     avatar: Boolean,
     thumbnail: Boolean,
@@ -53514,7 +54383,8 @@ const mouseEvents = ['mouseover', 'mouseout', 'mouseenter', 'mouseleave'];
     return h('div', {
       staticClass: 'q-item__section column',
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -53831,7 +54701,7 @@ function getBlockElement(el, parent) {
 }
 
 function isChildOf(el, parent) {
-  return el === parent ? false : (parent === document ? document.body : parent).contains(el);
+  return !el || el === document.body ? false : (parent === document ? document.body : parent).contains(el.parentNode);
 }
 
 const urlRegex = /^https?:\/\//;
@@ -54167,9 +55037,10 @@ function extend_extend() {
 
 
 
+
 /* harmony default export */ var QEditor = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QEditor',
-  mixins: [fullscreen, mixins_dark],
+  mixins: [listeners, fullscreen, mixins_dark],
   props: {
     value: {
       type: String,
@@ -54555,6 +55426,10 @@ function extend_extend() {
       }, this.contentStyle];
     },
 
+    classes() {
+      return `q-editor q-editor--${this.isViewingSource === true ? 'source' : 'default'}` + (this.disable === true ? ' disabled' : '') + (this.inFullscreen === true ? ' fullscreen column' : '') + (this.square === true ? ' q-editor--square no-border-radius' : '') + (this.flat === true ? ' q-editor--flat' : '') + (this.dense === true ? ' q-editor--dense' : '') + (this.isDark === true ? ' q-editor--dark q-dark' : '');
+    },
+
     innerClass() {
       return [this.contentClass, {
         col: this.inFullscreen,
@@ -54659,7 +55534,7 @@ function extend_extend() {
     __onMouseup(e) {
       this.caret.save();
 
-      if (this.$listeners.mouseup !== void 0) {
+      if (this.qListeners.mouseup !== void 0) {
         this.$emit('mouseup', e);
       }
     },
@@ -54667,7 +55542,7 @@ function extend_extend() {
     __onKeyup(e) {
       this.caret.save();
 
-      if (this.$listeners.keyup !== void 0) {
+      if (this.qListeners.keyup !== void 0) {
         this.$emit('keyup', e);
       }
     },
@@ -54675,7 +55550,7 @@ function extend_extend() {
     __onTouchend(e) {
       this.caret.save();
 
-      if (this.$listeners.touchend !== void 0) {
+      if (this.qListeners.touchend !== void 0) {
         this.$emit('touchend', e);
       }
     },
@@ -54760,7 +55635,7 @@ function extend_extend() {
       }, bars);
     }
 
-    const on = { ...this.$listeners,
+    const on = { ...this.qListeners,
       input: this.__onInput,
       keydown: this.__onKeydown,
       click: this.__onClick,
@@ -54772,18 +55647,10 @@ function extend_extend() {
       touchend: this.__onTouchend
     };
     return h('div', {
-      staticClass: 'q-editor',
       style: {
         height: this.inFullscreen === true ? '100vh' : null
       },
-      'class': {
-        disabled: this.disable,
-        'fullscreen column': this.inFullscreen,
-        'q-editor--square no-border-radius': this.square,
-        'q-editor--flat': this.flat,
-        'q-editor--dense': this.dense,
-        'q-editor--dark q-dark': this.isDark
-      },
+      class: this.classes,
       attrs: this.attrs
     }, [toolbars, h('div', {
       ref: 'content',
@@ -54808,8 +55675,10 @@ function extend_extend() {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/item/QItemLabel.js
 
 
+
 /* harmony default export */ var QItemLabel = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QItemLabel',
+  mixins: [listeners],
   props: {
     overline: Boolean,
     caption: Boolean,
@@ -54844,7 +55713,8 @@ function extend_extend() {
       staticClass: 'q-item__label',
       style: this.style,
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -54963,58 +55833,6 @@ function extend_extend() {
         }
       })
     }, slot_slot(this, 'default'));
-  }
-
-}));
-// CONCATENATED MODULE: ./node_modules/quasar/src/components/separator/QSeparator.js
-
-
-/* harmony default export */ var QSeparator = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
-  name: 'QSeparator',
-  mixins: [mixins_dark],
-  props: {
-    spaced: Boolean,
-    inset: [Boolean, String],
-    vertical: Boolean,
-    color: String
-  },
-  computed: {
-    insetClass() {
-      switch (this.inset) {
-        case true:
-          return ' q-separator--inset';
-
-        case 'item':
-          return ' q-separator--item-inset';
-
-        case 'item-thumbnail':
-          return ' q-separator--item-thumbnail-inset';
-
-        default:
-          return '';
-      }
-    },
-
-    classes() {
-      return 'q-separator' + this.insetClass + ` q-separator--${this.vertical === true ? 'vertical self-stretch' : 'horizontal col-grow'}` + (this.color !== void 0 ? ` bg-${this.color}` : '') + (this.isDark === true ? ' q-separator--dark' : '') + (this.spaced === true ? ' q-separator--spaced' : '');
-    },
-
-    attrs() {
-      return {
-        role: 'separator',
-        'aria-orientation': this.vertical === true ? 'vertical' : 'horizontal'
-      };
-    }
-
-  },
-
-  render(h) {
-    return h('hr', {
-      staticClass: 'q-separator',
-      class: this.classes,
-      attrs: this.attrs,
-      on: this.$listeners
-    });
   }
 
 }));
@@ -55210,7 +56028,7 @@ const eventName = 'q:expansion-item:close';
       if (this.isClickable === true) {
         const evtProp = this.hasRouterLink === true ? 'nativeOn' : 'on';
         data.props.clickable = true;
-        data[evtProp] = { ...this.$listeners,
+        data[evtProp] = { ...this.qListeners,
           click: this.__onHeaderClick
         };
         this.hasRouterLink === true && Object.assign(data.props, this.routerLinkProps);
@@ -55297,6 +56115,7 @@ const labelPositions = ['top', 'right', 'bottom', 'left'];
     textColor: String,
     glossy: Boolean,
     square: Boolean,
+    padding: String,
     label: {
       type: [String, Number],
       default: ''
@@ -55307,7 +56126,9 @@ const labelPositions = ['top', 'right', 'bottom', 'left'];
       validator: v => labelPositions.includes(v)
     },
     externalLabel: Boolean,
-    hideLabel: Boolean,
+    hideLabel: {
+      type: Boolean
+    },
     labelClass: [Array, String, Object],
     labelStyle: [Array, String, Object],
     disable: Boolean
@@ -55375,6 +56196,7 @@ const QFab_alignValues = ['left', 'center', 'right'];
   props: {
     icon: String,
     activeIcon: String,
+    hideIcon: Boolean,
     hideLabel: {
       default: null
     },
@@ -55409,7 +56231,8 @@ const QFab_alignValues = ['left', 'center', 'right'];
   },
 
   render(h) {
-    const child = [h('div', {
+    const child = [];
+    this.hideIcon !== true && child.push(h('div', {
       staticClass: 'q-fab__icon-holder'
     }, [h(QIcon, {
       staticClass: 'q-fab__icon absolute-full',
@@ -55421,12 +56244,13 @@ const QFab_alignValues = ['left', 'center', 'right'];
       props: {
         name: this.activeIcon || this.$q.iconSet.fab.activeIcon
       }
-    })])];
+    })]));
     this.label !== '' && child[this.labelProps.action](h('div', this.labelProps.data, [this.label]));
     return h('div', {
       staticClass: 'q-fab z-fab row inline justify-center',
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [h('div', {
       staticClass: 'q-fab__actions flex no-wrap inline',
       class: `q-fab__actions--${this.direction}`
@@ -55455,6 +56279,7 @@ const QFab_alignValues = ['left', 'center', 'right'];
 
 
 
+
 const anchorMap = {
   start: 'self-end',
   center: 'self-center',
@@ -55463,11 +56288,11 @@ const anchorMap = {
 const anchorValues = Object.keys(anchorMap);
 /* harmony default export */ var QFabAction = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QFabAction',
-  mixins: [fab],
+  mixins: [listeners, fab],
   props: {
     icon: {
       type: String,
-      required: true
+      default: ''
     },
     anchor: {
       type: String,
@@ -55488,6 +56313,12 @@ const anchorValues = Object.keys(anchorMap);
     classes() {
       const align = anchorMap[this.anchor];
       return this.formClass + (align !== void 0 ? ` ${align}` : '');
+    },
+
+    onEvents() {
+      return { ...this.qListeners,
+        click: this.click
+      };
     }
 
   },
@@ -55501,11 +56332,12 @@ const anchorValues = Object.keys(anchorMap);
   },
 
   render(h) {
-    const child = [h(QIcon, {
+    const child = [];
+    this.icon !== '' && child.push(h(QIcon, {
       props: {
         name: this.icon
       }
-    })];
+    }));
     this.label !== '' && child[this.labelProps.action](h('div', this.labelProps.data, [this.label]));
     return h(QBtn, {
       class: this.classes,
@@ -55517,9 +56349,7 @@ const anchorValues = Object.keys(anchorMap);
         noCaps: true,
         fabMini: true
       },
-      on: { ...this.$listeners,
-        click: this.click
-      }
+      on: this.onEvents
     }, mergeSlot(child, this, 'default'));
   }
 
@@ -55546,9 +56376,9 @@ const anchorValues = Object.keys(anchorMap);
   props: {
     /* SSR does not know about File & FileList */
     value: isSSR === true ? {} : [File, FileList, Array],
+    append: Boolean,
     useChips: Boolean,
     displayValue: [String, Number],
-    maxFiles: [Number, String],
     tabindex: {
       type: [String, Number],
       default: 0
@@ -55592,6 +56422,25 @@ const anchorValues = Object.keys(anchorMap);
 
       const max = this.maxFiles;
       return `${this.innerValue.length}${max !== void 0 ? ' / ' + max : ''} (${this.totalSize})`;
+    },
+
+    inputAttrs() {
+      return {
+        tabindex: -1,
+        type: 'file',
+        title: '',
+        // try to remove default tooltip,
+        accept: this.accept,
+        capture: this.capture,
+        name: this.nameProp,
+        ...this.qAttrs,
+        id: this.targetUid,
+        disabled: this.editable !== true
+      };
+    },
+
+    isAppending() {
+      return this.multiple === true && this.append === true;
     }
 
   },
@@ -55625,9 +56474,9 @@ const anchorValues = Object.keys(anchorMap);
     },
 
     __addFiles(e, fileList) {
-      const files = this.__processFiles(e, fileList);
+      const files = this.__processFiles(e, fileList, this.innerValue, this.isAppending);
 
-      files !== void 0 && this.__emitValue(this.maxFiles !== void 0 ? files.slice(0, parseInt(this.maxFiles, 10)) : files);
+      files !== void 0 && this.__emitValue(this.isAppending === true ? this.innerValue.concat(files) : files);
     },
 
     __getControl(h) {
@@ -55704,17 +56553,7 @@ const anchorValues = Object.keys(anchorMap);
       const data = {
         ref: 'input',
         staticClass: 'q-field__input fit absolute-full cursor-pointer',
-        attrs: {
-          tabindex: -1,
-          type: 'file',
-          title: '',
-          // try to remove default tooltip,
-          accept: this.accept,
-          name: this.nameProp,
-          ...this.$attrs,
-          id: this.targetUid,
-          disabled: this.editable !== true
-        },
+        attrs: this.inputAttrs,
         domProps: this.formDomProps,
         on: cache(this, 'input', {
           change: this.__addFiles
@@ -55731,8 +56570,10 @@ const anchorValues = Object.keys(anchorMap);
   },
 
   created() {
-    this.fieldClass = 'q-file q-field--auto-height';
-    this.type = 'file'; // necessary for QField's clearable
+    this.fieldClass = 'q-file q-field--auto-height'; // necessary for QField's clearable
+    // and FileValueMixin
+
+    this.type = 'file';
   }
 
 }));
@@ -55746,8 +56587,10 @@ const anchorValues = Object.keys(anchorMap);
 
 
 
+
 /* harmony default export */ var QFooter = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QFooter',
+  mixins: [listeners],
   inject: {
     layout: {
       default() {
@@ -55840,8 +56683,16 @@ const anchorValues = Object.keys(anchorMap);
       return offset > 0 ? offset : 0;
     },
 
+    hidden() {
+      return this.value !== true || this.fixed === true && this.revealed !== true;
+    },
+
+    revealOnFocus() {
+      return this.value === true && this.hidden === true && this.reveal === true;
+    },
+
     classes() {
-      return (this.fixed === true ? 'fixed' : 'absolute') + '-bottom' + (this.value === true || this.fixed === true ? '' : ' hidden') + (this.bordered === true ? ' q-footer--bordered' : '') + (this.value !== true || this.fixed === true && this.revealed !== true ? ' q-footer--hidden' : '');
+      return (this.fixed === true ? 'fixed' : 'absolute') + '-bottom' + (this.bordered === true ? ' q-footer--bordered' : '') + (this.hidden === true ? ' q-footer--hidden' : '') + (this.value !== true ? ' q-layout--prevent-focus' : '') + (this.value !== true && this.fixed !== true ? ' hidden' : '');
     },
 
     style() {
@@ -55857,19 +56708,26 @@ const anchorValues = Object.keys(anchorMap);
       }
 
       return css;
+    },
+
+    onEvents() {
+      return { ...this.qListeners,
+        focusin: this.__onFocusin,
+        input: event_stop
+      };
     }
 
   },
 
   render(h) {
-    const child = [h(QResizeObserver, {
+    const child = mergeSlot([h(QResizeObserver, {
       props: {
         debounce: 0
       },
       on: cache(this, 'resize', {
         resize: this.__onResize
       })
-    })];
+    })], this, 'default');
     this.elevated === true && child.push(h('div', {
       staticClass: 'q-layout__shadow absolute-full overflow-hidden no-pointer-events'
     }));
@@ -55877,10 +56735,8 @@ const anchorValues = Object.keys(anchorMap);
       staticClass: 'q-footer q-layout__section--marginal',
       class: this.classes,
       style: this.style,
-      on: { ...this.$listeners,
-        input: event_stop
-      }
-    }, mergeSlot(child, this, 'default'));
+      on: this.onEvents
+    }, child);
   },
 
   created() {
@@ -55937,6 +56793,14 @@ const anchorValues = Object.keys(anchorMap);
       } = this.layout.scroll;
 
       this.__updateLocal('revealed', direction === 'up' || position - inflexionPosition < 100 || this.layout.height - this.containerHeight - position - this.size < 300);
+    },
+
+    __onFocusin(evt) {
+      if (this.revealOnFocus === true) {
+        this.__updateLocal('revealed', true);
+      }
+
+      this.$emit('focusin', evt);
     }
 
   }
@@ -55951,11 +56815,21 @@ const anchorValues = Object.keys(anchorMap);
 
 /* harmony default export */ var QForm = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QForm',
+  mixins: [listeners],
   props: {
     autofocus: Boolean,
     noErrorFocus: Boolean,
     noResetFocus: Boolean,
     greedy: Boolean
+  },
+  computed: {
+    onEvents() {
+      return { ...this.qListeners,
+        submit: this.submit,
+        reset: this.reset
+      };
+    }
+
   },
 
   mounted() {
@@ -55968,7 +56842,7 @@ const anchorValues = Object.keys(anchorMap);
       const promises = [];
       const focus = typeof shouldFocus === 'boolean' ? shouldFocus : this.noErrorFocus !== true;
       this.validateIndex++;
-      const components = getAllChildren(this);
+      const components = this.getValidationComponents();
 
       const emit = (res, ref) => {
         this.$emit('validation-' + (res === true ? 'success' : 'error'), ref);
@@ -55976,35 +56850,32 @@ const anchorValues = Object.keys(anchorMap);
 
       for (let i = 0; i < components.length; i++) {
         const comp = components[i];
+        const valid = comp.validate();
 
-        if (typeof comp.validate === 'function') {
-          const valid = comp.validate();
+        if (typeof valid.then === 'function') {
+          promises.push(valid.then(valid => ({
+            valid,
+            comp
+          }), error => ({
+            valid: false,
+            comp,
+            error
+          })));
+        } else if (valid !== true) {
+          if (this.greedy === false) {
+            emit(false, comp);
 
-          if (typeof valid.then === 'function') {
-            promises.push(valid.then(valid => ({
-              valid,
-              comp
-            }), error => ({
-              valid: false,
-              comp,
-              error
-            })));
-          } else if (valid !== true) {
-            if (this.greedy === false) {
-              emit(false, comp);
-
-              if (focus === true && typeof comp.focus === 'function') {
-                comp.focus();
-              }
-
-              return Promise.resolve(false);
+            if (focus === true && typeof comp.focus === 'function') {
+              comp.focus();
             }
 
-            promises.push({
-              valid: false,
-              comp
-            });
+            return Promise.resolve(false);
           }
+
+          promises.push({
+            valid: false,
+            comp
+          });
         }
       }
 
@@ -56040,10 +56911,8 @@ const anchorValues = Object.keys(anchorMap);
 
     resetValidation() {
       this.validateIndex++;
-      getAllChildren(this).forEach(comp => {
-        if (typeof comp.resetValidation === 'function') {
-          comp.resetValidation();
-        }
+      this.getValidationComponents().forEach(comp => {
+        comp.resetValidation();
       });
     },
 
@@ -56051,7 +56920,7 @@ const anchorValues = Object.keys(anchorMap);
       evt !== void 0 && stopAndPrevent(evt);
       this.validate().then(val => {
         if (val === true) {
-          if (this.$listeners.submit !== void 0) {
+          if (this.qListeners.submit !== void 0) {
             this.$emit('submit', evt);
           } else if (evt !== void 0 && evt.target !== void 0 && typeof evt.target.submit === 'function') {
             evt.target.submit();
@@ -56074,8 +56943,12 @@ const anchorValues = Object.keys(anchorMap);
     },
 
     focus() {
-      const target = this.$el.querySelector('[autofocus], [data-autofocus]') || [].find.call(this.$el.querySelectorAll('[tabindex]'), el => el.tabIndex > -1);
+      const target = this.$el.querySelector('[autofocus], [data-autofocus]') || Array.prototype.find.call(this.$el.querySelectorAll('[tabindex]'), el => el.tabIndex > -1);
       target !== null && target !== void 0 && target.focus();
+    },
+
+    getValidationComponents() {
+      return Array.prototype.map.call(this.$el.getElementsByClassName('q-validation-component'), field => field.__vue__).filter(c => c !== void 0 && typeof c.validate === 'function');
     }
 
   },
@@ -56083,10 +56956,7 @@ const anchorValues = Object.keys(anchorMap);
   render(h) {
     return h('form', {
       staticClass: 'q-form',
-      on: { ...this.$listeners,
-        submit: this.submit,
-        reset: this.reset
-      }
+      on: this.onEvents
     }, slot_slot(this, 'default'));
   }
 
@@ -56100,8 +56970,10 @@ const anchorValues = Object.keys(anchorMap);
 
 
 
+
 /* harmony default export */ var QHeader = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QHeader',
+  mixins: [listeners],
   inject: {
     layout: {
       default() {
@@ -56181,8 +57053,16 @@ const anchorValues = Object.keys(anchorMap);
       return offset > 0 ? offset : 0;
     },
 
+    hidden() {
+      return this.value !== true || this.fixed === true && this.revealed !== true;
+    },
+
+    revealOnFocus() {
+      return this.value === true && this.hidden === true && this.reveal === true;
+    },
+
     classes() {
-      return (this.fixed === true ? 'fixed' : 'absolute') + '-top' + (this.bordered === true ? ' q-header--bordered' : '') + (this.value !== true || this.fixed === true && this.revealed !== true ? ' q-header--hidden' : '');
+      return (this.fixed === true ? 'fixed' : 'absolute') + '-top' + (this.bordered === true ? ' q-header--bordered' : '') + (this.hidden === true ? ' q-header--hidden' : '') + (this.value !== true ? ' q-layout--prevent-focus' : '');
     },
 
     style() {
@@ -56198,29 +57078,35 @@ const anchorValues = Object.keys(anchorMap);
       }
 
       return css;
+    },
+
+    onEvents() {
+      return { ...this.qListeners,
+        focusin: this.__onFocusin,
+        input: event_stop
+      };
     }
 
   },
 
   render(h) {
-    const child = mergeSlot([h(QResizeObserver, {
+    const child = uniqueSlot(this, 'default', []);
+    this.elevated === true && child.push(h('div', {
+      staticClass: 'q-layout__shadow absolute-full overflow-hidden no-pointer-events'
+    }));
+    child.push(h(QResizeObserver, {
       props: {
         debounce: 0
       },
       on: cache(this, 'resize', {
         resize: this.__onResize
       })
-    })], this, 'default');
-    this.elevated === true && child.push(h('div', {
-      staticClass: 'q-layout__shadow absolute-full overflow-hidden no-pointer-events'
     }));
     return h('header', {
       staticClass: 'q-header q-layout__section--marginal',
       class: this.classes,
       style: this.style,
-      on: { ...this.$listeners,
-        input: event_stop
-      }
+      on: this.onEvents
     }, child);
   },
 
@@ -56264,6 +57150,14 @@ const anchorValues = Object.keys(anchorMap);
       if (this[prop] !== val) {
         this[prop] = val;
       }
+    },
+
+    __onFocusin(evt) {
+      if (this.revealOnFocus === true) {
+        this.__updateLocal('revealed', true);
+      }
+
+      this.$emit('focusin', evt);
     }
 
   }
@@ -56297,9 +57191,10 @@ const anchorValues = Object.keys(anchorMap);
 
 
 
+
 /* harmony default export */ var QImg = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QImg',
-  mixins: [mixins_ratio],
+  mixins: [listeners, mixins_ratio],
   props: {
     src: String,
     srcset: String,
@@ -56509,7 +57404,8 @@ const anchorValues = Object.keys(anchorMap);
       const nativeImg = this.nativeContextMenu === true ? [h('img', {
         staticClass: 'absolute-full fit',
         attrs: {
-          src: this.url
+          src: this.url,
+          'aria-hidden': 'true'
         }
       })] : void 0;
       const content = this.url !== void 0 ? h('div', {
@@ -56561,7 +57457,8 @@ const anchorValues = Object.keys(anchorMap);
       class: this.classes,
       style: this.style,
       attrs: this.attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [h('div', {
       style: this.ratioStyle
     }), this.__getImage(h), this.__getContent(h)]);
@@ -56595,8 +57492,10 @@ const anchorValues = Object.keys(anchorMap);
 
 
 
+
 /* harmony default export */ var QInfiniteScroll = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QInfiniteScroll',
+  mixins: [listeners],
   props: {
     offset: {
       type: Number,
@@ -56645,9 +57544,9 @@ const anchorValues = Object.keys(anchorMap);
         return;
       }
 
-      const scrollHeight = getScrollHeight(this.scrollContainer),
-            scrollPosition = getScrollPosition(this.scrollContainer),
-            containerHeight = dom_height(this.scrollContainer);
+      const scrollHeight = getScrollHeight(this.__scrollTarget),
+            scrollPosition = getScrollPosition(this.__scrollTarget),
+            containerHeight = dom_height(this.__scrollTarget);
 
       if (this.reverse === false) {
         if (scrollPosition + containerHeight + this.offset >= scrollHeight) {
@@ -56667,16 +57566,16 @@ const anchorValues = Object.keys(anchorMap);
 
       this.index++;
       this.fetching = true;
-      const heightBefore = getScrollHeight(this.scrollContainer);
+      const heightBefore = getScrollHeight(this.__scrollTarget);
       this.$emit('load', this.index, stop => {
         if (this.working === true) {
           this.fetching = false;
           this.$nextTick(() => {
             if (this.reverse === true) {
-              const heightAfter = getScrollHeight(this.scrollContainer),
-                    scrollPosition = getScrollPosition(this.scrollContainer),
+              const heightAfter = getScrollHeight(this.__scrollTarget),
+                    scrollPosition = getScrollPosition(this.__scrollTarget),
                     heightDifference = heightAfter - heightBefore;
-              setScrollPosition(this.scrollContainer, scrollPosition + heightDifference);
+              setScrollPosition(this.__scrollTarget, scrollPosition + heightDifference);
             }
 
             if (stop === true) {
@@ -56696,7 +57595,8 @@ const anchorValues = Object.keys(anchorMap);
     resume() {
       if (this.working === false) {
         this.working = true;
-        this.scrollContainer.addEventListener('scroll', this.poll, listenOpts.passive);
+
+        this.__scrollTarget.addEventListener('scroll', this.poll, listenOpts.passive);
       }
 
       this.immediatePoll();
@@ -56706,19 +57606,20 @@ const anchorValues = Object.keys(anchorMap);
       if (this.working === true) {
         this.working = false;
         this.fetching = false;
-        this.scrollContainer.removeEventListener('scroll', this.poll, listenOpts.passive);
+
+        this.__scrollTarget.removeEventListener('scroll', this.poll, listenOpts.passive);
       }
     },
 
     updateScrollTarget() {
-      if (this.scrollContainer && this.working === true) {
-        this.scrollContainer.removeEventListener('scroll', this.poll, listenOpts.passive);
+      if (this.__scrollTarget && this.working === true) {
+        this.__scrollTarget.removeEventListener('scroll', this.poll, listenOpts.passive);
       }
 
-      this.scrollContainer = getScrollTarget(this.$el, this.scrollTarget);
+      this.__scrollTarget = getScrollTarget(this.$el, this.scrollTarget);
 
       if (this.working === true) {
-        this.scrollContainer.addEventListener('scroll', this.poll, listenOpts.passive);
+        this.__scrollTarget.addEventListener('scroll', this.poll, listenOpts.passive);
       }
     },
 
@@ -56743,15 +57644,15 @@ const anchorValues = Object.keys(anchorMap);
     this.immediatePoll();
 
     if (this.reverse === true) {
-      const scrollHeight = getScrollHeight(this.scrollContainer),
-            containerHeight = dom_height(this.scrollContainer);
-      setScrollPosition(this.scrollContainer, scrollHeight - containerHeight);
+      const scrollHeight = getScrollHeight(this.__scrollTarget),
+            containerHeight = dom_height(this.__scrollTarget);
+      setScrollPosition(this.__scrollTarget, scrollHeight - containerHeight);
     }
   },
 
   beforeDestroy() {
     if (this.working === true) {
-      this.scrollContainer.removeEventListener('scroll', this.poll, listenOpts.passive);
+      this.__scrollTarget.removeEventListener('scroll', this.poll, listenOpts.passive);
     }
   },
 
@@ -56767,7 +57668,8 @@ const anchorValues = Object.keys(anchorMap);
 
     return h('div', {
       staticClass: 'q-infinite-scroll',
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, child);
   }
 
@@ -56780,9 +57682,10 @@ const anchorValues = Object.keys(anchorMap);
 
 
 
+
 /* harmony default export */ var QInnerLoading = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QInnerLoading',
-  mixins: [mixins_dark, transition],
+  mixins: [listeners, mixins_dark, transition],
   props: {
     showing: Boolean,
     color: String,
@@ -56796,7 +57699,8 @@ const anchorValues = Object.keys(anchorMap);
     const child = this.showing === true ? [h('div', {
       staticClass: 'q-inner-loading absolute-full column flex-center',
       class: this.isDark === true ? 'q-inner-loading--dark' : null,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, this.$scopedSlots.default !== void 0 ? this.$scopedSlots.default() : [h(QSpinner, {
       props: {
         size: this.size,
@@ -56902,9 +57806,10 @@ function destroy(el) {
 
 
 
+
 /* harmony default export */ var QIntersection = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QIntersection',
-  mixins: [mixins_tag],
+  mixins: [tag, listeners],
   directives: {
     Intersection: Intersection
   },
@@ -56952,7 +57857,7 @@ function destroy(el) {
       if (this.showing !== entry.isIntersecting) {
         this.showing = entry.isIntersecting;
 
-        if (this.$listeners.visibility !== void 0) {
+        if (this.qListeners.visibility !== void 0) {
           this.$emit('visibility', this.showing);
         }
       }
@@ -56966,7 +57871,8 @@ function destroy(el) {
     }, slot_slot(this, 'default'))] : void 0;
     return h(this.tag, {
       staticClass: 'q-intersection',
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       directives: this.directives
     }, this.transition ? [h('transition', {
       props: {
@@ -57048,14 +57954,11 @@ const QKnob_keyCodes = [34, 37, 40, 33, 39, 38];
   },
   computed: {
     classes() {
-      return {
-        disabled: this.disable,
-        'q-knob--editable': this.editable
-      };
+      return 'q-knob non-selectable' + (this.editable === true ? ' q-knob--editable' : this.disable === true ? ' disabled' : '');
     },
 
     editable() {
-      return !this.disable && !this.readonly;
+      return this.disable === false && this.readonly === false;
     },
 
     decimals() {
@@ -57066,7 +57969,11 @@ const QKnob_keyCodes = [34, 37, 40, 33, 39, 38];
       return this.step === 0 ? 1 : this.step;
     },
 
-    events() {
+    computedInstantFeedback() {
+      return this.instantFeedback === true || this.dragging === true;
+    },
+
+    onEvents() {
       return this.$q.platform.is.mobile === true ? {
         click: this.__click
       } : {
@@ -57154,8 +58061,6 @@ const QKnob_keyCodes = [34, 37, 40, 33, 39, 38];
       this.__updateCenterPosition();
 
       this.__updatePosition(evt);
-
-      this.__updateValue();
     },
 
     __updatePosition(evt, change) {
@@ -57213,17 +58118,16 @@ const QKnob_keyCodes = [34, 37, 40, 33, 39, 38];
 
   render(h) {
     const data = {
-      staticClass: 'q-knob non-selectable',
       class: this.classes,
       attrs: this.attrs,
       props: { ...this.$props,
         value: this.model,
-        instantFeedback: this.dragging
+        instantFeedback: this.computedInstantFeedback
       }
     };
 
     if (this.editable === true) {
-      data.on = this.events;
+      data.on = this.onEvents;
       data.directives = cache(this, 'dir', [{
         name: 'touch-pan',
         value: this.__pan,
@@ -57357,8 +58261,10 @@ const {
 
 
 
+
 /* harmony default export */ var QLayout = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QLayout',
+  mixins: [listeners],
 
   provide() {
     return {
@@ -57463,7 +58369,8 @@ const {
     const layout = h('div', {
       class: this.classes,
       style: this.style,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, mergeSlot([h(QScrollObserver, {
       on: cache(this, 'scroll', {
         scroll: this.__onPageScroll
@@ -57503,8 +58410,11 @@ const {
     },
 
     __onPageScroll(data) {
-      this.scroll = data;
-      this.$listeners.scroll !== void 0 && this.$emit('scroll', data);
+      if (this.container === true || document.qScrollPrevented !== true) {
+        this.scroll = data;
+      }
+
+      this.qListeners.scroll !== void 0 && this.$emit('scroll', data);
     },
 
     __onPageResize({
@@ -57517,7 +58427,7 @@ const {
         resized = true;
         this.height = height;
 
-        if (this.$listeners['scroll-height'] !== void 0) {
+        if (this.qListeners['scroll-height'] !== void 0) {
           this.$emit('scroll-height', height);
         }
 
@@ -57529,7 +58439,7 @@ const {
         this.width = width;
       }
 
-      if (resized === true && this.$listeners.resize !== void 0) {
+      if (resized === true && this.qListeners.resize !== void 0) {
         this.$emit('resize', {
           height,
           width
@@ -57566,9 +58476,10 @@ const {
 
 
 
+
 /* harmony default export */ var QMarkupTable = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QMarkupTable',
-  mixins: [mixins_dark],
+  mixins: [mixins_dark, listeners],
   props: {
     dense: Boolean,
     flat: Boolean,
@@ -57592,7 +58503,8 @@ const {
     return h('div', {
       staticClass: 'q-markup-table q-table__container q-table__card',
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [h('table', {
       staticClass: 'q-table'
     }, slot_slot(this, 'default'))]);
@@ -57610,16 +58522,18 @@ const {
 
 
 
+
 /* harmony default export */ var QNoSsr = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QNoSsr',
-  mixins: [can_render, mixins_tag],
+  mixins: [can_render, tag, listeners],
   props: {
     placeholder: String
   },
 
   render(h) {
     const data = {
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     };
 
     if (this.canRender === true) {
@@ -57649,8 +58563,10 @@ const {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/page/QPage.js
 
 
+
 /* harmony default export */ var QPage = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QPage',
+  mixins: [listeners],
   inject: {
     pageContainer: {
       default() {
@@ -57691,7 +58607,8 @@ const {
       staticClass: 'q-page',
       style: this.style,
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -57699,8 +58616,10 @@ const {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/page/QPageContainer.js
 
 
+
 /* harmony default export */ var QPageContainer = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QPageContainer',
+  mixins: [listeners],
   inject: {
     layout: {
       default() {
@@ -57741,7 +58660,8 @@ const {
     return h('div', {
       staticClass: 'q-page-container',
       style: this.style,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -57753,8 +58673,10 @@ const {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/page-sticky/QPageSticky.js
 
 
+
 /* harmony default export */ var QPageSticky = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QPageSticky',
+  mixins: [listeners],
   inject: {
     layout: {
       default() {
@@ -57863,7 +58785,8 @@ const {
       staticClass: 'q-page-sticky row flex-center',
       class: this.classes,
       style: this.style,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, this.expand === true ? content : [h('div', content)]);
   }
 
@@ -57907,6 +58830,12 @@ const {
   computed: {
     height() {
       return this.layout.container === true ? this.layout.containerHeight : this.layout.height;
+    },
+
+    onEvents() {
+      return { ...this.qListeners,
+        click: this.__onClick
+      };
     }
 
   },
@@ -57962,9 +58891,7 @@ const {
       }
     }, this.showing === true ? [h('div', {
       staticClass: 'q-page-scroller',
-      on: { ...this.$listeners,
-        click: this.__onClick
-      }
+      on: this.onEvents
     }, [QPageSticky.options.render.call(this, h)])] : null);
   },
 
@@ -57988,9 +58915,10 @@ const {
 
 
 
+
 /* harmony default export */ var QPagination = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QPagination',
-  mixins: [mixins_dark],
+  mixins: [mixins_dark, listeners],
   props: {
     value: {
       type: Number,
@@ -58336,7 +59264,8 @@ const {
         disabled: this.disable
       },
       attrs: this.attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [contentStart, h('div', {
       staticClass: 'row justify-center',
       on: this.input === true ? cache(this, 'stop', {
@@ -58386,8 +59315,13 @@ const {
 
 
 
+
+const {
+  passive: QParallax_passive
+} = listenOpts;
 /* harmony default export */ var QParallax = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QParallax',
+  mixins: [listeners],
   props: {
     src: String,
     height: {
@@ -58413,28 +59347,22 @@ const {
 
   watch: {
     height() {
-      this.__updatePos();
+      this.working === true && this.__updatePos();
     },
 
     scrollTarget() {
-      this.__unconfigureScrollTarget();
+      if (this.working === true) {
+        this.__stop();
 
-      this.__configureScrollTarget();
+        this.__start();
+      }
     }
 
   },
   methods: {
     __update(percentage) {
       this.percentScrolled = percentage;
-      this.$listeners.scroll !== void 0 && this.$emit('scroll', percentage);
-    },
-
-    __onResize() {
-      if (this.__scrollTarget) {
-        this.mediaHeight = this.media.naturalHeight || this.media.videoHeight || dom_height(this.media);
-
-        this.__updatePos();
-      }
+      this.qListeners.scroll !== void 0 && this.$emit('scroll', percentage);
     },
 
     __updatePos() {
@@ -58453,7 +59381,7 @@ const {
       top = dom_offset(this.$el).top;
       bottom = top + this.height;
 
-      if (bottom > containerTop && top < containerBottom) {
+      if (this.observer !== void 0 || bottom > containerTop && top < containerBottom) {
         const percent = (containerBottom - top) / (this.height + containerHeight);
 
         this.__setPos((this.mediaHeight - this.height) * percent * this.speed);
@@ -58467,18 +59395,29 @@ const {
       this.media.style.transform = `translate3D(-50%,${Math.round(offset)}px, 0)`;
     },
 
-    __configureScrollTarget() {
-      this.__scrollTarget = getScrollTarget(this.$el, this.scrollTarget);
-
-      this.__scrollTarget.addEventListener('scroll', this.__updatePos, listenOpts.passive);
-
-      this.__onResize();
+    __onResize() {
+      this.mediaHeight = this.media.naturalHeight || this.media.videoHeight || dom_height(this.media);
+      this.working === true && this.__updatePos();
     },
 
-    __unconfigureScrollTarget() {
-      if (this.__scrollTarget !== void 0) {
-        this.__scrollTarget.removeEventListener('scroll', this.__updatePos, listenOpts.passive);
+    __start() {
+      this.working = true;
+      this.__scrollTarget = getScrollTarget(this.$el, this.scrollTarget);
 
+      this.__scrollTarget.addEventListener('scroll', this.__updatePos, QParallax_passive);
+
+      window.addEventListener('resize', this.__resizeHandler, QParallax_passive);
+
+      this.__updatePos();
+    },
+
+    __stop() {
+      if (this.working === true) {
+        this.working = false;
+
+        this.__scrollTarget.removeEventListener('scroll', this.__updatePos, QParallax_passive);
+
+        window.removeEventListener('resize', this.__resizeHandler, QParallax_passive);
         this.__scrollTarget = void 0;
       }
     }
@@ -58491,7 +59430,8 @@ const {
       style: {
         height: `${this.height}px`
       },
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [h('div', {
       ref: 'mediaParent',
       staticClass: 'q-parallax__media absolute-full'
@@ -58507,25 +59447,31 @@ const {
     }) : slot_slot(this, 'default'))]);
   },
 
-  beforeMount() {
-    this.__setPos = frame_debounce(this.__setPos);
-  },
-
   mounted() {
+    this.__setPos = frame_debounce(this.__setPos);
     this.__update = frame_debounce(this.__update);
-    this.resizeHandler = frame_debounce(this.__onResize);
+    this.__resizeHandler = frame_debounce(this.__onResize);
     this.media = this.$scopedSlots.media !== void 0 ? this.$refs.mediaParent.children[0] : this.$refs.media;
     this.media.onload = this.media.onloadstart = this.media.loadedmetadata = this.__onResize;
-    window.addEventListener('resize', this.resizeHandler, listenOpts.passive);
 
-    this.__configureScrollTarget();
+    this.__onResize();
+
+    this.media.style.display = 'initial';
+
+    if (window.IntersectionObserver !== void 0) {
+      this.observer = new IntersectionObserver(entries => {
+        this[entries[0].isIntersecting === true ? '__start' : '__stop']();
+      });
+      this.observer.observe(this.$el);
+    } else {
+      this.__start();
+    }
   },
 
   beforeDestroy() {
-    window.removeEventListener('resize', this.resizeHandler, listenOpts.passive);
+    this.__stop();
 
-    this.__unconfigureScrollTarget();
-
+    this.observer !== void 0 && this.observer.disconnect();
     this.media.onload = this.media.onloadstart = this.media.loadedmetadata = null;
   }
 
@@ -58542,8 +59488,10 @@ const {
 
 
 
+
 /* harmony default export */ var QPopupEdit = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QPopupEdit',
+  mixins: [mixins_attrs],
   props: {
     value: {
       required: true
@@ -58593,6 +59541,13 @@ const {
         set: this.set,
         cancel: this.cancel
       };
+    },
+
+    menuProps() {
+      return { ...this.qAttrs,
+        cover: this.cover,
+        contentClass: this.classes
+      };
     }
 
   },
@@ -58616,6 +59571,14 @@ const {
       }
 
       this.__close();
+    },
+
+    show(e) {
+      this.$refs.menu !== void 0 && this.$refs.menu.show(e);
+    },
+
+    hide(e) {
+      this.$refs.menu !== void 0 && this.$refs.menu.hide(e);
     },
 
     __hasChanged() {
@@ -58678,10 +59641,7 @@ const {
 
     return h(QMenu, {
       ref: 'menu',
-      props: { ...this.$attrs,
-        cover: this.cover,
-        contentClass: this.classes
-      },
+      props: this.menuProps,
       on: cache(this, 'menu', {
         'before-show': () => {
           this.validated = false;
@@ -58727,9 +59687,11 @@ const {
 
 
 
+
+
 /* harmony default export */ var QPopupProxy = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QPopupProxy',
-  mixins: [mixins_anchor],
+  mixins: [mixins_attrs, listeners, mixins_anchor],
   props: {
     breakpoint: {
       type: [String, Number],
@@ -58747,6 +59709,12 @@ const {
   computed: {
     parsedBreakpoint() {
       return parseInt(this.breakpoint, 10);
+    },
+
+    onEvents() {
+      return { ...this.qListeners,
+        hide: this.__onHide
+      };
     }
 
   },
@@ -58807,10 +59775,10 @@ const {
     } : {};
     const data = {
       ref: 'popup',
-      props: Object.assign(props, this.$attrs),
-      on: { ...this.$listeners,
-        hide: this.__onHide
-      }
+      props: { ...props,
+        ...this.qAttrs
+      },
+      on: this.onEvents
     };
     let component;
 
@@ -58837,6 +59805,7 @@ const {
 
 
 
+
 function QLinearProgress_width(val) {
   return {
     transform: `scale3d(${val},1,1)`
@@ -58845,7 +59814,7 @@ function QLinearProgress_width(val) {
 
 /* harmony default export */ var QLinearProgress = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QLinearProgress',
-  mixins: [mixins_dark, getSizeMixin({
+  mixins: [listeners, mixins_dark, getSizeMixin({
     xs: 2,
     sm: 4,
     md: 6,
@@ -58864,7 +59833,8 @@ function QLinearProgress_width(val) {
     stripe: Boolean,
     indeterminate: Boolean,
     query: Boolean,
-    rounded: Boolean
+    rounded: Boolean,
+    instantFeedback: Boolean
   },
   computed: {
     motion() {
@@ -58880,15 +59850,15 @@ function QLinearProgress_width(val) {
     },
 
     trackClass() {
-      return 'q-linear-progress__track--' + (this.isDark === true ? 'dark' : 'light') + (this.trackColor !== void 0 ? ` bg-${this.trackColor}` : '');
+      return `q-linear-progress__track--with${this.instantFeedback === true ? 'out' : ''}-transition` + ` q-linear-progress__track--${this.isDark === true ? 'dark' : 'light'}` + (this.trackColor !== void 0 ? ` bg-${this.trackColor}` : '');
     },
 
     modelStyle() {
-      return QLinearProgress_width(this.motion ? 1 : this.value);
+      return QLinearProgress_width(this.motion === true ? 1 : this.value);
     },
 
     modelClasses() {
-      return `q-linear-progress__model--${this.motion ? 'in' : ''}determinate`;
+      return `q-linear-progress__model--with${this.instantFeedback === true ? 'out' : ''}-transition` + ` q-linear-progress__model--${this.motion === true ? 'in' : ''}determinate`;
     },
 
     stripeStyle() {
@@ -58900,8 +59870,8 @@ function QLinearProgress_width(val) {
     attrs() {
       return {
         role: 'progressbar',
-        'aria-valuemin': this.min,
-        'aria-valuemax': this.max,
+        'aria-valuemin': 0,
+        'aria-valuemax': 1,
         'aria-valuenow': this.indeterminate === true ? void 0 : this.value
       };
     }
@@ -58926,7 +59896,8 @@ function QLinearProgress_width(val) {
       style: this.sizeStyle,
       class: this.classes,
       attrs: this.attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, mergeSlot(child, this, 'default'));
   }
 
@@ -58948,6 +59919,7 @@ const PULLER_HEIGHT = 40,
       OFFSET_TOP = 20;
 /* harmony default export */ var QPullToRefresh = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QPullToRefresh',
+  mixins: [listeners],
   directives: {
     TouchPan: TouchPan
   },
@@ -58983,6 +59955,24 @@ const PULLER_HEIGHT = 40,
 
     classes() {
       return 'q-pull-to-refresh__puller row flex-center' + (this.animating === true ? ' q-pull-to-refresh__puller--animating' : '') + (this.bgColor !== void 0 ? ` bg-${this.bgColor}` : '');
+    },
+
+    directives() {
+      if (this.disable !== true) {
+        return [{
+          name: 'touch-pan',
+          modifiers: {
+            down: true,
+            mightPrevent: true,
+            mouse: this.noMouse !== true
+          },
+          value: this.__pull
+        }];
+      }
+    },
+
+    contentClass() {
+      return `q-pull-to-refresh__content${this.pulling === true ? ' no-pointer-events' : ''}`;
     }
 
   },
@@ -59005,7 +59995,7 @@ const PULLER_HEIGHT = 40,
     },
 
     updateScrollTarget() {
-      this.scrollContainer = getScrollTarget(this.$el, this.scrollTarget);
+      this.__scrollTarget = getScrollTarget(this.$el, this.scrollTarget);
     },
 
     __pull(event) {
@@ -59037,8 +60027,8 @@ const PULLER_HEIGHT = 40,
       }
 
       if (event.isFirst === true) {
-        if (getScrollPosition(this.scrollContainer) !== 0) {
-          if (this.pulling) {
+        if (getScrollPosition(this.__scrollTarget) !== 0) {
+          if (this.pulling === true) {
             this.pulling = false;
             this.state = 'pull';
 
@@ -59104,20 +60094,12 @@ const PULLER_HEIGHT = 40,
 
   render(h) {
     return h('div', {
-      staticClass: 'q-pull-to-refresh overflow-hidden',
-      on: this.$listeners,
-      directives: this.disable === true ? null : cache(this, 'dir#' + this.noMouse, [{
-        name: 'touch-pan',
-        modifiers: {
-          down: true,
-          mightPrevent: true,
-          mouse: this.noMouse !== true
-        },
-        value: this.__pull
-      }])
+      staticClass: 'q-pull-to-refresh',
+      on: { ...this.qListeners
+      },
+      directives: this.directives
     }, [h('div', {
-      staticClass: 'q-pull-to-refresh__content',
-      class: this.pulling === true ? 'no-pointer-events' : ''
+      class: this.contentClass
     }, slot_slot(this, 'default')), h('div', {
       staticClass: 'q-pull-to-refresh__puller-container fixed row flex-center no-pointer-events z-top',
       style: this.positionCSS
@@ -59146,7 +60128,6 @@ const PULLER_HEIGHT = 40,
 
 
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/range/QRange.js
-
 
 
 
@@ -59243,21 +60224,21 @@ const dragType = {
 
     trackStyle() {
       return {
-        [this.horizProp]: 100 * this.ratioMin + '%',
-        width: 100 * (this.ratioMax - this.ratioMin) + '%'
+        [this.positionProp]: `${100 * this.ratioMin}%`,
+        [this.sizeProp]: `${100 * (this.ratioMax - this.ratioMin)}%`
       };
     },
 
     minThumbStyle() {
       return {
-        [this.horizProp]: 100 * this.ratioMin + '%',
+        [this.positionProp]: `${100 * this.ratioMin}%`,
         'z-index': this.__nextFocus === 'min' ? 2 : void 0
       };
     },
 
     maxThumbStyle() {
       return {
-        [this.horizProp]: 100 * this.ratioMax + '%'
+        [this.positionProp]: `${100 * this.ratioMax}%`
       };
     },
 
@@ -59393,25 +60374,29 @@ const dragType = {
     __getDragging(event) {
       const {
         left,
-        width
+        top,
+        width,
+        height
       } = this.$el.getBoundingClientRect(),
-            sensitivity = this.dragOnlyRange ? 0 : this.$refs.minThumb.offsetWidth / (2 * width),
+            sensitivity = this.dragOnlyRange === true ? 0 : this.vertical === true ? this.$refs.minThumb.offsetHeight / (2 * height) : this.$refs.minThumb.offsetWidth / (2 * width),
             diff = this.max - this.min;
       let dragging = {
         left,
+        top,
         width,
+        height,
         valueMin: this.model.min,
         valueMax: this.model.max,
         ratioMin: (this.model.min - this.min) / diff,
         ratioMax: (this.model.max - this.min) / diff
       };
-      let ratio = getRatio(event, dragging, this.isReversed),
+      let ratio = getRatio(event, dragging, this.isReversed, this.vertical),
           type;
 
       if (this.dragOnlyRange !== true && ratio < dragging.ratioMin + sensitivity) {
         type = dragType.MIN;
       } else if (this.dragOnlyRange === true || ratio < dragging.ratioMax - sensitivity) {
-        if (this.dragRange || this.dragOnlyRange) {
+        if (this.dragRange === true || this.dragOnlyRange === true) {
           type = dragType.RANGE;
           Object.assign(dragging, {
             offsetRatio: ratio,
@@ -59432,7 +60417,7 @@ const dragType = {
     },
 
     __updatePosition(event, dragging = this.dragging) {
-      let ratio = getRatio(event, dragging, this.isReversed),
+      let ratio = getRatio(event, dragging, this.isReversed, this.vertical),
           model = getModel(ratio, this.min, this.max, this.step, this.decimals),
           pos;
 
@@ -59552,24 +60537,24 @@ const dragType = {
 
       if (this.label === true || this.labelAlways === true) {
         child.push(h('div', {
-          staticClass: 'q-slider__pin absolute',
+          staticClass: `q-slider__pin q-slider__pin${this.axis} absolute`,
           style: this[which + 'PinStyle'].pin,
           class: this[which + 'PinClass']
         }, [h('div', {
-          staticClass: 'q-slider__pin-text-container',
+          staticClass: `q-slider__pin-text-container q-slider__pin-text-container${this.axis}`,
           style: this[which + 'PinStyle'].pinTextContainer
         }, [h('span', {
           staticClass: 'q-slider__pin-text',
           class: this[which + 'PinTextClass']
         }, [this[which + 'Label']])])]), h('div', {
-          staticClass: 'q-slider__arrow',
+          staticClass: `q-slider__arrow q-slider__arrow${this.axis}`,
           class: this[which + 'PinClass']
         }));
       }
 
       return h('div', {
         ref: which + 'Thumb',
-        staticClass: 'q-slider__thumb-container absolute non-selectable',
+        staticClass: `q-slider__thumb-container q-slider__thumb-container${this.axis} absolute non-selectable`,
         style: this[which + 'ThumbStyle'],
         class: this[which + 'ThumbClass'],
         on: this[which + 'Events'],
@@ -59583,15 +60568,15 @@ const dragType = {
 
   render(h) {
     const track = [h('div', {
-      staticClass: 'q-slider__track absolute',
+      staticClass: `q-slider__track q-slider__track${this.axis} absolute`,
       style: this.trackStyle
     })];
     this.markers === true && track.push(h('div', {
-      staticClass: 'q-slider__track-markers absolute-full fit',
+      staticClass: `q-slider__track-markers q-slider__track-markers${this.axis} absolute-full fit`,
       style: this.markerStyle
     }));
     const child = [h('div', {
-      staticClass: 'q-slider__track-container absolute'
+      staticClass: `q-slider__track-container q-slider__track-container${this.axis} absolute`
     }, track), this.__getThumb(h, 'min'), this.__getThumb(h, 'max')];
 
     if (this.name !== void 0 && this.disable !== true) {
@@ -59602,21 +60587,11 @@ const dragType = {
       staticClass: this.value.min === null || this.value.max === null ? 'q-slider--no-value' : void 0,
       attrs: { ...this.attrs,
         'aria-valuenow': this.value.min + '|' + this.value.max,
-        tabindex: this.dragOnlyRange && !this.$q.platform.is.mobile ? this.computedTabindex : null
+        tabindex: this.dragOnlyRange === true && this.$q.platform.is.mobile !== true ? this.computedTabindex : null
       },
       class: this.classes,
       on: this.events,
-      directives: this.editable === true ? cache(this, 'dir', [{
-        name: 'touch-pan',
-        value: this.__pan,
-        modifiers: {
-          horizontal: true,
-          prevent: true,
-          stop: true,
-          mouse: true,
-          mouseAllDir: true
-        }
-      }]) : null
+      directives: this.panDirectives
     }, child);
   }
 
@@ -59633,9 +60608,10 @@ const dragType = {
 
 
 
+
 /* harmony default export */ var QRating = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QRating',
-  mixins: [mixins_size, mixins_form],
+  mixins: [mixins_size, mixins_form, listeners],
   props: {
     value: {
       type: Number,
@@ -59819,7 +60795,8 @@ const dragType = {
       class: this.classes,
       style: this.sizeStyle,
       attrs: this.attrs,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, child);
   }
 
@@ -59834,14 +60811,16 @@ const dragType = {
 
 
 
+
 /* harmony default export */ var QResponsive = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QResponsive',
-  mixins: [mixins_ratio],
+  mixins: [mixins_ratio, listeners],
 
   render(h) {
     return h('div', {
       staticClass: 'q-responsive',
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [h('div', {
       staticClass: 'q-responsive__filler overflow-hidden'
     }, [h('div', {
@@ -60210,13 +61189,17 @@ function getScrollDetails(parent, child, beforeRef, afterRef, horizontal, sticky
 
   if (beforeRef !== void 0) {
     for (let el = beforeRef.previousElementSibling; el !== null; el = el.previousElementSibling) {
-      details.offsetStart += el[propElSize];
+      if (el.classList.contains('q-virtual-scroll--skip') === false) {
+        details.offsetStart += el[propElSize];
+      }
     }
   }
 
   if (afterRef !== void 0) {
     for (let el = afterRef.nextElementSibling; el !== null; el = el.nextElementSibling) {
-      details.offsetEnd += el[propElSize];
+      if (el.classList.contains('q-virtual-scroll--skip') === false) {
+        details.offsetEnd += el[propElSize];
+      }
     }
   }
 
@@ -60571,7 +61554,7 @@ const commonVirtPropsList = Object.keys(commonVirtScrollProps);
 
     __emitScroll(index) {
       if (this.prevToIndex !== index) {
-        this.$listeners['virtual-scroll'] !== void 0 && this.$emit('virtual-scroll', {
+        this.qListeners['virtual-scroll'] !== void 0 && this.$emit('virtual-scroll', {
           index,
           from: this.virtualScrollSliceRange.from,
           to: this.virtualScrollSliceRange.to - 1,
@@ -60616,11 +61599,12 @@ const commonVirtPropsList = Object.keys(commonVirtScrollProps);
 
 
 
+
 const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
 
 /* harmony default export */ var QSelect = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QSelect',
-  mixins: [QField, virtual_scroll, composition, FormFieldMixin],
+  mixins: [QField, virtual_scroll, composition, FormFieldMixin, listeners],
   props: {
     value: {
       required: true
@@ -60729,7 +61713,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
     },
 
     fieldClass() {
-      return `q-select q-field--auto-height q-select--with${this.useInput !== true ? 'out' : ''}-input`;
+      return `q-select q-field--auto-height q-select--with${this.useInput !== true ? 'out' : ''}-input q-select--with${this.useChips !== true ? 'out' : ''}-chips`;
     },
 
     computedInputClass() {
@@ -60878,22 +61862,6 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
       return this.__getPropValueFn('optionDisable', 'disable');
     },
 
-    autocompleteControlEvents() {
-      const on = {
-        keydown: this.__onTargetKeydown,
-        keyup: this.__onTargetAutocomplete,
-        keypress: this.__onTargetKeypress
-      };
-
-      if (this.$q.platform.is.mobile === true) {
-        on.focus = ev => {
-          ev.target.blur();
-        };
-      }
-
-      return on;
-    },
-
     inputControlEvents() {
       const on = {
         input: this.__onInput,
@@ -60905,14 +61873,12 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
         keydown: this.__onTargetKeydown,
         keyup: this.__onTargetKeyup,
         keypress: this.__onTargetKeypress,
-        focus: this.__selectInputText
+        focus: this.__selectInputText,
+        click: e => {
+          this.hasDialog === true && event_stop(e);
+        }
       };
       on.compositionstart = on.compositionupdate = on.compositionend = this.__onComposition;
-
-      if (this.hasDialog === true) {
-        on.click = event_stop;
-      }
-
       return on;
     }
 
@@ -60928,7 +61894,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
           const model = this.value.slice();
           this.$emit('remove', {
             index,
-            value: model.splice(index, 1)
+            value: model.splice(index, 1)[0]
           });
           this.$emit('input', model);
         } else {
@@ -60986,14 +61952,14 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
       const optValue = this.getOptionValue(opt);
 
       if (this.multiple !== true) {
-        this.$refs.target !== void 0 && this.$refs.target.focus();
-
         if (keepOpen !== true) {
           this.updateInputValue(this.fillInput === true ? this.getOptionLabel(opt) : '', true, true);
           this.hidePopup();
         }
 
-        if (isDeepEqual(this.getOptionValue(this.innerValue), optValue) !== true) {
+        this.$refs.target !== void 0 && this.$refs.target.focus();
+
+        if (isDeepEqual(this.getOptionValue(this.innerValue[0]), optValue) !== true) {
           this.$emit('input', this.emitValue === true ? optValue : opt);
         }
 
@@ -61020,7 +61986,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
       if (index > -1) {
         this.$emit('remove', {
           index,
-          value: model.splice(index, 1)
+          value: model.splice(index, 1)[0]
         });
       } else {
         if (this.maxValues !== void 0 && model.length >= this.maxValues) {
@@ -61150,7 +62116,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
         return;
       }
 
-      const newValueModeValid = this.inputValue.length > 0 && (this.newValueMode !== void 0 || this.$listeners['new-value'] !== void 0);
+      const newValueModeValid = this.inputValue.length > 0 && (this.newValueMode !== void 0 || this.qListeners['new-value'] !== void 0);
       const tabShouldSelect = e.shiftKey !== true && this.multiple !== true && (this.optionIndex > -1 || newValueModeValid === true); // escape
 
       if (e.keyCode === 27) {
@@ -61178,7 +62144,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
       } // backspace
 
 
-      if (e.keyCode === 8 && this.multiple === true && this.inputValue.length === 0 && Array.isArray(this.value)) {
+      if (e.keyCode === 8 && this.multiple === true && this.hideSelected !== true && this.inputValue.length === 0 && Array.isArray(this.value)) {
         this.removeAtIndex(this.value.length - 1);
         return;
       } // up, down
@@ -61265,7 +62231,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
           }
         };
 
-        if (this.$listeners['new-value'] !== void 0) {
+        if (this.qListeners['new-value'] !== void 0) {
           this.$emit('new-value', this.inputValue, done);
         } else {
           done(this.inputValue);
@@ -61324,6 +62290,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
 
           })
         }, [h('span', {
+          staticClass: 'ellipsis',
           domProps: {
             [scope.sanitize === true ? 'textContent' : 'innerHTML']: this.getOptionLabel(scope.opt)
           }
@@ -61345,22 +62312,30 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
       if (isTarget === true && this.useInput === true) {
         child.push(this.__getInput(h, fromDialog));
       } else if (this.editable === true) {
-        const options = {
-          staticClass: 'q-select__autocomplete-input no-outline',
+        isTarget === true && child.push(h('div', {
+          // there can be only one (when dialog is opened the control in dialog should be target)
+          ref: 'target',
+          key: 'd_t',
+          staticClass: 'no-outline',
           attrs: {
-            autocomplete: this.$attrs.autocomplete,
+            id: this.targetUid,
             tabindex: this.tabindex
           },
-          on: this.autocompleteControlEvents
-        };
-
-        if (isTarget === true) {
-          // there can be only one (when dialog is opened the control in dialog should be target)
-          options.ref = 'target';
-          options.attrs.id = this.targetUid;
-        }
-
-        child.push(h('input', options));
+          on: cache(this, 'f-tget', {
+            keydown: this.__onTargetKeydown,
+            keyup: this.__onTargetKeyup,
+            keypress: this.__onTargetKeypress
+          })
+        }));
+        this.qAttrs.autocomplete !== void 0 && child.push(h('input', {
+          staticClass: 'q-select__autocomplete-input no-outline',
+          attrs: {
+            autocomplete: this.qAttrs.autocomplete
+          },
+          on: cache(this, 'autoinp', {
+            keyup: this.__onTargetAutocomplete
+          })
+        }));
       }
 
       if (this.nameProp !== void 0 && this.disable !== true && this.innerOptionsValue.length > 0) {
@@ -61381,7 +62356,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
 
       return h('div', {
         staticClass: 'q-field__native row items-center',
-        attrs: this.$attrs
+        attrs: this.qAttrs
       }, child);
     },
 
@@ -61421,6 +62396,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
     __getInput(h, fromDialog) {
       const options = {
         ref: 'target',
+        key: 'i_t',
         staticClass: 'q-field__input q-placeholder col',
         style: this.inputStyle,
         class: this.computedInputClass,
@@ -61430,7 +62406,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
         attrs: {
           // required for Android in order to show ENTER key when in form
           type: 'search',
-          ...this.$attrs,
+          ...this.qAttrs,
           id: this.targetUid,
           maxlength: this.maxlength,
           // this is converted to prop by QField
@@ -61472,7 +62448,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
         this.__focus();
       }
 
-      if (this.$listeners.filter !== void 0) {
+      if (this.qListeners.filter !== void 0) {
         this.inputTimer = setTimeout(() => {
           this.filter(this.inputValue);
         }, this.inputDebounce);
@@ -61501,7 +62477,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
     },
 
     filter(val) {
-      if (this.$listeners.filter === void 0 || this.focused !== true) {
+      if (this.qListeners.filter === void 0 || this.focused !== true) {
         return;
       }
 
@@ -61650,7 +62626,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
           filled: true,
           stackLabel: this.inputValue.length > 0
         },
-        on: { ...this.$listeners,
+        on: { ...this.qListeners,
           focus: this.__onDialogFieldFocus,
           blur: this.__onDialogFieldBlur
         },
@@ -61698,7 +62674,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
 
     __onDialogHide(e) {
       this.hidePopup();
-      this.$emit('blur', e);
+      this.focused === false && this.$emit('blur', e);
 
       this.__resetInputValue();
     },
@@ -61745,7 +62721,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
         this.__focus();
       }
 
-      if (this.$listeners.filter !== void 0) {
+      if (this.qListeners.filter !== void 0) {
         this.filter(this.inputValue);
       } else if (this.noOptions !== true || this.$scopedSlots['no-option'] !== void 0) {
         this.menu = true;
@@ -61778,7 +62754,7 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
     },
 
     __onPreRender() {
-      this.hasDialog = this.$q.platform.is.mobile !== true && this.behavior !== 'dialog' ? false : this.behavior !== 'menu' && (this.useInput === true ? this.$scopedSlots['no-option'] !== void 0 || this.$listeners.filter !== void 0 || this.noOptions === false : true);
+      this.hasDialog = this.$q.platform.is.mobile !== true && this.behavior !== 'dialog' ? false : this.behavior !== 'menu' && (this.useInput === true ? this.$scopedSlots['no-option'] !== void 0 || this.qListeners.filter !== void 0 || this.noOptions === false : true);
       this.transitionShowComputed = this.hasDialog === true && this.useInput === true && this.$q.platform.is.ios === true ? 'fade' : this.transitionShow;
     },
 
@@ -61810,11 +62786,12 @@ const validateNewValueMode = v => ['add', 'add-unique', 'toggle'].includes(v);
 
 
 
+
 const skeletonTypes = ['text', 'rect', 'circle', 'QBtn', 'QBadge', 'QChip', 'QToolbar', 'QCheckbox', 'QRadio', 'QToggle', 'QSlider', 'QRange', 'QInput', 'QAvatar'];
 const skeletonAnimations = ['wave', 'pulse', 'pulse-x', 'pulse-y', 'fade', 'blink', 'none'];
 /* harmony default export */ var QSkeleton = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QSkeleton',
-  mixins: [mixins_dark, mixins_tag],
+  mixins: [mixins_dark, tag, listeners],
   props: {
     type: {
       type: String,
@@ -61854,7 +62831,8 @@ const skeletonAnimations = ['wave', 'pulse', 'pulse-x', 'pulse-y', 'fade', 'blin
       staticClass: 'q-skeleton',
       class: this.classes,
       style: this.style,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -61867,10 +62845,11 @@ const skeletonAnimations = ['wave', 'pulse', 'pulse-x', 'pulse-y', 'fade', 'blin
 
 
 
+
 const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end', 'width'], ['top', 'start', 'center', 'height'], ['bottom', 'end', 'center', 'height']];
 /* harmony default export */ var QSlideItem = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QSlideItem',
-  mixins: [mixins_dark],
+  mixins: [mixins_dark, listeners],
   props: {
     leftColor: String,
     rightColor: String,
@@ -62018,7 +62997,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('div', {
       staticClass: 'q-slide-item q-item-type overflow-hidden',
       class: this.isDark === true ? `q-slide-item--dark q-dark` : '',
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, content);
   },
 
@@ -62038,13 +63018,16 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
 
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/space/QSpace.js
 
+
 /* harmony default export */ var QSpace = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QSpace',
+  mixins: [listeners],
 
   render(h) {
     return h('div', {
       staticClass: 'q-space',
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     });
   }
 
@@ -62063,7 +63046,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -62156,7 +63140,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -62267,7 +63252,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -62421,7 +63407,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -62511,7 +63498,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -62651,7 +63639,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -62762,7 +63751,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -62869,7 +63859,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -62931,7 +63922,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63093,7 +64085,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63151,7 +64144,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63275,7 +64269,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63319,7 +64314,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63506,7 +64502,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63559,7 +64556,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63645,7 +64643,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63733,7 +64732,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63813,7 +64813,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -63927,7 +64928,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('svg', {
       staticClass: 'q-spinner',
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         focusable: 'false'
         /* needed for IE11 */
@@ -64032,9 +65034,10 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
 
 
 
+
 /* harmony default export */ var QSplitter = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QSplitter',
-  mixins: [mixins_dark],
+  mixins: [mixins_dark, listeners],
   directives: {
     TouchPan: TouchPan
   },
@@ -64156,7 +65159,10 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
   },
 
   render(h) {
-    let child = [h('div', {
+    const attrs = this.disable === true ? {
+      'aria-disabled': ''
+    } : void 0;
+    const child = [h('div', {
       ref: 'before',
       staticClass: 'q-splitter__panel q-splitter__before' + (this.reverse === true ? ' col' : ''),
       style: this.styles.before,
@@ -64167,7 +65173,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     }, slot_slot(this, 'before')), h('div', {
       staticClass: 'q-splitter__separator',
       style: this.separatorStyle,
-      class: this.separatorClass
+      class: this.separatorClass,
+      attrs
     }, [h('div', {
       staticClass: 'absolute-full q-splitter__separator-area',
       directives: this.disable === true ? void 0 : cache(this, 'dir#' + this.horizontal, [{
@@ -64194,7 +65201,8 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     return h('div', {
       staticClass: 'q-splitter no-wrap',
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, mergeSlot(child, this, 'default'));
   }
 
@@ -64206,8 +65214,11 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
 
 
 
+
+
 /* harmony default export */ var StepHeader = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'StepHeader',
+  mixins: [mixins_attrs],
   directives: {
     Ripple: Ripple
   },
@@ -64232,29 +65243,29 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
 
     isDone() {
       const opt = this.step.done;
-      return !this.isDisable && (opt === true || opt === '');
+      return this.isDisable === false && (opt === true || opt === '');
     },
 
     headerNav() {
       const opt = this.step.headerNav,
             nav = opt === true || opt === '' || opt === void 0;
-      return !this.isDisable && this.stepper.headerNav && (this.isActive || nav);
+      return this.isDisable === false && this.stepper.headerNav && (this.isActive === true || nav);
     },
 
     hasPrefix() {
-      return this.step.prefix && !this.isActive && !this.isError && !this.isDone;
+      return this.step.prefix && this.isActive === false && this.isError === false && this.isDone === false;
     },
 
     icon() {
-      if (this.isActive) {
+      if (this.isActive === true) {
         return this.step.activeIcon || this.stepper.activeIcon || this.$q.iconSet.stepper.active;
       }
 
-      if (this.isError) {
+      if (this.isError === true) {
         return this.step.errorIcon || this.stepper.errorIcon || this.$q.iconSet.stepper.error;
       }
 
-      if (!this.isDisable && this.isDone) {
+      if (this.isDisable === false && this.isDone === true) {
         return this.step.doneIcon || this.stepper.doneIcon || this.$q.iconSet.stepper.done;
       }
 
@@ -64262,15 +65273,18 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     },
 
     color() {
-      if (this.isActive) {
-        return this.step.activeColor || this.stepper.activeColor || this.step.color;
+      const errorColor = this.isError === true ? this.step.errorColor || this.stepper.errorColor : void 0;
+
+      if (this.isActive === true) {
+        const color = this.step.activeColor || this.stepper.activeColor || this.step.color;
+        return color !== void 0 ? color : errorColor;
       }
 
-      if (this.isError) {
-        return this.step.errorColor || this.stepper.errorColor;
+      if (errorColor !== void 0) {
+        return errorColor;
       }
 
-      if (!this.disable && this.isDone) {
+      if (this.isDisable === false && this.isDone === true) {
         return this.step.doneColor || this.stepper.doneColor || this.step.color || this.stepper.inactiveColor;
       }
 
@@ -64278,50 +65292,49 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
     },
 
     classes() {
-      return {
-        [`text-${this.color}`]: this.color,
-        'q-stepper__tab--error': this.isError,
-        'q-stepper__tab--active': this.isActive,
-        'q-stepper__tab--done': this.isDone,
-        'q-stepper__tab--navigation q-focusable q-hoverable': this.headerNav,
-        'q-stepper__tab--disabled': this.isDisable
-      };
+      return `q-stepper__tab col-grow flex items-center no-wrap relative-position` + (this.color !== void 0 ? ` text-${this.color}` : '') + (this.isError === true ? ' q-stepper__tab--error' : '') + (this.isActive === true ? ' q-stepper__tab--active' : '') + (this.isDone === true ? ' q-stepper__tab--done' : '') + (this.headerNav === true ? ' q-stepper__tab--navigation q-focusable q-hoverable' : '') + (this.isDisable === true ? ' q-stepper__tab--disabled' : '');
     }
 
   },
   methods: {
     activate() {
       this.$refs.blurTarget !== void 0 && this.$refs.blurTarget.focus();
-      !this.isActive && this.stepper.goTo(this.step.name);
+      this.isActive === false && this.stepper.goTo(this.step.name);
     },
 
     keyup(e) {
-      e.keyCode === 13 && !this.isActive && this.stepper.goTo(this.step.name);
+      if (e.keyCode === 13 && this.isActive === false) {
+        this.stepper.goTo(this.step.name);
+      }
     }
 
   },
 
   render(h) {
     const data = {
-      staticClass: 'q-stepper__tab col-grow flex items-center no-wrap relative-position',
-      class: this.classes,
-      directives: this.stepper.headerNav ? [{
-        name: 'ripple',
-        value: this.headerNav
-      }] : null
+      class: this.classes
     };
 
-    if (this.headerNav) {
-      data.on = {
-        click: this.activate,
-        keyup: this.keyup
-      };
-      data.attrs = {
-        tabindex: this.isDisable === true ? -1 : this.$attrs.tabindex || 0
-      };
+    if (this.stepper.headerNav === true) {
+      data.directives = [{
+        name: 'ripple',
+        value: this.headerNav
+      }];
     }
 
-    return h('div', data, [h('div', {
+    this.headerNav === true && Object.assign(data, {
+      on: cache(this, 'headnavon', {
+        click: this.activate,
+        keyup: this.keyup
+      }),
+      attrs: this.isDisable === true ? {
+        tabindex: -1,
+        'aria-disabled': ''
+      } : {
+        tabindex: this.qAttrs.tabindex || 0
+      }
+    });
+    const child = [h('div', {
       staticClass: 'q-focus-helper',
       attrs: {
         tabindex: -1
@@ -64335,13 +65348,25 @@ const slotsDef = [['left', 'center', 'start', 'width'], ['right', 'center', 'end
       props: {
         name: this.icon
       }
-    })])]), this.step.title ? h('div', {
-      staticClass: 'q-stepper__label q-stepper__line relative-position'
-    }, [h('div', {
-      staticClass: 'q-stepper__title'
-    }, [this.step.title]), this.step.caption ? h('div', {
-      staticClass: 'q-stepper__caption'
-    }, [this.step.caption]) : null]) : null]);
+    })])])];
+
+    if (this.step.title !== void 0 && this.step.title !== null) {
+      const content = [h('div', {
+        staticClass: 'q-stepper__title'
+      }, [this.step.title])];
+
+      if (this.step.caption !== void 0 && this.step.caption !== null) {
+        content.push(h('div', {
+          staticClass: 'q-stepper__caption'
+        }, [this.step.caption]));
+      }
+
+      child.push(h('div', {
+        staticClass: 'q-stepper__label q-stepper__line relative-position'
+      }, content));
+    }
+
+    return h('div', data, child);
   }
 
 }));
@@ -64422,7 +65447,8 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
     }, slot_slot(this, 'default'))] : void 0) : vertical !== true || this.isActive === true ? StepWrapper.options.render.call(this, h) : void 0;
     return h('div', {
       staticClass: 'q-stepper__step',
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, vertical === true ? [h(StepHeader, {
       props: {
         stepper: this.stepper,
@@ -64456,6 +65482,7 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
     alternativeLabels: Boolean,
     headerNav: Boolean,
     contracted: Boolean,
+    headerClass: String,
     inactiveColor: String,
     inactiveIcon: String,
     doneIcon: String,
@@ -64467,7 +65494,11 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
   },
   computed: {
     classes() {
-      return `q-stepper--${this.vertical === true ? 'vertical' : 'horizontal'}` + (this.flat === true || this.isDark === true ? ' q-stepper--flat no-shadow' : '') + (this.bordered === true || this.isDark === true && this.flat === false ? ' q-stepper--bordered' : '') + (this.contracted === true ? ' q-stepper--contracted' : '') + (this.isDark === true ? ' q-stepper--dark q-dark' : '');
+      return `q-stepper q-stepper--${this.vertical === true ? 'vertical' : 'horizontal'}` + (this.flat === true || this.isDark === true ? ' q-stepper--flat no-shadow' : '') + (this.bordered === true || this.isDark === true && this.flat === false ? ' q-stepper--bordered' : '') + (this.contracted === true ? ' q-stepper--contracted' : '') + (this.isDark === true ? ' q-stepper--dark q-dark' : '');
+    },
+
+    headerClasses() {
+      return 'q-stepper__header row items-stretch justify-between' + ` q-stepper__header--${this.alternativeLabels === true ? 'alternative' : 'standard'}-labels` + (this.flat === false || this.bordered === true ? ' q-stepper__header--border' : '') + (this.headerClass !== void 0 ? ` ${this.headerClass}` : '');
     }
 
   },
@@ -64488,11 +65519,7 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
       }
 
       return [h('div', {
-        staticClass: 'q-stepper__header row items-stretch justify-between',
-        class: {
-          [`q-stepper__header--${this.alternativeLabels ? 'alternative' : 'standard'}-labels`]: true,
-          'q-stepper__header--border': !this.flat || this.bordered
-        }
+        class: this.headerClasses
       }, this.__getAllPanels().map(panel => {
         const step = panel.componentOptions.propsData;
         return h(StepHeader, {
@@ -64510,9 +65537,9 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
 
     __renderPanels(h) {
       return h('div', {
-        staticClass: 'q-stepper',
         class: this.classes,
-        on: this.$listeners
+        on: { ...this.qListeners
+        }
       }, mergeSlot(this.__getContent(h), this, 'navigation'));
     }
 
@@ -64521,13 +65548,16 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/stepper/QStepperNavigation.js
 
 
+
 /* harmony default export */ var QStepperNavigation = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QStepperNavigation',
+  mixins: [listeners],
 
   render(h) {
     return h('div', {
       staticClass: 'q-stepper__nav',
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -64550,8 +65580,10 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
         pagesNumber: this.pagesNumber,
         isFirstPage: this.isFirstPage,
         isLastPage: this.isLastPage,
+        firstPage: this.firstPage,
         prevPage: this.prevPage,
         nextPage: this.nextPage,
+        lastPage: this.lastPage,
         inFullscreen: this.inFullscreen,
         toggleFullscreen: this.toggleFullscreen
       };
@@ -64617,15 +65649,18 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
 
 
 
+
 /* harmony default export */ var QTh = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QTh',
+  mixins: [listeners],
   props: {
     props: Object,
     autoWidth: Boolean
   },
 
   render(h) {
-    const on = this.$listeners;
+    const on = { ...this.qListeners
+    };
 
     if (this.props === void 0) {
       return h('th', {
@@ -64670,7 +65705,7 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
       on: { ...on,
         ...evt
       },
-      style: col.__thStyle,
+      style: col.headerStyle,
       class: col.__thClass + (this.autoWidth === true ? ' q-table--col-auto-width' : '')
     }, child);
   }
@@ -64712,36 +65747,24 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
         })).slice();
       }
 
-      let mapFn;
-
-      if (headerCell !== void 0) {
-        mapFn = col => headerCell({
+      const child = this.computedCols.map(col => {
+        const headerCellCol = this.$scopedSlots[`header-cell-${col.name}`],
+              slot = headerCellCol !== void 0 ? headerCellCol : headerCell,
+              props = {
           col,
           cols: this.computedCols,
           sort: this.sort,
           colsMap: this.computedColsMap
-        });
-      } else {
-        mapFn = col => {
-          const props = {
-            col,
-            cols: this.computedCols,
-            sort: this.sort,
-            colsMap: this.computedColsMap
-          };
-          const slot = this.$scopedSlots[`header-cell-${col.name}`];
-          return slot !== void 0 ? slot(props) : h(QTh, {
-            key: col.name,
-            props: {
-              props
-            },
-            style: col.headerStyle,
-            class: col.headerClasses
-          }, col.label);
         };
-      }
-
-      const child = this.computedCols.map(mapFn);
+        return slot !== void 0 ? slot(props) : h(QTh, {
+          key: col.name,
+          props: {
+            props
+          },
+          style: col.headerStyle,
+          class: col.headerClasses
+        }, col.label);
+      });
 
       if (this.singleSelection === true && this.grid !== true) {
         child.unshift(h('th', {
@@ -64802,33 +65825,33 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
 
 /* harmony default export */ var table_body = ({
   methods: {
-    getTableRowBody(row, body) {
+    getTableRowBody(row, body, pageIndex) {
       const key = this.getRowKey(row),
             selected = this.isRowSelected(key);
       return body(this.addBodyRowMeta({
         key,
         row,
+        pageIndex,
         cols: this.computedCols,
         colsMap: this.computedColsMap,
         __trClass: selected ? 'selected' : ''
       }));
     },
 
-    getTableRow(h, row) {
+    getTableRow(h, row, pageIndex) {
       const bodyCell = this.$scopedSlots['body-cell'],
             key = this.getRowKey(row),
             selected = this.isRowSelected(key),
-            child = bodyCell ? this.computedCols.map(col => bodyCell(this.addBodyCellMetaData({
-        row,
-        col
-      }))) : this.computedCols.map(col => {
-        const slot = this.$scopedSlots[`body-cell-${col.name}`];
+            child = this.computedCols.map(col => {
+        const bodyCellCol = this.$scopedSlots[`body-cell-${col.name}`],
+              slot = bodyCellCol !== void 0 ? bodyCellCol : bodyCell;
         return slot !== void 0 ? slot(this.addBodyCellMetaData({
           row,
+          pageIndex,
           col
         })) : h('td', {
           class: col.__tdClass,
-          style: col.__tdStyle
+          style: col.style
         }, this.getCellValue(col, row));
       });
       this.hasSelectionMode === true && child.unshift(h('td', {
@@ -64841,8 +65864,8 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
           dense: this.dense
         },
         on: {
-          input: adding => {
-            this.__updateSelection([key], [row], adding);
+          input: (adding, evt) => {
+            this.__updateSelection([key], [row], adding, evt);
           }
         }
       })]));
@@ -64854,7 +65877,7 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
         on: {}
       };
 
-      if (this.$listeners['row-click'] !== void 0) {
+      if (this.qListeners['row-click'] !== void 0) {
         data.class['cursor-pointer'] = true;
 
         data.on.click = evt => {
@@ -64862,7 +65885,7 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
         };
       }
 
-      if (this.$listeners['row-dblclick'] !== void 0) {
+      if (this.qListeners['row-dblclick'] !== void 0) {
         data.class['cursor-pointer'] = true;
 
         data.on.dblclick = evt => {
@@ -64877,7 +65900,7 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
       const body = this.$scopedSlots.body,
             topRow = this.$scopedSlots['top-row'],
             bottomRow = this.$scopedSlots['bottom-row'],
-            mapFn = body !== void 0 ? row => this.getTableRowBody(row, body) : row => this.getTableRow(h, row);
+            mapFn = body !== void 0 ? (row, pageIndex) => this.getTableRowBody(row, body, pageIndex) : (row, pageIndex) => this.getTableRow(h, row, pageIndex);
       let child = this.computedRows.map(mapFn);
 
       if (topRow !== void 0) {
@@ -64897,10 +65920,11 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
 
     getTableRowVirtual(h) {
       const body = this.$scopedSlots.body;
-      return body !== void 0 ? props => this.getTableRowBody(props.item, body) : props => this.getTableRow(h, props.item);
+      return body !== void 0 ? (props, pageIndex) => this.getTableRowBody(props.item, body, pageIndex) : (props, pageIndex) => this.getTableRow(h, props.item, pageIndex);
     },
 
     addBodyRowMeta(data) {
+      data.rowIndex = this.firstRowIndex + data.pageIndex;
       this.hasSelectionMode === true && Object.defineProperty(data, 'selected', {
         get: () => this.isRowSelected(data.key),
         set: adding => {
@@ -64931,6 +65955,7 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
     },
 
     addBodyCellMetaData(data) {
+      data.rowIndex = this.firstRowIndex + data.pageIndex;
       Object.defineProperty(data, 'value', {
         get: () => this.getCellValue(data.col, data.row),
         configurable: true,
@@ -64951,10 +65976,17 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
 
 
 
+const table_bottom_staticClass = 'q-table__bottom row items-center';
 /* harmony default export */ var table_bottom = ({
+  props: {
+    hideBottom: Boolean,
+    hideSelectedBanner: Boolean,
+    hideNoData: Boolean,
+    hidePagination: Boolean
+  },
   computed: {
     navIcon() {
-      const ico = [this.$q.iconSet.table.prevPage, this.$q.iconSet.table.nextPage];
+      const ico = [this.iconFirstPage || this.$q.iconSet.table.firstPage, this.iconPrevPage || this.$q.iconSet.table.prevPage, this.iconNextPage || this.$q.iconSet.table.nextPage, this.iconLastPage || this.$q.iconSet.table.lastPage];
       return this.$q.lang.rtl === true ? ico.reverse() : ico;
     }
 
@@ -64966,6 +65998,10 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
       }
 
       if (this.nothingToDisplay === true) {
+        if (this.hideNoData === true) {
+          return;
+        }
+
         const message = this.loading === true ? this.loadingLabel || this.$q.lang.table.loading : this.filter ? this.noResultsLabel || this.$q.lang.table.noResults : this.noDataLabel || this.$q.lang.table.noData;
         const noData = this.$scopedSlots['no-data'];
         const children = noData !== void 0 ? [noData({
@@ -64979,18 +66015,36 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
           }
         }), message];
         return h('div', {
-          staticClass: 'q-table__bottom row items-center q-table__bottom--nodata'
+          staticClass: table_bottom_staticClass + ' q-table__bottom--nodata'
         }, children);
       }
 
       const bottom = this.$scopedSlots.bottom;
-      return h('div', {
-        staticClass: 'q-table__bottom row items-center',
-        class: bottom !== void 0 ? null : 'justify-end'
-      }, bottom !== void 0 ? [bottom(this.marginalsProps)] : this.getPaginationRow(h));
+
+      if (bottom !== void 0) {
+        return h('div', {
+          staticClass: table_bottom_staticClass
+        }, [bottom(this.marginalsProps)]);
+      }
+
+      const child = this.hideSelectedBanner !== true && this.hasSelectionMode === true && this.rowsSelectedNumber > 0 ? [h('div', {
+        staticClass: 'q-table__control'
+      }, [h('div', [(this.selectedRowsLabel || this.$q.lang.table.selectedRecords)(this.rowsSelectedNumber)])])] : [];
+
+      if (this.hidePagination !== true) {
+        return h('div', {
+          staticClass: table_bottom_staticClass + ' justify-end'
+        }, this.getPaginationRow(h, child));
+      }
+
+      if (child.length > 0) {
+        return h('div', {
+          staticClass: table_bottom_staticClass
+        }, child);
+      }
     },
 
-    getPaginationRow(h) {
+    getPaginationRow(h, child) {
       let control;
       const {
         rowsPerPage
@@ -64998,11 +66052,9 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
             paginationLabel = this.paginationLabel || this.$q.lang.table.pagination,
             paginationSlot = this.$scopedSlots.pagination,
             hasOpts = this.rowsPerPageOptions.length > 1;
-      const child = [h('div', {
-        staticClass: 'q-table__control'
-      }, [h('div', [this.hasSelectionMode === true && this.rowsSelectedNumber > 0 ? (this.selectedRowsLabel || this.$q.lang.table.selectedRecords)(this.rowsSelectedNumber) : ''])]), h('div', {
+      child.push(h('div', {
         staticClass: 'q-table__separator col'
-      })];
+      }));
 
       if (hasOpts === true) {
         child.push(h('div', {
@@ -65038,35 +66090,57 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
       } else {
         control = [h('span', rowsPerPage !== 0 ? {
           staticClass: 'q-table__bottom-item'
-        } : {}, [rowsPerPage ? paginationLabel(this.firstRowIndex + 1, Math.min(this.lastRowIndex, this.computedRowsNumber), this.computedRowsNumber) : paginationLabel(1, this.computedData.rowsNumber, this.computedRowsNumber)])];
+        } : {}, [rowsPerPage ? paginationLabel(this.firstRowIndex + 1, Math.min(this.lastRowIndex, this.computedRowsNumber), this.computedRowsNumber) : paginationLabel(1, this.filteredSortedRowsNumber, this.computedRowsNumber)])];
 
-        if (rowsPerPage !== 0) {
-          const size = this.dense === true ? 'sm' : void 0;
-          control.push(h(QBtn, {
-            props: {
-              color: this.color,
-              round: true,
+        if (rowsPerPage !== 0 && this.pagesNumber > 1) {
+          const btnProps = {
+            color: this.color,
+            round: true,
+            dense: true,
+            flat: true
+          };
+
+          if (this.dense === true) {
+            btnProps.size = 'sm';
+          }
+
+          this.pagesNumber > 2 && control.push(h(QBtn, {
+            key: 'pgFirst',
+            props: { ...btnProps,
               icon: this.navIcon[0],
-              dense: true,
-              flat: true,
-              size,
+              disable: this.isFirstPage
+            },
+            on: cache(this, 'pgFirst', {
+              click: this.firstPage
+            })
+          }));
+          control.push(h(QBtn, {
+            key: 'pgPrev',
+            props: { ...btnProps,
+              icon: this.navIcon[1],
               disable: this.isFirstPage
             },
             on: cache(this, 'pgPrev', {
               click: this.prevPage
             })
           }), h(QBtn, {
-            props: {
-              color: this.color,
-              round: true,
-              icon: this.navIcon[1],
-              dense: true,
-              size,
-              flat: true,
+            key: 'pgNext',
+            props: { ...btnProps,
+              icon: this.navIcon[2],
               disable: this.isLastPage
             },
             on: cache(this, 'pgNext', {
               click: this.nextPage
+            })
+          }));
+          this.pagesNumber > 2 && control.push(h(QBtn, {
+            key: 'pgLast',
+            props: { ...btnProps,
+              icon: this.navIcon[3],
+              disable: this.isLastPage
+            },
+            on: cache(this, 'pgLast', {
+              click: this.lastPage
             })
           }));
         }
@@ -65104,8 +66178,8 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
             dense: true
           },
           on: {
-            input: val => {
-              scope.selected = val;
+            input: (adding, evt) => {
+              this.__updateSelection([scope.key], [scope.row], adding, evt);
             }
           }
         })]), h(QSeparator, {
@@ -65120,17 +66194,17 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
           on: {}
         };
 
-        if (this.$listeners['row-click'] !== void 0 || this.$listeners['row-dblclick'] !== void 0) {
+        if (this.qListeners['row-click'] !== void 0 || this.qListeners['row-dblclick'] !== void 0) {
           data.staticClass += ' cursor-pointer';
         }
 
-        if (this.$listeners['row-click'] !== void 0) {
+        if (this.qListeners['row-click'] !== void 0) {
           data.on.click = evt => {
             this.$emit('row-click', evt, scope.row);
           };
         }
 
-        if (this.$listeners['row-dblclick'] !== void 0) {
+        if (this.qListeners['row-dblclick'] !== void 0) {
           data.on.dblclick = evt => {
             this.$emit('row-dblclick', evt, scope.row);
           };
@@ -65145,12 +66219,13 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
         staticClass: 'q-table__grid-content row',
         class: this.cardContainerClass,
         style: this.cardContainerStyle
-      }, this.computedRows.map(row => {
+      }, this.computedRows.map((row, pageIndex) => {
         const key = this.getRowKey(row),
               selected = this.isRowSelected(key);
         return item(this.addBodyRowMeta({
           key,
           row,
+          pageIndex,
           cols: this.computedCols,
           colsMap: this.computedColsMap,
           __trClass: selected ? 'selected' : ''
@@ -65186,13 +66261,15 @@ const StepWrapper = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.exten
 
 
 
+
+
 const comps = {
   list: QList,
   table: QMarkupTable
 };
 /* harmony default export */ var QVirtualScroll = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QVirtualScroll',
-  mixins: [virtual_scroll],
+  mixins: [mixins_attrs, listeners, virtual_scroll],
   props: {
     type: {
       type: String,
@@ -65309,8 +66386,9 @@ const comps = {
     }, child) : h(comps[this.type], {
       class: this.classes,
       attrs: this.attrs,
-      props: this.$attrs,
-      on: this.$listeners
+      props: this.qAttrs,
+      on: { ...this.qListeners
+      }
     }, child);
   }
 
@@ -65341,7 +66419,7 @@ function sortBoolean(a, b) {
       type: Function,
 
       default(data, sortBy, descending) {
-        const col = this.columns.find(def => def.name === sortBy);
+        const col = this.colList.find(def => def.name === sortBy);
 
         if (col === void 0 || col.field === void 0) {
           return data;
@@ -65391,7 +66469,7 @@ function sortBoolean(a, b) {
       } = this.computedPagination;
 
       if (sortBy) {
-        return this.columns.find(def => def.name === sortBy) || null;
+        return this.colList.find(def => def.name === sortBy) || null;
       }
     }
 
@@ -65485,14 +66563,15 @@ function fixPagination(p) {
     pagination: Object,
     rowsPerPageOptions: {
       type: Array,
-      default: () => [3, 5, 7, 10, 15, 20, 25, 50, 0]
+      default: () => [5, 7, 10, 15, 20, 25, 50, 0]
     }
   },
   computed: {
     computedPagination() {
-      return fixPagination({ ...this.innerPagination,
+      const pag = this.qListeners['update:pagination'] !== void 0 ? { ...this.innerPagination,
         ...this.pagination
-      });
+      } : this.innerPagination;
+      return fixPagination(pag);
     },
 
     firstRowIndex() {
@@ -65524,7 +66603,8 @@ function fixPagination(p) {
     },
 
     computedRowsPerPageOptions() {
-      return this.rowsPerPageOptions.map(count => ({
+      const opts = this.rowsPerPageOptions.includes(this.innerPagination.rowsPerPage) ? this.rowsPerPageOptions : [this.innerPagination.rowsPerPage].concat(this.rowsPerPageOptions);
+      return opts.map(count => ({
         label: count === 0 ? this.$q.lang.table.allRows : '' + count,
         value: count
       }));
@@ -65565,24 +66645,30 @@ function fixPagination(p) {
       });
 
       if (samePagination(this.computedPagination, newPagination)) {
-        if (this.isServerSide && forceServerRequest) {
+        if (this.isServerSide === true && forceServerRequest === true) {
           this.__sendServerRequest(newPagination);
         }
 
         return;
       }
 
-      if (this.isServerSide) {
+      if (this.isServerSide === true) {
         this.__sendServerRequest(newPagination);
 
         return;
       }
 
-      if (this.pagination) {
+      if (this.pagination !== void 0 && this.qListeners['update:pagination'] !== void 0) {
         this.$emit('update:pagination', newPagination);
       } else {
         this.innerPagination = newPagination;
       }
+    },
+
+    firstPage() {
+      this.setPagination({
+        page: 1
+      });
     },
 
     prevPage() {
@@ -65608,13 +66694,21 @@ function fixPagination(p) {
           page: page + 1
         });
       }
+    },
+
+    lastPage() {
+      this.setPagination({
+        page: this.pagesNumber
+      });
     }
 
   },
 
   created() {
-    this.$emit('update:pagination', { ...this.computedPagination
-    });
+    if (this.qListeners['update:pagination'] !== void 0) {
+      this.$emit('update:pagination', { ...this.computedPagination
+      });
+    }
   }
 
 });
@@ -65674,11 +66768,12 @@ function fixPagination(p) {
       this.$emit('update:selected', []);
     },
 
-    __updateSelection(keys, rows, added) {
+    __updateSelection(keys, rows, added, evt) {
       this.$emit('selection', {
         rows,
         added,
-        keys
+        keys,
+        evt
       });
       const payload = this.singleSelection === true ? added === true ? rows : [] : added === true ? this.selected.concat(rows) : this.selected.filter(row => keys.includes(this.getRowKey(row)) === false);
       this.$emit('update:selected', payload);
@@ -65740,25 +66835,42 @@ function getVal(val) {
   }
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/table/table-column-selection.js
+
 /* harmony default export */ var table_column_selection = ({
   props: {
     visibleColumns: Array
   },
   computed: {
+    colList() {
+      if (this.columns !== void 0) {
+        return this.columns;
+      } // we infer columns from first row
+
+
+      const row = this.data[0];
+      return row !== void 0 ? Object.keys(row).map(name => ({
+        name,
+        label: name.toUpperCase(),
+        field: name,
+        align: isNumber(row[name]) ? 'right' : 'left',
+        sortable: true
+      })) : [];
+    },
+
     computedCols() {
       let {
         sortBy,
         descending
       } = this.computedPagination;
-      const cols = this.visibleColumns !== void 0 ? this.columns.filter(col => col.required === true || this.visibleColumns.includes(col.name) === true) : this.columns;
+      const cols = this.visibleColumns !== void 0 ? this.colList.filter(col => col.required === true || this.visibleColumns.includes(col.name) === true) : this.colList;
       return cols.map(col => {
-        col.align = col.align || 'right';
-        col.__iconClass = `q-table__sort-icon q-table__sort-icon--${col.align}`;
-        col.__thClass = `text-${col.align}${col.headerClasses !== void 0 ? ' ' + col.headerClasses : ''}${col.sortable === true ? ' sortable' : ''}${col.name === sortBy ? ` sorted ${descending === true ? 'sort-desc' : ''}` : ''}`;
-        col.__tdClass = `text-${col.align}${col.classes !== void 0 ? ' ' + col.classes : ''}`;
-        col.__thStyle = col.headerStyle !== void 0 ? col.headerStyle : null;
-        col.__tdStyle = col.style !== void 0 ? col.style : null;
-        return col;
+        const align = col.align || 'right';
+        return { ...col,
+          align,
+          __iconClass: `q-table__sort-icon q-table__sort-icon--${align}`,
+          __thClass: `text-${align}` + (col.headerClasses !== void 0 ? ' ' + col.headerClasses : '') + (col.sortable === true ? ' sortable' : '') + (col.name === sortBy ? ` sorted ${descending === true ? 'sort-desc' : ''}` : ''),
+          __tdClass: `text-${align}${col.classes !== void 0 ? ' ' + col.classes : ''}`
+        };
       });
     },
 
@@ -65792,13 +66904,14 @@ function getVal(val) {
 
 
 
+
 const commonVirtPropsObj = {};
 commonVirtPropsList.forEach(p => {
   commonVirtPropsObj[p] = {};
 });
 /* harmony default export */ var QTable = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QTable',
-  mixins: [mixins_dark, fullscreen, table_top, table_header, table_body, table_bottom, table_grid, table_sort, table_filter, table_pagination, table_row_selection, table_row_expand, table_column_selection],
+  mixins: [mixins_dark, listeners, fullscreen, table_top, table_header, table_body, table_bottom, table_grid, table_sort, table_filter, table_pagination, table_row_selection, table_row_expand, table_column_selection],
   props: {
     data: {
       type: Array,
@@ -65811,9 +66924,12 @@ commonVirtPropsList.forEach(p => {
     columns: Array,
     loading: Boolean,
     binaryStateSort: Boolean,
+    iconFirstPage: String,
+    iconPrevPage: String,
+    iconNextPage: String,
+    iconLastPage: String,
     title: String,
     hideHeader: Boolean,
-    hideBottom: Boolean,
     grid: Boolean,
     gridHeader: Boolean,
     dense: Boolean,
@@ -65850,12 +66966,12 @@ commonVirtPropsList.forEach(p => {
 
   data() {
     return {
-      innerPagination: {
+      innerPagination: Object.assign({
         sortBy: null,
         descending: false,
         page: 1,
-        rowsPerPage: 5
-      }
+        rowsPerPage: this.rowsPerPageOptions.length > 0 ? this.rowsPerPageOptions[0] : 5
+      }, this.pagination)
     };
   },
 
@@ -65878,27 +66994,16 @@ commonVirtPropsList.forEach(p => {
       return ['tableStyle', 'tableClass', 'tableHeaderStyle', 'tableHeaderClass', 'containerClass'].map(p => this[p]).join(';');
     },
 
-    computedData() {
+    filteredSortedRows() {
       let rows = this.data;
 
-      if (rows.length === 0) {
-        return {
-          rowsNumber: 0,
-          rows
-        };
-      }
-
-      if (this.isServerSide === true) {
-        return {
-          rowsNumber: rows.length,
-          rows
-        };
+      if (this.isServerSide === true || rows.length === 0) {
+        return rows;
       }
 
       const {
         sortBy,
-        descending,
-        rowsPerPage
+        descending
       } = this.computedPagination;
 
       if (this.filter) {
@@ -65909,7 +67014,23 @@ commonVirtPropsList.forEach(p => {
         rows = this.sortMethod(this.data === rows ? rows.slice() : rows, sortBy, descending);
       }
 
-      const rowsNumber = rows.length;
+      return rows;
+    },
+
+    filteredSortedRowsNumber() {
+      return this.filteredSortedRows.length;
+    },
+
+    computedRows() {
+      let rows = this.filteredSortedRows;
+
+      if (this.isServerSide === true) {
+        return rows;
+      }
+
+      const {
+        rowsPerPage
+      } = this.computedPagination;
 
       if (rowsPerPage !== 0) {
         if (this.firstRowIndex === 0 && this.data !== rows) {
@@ -65921,18 +67042,11 @@ commonVirtPropsList.forEach(p => {
         }
       }
 
-      return {
-        rowsNumber,
-        rows
-      };
-    },
-
-    computedRows() {
-      return this.computedData.rows;
+      return rows;
     },
 
     computedRowsNumber() {
-      return this.isServerSide === true ? this.computedPagination.rowsNumber || 0 : this.computedData.rowsNumber;
+      return this.isServerSide === true ? this.computedPagination.rowsNumber || 0 : this.filteredSortedRowsNumber;
     },
 
     nothingToDisplay() {
@@ -66079,8 +67193,10 @@ commonVirtPropsList.forEach(p => {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/table/QTr.js
 
 
+
 /* harmony default export */ var QTr = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QTr',
+  mixins: [listeners],
   props: {
     props: Object,
     noHover: Boolean
@@ -66094,7 +67210,8 @@ commonVirtPropsList.forEach(p => {
 
   render(h) {
     return h('tr', {
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       class: this.classes
     }, slot_slot(this, 'default'));
   }
@@ -66103,8 +67220,10 @@ commonVirtPropsList.forEach(p => {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/table/QTd.js
 
 
+
 /* harmony default export */ var QTd = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QTd',
+  mixins: [listeners],
   props: {
     props: Object,
     autoWidth: Boolean,
@@ -66118,7 +67237,7 @@ commonVirtPropsList.forEach(p => {
   },
 
   render(h) {
-    const on = this.$listeners;
+    const on = this.qListeners;
 
     if (this.props === void 0) {
       return h('td', {
@@ -66136,7 +67255,7 @@ commonVirtPropsList.forEach(p => {
 
     return h('td', {
       on,
-      style: col.__tdStyle,
+      style: col.style,
       class: this.classes + ' ' + col.__tdClass
     }, slot_slot(this, 'default'));
   }
@@ -66475,8 +67594,12 @@ function isIncludedRoute(current, target) {
     },
 
     __click(evt) {
-      // __activate() has already updated the offset
+      if (this._isBeingDestroyed === true || this._isDestroyed === true) {
+        return;
+      } // __activate() has already updated the offset
       // (on desktop only, through mousedown event)
+
+
       if (this.$q.platform.is.desktop !== true) {
         this.__updateClock(evt, this.__getClockRect());
       }
@@ -66485,7 +67608,9 @@ function isIncludedRoute(current, target) {
     },
 
     __activate(evt) {
-      this.__updateClock(evt, this.__getClockRect());
+      if (this._isBeingDestroyed !== true && this._isDestroyed !== true) {
+        this.__updateClock(evt, this.__getClockRect());
+      }
     },
 
     __getClockRect() {
@@ -66883,7 +68008,8 @@ function isIncludedRoute(current, target) {
 
     return h('div', {
       class: this.classes,
-      on: this.$listeners,
+      on: { ...this.qListeners
+      },
       attrs: {
         tabindex: -1
       }
@@ -66900,9 +68026,10 @@ function isIncludedRoute(current, target) {
 
 
 
+
 /* harmony default export */ var QTimeline = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QTimeline',
-  mixins: [mixins_dark],
+  mixins: [mixins_dark, listeners],
 
   provide() {
     return {
@@ -66937,12 +68064,14 @@ function isIncludedRoute(current, target) {
     return h('ul', {
       staticClass: 'q-timeline',
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
 }));
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/timeline/QTimelineEntry.js
+
 
 
 
@@ -66956,6 +68085,7 @@ function isIncludedRoute(current, target) {
 
     }
   },
+  mixins: [listeners],
   props: {
     heading: Boolean,
     tag: {
@@ -67002,7 +68132,8 @@ function isIncludedRoute(current, target) {
       }, child)];
       return h('div', {
         staticClass: 'q-timeline__heading',
-        on: this.$listeners
+        on: { ...this.qListeners
+        }
       }, this.reverse === true ? content.reverse() : content);
     }
 
@@ -67037,7 +68168,8 @@ function isIncludedRoute(current, target) {
     return h('li', {
       staticClass: 'q-timeline__entry',
       class: this.classes,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, this.reverse === true ? content.reverse() : content);
   }
 
@@ -67052,8 +68184,10 @@ function isIncludedRoute(current, target) {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/toolbar/QToolbar.js
 
 
+
 /* harmony default export */ var QToolbar = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QToolbar',
+  mixins: [listeners],
   props: {
     inset: Boolean
   },
@@ -67062,7 +68196,8 @@ function isIncludedRoute(current, target) {
     return h('div', {
       staticClass: 'q-toolbar row no-wrap items-center',
       class: this.inset ? 'q-toolbar--inset' : null,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -67070,17 +68205,25 @@ function isIncludedRoute(current, target) {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/toolbar/QToolbarTitle.js
 
 
+
 /* harmony default export */ var QToolbarTitle = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QToolbarTitle',
+  mixins: [listeners],
   props: {
     shrink: Boolean
+  },
+  computed: {
+    classes() {
+      return 'q-toolbar__title ellipsis' + (this.shrink === true ? ' col-shrink' : '');
+    }
+
   },
 
   render(h) {
     return h('div', {
-      staticClass: 'q-toolbar__title ellipsis',
-      class: this.shrink === true ? 'col-shrink' : null,
-      on: this.$listeners
+      class: this.classes,
+      on: { ...this.qListeners
+      }
     }, slot_slot(this, 'default'));
   }
 
@@ -67117,6 +68260,10 @@ function isIncludedRoute(current, target) {
     labelKey: {
       type: String,
       default: 'label'
+    },
+    childrenKey: {
+      type: String,
+      default: 'children'
     },
     color: String,
     controlColor: String,
@@ -67188,7 +68335,7 @@ function isIncludedRoute(current, target) {
       const travel = (node, parent) => {
         const tickStrategy = node.tickStrategy || (parent ? parent.tickStrategy : this.tickStrategy);
         const key = node[this.nodeKey],
-              isParent = node.children && node.children.length > 0,
+              isParent = node[this.childrenKey] && node[this.childrenKey].length > 0,
               isLeaf = isParent !== true,
               selectable = node.disabled !== true && this.hasSelection === true && node.selectable !== false,
               expandable = node.disabled !== true && node.expandable !== false,
@@ -67234,7 +68381,7 @@ function isIncludedRoute(current, target) {
         meta[key] = m;
 
         if (isParent === true) {
-          m.children = node.children.map(n => travel(n, m));
+          m.children = node[this.childrenKey].map(n => travel(n, m));
 
           if (this.filter) {
             if (m.matchesFilter !== true) {
@@ -67315,8 +68462,8 @@ function isIncludedRoute(current, target) {
           return node;
         }
 
-        if (node.children) {
-          return find(null, node.children);
+        if (node[this.childrenKey]) {
+          return find(null, node[this.childrenKey]);
         }
       };
 
@@ -67346,10 +68493,10 @@ function isIncludedRoute(current, target) {
     expandAll() {
       const expanded = this.innerExpanded,
             travel = node => {
-        if (node.children && node.children.length > 0) {
+        if (node[this.childrenKey] && node[this.childrenKey].length > 0) {
           if (node.expandable !== false && node.disabled !== true) {
             expanded.push(node[this.nodeKey]);
-            node.children.forEach(travel);
+            node[this.childrenKey].forEach(travel);
           }
         }
       };
@@ -67377,7 +68524,7 @@ function isIncludedRoute(current, target) {
             this.lazy[key] = 'loaded';
 
             if (children) {
-              this.$set(node, 'children', children);
+              this.$set(node, this.childrenKey, children);
             }
 
             this.$nextTick(() => {
@@ -67529,7 +68676,7 @@ function isIncludedRoute(current, target) {
       const key = node[this.nodeKey],
             meta = this.meta[key],
             header = node.header ? this.$scopedSlots[`header-${node.header}`] || this.$scopedSlots['default-header'] : this.$scopedSlots['default-header'];
-      const children = meta.isParent === true ? this.__getChildren(h, node.children) : [];
+      const children = meta.isParent === true ? this.__getChildren(h, node[this.childrenKey]) : [];
       const isParent = children.length > 0 || meta.lazy && meta.lazy !== 'loaded';
       let body = node.body ? this.$scopedSlots[`body-${node.body}`] || this.$scopedSlots['default-body'] : this.$scopedSlots['default-body'],
           slotScope = header !== void 0 || body !== void 0 ? this.__getSlotScope(node, meta, key) : null;
@@ -67592,7 +68739,7 @@ function isIncludedRoute(current, target) {
         props: {
           name: this.computedIcon
         },
-        nativeOn: {
+        on: {
           click: e => {
             this.__onExpandClick(node, meta, e);
           }
@@ -67787,21 +68934,10 @@ function isIncludedRoute(current, target) {
     },
 
     canAddFiles() {
-      return this.editable && this.isUploading !== true && (this.multiple === true || this.queuedFiles.length === 0);
-    },
-
-    extensions() {
-      if (this.accept !== void 0) {
-        return this.accept.split(',').map(ext => {
-          ext = ext.trim(); // support "image/*"
-
-          if (ext.endsWith('/*')) {
-            ext = ext.slice(0, ext.length - 1);
-          }
-
-          return ext;
-        });
-      }
+      return this.editable === true && this.isUploading !== true && ( // if single selection and no files are queued:
+      this.multiple === true || this.queuedFiles.length === 0) && ( // if max-files is set and current number of files does not exceeds it:
+      this.maxFiles === void 0 || this.files.length < this.maxFilesNumber) && ( // if max-total-size is set and current upload size does not exceeds it:
+      this.maxTotalSize === void 0 || this.uploadSize < this.maxTotalSizeNumber);
     },
 
     uploadProgress() {
@@ -67945,7 +69081,7 @@ function isIncludedRoute(current, target) {
     },
 
     __addFiles(e, fileList) {
-      const processedFiles = this.__processFiles(e, fileList);
+      const processedFiles = this.__processFiles(e, fileList, this.files, true);
 
       if (processedFiles === void 0) {
         return;
@@ -68001,6 +69137,7 @@ function isIncludedRoute(current, target) {
           title: '',
           // try to remove default tooltip
           accept: this.accept,
+          capture: this.capture,
           ...(this.multiple === true ? {
             multiple: true
           } : {})
@@ -68045,7 +69182,7 @@ function isIncludedRoute(current, target) {
           'q-uploader__file--uploaded': file.__status === 'uploaded'
         },
         style: this.noThumbnails !== true && file.__img !== void 0 ? {
-          backgroundImage: 'url(' + file.__img.src + ')'
+          backgroundImage: 'url("' + file.__img.src + '")'
         } : null
       }, [h('div', {
         staticClass: 'q-uploader__file-header row flex-center no-wrap'
@@ -68406,9 +69543,10 @@ function getFn(prop) {
 // CONCATENATED MODULE: ./node_modules/quasar/src/components/video/QVideo.js
 
 
+
 /* harmony default export */ var QVideo = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'QVideo',
-  mixins: [mixins_ratio],
+  mixins: [mixins_ratio, listeners],
   props: {
     src: {
       type: String,
@@ -68436,7 +69574,8 @@ function getFn(prop) {
     return h('div', {
       class: this.classes,
       style: this.ratioStyle,
-      on: this.$listeners
+      on: { ...this.qListeners
+      }
     }, [h('iframe', this.iframeData)]);
   }
 
@@ -69337,17 +70476,27 @@ function promisify(target, fn) {
 /* harmony default export */ var AppFullscreen = ({
   isCapable: false,
   isActive: false,
+  activeEl: null,
 
   request(target) {
-    return this.isCapable && !this.isActive ? promisify(target || document.documentElement, prefixes.request) : this.__getErr();
+    if (this.isCapable === true && this.isActive === false) {
+      const el = target || document.documentElement;
+      return promisify(el, prefixes.request).then(() => {
+        this.activeEl = el;
+      });
+    }
+
+    return this.__getErr();
   },
 
   exit() {
-    return this.isCapable && this.isActive ? promisify(document, prefixes.exit) : this.__getErr();
+    return this.isCapable === true && this.isActive === true ? promisify(document, prefixes.exit).then(() => {
+      this.activeEl = null;
+    }) : this.__getErr();
   },
 
   toggle(target) {
-    return this.isActive ? this.exit() : this.request(target);
+    return this.isActive === true ? this.exit() : this.request(target);
   },
 
   install({
@@ -69359,7 +70508,7 @@ function promisify(target, fn) {
       return;
     }
 
-    prefixes.request = ['requestFullscreen', 'msRequestFullscreen', 'mozRequestFullScreen', 'webkitRequestFullscreen'].find(request => document.documentElement[request]);
+    prefixes.request = ['requestFullscreen', 'msRequestFullscreen', 'mozRequestFullScreen', 'webkitRequestFullscreen'].find(request => document.documentElement[request] !== void 0);
     this.isCapable = prefixes.request !== void 0;
 
     if (this.isCapable === false) {
@@ -69375,10 +70524,11 @@ function promisify(target, fn) {
     this.isActive = !!(document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
     ['onfullscreenchange', 'onmsfullscreenchange', 'onwebkitfullscreenchange'].forEach(evt => {
       document[evt] = () => {
-        this.isActive = !this.isActive;
+        this.isActive = this.isActive === false;
       };
     });
     external_commonjs_vue_commonjs2_vue_root_Vue_default.a.util.defineReactive(this, 'isActive', this.isActive);
+    external_commonjs_vue_commonjs2_vue_root_Vue_default.a.util.defineReactive(this, 'activeEl', this.activeEl);
   }
 
 });
@@ -69434,9 +70584,10 @@ function promisify(target, fn) {
 
 
 
+
 /* harmony default export */ var BottomSheet = (external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend({
   name: 'BottomSheetPlugin',
-  mixins: [mixins_dark],
+  mixins: [mixins_dark, mixins_attrs],
   inheritAttrs: false,
   props: {
     title: String,
@@ -69445,6 +70596,14 @@ function promisify(target, fn) {
     grid: Boolean,
     cardClass: [String, Array, Object],
     cardStyle: [String, Array, Object]
+  },
+  computed: {
+    dialogProps() {
+      return { ...this.qAttrs,
+        position: 'bottom'
+      };
+    }
+
   },
   methods: {
     show() {
@@ -69542,29 +70701,18 @@ function promisify(target, fn) {
 
   render(h) {
     let child = [];
-
-    if (this.title) {
-      child.push(h(QCardSection, {
-        staticClass: 'q-dialog__title'
-      }, [this.title]));
-    }
-
-    if (this.message) {
-      child.push(h(QCardSection, {
-        staticClass: 'q-dialog__message scroll'
-      }, [this.message]));
-    }
-
+    this.title && child.push(h(QCardSection, {
+      staticClass: 'q-dialog__title'
+    }, [this.title]));
+    this.message && child.push(h(QCardSection, {
+      staticClass: 'q-dialog__message'
+    }, [this.message]));
     child.push(this.grid === true ? h('div', {
-      staticClass: 'scroll row items-stretch justify-start'
-    }, this.__getGrid(h)) : h('div', {
-      staticClass: 'scroll'
-    }, this.__getList(h)));
+      staticClass: 'row items-stretch justify-start'
+    }, this.__getGrid(h)) : h('div', this.__getList(h)));
     return h(QDialog, {
       ref: 'dialog',
-      props: { ...this.$attrs,
-        position: 'bottom'
-      },
+      props: this.dialogProps,
       on: cache(this, 'hide', {
         hide: () => {
           this.$emit('hide');
@@ -69745,8 +70893,7 @@ function has(key, ssr) {
   return Cookies_get(key, ssr) !== null;
 }
 
-function getObject(ctx = {}) {
-  const ssr = ctx.ssr;
+function getObject(ssr) {
   return {
     get: key => Cookies_get(key, ssr),
     set: (key, val, opts) => Cookies_set(key, val, opts, ssr),
@@ -69756,12 +70903,8 @@ function getObject(ctx = {}) {
   };
 }
 /* harmony default export */ var Cookies = ({
-  parseSSR(
-  /* ssrContext */
-  ssr) {
-    return ssr ? getObject({
-      ssr
-    }) : this;
+  parseSSR(ssrContext) {
+    return ssrContext !== void 0 ? getObject(ssrContext) : this;
   },
 
   install({
@@ -69770,7 +70913,7 @@ function getObject(ctx = {}) {
   }) {
     if (isSSR === true) {
       queues.server.push((q, ctx) => {
-        q.cookies = getObject(ctx);
+        q.cookies = getObject(ctx.ssr);
       });
     } else {
       Object.assign(this, getObject());
@@ -69885,7 +71028,7 @@ const Loading = {
         el: node,
 
         mounted() {
-          preventScroll(true, client);
+          preventScroll(true);
         },
 
         render: h => {
@@ -69899,7 +71042,7 @@ const Loading = {
                 // might be called to finalize
                 // previous leave, even if it was cancelled
                 if (this.isActive !== true && Loading_vm !== void 0) {
-                  preventScroll(false, client);
+                  preventScroll(false);
                   Loading_vm.$destroy();
                   Loading_vm.$el.remove();
                   Loading_vm = void 0;
@@ -70134,8 +71277,6 @@ function updateClient() {
   if (ssrTakeover === true) {
     ssrTakeover = false;
     this.$root.__currentMeta = window.__Q_META__;
-    document.body.querySelector('script[data-qmeta-init]').remove();
-    return;
   }
 
   const meta = {
@@ -70183,7 +71324,7 @@ function getHead(meta) {
   return output;
 }
 
-function getServerMeta(app, html) {
+function getServerMeta(app, html, ctx) {
   const meta = {
     title: '',
     titleTemplate: null,
@@ -70195,11 +71336,12 @@ function getServerMeta(app, html) {
   };
   parseMeta(app, meta);
   normalize(meta);
+  const nonce = ctx !== void 0 && ctx.nonce !== void 0 ? ` nonce="${ctx.nonce}"` : '';
   const tokens = {
     '%%Q_HTML_ATTRS%%': Object.keys(meta.htmlAttr).filter(htmlFilter).map(getAttr(meta.htmlAttr)).join(' '),
     '%%Q_HEAD_TAGS%%': getHead(meta),
     '%%Q_BODY_ATTRS%%': Object.keys(meta.bodyAttr).filter(bodyFilter).map(getAttr(meta.bodyAttr)).join(' '),
-    '%%Q_BODY_TAGS%%': Object.keys(meta.noscript).map(name => `<noscript data-qmeta="${name}">${meta.noscript[name]}</noscript>`).join('') + `<script data-qmeta-init>window.__Q_META__=${delete meta.noscript && JSON.stringify(meta)}</script>`
+    '%%Q_BODY_TAGS%%': Object.keys(meta.noscript).map(name => `<noscript data-qmeta="${name}">${meta.noscript[name]}</noscript>`).join('') + `<script${nonce}>window.__Q_META__=${delete meta.noscript && JSON.stringify(meta)}</script>`
   };
   Object.keys(tokens).forEach(key => {
     html = html.replace(key, tokens[key]);
@@ -70233,7 +71375,9 @@ function triggerMeta() {
     queues
   }) {
     if (isSSR === true) {
-      external_commonjs_vue_commonjs2_vue_root_Vue_default.a.prototype.$getMetaHTML = app => html => getServerMeta(app, html);
+      external_commonjs_vue_commonjs2_vue_root_Vue_default.a.prototype.$getMetaHTML = app => {
+        return (html, ctx) => getServerMeta(app, html, ctx);
+      };
 
       external_commonjs_vue_commonjs2_vue_root_Vue_default.a.mixin({
         beforeCreate
@@ -70282,6 +71426,7 @@ function triggerMeta() {
 
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/plugins/Notify.js
+
 
 
 
@@ -70364,9 +71509,7 @@ const Notifications = {
           notif.icon = notif.icon.call(this);
         }
       } else {
-        Object.assign(notif, {
-          message: config
-        });
+        notif.message = config;
       }
 
       notif.meta = {
@@ -70490,7 +71633,8 @@ const Notifications = {
           notif.meta.uid = original.meta.uid;
           notif.meta.badge = original.meta.badge + 1;
           notif.meta.badgeStaticClass = `q-notification__badge q-notification__badge--${notif.badgePosition}` + (notif.badgeColor !== void 0 ? ` bg-${notif.badgeColor}` : '') + (notif.badgeTextColor !== void 0 ? ` text-${notif.badgeTextColor}` : '');
-          notif = Object.assign(original, notif);
+          const index = this.notifs[notif.position].indexOf(original);
+          this.notifs[notif.position][index] = groups[notif.group] = notif;
         }
 
       notif.meta.close = () => {
@@ -70511,10 +71655,7 @@ const Notifications = {
     },
 
     remove(notif) {
-      if (notif.meta.timer) {
-        clearTimeout(notif.meta.timer);
-      }
-
+      clearTimeout(notif.meta.timer);
       const index = this.notifs[notif.position].indexOf(notif);
 
       if (index !== -1) {
@@ -70580,7 +71721,7 @@ const Notifications = {
         if (meta.hasMedia === true) {
           if (notif.icon) {
             mainChild.push(h(QIcon, {
-              staticClass: 'q-notification__icon col-auto',
+              staticClass: 'q-notification__icon',
               attrs: {
                 role: 'img'
               },
@@ -70632,6 +71773,28 @@ const Notifications = {
         }, child)]);
       }));
     }));
+  },
+
+  mounted() {
+    if (this.$q.fullscreen !== void 0 && this.$q.fullscreen.isCapable === true) {
+      const append = isFullscreen => {
+        const newParent = getBodyFullscreenElement(isFullscreen, this.$q.fullscreen.activeEl);
+
+        if (this.$el.parentElement !== newParent) {
+          newParent.appendChild(this.$el);
+        }
+      };
+
+      this.unwatchFullscreen = this.$watch('$q.fullscreen.isActive', append);
+
+      if (this.$q.fullscreen.isActive === true) {
+        append(true);
+      }
+    }
+  },
+
+  beforeDestroy() {
+    this.unwatchFullscreen !== void 0 && this.unwatchFullscreen();
   }
 
 };
@@ -70923,7 +72086,9 @@ function clean(link) {
 // CONCATENATED MODULE: ./node_modules/quasar/src/utils/open-url.js
 
 
-/* harmony default export */ var open_url = ((url, reject) => {
+
+
+function openWindow(url, reject) {
   let open = window.open;
 
   if (plugins_Platform.is.cordova === true) {
@@ -70941,11 +72106,28 @@ function clean(link) {
   let win = open(url, '_blank');
 
   if (win) {
-    win.focus();
+    plugins_Platform.is.desktop && win.focus();
     return win;
   } else {
     reject && reject();
   }
+}
+
+/* harmony default export */ var open_url = ((url, reject) => {
+  if (plugins_Platform.is.ios === true && window.SafariViewController !== void 0) {
+    window.SafariViewController.isAvailable(available => {
+      if (available) {
+        window.SafariViewController.show({
+          url
+        }, noop, reject);
+      } else {
+        openWindow(url, reject);
+      }
+    });
+    return;
+  }
+
+  return openWindow(url, reject);
 });
 // CONCATENATED MODULE: ./node_modules/quasar/src/utils.js
 
@@ -70997,8 +72179,8 @@ function clean(link) {
 
 var CodeBlockContainer_component = normalizeComponent(
   components_CodeBlockContainervue_type_script_lang_ts_,
-  CodeBlockContainervue_type_template_id_24c2bdef_render,
-  CodeBlockContainervue_type_template_id_24c2bdef_staticRenderFns,
+  CodeBlockContainervue_type_template_id_4c024626_render,
+  CodeBlockContainervue_type_template_id_4c024626_staticRenderFns,
   false,
   null,
   null,
@@ -71008,23 +72190,23 @@ var CodeBlockContainer_component = normalizeComponent(
 
 /* harmony default export */ var CodeBlockContainer = (CodeBlockContainer_component.exports);
 
-CodeBlockContainer_component.options.components = Object.assign({QCard: QCard,QCardSection: QCardSection,QSelect: QSelect,QBtn: QBtn,QPopupProxy: QPopupProxy,QInput: QInput,QToggle: QToggle,QIcon: QIcon,QSlideTransition: QSlideTransition}, CodeBlockContainer_component.options.components || {})
+CodeBlockContainer_component.options.components = Object.assign(Object.create(CodeBlockContainer_component.options.components || null), CodeBlockContainer_component.options.components || {}, {QCard: QCard,QCardSection: QCardSection,QSelect: QSelect,QBtn: QBtn,QPopupProxy: QPopupProxy,QInput: QInput,QToggle: QToggle,QSlideTransition: QSlideTransition})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocksSettings.vue?vue&type=template&id=63a21932&scoped=true&
-var CodeBlocksSettingsvue_type_template_id_63a21932_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row q-pa-none q-mb-md"},[_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-card',{staticClass:"q-mb-sm q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Language')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.languageHasCompiler,"label":_vm.$t('CodeBlocksSettings.AllowExec')},model:{value:(_vm.runCode),callback:function ($$v) {_vm.runCode=$$v},expression:"runCode"}})],1),_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.canContinousCompile,"label":_vm.$t('CodeBlocksSettings.ContinousCompile')},model:{value:(_vm.continuousCompile),callback:function ($$v) {_vm.continuousCompile=$$v},expression:"continuousCompile"}})],1),_c('div',{class:("col-xs-12 col-md-" + (_vm.runCode ? 8 : 12) + " " + (_vm.runCode ? 'q-pr-md-sm' : ''))},[_c('q-select',{attrs:{"options":_vm.compiledLanguages,"label":_vm.$t('CodeBlocksSettings.Language')},model:{value:(_vm.compilerLanguageObj),callback:function ($$v) {_vm.compilerLanguageObj=$$v},expression:"compilerLanguageObj"}})],1),(_vm.runCode)?_c('div',{staticClass:"col-xs-12 col-md-4"},[_c('q-select',{attrs:{"options":_vm.compilerVersions,"label":_vm.$t('CodeBlocksSettings.CVersion')},model:{value:(_vm.compilerVersion),callback:function ($$v) {_vm.compilerVersion=$$v},expression:"compilerVersion"}})],1):_vm._e(),(_vm.runCode)?_c('div',{staticClass:"col-12"},[_c('q-input',{attrs:{"rules":[_vm.validNumber],"label":_vm.$t('CodeBlocksSettings.RunTime'),"maxlength":"6"},model:{value:(_vm.maxRuntime),callback:function ($$v) {_vm.maxRuntime=$$v},expression:"maxRuntime"}})],1):_vm._e(),(_vm.runCode && _vm.accepstArguments)?_c('div',{staticClass:"col-12 text-body2"},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.AllowArguments'))+" "),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showArgsInfoDialog}})],1):_vm._e()])])],1)],1),_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-slide-transition',[(_vm.runCode)?_c('q-card',{staticClass:"q-mb-sm q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Output')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-12 col-md-6 col-12 q-pr-md-sm"},[_c('q-input',{attrs:{"rules":[_vm.validNumber],"label":_vm.$t('CodeBlocksSettings.MaxCharacters'),"maxlength":"6"},model:{value:(_vm.maxCharacters),callback:function ($$v) {_vm.maxCharacters=$$v},expression:"maxCharacters"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.outputParsers,"label":_vm.$t('CodeBlocksSettings.Parser')},model:{value:(_vm.outputParser),callback:function ($$v) {_vm.outputParser=$$v},expression:"outputParser"}})],1)])])],1):_vm._e()],1),_c('q-card',{staticClass:"q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Themes')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 col-md-6 q-pr-md-sm"},[_c('q-select',{attrs:{"options":_vm.themes,"label":_vm.$t('CodeBlocksSettings.TGeneral')},model:{value:(_vm.codeTheme),callback:function ($$v) {_vm.codeTheme=$$v},expression:"codeTheme"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.themes,"label":_vm.$t('CodeBlocksSettings.TSolution')},model:{value:(_vm.solutionTheme),callback:function ($$v) {_vm.solutionTheme=$$v},expression:"solutionTheme"}})],1)])])],1)],1),_c('q-slide-transition',[(_vm.runCode)?_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-card',[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Libraries')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row q-my-none q-py-none",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 q-my-none q-py-none"},[_c('q-select',{attrs:{"options":_vm.domLibraries,"multiple":"","use-chips":"","stack-label":"","deletable-chips":"","label":_vm.$t('CodeBlocksSettings.DomLibs')},model:{value:(_vm.domLibrary),callback:function ($$v) {_vm.domLibrary=$$v},expression:"domLibrary"}})],1),(_vm.runCode && _vm.workerLibraries.length > 0)?_c('div',{staticClass:"col-xs-12 q-my-none q-py-none"},[_c('q-select',{attrs:{"options":_vm.workerLibraries,"multiple":"","use-chips":"","stack-label":"","deletable-chips":"","label":_vm.$t('CodeBlocksSettings.WorkLibs')},model:{value:(_vm.workerLibrary),callback:function ($$v) {_vm.workerLibrary=$$v},expression:"workerLibrary"}})],1):_vm._e()])])],1)],1):_vm._e()]),_c('div',{class:("col-xs-" + (_vm.options.randomizer.active ? '12' : '12') + " q-mt-sm")},[_c('RandomizerSettings',{attrs:{"options":_vm.options}})],1),_c('div',{staticClass:"col-xs-12"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.serializedOptions),expression:"serializedOptions"}],staticClass:"blocksettings",attrs:{"name":("block_settings[" + (this.options.id) + "]")},domProps:{"value":(_vm.serializedOptions)},on:{"input":function($event){if($event.target.composing){ return; }_vm.serializedOptions=$event.target.value}}})])],1)}
-var CodeBlocksSettingsvue_type_template_id_63a21932_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocksSettings.vue?vue&type=template&id=4c24fc88&scoped=true&
+var CodeBlocksSettingsvue_type_template_id_4c24fc88_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row q-pa-none q-mb-md"},[_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-card',{staticClass:"q-mb-sm q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Language')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.languageHasCompiler,"label":_vm.$t('CodeBlocksSettings.AllowExec')},model:{value:(_vm.runCode),callback:function ($$v) {_vm.runCode=$$v},expression:"runCode"}})],1),_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.canContinousCompile,"label":_vm.$t('CodeBlocksSettings.ContinousCompile')},model:{value:(_vm.continuousCompile),callback:function ($$v) {_vm.continuousCompile=$$v},expression:"continuousCompile"}})],1),_c('div',{class:("col-xs-12 col-md-" + (_vm.runCode ? 8 : 12) + " " + (_vm.runCode ? 'q-pr-md-sm' : ''))},[_c('q-select',{attrs:{"options":_vm.compiledLanguages,"label":_vm.$t('CodeBlocksSettings.Language')},model:{value:(_vm.compilerLanguageObj),callback:function ($$v) {_vm.compilerLanguageObj=$$v},expression:"compilerLanguageObj"}})],1),(_vm.runCode)?_c('div',{staticClass:"col-xs-12 col-md-4"},[_c('q-select',{attrs:{"options":_vm.compilerVersions,"label":_vm.$t('CodeBlocksSettings.CVersion')},model:{value:(_vm.compilerVersion),callback:function ($$v) {_vm.compilerVersion=$$v},expression:"compilerVersion"}})],1):_vm._e(),(_vm.runCode)?_c('div',{staticClass:"col-12"},[_c('q-input',{attrs:{"rules":[_vm.validNumber],"label":_vm.$t('CodeBlocksSettings.RunTime'),"maxlength":"6"},model:{value:(_vm.maxRuntime),callback:function ($$v) {_vm.maxRuntime=$$v},expression:"maxRuntime"}})],1):_vm._e(),(_vm.runCode && _vm.accepstArguments)?_c('div',{staticClass:"col-12 text-body2"},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.AllowArguments'))+" "),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showArgsInfoDialog}})],1):_vm._e(),(_vm.runCode && _vm.accepstArguments)?_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.canPersistentArguments,"label":_vm.$t('CodeBlocksSettings.PersistentArguments')},model:{value:(_vm.persistentArguments),callback:function ($$v) {_vm.persistentArguments=$$v},expression:"persistentArguments"}})],1):_vm._e()])])],1)],1),_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-slide-transition',[(_vm.runCode)?_c('q-card',{staticClass:"q-mb-sm q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Output')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-12 col-md-6 col-12 q-pr-md-sm"},[_c('q-input',{attrs:{"rules":[_vm.validNumber],"label":_vm.$t('CodeBlocksSettings.MaxCharacters'),"maxlength":"6"},model:{value:(_vm.maxCharacters),callback:function ($$v) {_vm.maxCharacters=$$v},expression:"maxCharacters"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.outputParsers,"label":_vm.$t('CodeBlocksSettings.Parser')},model:{value:(_vm.outputParser),callback:function ($$v) {_vm.outputParser=$$v},expression:"outputParser"}})],1)])])],1):_vm._e()],1),_c('q-card',{staticClass:"q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Themes')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 col-md-6 q-pr-md-sm"},[_c('q-select',{attrs:{"options":_vm.themes,"label":_vm.$t('CodeBlocksSettings.TGeneral')},model:{value:(_vm.codeTheme),callback:function ($$v) {_vm.codeTheme=$$v},expression:"codeTheme"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.themes,"label":_vm.$t('CodeBlocksSettings.TSolution')},model:{value:(_vm.solutionTheme),callback:function ($$v) {_vm.solutionTheme=$$v},expression:"solutionTheme"}})],1)])])],1)],1),_c('q-slide-transition',[(_vm.runCode)?_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-card',[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Libraries')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row q-my-none q-py-none",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 q-my-none q-py-none"},[_c('q-select',{attrs:{"options":_vm.domLibraries,"multiple":"","use-chips":"","stack-label":"","deletable-chips":"","label":_vm.$t('CodeBlocksSettings.DomLibs')},model:{value:(_vm.domLibrary),callback:function ($$v) {_vm.domLibrary=$$v},expression:"domLibrary"}})],1),(_vm.runCode && _vm.workerLibraries.length > 0)?_c('div',{staticClass:"col-xs-12 q-my-none q-py-none"},[_c('q-select',{attrs:{"options":_vm.workerLibraries,"multiple":"","use-chips":"","stack-label":"","deletable-chips":"","label":_vm.$t('CodeBlocksSettings.WorkLibs')},model:{value:(_vm.workerLibrary),callback:function ($$v) {_vm.workerLibrary=$$v},expression:"workerLibrary"}})],1):_vm._e()])])],1)],1):_vm._e()]),_c('div',{class:("col-xs-" + (_vm.options.randomizer.active ? '12' : '12') + " q-mt-sm")},[_c('RandomizerSettings',{attrs:{"options":_vm.options}})],1),_c('div',{staticClass:"col-xs-12"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.serializedOptions),expression:"serializedOptions"}],staticClass:"blocksettings",attrs:{"name":("block_settings[" + (this.options.id) + "]")},domProps:{"value":(_vm.serializedOptions)},on:{"input":function($event){if($event.target.composing){ return; }_vm.serializedOptions=$event.target.value}}})])],1)}
+var CodeBlocksSettingsvue_type_template_id_4c24fc88_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=template&id=63a21932&scoped=true&
+// CONCATENATED MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=template&id=4c24fc88&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSettings.vue?vue&type=template&id=8b99c0d6&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSettings.vue?vue&type=template&id=8b99c0d6&scoped=true&
 var RandomizerSettingsvue_type_template_id_8b99c0d6_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('q-card',[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('RandomizerSettings.Caption'))+" "),_c('q-toggle',{model:{value:(_vm.options.randomizer.active),callback:function ($$v) {_vm.$set(_vm.options.randomizer, "active", $$v)},expression:"options.randomizer.active"}})],1),_c('q-slide-transition',[_c('q-card-section',{directives:[{name:"show",rawName:"v-show",value:(_vm.options.randomizer.active),expression:"options.randomizer.active"}],staticClass:"q-ml-md"},[_c('div',{staticClass:"tagList"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$t('RandomizerSettings.Available'))+" "),_c('q-btn',{staticClass:"gt-xs",attrs:{"color":"primary","size":"12px","flat":"","dense":"","round":"","icon":"add"},on:{"click":_vm.addTag}})],1),_c('div',{staticClass:"row q-mb-sm"},_vm._l((_vm.options.randomizer.knownTags),function(tag,i){return _c('div',{key:tag,class:("tagItem q-ml-sm " + _vm.tagClass)},[_c('div',{staticClass:"row no-wrap"},[_c('div',{staticClass:"tagInfo col-shrink"},[_c('div',{staticClass:"tagName"},[_vm._v(_vm._s(tag))]),_c('div',{staticClass:"tagString"},[_vm._v("{:"+_vm._s(tag)+"}")])]),_c('div',{staticClass:"tagAction col-4 q-pl-sm text-right"},[_c('q-btn',{staticClass:"gt-xs",attrs:{"size":"12px","flat":"","dense":"","round":"","icon":"delete"},on:{"click":function($event){return _vm.removeTag(i)}}})],1)])])}),0)]),_c('div',{staticClass:"tagList q-mt-lg"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$t('RandomizerSettings.Sets'))+" "),_c('q-btn',{staticClass:"gt-xs",attrs:{"color":"primary","size":"12px","flat":"","dense":"","round":"","icon":"add"},on:{"click":_vm.addSet}})],1),_c('q-list',{staticClass:"setList"},_vm._l((_vm.options.randomizer.sets),function(s,i){return _c('q-item',{key:s.uuid},[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-avatar',{attrs:{"color":"primary","text-color":"white","disabled":!_vm.isVisible(i)}},[_vm._v(" "+_vm._s(i)+" ")])],1),_c('q-item-section',[_c('q-item-label',[_vm._v(_vm._s(s.title))]),_c('q-item-label',{attrs:{"caption":"","lines":"2"}},[_c('div',{staticClass:"row q-mb-sm"},_vm._l((s.values),function(tag){return _c('div',{key:tag.name,class:("tagItem q-ml-sm " + _vm.tagClass)},[_c('div',{staticClass:"row no-wrap"},[_c('div',{staticClass:"tagInfo col-shrink"},[_c('div',{staticClass:"tagName"},[_vm._v(_vm._s(tag.tag))]),_c('div',{staticClass:"tagString"},[_vm._v(_vm._s(tag.value))])])])])}),0)])],1),_c('q-item-section',{attrs:{"side":"","top":""}},[_c('div',{staticClass:"text-grey-8 q-gutter-xs"},[_c('q-icon',{staticClass:"q-mr-lg",attrs:{"name":_vm.isCompleteSet(s) ? 'check' : 'warning',"color":_vm.isCompleteSet(s) ? 'positive' : 'negative',"size":"24px"}}),_c('q-btn',{staticClass:"gt-xs",attrs:{"size":"12px","flat":"","dense":"","round":"","icon":_vm.isVisible(i) ? 'visibility' : 'visibility_off'},on:{"click":function($event){return _vm.setVisible(i)}}},[_c('q-tooltip',{attrs:{"delay":200,"offset":[0, 10]}},[_vm._v(" Use this set when running code in preview or editMode. ")])],1),_c('q-btn',{staticClass:"gt-xs",attrs:{"size":"12px","flat":"","dense":"","round":"","icon":"edit"}},[_c('RandomizerSetEditor',{attrs:{"options":_vm.options,"tagSet":_vm.getFullSet(s),"nr":i}})],1),_c('q-btn',{staticClass:"gt-xs",attrs:{"size":"12px","flat":"","dense":"","round":"","icon":"delete"},on:{"click":function($event){return _vm.removeSet(i)}}})],1)])],1)}),1)],1)])],1)],1)],1)}
 var RandomizerSettingsvue_type_template_id_8b99c0d6_scoped_true_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/RandomizerSettings.vue?vue&type=template&id=8b99c0d6&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSetEditor.vue?vue&type=template&id=e5082460&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSetEditor.vue?vue&type=template&id=e5082460&
 var RandomizerSetEditorvue_type_template_id_e5082460_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-popup-proxy',{attrs:{"transition-show":"flip-up","transition-hide":"flip-down"},on:{"before-show":_vm.onShow}},[_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('RandomizerSetEditor.Caption', { nr: _vm.nr })))])]),_vm._l((_vm.tagSet.values),function(tag){return _c('div',{key:tag.tag,staticClass:"q-pl-md"},[_c('q-input',{attrs:{"label":tag.tag},model:{value:(tag.value),callback:function ($$v) {_vm.$set(tag, "value", $$v)},expression:"tag.value"}})],1)})],2)])}
 var RandomizerSetEditorvue_type_template_id_e5082460_staticRenderFns = []
 
@@ -71049,14 +72231,15 @@ var RandomizerSetEditorvue_type_template_id_e5082460_staticRenderFns = []
 
 
 
-
 var RandomizerSetEditorvue_type_script_lang_ts_RandomizerSetEditor = /*#__PURE__*/function (_Vue) {
   _inherits(RandomizerSetEditor, _Vue);
+
+  var _super = _createSuper(RandomizerSetEditor);
 
   function RandomizerSetEditor() {
     _classCallCheck(this, RandomizerSetEditor);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(RandomizerSetEditor).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(RandomizerSetEditor, [{
@@ -71127,10 +72310,9 @@ var RandomizerSetEditor_component = normalizeComponent(
 
 /* harmony default export */ var components_RandomizerSetEditor = (RandomizerSetEditor_component.exports);
 
-RandomizerSetEditor_component.options.components = Object.assign({QPopupProxy: QPopupProxy,QInput: QInput}, RandomizerSetEditor_component.options.components || {})
+RandomizerSetEditor_component.options.components = Object.assign(Object.create(RandomizerSetEditor_component.options.components || null), RandomizerSetEditor_component.options.components || {}, {QPopupProxy: QPopupProxy,QInput: QInput})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSettings.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -71152,12 +72334,14 @@ RandomizerSetEditor_component.options.components = Object.assign({QPopupProxy: Q
 var RandomizerSettingsvue_type_script_lang_ts_RandomizerSettings = /*#__PURE__*/function (_Vue) {
   _inherits(RandomizerSettings, _Vue);
 
+  var _super = _createSuper(RandomizerSettings);
+
   function RandomizerSettings() {
     var _this;
 
     _classCallCheck(this, RandomizerSettings);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(RandomizerSettings).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this._newTagName = '';
     return _this;
   }
@@ -71312,10 +72496,9 @@ var RandomizerSettings_component = normalizeComponent(
 
 /* harmony default export */ var components_RandomizerSettings = (RandomizerSettings_component.exports);
 
-RandomizerSettings_component.options.components = Object.assign({QCard: QCard,QCardSection: QCardSection,QToggle: QToggle,QSlideTransition: QSlideTransition,QBtn: QBtn,QList: QList,QItem: QItem,QItemSection: QItemSection,QAvatar: QAvatar,QItemLabel: QItemLabel,QIcon: QIcon,QTooltip: QTooltip}, RandomizerSettings_component.options.components || {})
+RandomizerSettings_component.options.components = Object.assign(Object.create(RandomizerSettings_component.options.components || null), RandomizerSettings_component.options.components || {}, {QCard: QCard,QCardSection: QCardSection,QToggle: QToggle,QSlideTransition: QSlideTransition,QBtn: QBtn,QList: QList,QItem: QItem,QItemSection: QItemSection,QAvatar: QAvatar,QItemLabel: QItemLabel,QIcon: QIcon,QTooltip: QTooltip})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocksSettings.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -71338,10 +72521,12 @@ RandomizerSettings_component.options.components = Object.assign({QCard: QCard,QC
 var CodeBlocksSettingsvue_type_script_lang_ts_CodeBlocksSettings = /*#__PURE__*/function (_Vue) {
   _inherits(CodeBlocksSettings, _Vue);
 
+  var _super = _createSuper(CodeBlocksSettings);
+
   function CodeBlocksSettings() {
     _classCallCheck(this, CodeBlocksSettings);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(CodeBlocksSettings).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(CodeBlocksSettings, [{
@@ -71640,6 +72825,26 @@ var CodeBlocksSettingsvue_type_script_lang_ts_CodeBlocksSettings = /*#__PURE__*/
       return false;
     }
   }, {
+    key: "persistentArguments",
+    get: function get() {
+      return this.options.persistentArguments;
+    },
+    set: function set(v) {
+      this.$emit('persistent-arguments-change', v);
+    }
+  }, {
+    key: "canPersistentArguments",
+    get: function get() {
+      var cmp = this.$compilerRegistry.getCompiler(this.compiler);
+
+      if (cmp) {
+        console.d('Persistent Arguments - ', 'can', cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun);
+        return cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun;
+      }
+
+      return false;
+    }
+  }, {
     key: "accepstArguments",
     get: function get() {
       var cmp = this.$compilerRegistry.getCompiler(this.compiler);
@@ -71667,8 +72872,8 @@ CodeBlocksSettingsvue_type_script_lang_ts_CodeBlocksSettings = __decorate([vue_c
 /* harmony default export */ var CodeBlocksSettingsvue_type_script_lang_ts_ = (CodeBlocksSettingsvue_type_script_lang_ts_CodeBlocksSettings);
 // CONCATENATED MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_CodeBlocksSettingsvue_type_script_lang_ts_ = (CodeBlocksSettingsvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=style&index=0&id=63a21932&lang=sass&scoped=true&
-var CodeBlocksSettingsvue_type_style_index_0_id_63a21932_lang_sass_scoped_true_ = __webpack_require__("b48a");
+// EXTERNAL MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=style&index=0&id=4c24fc88&lang=sass&scoped=true&
+var CodeBlocksSettingsvue_type_style_index_0_id_4c24fc88_lang_sass_scoped_true_ = __webpack_require__("985a");
 
 // CONCATENATED MODULE: ./src/components/CodeBlocksSettings.vue
 
@@ -71681,27 +72886,27 @@ var CodeBlocksSettingsvue_type_style_index_0_id_63a21932_lang_sass_scoped_true_ 
 
 var CodeBlocksSettings_component = normalizeComponent(
   components_CodeBlocksSettingsvue_type_script_lang_ts_,
-  CodeBlocksSettingsvue_type_template_id_63a21932_scoped_true_render,
-  CodeBlocksSettingsvue_type_template_id_63a21932_scoped_true_staticRenderFns,
+  CodeBlocksSettingsvue_type_template_id_4c24fc88_scoped_true_render,
+  CodeBlocksSettingsvue_type_template_id_4c24fc88_scoped_true_staticRenderFns,
   false,
   null,
-  "63a21932",
+  "4c24fc88",
   null
   
 )
 
 /* harmony default export */ var components_CodeBlocksSettings = (CodeBlocksSettings_component.exports);
 
-CodeBlocksSettings_component.options.components = Object.assign({QCard: QCard,QCardSection: QCardSection,QToggle: QToggle,QSelect: QSelect,QInput: QInput,QBtn: QBtn,QSlideTransition: QSlideTransition}, CodeBlocksSettings_component.options.components || {})
+CodeBlocksSettings_component.options.components = Object.assign(Object.create(CodeBlocksSettings_component.options.components || null), CodeBlocksSettings_component.options.components || {}, {QCard: QCard,QCardSection: QCardSection,QToggle: QToggle,QSelect: QSelect,QInput: QInput,QBtn: QBtn,QSlideTransition: QSlideTransition})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlock.vue?vue&type=template&id=2df9e21e&scoped=true&
-var CodeBlockvue_type_template_id_2df9e21e_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:("codeblock block-" + _vm.typeName)},[_c('CodeBlockButton',{directives:[{name:"show",rawName:"v-show",value:(_vm.showBookmarkButton),expression:"showBookmarkButton"}],attrs:{"block":_vm.block,"isBookmarkPanel":_vm.isBookmarkPanel}}),_c('codemirror',{ref:"codeBox",class:("accqstXmlInput noRTEditor " + _vm.boxClass),attrs:{"value":_vm.code,"options":_vm.options,"name":(_vm.namePrefix + "block[" + (_vm.block.parentID) + "][" + (_vm.block.id) + "]"),"id":("teQ" + (_vm.block.parentID) + "B" + (_vm.block.id)),"data-question":_vm.block.parentID},on:{"ready":_vm.onCodeReady,"focus":_vm.onCodeFocus,"input":_vm.onCodeChangeDefered}}),(_vm.editMode)?_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasAlternativeContent),expression:"hasAlternativeContent"}]},[_c('div',{staticClass:"q-mt-lg text-subtitle2"},[_vm._v(_vm._s(_vm.$t('CodeBlock.Initial_Content')))]),_c('codemirror',{ref:"altBox",class:("accqstXmlInput noRTEditor " + _vm.boxClass),attrs:{"value":_vm.altCode,"options":_vm.altOptions,"name":(_vm.namePrefix + "alt_block[" + (_vm.block.parentID) + "][" + (_vm.block.id) + "]")},on:{"ready":_vm.onAltCodeReady,"focus":_vm.onAltCodeFocus,"input":_vm.onAltCodeChangeDefered}})],1):_vm._e()],1)}
-var CodeBlockvue_type_template_id_2df9e21e_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlock.vue?vue&type=template&id=6a2aa410&scoped=true&
+var CodeBlockvue_type_template_id_6a2aa410_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:("codeblock block-" + _vm.typeName)},[_c('CodeBlockButton',{directives:[{name:"show",rawName:"v-show",value:(_vm.showBookmarkButton),expression:"showBookmarkButton"}],attrs:{"block":_vm.block,"isBookmarkPanel":_vm.isBookmarkPanel}}),_c('codemirror',{ref:"codeBox",class:("accqstXmlInput noRTEditor " + _vm.boxClass),attrs:{"value":_vm.code,"options":_vm.options,"name":(_vm.namePrefix + "block[" + (_vm.block.parentID) + "][" + (_vm.block.id) + "]"),"id":("teQ" + (_vm.block.parentID) + "B" + (_vm.block.id)),"data-question":_vm.block.parentID},on:{"ready":_vm.onCodeReady,"focus":_vm.onCodeFocus,"input":_vm.onCodeChangeDefered}}),(_vm.editMode)?_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasAlternativeContent),expression:"hasAlternativeContent"}]},[_c('div',{staticClass:"q-mt-lg text-subtitle2"},[_vm._v(_vm._s(_vm.$t('CodeBlock.Initial_Content')))]),_c('codemirror',{ref:"altBox",class:("accqstXmlInput noRTEditor " + _vm.boxClass),attrs:{"value":_vm.altCode,"options":_vm.altOptions,"name":(_vm.namePrefix + "alt_block[" + (_vm.block.parentID) + "][" + (_vm.block.id) + "]")},on:{"ready":_vm.onAltCodeReady,"focus":_vm.onAltCodeFocus,"input":_vm.onAltCodeChangeDefered}})],1):_vm._e()],1)}
+var CodeBlockvue_type_template_id_6a2aa410_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodeBlock.vue?vue&type=template&id=2df9e21e&scoped=true&
+// CONCATENATED MODULE: ./src/components/CodeBlock.vue?vue&type=template&id=6a2aa410&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ErrorTip.vue?vue&type=template&id=67eb593e&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ErrorTip.vue?vue&type=template&id=67eb593e&
 var ErrorTipvue_type_template_id_67eb593e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-icon',{class:("mdi " + _vm.severityClass + " mainTipIcon"),attrs:{"name":_vm.severityIcon}},[_c('q-tooltip',[_c('div',[_c('ul',{staticClass:"tiplist"},_vm._l((_vm.errors),function(error){return _c('li',{key:error.message},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-1"},[_c('q-icon',{attrs:{"name":_vm.iconForSeverity(error.severity)}})],1),_c('div',{staticClass:"col-11 q-pr-md"},[_c('div',{staticClass:"q-my-none tipper"},[_vm._v(_vm._s(error.message))])])])])}),0)])])],1)}
 var ErrorTipvue_type_template_id_67eb593e_staticRenderFns = []
 
@@ -71718,14 +72923,15 @@ var ErrorTipvue_type_template_id_67eb593e_staticRenderFns = []
 
 
 
-
 var ErrorTipvue_type_script_lang_ts_ErrorTip = /*#__PURE__*/function (_Vue) {
   _inherits(ErrorTip, _Vue);
+
+  var _super = _createSuper(ErrorTip);
 
   function ErrorTip() {
     _classCallCheck(this, ErrorTip);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(ErrorTip).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(ErrorTip, [{
@@ -71794,10 +73000,9 @@ var ErrorTip_component = normalizeComponent(
 
 /* harmony default export */ var components_ErrorTip = (ErrorTip_component.exports);
 
-ErrorTip_component.options.components = Object.assign({QIcon: QIcon,QTooltip: QTooltip}, ErrorTip_component.options.components || {})
+ErrorTip_component.options.components = Object.assign(Object.create(ErrorTip_component.options.components || null), ErrorTip_component.options.components || {}, {QIcon: QIcon,QTooltip: QTooltip})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/BaseBlock.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -71809,10 +73014,12 @@ ErrorTip_component.options.components = Object.assign({QIcon: QIcon,QTooltip: QT
 var BaseBlockvue_type_script_lang_ts_BaseBlock = /*#__PURE__*/function (_Vue) {
   _inherits(BaseBlock, _Vue);
 
+  var _super = _createSuper(BaseBlock);
+
   function BaseBlock() {
     _classCallCheck(this, BaseBlock);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(BaseBlock).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(BaseBlock, [{
@@ -71951,15 +73158,14 @@ var glsl = __webpack_require__("5e79");
 // EXTERNAL MODULE: ./node_modules/codemirror/addon/edit/closebrackets.js
 var closebrackets = __webpack_require__("10b2");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockButton.vue?vue&type=template&id=f832fcd2&scoped=true&
-var CodeBlockButtonvue_type_template_id_f832fcd2_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"floatingButton"},[_c('q-btn',{attrs:{"color":_vm.color,"text-color":"black","icon":_vm.iconName,"round":"","size":"xs"},on:{"click":_vm.onClick}})],1)}
-var CodeBlockButtonvue_type_template_id_f832fcd2_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockButton.vue?vue&type=template&id=0bd2a5d9&scoped=true&
+var CodeBlockButtonvue_type_template_id_0bd2a5d9_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"floatingButton"},[_c('q-btn',{attrs:{"color":_vm.color,"text-color":"black","icon":_vm.iconName,"round":"","size":"xs"},on:{"click":_vm.onClick}})],1)}
+var CodeBlockButtonvue_type_template_id_0bd2a5d9_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodeBlockButton.vue?vue&type=template&id=f832fcd2&scoped=true&
+// CONCATENATED MODULE: ./src/components/CodeBlockButton.vue?vue&type=template&id=0bd2a5d9&scoped=true&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockButton.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -71971,12 +73177,14 @@ var CodeBlockButtonvue_type_template_id_f832fcd2_scoped_true_staticRenderFns = [
 var CodeBlockButtonvue_type_script_lang_ts_CodeBlockButton = /*#__PURE__*/function (_Vue) {
   _inherits(CodeBlockButton, _Vue);
 
+  var _super = _createSuper(CodeBlockButton);
+
   function CodeBlockButton() {
     var _this;
 
     _classCallCheck(this, CodeBlockButton);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CodeBlockButton).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.bookmarked = false;
     return _this;
   }
@@ -72041,8 +73249,8 @@ CodeBlockButtonvue_type_script_lang_ts_CodeBlockButton = __decorate([vue_class_c
 /* harmony default export */ var CodeBlockButtonvue_type_script_lang_ts_ = (CodeBlockButtonvue_type_script_lang_ts_CodeBlockButton);
 // CONCATENATED MODULE: ./src/components/CodeBlockButton.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_CodeBlockButtonvue_type_script_lang_ts_ = (CodeBlockButtonvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/CodeBlockButton.vue?vue&type=style&index=0&id=f832fcd2&lang=sass&scoped=true&
-var CodeBlockButtonvue_type_style_index_0_id_f832fcd2_lang_sass_scoped_true_ = __webpack_require__("6a5a");
+// EXTERNAL MODULE: ./src/components/CodeBlockButton.vue?vue&type=style&index=0&id=0bd2a5d9&lang=sass&scoped=true&
+var CodeBlockButtonvue_type_style_index_0_id_0bd2a5d9_lang_sass_scoped_true_ = __webpack_require__("2b86");
 
 // CONCATENATED MODULE: ./src/components/CodeBlockButton.vue
 
@@ -72055,22 +73263,20 @@ var CodeBlockButtonvue_type_style_index_0_id_f832fcd2_lang_sass_scoped_true_ = _
 
 var CodeBlockButton_component = normalizeComponent(
   components_CodeBlockButtonvue_type_script_lang_ts_,
-  CodeBlockButtonvue_type_template_id_f832fcd2_scoped_true_render,
-  CodeBlockButtonvue_type_template_id_f832fcd2_scoped_true_staticRenderFns,
+  CodeBlockButtonvue_type_template_id_0bd2a5d9_scoped_true_render,
+  CodeBlockButtonvue_type_template_id_0bd2a5d9_scoped_true_staticRenderFns,
   false,
   null,
-  "f832fcd2",
+  "0bd2a5d9",
   null
   
 )
 
 /* harmony default export */ var components_CodeBlockButton = (CodeBlockButton_component.exports);
 
-CodeBlockButton_component.options.components = Object.assign({QBtn: QBtn}, CodeBlockButton_component.options.components || {})
+CodeBlockButton_component.options.components = Object.assign(Object.create(CodeBlockButton_component.options.components || null), CodeBlockButton_component.options.components || {}, {QBtn: QBtn})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlock.vue?vue&type=script&lang=ts&
-
-
 
 
 
@@ -72117,12 +73323,14 @@ var ErrorTipCtor = external_commonjs_vue_commonjs2_vue_root_Vue_default.a.extend
 var CodeBlockvue_type_script_lang_ts_CodeBlock = /*#__PURE__*/function (_BaseBlock) {
   _inherits(CodeBlock, _BaseBlock);
 
+  var _super = _createSuper(CodeBlock);
+
   function CodeBlock() {
     var _this;
 
     _classCallCheck(this, CodeBlock);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CodeBlock).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.codeUpdateTimer = null;
     _this.codeUpdateStartTime = 0;
     _this.continuousCodeUpdateTimer = null;
@@ -72228,6 +73436,11 @@ var CodeBlockvue_type_script_lang_ts_CodeBlock = /*#__PURE__*/function (_BaseBlo
     value: function onCodeChangeDefered(newCode) {
       var _this4 = this;
 
+      if (!this.editMode) {
+        this.onCodeChange(newCode);
+        return;
+      }
+
       var now = new Date().getTime(); //clear an existing update timeout
 
       if (this.codeUpdateTimer !== null) {
@@ -72244,24 +73457,30 @@ var CodeBlockvue_type_script_lang_ts_CodeBlock = /*#__PURE__*/function (_BaseBlo
       }; //did we wait for a maximum time? run
 
 
-      if (now - this.codeUpdateStartTime > "500") {
+      if (now - this.codeUpdateStartTime > "800") {
         doIt();
         return;
       }
 
       this.codeUpdateTimer = setTimeout(function () {
         doIt();
-      }, "200");
+      }, "150");
     }
   }, {
     key: "onCodeChange",
     value: function onCodeChange(newCode) {
       var _this5 = this;
 
+      //update line numbers manually (changing in options takes too long)
+      this.block.lineCountHint = this.codemirror.doc.size;
+      this.codemirror.options.firstLineNumber = this.block.firstLine; //copy the content to the actual textbox processed by StudON
+
       var tb = this.codeBox.$el.querySelector('textarea[name]');
-      tb.value = newCode;
-      this.block.content = newCode;
-      this.updateTagDisplay();
+      tb.value = newCode; //copy code to the block structure
+
+      this.block.content = newCode; //find all tags
+
+      this.updateTagDisplay(); //send out the event for processing
 
       if (this.editMode) {
         this.$emit('code-changed-in-edit-mode', undefined);
@@ -72273,7 +73492,7 @@ var CodeBlockvue_type_script_lang_ts_CodeBlock = /*#__PURE__*/function (_BaseBlo
 
         this.continuousCodeUpdateTimer = setTimeout(function () {
           _this5.$emit('code-changed-in-view-mode', undefined);
-        }, "200");
+        }, "150");
       }
     }
   }, {
@@ -72297,14 +73516,14 @@ var CodeBlockvue_type_script_lang_ts_CodeBlock = /*#__PURE__*/function (_BaseBlo
       }; //did we wait for a maximum time? run
 
 
-      if (now - this.altCodeUpdateStartTime > "500") {
+      if (now - this.altCodeUpdateStartTime > "800") {
         doIt();
         return;
       }
 
       this.altCodeUpdateTimer = setTimeout(function () {
         doIt();
-      }, "200");
+      }, "150");
     }
   }, {
     key: "onAltCodeChange",
@@ -72451,6 +73670,16 @@ var CodeBlockvue_type_script_lang_ts_CodeBlock = /*#__PURE__*/function (_BaseBlo
         });
       } else {
         this.clearErrorDisplay();
+      }
+    }
+  }, {
+    key: "onFirstLineChanged",
+    value: function onFirstLineChanged(val) {
+      if (this.codemirror) {
+        if (this.codemirror.options.firstLineNumber != this.block.firstLine) {
+          this.codemirror.options.firstLineNumber = this.block.firstLine;
+          this.codemirror.refresh();
+        }
       }
     }
   }, {
@@ -72633,16 +73862,16 @@ var CodeBlockvue_type_script_lang_ts_CodeBlock = /*#__PURE__*/function (_BaseBlo
         indentUnit: 4,
         autoCloseBrackets: true,
         readOnly: !this.editMode && (this.block.readonly || this.block.static || this.block.hidden || this.readonly),
-        firstLineNumber: this.block.firstLine,
+        //firstLineNumber: this.block.firstLine, //make sure to change altOptions as well when activating this
         gutters: ['diagnostics', 'CodeMirror-linenumbers']
       };
     }
   }, {
     key: "altOptions",
     get: function get() {
-      var o = Object.assign({}, this.options);
-      o.firstLineNumber = 1;
-      return o;
+      return this.options; // let o = { ...this.options }
+      // o.firstLineNumber = 1
+      // return o
     }
   }, {
     key: "codemirror",
@@ -72723,6 +73952,8 @@ __decorate([Prop({
   }
 })], CodeBlockvue_type_script_lang_ts_CodeBlock.prototype, "block", void 0);
 
+__decorate([Watch('block.firstLine')], CodeBlockvue_type_script_lang_ts_CodeBlock.prototype, "onFirstLineChanged", null);
+
 __decorate([Watch('visibleLines')], CodeBlockvue_type_script_lang_ts_CodeBlock.prototype, "onVisibleLinesChanged", null);
 
 __decorate([Watch('errors')], CodeBlockvue_type_script_lang_ts_CodeBlock.prototype, "onErrorsChanged", null);
@@ -72735,8 +73966,8 @@ CodeBlockvue_type_script_lang_ts_CodeBlock = __decorate([vue_class_component_esm
 /* harmony default export */ var CodeBlockvue_type_script_lang_ts_ = (CodeBlockvue_type_script_lang_ts_CodeBlock);
 // CONCATENATED MODULE: ./src/components/CodeBlock.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_CodeBlockvue_type_script_lang_ts_ = (CodeBlockvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/CodeBlock.vue?vue&type=style&index=0&id=2df9e21e&scoped=true&lang=sass&
-var CodeBlockvue_type_style_index_0_id_2df9e21e_scoped_true_lang_sass_ = __webpack_require__("b665");
+// EXTERNAL MODULE: ./src/components/CodeBlock.vue?vue&type=style&index=0&id=6a2aa410&scoped=true&lang=sass&
+var CodeBlockvue_type_style_index_0_id_6a2aa410_scoped_true_lang_sass_ = __webpack_require__("da3c");
 
 // CONCATENATED MODULE: ./src/components/CodeBlock.vue
 
@@ -72749,25 +73980,24 @@ var CodeBlockvue_type_style_index_0_id_2df9e21e_scoped_true_lang_sass_ = __webpa
 
 var CodeBlock_component = normalizeComponent(
   components_CodeBlockvue_type_script_lang_ts_,
-  CodeBlockvue_type_template_id_2df9e21e_scoped_true_render,
-  CodeBlockvue_type_template_id_2df9e21e_scoped_true_staticRenderFns,
+  CodeBlockvue_type_template_id_6a2aa410_scoped_true_render,
+  CodeBlockvue_type_template_id_6a2aa410_scoped_true_staticRenderFns,
   false,
   null,
-  "2df9e21e",
+  "6a2aa410",
   null
   
 )
 
 /* harmony default export */ var components_CodeBlock = (CodeBlock_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePanel.vue?vue&type=template&id=952b797a&scoped=true&
-var CodePanelvue_type_template_id_952b797a_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.editMode),expression:"editMode"}],staticClass:"blocksEditorPanelContainer",style:(("width:" + _vm.width + "px"))},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.block !== null),expression:"block !== null"}],staticClass:"blocksEditorPanelLeft"},[_c('q-btn',{staticClass:"expander",attrs:{"icon":_vm.expanded ? 'chevron_right' : 'chevron_left',"size":"sm","unelevated":"","align":"center","color":"blue-grey-4"},on:{"click":_vm.onExpandClick}}),_c('CodeBlock',{attrs:{"block":_vm.saveBlock,"theme":_vm.themeForBlock(_vm.block),"mode":"","visibleLines":_vm.visibleLinesNow,"editMode":true,"muteReadyState":true,"isBookmarkPanel":true,"namePrefix":"panel_"},on:{"code-changed-in-edit-mode":_vm.onCodeChange}})],1)])}
-var CodePanelvue_type_template_id_952b797a_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePanel.vue?vue&type=template&id=4d95ff90&scoped=true&
+var CodePanelvue_type_template_id_4d95ff90_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.editMode),expression:"editMode"}],staticClass:"blocksEditorPanelContainer",style:(("width:" + _vm.width + "px"))},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.block !== null),expression:"block !== null"}],staticClass:"blocksEditorPanelLeft"},[_c('q-btn',{staticClass:"expander",attrs:{"icon":_vm.expanded ? 'chevron_right' : 'chevron_left',"size":"sm","unelevated":"","align":"center","color":"blue-grey-4"},on:{"click":_vm.onExpandClick}}),_c('CodeBlock',{attrs:{"block":_vm.saveBlock,"theme":_vm.themeForBlock(_vm.block),"mode":"","visibleLines":_vm.visibleLinesNow,"editMode":true,"muteReadyState":true,"isBookmarkPanel":true,"namePrefix":"panel_"},on:{"code-changed-in-edit-mode":_vm.onCodeChange}})],1)])}
+var CodePanelvue_type_template_id_4d95ff90_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodePanel.vue?vue&type=template&id=952b797a&scoped=true&
+// CONCATENATED MODULE: ./src/components/CodePanel.vue?vue&type=template&id=4d95ff90&scoped=true&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePanel.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -72781,12 +74011,14 @@ var CodePanelvue_type_template_id_952b797a_scoped_true_staticRenderFns = []
 var CodePanelvue_type_script_lang_ts_CodePanel = /*#__PURE__*/function (_Vue) {
   _inherits(CodePanel, _Vue);
 
+  var _super = _createSuper(CodePanel);
+
   function CodePanel() {
     var _this;
 
     _classCallCheck(this, CodePanel);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CodePanel).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.expanded = false;
     return _this;
   }
@@ -72843,6 +74075,7 @@ var CodePanelvue_type_script_lang_ts_CodePanel = /*#__PURE__*/function (_Vue) {
         static: true,
         hidden: false,
         themeForCodeBlock: '',
+        lineCountHint: -0,
         getThemeForBlock: function getThemeForBlock(bl) {
           return '';
         },
@@ -72910,8 +74143,8 @@ CodePanelvue_type_script_lang_ts_CodePanel = __decorate([vue_class_component_esm
 /* harmony default export */ var CodePanelvue_type_script_lang_ts_ = (CodePanelvue_type_script_lang_ts_CodePanel);
 // CONCATENATED MODULE: ./src/components/CodePanel.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_CodePanelvue_type_script_lang_ts_ = (CodePanelvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/CodePanel.vue?vue&type=style&index=0&id=952b797a&lang=sass&scoped=true&
-var CodePanelvue_type_style_index_0_id_952b797a_lang_sass_scoped_true_ = __webpack_require__("7885");
+// EXTERNAL MODULE: ./src/components/CodePanel.vue?vue&type=style&index=0&id=4d95ff90&lang=sass&scoped=true&
+var CodePanelvue_type_style_index_0_id_4d95ff90_lang_sass_scoped_true_ = __webpack_require__("995c");
 
 // CONCATENATED MODULE: ./src/components/CodePanel.vue
 
@@ -72924,41 +74157,41 @@ var CodePanelvue_type_style_index_0_id_952b797a_lang_sass_scoped_true_ = __webpa
 
 var CodePanel_component = normalizeComponent(
   components_CodePanelvue_type_script_lang_ts_,
-  CodePanelvue_type_template_id_952b797a_scoped_true_render,
-  CodePanelvue_type_template_id_952b797a_scoped_true_staticRenderFns,
+  CodePanelvue_type_template_id_4d95ff90_scoped_true_render,
+  CodePanelvue_type_template_id_4d95ff90_scoped_true_staticRenderFns,
   false,
   null,
-  "952b797a",
+  "4d95ff90",
   null
   
 )
 
 /* harmony default export */ var components_CodePanel = (CodePanel_component.exports);
 
-CodePanel_component.options.components = Object.assign({QBtn: QBtn}, CodePanel_component.options.components || {})
+CodePanel_component.options.components = Object.assign(Object.create(CodePanel_component.options.components || null), CodePanel_component.options.components || {}, {QBtn: QBtn})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/Blockly.vue?vue&type=template&id=8624461a&
-var Blocklyvue_type_template_id_8624461a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"row q-ma-none q-pa-none block-blockly",attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id}},[_c('div',{class:("col-12 text-" + (_vm.block.align) + " q-mx-none q-pa-none"),staticStyle:{"padding-top":"6px"}},[_c('div',{staticClass:"blocklyCanvas",style:(("width:" + (_vm.block.width) + ";height:" + (_vm.block.height)))},[_c('div',{ref:"blocklyContainer",staticClass:"blocklyContainer"})])])]),_c('xml',{ref:"blocklyToolbox",staticStyle:{"display":"none"},domProps:{"innerHTML":_vm._s(_vm.toolboxContent)}}),(_vm.editMode)?_c('div',[_c('q-list',{staticClass:"rounded-borders q-mt-sm",attrs:{"bordered":""}},[_c('q-expansion-item',{attrs:{"expand-separator":"","icon":"code","label":_vm.$t('Blockly.CodePreviewLabel'),"caption":_vm.$t('Blockly.CodePreviewCaption')},on:{"before-show":_vm.onBeforeShow}},[_c('textarea',{staticStyle:{"display":"none"},attrs:{"name":("block[" + (_vm.block.parentID) + "][" + (_vm.block.id) + "]")},domProps:{"innerHTML":_vm._s(_vm.block.content)}}),(_vm.editMode)?_c('CodeBlock',{attrs:{"block":_vm.cmblock,"theme":_vm.cmoptions.theme,"mode":_vm.cmoptions.mode,"visibleLines":_vm.visibleLinesNow,"editMode":false,"muteReadyState":true,"namePrefix":"preview_"},on:{"code-changed-in-edit-mode":_vm.onCodeChange}}):_vm._e()],1),_c('q-expansion-item',{attrs:{"expand-separator":"","default-opened":false,"icon":"developer_board","label":_vm.$t('Blockly.CustomBlocksLabel'),"caption":_vm.$t('Blockly.CustomBlocksCaption')},on:{"before-show":_vm.onBeforeShow}},[_c('BlocklyCustomBlocksEditor',{attrs:{"block":_vm.block}})],1),_c('q-expansion-item',{attrs:{"expand-separator":"","default-opened":false,"disable":_vm.useToolboxOverride,"icon":"ballot","label":_vm.$t('Blockly.ToolboxLabel'),"caption":_vm.$t('Blockly.ToolboxCaption')},on:{"before-show":_vm.onBeforeShow},model:{value:(_vm.tbEditExpanded),callback:function ($$v) {_vm.tbEditExpanded=$$v},expression:"tbEditExpanded"}},[_c('BlocklyToolboxEditor',{attrs:{"block":_vm.block}})],1),_c('q-expansion-item',{attrs:{"expand-separator":"","icon":"event_note","expanded":true,"label":_vm.$t('Blockly.RAWToolboxLabel'),"caption":_vm.$t('Blockly.RAWToolboxCaption')},on:{"before-show":_vm.onBeforeShow}},[_c('q-checkbox',{attrs:{"label":_vm.$t('Blockly.UseCustomToolbox')},on:{"input":_vm.onToolboxOverrideChange},model:{value:(_vm.block.blockly.useOverride),callback:function ($$v) {_vm.$set(_vm.block.blockly, "useOverride", $$v)},expression:"block.blockly.useOverride"}}),(_vm.editMode)?_c('CodeBlock',{attrs:{"block":_vm.tbblock,"theme":_vm.tboptions.theme,"mode":_vm.tboptions.mode,"visibleLines":_vm.visibleLinesNow,"editMode":this.block.blockly.useOverride,"muteReadyState":true,"namePrefix":"toolbox_"},on:{"code-changed-in-edit-mode":_vm.onToolboxOverrideChange}}):_vm._e()],1)],1)],1):_vm._e()],1)}
-var Blocklyvue_type_template_id_8624461a_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/Blockly.vue?vue&type=template&id=d93e5b42&
+var Blocklyvue_type_template_id_d93e5b42_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"row q-ma-none q-pa-none block-blockly",attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id}},[_c('div',{class:("col-12 text-" + (_vm.block.align) + " q-mx-none q-pa-none"),staticStyle:{"padding-top":"6px"}},[_c('div',{staticClass:"blocklyCanvas",style:(("width:" + (_vm.block.width) + ";height:" + (_vm.block.height)))},[_c('div',{ref:"blocklyContainer",staticClass:"blocklyContainer"})])])]),_c('xml',{ref:"blocklyToolbox",staticStyle:{"display":"none"},domProps:{"innerHTML":_vm._s(_vm.toolboxContent)}}),(_vm.editMode)?_c('div',[_c('q-list',{staticClass:"rounded-borders q-mt-sm",attrs:{"bordered":""}},[_c('q-expansion-item',{attrs:{"expand-separator":"","icon":"code","label":_vm.$t('Blockly.CodePreviewLabel'),"caption":_vm.$t('Blockly.CodePreviewCaption')},on:{"before-show":_vm.onBeforeShow}},[_c('textarea',{staticStyle:{"display":"none"},attrs:{"name":("block[" + (_vm.block.parentID) + "][" + (_vm.block.id) + "]")},domProps:{"innerHTML":_vm._s(_vm.block.content)}}),(_vm.editMode)?_c('CodeBlock',{attrs:{"block":_vm.cmblock,"theme":_vm.cmoptions.theme,"mode":_vm.cmoptions.mode,"visibleLines":_vm.visibleLinesNow,"editMode":false,"muteReadyState":true,"namePrefix":"preview_"},on:{"code-changed-in-edit-mode":_vm.onCodeChange}}):_vm._e()],1),_c('q-expansion-item',{attrs:{"expand-separator":"","default-opened":false,"icon":"developer_board","label":_vm.$t('Blockly.CustomBlocksLabel'),"caption":_vm.$t('Blockly.CustomBlocksCaption')},on:{"before-show":_vm.onBeforeShow}},[_c('BlocklyCustomBlocksEditor',{attrs:{"block":_vm.block}})],1),_c('q-expansion-item',{attrs:{"expand-separator":"","default-opened":false,"disable":_vm.useToolboxOverride,"icon":"ballot","label":_vm.$t('Blockly.ToolboxLabel'),"caption":_vm.$t('Blockly.ToolboxCaption')},on:{"before-show":_vm.onBeforeShow},model:{value:(_vm.tbEditExpanded),callback:function ($$v) {_vm.tbEditExpanded=$$v},expression:"tbEditExpanded"}},[_c('BlocklyToolboxEditor',{attrs:{"block":_vm.block}})],1),_c('q-expansion-item',{attrs:{"expand-separator":"","icon":"event_note","expanded":true,"label":_vm.$t('Blockly.RAWToolboxLabel'),"caption":_vm.$t('Blockly.RAWToolboxCaption')},on:{"before-show":_vm.onBeforeShow}},[_c('q-checkbox',{attrs:{"label":_vm.$t('Blockly.UseCustomToolbox')},on:{"input":_vm.onToolboxOverrideChange},model:{value:(_vm.block.blockly.useOverride),callback:function ($$v) {_vm.$set(_vm.block.blockly, "useOverride", $$v)},expression:"block.blockly.useOverride"}}),(_vm.editMode)?_c('CodeBlock',{attrs:{"block":_vm.tbblock,"theme":_vm.tboptions.theme,"mode":_vm.tboptions.mode,"visibleLines":_vm.visibleLinesNow,"editMode":this.block.blockly.useOverride,"muteReadyState":true,"namePrefix":"toolbox_"},on:{"code-changed-in-edit-mode":_vm.onToolboxOverrideChange}}):_vm._e()],1)],1)],1):_vm._e()],1)}
+var Blocklyvue_type_template_id_d93e5b42_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Blockly/Blockly.vue?vue&type=template&id=8624461a&
+// CONCATENATED MODULE: ./src/components/Blockly/Blockly.vue?vue&type=template&id=d93e5b42&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyCustomBlocksEditor.vue?vue&type=template&id=cc62c5e2&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyCustomBlocksEditor.vue?vue&type=template&id=cc62c5e2&
 var BlocklyCustomBlocksEditorvue_type_template_id_cc62c5e2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"q-ml-lg q-pb-sm q-pl-lg"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('Blockly.ToolboxItems')))]),_c('q-btn',{staticClass:"gt-xs",attrs:{"color":"primary","size":"12px","flat":"","dense":"","round":"","icon":"add"},on:{"click":_vm.addBlock}})],1),_c('q-list',{staticClass:"rounded-borders q-mt-sm ",attrs:{"dense":"","bordered":""}},_vm._l((_vm.customBlocks),function(item){return _c('q-expansion-item',{key:item.uuid,attrs:{"expand-separator":"","dark":"","group":"blockListing","header-class":"bg-blue-grey text-white","label":_vm.labelForBlock(item),"caption":item.JSON.type},on:{"show":_vm.onShowBlock},scopedSlots:_vm._u([{key:"header",fn:function(){return [_c('q-item',{staticStyle:{"width":"100%"}},[_c('q-item-section',[_c('q-item-label',[_vm._v(_vm._s(_vm.labelForBlock(item)))]),_c('q-item-label',{attrs:{"caption":""}},[_vm._v(" "+_vm._s(item.JSON.type)+" ")])],1),_c('q-item-section',{attrs:{"top":"","side":""}},[_c('q-btn',{attrs:{"icon":"delete","flat":"","dense":"","color":"red-3","right":"","ripple":{ center: true }},on:{"click":function($event){return _vm.removeBlock(item)}}})],1)],1)]},proxy:true}],null,true),model:{value:(item._expanded),callback:function ($$v) {_vm.$set(item, "_expanded", $$v)},expression:"item._expanded"}},[_c('BlocklyCustomBlockEditor',{attrs:{"blockDefinition":item,"block":_vm.block,"customBlocks":_vm.customBlocks}})],1)}),1)],1)}
 var BlocklyCustomBlocksEditorvue_type_template_id_cc62c5e2_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/Blockly/BlocklyCustomBlocksEditor.vue?vue&type=template&id=cc62c5e2&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyCustomBlockEditor.vue?vue&type=template&id=4fbc04c4&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyCustomBlockEditor.vue?vue&type=template&id=4fbc04c4&scoped=true&
 var BlocklyCustomBlockEditorvue_type_template_id_4fbc04c4_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-card',{staticClass:"bg-blue-grey-2 q-pl-lg"},[_c('q-card-section',[_c('div',{staticClass:"row q-pa-none"},[_c('div',{staticClass:"col-md-7 q-pl-lg col-sm-6 col-xs-12"},[_c('q-input',{attrs:{"label":_vm.$t('Blockly.Block.TypeName')},model:{value:(_vm.blockDefinition.JSON.type),callback:function ($$v) {_vm.$set(_vm.blockDefinition.JSON, "type", $$v)},expression:"blockDefinition.JSON.type"}}),_c('q-select',{staticClass:"q-mt-md ",attrs:{"options":_vm.colors,"label":"Color"},scopedSlots:_vm._u([{key:"before",fn:function(){return [_c('div',{staticClass:"colorBlockContainer"},[_c('div',{staticClass:"colorBlock",style:(("background-color:" + _vm.htmlColor))})])]},proxy:true}]),model:{value:(_vm.color),callback:function ($$v) {_vm.color=$$v},expression:"color"}})],1),_c('div',{staticClass:"col-md-5 col-sm-6 col-xs-12 q-pl-lg previewBoxContainer"},[_c('div',{staticClass:"previewBox"},[_c('BlockPreview',{attrs:{"blockDefinition":_vm.blockDefinition,"width":"100%","height":"200px"}})],1)])])]),_c('q-card-section',{staticClass:"q-pb-xs q-pt-lg"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('Blockly.Block.Properties')))])])]),_c('q-card-section',[_c('BlockEditor',{attrs:{"blockDefinition":_vm.blockDefinition}})],1),_c('q-card-section',{staticClass:"q-pb-xs q-pt-lg"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('Blockly.Block.CodeGeneratorFunction')))])])]),_c('q-card-section',{staticClass:"q-mt-none q-pt-xs"},[_c('q-slide-transition',{staticClass:"q-mb-xs"},[_c('q-banner',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasError),expression:"hasError"}],staticClass:"text-white bg-red",attrs:{"inline-actions":"","rounded":""},scopedSlots:_vm._u([{key:"action",fn:function(){return [_c('q-btn',{attrs:{"flat":"","color":"white","label":_vm.$t('Dismiss')},on:{"click":function($event){return _vm.dismissError()}}})]},proxy:true}])},[_c('div',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('Blockly.Block.CompileError')))]),_c('div',{staticClass:"q-pl-lg"},[_vm._v(_vm._s(_vm.errorString))])])],1),_c('CodeBlock',{attrs:{"block":_vm.prefixCodeBlock,"theme":_vm.staticCodeOptions.theme,"mode":_vm.staticCodeOptions.mode,"visibleLines":"1","editMode":false,"muteReadyState":true,"namePrefix":"blockCodePre","canBookmark":false}}),_c('CodeBlock',{attrs:{"block":_vm.codeBlock,"theme":_vm.codeOptions.theme,"mode":_vm.codeOptions.mode,"visibleLines":"10","editMode":true,"muteReadyState":true,"namePrefix":"blockCode"},on:{"code-changed-in-edit-mode":_vm.onBlockCodeChange}}),_c('CodeBlock',{attrs:{"block":_vm.postfixCodeBlock,"theme":_vm.staticCodeOptions.theme,"mode":_vm.staticCodeOptions.mode,"visibleLines":"1","editMode":false,"muteReadyState":true,"namePrefix":"blockCodePost","canBookmark":false}})],1)],1)}
 var BlocklyCustomBlockEditorvue_type_template_id_4fbc04c4_scoped_true_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/Blockly/BlocklyCustomBlockEditor.vue?vue&type=template&id=4fbc04c4&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlockPreview.vue?vue&type=template&id=309f98d2&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlockPreview.vue?vue&type=template&id=309f98d2&
 var BlockPreviewvue_type_template_id_309f98d2_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"q-ml-lg q-pb-sm q-pl-lg"},[_c('div',{ref:"blocklyPreviewContainer",staticClass:"blocklyBlockContainer",style:(("width:" + _vm.width + "; height:" + _vm.height))})])}
 var BlockPreviewvue_type_template_id_309f98d2_staticRenderFns = []
 
@@ -72966,7 +74199,6 @@ var BlockPreviewvue_type_template_id_309f98d2_staticRenderFns = []
 // CONCATENATED MODULE: ./src/components/Blockly/BlockPreview.vue?vue&type=template&id=309f98d2&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlockPreview.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -72987,12 +74219,14 @@ var UNNAMED = 'unnamed';
 var BlockPreviewvue_type_script_lang_ts_BlockEditor = /*#__PURE__*/function (_Vue) {
   _inherits(BlockEditor, _Vue);
 
+  var _super = _createSuper(BlockEditor);
+
   function BlockEditor() {
     var _this;
 
     _classCallCheck(this, BlockEditor);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BlockEditor).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.previewWorkspace = undefined;
     return _this;
   }
@@ -73136,7 +74370,7 @@ var BlockPreview_component = normalizeComponent(
 )
 
 /* harmony default export */ var BlockPreview = (BlockPreview_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlockEditor.vue?vue&type=template&id=f7fa5782&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlockEditor.vue?vue&type=template&id=f7fa5782&
 var BlockEditorvue_type_template_id_f7fa5782_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-card',{attrs:{"flat":""}},[_c('q-item',[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-icon',{attrs:{"dark":false,"name":"build"}})],1),_c('q-item-section',[_c('q-item-label',[_vm._v(_vm._s(_vm.$t('Blockly.Block.BlockEditTitle')))]),_c('q-item-label',{attrs:{"caption":""}},[_vm._v(" "+_vm._s(_vm.$t('Blockly.Block.BlockEditDescription'))+" ")])],1),_c('q-item-section',{attrs:{"side":""}},[_c('q-btn',{attrs:{"color":"grey","round":"","flat":"","dense":"","icon":_vm.isEditorExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'},on:{"click":function($event){return _vm.toogleEditorExpanded()}}})],1)],1),_c('q-card-section',{staticStyle:{"display":"none"}},[_c('xml',{ref:"toolbox",staticClass:"toolbox",attrs:{"xmlns":"https://developers.google.com/blockly/xml","id":"blockfactory_toolbox"}},[_c('category',{attrs:{"name":"Input","colour":_vm.toHTMLColor(_vm.blockPrimaryColors.Math)}},[_c('block',{attrs:{"type":"input_value"}},[_c('value',{attrs:{"name":"TYPE"}},[_c('shadow',{attrs:{"type":"type_null"}})])],1),_c('block',{attrs:{"type":"input_statement"}},[_c('value',{attrs:{"name":"TYPE"}},[_c('shadow',{attrs:{"type":"type_null"}})])],1),_c('block',{attrs:{"type":"input_dummy"}})],1),_c('category',{attrs:{"name":"Field","colour":_vm.toHTMLColor(_vm.blockPrimaryColors.Text)}},[_c('block',{attrs:{"type":"field_static"}}),_c('block',{attrs:{"type":"field_label_serializable"}}),_c('block',{attrs:{"type":"field_input"}}),_c('block',{attrs:{"type":"field_number"}}),_c('block',{attrs:{"type":"field_angle"}}),_c('block',{attrs:{"type":"field_dropdown"}}),_c('block',{attrs:{"type":"field_checkbox"}}),_c('block',{attrs:{"type":"field_colour"}}),_c('block',{attrs:{"type":"field_variable"}}),_c('block',{attrs:{"type":"field_image"}})],1),_c('category',{attrs:{"name":"Type","colour":_vm.toHTMLColor(_vm.blockPrimaryColors.List)}},[_c('block',{attrs:{"type":"type_group"}}),_c('block',{attrs:{"type":"type_null"}}),_c('block',{attrs:{"type":"type_boolean"}}),_c('block',{attrs:{"type":"type_number"}}),_c('block',{attrs:{"type":"type_string"}}),_c('block',{attrs:{"type":"type_list"}}),_c('block',{attrs:{"type":"type_other"}})],1)],1)],1),_c('q-card-section',{directives:[{name:"show",rawName:"v-show",value:(_vm.isEditorExpanded),expression:"isEditorExpanded"}]},[_c('div',{ref:"blocklyMainContainerParent",staticClass:"blocklyMainContainerParent"},[_c('div',{ref:"blocklyMainContainer",staticClass:"blocklyMainContainer",attrs:{"width":"100%","height":"300px"}})]),_c('div',{staticStyle:{"display":"none"}},[_c('div',{ref:"blocklyPreviewContainer",staticClass:"blocklyPreviewContainer"})])])],1)}
 var BlockEditorvue_type_template_id_f7fa5782_staticRenderFns = []
 
@@ -73144,7 +74378,6 @@ var BlockEditorvue_type_template_id_f7fa5782_staticRenderFns = []
 // CONCATENATED MODULE: ./src/components/Blockly/BlockEditor.vue?vue&type=template&id=f7fa5782&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlockEditor.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -73183,12 +74416,14 @@ var BlockEditorvue_type_script_lang_ts_UNNAMED = 'unnamed';
 var BlockEditorvue_type_script_lang_ts_BlockEditor = /*#__PURE__*/function (_Vue) {
   _inherits(BlockEditor, _Vue);
 
+  var _super = _createSuper(BlockEditor);
+
   function BlockEditor() {
     var _this;
 
     _classCallCheck(this, BlockEditor);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BlockEditor).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.previewWorkspace = undefined;
     _this.mainWorkspace = undefined;
     _this.updateBlocksFlag = false;
@@ -73990,10 +75225,9 @@ var BlockEditor_component = normalizeComponent(
 
 /* harmony default export */ var Blockly_BlockEditor = (BlockEditor_component.exports);
 
-BlockEditor_component.options.components = Object.assign({QCard: QCard,QItem: QItem,QItemSection: QItemSection,QIcon: QIcon,QItemLabel: QItemLabel,QBtn: QBtn,QCardSection: QCardSection}, BlockEditor_component.options.components || {})
+BlockEditor_component.options.components = Object.assign(Object.create(BlockEditor_component.options.components || null), BlockEditor_component.options.components || {}, {QCard: QCard,QItem: QItem,QItemSection: QItemSection,QIcon: QIcon,QItemLabel: QItemLabel,QBtn: QBtn,QCardSection: QCardSection})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyCustomBlockEditor.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -74013,12 +75247,14 @@ BlockEditor_component.options.components = Object.assign({QCard: QCard,QItem: QI
 var BlocklyCustomBlockEditorvue_type_script_lang_ts_BlocklyCustomBlockEditor = /*#__PURE__*/function (_Vue) {
   _inherits(BlocklyCustomBlockEditor, _Vue);
 
+  var _super = _createSuper(BlocklyCustomBlockEditor);
+
   function BlocklyCustomBlockEditor() {
     var _this;
 
     _classCallCheck(this, BlocklyCustomBlockEditor);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BlocklyCustomBlockEditor).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.codeLen = 0;
     return _this;
   }
@@ -74264,10 +75500,9 @@ var BlocklyCustomBlockEditor_component = normalizeComponent(
 
 /* harmony default export */ var Blockly_BlocklyCustomBlockEditor = (BlocklyCustomBlockEditor_component.exports);
 
-BlocklyCustomBlockEditor_component.options.components = Object.assign({QCard: QCard,QCardSection: QCardSection,QInput: QInput,QSelect: QSelect,QSlideTransition: QSlideTransition,QBanner: QBanner,QBtn: QBtn}, BlocklyCustomBlockEditor_component.options.components || {})
+BlocklyCustomBlockEditor_component.options.components = Object.assign(Object.create(BlocklyCustomBlockEditor_component.options.components || null), BlocklyCustomBlockEditor_component.options.components || {}, {QCard: QCard,QCardSection: QCardSection,QInput: QInput,QSelect: QSelect,QSlideTransition: QSlideTransition,QBanner: QBanner,QBtn: QBtn})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyCustomBlocksEditor.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -74287,10 +75522,12 @@ BlocklyCustomBlockEditor_component.options.components = Object.assign({QCard: QC
 var BlocklyCustomBlocksEditorvue_type_script_lang_ts_BlocklyCustomBlocksEditor = /*#__PURE__*/function (_Vue) {
   _inherits(BlocklyCustomBlocksEditor, _Vue);
 
+  var _super = _createSuper(BlocklyCustomBlocksEditor);
+
   function BlocklyCustomBlocksEditor() {
     _classCallCheck(this, BlocklyCustomBlocksEditor);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(BlocklyCustomBlocksEditor).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(BlocklyCustomBlocksEditor, [{
@@ -74415,23 +75652,23 @@ var BlocklyCustomBlocksEditor_component = normalizeComponent(
 
 /* harmony default export */ var Blockly_BlocklyCustomBlocksEditor = (BlocklyCustomBlocksEditor_component.exports);
 
-BlocklyCustomBlocksEditor_component.options.components = Object.assign({QBtn: QBtn,QList: QList,QExpansionItem: QExpansionItem,QItem: QItem,QItemSection: QItemSection,QItemLabel: QItemLabel}, BlocklyCustomBlocksEditor_component.options.components || {})
+BlocklyCustomBlocksEditor_component.options.components = Object.assign(Object.create(BlocklyCustomBlocksEditor_component.options.components || null), BlocklyCustomBlocksEditor_component.options.components || {}, {QBtn: QBtn,QList: QList,QExpansionItem: QExpansionItem,QItem: QItem,QItemSection: QItemSection,QItemLabel: QItemLabel})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyToolboxEditor.vue?vue&type=template&id=c967b944&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyToolboxEditor.vue?vue&type=template&id=c967b944&
 var BlocklyToolboxEditorvue_type_template_id_c967b944_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"q-ml-lg q-pb-sm q-pl-lg"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('Blockly.Properties')))])]),_c('div',[_c('q-toggle',{attrs:{"label":_vm.$t('Blockly.ShowControls')},model:{value:(_vm.showControls),callback:function ($$v) {_vm.showControls=$$v},expression:"showControls"}})],1),_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('Blockly.ToolboxCategories')))]),_c('q-btn',{staticClass:"gt-xs",attrs:{"color":"primary","size":"12px","flat":"","dense":"","round":"","icon":"add"},on:{"click":_vm.addCategory}})],1),_c('q-list',{staticClass:"rounded-borders q-mt-sm ",attrs:{"dark":"","bordered":""}},_vm._l((_vm.categories),function(category){return _c('q-expansion-item',{key:category.uuid,attrs:{"expand-separator":"","group":"categoryListing","header-class":"bg-blue-grey text-white","label":category.name,"caption":_vm.descriptionForCategory(category)},scopedSlots:_vm._u([{key:"header",fn:function(){return [_c('q-item',{staticStyle:{"width":"100%"}},[_c('q-item-section',[_c('q-item-label',[_vm._v(_vm._s(category.name))]),_c('q-item-label',{attrs:{"caption":""}},[_vm._v(" "+_vm._s(_vm.descriptionForCategory(category))+" ")])],1),_c('q-item-section',{attrs:{"top":"","side":""}},[_c('q-btn',{attrs:{"icon":"delete","flat":"","dense":"","color":"red-3","right":"","ripple":{ center: true }},on:{"click":function($event){return _vm.removeCategory(category)}}})],1)],1)]},proxy:true}],null,true)},[_c('BlocklyToolboxCategoryEditor',{attrs:{"category":category,"customBlocks":_vm.block.blockly.blocks}})],1)}),1)],1)}
 var BlocklyToolboxEditorvue_type_template_id_c967b944_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/Blockly/BlocklyToolboxEditor.vue?vue&type=template&id=c967b944&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyToolboxCategoryEditor.vue?vue&type=template&id=331822ca&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyToolboxCategoryEditor.vue?vue&type=template&id=331822ca&
 var BlocklyToolboxCategoryEditorvue_type_template_id_331822ca_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-card',{staticClass:"bg-blue-grey-1 q-pl-lg"},[_c('q-card-section',{staticClass:"q-pb-none q-mb-none"},[_c('div',{staticClass:"text-overline text-black q-pa-none q-ma-none"},[_vm._v(" "+_vm._s(_vm.$t('Blockly.Properties'))+" ")])]),_c('q-card-section',{staticClass:"q-mb-none q-pb-none q-pt-none"},[_c('div',{staticClass:"row q-pa-none"},[_c('q-input',{staticClass:"col-3 q-ml-lg col-sm-5 col-xs-11",attrs:{"label":"Label"},model:{value:(_vm.category.name),callback:function ($$v) {_vm.$set(_vm.category, "name", $$v)},expression:"category.name"}}),_c('div',{staticClass:"col-3 q-ml-lg col-sm-5 col-xs-11"},[_c('q-select',{attrs:{"options":_vm.colors,"label":"Color"},scopedSlots:_vm._u([{key:"before",fn:function(){return [_c('div',{staticClass:"colorBlockContainer"},[_c('div',{staticClass:"colorBlock",style:(("background-color:" + _vm.htmlColor))})])]},proxy:true}]),model:{value:(_vm.color),callback:function ($$v) {_vm.color=$$v},expression:"color"}})],1)],1)]),_c('q-card-section',{staticClass:"q-pb-none  q-mb-none"},[_c('div',{staticClass:"text-overline text-black q-pa-none q-ma-none"},[_vm._v(" "+_vm._s(_vm.$t('Blockly.ToolboxItems'))+" "),_c('q-btn',{staticClass:"gt-xs",attrs:{"color":"primary","size":"12px","flat":"","dense":"","round":"","icon":"add"},on:{"click":_vm.addItem}})],1)]),_c('q-card-section',{staticClass:"q-mb-none q-pt-none"},[_c('q-list',{staticClass:"rounded-borders q-mt-sm ",staticStyle:{"max-width":"400px"},attrs:{"dense":"","dark":"","bordered":""}},_vm._l((_vm.category.items),function(item){return _c('q-expansion-item',{key:item.uuid,attrs:{"dense":"","expand-separator":"","group":"itemListing","header-class":"bg-blue-grey text-white","label":_vm.labelForItem(item.type),"caption":item.type},scopedSlots:_vm._u([{key:"header",fn:function(){return [_c('q-item',{staticStyle:{"width":"100%"}},[_c('q-item-section',[_c('q-item-label',[_vm._v(_vm._s(_vm.labelForItem(item.type)))]),_c('q-item-label',{attrs:{"caption":""}},[_vm._v(" "+_vm._s(item.type)+" ")])],1),_c('q-item-section',{attrs:{"top":"","side":""}},[_c('q-btn',{attrs:{"icon":"delete","flat":"","dense":"","color":"red-3","right":"","ripple":{ center: true }},on:{"click":function($event){return _vm.removeItem(item)}}})],1)],1)]},proxy:true}],null,true),model:{value:(item._expanded),callback:function ($$v) {_vm.$set(item, "_expanded", $$v)},expression:"item._expanded"}},[_c('BlocklyToolboxItemEditor',{attrs:{"item":item,"customBlocks":_vm.customBlocks}})],1)}),1)],1)],1)}
 var BlocklyToolboxCategoryEditorvue_type_template_id_331822ca_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/Blockly/BlocklyToolboxCategoryEditor.vue?vue&type=template&id=331822ca&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyToolboxItemEditor.vue?vue&type=template&id=2a6974b1&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyToolboxItemEditor.vue?vue&type=template&id=2a6974b1&
 var BlocklyToolboxItemEditorvue_type_template_id_2a6974b1_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-card',{staticClass:"bg-blue-grey-2 q-pl-lg"},[_c('q-card-section',[_c('div',{staticClass:"row q-pa-none"},[_c('q-select',{staticClass:"col-11 q-ml-lg col-sm-11 col-xs-11",attrs:{"options":_vm.filteredBlockTypes,"label":"Type","use-input":"","input-debounce":"0","behavior":"menu"},on:{"filter":_vm.filterTypes},scopedSlots:_vm._u([{key:"no-option",fn:function(){return [_c('q-item',[_c('q-item-section',{staticClass:"text-grey"},[_vm._v(" No results ")])],1)]},proxy:true}]),model:{value:(_vm.type),callback:function ($$v) {_vm.type=$$v},expression:"type"}})],1)])],1)}
 var BlocklyToolboxItemEditorvue_type_template_id_2a6974b1_staticRenderFns = []
 
@@ -74454,16 +75691,17 @@ var BlocklyToolboxItemEditorvue_type_template_id_2a6974b1_staticRenderFns = []
 
 
 
-
 var BlocklyToolboxItemEditorvue_type_script_lang_ts_BlocklyToolboxItemEditor = /*#__PURE__*/function (_Vue) {
   _inherits(BlocklyToolboxItemEditor, _Vue);
+
+  var _super = _createSuper(BlocklyToolboxItemEditor);
 
   function BlocklyToolboxItemEditor() {
     var _this;
 
     _classCallCheck(this, BlocklyToolboxItemEditor);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BlocklyToolboxItemEditor).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.filteredBlockTypes = [];
     return _this;
   }
@@ -74543,10 +75781,9 @@ var BlocklyToolboxItemEditor_component = normalizeComponent(
 
 /* harmony default export */ var Blockly_BlocklyToolboxItemEditor = (BlocklyToolboxItemEditor_component.exports);
 
-BlocklyToolboxItemEditor_component.options.components = Object.assign({QCard: QCard,QCardSection: QCardSection,QSelect: QSelect,QItem: QItem,QItemSection: QItemSection}, BlocklyToolboxItemEditor_component.options.components || {})
+BlocklyToolboxItemEditor_component.options.components = Object.assign(Object.create(BlocklyToolboxItemEditor_component.options.components || null), BlocklyToolboxItemEditor_component.options.components || {}, {QCard: QCard,QCardSection: QCardSection,QSelect: QSelect,QItem: QItem,QItemSection: QItemSection})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyToolboxCategoryEditor.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -74565,10 +75802,12 @@ BlocklyToolboxItemEditor_component.options.components = Object.assign({QCard: QC
 var BlocklyToolboxCategoryEditorvue_type_script_lang_ts_BlocklyToolboxCategoryEditor = /*#__PURE__*/function (_Vue) {
   _inherits(BlocklyToolboxCategoryEditor, _Vue);
 
+  var _super = _createSuper(BlocklyToolboxCategoryEditor);
+
   function BlocklyToolboxCategoryEditor() {
     _classCallCheck(this, BlocklyToolboxCategoryEditor);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(BlocklyToolboxCategoryEditor).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(BlocklyToolboxCategoryEditor, [{
@@ -74666,10 +75905,9 @@ var BlocklyToolboxCategoryEditor_component = normalizeComponent(
 
 /* harmony default export */ var Blockly_BlocklyToolboxCategoryEditor = (BlocklyToolboxCategoryEditor_component.exports);
 
-BlocklyToolboxCategoryEditor_component.options.components = Object.assign({QCard: QCard,QCardSection: QCardSection,QInput: QInput,QSelect: QSelect,QBtn: QBtn,QList: QList,QExpansionItem: QExpansionItem,QItem: QItem,QItemSection: QItemSection,QItemLabel: QItemLabel}, BlocklyToolboxCategoryEditor_component.options.components || {})
+BlocklyToolboxCategoryEditor_component.options.components = Object.assign(Object.create(BlocklyToolboxCategoryEditor_component.options.components || null), BlocklyToolboxCategoryEditor_component.options.components || {}, {QCard: QCard,QCardSection: QCardSection,QInput: QInput,QSelect: QSelect,QBtn: QBtn,QList: QList,QExpansionItem: QExpansionItem,QItem: QItem,QItemSection: QItemSection,QItemLabel: QItemLabel})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/BlocklyToolboxEditor.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -74687,10 +75925,12 @@ BlocklyToolboxCategoryEditor_component.options.components = Object.assign({QCard
 var BlocklyToolboxEditorvue_type_script_lang_ts_BlocklyToolboxEditor = /*#__PURE__*/function (_Vue) {
   _inherits(BlocklyToolboxEditor, _Vue);
 
+  var _super = _createSuper(BlocklyToolboxEditor);
+
   function BlocklyToolboxEditor() {
     _classCallCheck(this, BlocklyToolboxEditor);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(BlocklyToolboxEditor).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(BlocklyToolboxEditor, [{
@@ -74775,10 +76015,9 @@ var BlocklyToolboxEditor_component = normalizeComponent(
 
 /* harmony default export */ var Blockly_BlocklyToolboxEditor = (BlocklyToolboxEditor_component.exports);
 
-BlocklyToolboxEditor_component.options.components = Object.assign({QToggle: QToggle,QBtn: QBtn,QList: QList,QExpansionItem: QExpansionItem,QItem: QItem,QItemSection: QItemSection,QItemLabel: QItemLabel}, BlocklyToolboxEditor_component.options.components || {})
+BlocklyToolboxEditor_component.options.components = Object.assign(Object.create(BlocklyToolboxEditor_component.options.components || null), BlocklyToolboxEditor_component.options.components || {}, {QToggle: QToggle,QBtn: QBtn,QList: QList,QExpansionItem: QExpansionItem,QItem: QItem,QItemSection: QItemSection,QItemLabel: QItemLabel})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Blockly/Blockly.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -74800,12 +76039,14 @@ BlocklyToolboxEditor_component.options.components = Object.assign({QToggle: QTog
 var Blocklyvue_type_script_lang_ts_BlocklyBlock = /*#__PURE__*/function (_Vue) {
   _inherits(BlocklyBlock, _Vue);
 
+  var _super = _createSuper(BlocklyBlock);
+
   function BlocklyBlock() {
     var _this;
 
     _classCallCheck(this, BlocklyBlock);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(BlocklyBlock).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.workspace = null;
     _this.tmpcode = '';
     _this.tbEditExpanded = false;
@@ -74957,7 +76198,7 @@ var Blocklyvue_type_script_lang_ts_BlocklyBlock = /*#__PURE__*/function (_Vue) {
 
           this.continuousCodeUpdateTimer = setTimeout(function () {
             _this4.$emit('code-changed-in-view-mode', undefined);
-          }, "200");
+          }, "150");
         }
 
         return;
@@ -74970,13 +76211,13 @@ var Blocklyvue_type_script_lang_ts_BlocklyBlock = /*#__PURE__*/function (_Vue) {
     key: "parseToolboxCode",
     value: function parseToolboxCode(toolboxXML) {
       Object.keys(BlockPrimaryColors).forEach(function (key) {
-        toolboxXML = toolboxXML.replaceAll("{!PrimaryColors.".concat(key, "}"), BlockPrimaryColors[key]);
+        toolboxXML = toolboxXML.replaceAllPoly("{!PrimaryColors.".concat(key, "}"), BlockPrimaryColors[key]);
       });
       Object.keys(BlockSecondaryColors).forEach(function (key) {
-        toolboxXML = toolboxXML.replaceAll("{!SecondaryColors.".concat(key, "}"), BlockSecondaryColors[key]);
+        toolboxXML = toolboxXML.replaceAllPoly("{!SecondaryColors.".concat(key, "}"), BlockSecondaryColors[key]);
       });
       Object.keys(BlockTertiaryColors).forEach(function (key) {
-        toolboxXML = toolboxXML.replaceAll("{!TertiaryColors.".concat(key, "}"), BlockTertiaryColors[key]);
+        toolboxXML = toolboxXML.replaceAllPoly("{!TertiaryColors.".concat(key, "}"), BlockTertiaryColors[key]);
       });
       return toolboxXML;
     }
@@ -75361,8 +76602,8 @@ var Blocklyvue_type_style_index_0_lang_stylus_ = __webpack_require__("62b9");
 
 var Blockly_component = normalizeComponent(
   Blockly_Blocklyvue_type_script_lang_ts_,
-  Blocklyvue_type_template_id_8624461a_render,
-  Blocklyvue_type_template_id_8624461a_staticRenderFns,
+  Blocklyvue_type_template_id_d93e5b42_render,
+  Blocklyvue_type_template_id_d93e5b42_staticRenderFns,
   false,
   null,
   null,
@@ -75372,16 +76613,16 @@ var Blockly_component = normalizeComponent(
 
 /* harmony default export */ var Blockly = (Blockly_component.exports);
 
-Blockly_component.options.components = Object.assign({QList: QList,QExpansionItem: QExpansionItem,QCheckbox: QCheckbox}, Blockly_component.options.components || {})
+Blockly_component.options.components = Object.assign(Object.create(Blockly_component.options.components || null), Blockly_component.options.components || {}, {QList: QList,QExpansionItem: QExpansionItem,QCheckbox: QCheckbox})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePlayground.vue?vue&type=template&id=227dea0f&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePlayground.vue?vue&type=template&id=227dea0f&scoped=true&
 var CodePlaygroundvue_type_template_id_227dea0f_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('PlaygroundCanvas',{key:_vm.runCount,ref:"playgroundContainer",attrs:{"output":_vm.finalOutputObject.initialOutput,"obj":_vm.block.obj,"block":_vm.block,"eventHub":_vm.eventHub,"tagSet":_vm.tagSet,"data-question":_vm.block.parentID,"runner":_vm.emitRun},on:{"canvas-change":_vm.onCanvasChange,"did-init":_vm.onDidInit}}),_c('div',{staticClass:"row justify-end"},[(_vm.editMode)?_c('q-btn',{staticStyle:{"margin-right":"-9px","margin-bottom":"-10px"},attrs:{"icon":"","color":"secondary","small":"","flat":"","round":""},on:{"click":_vm.toggleExpanded}},[_c('q-icon',{attrs:{"name":_vm.block.codeExpanded ? 'expand_less' : 'expand_more',"size":"24"}})],1):_vm._e()],1),_c('q-slide-transition',[(_vm.editMode)?_c('CodeBlock',{attrs:{"block":_vm.block,"theme":_vm.options.theme,"mode":_vm.options.mode,"visibleLines":_vm.visibleLinesNow,"editMode":this.editMode,"muteReadyState":true},on:{"code-changed-in-edit-mode":_vm.onCodeChange}}):_vm._e()],1)],1)}
 var CodePlaygroundvue_type_template_id_227dea0f_scoped_true_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/CodePlayground.vue?vue&type=template&id=227dea0f&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PlaygroundCanvas.vue?vue&type=template&id=8d828cb2&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PlaygroundCanvas.vue?vue&type=template&id=8d828cb2&scoped=true&
 var PlaygroundCanvasvue_type_template_id_8d828cb2_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row ma-0 pa-0 block-playground",attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id}},[_c('div',{class:("col-12 text-" + (_vm.block.align))},[_c('div',{ref:"innerPlaygroundContainer",staticClass:"playground",style:(("width:" + (_vm.block.width) + ";height:" + (_vm.block.height))),attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id}},[_vm._v(" "+_vm._s(_vm.output)+" ")])])])}
 var PlaygroundCanvasvue_type_template_id_8d828cb2_scoped_true_staticRenderFns = []
 
@@ -75397,16 +76638,17 @@ var PlaygroundCanvasvue_type_template_id_8d828cb2_scoped_true_staticRenderFns = 
 
 
 
-
 var PlaygroundCanvasvue_type_script_lang_ts_PlaygroundCanvas = /*#__PURE__*/function (_Vue) {
   _inherits(PlaygroundCanvas, _Vue);
+
+  var _super = _createSuper(PlaygroundCanvas);
 
   function PlaygroundCanvas() {
     var _this;
 
     _classCallCheck(this, PlaygroundCanvas);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PlaygroundCanvas).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.output = '';
     return _this;
   }
@@ -75519,7 +76761,6 @@ var PlaygroundCanvas_component = normalizeComponent(
 
 
 
-
  //helper to reset the canvas area if needed
 
 
@@ -75531,12 +76772,14 @@ var PlaygroundCanvasCtor = external_commonjs_vue_commonjs2_vue_root_Vue_default.
 var CodePlaygroundvue_type_script_lang_ts_CodePlayground = /*#__PURE__*/function (_BaseBlock) {
   _inherits(CodePlayground, _BaseBlock);
 
+  var _super = _createSuper(CodePlayground);
+
   function CodePlayground() {
     var _this;
 
     _classCallCheck(this, CodePlayground);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CodePlayground).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.isPreparingRun = false;
     _this.lastRun = new Date();
     _this.runCount = 0;
@@ -75931,16 +77174,16 @@ var CodePlayground_component = normalizeComponent(
 
 /* harmony default export */ var components_CodePlayground = (CodePlayground_component.exports);
 
-CodePlayground_component.options.components = Object.assign({QBtn: QBtn,QIcon: QIcon,QSlideTransition: QSlideTransition}, CodePlayground_component.options.components || {})
+CodePlayground_component.options.components = Object.assign(Object.create(CodePlayground_component.options.components || null), CodePlayground_component.options.components || {}, {QBtn: QBtn,QIcon: QIcon,QSlideTransition: QSlideTransition})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/SimpleText.vue?vue&type=template&id=13d82b2b&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/SimpleText.vue?vue&type=template&id=13d82b2b&scoped=true&
 var SimpleTextvue_type_template_id_13d82b2b_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(!_vm.editMode)?_c('div',{directives:[{name:"highlight",rawName:"v-highlight",value:(_vm.language),expression:"language"}],domProps:{"innerHTML":_vm._s(_vm.previewValue)}}):_c('TipTap',{staticClass:"editor q-my-3",attrs:{"value":_vm.value,"name":_vm.name,"language":_vm.language,"scopUUID":_vm.scopeUUID,"editMode":_vm.editMode},on:{"input":_vm.updatedContent}})],1)}
 var SimpleTextvue_type_template_id_13d82b2b_scoped_true_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/SimpleText.vue?vue&type=template&id=13d82b2b&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/TipTap.vue?vue&type=template&id=5a368702&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/TipTap.vue?vue&type=template&id=5a368702&scoped=true&
 var TipTapvue_type_template_id_5a368702_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row q-ma-0 q-pa-0"},[_c('div',{staticClass:"col-xs-12 col-md-6 q-px-sm"},[_c('q-input',{ref:"editBox",staticClass:"plain accqstXmlInput noRTEditor",attrs:{"type":"textarea","autogrow":"","filled":"","name":_vm.name,"label":"HTML Source","background-color":"blue-grey darken-3"},model:{value:(_vm.text),callback:function ($$v) {_vm.text=$$v},expression:"text"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6 q-px-sm"},[_c('div',{staticClass:"q-field__label no-pointer-events ellipsis text-caption wysiwyg"},[_vm._v(" Preview ")]),_c('div',{directives:[{name:"highlight",rawName:"v-highlight",value:(_vm.language),expression:"language"},{name:"tagged",rawName:"v-tagged",value:(_vm.scopeUUID),expression:"scopeUUID"}],domProps:{"innerHTML":_vm._s(_vm.text)}})])])}
 var TipTapvue_type_template_id_5a368702_scoped_true_staticRenderFns = []
 
@@ -75960,14 +77203,15 @@ var TipTapvue_type_template_id_5a368702_scoped_true_staticRenderFns = []
 
 
 
-
 var TipTapvue_type_script_lang_ts_TipTap = /*#__PURE__*/function (_Vue) {
   _inherits(TipTap, _Vue);
+
+  var _super = _createSuper(TipTap);
 
   function TipTap() {
     _classCallCheck(this, TipTap);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(TipTap).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(TipTap, [{
@@ -76065,10 +77309,9 @@ var TipTap_component = normalizeComponent(
 
 /* harmony default export */ var components_TipTap = (TipTap_component.exports);
 
-TipTap_component.options.components = Object.assign({QInput: QInput,QField: QField}, TipTap_component.options.components || {})
+TipTap_component.options.components = Object.assign(Object.create(TipTap_component.options.components || null), TipTap_component.options.components || {}, {QInput: QInput,QField: QField})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/SimpleText.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -76082,10 +77325,12 @@ TipTap_component.options.components = Object.assign({QInput: QInput,QField: QFie
 var SimpleTextvue_type_script_lang_ts_SimpleText = /*#__PURE__*/function (_BaseBlock) {
   _inherits(SimpleText, _BaseBlock);
 
+  var _super = _createSuper(SimpleText);
+
   function SimpleText() {
     _classCallCheck(this, SimpleText);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(SimpleText).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(SimpleText, [{
@@ -76170,16 +77415,17 @@ var SimpleText_component = normalizeComponent(
 
 
 
-
 var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) {
   _inherits(CodeBlocks, _Vue);
+
+  var _super = _createSuper(CodeBlocks);
 
   function CodeBlocks() {
     var _this;
 
     _classCallCheck(this, CodeBlocks);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CodeBlocks).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.didInitialize = false;
     _this.outputHTML = '';
     _this.output = '';
@@ -76257,6 +77503,9 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
     key: "onContinousCompileStateChange",
     value: function onContinousCompileStateChange(v) {}
   }, {
+    key: "onPersistentArgumentsChange",
+    value: function onPersistentArgumentsChange(v) {}
+  }, {
     key: "onLanguageChange",
     value: function onLanguageChange(v) {}
   }, {
@@ -76297,7 +77546,7 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
       }
 
       if (this.output != newOutput) {
-        this.output = newOutput.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+        this.output = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;');
 
         if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
           this.outputHTML = this.output.substr(0, this.maxCharacters);
@@ -76322,7 +77571,7 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
     value: function log(text) {
       //console.log("log", text);
       this.output += text;
-      text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+      text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;');
 
       if (!this.didClip) {
         if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
@@ -76336,7 +77585,7 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
   }, {
     key: "logError",
     value: function logError(text) {
-      text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+      text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;');
       text = this.$CodeBlock.format_error(text); //console.log("err", text);
 
       this.sansoutput += text;
@@ -76345,7 +77594,7 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
   }, {
     key: "logInfo",
     value: function logInfo(text) {
-      text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+      text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;');
       text = this.$CodeBlock.format_info(text); //console.log("nfo", text);
 
       this.sansoutput += text;
@@ -76411,7 +77660,8 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
         processedOutput: processed,
         sansoutput: this.sansoutput,
         parseError: parseError,
-        outputElement: $(this.outputElement)
+        //outputElement: $(this.outputElement) as JQuery<HTMLElement> //This line soes not work here, looks like the update did not yet happen?
+        outputElement: $(this.$refs.output)
       };
       this.eventHub.$emit('output-updated', this._finalOutputObject);
       this.onRunFinished();
@@ -76460,6 +77710,8 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
         cmp.compileAndRun('' + self.blockid, self.completeSource, self, self.executionTimeout, self.log.bind(_this3), self.logInfo.bind(_this3), self.logError.bind(_this3), self.processDiagnostics.bind(_this3), function () {
           var success = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
           var overrideOutput = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+          var returnState = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
+          console.d('returnState:', returnState, _args);
 
           if (!success) {
             self.$compilerState.hideGlobalState();
@@ -76468,6 +77720,11 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
           }
 
           var res = self.finishedExecution(overrideOutput ? overrideOutput : self.output, self.sansoutput);
+
+          if (returnState !== undefined && _this3.blockInfo.persistentArguments) {
+            _this3.blockInfo.storeDefaultArgs(returnState);
+          }
+
           self.$compilerState.hideGlobalState();
           self.$compilerState.setAllRunButtons(true);
           return res;
@@ -76623,7 +77880,8 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
         solutionTheme: this.solutionTheme,
         outputParser: this.outputParser,
         randomizer: this.blockInfo.randomizer,
-        continuousCompilation: this.blockInfo.continuousCompilation
+        continuousCompilation: this.blockInfo.continuousCompilation,
+        persistentArguments: this.blockInfo.persistentArguments
       };
     }
   }, {
@@ -76842,8 +78100,8 @@ var CodeBlocksvue_type_style_index_0_lang_sass_ = __webpack_require__("7a59");
 
 var CodeBlocks_component = normalizeComponent(
   components_CodeBlocksvue_type_script_lang_ts_,
-  CodeBlocksvue_type_template_id_7e2a6277_render,
-  CodeBlocksvue_type_template_id_7e2a6277_staticRenderFns,
+  CodeBlocksvue_type_template_id_52c0afcc_render,
+  CodeBlocksvue_type_template_id_52c0afcc_staticRenderFns,
   false,
   null,
   null,
@@ -76853,7 +78111,7 @@ var CodeBlocks_component = normalizeComponent(
 
 /* harmony default export */ var components_CodeBlocks = (CodeBlocks_component.exports);
 
-CodeBlocks_component.options.components = Object.assign({QBtn: QBtn,QIcon: QIcon,QTooltip: QTooltip,QSlideTransition: QSlideTransition}, CodeBlocks_component.options.components || {})
+CodeBlocks_component.options.components = Object.assign(Object.create(CodeBlocks_component.options.components || null), CodeBlocks_component.options.components || {}, {QBtn: QBtn,QIcon: QIcon,QTooltip: QTooltip,QSlideTransition: QSlideTransition})
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=script&lang=js&
 //
@@ -76904,9 +78162,9 @@ var App_component = normalizeComponent(
 
 /* harmony default export */ var App = (App_component.exports);
 
-App_component.options.components = Object.assign({QLayout: QLayout,QPageContainer: QPageContainer}, App_component.options.components || {})
+App_component.options.components = Object.assign(Object.create(App_component.options.components || null), App_component.options.components || {}, {QLayout: QLayout,QPageContainer: QPageContainer})
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0d923754-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/AppEditor.vue?vue&type=template&id=0797aa13&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c8fb74e0-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/AppEditor.vue?vue&type=template&id=0797aa13&
 var AppEditorvue_type_template_id_0797aa13_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-layout',{staticStyle:{"min-height":"0"},attrs:{"view":"hHh lpR fFf"}},[_c('q-page-container',[_c('CodeBlocksEditor',{attrs:{"blockInfo":_vm.blocks}})],1)],1)}
 var AppEditorvue_type_template_id_0797aa13_staticRenderFns = []
 
@@ -76914,7 +78172,6 @@ var AppEditorvue_type_template_id_0797aa13_staticRenderFns = []
 // CONCATENATED MODULE: ./src/AppEditor.vue?vue&type=template&id=0797aa13&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/ts-loader??ref--13-3!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocksEditor.vue?vue&type=script&lang=ts&
-
 
 
 
@@ -76932,10 +78189,12 @@ var CodeBlocksEditorvue_type_script_lang_ts_mixin = {
 var CodeBlocksEditorvue_type_script_lang_ts_CodeBlocksEditor = /*#__PURE__*/function (_CodeBlocks) {
   _inherits(CodeBlocksEditor, _CodeBlocks);
 
+  var _super = _createSuper(CodeBlocksEditor);
+
   function CodeBlocksEditor() {
     _classCallCheck(this, CodeBlocksEditor);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(CodeBlocksEditor).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(CodeBlocksEditor, [{
@@ -76961,7 +78220,11 @@ var CodeBlocksEditorvue_type_script_lang_ts_CodeBlocksEditor = /*#__PURE__*/func
         return;
       }
 
-      bl.visibleLines = +nfo.visibleLines;
+      if (nfo.visibleLines != 'auto' && isNaN(nfo.visibleLines)) {
+        bl.visibleLines = 'auto';
+      } else {
+        bl.visibleLines = nfo.visibleLines;
+      }
     }
   }, {
     key: "onPlacementChange",
@@ -77017,6 +78280,11 @@ var CodeBlocksEditorvue_type_script_lang_ts_CodeBlocksEditor = /*#__PURE__*/func
     key: "onContinousCompileStateChange",
     value: function onContinousCompileStateChange(v) {
       this.blockInfo.continuousCompilation = v;
+    }
+  }, {
+    key: "onPersistentArgumentsChange",
+    value: function onPersistentArgumentsChange(v) {
+      this.blockInfo.persistentArguments = v;
     }
   }, {
     key: "onLanguageChange",
@@ -77183,7 +78451,7 @@ var AppEditor_component = normalizeComponent(
 
 /* harmony default export */ var AppEditor = (AppEditor_component.exports);
 
-AppEditor_component.options.components = Object.assign({QLayout: QLayout,QPageContainer: QPageContainer}, AppEditor_component.options.components || {})
+AppEditor_component.options.components = Object.assign(Object.create(AppEditor_component.options.components || null), AppEditor_component.options.components || {}, {QLayout: QLayout,QPageContainer: QPageContainer})
 
 // CONCATENATED MODULE: ./src/compiler/doppio.v001.js
 
@@ -77305,6 +78573,7 @@ var singleton = new external_commonjs_vue_commonjs2_vue_root_Vue_default.a({
       canRun: true,
       canStop: true,
       allowsContinousCompilation: false,
+      allowsPersistentArguments: false,
       acceptsJSONArgument: false,
       didPreload: false,
       requestedPreload: false,
@@ -77426,28 +78695,33 @@ var singleton = new external_commonjs_vue_commonjs2_vue_root_Vue_default.a({
 
 
 
-
 var teaVMRunOverhead = 30000; //ICompilerInstance
 
 var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
   _inherits(JavaV100Compiler, _Vue);
+
+  var _super = _createSuper(JavaV100Compiler);
 
   function JavaV100Compiler() {
     var _this;
 
     _classCallCheck(this, JavaV100Compiler);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(JavaV100Compiler).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.version = '100';
     _this.language = 'java';
     _this.canRun = true;
     _this.canStop = true;
     _this.allowsContinousCompilation = false;
+    _this.allowsPersistentArguments = false;
     _this.acceptsJSONArgument = true;
     _this.didPreload = false;
     _this.teaworker = undefined;
     _this.isReady = false;
     _this.isRunning = false;
+    _this.sessionCompileListener = undefined;
+    _this.sessionID = '-1';
+    _this.sessionWorker = undefined;
     return _this;
   }
 
@@ -77569,21 +78843,31 @@ var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
           _this4.teaworker = undefined;
         }
       }, teaVMRunOverhead);
-      var mainClass = 'Unknown';
-      var text = code.replace(/"(?:[^"\\]|\\.)*"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments
+      var text = code.replace(/"(?:[^"\\]|\\.)*"|\/\*[\s\S]*?\*\//gm, '').replace(/(^.*)\/\/.*$/gm, '$1'); //replace strings and comments
       //let text = code.replace(/"(?:[^"\\]+?|(?!")"|\\{2}|\\[\s\S])*?"|^.*(\/\/.*$)|\/\*[\s\S]*?\*\//gm, ''); //replace strings and comments
 
       text = text.replaceRec(/(\{[^{}]*\})/gm, '[]'); //replace parentheses
-      //above replaces all {} with [], so look for public class <name> []
 
-      var regexpMainClass = /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm;
-      var match;
+      var getMainClass = function getMainClass(_code) {
+        var ret = 'Unknown'; //above replaces all {} with [], so look for public class <name> []
 
-      while ((match = regexpMainClass.exec(text)) !== null) {
-        if (match[1]) {
-          mainClass = match[1];
-          break;
+        var regexpMainClass = /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm;
+        var match;
+
+        while ((match = regexpMainClass.exec(_code)) !== null) {
+          if (match[1]) {
+            ret = match[1];
+            break;
+          }
         }
+
+        return ret;
+      };
+
+      var mainClass = getMainClass(text); //fallback if the above regExps mangled the student code and we can not find the main class
+
+      if (mainClass == 'Unknown') {
+        mainClass = getMainClass(code.replace('{', '['));
       } //console.log(mainClass, code);
 
 
@@ -77658,6 +78942,8 @@ var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
 
             if (_this4.teaworker) {
               _this4.teaworker.removeEventListener('message', myListener);
+
+              _this4.sessionCompileListener = undefined;
             }
 
             try {
@@ -77692,6 +78978,7 @@ var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
               _this4.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>');
 
               var workerrun = new Worker("".concat(_this4.$CodeBlock.baseurl, "js/teavm/v").concat(_this4.version, "/workerrun.js"));
+              _this4.sessionWorker = workerrun;
               workerrun.addEventListener('message', runListener.bind(_this4));
               workerrun.postMessage({
                 command: 'run',
@@ -77701,7 +78988,8 @@ var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
               });
 
               workerrun.end = function (msg) {
-                //when we end it IS over, no matter how often we tried :)
+                _this4.sessionWorker = undefined; //when we end it IS over, no matter how often we tried :)
+
                 try {
                   workerrun.terminate();
 
@@ -77736,6 +79024,8 @@ var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
       };
 
       if (this.teaworker) {
+        this.sessionID = questionID;
+        this.sessionCompileListener = myListener;
         this.teaworker.addEventListener('message', myListener);
       } //console.log(code);
 
@@ -77754,6 +79044,8 @@ var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
 
       if (this.teaworker) {
         this.teaworker.end = function (msg) {
+          var terminate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
           try {
             clearTimeout(compilerTimeout);
           } catch (e) {//nothing to see here
@@ -77763,7 +79055,9 @@ var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
             return;
           }
 
-          if (_this4.teaworker) {
+          if (_this4.teaworker && terminate) {
+            console.log('TERMINATING');
+
             _this4.teaworker.terminate();
           }
 
@@ -77782,8 +79076,23 @@ var teavm_v100_JavaV100Compiler = /*#__PURE__*/function (_Vue) {
     value: function stop() {
       console.d('FORCE STOPPING');
 
-      if (this.teaworker) {
-        this.teaworker.end(external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$l('CodeBlocks.UserCanceled'));
+      if (this.sessionWorker) {
+        this.sessionWorker.end(external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$l('CodeBlocks.UserCanceled'));
+      } else if (this.teaworker) {
+        if (this.sessionCompileListener) {
+          // this.sessionCompileListener({
+          //     data: {
+          //         id: '' + this.sessionID,
+          //         command: 'compilation-complete',
+          //         status: 'errors',
+          //         errors: [Vue.$l('CodeBlocks.UserCanceled')]
+          //     }
+          // })
+          this.teaworker.removeEventListener('message', this.sessionCompileListener);
+          this.sessionCompileListener = undefined;
+        }
+
+        this.teaworker.end(external_commonjs_vue_commonjs2_vue_root_Vue_default.a.$l('CodeBlocks.UserCanceled'), false);
       }
     }
   }]);
@@ -77801,7 +79110,6 @@ var javaCompiler_V100 = new teavm_v100_JavaV100Compiler();
 
 
 
-
  //load all versions
 
 
@@ -77810,12 +79118,14 @@ var javaCompiler_V100 = new teavm_v100_JavaV100Compiler();
 var java_JavaCompilerInfo = /*#__PURE__*/function (_Vue) {
   _inherits(JavaCompilerInfo, _Vue);
 
+  var _super = _createSuper(JavaCompilerInfo);
+
   function JavaCompilerInfo() {
     var _this;
 
     _classCallCheck(this, JavaCompilerInfo);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(JavaCompilerInfo).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.type = 'java';
     _this.displayName = 'Java'; //attach all version
 
@@ -77838,7 +79148,6 @@ var es_string_iterator = __webpack_require__("3ca3");
 var web_url = __webpack_require__("2b3d");
 
 // CONCATENATED MODULE: ./src/compiler/javascript.v100.ts
-
 
 
 
@@ -77994,17 +79303,20 @@ function runJavaScriptWorker(questionID, code, callingCodeBlocks, max_ms, log_ca
 var javascript_v100_JavascriptV100Compiler = /*#__PURE__*/function (_Vue) {
   _inherits(JavascriptV100Compiler, _Vue);
 
+  var _super = _createSuper(JavascriptV100Compiler);
+
   function JavascriptV100Compiler() {
     var _this;
 
     _classCallCheck(this, JavascriptV100Compiler);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(JavascriptV100Compiler).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.version = '100';
     _this.language = 'javascript';
     _this.canRun = true;
     _this.canStop = false;
     _this.allowsContinousCompilation = false;
+    _this.allowsPersistentArguments = false;
     _this.acceptsJSONArgument = false;
     _this.isReady = true;
     _this.isRunning = false;
@@ -78029,7 +79341,6 @@ javascript_v100_JavascriptV100Compiler = __decorate([vue_class_component_esm], j
 var javascriptCompiler_V100 = new javascript_v100_JavascriptV100Compiler();
 /* harmony default export */ var javascript_v100 = (javascriptCompiler_V100);
 // CONCATENATED MODULE: ./src/compiler/javascript.v101.ts
-
 
 
 
@@ -78067,8 +79378,15 @@ function javascript_v101_runJavaScriptWorker(questionID, code, callingCodeBlocks
 
     switch (msg.data[0]) {
       case 'finished':
+        if (msg && msg.data && msg.data.length >= 3) {
+          args['return'] = msg.data[2];
+        } else {
+          args['return'] = {};
+        }
+
+        console.d('returned msg:', msg, ', args:', args);
         executionFinished = true;
-        finishedExecutionCB(true);
+        finishedExecutionCB(true, undefined, args['return']);
         console.i('Execution finished in ' + time + ' ms\n'); //info_callback('Info: Execution finished in ' + time + ' ms\n')
 
         worker.end();
@@ -78160,12 +79478,14 @@ function javascript_v101_runJavaScriptWorker(questionID, code, callingCodeBlocks
 var javascript_v101_JavascriptV101Compiler = /*#__PURE__*/function (_Vue) {
   _inherits(JavascriptV101Compiler, _Vue);
 
+  var _super = _createSuper(JavascriptV101Compiler);
+
   function JavascriptV101Compiler() {
     var _this;
 
     _classCallCheck(this, JavascriptV101Compiler);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(JavascriptV101Compiler).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.version = '101';
     _this.language = 'javascript';
     _this.canRun = true;
@@ -78173,6 +79493,7 @@ var javascript_v101_JavascriptV101Compiler = /*#__PURE__*/function (_Vue) {
     _this.isRunning = false;
     _this.canStop = true;
     _this.allowsContinousCompilation = true;
+    _this.allowsPersistentArguments = true;
     _this.acceptsJSONArgument = true;
     _this.libraries = [{
       key: 'd3-101',
@@ -78227,7 +79548,6 @@ var javascriptCompiler_V101 = new javascript_v101_JavascriptV101Compiler();
 
 
 
-
  //load all versions
 
 
@@ -78236,12 +79556,14 @@ var javascriptCompiler_V101 = new javascript_v101_JavascriptV101Compiler();
 var javascript_JavascriptCompilerInfo = /*#__PURE__*/function (_Vue) {
   _inherits(JavascriptCompilerInfo, _Vue);
 
+  var _super = _createSuper(JavascriptCompilerInfo);
+
   function JavascriptCompilerInfo() {
     var _this;
 
     _classCallCheck(this, JavascriptCompilerInfo);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(JavascriptCompilerInfo).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.type = 'javascript';
     _this.displayName = 'JavaScript'; //attach all version
 
@@ -78267,10 +79589,9 @@ var JavascriptCompilers = new javascript_JavascriptCompilerInfo();
 
 
 
-
 function runPythonWorker(questionID, prog, callingCodeBlocks, maxRuntime, logCallback, infoCallback, errCallback, compileFailedCallback, finishCallback) {
   // the Python program
-  prog = prog.replaceAll('\t', '    ');
+  prog = prog.replaceAllPoly('\t', '    ');
 
   if (!window.Worker) {
     errCallback('CRITICAL-ERROR: your browser does not support WebWorkers!! (please consult a Tutor).');
@@ -78383,17 +79704,20 @@ function runPythonWorker(questionID, prog, callingCodeBlocks, maxRuntime, logCal
 var python_v100_PythonV100Compiler = /*#__PURE__*/function (_Vue) {
   _inherits(PythonV100Compiler, _Vue);
 
+  var _super = _createSuper(PythonV100Compiler);
+
   function PythonV100Compiler() {
     var _this;
 
     _classCallCheck(this, PythonV100Compiler);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PythonV100Compiler).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.version = '100';
     _this.language = 'python';
     _this.canRun = true;
     _this.canStop = false;
     _this.allowsContinousCompilation = false;
+    _this.allowsPersistentArguments = false;
     _this.acceptsJSONArgument = false;
     _this.isReady = true;
     _this.isRunning = false;
@@ -78427,11 +79751,10 @@ var pythonCompiler_V100 = new python_v100_PythonV100Compiler();
 
 
 
-
 function python_v101_runPythonWorker(questionID, prog, callingCodeBlocks, maxRuntime, logCallback, infoCallback, errCallback, compileFailedCallback, finishCallback, legacy) {
   console.log('Python Version:', legacy ? '2.7' : '3'); // the Python program
 
-  prog = prog.replaceAll('\t', '    ');
+  prog = prog.replaceAllPoly('\t', '    ');
 
   if (!window.Worker) {
     errCallback('CRITICAL-ERROR: your browser does not support WebWorkers!! (please consult a Tutor).');
@@ -78547,17 +79870,20 @@ function python_v101_runPythonWorker(questionID, prog, callingCodeBlocks, maxRun
 var python_v101_PythonV101LegacyCompiler = /*#__PURE__*/function (_Vue) {
   _inherits(PythonV101LegacyCompiler, _Vue);
 
+  var _super = _createSuper(PythonV101LegacyCompiler);
+
   function PythonV101LegacyCompiler() {
     var _this;
 
     _classCallCheck(this, PythonV101LegacyCompiler);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PythonV101LegacyCompiler).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.version = '101';
     _this.language = 'python';
     _this.canRun = true;
     _this.canStop = true;
     _this.allowsContinousCompilation = true;
+    _this.allowsPersistentArguments = false;
     _this.acceptsJSONArgument = false;
     _this.isReady = true;
     _this.isRunning = false;
@@ -78593,17 +79919,20 @@ python_v101_PythonV101LegacyCompiler = __decorate([vue_class_component_esm], pyt
 var python_v101_PythonV101Compiler = /*#__PURE__*/function (_Vue2) {
   _inherits(PythonV101Compiler, _Vue2);
 
+  var _super2 = _createSuper(PythonV101Compiler);
+
   function PythonV101Compiler() {
     var _this2;
 
     _classCallCheck(this, PythonV101Compiler);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(PythonV101Compiler).apply(this, arguments));
+    _this2 = _super2.apply(this, arguments);
     _this2.version = '101';
     _this2.language = 'python';
     _this2.canRun = true;
     _this2.canStop = true;
     _this2.allowsContinousCompilation = true;
+    _this2.allowsPersistentArguments = false;
     _this2.acceptsJSONArgument = false;
     _this2.isReady = true;
     _this2.isRunning = false;
@@ -78647,7 +79976,6 @@ var pythonLegacyCompiler_V101 = new python_v101_PythonV101LegacyCompiler();
 
 
 
-
  //load all versions
 
 
@@ -78656,12 +79984,14 @@ var pythonLegacyCompiler_V101 = new python_v101_PythonV101LegacyCompiler();
 var python_PythonCompilerInfo = /*#__PURE__*/function (_Vue) {
   _inherits(PythonCompilerInfo, _Vue);
 
+  var _super = _createSuper(PythonCompilerInfo);
+
   function PythonCompilerInfo() {
     var _this;
 
     _classCallCheck(this, PythonCompilerInfo);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(PythonCompilerInfo).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.type = 'python';
     _this.displayName = 'Python 2.7'; //attach all version
 
@@ -78680,12 +80010,14 @@ python_PythonCompilerInfo = __decorate([vue_class_component_esm], python_PythonC
 var python_Python3CompilerInfo = /*#__PURE__*/function (_Vue2) {
   _inherits(Python3CompilerInfo, _Vue2);
 
+  var _super2 = _createSuper(Python3CompilerInfo);
+
   function Python3CompilerInfo() {
     var _this2;
 
     _classCallCheck(this, Python3CompilerInfo);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Python3CompilerInfo).apply(this, arguments));
+    _this2 = _super2.apply(this, arguments);
     _this2.type = 'python3';
     _this2.displayName = 'Python 3'; //attach all version
 
@@ -78702,7 +80034,6 @@ python_Python3CompilerInfo = __decorate([vue_class_component_esm], python_Python
 
 var PythonCompilers = [new python_PythonCompilerInfo(), new python_Python3CompilerInfo()];
 // CONCATENATED MODULE: ./src/compiler/glsl.v100.ts
-
 
 
 
@@ -78738,17 +80069,20 @@ function runGLSLWorker(questionID, prog, callingCodeBlocks, maxRuntime, logCallb
 var glsl_v100_GLSLV100Compiler = /*#__PURE__*/function (_Vue) {
   _inherits(GLSLV100Compiler, _Vue);
 
+  var _super = _createSuper(GLSLV100Compiler);
+
   function GLSLV100Compiler() {
     var _this;
 
     _classCallCheck(this, GLSLV100Compiler);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(GLSLV100Compiler).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.version = '100';
     _this.language = 'glsl';
     _this.canRun = true;
     _this.canStop = false;
     _this.allowsContinousCompilation = false;
+    _this.allowsPersistentArguments = false;
     _this.acceptsJSONArgument = false;
     _this.isReady = true;
     _this.isRunning = false;
@@ -78777,7 +80111,6 @@ var v100 = new glsl_v100_GLSLV100Compiler();
 
 
 
-
  //load all versions
 
 
@@ -78785,12 +80118,14 @@ var v100 = new glsl_v100_GLSLV100Compiler();
 var glsl_GLSLCompilerInfo = /*#__PURE__*/function (_Vue) {
   _inherits(GLSLCompilerInfo, _Vue);
 
+  var _super = _createSuper(GLSLCompilerInfo);
+
   function GLSLCompilerInfo() {
     var _this;
 
     _classCallCheck(this, GLSLCompilerInfo);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(GLSLCompilerInfo).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.type = 'glsl';
     _this.displayName = 'GLSL Shader'; //attach all version
 
@@ -78822,18 +80157,19 @@ var GLSLCompilers = new glsl_GLSLCompilerInfo();
 
 
 
-
  //prepare Compiler Registry
 
 var CompilerRegistry_CompilerRegistry = /*#__PURE__*/function (_Vue) {
   _inherits(CompilerRegistry, _Vue);
+
+  var _super = _createSuper(CompilerRegistry);
 
   function CompilerRegistry() {
     var _this;
 
     _classCallCheck(this, CompilerRegistry);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(CompilerRegistry).apply(this, arguments));
+    _this = _super.apply(this, arguments);
     _this.compilers = {};
     _this.libraries = [];
     _this.loadedURIs = [];
@@ -79194,7 +80530,6 @@ var playgroundLoader = new PlaygroundManager_PlaygroundLoadManager();
 
 
 
-
  //get loaders
 
 
@@ -79209,10 +80544,12 @@ external_commonjs_vue_commonjs2_vue_root_Vue_default.a.prototype.$compilerRegist
 var codeBlocksManager_BlockData = /*#__PURE__*/function (_Vue) {
   _inherits(BlockData, _Vue);
 
+  var _super = _createSuper(BlockData);
+
   function BlockData() {
     _classCallCheck(this, BlockData);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(BlockData).apply(this, arguments));
+    return _super.apply(this, arguments);
   }
 
   _createClass(BlockData, [{
@@ -79285,7 +80622,16 @@ var codeBlocksManager_BlockData = /*#__PURE__*/function (_Vue) {
         return 0;
       }
 
-      return this.content.split('\n').length;
+      if (this.lineCountHint >= 0) {
+        return this.lineCountHint;
+      }
+
+      var ct = 0;
+      this.content.replace(/\n/, function (m) {
+        ct++;
+        return m;
+      });
+      return ct;
     }
   }, {
     key: "nextLine",
@@ -79356,7 +80702,8 @@ var codeBlocksManager_InternalCodeBlocksManager = /*#__PURE__*/function () {
       uuid: 'is-set-below',
       executionTimeout: 5000,
       maxCharacters: 1000,
-      continuousCompilation: isTrue(inData.continuousCompilation)
+      continuousCompilation: isTrue(inData.continuousCompilation),
+      persistentArguments: isTrue(inData.persistentArguments)
     };
 
     if (inData.randomizerActive !== undefined) {
@@ -79473,6 +80820,7 @@ var codeBlocksManager_InternalCodeBlocksManager = /*#__PURE__*/function () {
         align: 'center',
         readyCount: 0,
         obj: null,
+        lineCountHint: -1,
         blockly: {
           showControls: false,
           useOverride: false,
@@ -79557,22 +80905,33 @@ var codeBlocksManager_InternalCodeBlocksManager = /*#__PURE__*/function () {
           var MainBlock = /*#__PURE__*/function (_Vue2) {
             _inherits(MainBlock, _Vue2);
 
+            var _super2 = _createSuper(MainBlock);
+
             function MainBlock() {
               _classCallCheck(this, MainBlock);
 
-              return _possibleConstructorReturn(this, _getPrototypeOf(MainBlock).apply(this, arguments));
+              return _super2.apply(this, arguments);
             }
 
             _createClass(MainBlock, [{
               key: "initArgsForLanguage",
               value: function initArgsForLanguage() {
-                console.d('Constructing args for', this.language);
+                console.d('Constructing args for', this.language, this.defaultArgs);
 
                 if (this.language === 'java') {
                   return [];
                 }
 
-                return {};
+                if (this.defaultArgs === undefined) {
+                  return {};
+                } else {
+                  return this.defaultArgs;
+                }
+              }
+            }, {
+              key: "storeDefaultArgs",
+              value: function storeDefaultArgs(args) {
+                this.defaultArgs = args;
               }
             }, {
               key: "swap",
@@ -79648,7 +81007,8 @@ var codeBlocksManager_InternalCodeBlocksManager = /*#__PURE__*/function () {
                     },
                     blocks: [],
                     _blockErrors: []
-                  }
+                  },
+                  lineCountHint: -1
                 };
 
                 _data2.blocks.push(self.constructBlock(_data2, block));
@@ -79682,10 +81042,12 @@ var codeBlocksManager_InternalCodeBlocksManager = /*#__PURE__*/function () {
 var codeBlocksManager_MountableArray = /*#__PURE__*/function (_Array) {
   _inherits(MountableArray, _Array);
 
+  var _super3 = _createSuper(MountableArray);
+
   function MountableArray() {
     _classCallCheck(this, MountableArray);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(MountableArray).apply(this, arguments));
+    return _super3.apply(this, arguments);
   }
 
   _createClass(MountableArray, [{
@@ -79740,7 +81102,7 @@ var CodeBlocksManager = {
 
 
 
-String.prototype.replaceAll = function (search, replacement) {
+String.prototype.replaceAllPoly = function (search, replacement) {
   var target = this;
   return target.replace(new RegExp(search, 'g'), replacement);
 };

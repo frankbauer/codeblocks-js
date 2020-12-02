@@ -55,7 +55,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
     }
 
     getCompiler(compilerInfo: ICompilerIDQuery): ICompilerInstance | undefined {
-        let cmps = this.compilers[compilerInfo.languageType]
+        const cmps = this.compilers[compilerInfo.languageType]
         if (!cmps) {
             return undefined
         }
@@ -125,7 +125,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
     private loadURIsIter(libs: string[], whenLoaded: () => void): void {
         console.log(libs)
         let loadCount = 0
-        let didLoad = (u: string) => {
+        const didLoad = (u: string) => {
             loadCount++
             if (loadCount == libs.length) {
                 whenLoaded()
@@ -138,7 +138,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             }
             this.loadedURIs.push(uri)
 
-            let script = document.createElement('script')
+            const script = document.createElement('script')
             script.src = uri
             console.log('[Loading Library from ' + uri + ']')
             script.onload = function() {
@@ -162,7 +162,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
 
         const self = this
 
-        let loadLib = function(uris, idx) {
+        const loadLib = function(uris, idx) {
             if (idx >= uris.length) {
                 whenLoaded()
 
@@ -170,7 +170,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
                 // => dequeu it and run it now
                 self.isLoadingLibs = false
                 if (self.afterLoadFinished.length > 0) {
-                    let next = self.afterLoadFinished.shift()
+                    const next = self.afterLoadFinished.shift()
                     if (next) {
                         next()
                     }
@@ -187,7 +187,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             }
             self.loadedURIs.push(uri)
 
-            let script = document.createElement('script')
+            const script = document.createElement('script')
             script.src = uri
             console.log('[Loading Library from ' + uri + ']')
             script.onload = function() {
@@ -224,7 +224,19 @@ compilerRegistry.registerDOMLib(
     '5.13.4',
     'D3',
     false,
-    1000
+    10000
+)
+
+compilerRegistry.registerDOMLib(
+    [
+        Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/d3.v6.min.js'
+        //Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js'
+    ],
+    'd3',
+    '6.2.0',
+    'D3',
+    false,
+    1100
 )
 
 compilerRegistry.registerDOMLib(
@@ -248,7 +260,16 @@ compilerRegistry.registerDOMLib(
     '2.0.0',
     'Brain.JS',
     false,
-    1000
+    3000
+)
+
+compilerRegistry.registerDOMLib(
+    [Vue.$CodeBlock.baseurl + 'js/phaser/3.24.1/phaser.min.js'],
+    'phaser',
+    '3.24',
+    'Phaser',
+    false,
+    4000
 )
 
 export default compilerRegistry

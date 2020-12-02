@@ -14,18 +14,29 @@
             @did-init="onDidInit"
         />
         <div class="row justify-end">
-            <q-btn
-                icon
-                color="secondary"
-                small
-                flat
-                round
-                style="margin-right:-9px; margin-bottom:-10px"
-                v-if="editMode"
-                @click="toggleExpanded"
-            >
-                <q-icon :name="block.codeExpanded ? 'expand_less' : 'expand_more'" size="24" />
-            </q-btn>
+            <q-btn-group rounded class="q-mb-sm" v-if="editMode">
+                <q-btn
+                    :color="isExpandedAuto ? 'primary' : 'blue-grey-4'"
+                    small
+                    label="Auto"
+                    icon="video_label"
+                    @click="setExpandedAuto"
+                />
+                <q-btn
+                    :color="isExpandedLarge ? 'primary' : 'blue-grey-4'"
+                    small
+                    label="Large"
+                    icon="call_to_action"
+                    @click="setExpandedLarge"
+                />
+                <q-btn
+                    :color="isExpandedTiny ? 'primary' : 'blue-grey-4'"
+                    small
+                    label="Small"
+                    icon="visibility_off"
+                    @click="setExpandedTiny"
+                />
+            </q-btn-group>
         </div>
         <q-slide-transition>
             <CodeBlock
@@ -55,7 +66,7 @@ const PlaygroundCanvasCtor = Vue.extend(PlaygroundCanvas)
 
 import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '@/lib/codeBlocksManager'
-import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
 
 export interface ICodePlaygroundOptions {
@@ -116,8 +127,10 @@ export default class CodePlayground extends BaseBlock {
         }
     }
     get visibleLinesNow(): 'auto' | string {
-        if (!this.block.codeExpanded) {
-            return '5.2'
+        if (this.block.codeExpanded == CodeExpansionType.TINY) {
+            return '2.4'
+        } else if (this.block.codeExpanded == CodeExpansionType.LARGE) {
+            return '33.4'
         }
         return 'auto'
     }
@@ -144,9 +157,28 @@ export default class CodePlayground extends BaseBlock {
     needsCodeRebuild: boolean = false
     initAndRebuildErrors: any[] = []
 
-    toggleExpanded(): void {
-        this.block.codeExpanded = !this.block.codeExpanded
-        if (this.block.codeExpanded) {
+    get isExpandedLarge(): boolean {
+        return this.block.codeExpanded == CodeExpansionType.LARGE
+    }
+    get isExpandedTiny(): boolean {
+        return this.block.codeExpanded == CodeExpansionType.TINY
+    }
+    get isExpandedAuto(): boolean {
+        return this.block.codeExpanded == CodeExpansionType.AUTO
+    }
+    setExpandedLarge(): void {
+        this.setExpanded(CodeExpansionType.LARGE)
+    }
+    setExpandedTiny(): void {
+        this.setExpanded(CodeExpansionType.TINY)
+    }
+    setExpandedAuto(): void {
+        this.setExpanded(CodeExpansionType.AUTO)
+    }
+    setExpanded(val: CodeExpansionType): void {
+        this.block.codeExpanded = val
+
+        if (this.block.codeExpanded != CodeExpansionType.TINY) {
             this.$CodeBlock.refreshAllCodeMirrors()
         }
     }

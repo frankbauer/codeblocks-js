@@ -459,7 +459,7 @@ export default class CodeBlocks extends Vue {
             return
         }
         if (this.output != newOutput) {
-            this.output = newOutput.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+            this.output = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
                 this.outputHTML = this.output.substr(0, this.maxCharacters)
                 this.outputHTML += this.$CodeBlock.format_info(
@@ -482,7 +482,7 @@ export default class CodeBlocks extends Vue {
     log(text: string): void {
         //console.log("log", text);
         this.output += text
-        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         if (!this.didClip) {
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
                 this.outputHTML += this.$CodeBlock.format_info(
@@ -496,7 +496,7 @@ export default class CodeBlocks extends Vue {
     }
 
     logError(text: string): void {
-        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         text = this.$CodeBlock.format_error(text)
         //console.log("err", text);
         this.sansoutput += text
@@ -504,7 +504,7 @@ export default class CodeBlocks extends Vue {
     }
 
     logInfo(text: string): void {
-        text = text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         text = this.$CodeBlock.format_info(text)
         //console.log("nfo", text);
         this.sansoutput += text
@@ -573,7 +573,8 @@ export default class CodeBlocks extends Vue {
             processedOutput: processed,
             sansoutput: this.sansoutput,
             parseError: parseError,
-            outputElement: $(this.outputElement) as JQuery<HTMLElement>
+            //outputElement: $(this.outputElement) as JQuery<HTMLElement> //This line soes not work here, looks like the update did not yet happen?
+            outputElement: $(this.$refs.output) as JQuery<HTMLElement>
         }
         this.eventHub.$emit('output-updated', this._finalOutputObject)
 
@@ -604,20 +605,21 @@ export default class CodeBlocks extends Vue {
         this.clearDiagnostics()
         const self = this
 
-        let _args: object | string[] = {}
-        if (cmp.acceptsJSONArgument) {
-            _args = this.blockInfo.initArgsForLanguage()
-            this.blocks.forEach(bl => {
-                if (bl.obj) {
-                    bl.obj.addArgumentsTo(_args)
-                }
-            })
-        }
-
         this.loadLibraries(() => {
             self.eventHub.$emit('before-run', {})
             console.d('compileAndRun')
             self.didRunOnce = true
+
+            let _args: object | string[] = {}
+            if (cmp.acceptsJSONArgument) {
+                _args = this.blockInfo.initArgsForLanguage()
+                this.blocks.forEach(bl => {
+                    if (bl.obj) {
+                        console.i('!!! ADD ARGUMENTS TO !!!')
+                        bl.obj.addArgumentsTo(_args)
+                    }
+                })
+            }
             cmp.compileAndRun(
                 '' + self.blockid,
                 self.completeSource,
