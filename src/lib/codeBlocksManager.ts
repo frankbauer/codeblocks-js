@@ -418,7 +418,10 @@ class InternalCodeBlocksManager {
                 static: isTrue(inBlock.static),
                 hidden: isTrue(inBlock.hidden),
                 visibleLines:
-                    inBlock.visibleLines === undefined ? 'auto' : Number(inBlock.visibleLines),
+                    inBlock.visibleLines === undefined ||
+                    inBlock.visibleLines?.trim().toLowerCase() == 'auto'
+                        ? 'auto'
+                        : Number(inBlock.visibleLines),
                 shouldAutoreset: isTrue(inBlock.shouldAutoreset),
 
                 expanded:
