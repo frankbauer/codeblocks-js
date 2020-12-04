@@ -18,6 +18,7 @@
     </style>
   </head>
   <body>
+      
     <noscript>
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
@@ -33,17 +34,79 @@ console.log('[{"x":0, "y":0, "color":10}]')
         <playground>{ 
             scope:undefined,
             init: function(canvasElement, outputElement, scope, runner) {
+                Phaser.GameObjects.Sprite.prototype.gdi_walkTo = function(x, y){  
+                    if (this._gdi_base_v===undefined) {
+                        this._gdi_base_v = 10
+                    }                  
+                    const path = new Phaser.Curves.Path(this.x, this.y);
+                    path.lineTo(x, y);
+                    const l = new Phaser.Math.Vector2(this.x-x, this.y-y).length()
+                    console.log(l)
+                    this._gdi_move = {
+                        path:path,
+                        t:0,
+                        inc:this._gdi_base_v/l,
+                        last:{
+                            p:null,
+                            d:-1
+                        }
+                    }
+                }
+
+                Phaser.GameObjects.Sprite.prototype.gdi_setBaseSpeed = function(bsp){
+                    this._gdi_base_v = bsp
+                }
+
+                Phaser.GameObjects.Sprite.prototype.gdi_update = function(time, delta){
+                    delta /= 1000
+                    const o = this._gdi_move
+                    if (o){
+                        if (o.t > 1){                            
+                            const frame = this.anims.currentFrame                            
+                            this.anims.stop()
+                            this.setFrame(frame.textureFrame - frame.index + 1)
+                            this._gdi_move = undefined    
+                            return                                                    
+                        }                        
+                        const p = o.path.getPoint(Phaser.Math.Easing.Sine.InOut(o.t))
+                        this.x = p.x
+                        this.y = p.y;
+    
+                        let v = 0;
+                        let dir = 0;
+                        if (o.last.p!==null){
+                            const d = o.last.p.subtract(p);
+                            v = (o.last.p.length() / delta) * this._gdi_base_v
+                            dir = Math.floor((o.last.p.angle() - Math.PI/8 )/ (Math.PI/4))
+                            if (dir &lt; 0) dir += 8
+                            console.log(Math.max(0.3, v * 0.65))
+                            this.anims.setTimeScale(Math.max(0.3, v * 0.005))
+                            if (dir != o.last.d && v > 0.05){
+                                const frame = this.anims.currentFrame.index
+                                this.anims.play('figure-'+animNamesByDir[dir], true, frame)  
+                                o.last.d = dir
+                            }
+                            
+                        }
+                        o.last.p = p;
+
+                        o.t += o.inc * delta                       
+                    }
+                }
                 console.log("init")
                 const self = this
                 this.scope = scope
                 
+
                 var config = {
                     type: Phaser.AUTO,
+                    backgroundColor: '#fdfdfd',
                     scale: {
                         parent: canvasElement[0],
-                        mode: Phaser.Scale.RESIZE,
+                        mode: Phaser.Scale.NONE,
                         width: canvasElement.width(),
                         height: canvasElement.height(),
+                        zoom: 1
                     },
                     scene: {
                         preload: preload,
@@ -53,17 +116,92 @@ console.log('[{"x":0, "y":0, "color":10}]')
                 };
                 
                 var game = new Phaser.Game(config);
+
+                function resize() {
+                    let w = canvasElement.width();
+                    let h = canvasElement.height();
+                    // manually resize the game with the Phaser 3.16 scalemanager
+                    this.scale.resize(w, h);
+                    // Check which scene is active.
+                    for (let scene of this.scene.manager.scenes) {
+                        if (scene.scene.settings.active) {
+                            // Scale the camera
+                            scene.cameras.main.setViewport(0, 0, w, h);
+                            if (scene.resizeField) {
+                                // Scale/position stuff in the scene itself with this method, that the scene must implement.
+                                scene.resizeField(w, h);
+                            }
+                        }
+                    }
+                }
+                //window.addEventListener('resize', resize.bind(this));
                 
                 function preload ()
                 {
+                    this.load.image('tile', 'resources/tile/checker.png')
+                    this.load.spritesheet('figure', 'resources/sprite/figure_blue_big.png',
+                    {frameWidth:76, frameHeight:64});
+                    this.load.spritesheet('small', 'resources/sprite/figure_blue.png',
+                    {frameWidth:38, frameHeight:32});
                 }
+
+                let f1 = null;
+                let f2 = null;
                 
+                const animNamesByDir = ['N', 'NO', 'O', 'SO', 'S', 'SW', 'W', 'NW'];
+                const sheetIndex = [0, 1, 3, 5, 4, 6, 7, 2];
                 function create ()
                 {
+                    this.cameras.main.setRoundPixels(true);
+
+                    this.add.image(100, 100, 'tile')
+                    this.add.image(190, 100, 'tile')
+                    this.add.image(280, 100, 'tile')
+                    this.add.image(145, 126, 'tile')
+                    this.add.image(235, 126, 'tile')
+                    this.add.image(100, 152, 'tile')
+                    this.add.image(190, 152, 'tile')
+                    this.add.image(280, 152, 'tile')
+                    this.add.image(145, 178, 'tile')
+                    this.add.image(235, 178, 'tile')
+
+                    const oy = 36/64;
+                    const ox = 37/76;
+                    f1 = this.add.sprite(190, 84, 'figure', 0)
+                    f1.setOrigin(ox, oy)
+                    this.add.sprite(100, 84, 'small', 0).setOrigin(ox, oy)            
+                    
+                    f2 = this.add.sprite(280, 84, 'figure', 0)
+                    f2.setOrigin(ox, oy)
+
+                    animNamesByDir.forEach((name, nr) => {
+                        const idx = sheetIndex[nr];
+                        const conf = { start: idx*20, end: idx*20 + 19 };
+                        console.log('ADD', name, conf)
+                        this.anims.create({
+                            key: 'figure-'+name,
+                            frames: this.anims.generateFrameNumbers('figure', conf),
+                            frameRate: 25,
+                            repeat: -1
+                        });
+                    })                    
+                    
+
+                    f2.anims.setTimeScale(0.01)
+
+                    f2.anims.play('figure-O')
+                    f1.anims.play('figure-S')
+                    f2.gdi_walkTo(280-3*45, 84+3*26)
+                    f1.gdi_walkTo(280, 84)
                 }
                 
-                function update ()
+                
+                
+                function update (time, delta)
                 {
+                    f1.gdi_update(time, delta)
+                    f2.gdi_update(time, delta)
+                    
                 }                
             },
             addArgumentsTo(args) {        
@@ -84,10 +222,16 @@ console.log('[{"x":0, "y":0, "color":10}]')
         </div>
   </div>
 
+
+
+</div>
+
     
   </div>
-  <script>  
+  <script>
+      
 </script>
     <!-- built files will be auto injected -->
+    
   </body>
 </html>
