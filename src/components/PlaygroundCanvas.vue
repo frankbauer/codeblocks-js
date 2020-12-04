@@ -35,16 +35,17 @@ export default class PlaygroundCanvas extends Vue {
     }
 
     whenMounted(): void {
-        //console.d("MOUNTED");
         if (this.obj) {
-            //console.d('Will Init', this.canvas, $(this.canvas).css('background-color'))
+            console.d('Will Init', this.canvas, $(this.canvas).css('background-color'))
 
             this.$compilerRegistry.loadLibraries(this.block.domLibs, () => {
                 this.$nextTick(() => {
-                    this.obj.rebuild() //we need to rebuild the script to make sure its context is the current state of the DOM
+                    this.$nextTick(() => {
+                        this.obj.rebuild() //we need to rebuild the script to make sure its context is the current state of the DOM
 
-                    this.obj.init($(this.canvas), $(this.block.scopeSelector), this.runner)
-                    this.$emit('did-init', this.canvas)
+                        this.obj.init($(this.canvas), $(this.block.scopeSelector), this.runner)
+                        this.$emit('did-init', this.canvas)
+                    })
                 })
             })
         }

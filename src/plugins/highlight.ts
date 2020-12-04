@@ -29,12 +29,15 @@ const reg_hl = /(\[hl\]|\[hl\s+language="?(.*?)"?\])(.*?)(\[\/hl\])/gm
 const reg_code = /(\[code\]|\[code\s+language="?(.*?)"?\])([\s\S]*?)(\[\/code\])/gm
 
 hljs.$vue = {
-    processElements: function(scope: Document | HTMLElement | undefined, inLang: string | undefined) {
+    processElements: function (
+        scope: Document | HTMLElement | undefined,
+        inLang: string | undefined
+    ) {
         if (scope === undefined) {
             scope = document
         }
         const elements = scope.querySelectorAll('[highlight]')
-        elements.forEach(el => {
+        elements.forEach((el) => {
             if (inLang === undefined && el.hasAttribute('highlight')) {
                 const lang = el.getAttribute('highlight')
                 inLang = lang === null ? undefined : lang
@@ -95,7 +98,7 @@ hljs.$vue = {
             inLang = lang === null ? 'javascript' : lang
         }
 
-        let txt = el.innerHTML.replace(reg_hl, function(m1, m2, m3, m4, m5) {
+        let txt = el.innerHTML.replace(reg_hl, function (m1, m2, m3, m4, m5) {
             const lang = m3 === undefined ? inLang : m3
             //console.log("m1", m1, "m2", m2, "m3", m3, "m4", m4, "m5", m5, "in", inLang, "res", lang)
             if (lang) {
@@ -105,7 +108,7 @@ hljs.$vue = {
             }
         })
 
-        txt = txt.replace(reg_code, function(m1, m2, m3, m4, m5) {
+        txt = txt.replace(reg_code, function (m1, m2, m3, m4, m5) {
             const lang = m3 === undefined ? inLang : m3
             m4 = m4
                 .replace(/<br( +\/)?>/g, '\n')
@@ -131,13 +134,13 @@ hljs.$vue = {
                 this.processElementSimple(el, inLang)
             })
         }
-    }
+    },
 }
 
-window.highlightAll = function() {
+window.highlightAll = function () {
     hljs.$vue.processElements()
 }
-window.highlightElement = function(el: HTMLElement) {
+window.highlightElement = function (el: HTMLElement) {
     hljs.$vue.processElement(el, el.getAttribute('highlight'))
 }
 window.hljs = hljs
@@ -145,12 +148,12 @@ Vue.$hljs = hljs
 
 Vue.directive('highlight', {
     //deep: true,
-    bind: function(el: HTMLElement, binding: DirectiveBinding) {
-        //console.log("DIRECTIVE - bind", el, binding)
+    bind: function (el: HTMLElement, binding: DirectiveBinding) {
+        console.log('DIRECTIVE - bind', el, binding)
         hljs.$vue.processElement(el, binding.value)
     },
-    componentUpdated: function(el: HTMLElement, binding: DirectiveBinding) {
-        //console.log("DIRECTIVE - update", el, binding)
+    componentUpdated: function (el: HTMLElement, binding: DirectiveBinding) {
+        console.log('DIRECTIVE - update', el, binding)
         hljs.$vue.processElement(el, binding.value)
-    }
+    },
 })
