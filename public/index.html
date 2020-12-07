@@ -22,6 +22,50 @@
     <noscript>
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <div codeblockseditor data-compiler="java" data-compiler-versio="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="5000">
+        <loading><div></div><div></div></loading> 
+        
+        <block data-visible-lines="auto">import org.teavm.jso.browser.Window;
+import org.teavm.jso.dom.events.MessageEvent;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
+import org.teavm.jso.JSBody;
+import org.lgdv.*;
+
+interface WorkerMessage extends JSObject {
+    @JSProperty
+    String getCommand();
+
+    @JSProperty
+    void setCommand(String command);
+
+    @JSProperty
+    String getId();
+
+    @JSProperty
+    void setId(String id);
+}
+
+public class One{
+    
+    public static void main(String[] args){
+        System.out.println("START");
+        Window.worker().addEventListener("message", (MessageEvent event) -> {
+            CodeBlocksBaseMessage request = (CodeBlocksBaseMessage) event.getData();
+            System.out.println("Hello" + request.getCommand());       
+            
+            //CodeBlocksBaseMessage response = CodeBlocks.createJSObject();
+            //response.setCommand("run-completed");
+            //response.setId(request.getId());
+            //Window.worker().postMessage(response);
+            
+            //Window.post("{ command: 'run-completed', id: " + request.getId() + " }");
+            CodeBlocks.postMessage(CodeBlocks.createBaseMessage("run-completed", -1));
+        });
+        System.out.println("ENDE");
+    }
+}</block>
+    </div>
     <div style="padding-left:50px;padding-right:50px">
       <div codeblockseditor data-compiler="javascript" data-run-code="true" data-max-characters="10000000" data-dom-libs='["phaser-3.24"]'>
         <loading><div></div><div></div></loading> 
@@ -41,7 +85,7 @@ console.log('[{"x":0, "y":0, "color":10}]')
                     const path = new Phaser.Curves.Path(this.x, this.y);
                     path.lineTo(x, y);
                     const l = new Phaser.Math.Vector2(this.x-x, this.y-y).length()
-                    console.log(l)
+                    //console.log(l)
                     this._gdi_move = {
                         path:path,
                         t:0,
@@ -79,7 +123,7 @@ console.log('[{"x":0, "y":0, "color":10}]')
                             v = (o.last.p.length() / delta) * this._gdi_base_v
                             dir = Math.floor((o.last.p.angle() - Math.PI/8 )/ (Math.PI/4))
                             if (dir &lt; 0) dir += 8
-                            console.log(Math.max(0.3, v * 0.65))
+                            //console.log(Math.max(0.3, v * 0.65))
                             this.anims.setTimeScale(Math.max(0.3, v * 0.005))
                             if (dir != o.last.d && v > 0.05){
                                 const frame = this.anims.currentFrame.index
