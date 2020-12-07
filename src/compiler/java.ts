@@ -16,7 +16,7 @@ export class JavaCompilerInfo extends Vue implements ICompilerInfo {
     versions = [v001, v100, v101]
 
     //declare the default one
-    default = v101
+    default = v100
 }
 
 export const JavaCompilers: ICompilerInfo[] | ICompilerInfo = new JavaCompilerInfo()
