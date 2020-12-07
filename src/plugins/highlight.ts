@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import hljs from 'highlight.js/lib/highlight'
+import hljs from 'highlight.js/lib/core'
 //import 'highlight.js/styles/ocean.css'
 import 'highlight.js/styles/tomorrow.css'
 import '../styles/highlight.styl'
@@ -9,21 +9,16 @@ hljs.configure({ useBR: false })
 
 hljs.registerLanguage('c', require('highlight.js/lib/languages/cpp'))
 hljs.registerLanguage('c++', require('highlight.js/lib/languages/cpp'))
-hljs.registerLanguage('c#', require('highlight.js/lib/languages/cs'))
+hljs.registerLanguage('c#', require('highlight.js/lib/languages/csharp'))
 hljs.registerLanguage('css', require('highlight.js/lib/languages/css'))
 hljs.registerLanguage('fortran', require('highlight.js/lib/languages/fortran'))
 hljs.registerLanguage('glsl', require('highlight.js/lib/languages/glsl'))
-hljs.registerLanguage('html', require('highlight.js/lib/languages/xml'))
 hljs.registerLanguage('java', require('highlight.js/lib/languages/java'))
 hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'))
-hljs.registerLanguage('objectivec', require('highlight.js/lib/languages/objectivec'))
 hljs.registerLanguage('perl', require('highlight.js/lib/languages/perl'))
 hljs.registerLanguage('php', require('highlight.js/lib/languages/php'))
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'))
 hljs.registerLanguage('r', require('highlight.js/lib/languages/r'))
-hljs.registerLanguage('ruby', require('highlight.js/lib/languages/ruby'))
-hljs.registerLanguage('sql', require('highlight.js/lib/languages/sql'))
-hljs.registerLanguage('xml', require('highlight.js/lib/languages/xml'))
 
 const reg_hl = /(\[hl\]|\[hl\s+language="?(.*?)"?\])(.*?)(\[\/hl\])/gm
 const reg_code = /(\[code\]|\[code\s+language="?(.*?)"?\])([\s\S]*?)(\[\/code\])/gm

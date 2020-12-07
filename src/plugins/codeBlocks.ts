@@ -18,22 +18,18 @@ const mimeTypesForLanguage = {
     html: { mime: 'text/html', displayName: 'HTML' }, // (HTML)
     java: { mime: 'text/x-java', displayName: 'Java' }, // (Java),
     javascript: { mime: 'text/javascript', displayName: 'JavaScript' }, // (JavaScript)
-    objectivec: { mime: 'text/x-objectivec', displayName: 'Objective-C' }, // (Objective-C),
     perl: { mime: 'text/x-perl', displayName: 'Perl' }, // (Perl)
     php: { mime: 'application/x-httpd-php', displayName: 'PHP' }, // (PHP)
     python: { mime: 'text/x-python', displayName: 'Python' }, // (Python)
     r: { mime: 'text/x-rsrc', displayName: 'R' }, //(R)
-    ruby: { mime: 'text/x-ruby', displayName: 'Ruby' }, // (Ruby)
-    sql: { mime: 'text/x-mysql', displayName: 'MySQL' }, // (mysql)
-    xml: { mime: 'application/xml', displayName: 'XML' } //text/html (XML)
 }
 
 function loadSettings(scope: HTMLElement | Document): IGlobalSettings {
-    let options = {
-        baseurl: ''
+    const options = {
+        baseurl: '',
     }
     const settings = scope.querySelectorAll('meta[name^=codeblocks]')
-    settings.forEach(opt => {
+    settings.forEach((opt) => {
         const name = opt.getAttribute('name')
         const value = opt.getAttribute('content')
 
@@ -76,7 +72,7 @@ export class GlobalState implements IGlobalState {
             return {
                 type: 'json',
                 json: outputObject,
-                text: ''
+                text: '',
             }
         }
 
@@ -100,7 +96,7 @@ export class GlobalState implements IGlobalState {
             return {
                 type: 'dual',
                 json: json,
-                text: str
+                text: str,
             }
         } else {
             const too = outputObject.trim()
@@ -112,7 +108,7 @@ export class GlobalState implements IGlobalState {
                 return {
                     type: CodeOutputTypes.JSON,
                     json: JSON.parse(outputObject),
-                    text: ''
+                    text: '',
                 }
             }
         }
@@ -120,7 +116,7 @@ export class GlobalState implements IGlobalState {
         return {
             type: 'text',
             json: undefined,
-            text: outputObject
+            text: outputObject,
         }
     }
     mimeType(language: string): string {
@@ -132,7 +128,7 @@ export class GlobalState implements IGlobalState {
     }
     knownLanguages(): IListItemData[] {
         return Object.keys(mimeTypesForLanguage)
-            .map(k => {
+            .map((k) => {
                 return { label: mimeTypesForLanguage[k].displayName, value: k }
             })
             .sort((a, b) => (a.value < b.value ? -1 : 1))
@@ -149,11 +145,11 @@ export class GlobalState implements IGlobalState {
         }, 500)
     }
     public itemForValue(items: IListItemData[], value: string): IListItemData {
-        let ret = items.find(i => i.value == value)
+        const ret = items.find((i) => i.value == value)
         if (ret === undefined) {
             return {
                 label: '???',
-                value: '???'
+                value: '???',
             }
         }
         return ret
