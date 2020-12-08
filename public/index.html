@@ -22,7 +22,7 @@
     <noscript>
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div codeblockseditor data-compiler="java" data-compiler-versio="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="5000">
+    <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000">
         <loading><div></div><div></div></loading> 
         
         <block data-visible-lines="auto">import org.teavm.jso.browser.Window;
@@ -60,9 +60,14 @@ public class One{
             //Window.worker().postMessage(response);
             
             //Window.post("{ command: 'run-completed', id: " + request.getId() + " }");
-            CodeBlocks.postMessage(CodeBlocks.createBaseMessage("run-completed", -1));
+            if (request.getCommand().equals("nonce")) {
+                //CodeBlocks.postMessage(CodeBlocks.createMessage("run-completed", -1));
+                System.exit(0);
+            }
         });
-        System.out.println("ENDE");
+        int[] a = {1, 2, 3};
+        System.out.println("ENDE" + a[0]);
+        System.err.println("ERR");
     }
 }</block>
     </div>
