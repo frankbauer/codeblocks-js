@@ -74,6 +74,16 @@ export interface ICompilerRegistry {
     loadLibraries(domLibraries: string[], whenLoaded: () => void): void
 }
 
+export interface ICompileAndRunArguments {
+    max_ms: number
+    log_callback: (txt: string) => void
+    info_callback: (txt: string) => void
+    err_callback: (txt: string) => void
+    compileFailedCallback: (info: ICompilerErrorDescription) => void
+    finishedExecutionCB: finishedCallbackSignatur
+    args: object
+}
+
 export interface ICompilerInstance {
     readonly version: string
     readonly language: string
@@ -93,13 +103,7 @@ export interface ICompilerInstance {
         questionID: string,
         code: string,
         callingCodeBlocks: any,
-        max_ms: number,
-        log_callback: (txt: string) => void,
-        info_callback: (txt: string) => void,
-        err_callback: (txt: string) => void,
-        compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: finishedCallbackSignatur,
-        args: object,
+        options: ICompileAndRunArguments,
         runCreate?: boolean
     ): void
     stop?(): void

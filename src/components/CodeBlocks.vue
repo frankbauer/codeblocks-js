@@ -184,7 +184,11 @@ import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import { BlockData, IAppSettings, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
 import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
-import { ICompilerID, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
+import {
+    ICompilerID,
+    ICompilerErrorDescription,
+    ICompileAndRunArguments,
+} from '@/lib/ICompilerRegistry'
 import {
     CodeOutputTypes,
     IRandomizerSet,
@@ -594,16 +598,17 @@ export default class CodeBlocks extends Vue {
                     }
                 })
             }
-            cmp.compileAndRun(
-                '' + self.blockid,
-                self.completeSource,
-                self,
-                self.executionTimeout,
-                self.log.bind(this),
-                self.logInfo.bind(this),
-                self.logError.bind(this),
-                self.processDiagnostics.bind(this),
-                (success = true, overrideOutput = undefined, returnState = undefined) => {
+            const runOptions: ICompileAndRunArguments = {
+                max_ms: self.executionTimeout,
+                log_callback: self.log.bind(this),
+                info_callback: self.logInfo.bind(this),
+                err_callback: self.logError.bind(this),
+                compileFailedCallback: self.processDiagnostics.bind(this),
+                finishedExecutionCB: (
+                    success = true,
+                    overrideOutput = undefined,
+                    returnState = undefined
+                ) => {
                     console.d('returnState:', returnState, _args)
                     if (!success) {
                         self.$compilerState.hideGlobalState()
@@ -622,8 +627,9 @@ export default class CodeBlocks extends Vue {
                     self.$compilerState.setAllRunButtons(true)
                     return res
                 },
-                _args
-            )
+                args: _args,
+            }
+            cmp.compileAndRun('' + self.blockid, self.completeSource, self, runOptions)
         })
 
         return true

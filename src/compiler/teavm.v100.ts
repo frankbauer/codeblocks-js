@@ -6,6 +6,7 @@ import {
     ICompilerRegistry,
     ErrorSeverity,
     finishedCallbackSignatur,
+    ICompileAndRunArguments,
 } from '@/lib/ICompilerRegistry'
 
 declare global {
@@ -107,15 +108,18 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         questionID: string,
         code: string,
         callingCodeBlocks: any,
-        max_ms: number,
-        log_callback: (txt: string) => void,
-        info_callback: (txt: string) => void,
-        err_callback: (txt: string) => void,
-        compileFailedCallback: (info: ICompilerErrorDescription) => void,
-        finishedExecutionCB: finishedCallbackSignatur,
-        args: object,
+        options: ICompileAndRunArguments,
         runCreate: boolean = true
     ): void {
+        const {
+            max_ms,
+            log_callback,
+            info_callback,
+            err_callback,
+            compileFailedCallback,
+            finishedExecutionCB,
+            args,
+        } = options
         const start = Date.now()
         let executionFinished = false
         let booted = false
