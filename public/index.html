@@ -22,7 +22,7 @@
     <noscript>
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000">
+    <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1>
         <loading><div></div><div></div></loading> 
         
         <block data-visible-lines="auto">import org.teavm.jso.browser.Window;
@@ -70,6 +70,16 @@ public class One{
         System.err.println("ERR");
     }
 }</block>
+<playground>{
+    init: function(canvasElement, outputElement, scope, runner) {
+        canvasElement.hide();
+    },
+    addArgumentsTo(args) {},
+    reset(canvasElement) {},
+    update: function(txt, json, canvasElement, outputElement) {
+
+    }
+}</playground>
     </div>
     <div style="padding-left:50px;padding-right:50px">
       <div codeblockseditor data-compiler="javascript" data-run-code="true" data-max-characters="10000000" data-dom-libs='["phaser-3.24"]'>

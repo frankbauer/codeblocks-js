@@ -17,6 +17,7 @@
             @compiler-version-change="onCompilerVersionChange"
             @run-state-change="onRunStateChange"
             @continuous-compile-change="onContinousCompileStateChange"
+            @message-passing-change="onMessagePassingChange"
             @persistent-arguments-change="onPersistentArgumentsChange"
             @language-change="onLanguageChange"
             @character-limit-change="onCharacterLimitChange"
@@ -116,7 +117,7 @@
                     class="white--text"
                     @click="run"
                     :ripple="{ center: true }"
-                    style="border-radius:0px"
+                    style="border-radius: 0px"
                     :data-question="blockInfo.id"
                 >
                     {{ $t('CodeBlocks.run') }}
@@ -136,7 +137,7 @@
                             id="cancel_button"
                             color="negative"
                             :ripple="{ center: true }"
-                            style="border-radius:0px"
+                            style="border-radius: 0px"
                             :data-question="blockInfo.id"
                             @click="stop"
                         >
@@ -152,7 +153,7 @@
                 >
                     <div
                         class="globalState col-grow"
-                        style="align-self: center;"
+                        style="align-self: center"
                         v-show="showGlobalMessages"
                     >
                         <div id="message" v-html="$compilerState.globalStateMessage"></div>
@@ -188,7 +189,7 @@ import {
     CodeOutputTypes,
     IRandomizerSet,
     KnownBlockTypes,
-    IBlockDataPlayground
+    IBlockDataPlayground,
 } from '@/lib/ICodeBlocks'
 
 export interface IOnTypeChangeInfo {
@@ -231,8 +232,8 @@ export interface IOnThemeChangeInfo {
         CodePlayground,
         SimpleText,
         Blockly,
-        CodePanel
-    }
+        CodePanel,
+    },
 })
 export default class CodeBlocks extends Vue {
     didInitialize: boolean = false
@@ -262,10 +263,10 @@ export default class CodeBlocks extends Vue {
                 processedOutput: {
                     type: 'text',
                     text: '',
-                    json: undefined
+                    json: undefined,
                 },
                 sansoutput: '',
-                outputElement: $(this.outputElement) as JQuery<HTMLElement>
+                outputElement: $(this.outputElement) as JQuery<HTMLElement>,
             }
         }
         return this._finalOutputObject
@@ -286,7 +287,8 @@ export default class CodeBlocks extends Vue {
             outputParser: this.outputParser,
             randomizer: this.blockInfo.randomizer,
             continuousCompilation: this.blockInfo.continuousCompilation,
-            persistentArguments: this.blockInfo.persistentArguments
+            persistentArguments: this.blockInfo.persistentArguments,
+            messagePassing: this.blockInfo.messagePassing,
         }
     }
     get blocks(): BlockData[] {
@@ -369,8 +371,8 @@ export default class CodeBlocks extends Vue {
     }
     get completeSource(): string {
         return this.blocks
-            .filter(b => b.hasCode)
-            .map(b => b.actualContent())
+            .filter((b) => b.hasCode)
+            .map((b) => b.actualContent())
             .reduce((p, c) => {
                 return p + '\n' + c
             }, '')
@@ -379,7 +381,7 @@ export default class CodeBlocks extends Vue {
         return !this.$compilerState.globalStateHidden
     }
     get playgrounds(): BlockData[] {
-        return this.blocks.filter(b => b.type == 'PLAYGROUND')
+        return this.blocks.filter((b) => b.type == 'PLAYGROUND')
     }
     get outputElement(): HTMLElement {
         return this.$refs.output as HTMLElement
@@ -399,7 +401,7 @@ export default class CodeBlocks extends Vue {
     }
 
     blockBecameReady(): void {
-        let readyCount = this.blockInfo.blocks.map(b => b.readyCount).reduce((p, c) => p + c, 0)
+        let readyCount = this.blockInfo.blocks.map((b) => b.readyCount).reduce((p, c) => p + c, 0)
         if (readyCount == this.blockInfo.blocks.length) {
             this.$nextTick(() => {
                 this.eventHub.$emit('all-mounted', {})
@@ -416,7 +418,7 @@ export default class CodeBlocks extends Vue {
         return bl.themeForCodeBlock
     }
     public blockById(id: number): BlockData | undefined {
-        return this.blocks.find(block => block.id == id)
+        return this.blocks.find((block) => block.id == id)
     }
     onTypeChange(nfo: IOnTypeChangeInfo): void {}
     onVisibleLinesChange(nfo: IOnVisibleLinesChangeInfo): void {}
@@ -427,6 +429,7 @@ export default class CodeBlocks extends Vue {
     onCompilerVersionChange(v: string): void {}
     onRunStateChange(v: boolean): void {}
     onContinousCompileStateChange(v: boolean): void {}
+    onMessagePassingChange(v: boolean): void {}
     onPersistentArgumentsChange(v: boolean): void {}
     onLanguageChange(v: string): void {}
     onCharacterLimitChange(v: number): void {}
@@ -498,7 +501,7 @@ export default class CodeBlocks extends Vue {
 
     processDiagnostics(error: ICompilerErrorDescription) {
         const line = error.start.line
-        this.blocks.forEach(block => {
+        this.blocks.forEach((block) => {
             if (!block.hasCode) {
                 return
             }
@@ -513,7 +516,7 @@ export default class CodeBlocks extends Vue {
     }
 
     clearDiagnostics(): void {
-        this.blocks.forEach(block => (block.errors = []))
+        this.blocks.forEach((block) => (block.errors = []))
         this.eventHub.$emit('render-diagnostics', {})
     }
 
@@ -545,7 +548,7 @@ export default class CodeBlocks extends Vue {
             sansoutput: this.sansoutput,
             parseError: parseError,
             //outputElement: $(this.outputElement) as JQuery<HTMLElement> //This line soes not work here, looks like the update did not yet happen?
-            outputElement: $(this.$refs.output) as JQuery<HTMLElement>
+            outputElement: $(this.$refs.output) as JQuery<HTMLElement>,
         }
         this.eventHub.$emit('output-updated', this._finalOutputObject)
 
@@ -584,7 +587,7 @@ export default class CodeBlocks extends Vue {
             let _args: object | string[] = {}
             if (cmp.acceptsJSONArgument) {
                 _args = this.blockInfo.initArgsForLanguage()
-                this.blocks.forEach(bl => {
+                this.blocks.forEach((bl) => {
                     if (bl.obj) {
                         console.i('!!! ADD ARGUMENTS TO !!!')
                         bl.obj.addArgumentsTo(_args)
@@ -720,6 +723,10 @@ export default class CodeBlocks extends Vue {
         ) {
             this.onViewCodeChange(true)
         }
+    }
+
+    foo() {
+        console.log('FOO')
     }
 }
 </script>

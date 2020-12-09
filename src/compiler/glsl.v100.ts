@@ -4,7 +4,7 @@ import {
     ICompilerInstance,
     ICompilerErrorDescription,
     ICompilerRegistry,
-    finishedCallbackSignatur
+    finishedCallbackSignatur,
 } from '@/lib/ICompilerRegistry'
 
 function runGLSLWorker(
@@ -18,8 +18,10 @@ function runGLSLWorker(
     compileFailedCallback: (info: ICompilerErrorDescription) => void,
     finishCallback: finishedCallbackSignatur
 ) {
-    var outputData: string[] = []
-    callingCodeBlocks.blocks.filter(b => b.hasCode).forEach(block => outputData.push(block.content))
+    const outputData: string[] = []
+    callingCodeBlocks.blocks
+        .filter((b) => b.hasCode)
+        .forEach((block) => outputData.push(block.content))
     /*$("[data-contains-code][data-question="+questionID+"]").each(function(i, block) {
         if (block.getAttribute('data-ignore')) return;
         if (!blockHasProgramCode(block)) return;
@@ -42,6 +44,7 @@ export class GLSLV100Compiler extends Vue implements ICompilerInstance {
     readonly allowsContinousCompilation = false
     readonly allowsPersistentArguments = false
     readonly acceptsJSONArgument = false
+    readonly allowsMessagePassing = false
     isReady = true
     isRunning = false
 

@@ -4,7 +4,7 @@ import {
     ICompilerInstance,
     ICompilerErrorDescription,
     ErrorSeverity,
-    finishedCallbackSignatur
+    finishedCallbackSignatur,
 } from '@/lib/ICompilerRegistry'
 
 function runPythonWorker(
@@ -28,17 +28,17 @@ function runPythonWorker(
         return
     }
 
-    var worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v100/pyWorker.js')
+    const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v100/pyWorker.js')
 
     // construct message for worker
-    var pyInp = [] // not used jet
+    const pyInp = [] // not used jet
 
-    var messageData = { pyProg: prog, pyInp: pyInp, maxMS: maxRuntime }
+    const messageData = { pyProg: prog, pyInp: pyInp, maxMS: maxRuntime }
     worker.postMessage(['b8e493ca02970aeb0ef734555526bf9b', messageData])
-    var start = Date.now()
+    const start = Date.now()
 
-    var testTimeout = function() {
-        var time = Date.now() - start
+    const testTimeout = function () {
+        const time = Date.now() - start
         worker.end(
             'TimeoutError:  Execution took too long (> ' +
                 time +
@@ -46,16 +46,16 @@ function runPythonWorker(
         )
     }
 
-    var testTimeoutIntern = function() {
-        var time = Date.now() - start
+    const testTimeoutIntern = function () {
+        const time = Date.now() - start
         if (time > maxRuntime) {
             testTimeout()
             return true
         }
         return false
     }
-    var executionFinished = false
-    worker.end = function(msg) {
+    let executionFinished = false
+    worker.end = function (msg) {
         if (executionFinished) {
             return
         }
@@ -67,7 +67,7 @@ function runPythonWorker(
         }
     }
 
-    worker.onmessage = function(e) {
+    worker.onmessage = function (e) {
         if (executionFinished) {
             return
         }
@@ -87,7 +87,7 @@ function runPythonWorker(
                     start: { line: err.lineno - 1, column: err.colno },
                     end: { line: err.lineno - 1, column: err.colno + 1 },
                     message: err.message,
-                    severity: ErrorSeverity.Error
+                    severity: ErrorSeverity.Error,
                 })
             } else {
                 if (err && err.lineno !== undefined) {
@@ -95,7 +95,7 @@ function runPythonWorker(
                         start: { line: err.lineno - 1, column: 0 },
                         end: { line: err.lineno - 1, column: 0 },
                         message: err.message,
-                        severity: ErrorSeverity.Error
+                        severity: ErrorSeverity.Error,
                     })
                 }
             }
@@ -117,6 +117,7 @@ export class PythonV100Compiler extends Vue implements ICompilerInstance {
     readonly canStop = false
     readonly allowsContinousCompilation = false
     readonly allowsPersistentArguments = false
+    readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
     isReady = true
     isRunning = false

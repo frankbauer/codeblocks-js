@@ -11,7 +11,7 @@ export interface IListItemData {
 
 export enum ErrorSeverity {
     Error = 2,
-    Warning = 1
+    Warning = 1,
 }
 export interface IErrorPosition {
     line: number
@@ -79,6 +79,7 @@ export interface ICompilerInstance {
     readonly language: string
     readonly canRun: boolean
     readonly canStop: boolean
+    readonly allowsMessagePassing: boolean
     readonly allowsContinousCompilation: boolean
     readonly allowsPersistentArguments: boolean
     readonly acceptsJSONArgument: boolean

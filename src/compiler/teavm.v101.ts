@@ -25,6 +25,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
     readonly canStop = true
     readonly allowsContinousCompilation = false
     readonly allowsPersistentArguments = false
+    readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
     didPreload: boolean = false
     teaworker: Worker | undefined = undefined
@@ -309,7 +310,10 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                                 log_callback(ee.data.line + '\n')
                             } else if (ee.data.command == 'stderr') {
                                 err_callback(ee.data.line + '\n')
+                            } else if (ee.data.command.indexof('worker-') === 0) {
+                                //Message sent from the workter to the playground
                             }
+                            callingCodeBlocks.foo()
                         }
                         this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
                         const workerrun = new Worker(
@@ -323,6 +327,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                             id: '' + questionID,
                             code: e.data.script,
                             args: args,
+                            keepAlive: false,
                         })
                         workerrun.postMessage({
                             command: 'empty',

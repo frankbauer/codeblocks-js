@@ -4,7 +4,7 @@ import {
     ICompilerInstance,
     ICompilerErrorDescription,
     ErrorSeverity,
-    finishedCallbackSignatur
+    finishedCallbackSignatur,
 } from '@/lib/ICompilerRegistry'
 
 function runPythonWorker(
@@ -31,22 +31,22 @@ function runPythonWorker(
         return
     }
 
-    var worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v101/pyWorker.js')
+    const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v101/pyWorker.js')
 
     // construct message for worker
-    var pyInp = [] // not used jet
+    const pyInp = [] // not used jet
 
-    var messageData = {
+    const messageData = {
         pyProg: prog,
         pyInp: pyInp,
         maxMS: maxRuntime,
-        legacy: legacy
+        legacy: legacy,
     }
     worker.postMessage(['b8e493ca02970aeb0ef734556526bf9b', messageData])
-    var start = Date.now()
+    const start = Date.now()
 
-    var testTimeout = function() {
-        var time = Date.now() - start
+    const testTimeout = function () {
+        const time = Date.now() - start
         worker.end(
             'TimeoutError:  Execution took too long (> ' +
                 time +
@@ -54,16 +54,16 @@ function runPythonWorker(
         )
     }
 
-    var testTimeoutIntern = function() {
-        var time = Date.now() - start
+    const testTimeoutIntern = function () {
+        const time = Date.now() - start
         if (time > maxRuntime) {
             testTimeout()
             return true
         }
         return false
     }
-    var executionFinished = false
-    worker.end = function(msg) {
+    let executionFinished = false
+    worker.end = function (msg) {
         if (executionFinished) {
             return
         }
@@ -75,7 +75,7 @@ function runPythonWorker(
         }
     }
 
-    worker.onmessage = function(e) {
+    worker.onmessage = function (e) {
         if (executionFinished) {
             return
         }
@@ -95,28 +95,28 @@ function runPythonWorker(
                 compileFailedCallback({
                     start: {
                         line: err.lineno - 1,
-                        column: err.colno
+                        column: err.colno,
                     },
                     end: {
                         line: err.lineno - 1,
-                        column: err.colno + 1
+                        column: err.colno + 1,
                     },
                     message: err.message,
-                    severity: ErrorSeverity.Error
+                    severity: ErrorSeverity.Error,
                 })
             } else {
                 if (err && err.lineno !== undefined) {
                     compileFailedCallback({
                         start: {
                             line: err.lineno - 1,
-                            column: 0
+                            column: 0,
                         },
                         end: {
                             line: err.lineno - 1,
-                            column: 0
+                            column: 0,
                         },
                         message: err.message,
-                        severity: ErrorSeverity.Error
+                        severity: ErrorSeverity.Error,
                     })
                 }
             }
@@ -140,6 +140,7 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
     readonly canStop = true
     readonly allowsContinousCompilation = true
     readonly allowsPersistentArguments = false
+    readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
     isReady = true
     isRunning = false
@@ -189,6 +190,7 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
     readonly canStop = true
     readonly allowsContinousCompilation = true
     readonly allowsPersistentArguments = false
+    readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
     isReady = true
     isRunning = false
@@ -235,5 +237,5 @@ export const pythonLegacyCompiler_V101 = new PythonV101LegacyCompiler()
 
 export default {
     legacyPython: pythonLegacyCompiler_V101,
-    python3: pythonCompiler_V101
+    python3: pythonCompiler_V101,
 }

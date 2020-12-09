@@ -4,7 +4,7 @@ import {
     ICompilerInstance,
     ICompilerErrorDescription,
     ErrorSeverity,
-    finishedCallbackSignatur
+    finishedCallbackSignatur,
 } from '@/lib/ICompilerRegistry'
 
 //function runJavaScriptWorker( code, log_callback, max_ms, questionID){
@@ -28,8 +28,8 @@ function runJavaScriptWorker(
         return
     }
 
-    var not_allowed_keywords = ['postMessage', 'close', 'onmessage', 'debugger'] // blacklist (can be evaded, ... see below)
-    for (var key in not_allowed_keywords) {
+    const not_allowed_keywords = ['postMessage', 'close', 'onmessage', 'debugger'] // blacklist (can be evaded, ... see below)
+    for (const key in not_allowed_keywords) {
         if (code.indexOf(not_allowed_keywords[key]) != -1) {
             // the user is not allowed to use the functionallity of the WebWorker
             err_callback(
@@ -40,13 +40,13 @@ function runJavaScriptWorker(
             return
         }
     }
-    var lines = code.split('\n').length
+    const lines = code.split('\n').length
 
     // The user-code is sourrounded by webworker start and finish code (one line each)
     // additionally, the console.log fnc is replaced, because the original log fnc is consuming much cpu ressources,
     //      and continues logging, even after the worker was terminated.
 
-    var prefixCode = [
+    const prefixCode = [
         'for(var c in console) console[c]=null;', //delete all console functionality
         "for(var t in this) if(t!='close' && t!='postMessage' && t!='console') this[t]=null;", //delete all worker functionality
         'this.console = {};',
@@ -61,16 +61,16 @@ function runJavaScriptWorker(
         "   postMessage(['finished',",
         "   ''+(function(input){",
         "           'use strict';",
-        '\n'
+        '\n',
     ]
-    var postfixCode = ['\n', '})(input.data[1])]);', '   close();', '};']
+    const postfixCode = ['\n', '})(input.data[1])]);', '   close();', '};']
     code = prefixCode.join('') + code + postfixCode.join('')
 
     //TODO:: creating a WebWorker from an URL is throwing a SecurityError in  IE 11  ...
     //          is there any workaround?
-    var worker = new Worker(URL.createObjectURL(new Blob([code], { type: 'text/javascript' })))
-    var executionFinished = false
-    worker.end = function(msg) {
+    const worker = new Worker(URL.createObjectURL(new Blob([code], { type: 'text/javascript' })))
+    let executionFinished = false
+    worker.end = function (msg) {
         if (executionFinished) {
             return
         }
@@ -82,9 +82,9 @@ function runJavaScriptWorker(
         }
     }
 
-    var start = Date.now()
-    var testTimeout = function() {
-        var time = Date.now() - start
+    const start = Date.now()
+    const testTimeout = function () {
+        const time = Date.now() - start
         worker.end(
             'TimeoutError:  Execution took too long (>' +
                 time +
@@ -92,14 +92,14 @@ function runJavaScriptWorker(
         )
     }
 
-    var testTimeoutIntern = function() {
-        var time = Date.now() - start
+    const testTimeoutIntern = function () {
+        const time = Date.now() - start
         if (time > max_ms) {
             testTimeout
         }
     }
 
-    worker.onmessage = function(e) {
+    worker.onmessage = function (e) {
         if (executionFinished) {
             return
         }
@@ -120,13 +120,13 @@ function runJavaScriptWorker(
             )
         }
     }
-    worker.onerror = function(e) {
+    worker.onerror = function (e) {
         if (e.lineno == 1) {
             compileFailedCallback({
                 start: { line: -1, column: -1 },
                 end: { line: -1, column: -1 },
                 message: e.message,
-                severity: ErrorSeverity.Error
+                severity: ErrorSeverity.Error,
             })
             worker.end('Error: ' + e.message)
         } else if (e.lineno >= lines + 2) {
@@ -134,7 +134,7 @@ function runJavaScriptWorker(
                 start: { line: lines + 2, column: 0 },
                 end: { line: lines + 2, column: 0 },
                 message: e.message,
-                severity: ErrorSeverity.Error
+                severity: ErrorSeverity.Error,
             })
             worker.end('EndOfFile: ' + e.message)
         } else {
@@ -142,7 +142,7 @@ function runJavaScriptWorker(
                 start: { line: e.lineno - 2, column: e.colno - 1 },
                 end: { line: e.lineno - 2, column: e.colno },
                 message: e.message,
-                severity: ErrorSeverity.Error
+                severity: ErrorSeverity.Error,
             })
             worker.end('Line ' + (e.lineno - 2) + ': ' + e.message)
         }
@@ -161,6 +161,7 @@ export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
     readonly canStop = false
     readonly allowsContinousCompilation = false
     readonly allowsPersistentArguments = false
+    readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
     isReady = true
     isRunning = false

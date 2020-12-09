@@ -5,7 +5,7 @@ import {
     ICompilerErrorDescription,
     ICompilerRegistry,
     ErrorSeverity,
-    finishedCallbackSignatur
+    finishedCallbackSignatur,
 } from '@/lib/ICompilerRegistry'
 
 declare global {
@@ -25,6 +25,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
     readonly canStop = true
     readonly allowsContinousCompilation = false
     readonly allowsPersistentArguments = false
+    readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = true
     didPreload: boolean = false
     teaworker: Worker | undefined = undefined
@@ -70,7 +71,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             id: 'prep',
                             text:
                                 'public class Bootstrap { public static void main(String[] args){}}',
-                            mainClass: 'Bootstrap'
+                            mainClass: 'Bootstrap',
                         })
                     }
                     this.isReady = true
@@ -90,7 +91,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             this.teaworker.postMessage({
                 command: 'load-classlib',
                 id: 'didload-classlib',
-                url: 'classlib.txt'
+                url: 'classlib.txt',
             })
 
             return true
@@ -115,9 +116,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         args: object,
         runCreate: boolean = true
     ): void {
-        var start = Date.now()
-        var executionFinished = false
-        var booted = false
+        const start = Date.now()
+        let executionFinished = false
+        let booted = false
 
         if (this.isRunning) {
             err_callback('System is busy. Please wait until compilation finishes or call a tutor.')
@@ -156,7 +157,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
 
         const compilerTimeout = setTimeout(() => {
             if (!booted) {
-                var time = Date.now() - start
+                const time = Date.now() - start
 
                 if (this.teaworker) {
                     this.teaworker.end(
@@ -180,7 +181,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         const getMainClass = (_code: string) => {
             let ret = 'Unknown'
             //above replaces all {} with [], so look for public class <name> []
-            let regexpMainClass = /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
+            const regexpMainClass = /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
             let match: RegExpExecArray | null
             while ((match = regexpMainClass.exec(_code)) !== null) {
                 if (match[1]) {
@@ -197,7 +198,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         }
 
         //console.log(mainClass, code);
-        let myListener = (e: any) => {
+        const myListener = (e: any) => {
             //console.log('this.teaworker', questionID, e.data);
             if (e.data.id == '' + questionID) {
                 if (e.data.command == 'phase') {
@@ -224,20 +225,20 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             message: e.data.text,
                             start: {
                                 line: e.data.lineNumber,
-                                column: 0
+                                column: 0,
                             },
                             end: {
                                 line: e.data.lineNumber,
-                                column: 0
+                                column: 0,
                             },
                             severity:
                                 e.data.severity == 'ERROR'
                                     ? ErrorSeverity.Error
-                                    : ErrorSeverity.Warning
+                                    : ErrorSeverity.Warning,
                         })
                     }
 
-                    let msg = e.data.text + '\n'
+                    const msg = e.data.text + '\n'
                     if (e.data.severity == 'ERROR') {
                         err_callback(msg + '\n')
                     } else {
@@ -249,18 +250,20 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             message: e.data.message,
                             start: {
                                 line: e.data.startLineNumber,
-                                column: e.data.startColumn
+                                column: e.data.startColumn,
                             },
                             end: {
                                 line: e.data.endLineNumber,
-                                column: e.data.endColumn
+                                column: e.data.endColumn,
                             },
                             severity:
-                                e.data.kind == 'ERROR' ? ErrorSeverity.Error : ErrorSeverity.Warning
+                                e.data.kind == 'ERROR'
+                                    ? ErrorSeverity.Error
+                                    : ErrorSeverity.Warning,
                         })
                     }
 
-                    let msg = e.data.humanReadable + '\n'
+                    const msg = e.data.humanReadable + '\n'
                     if (e.data.kind == 'ERROR') {
                         err_callback(msg + '\n')
                     } else {
@@ -288,7 +291,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         finishedExecutionCB(false)
                         this.isRunning = false
                     } else {
-                        let runListener = (ee: any) => {
+                        const runListener = (ee: any) => {
                             //console.log('JAVA-WORKER-MSG', ee.data)
                             //console.log('tearunner', questionID, ee.data);
                             if (ee.data.command == 'run-finished-setup') {
@@ -310,7 +313,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             }
                         }
                         this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
-                        let workerrun = new Worker(
+                        const workerrun = new Worker(
                             `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
                         )
                         this.sessionWorker = workerrun
@@ -320,7 +323,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             command: 'run',
                             id: '' + questionID,
                             code: e.data.script,
-                            args: args
+                            args: args,
                         })
 
                         workerrun.end = (msg: string) => {
@@ -346,9 +349,9 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                             }
                         }
 
-                        var runStart = Date.now()
-                        runTimeout = setTimeout(function() {
-                            var time = Date.now() - runStart
+                        const runStart = Date.now()
+                        runTimeout = setTimeout(function () {
+                            const time = Date.now() - runStart
                             workerrun.end(
                                 'TimeoutError:  Execution took too long (>' +
                                     time +
@@ -376,7 +379,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                 command: 'compile',
                 id: '' + questionID,
                 text: code,
-                mainClass: mainClass
+                mainClass: mainClass,
             })
         }
 

@@ -58,6 +58,7 @@ export interface IAppSettings {
     scopeUUID?: string
     scopeSelector?: string
     continuousCompilation: boolean
+    messagePassing: boolean
     persistentArguments: boolean
 }
 
@@ -79,6 +80,7 @@ interface IAppElementData {
     scopeUUID?: string
     scopeSelector?: string
     continuousCompilation?: string
+    messagePassing?: string
     persistentArguments?: string
     outputParser?: CodeOutputTypes
     solutionTheme?: string
@@ -276,6 +278,7 @@ class InternalCodeBlocksManager {
             executionTimeout: 5000,
             maxCharacters: 1000,
             continuousCompilation: isTrue(inData.continuousCompilation),
+            messagePassing: isTrue(inData.messagePassing),
             persistentArguments: isTrue(inData.persistentArguments),
         }
 
@@ -510,6 +513,7 @@ class InternalCodeBlocksManager {
                     scopeUUID?: string
                     scopeSelector?: string
                     continuousCompilation!: boolean
+                    messagePassing!: boolean
                     persistentArguments!: boolean
 
                     initArgsForLanguage() {

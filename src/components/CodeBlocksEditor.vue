@@ -7,14 +7,14 @@ import CodeBlocks, {
     IOnPlacementChangeInfo,
     IOnScriptVersionChangeInfo,
     IOnSetAutoResetInfo,
-    IOnThemeChangeInfo
+    IOnThemeChangeInfo,
 } from '@/components/CodeBlocks.vue'
 import { KnownBlockTypes, CodeOutputTypes } from '@/lib/ICodeBlocks'
 
 var mixin = {
-    created: function() {
+    created: function () {
         console.log(1)
-    }
+    },
 }
 @Component
 export default class CodeBlocksEditor extends CodeBlocks {
@@ -72,7 +72,7 @@ export default class CodeBlocksEditor extends CodeBlocks {
         console.log('Selected Version', v, this.blockInfo.compiler.languageType)
         const c = this.$compilerRegistry.getCompiler({
             languageType: this.blockInfo.compiler.languageType,
-            version: v
+            version: v,
         })
         this.blockInfo.compiler.version = v
 
@@ -88,6 +88,9 @@ export default class CodeBlocksEditor extends CodeBlocks {
     }
     onContinousCompileStateChange(v: boolean): void {
         this.blockInfo.continuousCompilation = v
+    }
+    onMessagePassingChange(v: boolean): void {
+        this.blockInfo.messagePassing = v
     }
     onPersistentArgumentsChange(v: boolean): void {
         this.blockInfo.persistentArguments = v

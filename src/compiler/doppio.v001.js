@@ -32,7 +32,7 @@ function runJavaWorker(
 
     worker.addEventListener(
         'message',
-        function(e) {
+        function (e) {
             const data = e.data
             //console.log(data)
             switch (data.event) {
@@ -50,10 +50,10 @@ function runJavaWorker(
                     break
 
                 case 'startTimer':
-                    timer = setTimeout(function(e) {
+                    timer = setTimeout(function (e) {
                         console.log('Sending kill command')
                         worker.postMessage({ cmd: 'kill' })
-                        timer = setTimeout(function() {
+                        timer = setTimeout(function () {
                             console.log('Terminating Worker')
                             worker.terminate()
                         }, 5000)
@@ -92,7 +92,7 @@ function runJavaWorker(
                     if (!forceReload) {
                         worker.postMessage({ cmd: 'kill' })
                         console.log('Restarting...')
-                        setTimeout(function() {
+                        setTimeout(function () {
                             runJavaWorker(
                                 questionID,
                                 code,
@@ -122,12 +122,12 @@ function runJavaWorker(
         className: className,
         max_ms: max_ms + 1000,
         questionID: questionID,
-        forceReload: forceReload
+        forceReload: forceReload,
     })
 }
 
 const singleton = new Vue({
-    data: function() {
+    data: function () {
         return {
             loadedlibs: 0,
             version: '001',
@@ -136,11 +136,12 @@ const singleton = new Vue({
             canStop: true,
             allowsContinousCompilation: false,
             allowsPersistentArguments: false,
+            allowsMessagePassing: false,
             acceptsJSONArgument: false,
             didPreload: false,
             requestedPreload: false,
             isReady: false,
-            isRunning: false
+            isRunning: false,
         }
     },
     methods: {
@@ -159,12 +160,12 @@ const singleton = new Vue({
             this.didPreload = true
             console.log('[Preloading Doppio]')
             try {
-                JavaExec.showMessage = function(msg) {
+                JavaExec.showMessage = function (msg) {
                     this.$compilerState.displayGlobalState(msg)
                 }.bind(this)
 
                 const lock = []
-                JavaExec.setRunButton = function(enabled, info = undefined) {
+                JavaExec.setRunButton = function (enabled, info = undefined) {
                     if (info && !enabled && lock.indexOf(info) == -1) {
                         lock.push(info)
                     }
@@ -178,12 +179,12 @@ const singleton = new Vue({
                 }.bind(this)
 
                 const self = this
-                JavaExec.initialize(function() {
+                JavaExec.initialize(function () {
                     console.log('Initializing Filesystem')
                     JavaExec.initFileSystems(
                         Vue.$CodeBlock.baseurl + 'js/doppio/v001/',
                         false,
-                        function() {
+                        function () {
                             //JavaExec.printDirContent('sys/vendor');
 
                             JavaExec.reroutStdStreams()
@@ -230,19 +231,19 @@ const singleton = new Vue({
             console.log('[Preparing Dependencies for Doppio]')
             let script = document.createElement('script')
             script.src = Vue.$CodeBlock.baseurl + 'js/doppio/v001/browserfs/browserfs.min.js'
-            script.onload = function() {
+            script.onload = function () {
                 this.loadedlibs++
                 console.log('[BrowserFS loaded]')
 
                 let script = document.createElement('script')
                 script.src = Vue.$CodeBlock.baseurl + 'js/doppio/v001/doppio/doppio.js'
-                script.onload = function() {
+                script.onload = function () {
                     this.loadedlibs++
                     console.log('[Doppio loaded]')
 
                     let script = document.createElement('script')
                     script.src = Vue.$CodeBlock.baseurl + 'js/doppio/v001/JavaExec.js'
-                    script.onload = function() {
+                    script.onload = function () {
                         this.loadedlibs++
                         console.log('[JavaExec loaded]')
                         if (this.requestedPreload) {
@@ -254,8 +255,8 @@ const singleton = new Vue({
                 document.head.appendChild(script)
             }.bind(this)
             document.head.appendChild(script)
-        }
+        },
     },
-    created() {}
+    created() {},
 })
 export default singleton

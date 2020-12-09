@@ -5,7 +5,7 @@ import {
     ICompilerErrorDescription,
     ICompilerRegistry,
     ErrorSeverity,
-    finishedCallbackSignatur
+    finishedCallbackSignatur,
 } from '@/lib/ICompilerRegistry'
 
 declare global {
@@ -39,7 +39,7 @@ function runJavaScriptWorker(
     let executionFinished = false
     const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/javascript/v101/jsWorker.js')
 
-    worker.onmessage = function(msg) {
+    worker.onmessage = function (msg) {
         //only accept messages, as long as the worker is not terminated
         if (executionFinished) {
             return
@@ -78,17 +78,17 @@ function runJavaScriptWorker(
         }
     }
 
-    worker.onerror = function(e) {
+    worker.onerror = function (e) {
         compileFailedCallback({
             start: { line: e.lineno - 3, column: e.colno - 1 },
             end: { line: e.lineno - 3, column: e.colno },
             message: e.message,
-            severity: ErrorSeverity.Error
+            severity: ErrorSeverity.Error,
         })
         worker.end('Line ' + (e.lineno - 3) + ': ' + e.message)
     }
 
-    worker.end = function(msg) {
+    worker.end = function (msg) {
         if (executionFinished) {
             return
         }
@@ -109,7 +109,7 @@ function runJavaScriptWorker(
         )
     }
 
-    let startExecution = function(args: object) {
+    const startExecution = function (args: object) {
         //start worker execution
         worker.postMessage(['start', { code: code, args: args }])
 
@@ -118,19 +118,19 @@ function runJavaScriptWorker(
     }
 
     let willStartExecution = false
-    callingCodeBlocks.workerLibraries.forEach(l => {
+    callingCodeBlocks.workerLibraries.forEach((l) => {
         if (l === 'd3-101') {
             willStartExecution = true
             callingCodeBlocks.$compilerRegistry.loadLibraries(
                 ['d3-5.13.4', 'd3proxy-101'],
-                function() {
+                function () {
                     worker.postMessage(['importD3'])
                     startExecution(args)
                 }
             )
         } else if (l === 'brain-2.0.0') {
             willStartExecution = true
-            callingCodeBlocks.$compilerRegistry.loadLibraries([], function() {
+            callingCodeBlocks.$compilerRegistry.loadLibraries([], function () {
                 worker.postMessage(['importBrain'])
                 startExecution(args)
             })
@@ -153,20 +153,21 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
     readonly canStop = true
     readonly allowsContinousCompilation = true
     readonly allowsPersistentArguments = true
+    readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = true
     libraries = [
         {
             key: 'd3-101',
             name: 'd3',
             version: '5.14.3',
-            displayName: 'D3 - Proxy'
+            displayName: 'D3 - Proxy',
         },
         {
             key: 'brain-2.0.0',
             name: 'Brain.js',
             version: '2.0.0-alpha',
-            displayName: 'Brain.js'
-        }
+            displayName: 'Brain.js',
+        },
     ]
 
     registerLibs?(compilerRegistry: ICompilerRegistry): void {

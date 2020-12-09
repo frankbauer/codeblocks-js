@@ -23,11 +23,9 @@
                         </div>
 
                         <div
-                            :class="
-                                `col-xs-12 col-md-${runCode ? 8 : 12} ${
-                                    runCode ? 'q-pr-md-sm' : ''
-                                }`
-                            "
+                            :class="`col-xs-12 col-md-${runCode ? 8 : 12} ${
+                                runCode ? 'q-pr-md-sm' : ''
+                            }`"
                         >
                             <q-select
                                 :options="compiledLanguages"
@@ -50,7 +48,10 @@
                                 maxlength="6"
                             />
                         </div>
-                        <div class="col-12 text-body2" v-if="runCode && accepstArguments">
+                        <div
+                            class="col-12 text-body2"
+                            v-if="runCode && (accepstArguments || allowsMessagePassing)"
+                        >
                             {{ $t('CodeBlocksSettings.AllowArguments') }}
                             <q-btn
                                 flat
@@ -67,6 +68,13 @@
                                 v-model="persistentArguments"
                                 :disabled="!canPersistentArguments"
                                 :label="$t('CodeBlocksSettings.PersistentArguments')"
+                            />
+                        </div>
+                        <div class="col-12" v-if="runCode && allowsMessagePassing">
+                            <q-toggle
+                                v-model="messagePassing"
+                                :disabled="!allowsMessagePassing"
+                                :label="$t('CodeBlocksSettings.MessagePassing')"
                             />
                         </div>
                     </div>
@@ -199,6 +207,7 @@ export interface ICodeBlockSettingsOptions {
     randomizer: IRandomizerSettings
     continuousCompilation: boolean
     persistentArguments: boolean
+    messagePassing: boolean
 }
 
 @Component({ components: { RandomizerSettings } })
@@ -216,7 +225,7 @@ export default class CodeBlocksSettings extends Vue {
             { label: 'Blackboard', value: 'blackboard' },
             { label: 'neo', value: 'neo' },
             { label: 'mbo', value: 'mbo' },
-            { label: 'mdn like', value: 'mdn-like' }
+            { label: 'mdn like', value: 'mdn-like' },
         ]
     }
 
@@ -225,7 +234,7 @@ export default class CodeBlocksSettings extends Vue {
             { label: this.$l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
             { label: this.$l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
             { label: this.$l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
-            { label: this.$l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC }
+            { label: this.$l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
         ]
     }
     @Prop({ required: true }) options!: ICodeBlockSettingsOptions
@@ -239,14 +248,14 @@ export default class CodeBlocksSettings extends Vue {
 
     get serializedOptions(): string {
         const o: any = {
-            ...this.options
+            ...this.options,
         }
         o.randomizer = {
-            ...this.options.randomizer
+            ...this.options.randomizer,
         }
-        o.randomizer.sets = this.options.randomizer.sets.map(s => {
+        o.randomizer.sets = this.options.randomizer.sets.map((s) => {
             let values = {}
-            s.values.forEach(v => (values[v.tag] = v.value))
+            s.values.forEach((v) => (values[v.tag] = v.value))
             return values
         })
         return JSON.stringify(o)
@@ -265,12 +274,12 @@ export default class CodeBlocksSettings extends Vue {
     get workerLibraries(): IListItemData[] {
         const c = this.$compilerRegistry.getCompiler({
             languageType: this.compilerLanguage,
-            version: this.compilerVersion
+            version: this.compilerVersion,
         })
         if (c === undefined || c.libraries === undefined) {
             return []
         }
-        return c.libraries.map(l => {
+        return c.libraries.map((l) => {
             return { label: l.displayName, value: l.key }
         })
     }
@@ -333,25 +342,25 @@ export default class CodeBlocksSettings extends Vue {
 
     get domLibrary(): IListItemData[] {
         return this.options.domLibs
-            .map(d => this.domLibraries.find(k => k.value == d))
-            .filter(v => v !== undefined) as IListItemData[]
+            .map((d) => this.domLibraries.find((k) => k.value == d))
+            .filter((v) => v !== undefined) as IListItemData[]
     }
     set domLibrary(v: IListItemData[]) {
         this.$emit(
             'dom-libs-change',
-            v.map(vv => vv.value)
+            v.map((vv) => vv.value)
         )
     }
 
     get workerLibrary(): IListItemData[] {
         return this.options.workerLibs
-            .map(d => this.workerLibraries.find(k => k.value == d))
-            .filter(v => v !== undefined) as IListItemData[]
+            .map((d) => this.workerLibraries.find((k) => k.value == d))
+            .filter((v) => v !== undefined) as IListItemData[]
     }
     set workerLibrary(v: IListItemData[]) {
         this.$emit(
             'worker-libs-change',
-            v.map(vv => vv.value)
+            v.map((vv) => vv.value)
         )
     }
 
@@ -361,7 +370,7 @@ export default class CodeBlocksSettings extends Vue {
     set solutionTheme(v: IListItemData) {
         this.$emit('theme-change', {
             solution: v.value,
-            code: this.options.codeTheme
+            code: this.options.codeTheme,
         })
     }
 
@@ -371,7 +380,7 @@ export default class CodeBlocksSettings extends Vue {
     set codeTheme(v: IListItemData) {
         this.$emit('theme-change', {
             solution: this.options.solutionTheme,
-            code: v.value
+            code: v.value,
         })
     }
 
@@ -407,6 +416,22 @@ export default class CodeBlocksSettings extends Vue {
         return false
     }
 
+    get allowsMessagePassing(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            console.d('Message Passing - ', 'can', cmp.allowsContinousCompilation && cmp.canRun)
+            return cmp.allowsMessagePassing && cmp.canRun
+        }
+        return false
+    }
+
+    get messagePassing(): boolean {
+        return this.options.messagePassing
+    }
+    set messagePassing(v: boolean) {
+        this.$emit('message-passing-change', v)
+    }
+
     get persistentArguments(): boolean {
         return this.options.persistentArguments
     }
@@ -439,7 +464,7 @@ export default class CodeBlocksSettings extends Vue {
                 title: this.$l('CodeBlocksSettings.AllowArgumentsCaption'),
                 message: this.$l('CodeBlocksSettings.AllowArgumentsHint'),
                 html: true,
-                style: 'width:75%'
+                style: 'width:75%',
             })
             .onOk(() => {
                 // console.log('OK')
