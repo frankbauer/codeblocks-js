@@ -303,10 +303,12 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                                 log_callback(ee.data.line + '\n')
                             } else if (ee.data.command == 'stderr') {
                                 err_callback(ee.data.line + '\n')
-                            } else if (ee.data.command.indexof('worker-') === 0) {
+                            } else if (ee.data.command.indexOf('worker-') === 0) {
                                 //Message sent from the workter to the playground
+                                const cmd = ee.data.command.substr(7)
+                                ee.data.command = cmd
+                                options.didReceiveMessage(cmd, ee.data)
                             }
-                            callingCodeBlocks.foo()
                         }
                         this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
                         const workerrun = new Worker(
@@ -329,6 +331,17 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                             args: args,
                         })
                         const wr = workerrun
+
+                        //set up the real message handler
+                        options.postMessageFunction = (cmd, data) => {
+                            data = { ...data }
+                            console.i('SEND MESSAGE', cmd, data)
+                            data.command = cmd
+                            data.id = questionID
+                            wr.postMessage(data)
+                        }
+                        //make sure to send all queued messages now
+                        options.dequeuePostponedMessages()
 
                         setTimeout(() => {
                             console.log('SEND MESSAGE')

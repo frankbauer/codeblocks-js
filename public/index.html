@@ -61,6 +61,7 @@ public class One{
             
             //Window.post("{ command: 'run-completed', id: " + request.getId() + " }");
             if (request.getCommand().equals("nonce")) {
+                CodeBlocks.postMessage(CodeBlocks.createMessage("worker-test", -1));
                 //CodeBlocks.postMessage(CodeBlocks.createMessage("run-completed", -1));
                 System.exit(0);
             }

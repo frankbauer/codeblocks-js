@@ -82,6 +82,9 @@ export interface ICompileAndRunArguments {
     compileFailedCallback: (info: ICompilerErrorDescription) => void
     finishedExecutionCB: finishedCallbackSignatur
     args: object
+    didReceiveMessage: (cmd: string, data: any) => void
+    postMessageFunction: null | ((cmd: string, data: any) => void)
+    dequeuePostponedMessages: () => void
 }
 
 export interface ICompilerInstance {

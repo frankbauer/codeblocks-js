@@ -598,6 +598,10 @@ export default class CodeBlocks extends Vue {
                     }
                 })
             }
+            const queuedMessages: any[] = []
+            const doPostMessage = (cmd, data) => {
+                queuedMessages.push({ c: cmd, d: data })
+            }
             const runOptions: ICompileAndRunArguments = {
                 max_ms: self.executionTimeout,
                 log_callback: self.log.bind(this),
@@ -628,6 +632,14 @@ export default class CodeBlocks extends Vue {
                     return res
                 },
                 args: _args,
+                didReceiveMessage: (cmd, data) => {
+                    console.log('RCV', cmd, data)
+                },
+                postMessageFunction: doPostMessage,
+                dequeuePostponedMessages: () => {
+                    const msg = [...queuedMessages]
+                    msg.forEach((args) => doPostMessage(args.c, args.p))
+                },
             }
             cmp.compileAndRun('' + self.blockid, self.completeSource, self, runOptions)
         })
