@@ -599,10 +599,6 @@ export default class CodeBlocks extends Vue {
                 })
             }
 
-            const queuedMessages: any[] = []
-            const doPostMessage = (cmd, data) => {
-                queuedMessages.push({ c: cmd, d: data })
-            }
             const runOptions: ICompileAndRunArguments = {
                 max_ms: self.executionTimeout,
                 log_callback: self.log.bind(this),
@@ -634,9 +630,9 @@ export default class CodeBlocks extends Vue {
                 },
                 args: _args,
                 didReceiveMessage: (cmd, data) => {
+                    console.d('MESSAGE - Received', cmd)
                     this.blocks.forEach((bl) => {
                         if (bl.obj) {
-                            console.i('Received Message', cmd)
                             bl.obj.didReceiveMessage(cmd, data)
                         }
                     })
@@ -644,6 +640,14 @@ export default class CodeBlocks extends Vue {
                 postMessageFunction: null,
                 dequeuePostponedMessages: () => {},
                 keepAlive: cmp.allowsMessagePassing && self.options.messagePassing,
+                beforeStartHandler: () => {
+                    this.blocks.forEach((bl) => {
+                        console.d('MESSAGE - Before Start')
+                        if (bl.obj) {
+                            bl.obj.onStart()
+                        }
+                    })
+                },
             }
 
             if (runOptions.keepAlive) {
@@ -754,10 +758,6 @@ export default class CodeBlocks extends Vue {
         ) {
             this.onViewCodeChange(true)
         }
-    }
-
-    foo() {
-        console.log('FOO')
     }
 }
 </script>

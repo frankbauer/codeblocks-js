@@ -15,7 +15,6 @@ console.error = function (ch) {
 }
 
 function endSession(reqID) {
-    self.postMessage({ command: 'stdout', line: 'custom', id: reqID })
     if ($stderrBuffer != '') {
         self.postMessage({ command: 'stderr', line: $stderrBuffer, id: reqID })
     }
@@ -63,6 +62,9 @@ function listener(event) {
         self.postMessage({ command: 'run-finished-setup', id: reqID })
 
         try {
+            if (request.keepAlive) {
+                self.postMessage({ command: 'main-will-start', id: reqID })
+            }
             main(request.args)
             if (request.keepAlive) {
                 self.postMessage({ command: 'main-finished', id: reqID })

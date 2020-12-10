@@ -339,6 +339,8 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
 
                                 //make sure to send all queued messages now
                                 options.dequeuePostponedMessages()
+                            } else if (ee.data.command == 'main-will-start') {
+                                options.beforeStartHandler()
                             }
                         }
 

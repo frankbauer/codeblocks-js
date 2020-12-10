@@ -157,6 +157,9 @@ export class ScriptBlock implements IScriptBlock {
     }
     queuedMessages: any[] = []
     doPostMessageToWorker(cmd: string, data: any) {
+        if (data === undefined) {
+            data = {}
+        }
         if (
             this._runConfig !== undefined &&
             this._runConfig !== null &&
@@ -192,6 +195,16 @@ export class ScriptBlock implements IScriptBlock {
         const msg = [...this.queuedIncomingMessages]
         this.queuedIncomingMessages = []
         msg.forEach((args) => this.didReceiveMessage(args.c, args.d))
+    }
+
+    onStart() {
+        if (this.obj && !this.requestsOriginalVersion()) {
+            const o = this.obj as IPlaygroundObject
+            if (o.onStart) {
+                console.i('MESSAGE - Sent On Start')
+                o.onStart()
+            }
+        }
     }
 
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void {

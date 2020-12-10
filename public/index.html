@@ -45,8 +45,10 @@ public class One{
     }
 }</block>
 <playground>{
+    runner:null,
     init: function(canvasElement, outputElement, scope, runner) {
         canvasElement.hide();
+        this.runner = runner
         runner.postMessage('from-init', {})        
     },
     addArgumentsTo(args) {
@@ -55,7 +57,9 @@ public class One{
     reset(canvasElement) {},
     onMessage(cmd, data) {        
     },
-    onStarted() {        
+    onStart() {        
+        console.log("Starting")
+        setTimeout(() => { this.runner.postMessage('nonce', {})}, 2000)
     },
     update: function(txt, json, canvasElement, outputElement) {
 
