@@ -120,7 +120,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
             finishedExecutionCB,
             args,
         } = options
-
+        console.log(`[Starting TeaVM${options.keepAlive ? ' keepAlive' : ''}]`, args)
         const start = Date.now()
         let executionFinished = false
         let booted = false
@@ -284,11 +284,28 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                         finishedExecutionCB(false)
                         this.isRunning = false
                     } else {
+                        this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
+                        const workerrun = new Worker(
+                            `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
+                        )
+                        this.sessionWorker = workerrun
+
                         const runListener = (ee: any) => {
                             //console.log('JAVA-WORKER-MSG', ee.data)
                             console.log('tearunner', questionID, ee.data, ee.data.command)
                             if (ee.data.command == 'run-finished-setup') {
                                 //Nothing to do here
+                            } else if (
+                                ee.data.command == 'w-exit-keepalive' ||
+                                ee.data.command == 'exit-keepalive'
+                            ) {
+                                //Make sure a keep-alive session can do proper cleanup
+                                if (options.keepAlive) {
+                                    workerrun.postMessage({
+                                        command: 'session-ended',
+                                        id: '' + questionID,
+                                    })
+                                }
                             } else if (ee.data.command == 'run-completed') {
                                 finishedExecutionCB(true)
 
@@ -303,18 +320,28 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                                 log_callback(ee.data.line + '\n')
                             } else if (ee.data.command == 'stderr') {
                                 err_callback(ee.data.line + '\n')
-                            } else if (ee.data.command.indexOf('worker-') === 0) {
+                            } else if (ee.data.command.indexOf('w-') === 0) {
                                 //Message sent from the workter to the playground
                                 const cmd = ee.data.command.substr(7)
                                 ee.data.command = cmd
                                 options.didReceiveMessage(cmd, ee.data)
+                            } else if (ee.data.command == 'main-finished') {
+                                console.d('MESSAGE - Main Finished')
+                                //set up the real message handler
+                                options.postMessageFunction = (cmd, data) => {
+                                    data = { ...data }
+                                    console.d('MESSAGE - TeaVM Post ', cmd, data)
+                                    data.command = cmd
+                                    data.id = questionID
+                                    wr.postMessage(data)
+                                }
+                                options.postMessageFunction('main-finished', {})
+
+                                //make sure to send all queued messages now
+                                options.dequeuePostponedMessages()
                             }
                         }
-                        this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
-                        const workerrun = new Worker(
-                            `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
-                        )
-                        this.sessionWorker = workerrun
+
                         workerrun.addEventListener('message', runListener.bind(this))
 
                         workerrun.postMessage({
@@ -322,36 +349,9 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                             id: '' + questionID,
                             code: e.data.script,
                             args: args,
-                            keepAlive: false,
-                        })
-                        workerrun.postMessage({
-                            command: 'empty',
-                            id: '' + questionID,
-                            code: e.data.script,
-                            args: args,
+                            keepAlive: options.keepAlive,
                         })
                         const wr = workerrun
-
-                        //set up the real message handler
-                        options.postMessageFunction = (cmd, data) => {
-                            data = { ...data }
-                            console.i('SEND MESSAGE', cmd, data)
-                            data.command = cmd
-                            data.id = questionID
-                            wr.postMessage(data)
-                        }
-                        //make sure to send all queued messages now
-                        options.dequeuePostponedMessages()
-
-                        setTimeout(() => {
-                            console.log('SEND MESSAGE')
-                            wr.postMessage({
-                                command: 'nonce',
-                                id: '' + questionID,
-                                code: '',
-                                args: [],
-                            })
-                        }, 2000)
 
                         workerrun.end = (msg: string) => {
                             this.sessionWorker = undefined

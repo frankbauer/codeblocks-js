@@ -1,3 +1,5 @@
+import { ICompileAndRunArguments } from './ICompilerRegistry'
+
 export interface IParsedError {
     line: number
     column: number
@@ -28,6 +30,7 @@ export interface IPlaygroundObject {
         outputElement: JQuery<HTMLElement>
     ): string | undefined
     onParseError?(initialOutput: string, parseError: string): void
+    onMessage?(cmd: string, data: any): void
     addArgumentsTo?(args: object | string[]): void
 }
 
@@ -61,4 +64,7 @@ export interface IScriptBlock {
     ): string | undefined
     addArgumentsTo(args: object | string[]): void
     onParseError(initialOutput: string, parseError: string): boolean
+
+    runConfig: null | ICompileAndRunArguments
+    didReceiveMessage(cmd: string, data: any)
 }

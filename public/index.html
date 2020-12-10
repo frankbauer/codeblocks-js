@@ -25,44 +25,17 @@
     <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1>
         <loading><div></div><div></div></loading> 
         
-        <block data-visible-lines="auto">import org.teavm.jso.browser.Window;
-import org.teavm.jso.dom.events.MessageEvent;
-import org.teavm.jso.JSObject;
-import org.teavm.jso.JSProperty;
-import org.teavm.jso.JSBody;
-import org.lgdv.*;
+        <block data-visible-lines="auto">import org.lgdv.*;
 
-interface WorkerMessage extends JSObject {
-    @JSProperty
-    String getCommand();
-
-    @JSProperty
-    void setCommand(String command);
-
-    @JSProperty
-    String getId();
-
-    @JSProperty
-    void setId(String id);
-}
-
-public class One{
-    
+public class One{    
     public static void main(String[] args){
-        System.out.println("START");
-        Window.worker().addEventListener("message", (MessageEvent event) -> {
-            CodeBlocksBaseMessage request = (CodeBlocksBaseMessage) event.getData();
+        System.out.println("START " + args[0]);
+        args[0] = "Test";
+        CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {
             System.out.println("Hello" + request.getCommand());       
             
-            //CodeBlocksBaseMessage response = CodeBlocks.createJSObject();
-            //response.setCommand("run-completed");
-            //response.setId(request.getId());
-            //Window.worker().postMessage(response);
-            
-            //Window.post("{ command: 'run-completed', id: " + request.getId() + " }");
-            if (request.getCommand().equals("nonce")) {
-                CodeBlocks.postMessage(CodeBlocks.createMessage("worker-test", -1));
-                //CodeBlocks.postMessage(CodeBlocks.createMessage("run-completed", -1));
+            CodeBlocks.postMessage("echo", request.getId());
+            if (request.getCommand().equals("nonce")) {                
                 System.exit(0);
             }
         });
@@ -74,9 +47,16 @@ public class One{
 <playground>{
     init: function(canvasElement, outputElement, scope, runner) {
         canvasElement.hide();
+        runner.postMessage('from-init', {})        
     },
-    addArgumentsTo(args) {},
+    addArgumentsTo(args) {
+        args.push("Hello");
+    },
     reset(canvasElement) {},
+    onMessage(cmd, data) {        
+    },
+    onStarted() {        
+    },
     update: function(txt, json, canvasElement, outputElement) {
 
     }
@@ -91,7 +71,7 @@ console.log('\n&lt;JSON>\n\n')
 console.log('[{"x":0, "y":0, "color":10}]')
         </block>                     
         
-        <playground>{ 
+        <block>{ 
             scope:undefined,
             init: function(canvasElement, outputElement, scope, runner) {
                 Phaser.GameObjects.Sprite.prototype.gdi_walkTo = function(x, y){  
@@ -276,7 +256,7 @@ console.log('[{"x":0, "y":0, "color":10}]')
                             
                 return txt + "\n\nResult:"
             }
-        }</playground>
+        }</block>
         
         
         </div>

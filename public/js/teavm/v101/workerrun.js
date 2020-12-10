@@ -6,22 +6,38 @@ let $stdoutBuffer = ''
 
 const olog = console.log
 const oerr = console.error
-console.log = function(line){
-    olog("[WORKER]", ...arguments)    
+console.log = function (line) {
+    olog('[WORKER]', ...arguments)
 }
 
-console.error = function(ch){
-    oerr("[WORKER]", ...arguments)
+console.error = function (ch) {
+    oerr('[WORKER]', ...arguments)
+}
+
+function endSession(reqID) {
+    self.postMessage({ command: 'stdout', line: 'custom', id: reqID })
+    if ($stderrBuffer != '') {
+        self.postMessage({ command: 'stderr', line: $stderrBuffer, id: reqID })
+    }
+    if ($stdoutBuffer != '') {
+        self.postMessage({ command: 'stdout', line: $stdoutBuffer, id: reqID })
+    }
+
+    $stderrBuffer = undefined
+    $stdoutBuffer = undefined
+
+    self.postMessage({ command: 'run-completed', id: reqID })
 }
 
 function listener(event) {
     let request = event.data
     console.log('JAVA-WORKE-RUN-MSG', request)
-    if (request.command == 'run' && !didRun) {
-        didRun = true
-        
+    if (request.command == 'session-ended' && didRun) {
         const reqID = request.id
-        
+        endSession(reqID)
+    } else if (request.command == 'run' && !didRun) {
+        didRun = true
+        const reqID = request.id
 
         $rt_putStdoutCustom = function (ch) {
             if (ch === 0xa) {
@@ -47,8 +63,10 @@ function listener(event) {
         self.postMessage({ command: 'run-finished-setup', id: reqID })
 
         try {
-            console.log('Starting')
             main(request.args)
+            if (request.keepAlive) {
+                self.postMessage({ command: 'main-finished', id: reqID })
+            }
         } catch (EE) {
             if (EE instanceof Error) {
                 console.log('APPLICATION ERROR', EE)
@@ -59,21 +77,13 @@ function listener(event) {
             }
         }
 
-        if ($stderrBuffer != '') {
-            self.postMessage({ command: 'stderr', line: $stderrBuffer, id: reqID })
-        }
-        if ($stdoutBuffer != '') {
-            self.postMessage({ command: 'stdout', line: $stdoutBuffer, id: reqID })
-        }
-
-        // self.postMessage({ command: 'run-completed', id: reqID })
-
         URLObject = undefined
         blob = undefined
-        // $stderrBuffer = undefined
-        // $stdoutBuffer = undefined
 
         // self.removeEventListener('message', listener)
+        if (!request.keepAlive) {
+            endSession(reqID)
+        }
     }
     request = undefined
 }

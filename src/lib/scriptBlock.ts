@@ -6,8 +6,9 @@ import {
     IPlaygroundObject,
     IProcessedScriptOutput,
     IScriptOutputObject,
-    IScriptBlock
+    IScriptBlock,
 } from '@/lib/IScriptBlock'
+import { ICompileAndRunArguments } from './ICompilerRegistry'
 interface ICodeTemplate {
     prefix: string
     postfix: string
@@ -16,14 +17,14 @@ interface ICodeTemplate {
 const legacyCodeTemplate: ICodeTemplate = {
     prefix:
         'let editors=[]; $(".CodeMirror").toArray().forEach(cm =>  {if (!cm.CodeMirror.getTextArea().hasAttribute("is-editmode")) editors[cm.CodeMirror.getTextArea().id] = cm.CodeMirror}); return function(){ return {o:',
-    postfix: '}.o}.call({})'
+    postfix: '}.o}.call({})',
 }
 const v101CodeTemplate: ICodeTemplate = {
     prefix: '"use strict"; return function(){ return {o:',
-    postfix: '}.o}.call({})'
+    postfix: '}.o}.call({})',
 }
 
-const jsErrorParser = function(e: any, templ?: ICodeTemplate): IParsedError {
+const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedError {
     console.error(e)
     let line: number | undefined = undefined
     let column: number | undefined = undefined
@@ -40,7 +41,7 @@ const jsErrorParser = function(e: any, templ?: ICodeTemplate): IParsedError {
     }
 
     if (line === undefined) {
-        let lines = e.stack.split('\n')
+        const lines = e.stack.split('\n')
         if (lines.length > 1) {
             const regex = /<anonymous>:(\d+):(\d+)/gm
             let m: RegExpExecArray | null = null
@@ -107,11 +108,13 @@ export class ScriptBlock implements IScriptBlock {
                     )
                 }
                 this.obj = this.fkt()
+                this.dequeueIncoming()
             } catch (e) {
                 this.pushError(e)
             }
         } else if (this.fkt !== undefined) {
             this.obj = this.fkt()
+            this.dequeueIncoming()
         }
     }
 
@@ -131,7 +134,70 @@ export class ScriptBlock implements IScriptBlock {
         }
     }
 
+    _runConfig: null | ICompileAndRunArguments = null
+    get runConfig(): null | ICompileAndRunArguments {
+        return this._runConfig
+    }
+    set runConfig(cfg: null | ICompileAndRunArguments) {
+        if (this._runConfig) {
+            this._runConfig.dequeuePostponedMessages = function () {}
+        }
+        this._runConfig = cfg
+        if (this._runConfig) {
+            const self = this
+            this._runConfig.dequeuePostponedMessages = function () {
+                const msg = [...self.queuedMessages]
+                self.queuedMessages = []
+                msg.forEach((args) => self.doPostMessageToWorker(args.c, args.d))
+            }
+            if (this._runConfig.postMessageFunction !== null) {
+                this._runConfig.dequeuePostponedMessages()
+            }
+        }
+    }
+    queuedMessages: any[] = []
+    doPostMessageToWorker(cmd: string, data: any) {
+        if (
+            this._runConfig !== undefined &&
+            this._runConfig !== null &&
+            this._runConfig.postMessageFunction !== null
+        ) {
+            cmd = `d-${cmd}`
+            data.command = cmd
+            console.i('MESSAGE - Posted to Worker', cmd, data)
+            this._runConfig.postMessageFunction(cmd, data)
+        } else {
+            console.i('MESSAGE - Posted to Queue', cmd)
+            this.queuedMessages.push({ c: cmd, d: data })
+        }
+    }
+    queuedIncomingMessages: any[] = []
+    didReceiveMessage(cmd: string, data: any) {
+        if (this.obj && !this.requestsOriginalVersion()) {
+            const o = this.obj as IPlaygroundObject
+            if (o.onMessage === undefined) {
+                console.i('MESSAGE - Received to Queue', cmd)
+                this.queuedIncomingMessages.push({ c: cmd, d: data })
+            } else {
+                console.i('MESSAGE - Received', cmd, data)
+                o.onMessage(cmd, data)
+            }
+        } else {
+            console.i('MESSAGE - Received to Queue', cmd)
+            this.queuedIncomingMessages.push({ c: cmd, d: data })
+        }
+    }
+    dequeueIncoming() {
+        console.i('MESSAGE - Dequeue Incoming')
+        const msg = [...this.queuedIncomingMessages]
+        this.queuedIncomingMessages = []
+        msg.forEach((args) => this.didReceiveMessage(args.c, args.d))
+    }
+
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void {
+        this.queuedMessages = []
+        this.queuedIncomingMessages = []
+        console.i('MESSAGE - Reset Queue from Init')
         if (this.obj === undefined) {
             return
         }
@@ -141,6 +207,8 @@ export class ScriptBlock implements IScriptBlock {
                 const o = this.obj as ILegacyPlaygroundObject
                 o.init(canvasElement)
             } else {
+                runner.run = runner
+                runner.postMessage = this.doPostMessageToWorker.bind(this)
                 let outputElement: JQuery<HTMLElement> | undefined = undefined
                 if (scope === undefined || scope.length === 0) {
                     scope = canvasElement.parents('.codeblocks')
@@ -162,6 +230,9 @@ export class ScriptBlock implements IScriptBlock {
     }
 
     reset(canvasElement: JQuery<HTMLElement>): void {
+        this.queuedMessages = []
+        this.queuedIncomingMessages = []
+        console.i('MESSAGE - Reset Queue from Reset')
         if (this.obj && this.obj.reset && !this.requestsOriginalVersion()) {
             this.obj.reset(canvasElement)
         }
