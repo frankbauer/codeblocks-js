@@ -86,6 +86,8 @@ export interface ICompileAndRunArguments {
     postMessageFunction: null | ((cmd: string, data: any) => void)
     dequeuePostponedMessages: () => void
     beforeStartHandler: () => void
+    whenFinishedHandler(args: string[] | object): void
+    allowMessagePassing: boolean
     keepAlive: boolean
 }
 

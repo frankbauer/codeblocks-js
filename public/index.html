@@ -22,7 +22,7 @@
     <noscript>
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1>
+    <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1 data-persistent-arguments=1 data-keep-alive=1>
         <loading><div></div><div></div></loading> 
         
         <block data-visible-lines="auto">import org.lgdv.*;
@@ -52,14 +52,19 @@ public class One{
         runner.postMessage('from-init', {})        
     },
     addArgumentsTo(args) {
+        console.log("Input State", args)
         args.push("Hello");
     },
     reset(canvasElement) {},
-    onMessage(cmd, data) {        
+    onMessage(cmd, data) {   
+        console.log("Message", cmd, data)     
     },
-    onStart() {        
+    beforeStart() {        
         console.log("Starting")
         setTimeout(() => { this.runner.postMessage('nonce', {})}, 2000)
+    },
+    whenFinished(args){
+        console.log("Finished", args)
     },
     update: function(txt, json, canvasElement, outputElement) {
 

@@ -4,12 +4,12 @@ const __whitelist = new Set([
     'postMessage',
     'console',
     'performance',
-    'setTimeout'
+    'setTimeout',
 ])
 var window = {}
 var args = {}
 
-onmessage = function(input) {
+onmessage = function (input) {
     switch (input.data[0]) {
         case 'importD3':
             console.log('[Importing D3-Proxy]')
@@ -57,7 +57,7 @@ onmessage = function(input) {
                         s = s.join(' ')
                     }
                     postMessage(['err', '' + s])
-                }
+                },
             }
             console.warn = console.log
 

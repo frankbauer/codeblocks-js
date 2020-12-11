@@ -18,6 +18,7 @@
             @run-state-change="onRunStateChange"
             @continuous-compile-change="onContinousCompileStateChange"
             @message-passing-change="onMessagePassingChange"
+            @keep-alive-change="onKeepAliveChange"
             @persistent-arguments-change="onPersistentArgumentsChange"
             @language-change="onLanguageChange"
             @character-limit-change="onCharacterLimitChange"
@@ -293,6 +294,7 @@ export default class CodeBlocks extends Vue {
             continuousCompilation: this.blockInfo.continuousCompilation,
             persistentArguments: this.blockInfo.persistentArguments,
             messagePassing: this.blockInfo.messagePassing,
+            keepAlive: this.blockInfo.keepAlive,
         }
     }
     get blocks(): BlockData[] {
@@ -434,6 +436,7 @@ export default class CodeBlocks extends Vue {
     onRunStateChange(v: boolean): void {}
     onContinousCompileStateChange(v: boolean): void {}
     onMessagePassingChange(v: boolean): void {}
+    onKeepAliveChange(v: boolean): void {}
     onPersistentArgumentsChange(v: boolean): void {}
     onLanguageChange(v: string): void {}
     onCharacterLimitChange(v: number): void {}
@@ -610,7 +613,7 @@ export default class CodeBlocks extends Vue {
                     overrideOutput = undefined,
                     returnState = undefined
                 ) => {
-                    console.d('returnState:', returnState, _args)
+                    console.i('returnState:', returnState, _args)
                     if (!success) {
                         self.$compilerState.hideGlobalState()
                         self.$compilerState.setAllRunButtons(true)
@@ -621,8 +624,13 @@ export default class CodeBlocks extends Vue {
                         self.sansoutput
                     )
 
-                    if (returnState !== undefined && this.blockInfo.persistentArguments) {
-                        this.blockInfo.storeDefaultArgs(returnState)
+                    if (returnState !== undefined) {
+                        if (this.blockInfo.persistentArguments) {
+                            console.i('Store Default State', returnState)
+                            this.blockInfo.storeDefaultArgs(returnState)
+                        } else {
+                            this.blockInfo.clearDefaultArgs()
+                        }
                     }
                     self.$compilerState.hideGlobalState()
                     self.$compilerState.setAllRunButtons(true)
@@ -630,7 +638,7 @@ export default class CodeBlocks extends Vue {
                 },
                 args: _args,
                 didReceiveMessage: (cmd, data) => {
-                    console.d('MESSAGE - Received', cmd)
+                    console.i('MESSAGE - Received', cmd)
                     this.blocks.forEach((bl) => {
                         if (bl.obj) {
                             bl.obj.didReceiveMessage(cmd, data)
@@ -639,12 +647,24 @@ export default class CodeBlocks extends Vue {
                 },
                 postMessageFunction: null,
                 dequeuePostponedMessages: () => {},
-                keepAlive: cmp.allowsMessagePassing && self.options.messagePassing,
+                allowMessagePassing: cmp.allowsMessagePassing && self.options.messagePassing,
+                keepAlive:
+                    cmp.allowsMessagePassing &&
+                    self.options.messagePassing &&
+                    self.options.keepAlive,
                 beforeStartHandler: () => {
                     this.blocks.forEach((bl) => {
                         console.d('MESSAGE - Before Start')
                         if (bl.obj) {
-                            bl.obj.onStart()
+                            bl.obj.beforeStart()
+                        }
+                    })
+                },
+                whenFinishedHandler: (args: object | string[]) => {
+                    this.blocks.forEach((bl) => {
+                        console.d('MESSAGE - When Finished')
+                        if (bl.obj) {
+                            bl.obj.whenFinished(args)
                         }
                     })
                 },

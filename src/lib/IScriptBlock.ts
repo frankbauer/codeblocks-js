@@ -31,7 +31,8 @@ export interface IPlaygroundObject {
     ): string | undefined
     onParseError?(initialOutput: string, parseError: string): void
     onMessage?(cmd: string, data: any): void
-    onStart?(): void
+    beforeStart?(): void
+    whenFinished?(args: string[] | object): void
     addArgumentsTo?(args: object | string[]): void
 }
 
@@ -68,5 +69,6 @@ export interface IScriptBlock {
 
     runConfig: null | ICompileAndRunArguments
     didReceiveMessage(cmd: string, data: any)
-    onStart()
+    beforeStart()
+    whenFinished(args: string[] | object)
 }

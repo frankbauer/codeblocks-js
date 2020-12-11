@@ -92,7 +92,13 @@ export default class CodeBlocksEditor extends CodeBlocks {
     onMessagePassingChange(v: boolean): void {
         this.blockInfo.messagePassing = v
     }
+    onKeepAliveChange(v: boolean): void {
+        this.blockInfo.keepAlive = v
+    }
     onPersistentArgumentsChange(v: boolean): void {
+        if (v === false) {
+            this.blockInfo.clearDefaultArgs()
+        }
         this.blockInfo.persistentArguments = v
     }
     onLanguageChange(v: string): void {

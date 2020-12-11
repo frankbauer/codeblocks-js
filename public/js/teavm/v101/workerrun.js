@@ -3,6 +3,7 @@ self.importScripts('worker/runtime.js')
 let didRun = false
 let $stderrBuffer = ''
 let $stdoutBuffer = ''
+let rArgs = []
 
 const olog = console.log
 const oerr = console.error
@@ -25,12 +26,12 @@ function endSession(reqID) {
     $stderrBuffer = undefined
     $stdoutBuffer = undefined
 
-    self.postMessage({ command: 'run-completed', id: reqID })
+    self.postMessage({ command: 'run-completed', id: reqID, args: rArgs })
 }
 
 function listener(event) {
     let request = event.data
-    console.log('JAVA-WORKE-RUN-MSG', request)
+    //console.log('JAVA-WORKE-RUN-MSG', request)
     if (request.command == 'session-ended' && didRun) {
         const reqID = request.id
         endSession(reqID)
@@ -56,18 +57,20 @@ function listener(event) {
             }
         }
 
+        $rt_last_run_args = []
         let blob = new Blob([request.code], { type: 'application/javascript' })
         let URLObject = URL.createObjectURL(blob)
         self.importScripts(URLObject)
         self.postMessage({ command: 'run-finished-setup', id: reqID })
 
         try {
-            if (request.keepAlive) {
+            if (request.messagePosting) {
                 self.postMessage({ command: 'main-will-start', id: reqID })
             }
             main(request.args)
-            if (request.keepAlive) {
-                self.postMessage({ command: 'main-finished', id: reqID })
+            rArgs = $rt_last_run_args.data.map((j) => j.toString())
+            if (request.messagePosting) {
+                self.postMessage({ command: 'main-finished', id: reqID, args: rArgs })
             }
         } catch (EE) {
             if (EE instanceof Error) {

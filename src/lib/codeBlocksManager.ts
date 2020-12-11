@@ -59,6 +59,7 @@ export interface IAppSettings {
     scopeSelector?: string
     continuousCompilation: boolean
     messagePassing: boolean
+    keepAlive: boolean
     persistentArguments: boolean
 }
 
@@ -81,6 +82,7 @@ interface IAppElementData {
     scopeSelector?: string
     continuousCompilation?: string
     messagePassing?: string
+    keepAlive?: string
     persistentArguments?: string
     outputParser?: CodeOutputTypes
     solutionTheme?: string
@@ -221,6 +223,7 @@ export interface IMainBlock extends IAppSettings {
 
     initArgsForLanguage(): object | string[]
     storeDefaultArgs(args: object | string[]): void
+    clearDefaultArgs(): void
 }
 
 function isTrue(val: any): boolean {
@@ -279,6 +282,7 @@ class InternalCodeBlocksManager {
             maxCharacters: 1000,
             continuousCompilation: isTrue(inData.continuousCompilation),
             messagePassing: isTrue(inData.messagePassing),
+            keepAlive: isTrue(inData.keepAlive),
             persistentArguments: isTrue(inData.persistentArguments),
         }
 
@@ -514,15 +518,18 @@ class InternalCodeBlocksManager {
                     scopeSelector?: string
                     continuousCompilation!: boolean
                     messagePassing!: boolean
+                    keepAlive!: boolean
                     persistentArguments!: boolean
 
                     initArgsForLanguage() {
                         console.d('Constructing args for', this.language, this.defaultArgs)
-                        if (this.language === 'java') {
-                            return []
-                        }
+
                         if (this.defaultArgs === undefined) {
-                            return {}
+                            if (this.language === 'java') {
+                                return []
+                            } else {
+                                return {}
+                            }
                         } else {
                             return this.defaultArgs
                         }
@@ -531,6 +538,9 @@ class InternalCodeBlocksManager {
                     defaultArgs!: object | string[] | undefined
                     storeDefaultArgs(args: object | string[]) {
                         this.defaultArgs = args
+                    }
+                    clearDefaultArgs() {
+                        this.defaultArgs = undefined
                     }
 
                     swap(id1: number, id2: number) {

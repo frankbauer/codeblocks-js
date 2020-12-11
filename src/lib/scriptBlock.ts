@@ -182,7 +182,7 @@ export class ScriptBlock implements IScriptBlock {
                 console.i('MESSAGE - Received to Queue', cmd)
                 this.queuedIncomingMessages.push({ c: cmd, d: data })
             } else {
-                console.i('MESSAGE - Received', cmd, data)
+                console.i('MESSAGE - Received from Worker', cmd, data)
                 o.onMessage(cmd, data)
             }
         } else {
@@ -197,12 +197,22 @@ export class ScriptBlock implements IScriptBlock {
         msg.forEach((args) => this.didReceiveMessage(args.c, args.d))
     }
 
-    onStart() {
+    beforeStart() {
         if (this.obj && !this.requestsOriginalVersion()) {
             const o = this.obj as IPlaygroundObject
-            if (o.onStart) {
-                console.i('MESSAGE - Sent On Start')
-                o.onStart()
+            if (o.beforeStart) {
+                console.i('MESSAGE - beforeStart')
+                o.beforeStart()
+            }
+        }
+    }
+
+    whenFinished(args: string[] | object) {
+        if (this.obj && !this.requestsOriginalVersion()) {
+            const o = this.obj as IPlaygroundObject
+            if (o.whenFinished) {
+                console.i('MESSAGE - whenFinished')
+                o.whenFinished(args)
             }
         }
     }

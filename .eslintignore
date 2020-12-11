@@ -2,3 +2,7 @@
 ./lib/blockly/blockly.d.ts
 ./public/js/teavm/v100/worker/classes.js
 ./public/js/teavm/v101/worker/classes.js
+public/js/teavm/v101/worker/classes.js
+public/js/teavm/v100/worker/classes.js
+worker/*
+classes.js

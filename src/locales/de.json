@@ -67,6 +67,7 @@
         "ContinousCompile": "Automatisch Kompilieren",
         "PersistentArguments": "Persistente Argumente",
         "MessagePassing": "Nachrichtenaustauch (DOM und Worker)",
+        "KeepAlive": "Worker läuft nach main weiter",
         "AllowArguments": "Untersützt das Senden von Argumenten",
         "AllowArgumentsCaption": "Senden von Argumenten",
         "AllowArgumentsHint": "Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein JSON-Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden."

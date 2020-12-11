@@ -77,6 +77,13 @@
                                 :label="$t('CodeBlocksSettings.MessagePassing')"
                             />
                         </div>
+                        <div class="col-12 q-pl-lg" v-if="runCode && allowsMessagePassing">
+                            <q-toggle
+                                v-model="keepAlive"
+                                :disabled="!allowsMessagePassing || !messagePassing"
+                                :label="$t('CodeBlocksSettings.KeepAlive')"
+                            />
+                        </div>
                     </div>
                 </q-card-section>
             </q-card>
@@ -208,6 +215,7 @@ export interface ICodeBlockSettingsOptions {
     continuousCompilation: boolean
     persistentArguments: boolean
     messagePassing: boolean
+    keepAlive: boolean
 }
 
 @Component({ components: { RandomizerSettings } })
@@ -430,6 +438,13 @@ export default class CodeBlocksSettings extends Vue {
     }
     set messagePassing(v: boolean) {
         this.$emit('message-passing-change', v)
+    }
+
+    get keepAlive(): boolean {
+        return this.options.keepAlive
+    }
+    set keepAlive(v: boolean) {
+        this.$emit('keep-alive-change', v)
     }
 
     get persistentArguments(): boolean {

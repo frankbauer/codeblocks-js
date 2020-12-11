@@ -25,7 +25,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
     readonly canRun = true
     readonly canStop = true
     readonly allowsContinousCompilation = false
-    readonly allowsPersistentArguments = false
+    readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
     didPreload: boolean = false
@@ -281,7 +281,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                     }
 
                     if (e.data.status == 'errors') {
-                        finishedExecutionCB(false)
+                        finishedExecutionCB(false, undefined, options.args)
                         this.isRunning = false
                     } else {
                         this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
@@ -292,7 +292,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
 
                         const runListener = (ee: any) => {
                             //console.log('JAVA-WORKER-MSG', ee.data)
-                            console.log('tearunner', questionID, ee.data, ee.data.command)
+                            console.i('tearunner message', questionID, ee.data, ee.data.command)
                             if (ee.data.command == 'run-finished-setup') {
                                 //Nothing to do here
                             } else if (
@@ -307,7 +307,10 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                                     })
                                 }
                             } else if (ee.data.command == 'run-completed') {
-                                finishedExecutionCB(true)
+                                if (ee.data.args) {
+                                    options.args['return'] = ee.data.args
+                                }
+                                finishedExecutionCB(true, undefined, options.args['return'])
 
                                 console.i('Execution finished in ' + (Date.now() - start) + ' ms\n')
                                 // info_callback(
@@ -322,7 +325,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                                 err_callback(ee.data.line + '\n')
                             } else if (ee.data.command.indexOf('w-') === 0) {
                                 //Message sent from the workter to the playground
-                                const cmd = ee.data.command.substr(7)
+                                const cmd = ee.data.command.substr(2)
                                 ee.data.command = cmd
                                 options.didReceiveMessage(cmd, ee.data)
                             } else if (ee.data.command == 'main-finished') {
@@ -335,10 +338,13 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                                     data.id = questionID
                                     wr.postMessage(data)
                                 }
+
                                 options.postMessageFunction('main-finished', {})
 
                                 //make sure to send all queued messages now
                                 options.dequeuePostponedMessages()
+
+                                options.whenFinishedHandler(ee.data.args)
                             } else if (ee.data.command == 'main-will-start') {
                                 options.beforeStartHandler()
                             }
@@ -351,6 +357,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                             id: '' + questionID,
                             code: e.data.script,
                             args: args,
+                            messagePosting: options.allowMessagePassing,
                             keepAlive: options.keepAlive,
                         })
                         const wr = workerrun
@@ -371,7 +378,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                                 return
                             }
                             executionFinished = true
-                            finishedExecutionCB(false)
+                            finishedExecutionCB(false, undefined, options.args)
                             this.isRunning = false
                             if (msg) {
                                 err_callback(msg + '\n')
@@ -427,7 +434,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                     console.log('TERMINATING')
                     this.teaworker.terminate()
                 }
-                finishedExecutionCB(false)
+                finishedExecutionCB(false, undefined, options.args)
                 this.isRunning = false
                 this.isReady = true
                 if (msg) {

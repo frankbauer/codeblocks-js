@@ -490,6 +490,7 @@ function $rt_mainStarter(f) {
             javaArgs.data[i] = $rt_str(args[i]);
         }
         $rt_threadStarter(f)(javaArgs);
+        console.log("DONE2", javaArgs)
     };
 }
 var $rt_stringPool_instance;
