@@ -72,15 +72,15 @@
         "AllowArgumentsCaption": "Send Runtime-Arguments",
         "AllowArgumentsHint": "Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can add data to the passed argument-object. The object is available in the students as a variable named <code>args</code>.",
         "AllowArgumentsHintJava":"Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can push strings to the passed arguments-array. The array is passed to <code>args</code>-parameter of the <code>main</code>-Method.",
-        "UsePersistentArgumentsCaption":"en CodeBlocksSettings.UsePersistentArgumentsCaption",
+        "UsePersistentArgumentsCaption":"Persistente Arguments",
         "UsePersistentArgumentsHint":"en CodeBlocksSettings.UsePersistentArgumentsHint",
         "UsePersistentArgumentsHintJava":"en CodeBlocksSettings.UsePersistentArgumentsHintJava",
-        "AllowMessagePassingCaption":"en CodeBlocksSettings.AllowMessagePassingCaption",
+        "AllowMessagePassingCaption":"Message exchange",
         "AllowMessagePassingHint":"en CodeBlocksSettings.AllowMessagePassingHint",
         "AllowMessagePassingHintJava":"en CodeBlocksSettings.AllowMessagePassingHintJava",
-        "KeepAliveCaption":"en CodeBlocksSettings.AllowMessagePassingCaption",
-        "KeepAliveHint":"en CodeBlocksSettings.AllowMessagePassingHint",
-        "KeepAliveHintJava":"en CodeBlocksSettings.AllowMessagePassingHintJava"
+        "KeepAliveCaption":"Keep Worker alive",
+        "KeepAliveHint":"Workers are not automatically terminated when the student code finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>System.exit(0)</code>.",
+        "KeepAliveHintJava":"Workers are not automatically terminated when the students <code>main</code>-Method finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>System.exit(0)</code>."
     },
     "CodePlayground": {
         "InvalidJson": "Output is not a valid JSON-Object",
