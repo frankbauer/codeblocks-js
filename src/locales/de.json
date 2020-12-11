@@ -70,7 +70,17 @@
         "KeepAlive": "Worker läuft nach main weiter",
         "AllowArguments": "Untersützt das Senden von Argumenten",
         "AllowArgumentsCaption": "Senden von Argumenten",
-        "AllowArgumentsHint": "Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein JSON-Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden."
+        "AllowArgumentsHint": "Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein JSON-Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden.",
+        "AllowArgumentsHintJava":"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein JSON-Array definiert werden, welches der <code>main</code>-Methode als Parameter übergeben wird.",
+        "UsePersistentArgumentsCaption":"de CodeBlocksSettings.UsePersistentArgumentsCaption",
+        "UsePersistentArgumentsHint":"de CodeBlocksSettings.UsePersistentArgumentsHint",
+        "UsePersistentArgumentsHintJava":"de CodeBlocksSettings.UsePersistentArgumentsHintJava",
+        "AllowMessagePassingCaption":"de CodeBlocksSettings.AllowMessagePassingCaption",
+        "AllowMessagePassingHint":"de CodeBlocksSettings.AllowMessagePassingHint",
+        "AllowMessagePassingHintJava":"de CodeBlocksSettings.AllowMessagePassingHintJava",
+        "KeepAliveCaption":"de CodeBlocksSettings.AllowMessagePassingCaption",
+        "KeepAliveHint":"de CodeBlocksSettings.AllowMessagePassingHint",
+        "KeepAliveHintJava":"de CodeBlocksSettings.AllowMessagePassingHintJava"
     },
     "CodePlayground": {
         "InvalidJson": "Ausgabe ist nicht JSON-Formatiert",

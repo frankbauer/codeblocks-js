@@ -68,21 +68,42 @@
                                 v-model="persistentArguments"
                                 :disabled="!canPersistentArguments"
                                 :label="$t('CodeBlocksSettings.PersistentArguments')"
-                            />
+                            /><q-btn
+                                flat
+                                round
+                                color="primary"
+                                icon="info"
+                                size="xs"
+                                @click="showPersistentArgsInfoDialog"
+                            ></q-btn>
                         </div>
                         <div class="col-12" v-if="runCode && allowsMessagePassing">
                             <q-toggle
                                 v-model="messagePassing"
                                 :disabled="!allowsMessagePassing"
                                 :label="$t('CodeBlocksSettings.MessagePassing')"
-                            />
+                            /><q-btn
+                                flat
+                                round
+                                color="primary"
+                                icon="info"
+                                size="xs"
+                                @click="showMessagesInfoDialog"
+                            ></q-btn>
                         </div>
                         <div class="col-12 q-pl-lg" v-if="runCode && allowsMessagePassing">
                             <q-toggle
                                 v-model="keepAlive"
                                 :disabled="!allowsMessagePassing || !messagePassing"
                                 :label="$t('CodeBlocksSettings.KeepAlive')"
-                            />
+                            /><q-btn
+                                flat
+                                round
+                                color="primary"
+                                icon="info"
+                                size="xs"
+                                @click="showAliveInfoDialog"
+                            ></q-btn>
                         </div>
                     </div>
                 </q-card-section>
@@ -474,10 +495,43 @@ export default class CodeBlocksSettings extends Vue {
         return false
     }
     showArgsInfoDialog(): void {
+        this.showInfoDialog(
+            'CodeBlocksSettings.AllowArgumentsCaption',
+            this.compiler.languageType == 'java'
+                ? 'CodeBlocksSettings.AllowArgumentsHintJava'
+                : 'CodeBlocksSettings.AllowArgumentsHint'
+        )
+    }
+    showPersistentArgsInfoDialog(): void {
+        this.showInfoDialog(
+            'CodeBlocksSettings.UsePersistentArgumentsCaption',
+            this.compiler.languageType == 'java'
+                ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava'
+                : 'CodeBlocksSettings.UsePersistentArgumentsHint'
+        )
+    }
+    showMessagesInfoDialog(): void {
+        this.showInfoDialog(
+            'CodeBlocksSettings.AllowMessagePassingCaption',
+            this.compiler.languageType == 'java'
+                ? 'CodeBlocksSettings.AllowMessagePassingHintJava'
+                : 'CodeBlocksSettings.AllowMessagePassingHint'
+        )
+    }
+    showAliveInfoDialog(): void {
+        this.showInfoDialog(
+            'CodeBlocksSettings.KeepAliveCaption',
+            this.compiler.languageType == 'java'
+                ? 'CodeBlocksSettings.KeepAliveHintJava'
+                : 'CodeBlocksSettings.KeepAliveHint'
+        )
+    }
+
+    showInfoDialog(title, message): void {
         this.$q
             .dialog({
-                title: this.$l('CodeBlocksSettings.AllowArgumentsCaption'),
-                message: this.$l('CodeBlocksSettings.AllowArgumentsHint'),
+                title: this.$l(title),
+                message: this.$l(message),
                 html: true,
                 style: 'width:75%',
             })
