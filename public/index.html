@@ -22,10 +22,10 @@
     <noscript>
       <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div codeblockseditor data-compiler="javascript" data-compiler-version="102" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1 data-persistent-arguments=1 data-keep-alive=1>
+    <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1 data-persistent-arguments=1 data-keep-alive=1>
         <loading><div></div><div></div></loading> 
         
-        <block data-visible-lines="auto" data-expanded=0>/*import org.lgdv.*;
+        <block data-visible-lines="auto" data-expanded=0>import org.lgdv.*;
 
 public class One{    
     public static void main(String[] args){
@@ -43,20 +43,8 @@ public class One{
         System.out.println("ENDE" + a[0]);
         System.err.println("ERR");
     }
-}*/</block>
-<block data-visible-lines="auto">
-    console.log("IN ARGS", args)
-    args.t = "Foo"
-    args.ct++
-    CodeBlocks.startReceivingEvents((request) => {
-        console.log("Hello", request.command);       
-        
-        CodeBlocks.postMessage("echo", request.id);
-        if (request.command == "nonce") {                
-            System.exit(0);
-        }
-    });
-</block>
+}</block>
+
 <playground>{
     runner:null,
     init: function(canvasElement, outputElement, scope, runner) {
@@ -66,9 +54,7 @@ public class One{
     },
     addArgumentsTo(args) {
         console.log("Input State", args)
-        //args.push("Hello");
-        if (args.ct === undefined) args.ct = 0
-        args.w = "Hello"
+        args.push("Hello");        
     },
     reset(canvasElement) {},
     onMessage(cmd, data) {   
@@ -90,10 +76,19 @@ public class One{
       <div codeblockseditor data-compiler="javascript" data-compiler-version=102 data-run-code="true" data-max-characters="10000000" data-dom-libs='["phaser-3.24"]'>
         <loading><div></div><div></div></loading> 
         
-        <block data-visible-lines="auto">console.log('Hello You')
-console.log('\n&lt;JSON>\n\n')
-console.log('[{"x":0, "y":0, "color":10}]')
-        </block>                     
+        <block data-visible-lines="auto" data-expanded=0>
+            console.log("IN ARGS", args)
+            args.t = "Foo"
+            args.ct++
+            CodeBlocks.startReceivingEvents((request) => {
+                console.log("Hello", request.command);       
+                
+                CodeBlocks.postMessage("echo", request.id);
+                if (request.command == "nonce") {                
+                    System.exit(0);
+                }
+            });
+        </block>                   
         
         <block>{ 
             scope:undefined,
