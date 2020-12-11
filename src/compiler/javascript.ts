@@ -5,6 +5,7 @@ import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 //load all versions
 import v100 from './javascript.v100'
 import v101 from './javascript.v101'
+import v102 from './javascript.v102'
 
 @Component
 export class JavascriptCompilerInfo extends Vue implements ICompilerInfo {
@@ -12,7 +13,7 @@ export class JavascriptCompilerInfo extends Vue implements ICompilerInfo {
     displayName = 'JavaScript'
 
     //attach all version
-    versions = [v100, v101]
+    versions = [v100, v101, v102]
 
     //declare the default one
     default = v101

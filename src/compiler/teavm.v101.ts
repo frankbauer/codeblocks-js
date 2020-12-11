@@ -292,7 +292,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
 
                         const runListener = (ee: any) => {
                             //console.log('JAVA-WORKER-MSG', ee.data)
-                            console.i('tearunner message', questionID, ee.data, ee.data.command)
+                            console.d('tearunner message', questionID, ee.data, ee.data.command)
                             if (ee.data.command == 'run-finished-setup') {
                                 //Nothing to do here
                             } else if (
