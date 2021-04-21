@@ -90,12 +90,12 @@ public class One{
             });
         </block>                   
         
-        <block>{ 
+        <playground>{ 
             scope:undefined,
             init: function(canvasElement, outputElement, scope, runner) {
                 Phaser.GameObjects.Sprite.prototype.gdi_walkTo = function(x, y){  
                     if (this._gdi_base_v===undefined) {
-                        this._gdi_base_v = 10
+                        this._gdi_base_v = 30
                     }                  
                     const path = new Phaser.Curves.Path(this.x, this.y);
                     path.lineTo(x, y);
@@ -104,7 +104,7 @@ public class One{
                     this._gdi_move = {
                         path:path,
                         t:0,
-                        inc:this._gdi_base_v/l,
+                        inc:3*this._gdi_base_v/l,
                         last:{
                             p:null,
                             d:-1
@@ -275,7 +275,7 @@ public class One{
                             
                 return txt + "\n\nResult:"
             }
-        }</block>
+        }</playground>
         
         
         </div>
