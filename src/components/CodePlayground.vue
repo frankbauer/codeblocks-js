@@ -83,18 +83,18 @@ export interface ICodePlaygroundOptions {
 }
 
 @Component({
-    components: { PlaygroundCanvas, CodeBlock }
+    components: { PlaygroundCanvas, CodeBlock },
 })
 export default class CodePlayground extends BaseBlock {
     @Prop({ required: true }) finalOutputObject!: IScriptOutputObject
     @Prop({
         required: true,
-        validator: function(b) {
+        validator: function (b) {
             if (!b.obj) {
                 return false
             }
             return true
-        }
+        },
     })
     block!: BlockData
 
@@ -123,7 +123,7 @@ export default class CodePlayground extends BaseBlock {
             autoCloseBrackets: true,
             readOnly: !this.editMode,
             firstLineNumber: 1,
-            gutters: ['diagnostics', 'CodeMirror-linenumbers']
+            gutters: ['diagnostics', 'CodeMirror-linenumbers'],
         }
     }
     get visibleLinesNow(): 'auto' | string {
@@ -189,12 +189,12 @@ export default class CodePlayground extends BaseBlock {
         }
 
         this.block.obj.err = this.block.obj.err.concat(this.initAndRebuildErrors)
-        this.block.obj.err.forEach(e => {
+        this.block.obj.err.forEach((e) => {
             let err = {
                 start: { line: e.line, column: e.column },
                 end: { line: e.line, column: e.column + 1 },
                 message: e.msg,
-                severity: Vue.$SEVERITY_ERROR
+                severity: Vue.$SEVERITY_ERROR,
             }
             if (e.line === undefined) {
                 err.start = { line: 1, column: -1 }
@@ -339,7 +339,7 @@ export default class CodePlayground extends BaseBlock {
                                     '</span><div class="jsonErr">' +
                                     val.parseError +
                                     '</div>',
-                                html: true
+                                html: true,
                             })
                             .onOk(() => {
                                 // console.log('OK')
