@@ -1,165 +1,189 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="codeblocks-baseurl" content="<%= BASE_URL %>">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>frontend</title>
-    <link rel=stylesheet href="<%= BASE_URL %>css/loader.css">     
-    <link rel=stylesheet href="<%= BASE_URL %>css/roboto.css">  
-    <link rel=stylesheet href="<%= BASE_URL %>css/main.css">  
-    <script src="<%= BASE_URL %>js/jquery.min.js" type="text/javascript"></script>
-    <style>
-      codeblockseditor > *,  codeblocks > *, [codeblockseditor] > *,  [codeblocks] > *{
-				display:none;        
-      }
-    </style>
-  </head>
-  <body>
-      
-    <noscript>
-      <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true" data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1 data-persistent-arguments=1 data-keep-alive=1>
-        <loading><div></div><div></div></loading> 
-        
-        <block data-visible-lines="auto" data-expanded=0>import org.lgdv.*;
 
-public class One{    
-    public static void main(String[] args){
-        System.out.println("START " + args[0]);
-        args[0] = "Test";
-        CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {
-            System.out.println("Hello" + request.getCommand());       
-            
-            CodeBlocks.postMessage("echo", request.getId());
-            if (request.getCommand().equals("nonce")) {                
-                System.exit(0);
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <meta name="codeblocks-baseurl" content="<%= BASE_URL %>">
+        <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+        <title>frontend</title>
+        <link rel=stylesheet href="<%= BASE_URL %>css/loader.css">
+        <link rel=stylesheet href="<%= BASE_URL %>css/roboto.css">
+        <link rel=stylesheet href="<%= BASE_URL %>css/main.css">
+        <script src="<%= BASE_URL %>js/jquery.min.js" type="text/javascript"></script>
+        <style>
+            codeblockseditor>*,
+            codeblocks>*,
+            [codeblockseditor]>*,
+            [codeblocks]>* {
+                display: none;
             }
-        });
-        int[] a = {1, 2, 3};
-        System.out.println("ENDE" + a[0]);
-        System.err.println("ERR");
-    }
-}</block>
+        </style>
+    </head>
 
-<playground>{
-    runner:null,
-    init: function(canvasElement, outputElement, scope, runner) {
+    <body>
+        <noscript>
+            <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to
+                continue.</strong>
+        </noscript>
+        <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true"
+            data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1
+            data-persistent-arguments=1 data-keep-alive=1>
+            <loading>
+                <div></div>
+                <div></div>
+            </loading>
+
+            <block data-visible-lines="auto" data-expanded=0>import org.lgdv.*;
+
+                public class One{
+                public static void main(String[] args){
+                System.out.println("START " + args[0]);
+                args[0] = "Test";
+                CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {
+                System.out.println("Hello" + request.getCommand());
+
+                CodeBlocks.postMessage("echo", request.getId());
+                if (request.getCommand().equals("nonce")) {
+                System.exit(0);
+                }
+                });
+                int[] a = {1, 2, 3};
+                System.out.println("ENDE" + a[0]);
+                System.err.println("ERR");
+                }
+                }</block>
+
+            <script as="playground" type="application/javascript">
+exports = {
+    runner: null,
+    init: function (canvasElement, outputElement, scope, runner) {
         canvasElement.hide();
         this.runner = runner
-        runner.postMessage('from-init', {})        
+        runner.postMessage('from-init', {})
     },
     addArgumentsTo(args) {
         console.log("Input State", args)
-        args.push("Hello");        
+        args.push("Hello");
     },
     reset(canvasElement) {},
-    onMessage(cmd, data) {   
-        console.log("Message", cmd, data)     
+    onMessage(cmd, data) {
+        console.log("Message", cmd, data)
     },
-    beforeStart() {        
+    beforeStart() {
         console.log("Starting")
-        setTimeout(() => { this.runner.postMessage('nonce', {})}, 2000)
+        setTimeout(() => {
+            this.runner.postMessage('nonce', {})
+        }, 2000)
     },
-    whenFinished(args){
+    whenFinished(args) {
         console.log("Finished", args)
     },
-    update: function(txt, json, canvasElement, outputElement) {
+    update: function (txt, json, canvasElement, outputElement) {
 
     }
-}</playground>
-    </div>
-    <div style="padding-left:50px;padding-right:50px">
-      <div codeblockseditor data-compiler="javascript" data-compiler-version=102 data-run-code="true" data-max-characters="10000000" data-dom-libs='["phaser-3.54"]'>
-        <loading><div></div><div></div></loading> 
-        
-        <block data-visible-lines="auto" data-expanded=0>
-            console.log("IN ARGS", args)
-            args.t = "Foo"
-            args.ct++
-            CodeBlocks.startReceivingEvents((request) => {
-                console.log("Hello", request.command);       
-                
-                CodeBlocks.postMessage("echo", request.id);
-                if (request.command == "nonce") {                
-                    System.exit(0);
-                }
-            });
-        </block>                   
-        
-        <playground>{ 
-            scope:undefined,
-            init: function(canvasElement, outputElement, scope, runner) {                
-                console.log("init")
-                const self = this
-                this.scope = scope
-
-                var game = new Game(canvasElement, '#fdfdfd')
-                game.addImage('tile', 'resources/tile/checker.png')
-                game.addSpriteSheet('figure', 'resources/sprite/figure_blue_big.png', {
-                    frameWidth: 76,
-                    frameHeight: 64,
-                }, true)
-                game.addSpriteSheet('small', 'resources/sprite/figure_blue.png', {
-                    frameWidth: 38,
-                    frameHeight: 32,
-                }, true)
-                game.useIsometricMap(0, 0, 4, 3, 'tile')
-
-                let f1 = undefined
-                game.onCreate = (scene, game) => {
-                    console.log("[PHASER] custom create")
-                    f1 = game.addWalkingSpriteOnTile(2, 1, 'figure', 0)
-                    const f2 = game.addWalkingSpriteOnTile(3, 2, 'figure', 0)
-
-                    setTimeout(()=> {
-                        f2.walkToTile(0, 2)
-                        f1.walkToTile(3, 2)
-                    }, 1000)
-                }
-                
-                game.start(false)
-
-                canvasElement.on('click', (e) => {
-                    const t = game.map.getTileAt(e.offsetX, e.offsetY)
-                    console.log('[PHASER] tile = ', t.column, t.row)
-                    if (t && f1){ 
-                        runner.postMessage('clickedOn', {r:t.row, c:t.column})
-                        f1.walkToTile(t.column, t.row) 
-                    }
-                })             
-            },
-            addArgumentsTo(args) {        
-            },
-            update: function(txt, json, canvasElement, outputElement) {
-                this.output = this.scope.find('#out')
-                this.output.html(this.output.html() + "&lt;br>Hello")
-                
-                console.log("outputElement", outputElement)
-                console.log("this.output", this.output)
-                console.log("html", this.output.html())
-                            
-                return txt + "\n\nResult:"
-            }
-        }</playground>
-        
-        
+}
+            </script>
         </div>
-  </div>
+        <div style="padding-left:50px;padding-right:50px">
+            <div codeblockseditor data-compiler="javascript" data-compiler-version=102 data-run-code="true"
+                data-max-characters="10000000" data-dom-libs='["phaser-3.54"]'>
+                <loading>
+                    <div></div>
+                    <div></div>
+                </loading>
+
+                <block data-visible-lines="auto" data-expanded=0>
+                    console.log("IN ARGS", args)
+                    args.t = "Foo"
+                    args.ct++
+                    CodeBlocks.startReceivingEvents((request) => {
+                    console.log("Hello", request.command);
+
+                    CodeBlocks.postMessage("echo", request.id);
+                    if (request.command == "nonce") {
+                    System.exit(0);
+                    }
+                    });
+                </block>
+
+                <script as="playground" type="application/javascript">
+exports = {
+    scope: undefined,
+    init: function (canvasElement, outputElement, scope, runner) {
+        console.log("INIT from Script tag")
+        canvasElement.css('border', 'none')
+        const self = this
+        this.scope = scope
+
+        var game = new Game(canvasElement, '#fdfdfd')
+        game.addImage('tile', 'resources/tile/checker.png')
+        game.addSpriteSheet('figure', 'resources/sprite/figure_blue_big.png', {
+            frameWidth: 76,
+            frameHeight: 64,
+        }, true)
+        game.addSpriteSheet('small', 'resources/sprite/figure_blue.png', {
+            frameWidth: 38,
+            frameHeight: 32,
+        }, true)
+        game.useIsometricMap(0, 0, 4, 3, 'tile')
+
+        let f1 = undefined
+        game.onCreate = (scene, game) => {
+            console.log("[PHASER] custom create")
+            f1 = game.addWalkingSpriteOnTile(2, 1, 'figure', 0)
+            const f2 = game.addWalkingSpriteOnTile(3, 2, 'figure', 0)
+
+            setTimeout(() => {
+                f2.walkToTile(0, 2)
+                f1.walkToTile(3, 2)
+            }, 1000)
+        }
+
+        game.start(false)
+
+        canvasElement.on('click', (e) => {
+            const t = game.map.getTileAt(e.offsetX, e.offsetY)
+            console.log('[PHASER] tile = ', t.column, t.row)
+            if (t && f1) {
+                runner.postMessage('clickedOn', {
+                    r: t.row,
+                    c: t.column
+                })
+                f1.walkToTile(t.column, t.row)
+            }
+        })
+    },
+    addArgumentsTo(args) {},
+    update: function (txt, json, canvasElement, outputElement) {
+        this.output = this.scope.find('#out')
+        this.output.html(this.output.html() + "<br>Hello")
+
+        console.log("outputElement", outputElement)
+        console.log("this.output", this.output)
+        console.log("html", this.output.html())
+
+        return txt + "\n\nResult:"
+    }
+}
+                </script>
+
+
+            </div>
+        </div>
 
 
 
-</div>
+        </div>
 
-    
-  </div>
-  <script>
-      
-</script>
-    <!-- built files will be auto injected -->
-    
-  </body>
+
+        </div>
+        <script>
+
+        </script>
+        <!-- built files will be auto injected -->
+
+    </body>
+
 </html>

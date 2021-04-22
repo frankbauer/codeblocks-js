@@ -8,20 +8,20 @@ export enum KnownBlockTypes {
     BLOCKHIDDEN = 'BLOCK-hidden',
     BLOCKSTATIC = 'BLOCK-static',
     BLOCK = 'BLOCK',
-    BLOCKLY = 'BLOCKLY'
+    BLOCKLY = 'BLOCKLY',
 }
 
 export enum CodeOutputTypes {
     AUTO = 'auto',
     TEXT = 'text',
     JSON = 'json',
-    MAGIC = 'magic'
+    MAGIC = 'magic',
 }
 
 export enum CodeExpansionType {
     LARGE = 2,
     AUTO = 1,
-    TINY = 0
+    TINY = 0,
 }
 
 export interface IBlockloadManager {
@@ -78,6 +78,7 @@ export interface IBlockElementData {
     scopeUUID?: string
     scopeSelector?: string
     showControls?: boolean
+    as?: string
 }
 
 export interface IBlockDataBlockly {
@@ -116,6 +117,7 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
     shouldAutoreset: boolean
     blockly: IBlockDataBlockly
     lineCountHint: number
+    as?: KnownBlockTypes
 }
 
 export interface IBlockData extends IBlockDataBase {

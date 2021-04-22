@@ -394,7 +394,13 @@ class InternalCodeBlocksManager {
                 return
             }
             const inBlock = bl.dataset as IBlockElementData
+            const as = bl.getAttribute('as')
+            if (as !== null) {
+                inBlock.as = as.trim().toUpperCase()
+            }
+
             const block: IBlockDataBase = {
+                as: inBlock.as ? KnownBlockTypes[inBlock.as] : undefined,
                 hasCode: false,
                 version: '101',
                 type: bl.tagName as KnownBlockTypes,
@@ -469,10 +475,14 @@ class InternalCodeBlocksManager {
             }
 
             if (block.type != 'TEXT') {
+                console.log('BL', block.type, block.as)
+                if (block.as) {
+                    block.type = block.as
+                }
                 const loader = loaders[block.type]
-                console.d('LOADER', loader, loaders, block.type)
+                console.d('LOADER', loader, loaders, block.type, block.as)
                 if (loader === undefined) {
-                    console.i('Skipping', block.type)
+                    console.i('Skipping', block.type, block.as)
                     return
                 } else {
                     loader.loadFromDatablock(bl, inBlock, block, data.editMode)

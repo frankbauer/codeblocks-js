@@ -22,6 +22,6 @@ export class PlaygroundLoadManager implements IBlockloadManager {
 
 export const playgroundLoader = new PlaygroundLoadManager()
 
-export default function(loaders: { [index: string]: IBlockloadManager }) {
+export default function (loaders: { [index: string]: IBlockloadManager }) {
     loaders[playgroundLoader.blockTag] = playgroundLoader
 }
