@@ -520,7 +520,7 @@ class IsometricMapGame {
             game.addSpriteSheet(`figure.${idx}`, uri, fInfo, true);
         });
         game.addImage('tile', this.tileURI);
-        game.useIsometricMap(0, 0, this.columns, this.rows, 'tile');
+        game.useIsometricMap(0, 30, this.columns, this.rows, 'tile');
         game.onPreload = (scene, game) => {
             if (this.onPreload) {
                 this.onPreload(game, this);
