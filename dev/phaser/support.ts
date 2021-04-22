@@ -52,6 +52,10 @@ class WalkingSprite {
     private base_v: number = 5
     private move: GdIMove | undefined = undefined
     private animKey: string
+
+    public onEnterTile: (tile: IMapTile) => void
+    public onLeaveTile: (tile: IMapTile) => void
+
     private constructor(
         game: Game,
         sprite: Phaser.GameObjects.Sprite,
@@ -60,6 +64,11 @@ class WalkingSprite {
         this.sprite = sprite
         this.game = game
         this.animKey = config.texture
+
+        this.onEnterTile = () => {}
+        this.onLeaveTile = () => {}
+
+        this.updateCurrentTile()
     }
 
     static add(game: Game, scene: Phaser.Scene, config: AnimatedSpriteConfig): WalkingSprite {
@@ -90,6 +99,8 @@ class WalkingSprite {
     moveTo(x: number, y: number) {
         this.sprite.x = x
         this.sprite.y = y
+
+        this.updateCurrentTile()
     }
 
     walkToTile(c: number, r: number) {
@@ -118,6 +129,25 @@ class WalkingSprite {
 
     setBaseSpeed(bsp: number) {
         this.base_v = bsp
+    }
+
+    _currentTile: IMapTile | undefined
+    public get currentTile() {
+        return this._currentTile
+    }
+
+    private updateCurrentTile() {
+        const tile = this.game.map?.getTileAt(this.sprite.x, this.sprite.y)
+        if (tile !== this._currentTile) {
+            if (this._currentTile) {
+                this.onLeaveTile(this._currentTile)
+            }
+            if (tile) {
+                this.onEnterTile(tile)
+                console.log(`[PHASER] Changed Tile to ${tile.column}/${tile.row}`)
+            }
+            this._currentTile = tile
+        }
     }
 
     update(time: number, delta: number) {
@@ -155,6 +185,8 @@ class WalkingSprite {
             o.last.p = p
 
             o.t += o.inc * delta
+
+            this.updateCurrentTile()
         }
     }
 }
@@ -168,17 +200,24 @@ interface IMapTile {
     readonly bottom: Phaser.Math.Vector2
     readonly center: Phaser.Math.Vector2
     readonly bounds: Phaser.Geom.Rectangle
+
+    readonly row: number
+    readonly column: number
 }
 
 class IsometricTile implements IMapTile {
     public readonly map: IsometricMap
     public readonly image: Phaser.GameObjects.Image
+    public readonly row: number
+    public readonly column: number
 
-    constructor(map: IsometricMap, x: number, y: number, type: string) {
+    constructor(map: IsometricMap, x: number, y: number, type: string, c: number, r: number) {
         this.map = map
 
         this.image = map.scene.add.image(x, y, type)
         this.image.setOrigin(0, 0)
+        this.row = r
+        this.column = c
         console.log('[PHASER]', this.bounds)
     }
 
@@ -288,7 +327,7 @@ class TiledMap implements ITiledMap {
         } else {
             cf = Math.floor(cf)
         }
-        console.log(`[PHASER] TielAt ${x}/${y} => ${cf}/${rf}`)
+        //console.log(`[PHASER] TielAt ${x}/${y} => ${cf}/${rf}`)
         if (cf < 0 || cf >= this.columns || rf < 0 || rf >= this.rows) {
             return undefined
         }
@@ -336,7 +375,9 @@ class IsometricMap extends TiledMap {
                     this,
                     this.origin.x + c * this.dirX.x + r * this.dirY.x,
                     this.origin.y + c * this.dirX.y + r * this.dirY.y - this.tileHeight / 2,
-                    config.tileType
+                    config.tileType,
+                    c,
+                    r
                 )
             }
         }

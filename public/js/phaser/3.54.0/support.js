@@ -11,6 +11,9 @@ class WalkingSprite {
         this.sprite = sprite;
         this.game = game;
         this.animKey = config.texture;
+        this.onEnterTile = () => { };
+        this.onLeaveTile = () => { };
+        this.updateCurrentTile();
     }
     static add(game, scene, config) {
         const s = scene.add.sprite(config.x, config.y, config.texture, config.frame);
@@ -37,6 +40,7 @@ class WalkingSprite {
     moveTo(x, y) {
         this.sprite.x = x;
         this.sprite.y = y;
+        this.updateCurrentTile();
     }
     walkToTile(c, r) {
         var _a;
@@ -63,6 +67,23 @@ class WalkingSprite {
     }
     setBaseSpeed(bsp) {
         this.base_v = bsp;
+    }
+    get currentTile() {
+        return this._currentTile;
+    }
+    updateCurrentTile() {
+        var _a;
+        const tile = (_a = this.game.map) === null || _a === void 0 ? void 0 : _a.getTileAt(this.sprite.x, this.sprite.y);
+        if (tile !== this._currentTile) {
+            if (this._currentTile) {
+                this.onLeaveTile(this._currentTile);
+            }
+            if (tile) {
+                this.onEnterTile(tile);
+                console.log(`[PHASER] Changed Tile to ${tile.column}/${tile.row}`);
+            }
+            this._currentTile = tile;
+        }
     }
     update(time, delta) {
         delta /= 1000;
@@ -97,14 +118,17 @@ class WalkingSprite {
             }
             o.last.p = p;
             o.t += o.inc * delta;
+            this.updateCurrentTile();
         }
     }
 }
 class IsometricTile {
-    constructor(map, x, y, type) {
+    constructor(map, x, y, type, c, r) {
         this.map = map;
         this.image = map.scene.add.image(x, y, type);
         this.image.setOrigin(0, 0);
+        this.row = r;
+        this.column = c;
         console.log('[PHASER]', this.bounds);
     }
     get width() {
@@ -197,7 +221,7 @@ class TiledMap {
         else {
             cf = Math.floor(cf);
         }
-        console.log(`[PHASER] TielAt ${x}/${y} => ${cf}/${rf}`);
+        //console.log(`[PHASER] TielAt ${x}/${y} => ${cf}/${rf}`)
         if (cf < 0 || cf >= this.columns || rf < 0 || rf >= this.rows) {
             return undefined;
         }
@@ -214,7 +238,7 @@ class IsometricMap extends TiledMap {
             const roy = oy + (r + 1) * (this._tileHeight / 2);
             const rox = ox + r * (this._tileWidth / 2);
             for (let c = config.columns - 1; c >= 0; c--) {
-                this.tiles[r][c] = new IsometricTile(this, this.origin.x + c * this.dirX.x + r * this.dirY.x, this.origin.y + c * this.dirX.y + r * this.dirY.y - this.tileHeight / 2, config.tileType);
+                this.tiles[r][c] = new IsometricTile(this, this.origin.x + c * this.dirX.x + r * this.dirY.x, this.origin.y + c * this.dirX.y + r * this.dirY.y - this.tileHeight / 2, config.tileType, c, r);
             }
         }
     }

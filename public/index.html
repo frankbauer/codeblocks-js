@@ -92,31 +92,11 @@ public class One{
         
         <playground>{ 
             scope:undefined,
-            init: function(canvasElement, outputElement, scope, runner) {
-                
+            init: function(canvasElement, outputElement, scope, runner) {                
                 console.log("init")
                 const self = this
                 this.scope = scope
-                
 
-                var config = {
-                    type: Phaser.AUTO,
-                    backgroundColor: '#fdfdfd',
-                    scale: {
-                        parent: canvasElement[0],
-                        mode: Phaser.Scale.NONE,
-                        width: canvasElement.width(),
-                        height: canvasElement.height(),
-                        zoom: 1
-                    },
-                    scene: {
-                        preload: preload,
-                        create: create,
-                        update: update
-                    }
-                };
-                
-                //var game = new Phaser.Game(config);
                 var game = new Game(canvasElement, '#fdfdfd')
                 game.addImage('tile', 'resources/tile/checker.png')
                 game.addSpriteSheet('figure', 'resources/sprite/figure_blue_big.png', {
@@ -129,9 +109,10 @@ public class One{
                 }, true)
                 game.useIsometricMap(0, 0, 4, 3, 'tile')
 
+                let f1 = undefined
                 game.onCreate = (scene, game) => {
                     console.log("[PHASER] custom create")
-                    const f1 = game.addWalkingSpriteOnTile(2, 1, 'figure', 0)
+                    f1 = game.addWalkingSpriteOnTile(2, 1, 'figure', 0)
                     const f2 = game.addWalkingSpriteOnTile(3, 2, 'figure', 0)
 
                     setTimeout(()=> {
@@ -144,93 +125,12 @@ public class One{
 
                 canvasElement.on('click', (e) => {
                     const t = game.map.getTileAt(e.offsetX, e.offsetY)
-                    console.log('[PHASER] tile = ', t)
-                })
-
-                function resize() {
-                    let w = canvasElement.width();
-                    let h = canvasElement.height();
-                    // manually resize the game with the Phaser 3.16 scalemanager
-                    this.scale.resize(w, h);
-                    // Check which scene is active.
-                    for (let scene of this.scene.manager.scenes) {
-                        if (scene.scene.settings.active) {
-                            // Scale the camera
-                            scene.cameras.main.setViewport(0, 0, w, h);
-                            if (scene.resizeField) {
-                                // Scale/position stuff in the scene itself with this method, that the scene must implement.
-                                scene.resizeField(w, h);
-                            }
-                        }
+                    console.log('[PHASER] tile = ', t.column, t.row)
+                    if (t && f1){ 
+                        runner.postMessage('clickedOn', {r:t.row, c:t.column})
+                        f1.walkToTile(t.column, t.row) 
                     }
-                }
-                //window.addEventListener('resize', resize.bind(this));
-                
-                function preload ()
-                {
-                    this.load.image('tile', 'resources/tile/checker.png')
-                    this.load.spritesheet('figure', 'resources/sprite/figure_blue_big.png',
-                    {frameWidth:76, frameHeight:64});
-                    this.load.spritesheet('small', 'resources/sprite/figure_blue.png',
-                    {frameWidth:38, frameHeight:32});
-                }
-
-                let f1 = null;
-                let f2 = null;
-                
-               
-                function create ()
-                {
-                    this.cameras.main.setRoundPixels(true);
-
-                    this.add.image(100, 100, 'tile')
-                    this.add.image(190, 100, 'tile')
-                    this.add.image(280, 100, 'tile')
-                    this.add.image(145, 126, 'tile')
-                    this.add.image(235, 126, 'tile')
-                    this.add.image(100, 152, 'tile')
-                    this.add.image(190, 152, 'tile')
-                    this.add.image(280, 152, 'tile')
-                    this.add.image(145, 178, 'tile')
-                    this.add.image(235, 178, 'tile')
-
-                    const oy = 36/64;
-                    const ox = 37/76;
-                    f1 = WalkingSprite.add(this, 190, 84, 'figure', 0)
-                    f1.moveTo(ox, oy)
-                    this.add.sprite(100, 84, 'small', 0).setOrigin(ox, oy)            
-                    
-                    f2 = WalkingSprite.add(this, 280, 84, 'figure', 0)
-                    f2.moveTo(ox, oy)
-
-                    animNamesByDir.forEach((name, nr) => {
-                        const idx = sheetIndex[nr];
-                        const conf = { start: idx*20, end: idx*20 + 19 };
-                        console.log('ADD', name, conf)
-                        this.anims.create({
-                            key: 'figure-'+name,
-                            frames: this.anims.generateFrameNumbers('figure', conf),
-                            frameRate: 25,
-                            repeat: -1
-                        });
-                    })                    
-                    
-
-                    
-                    f2.sprite.anims.play('figure-O')
-                    f1.sprite.anims.play('figure-S')
-                    f2.walkTo(280-3*45, 84+3*26)
-                    f1.walkTo(280, 84)
-                }
-                
-                
-                
-                function update (time, delta)
-                {
-                    f1.update(time, delta)
-                    f2.update(time, delta)
-                    
-                }                
+                })             
             },
             addArgumentsTo(args) {        
             },
