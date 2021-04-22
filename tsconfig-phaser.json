@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "es6",
+      "strict": true,
+      "noImplicitAny": false,
+      "jsx": "preserve",
+      "importHelpers": true,
+      "moduleResolution": "node",
+      "experimentalDecorators": true,
+      "esModuleInterop": false,
+      "strictBindCallApply": true,
+      "allowSyntheticDefaultImports": true,
+      "sourceMap": true,
+      "baseUrl": ".",
+      "types": [
+        "webpack-env",
+        "jquery"
+      ],
+      "paths": {
+        "@/*": [
+          "./public/js/phaser/3.54.0/*"
+        ]
+      },
+      "lib": [
+        "esnext",
+        "dom",
+        "dom.iterable",
+        "scripthost",
+      ]
+    },
+    "include": [
+      "public/js/phaser/3.54.0/*.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ],
+    "typeRoots": [ "./public/js/phaser/3.54.0/types/"]
+  }
+  

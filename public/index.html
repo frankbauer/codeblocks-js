@@ -73,7 +73,7 @@ public class One{
 }</playground>
     </div>
     <div style="padding-left:50px;padding-right:50px">
-      <div codeblockseditor data-compiler="javascript" data-compiler-version=102 data-run-code="true" data-max-characters="10000000" data-dom-libs='["phaser-3.24"]'>
+      <div codeblockseditor data-compiler="javascript" data-compiler-version=102 data-run-code="true" data-max-characters="10000000" data-dom-libs='["phaser-3.54"]'>
         <loading><div></div><div></div></loading> 
         
         <block data-visible-lines="auto" data-expanded=0>
@@ -93,65 +93,7 @@ public class One{
         <playground>{ 
             scope:undefined,
             init: function(canvasElement, outputElement, scope, runner) {
-                Phaser.GameObjects.Sprite.prototype.gdi_walkTo = function(x, y){  
-                    if (this._gdi_base_v===undefined) {
-                        this._gdi_base_v = 30
-                    }                  
-                    const path = new Phaser.Curves.Path(this.x, this.y);
-                    path.lineTo(x, y);
-                    const l = new Phaser.Math.Vector2(this.x-x, this.y-y).length()
-                    //console.log(l)
-                    this._gdi_move = {
-                        path:path,
-                        t:0,
-                        inc:3*this._gdi_base_v/l,
-                        last:{
-                            p:null,
-                            d:-1
-                        }
-                    }
-                }
-
-                Phaser.GameObjects.Sprite.prototype.gdi_setBaseSpeed = function(bsp){
-                    this._gdi_base_v = bsp
-                }
-
-                Phaser.GameObjects.Sprite.prototype.gdi_update = function(time, delta){
-                    delta /= 1000
-                    const o = this._gdi_move
-                    if (o){
-                        if (o.t > 1){                            
-                            const frame = this.anims.currentFrame                            
-                            this.anims.stop()
-                            this.setFrame(frame.textureFrame - frame.index + 1)
-                            this._gdi_move = undefined    
-                            return                                                    
-                        }                        
-                        const p = o.path.getPoint(Phaser.Math.Easing.Sine.InOut(o.t))
-                        this.x = p.x
-                        this.y = p.y;
-    
-                        let v = 0;
-                        let dir = 0;
-                        if (o.last.p!==null){
-                            const d = o.last.p.subtract(p);
-                            v = (o.last.p.length() / delta) * this._gdi_base_v
-                            dir = Math.floor((o.last.p.angle() - Math.PI/8 )/ (Math.PI/4))
-                            if (dir &lt; 0) dir += 8
-                            //console.log(Math.max(0.3, v * 0.65))
-                            this.anims.setTimeScale(Math.max(0.3, v * 0.005))
-                            if (dir != o.last.d && v > 0.05){
-                                const frame = this.anims.currentFrame.index
-                                this.anims.play('figure-'+animNamesByDir[dir], true, frame)  
-                                o.last.d = dir
-                            }
-                            
-                        }
-                        o.last.p = p;
-
-                        o.t += o.inc * delta                       
-                    }
-                }
+                
                 console.log("init")
                 const self = this
                 this.scope = scope
@@ -174,7 +116,29 @@ public class One{
                     }
                 };
                 
-                var game = new Phaser.Game(config);
+                //var game = new Phaser.Game(config);
+                var game = new Game(canvasElement, '#fdfdfd')
+                game.addImage('tile', 'resources/tile/checker.png')
+                game.addSpriteSheet('figure', 'resources/sprite/figure_blue_big.png', {
+                    frameWidth: 76,
+                    frameHeight: 64,
+                }, true)
+                game.addSpriteSheet('small', 'resources/sprite/figure_blue.png', {
+                    frameWidth: 38,
+                    frameHeight: 32,
+                }, true)
+                game.useIsometricMap(0, 0, 4, 3, 'tile')
+
+                game.onCreate = (scene, game) => {
+                    console.log("[PHASER] custom create")
+                    const f1 = game.addWalkingSprite(190, 84, 'figure', 0)
+                    const f2 = game.addWalkingSprite(280, 84, 'figure', 0)
+
+                    f2.walkTo(280-3*45, 84+3*26)
+                    f1.walkTo(280, 84)
+                }
+                
+                game.start(false)
 
                 function resize() {
                     let w = canvasElement.width();
@@ -207,8 +171,7 @@ public class One{
                 let f1 = null;
                 let f2 = null;
                 
-                const animNamesByDir = ['N', 'NO', 'O', 'SO', 'S', 'SW', 'W', 'NW'];
-                const sheetIndex = [0, 1, 3, 5, 4, 6, 7, 2];
+               
                 function create ()
                 {
                     this.cameras.main.setRoundPixels(true);
@@ -226,12 +189,12 @@ public class One{
 
                     const oy = 36/64;
                     const ox = 37/76;
-                    f1 = this.add.sprite(190, 84, 'figure', 0)
-                    f1.setOrigin(ox, oy)
+                    f1 = WalkingSprite.add(this, 190, 84, 'figure', 0)
+                    f1.moveTo(ox, oy)
                     this.add.sprite(100, 84, 'small', 0).setOrigin(ox, oy)            
                     
-                    f2 = this.add.sprite(280, 84, 'figure', 0)
-                    f2.setOrigin(ox, oy)
+                    f2 = WalkingSprite.add(this, 280, 84, 'figure', 0)
+                    f2.moveTo(ox, oy)
 
                     animNamesByDir.forEach((name, nr) => {
                         const idx = sheetIndex[nr];
@@ -246,20 +209,19 @@ public class One{
                     })                    
                     
 
-                    f2.anims.setTimeScale(0.01)
-
-                    f2.anims.play('figure-O')
-                    f1.anims.play('figure-S')
-                    f2.gdi_walkTo(280-3*45, 84+3*26)
-                    f1.gdi_walkTo(280, 84)
+                    
+                    f2.sprite.anims.play('figure-O')
+                    f1.sprite.anims.play('figure-S')
+                    f2.walkTo(280-3*45, 84+3*26)
+                    f1.walkTo(280, 84)
                 }
                 
                 
                 
                 function update (time, delta)
                 {
-                    f1.gdi_update(time, delta)
-                    f2.gdi_update(time, delta)
+                    f1.update(time, delta)
+                    f2.update(time, delta)
                     
                 }                
             },

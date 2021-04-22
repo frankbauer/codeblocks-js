@@ -5,6 +5,8 @@
     "scripts": {
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
+        "dev-phaser":"tsc -p ./tsconfig-phaser.json -w",
+        "build-phaser":"tsc -p ./tsconfig-phaser.json",
         "build-lib": "vue-cli-service build --entry ./src/main.ts --target lib",
         "build-ilias": "node ilias-builder.js",
         "build-examples": "node examples-builder.js"
