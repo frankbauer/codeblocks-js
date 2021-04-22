@@ -73,9 +73,20 @@ export class ScriptBlock implements IScriptBlock {
     private src: string | undefined = undefined
     private fkt: Function | undefined = undefined
     private obj: IPlaygroundObject | ILegacyPlaygroundObject | undefined = undefined
-
+    private didInit: boolean = false
     constructor(script: string, public version: string) {
-        this.rebuild(script)
+        //this.rebuild(script)
+        this.didInit = false
+        this.src = script
+        this.obj = {
+            init: () => {
+                console.error('FAILED INIT ATTEMPT')
+            },
+            update: () => {
+                console.error('FAILED UPDATE ATTEMPT')
+                return undefined
+            },
+        }
     }
 
     requestsOriginalVersion() {
@@ -121,7 +132,17 @@ export class ScriptBlock implements IScriptBlock {
     pushError(e: any) {
         this.err.push(jsErrorParser(e))
     }
+
+    private lazyInit() {
+        if (!this.didInit) {
+            this.obj = undefined
+            this.rebuild(this.src)
+            this.didInit = true
+        }
+    }
+
     addArgumentsTo(args: object | string[]) {
+        this.lazyInit()
         if (this.obj && !this.requestsOriginalVersion()) {
             const o = this.obj as IPlaygroundObject
             if (o.addArgumentsTo) {
@@ -176,6 +197,7 @@ export class ScriptBlock implements IScriptBlock {
     }
     queuedIncomingMessages: any[] = []
     didReceiveMessage(cmd: string, data: any) {
+        this.lazyInit()
         if (this.obj && !this.requestsOriginalVersion()) {
             const o = this.obj as IPlaygroundObject
             if (o.onMessage === undefined) {
@@ -198,6 +220,7 @@ export class ScriptBlock implements IScriptBlock {
     }
 
     beforeStart() {
+        this.lazyInit()
         if (this.obj && !this.requestsOriginalVersion()) {
             const o = this.obj as IPlaygroundObject
             if (o.beforeStart) {
@@ -208,6 +231,7 @@ export class ScriptBlock implements IScriptBlock {
     }
 
     whenFinished(args: string[] | object) {
+        this.lazyInit()
         if (this.obj && !this.requestsOriginalVersion()) {
             const o = this.obj as IPlaygroundObject
             if (o.whenFinished) {
@@ -220,6 +244,7 @@ export class ScriptBlock implements IScriptBlock {
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void {
         this.queuedMessages = []
         this.queuedIncomingMessages = []
+        this.lazyInit()
         console.i('MESSAGE - Reset Queue from Init')
         if (this.obj === undefined) {
             return
@@ -255,6 +280,7 @@ export class ScriptBlock implements IScriptBlock {
     reset(canvasElement: JQuery<HTMLElement>): void {
         this.queuedMessages = []
         this.queuedIncomingMessages = []
+        this.lazyInit()
         console.i('MESSAGE - Reset Queue from Reset')
         if (this.obj && this.obj.reset && !this.requestsOriginalVersion()) {
             this.obj.reset(canvasElement)
@@ -265,6 +291,7 @@ export class ScriptBlock implements IScriptBlock {
         outputObject: IScriptOutputObject,
         canvasElement: JQuery<HTMLElement>
     ): string | undefined {
+        this.lazyInit()
         if (this.obj === undefined) {
             return outputObject.output
         }
@@ -299,6 +326,7 @@ export class ScriptBlock implements IScriptBlock {
     }
 
     onParseError(initialOutput: string, parseError: string): boolean {
+        this.lazyInit()
         if (this.obj === undefined) {
             return false
         }
