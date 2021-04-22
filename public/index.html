@@ -109,64 +109,18 @@ exports = {
                 </block>
 
                 <script as="playground" type="application/javascript">
-exports = {
-    scope: undefined,
-    init: function (canvasElement, outputElement, scope, runner) {
-        console.log("INIT from Script tag")
-        canvasElement.css('border', 'none')
-        const self = this
-        this.scope = scope
-
-        var game = new Game(canvasElement, '#fdfdfd')
-        game.addImage('tile', 'resources/tile/checker.png')
-        game.addSpriteSheet('figure', 'resources/sprite/figure_blue_big.png', {
-            frameWidth: 76,
-            frameHeight: 64,
-        }, true)
-        game.addSpriteSheet('small', 'resources/sprite/figure_blue.png', {
-            frameWidth: 38,
-            frameHeight: 32,
-        }, true)
-        game.useIsometricMap(0, 0, 4, 3, 'tile')
-
-        let f1 = undefined
-        game.onCreate = (scene, game) => {
-            console.log("[PHASER] custom create")
-            f1 = game.addWalkingSpriteOnTile(2, 1, 'figure', 0)
-            const f2 = game.addWalkingSpriteOnTile(3, 2, 'figure', 0)
-
-            setTimeout(() => {
-                f2.walkToTile(0, 2)
-                f1.walkToTile(3, 2)
-            }, 1000)
-        }
-
-        game.start(false)
-
-        canvasElement.on('click', (e) => {
-            const t = game.map.getTileAt(e.offsetX, e.offsetY)
-            console.log('[PHASER] tile = ', t.column, t.row)
-            if (t && f1) {
-                runner.postMessage('clickedOn', {
-                    r: t.row,
-                    c: t.column
-                })
-                f1.walkToTile(t.column, t.row)
-            }
-        })
-    },
-    addArgumentsTo(args) {},
-    update: function (txt, json, canvasElement, outputElement) {
-        this.output = this.scope.find('#out')
-        this.output.html(this.output.html() + "<br>Hello")
-
-        console.log("outputElement", outputElement)
-        console.log("this.output", this.output)
-        console.log("html", this.output.html())
-
-        return txt + "\n\nResult:"
+exports = new IsometricMapGame(4, 3, 'resources/tile/checker.png', ['resources/sprite/figure_blue_big.png', 'resources/sprite/figure_blue.png'], '#fdfdfd', (game, manager)=>{
+    manager.onCreate = () => {
+        manager.figures[0].moveToTile(2, 1)
+        manager.figures[1].moveToTile(3, 2)
     }
-}
+
+    manager.onClick = (tile) => {
+        manager.figures[0].walkToTile(tile.column, tile.row)
+    }
+})
+
+
                 </script>
 
 

@@ -13,6 +13,7 @@ class WalkingSprite {
         this.animKey = config.texture;
         this.onEnterTile = () => { };
         this.onLeaveTile = () => { };
+        this.onFinishedWalking = () => { };
         this.updateCurrentTile();
     }
     static add(game, scene, config) {
@@ -76,10 +77,10 @@ class WalkingSprite {
         const tile = (_a = this.game.map) === null || _a === void 0 ? void 0 : _a.getTileAt(this.sprite.x, this.sprite.y);
         if (tile !== this._currentTile) {
             if (this._currentTile) {
-                this.onLeaveTile(this._currentTile);
+                this.onLeaveTile(this._currentTile, this);
             }
             if (tile) {
-                this.onEnterTile(tile);
+                this.onEnterTile(tile, this);
                 console.log(`[PHASER] Changed Tile to ${tile.column}/${tile.row}`);
             }
             this._currentTile = tile;
@@ -94,6 +95,7 @@ class WalkingSprite {
                 this.sprite.anims.stop();
                 this.sprite.setFrame(+frame.textureFrame - frame.index + 1);
                 this.move = undefined;
+                this.onFinishedWalking(this);
                 return;
             }
             const p = o.path.getPoint(Phaser.Math.Easing.Sine.InOut(o.t));
@@ -129,7 +131,6 @@ class IsometricTile {
         this.image.setOrigin(0, 0);
         this.row = r;
         this.column = c;
-        console.log('[PHASER]', this.bounds);
     }
     get width() {
         return this.image.displayWidth;
@@ -478,10 +479,81 @@ class Game {
     }
 }
 class IsometricMapGame {
-    constructor() { }
-    init(canvasElement, outputElement, scope, runner) {
-        console.log('INIT LLLLLLLLLLL');
+    constructor(columns, rows, tileURI, figureURIs, backgroundColor, onPreload) {
+        this.columns = columns;
+        this.rows = rows;
+        this.tileURI = tileURI;
+        this.figureURIs = figureURIs;
+        this.backgroundColor = backgroundColor;
+        this.onPreload = onPreload;
+        this.scope = jQuery();
+        this.figures = [];
+        this.onCreate = () => { };
+        this.onClick = () => { };
+        this.onEnterTile = () => { };
+        this.onLeaveTile = () => { };
+        this.onFinishedWalking = () => { };
     }
-    update(txt, json, canvasElement, outputElement) { }
+    init(canvasElement, outputElement, scope, runner) {
+        console.log('INIT ISOMETRIC GAME');
+        canvasElement.css('border', 'none');
+        const self = this;
+        this.scope = scope;
+        const game = new Game(canvasElement, this.backgroundColor);
+        this.game = game;
+        this.figureURIs
+            .filter((v, i, a) => a.indexOf(v) === i)
+            .forEach((uri, idx) => {
+            let fInfo;
+            if (uri.indexOf('_big') >= 0) {
+                fInfo = {
+                    frameWidth: 76,
+                    frameHeight: 64,
+                };
+            }
+            else {
+                fInfo = {
+                    frameWidth: 38,
+                    frameHeight: 32,
+                };
+            }
+            game.addSpriteSheet(`figure.${idx}`, uri, fInfo, true);
+        });
+        game.addImage('tile', this.tileURI);
+        game.useIsometricMap(0, 0, this.columns, this.rows, 'tile');
+        game.onPreload = (scene, game) => {
+            if (this.onPreload) {
+                this.onPreload(game, this);
+            }
+        };
+        game.onCreate = (scene, game) => {
+            this.figures = this.figureURIs.map((uri, i, a) => {
+                const idx = a.indexOf(uri);
+                const name = `figure.${idx}`;
+                const f = game.addWalkingSpriteOnTile(0, 0, name, 0);
+                f.onEnterTile = this.onEnterTile.bind(this);
+                f.onLeaveTile = this.onLeaveTile.bind(this);
+                f.onFinishedWalking = this.onFinishedWalking.bind(this);
+                return f;
+            });
+            this.onCreate();
+        };
+        game.start(false);
+        canvasElement.on('click', (e) => {
+            var _a;
+            const t = (_a = game.map) === null || _a === void 0 ? void 0 : _a.getTileAt(e.offsetX, e.offsetY);
+            if (t !== undefined) {
+                this.onClick(t);
+                console.log('[PHASER] tile = ', t.column, t.row);
+                runner.postMessage('click', {
+                    r: t.row,
+                    c: t.column,
+                });
+            }
+        });
+    }
+    update(txt, json, canvasElement, outputElement) {
+        console.log('UPDATE ISOMETRIC GAME');
+    }
 }
 //# sourceMappingURL=support.js.map
