@@ -26,9 +26,25 @@ class WalkingSprite {
     setOrigin(x, y) {
         this.sprite.setOrigin(x, y);
     }
+    moveToTile(c, r) {
+        var _a;
+        const tile = (_a = this.game.map) === null || _a === void 0 ? void 0 : _a.getTile(c, r);
+        if (tile) {
+            const p = tile.center;
+            this.moveTo(p.x, p.y);
+        }
+    }
     moveTo(x, y) {
         this.sprite.x = x;
         this.sprite.y = y;
+    }
+    walkToTile(c, r) {
+        var _a;
+        const tile = (_a = this.game.map) === null || _a === void 0 ? void 0 : _a.getTile(c, r);
+        if (tile) {
+            const p = tile.center;
+            this.walkTo(p.x, p.y);
+        }
     }
     walkTo(x, y) {
         const path = new Phaser.Curves.Path(this.sprite.x, this.sprite.y);
@@ -275,6 +291,18 @@ class Game {
                 this.walkingSprites.push(ws);
             }
             return ws;
+        }
+        return undefined;
+    }
+    addWalkingSpriteOnTile(c, r, texture, frame, originX, originY, speed) {
+        var _a;
+        const tile = (_a = this.map) === null || _a === void 0 ? void 0 : _a.getTile(c, r);
+        if (tile) {
+            const p = tile.center;
+            return this.addWalkingSprite(p.x, p.y, texture, frame, originX, originY, speed);
+        }
+        else {
+            console.error(`[PHASER] Tile ${c}/${r} does not exists.`);
         }
         return undefined;
     }

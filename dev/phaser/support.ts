@@ -79,9 +79,25 @@ class WalkingSprite {
         this.sprite.setOrigin(x, y)
     }
 
+    moveToTile(c: number, r: number) {
+        const tile = this.game.map?.getTile(c, r)
+        if (tile) {
+            const p = tile.center
+            this.moveTo(p.x, p.y)
+        }
+    }
+
     moveTo(x: number, y: number) {
         this.sprite.x = x
         this.sprite.y = y
+    }
+
+    walkToTile(c: number, r: number) {
+        const tile = this.game.map?.getTile(c, r)
+        if (tile) {
+            const p = tile.center
+            this.walkTo(p.x, p.y)
+        }
     }
 
     walkTo(x: number, y: number) {
@@ -426,6 +442,25 @@ class Game {
                 this.walkingSprites.push(ws)
             }
             return ws
+        }
+        return undefined
+    }
+
+    public addWalkingSpriteOnTile(
+        c: number,
+        r: number,
+        texture: string,
+        frame?: string | number,
+        originX?: number,
+        originY?: number,
+        speed?: number
+    ) {
+        const tile = this.map?.getTile(c, r)
+        if (tile) {
+            const p = tile.center
+            return this.addWalkingSprite(p.x, p.y, texture, frame, originX, originY, speed)
+        } else {
+            console.error(`[PHASER] Tile ${c}/${r} does not exists.`)
         }
         return undefined
     }

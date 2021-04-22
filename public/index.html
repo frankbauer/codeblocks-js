@@ -127,15 +127,17 @@ public class One{
                     frameWidth: 38,
                     frameHeight: 32,
                 }, true)
-                game.useIsometricMap(0, 0, 4, 2, 'tile')
+                game.useIsometricMap(0, 0, 4, 3, 'tile')
 
                 game.onCreate = (scene, game) => {
                     console.log("[PHASER] custom create")
-                    const f1 = game.addWalkingSprite(190, 84, 'figure', 0)
-                    const f2 = game.addWalkingSprite(280, 84, 'figure', 0)
+                    const f1 = game.addWalkingSpriteOnTile(2, 1, 'figure', 0)
+                    const f2 = game.addWalkingSpriteOnTile(3, 2, 'figure', 0)
 
-                    f2.walkTo(280-3*45, 84+3*26)
-                    f1.walkTo(280, 84)
+                    setTimeout(()=> {
+                        f2.walkToTile(0, 2)
+                        f1.walkToTile(3, 2)
+                    }, 1000)
                 }
                 
                 game.start(false)
