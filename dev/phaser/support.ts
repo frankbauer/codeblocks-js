@@ -687,3 +687,11 @@ class Game {
         }
     }
 }
+
+class IsometricMapGame {
+    constructor() {}
+    init(canvasElement, outputElement, scope, runner) {
+        console.log('INIT LLLLLLLLLLL')
+    }
+    update(txt, json, canvasElement, outputElement) {}
+}
