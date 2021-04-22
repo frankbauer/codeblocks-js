@@ -1,40 +1,41 @@
 {
     "compilerOptions": {
-      "target": "es6",
-      "module": "es6",
-      "strict": true,
-      "noImplicitAny": false,
-      "jsx": "preserve",
-      "importHelpers": true,
-      "moduleResolution": "node",
-      "experimentalDecorators": true,
-      "esModuleInterop": false,
-      "strictBindCallApply": true,
-      "allowSyntheticDefaultImports": true,
-      "sourceMap": true,
-      "baseUrl": ".",
-      "types": [
-        "webpack-env",
-        "jquery"
-      ],
-      "paths": {
-        "@/*": [
-          "./public/js/phaser/3.54.0/*"
-        ]
-      },
-      "lib": [
-        "esnext",
-        "dom",
-        "dom.iterable",
-        "scripthost",
-      ]
+        "target": "es6",
+        "module": "es6",
+        "strict": true,
+        "noImplicitAny": false,
+        "jsx": "preserve",
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "esModuleInterop": false,
+        "strictBindCallApply": true,
+        "allowSyntheticDefaultImports": true,
+        "sourceMap": true,
+        "baseUrl": ".",
+        "types": [
+            "webpack-env",
+            "jquery"
+        ],
+        "paths": {
+            "@/*": [
+                "./dev/phaser/*"
+            ]
+        },
+        "lib": [
+            "esnext",
+            "dom",
+            "dom.iterable",
+            "scripthost",
+        ],
+        "outDir": "./public/js/phaser/3.54.0"
     },
     "include": [
-      "public/js/phaser/3.54.0/*.ts"
+        "./dev/phaser/*.ts"
     ],
     "exclude": [
-      "node_modules"
+        "node_modules"
     ],
-    "typeRoots": [ "./public/js/phaser/3.54.0/types/"]
-  }
-  
+    "typeRoots": ["./dev/phaser/types/"],
+    
+}
