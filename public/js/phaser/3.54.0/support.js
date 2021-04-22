@@ -411,9 +411,6 @@ class Game {
         this._scene = scene;
         this.imagesResources.forEach((r) => scene.load.image(r.key, r.uri));
         this.spritesheetResources.forEach((r) => this.generateSpriteSheet(r));
-        scene.input.on('pointerdown', () => {
-            console.log('[PHASER] Event');
-        });
     }
     create(scene) {
         console.log('[PHASER] CREATE');
@@ -537,20 +534,20 @@ class IsometricMapGame {
                 return f;
             });
             this.onCreate();
+            scene.input.on('pointerdown', (e) => {
+                var _a;
+                const t = (_a = game.map) === null || _a === void 0 ? void 0 : _a.getTileAt(e.x, e.y);
+                if (t !== undefined) {
+                    this.onClick(t);
+                    console.log('[PHASER] tile = ', t.column, t.row);
+                    runner.postMessage('click', {
+                        r: t.row,
+                        c: t.column,
+                    });
+                }
+            });
         };
         game.start(false);
-        canvasElement.on('click', (e) => {
-            var _a;
-            const t = (_a = game.map) === null || _a === void 0 ? void 0 : _a.getTileAt(e.offsetX, e.offsetY);
-            if (t !== undefined) {
-                this.onClick(t);
-                console.log('[PHASER] tile = ', t.column, t.row);
-                runner.postMessage('click', {
-                    r: t.row,
-                    c: t.column,
-                });
-            }
-        });
     }
     update(txt, json, canvasElement, outputElement) {
         console.log('UPDATE ISOMETRIC GAME');

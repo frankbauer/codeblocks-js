@@ -614,10 +614,6 @@ class Game {
         this._scene = scene
         this.imagesResources.forEach((r) => scene.load.image(r.key, r.uri))
         this.spritesheetResources.forEach((r) => this.generateSpriteSheet(r))
-
-        scene.input.on('pointerdown', () => {
-            console.log('[PHASER] Event')
-        })
     }
 
     private create(scene: Phaser.Scene) {
@@ -762,20 +758,20 @@ class IsometricMapGame {
                 return f
             })
             this.onCreate()
+
+            scene.input.on('pointerdown', (e: any) => {
+                const t = game.map?.getTileAt(e.x, e.y)
+                if (t !== undefined) {
+                    this.onClick(t)
+                    console.log('[PHASER] tile = ', t.column, t.row)
+                    runner.postMessage('click', {
+                        r: t.row,
+                        c: t.column,
+                    })
+                }
+            })
         }
         game.start(false)
-
-        canvasElement.on('click', (e) => {
-            const t = game.map?.getTileAt(e.offsetX, e.offsetY)
-            if (t !== undefined) {
-                this.onClick(t)
-                console.log('[PHASER] tile = ', t.column, t.row)
-                runner.postMessage('click', {
-                    r: t.row,
-                    c: t.column,
-                })
-            }
-        })
     }
 
     public onCreate: () => void
