@@ -127,7 +127,7 @@ public class One{
                     frameWidth: 38,
                     frameHeight: 32,
                 }, true)
-                game.useIsometricMap(0, 0, 4, 3, 'tile')
+                game.useIsometricMap(0, 0, 4, 2, 'tile')
 
                 game.onCreate = (scene, game) => {
                     console.log("[PHASER] custom create")
@@ -139,6 +139,11 @@ public class One{
                 }
                 
                 game.start(false)
+
+                canvasElement.on('click', (e) => {
+                    const t = game.map.getTileAt(e.offsetX, e.offsetY)
+                    console.log('[PHASER] tile = ', t)
+                })
 
                 function resize() {
                     let w = canvasElement.width();

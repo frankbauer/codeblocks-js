@@ -150,6 +150,7 @@ interface IMapTile {
     readonly right: Phaser.Math.Vector2
     readonly left: Phaser.Math.Vector2
     readonly bottom: Phaser.Math.Vector2
+    readonly center: Phaser.Math.Vector2
     readonly bounds: Phaser.Geom.Rectangle
 }
 
@@ -161,6 +162,7 @@ class IsometricTile implements IMapTile {
         this.map = map
 
         this.image = map.scene.add.image(x, y, type)
+        this.image.setOrigin(0, 0)
         console.log('[PHASER]', this.bounds)
     }
 
@@ -194,6 +196,12 @@ class IsometricTile implements IMapTile {
         return v
     }
 
+    get center(): Phaser.Math.Vector2 {
+        const v = this.image.getCenter()
+        v.y -= this.map.tileOverhang / 2
+        return v
+    }
+
     get bounds(): Phaser.Geom.Rectangle {
         const rect = this.image.getBounds()
         rect.height -= this.map.tileOverhang
@@ -204,6 +212,11 @@ class IsometricTile implements IMapTile {
 interface ITiledMap {
     readonly tileWidth: number
     readonly tileHeight: number
+    readonly rows: number
+    readonly columns: number
+
+    getTile(c: number, r: number): IMapTile | undefined
+    getTileAt(x: number, y: number): IMapTile | undefined
 }
 
 class TiledMap implements ITiledMap {
@@ -214,6 +227,9 @@ class TiledMap implements ITiledMap {
     protected _tileHeight: number
     public readonly tileOverhang: number
     protected config: MapConfig
+    protected origin: Phaser.Math.Vector2
+    protected dirX: Phaser.Math.Vector2
+    protected dirY: Phaser.Math.Vector2
 
     public get tileWidth(): number {
         return this._tileWidth
@@ -233,8 +249,35 @@ class TiledMap implements ITiledMap {
 
     protected tiles: IMapTile[][]
 
-    public getTile(c: number, r: number) {
+    public getTile(c: number, r: number): IMapTile | undefined {
+        if (c < 0 || c >= this.columns || r < 0 || r >= this.rows) {
+            return undefined
+        }
         return this.tiles[r][c]
+    }
+
+    public getTileAt(inX: number, inY: number): IMapTile | undefined {
+        const x = inX - this.origin.x
+        const y = inY - this.origin.y
+
+        let rf = (x / this.dirX.x + y / this.dirY.y) / 2
+        if (rf < 0) {
+            rf = Math.ceil(rf)
+        } else {
+            rf = Math.floor(rf)
+        }
+        let cf = (-y / this.dirY.y + x / this.dirX.x) / 2
+        if (cf < 0) {
+            cf = Math.ceil(cf)
+        } else {
+            cf = Math.floor(cf)
+        }
+        console.log(`[PHASER] TielAt ${x}/${y} => ${cf}/${rf}`)
+        if (cf < 0 || cf >= this.columns || rf < 0 || rf >= this.rows) {
+            return undefined
+        }
+
+        return this.getTile(cf, rf)
     }
 
     constructor(game: Game, scene: Phaser.Scene, config: MapConfig) {
@@ -244,11 +287,16 @@ class TiledMap implements ITiledMap {
         if (config.tileOverhang === undefined) {
             config.tileOverhang = 31
         }
+
+        this.origin = new Phaser.Math.Vector2(config.offsetX, config.offsetY)
+
         this.tileOverhang = config.tileOverhang
         const tileSource = game.scene!.textures.get(config.tileType).getSourceImage()
 
         this._tileWidth = tileSource.width
         this._tileHeight = tileSource.height - this.tileOverhang
+        this.dirX = new Phaser.Math.Vector2(this.tileWidth / 2, this.tileHeight / -2)
+        this.dirY = new Phaser.Math.Vector2(this.tileWidth / 2, this.tileHeight / 2)
 
         this.tiles = []
         for (let r = 0; r < config.rows; r++) {
@@ -261,18 +309,17 @@ class IsometricMap extends TiledMap {
     constructor(game: Game, scene: Phaser.Scene, config: MapConfig) {
         super(game, scene, config)
 
-        const ox = config.offsetX + this._tileWidth / 2
-        const oy =
-            config.offsetY + this.tileOverhang / 2 + (config.columns - 1) * (this._tileHeight / 2)
-
+        const ox = config.offsetX
+        const oy = config.offsetY - config.columns * this.dirX.y
+        this.origin = new Phaser.Math.Vector2(ox, oy)
         for (let r = 0; r < config.rows; r++) {
             const roy = oy + (r + 1) * (this._tileHeight / 2)
             const rox = ox + r * (this._tileWidth / 2)
             for (let c = config.columns - 1; c >= 0; c--) {
                 this.tiles[r][c] = new IsometricTile(
                     this,
-                    rox + c * (this._tileWidth / 2),
-                    roy - c * (this._tileHeight / 2),
+                    this.origin.x + c * this.dirX.x + r * this.dirY.x,
+                    this.origin.y + c * this.dirX.y + r * this.dirY.y - this.tileHeight / 2,
                     config.tileType
                 )
             }
@@ -488,6 +535,10 @@ class Game {
         this._scene = scene
         this.imagesResources.forEach((r) => scene.load.image(r.key, r.uri))
         this.spritesheetResources.forEach((r) => this.generateSpriteSheet(r))
+
+        scene.input.on('pointerdown', () => {
+            console.log('[PHASER] Event')
+        })
     }
 
     private create(scene: Phaser.Scene) {
@@ -530,7 +581,7 @@ class Game {
     }
 
     private update(scene: Phaser.Scene, time: number = 0, delta: number = 0) {
-        console.log('[PHASER] UPDATE', this.walkingSprites.length)
+        //console.log('[PHASER] UPDATE', this.walkingSprites.length)
         // f1.update(time, delta)
         // f2.update(time, delta)
 
