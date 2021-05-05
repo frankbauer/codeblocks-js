@@ -630,36 +630,9 @@ class Game {
             .forEach((c) => this.generateWalkingSprite(c))
 
         this.onCreate(scene, this)
-
-        // const oy = 36/64;
-        // const ox = 37/76;
-        // f1 = AnimatedSprite.add(this, 190, 84, 'figure', 0)
-        // f1.moveTo(ox, oy)
-        // this.add.sprite(100, 84, 'small', 0).setOrigin(ox, oy)
-        // f2 = AnimatedSprite.add(this, 280, 84, 'figure', 0)
-        // f2.moveTo(ox, oy)
-        // animNamesByDir.forEach((namess, nr) => {
-        //     const idx = sheetIndex[nr];
-        //     const conf = { start: idx*20, end: idx*20 + 19 };
-        //     console.log('ADD', name, conf)
-        //     this.anims.create({
-        //         key: 'figure-'+name,
-        //         frames: this.anims.generateFrameNumbers('figure', conf),
-        //         frameRate: 25,
-        //         repeat: -1
-        //     });
-        // })
-        // f2.sprite.anims.play('figure-O')
-        // f1.sprite.anims.play('figure-S')
-        // f2.walkTo(280-3*45, 84+3*26)
-        // f1.walkTo(280, 84)
     }
 
     private update(scene: Phaser.Scene, time: number = 0, delta: number = 0) {
-        //console.log('[PHASER] UPDATE', this.walkingSprites.length)
-        // f1.update(time, delta)
-        // f2.update(time, delta)
-
         this.walkingSprites.forEach((s) => s.update(time, delta))
 
         this.onUpdate(scene, this, time, delta)
