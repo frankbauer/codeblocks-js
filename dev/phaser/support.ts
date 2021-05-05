@@ -704,6 +704,13 @@ class IsometricMapGame {
         this.onEnterTile = () => {}
         this.onLeaveTile = () => {}
         this.onFinishedWalking = () => {}
+        this.update = (txt) => {
+            return txt
+        }
+        this.onMessage = () => {}
+        this.beforeStart = () => {}
+        this.whenFinished = () => {}
+        this.addArgumentsTo = () => {}
     }
 
     private scope: JQuery
@@ -711,7 +718,7 @@ class IsometricMapGame {
     private figures: WalkingSprite[]
 
     init(canvasElement: JQuery, outputElement: JQuery, scope: JQuery, runner: any) {
-        console.log('INIT ISOMETRIC GAME')
+        console.log('[PHASER] INIT ISOMETRIC GAME')
         canvasElement.css('border', 'none')
         const self = this
         this.scope = scope
@@ -780,7 +787,23 @@ class IsometricMapGame {
     public onLeaveTile: (tile: IMapTile, figure: WalkingSprite) => void
     public onFinishedWalking: (figure: WalkingSprite) => void
 
-    update(txt: string, json: object, canvasElement: JQuery, outputElement: JQuery) {
-        console.log('UPDATE ISOMETRIC GAME')
-    }
+    public onPassingArguments: (args: object | string[]) => void
+    public onUpdate: (
+        txt: string,
+        json: object,
+        canvasElement: JQuery,
+        outputElement: JQuery
+    ) => any
+
+    public update: (
+        txt: string,
+        json: object | undefined,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>
+    ) => string | undefined
+
+    public onMessage: (cmd: string, data: any) => void
+    public beforeStart: () => void
+    public whenFinished: (args: string[] | object) => void
+    public addArgumentsTo: (args: object | string[]) => void
 }
