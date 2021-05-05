@@ -34,7 +34,7 @@ const CodeBlocks = {
     },
 }
 
-const System = {
+const process = {
     exit: function (code) {
         CodeBlocks.postMessage('exit-keepalive', -1, { value: code })
     },
