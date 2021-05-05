@@ -694,7 +694,14 @@ class IsometricMapGame {
         private readonly tileURI: string,
         private readonly figureURIs: string[],
         private readonly backgroundColor: string,
-        private readonly onPreload?: (game: Game, manager: IsometricMapGame) => void
+        private readonly onPreload?: (
+            game: Game,
+            manager: IsometricMapGame,
+            canvasElement: JQuery,
+            outputElement: JQuery,
+            scope: JQuery,
+            runner: any
+        ) => void
     ) {
         this.scope = jQuery()
         this.figures = []
@@ -749,7 +756,7 @@ class IsometricMapGame {
 
         game.onPreload = (scene, game) => {
             if (this.onPreload) {
-                this.onPreload(game, this)
+                this.onPreload(game, this, canvasElement, outputElement, scope, runner)
             }
         }
         game.onCreate = (scene, game) => {

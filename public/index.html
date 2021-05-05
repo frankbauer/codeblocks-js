@@ -109,7 +109,7 @@ exports = {
                 </block>
 
                 <script as="playground" type="application/javascript">
-exports = new IsometricMapGame(4, 3, 'resources/tile/checker.png', ['resources/sprite/figure_blue_big.png', 'resources/sprite/figure_blue.png'], '#fdfdfd', (game, manager)=>{
+exports = new IsometricMapGame(4, 3, 'resources/tile/checker.png', ['resources/sprite/figure_blue_big.png', 'resources/sprite/figure_blue.png'], '#fdfdfd', (game, manager, canvasElement, outputElement, scope, runner)=>{
     manager.onCreate = () => {
         manager.figures[0].moveToTile(2, 1)
         manager.figures[1].moveToTile(3, 2)
