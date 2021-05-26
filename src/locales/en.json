@@ -52,6 +52,8 @@
         "RunTime": "Max. Runtime in ms.",
         "Output": "Output",
         "MaxCharacters": "Max. Output Characters",
+        "ExperimentalCompiler":"Experimental Compiler",
+        "ExperimentalCompilerDesc":"This compiler version is experimental. The properties and behaviour of this version might changen in the next update. You should not use this version for production.",
         "Parser": "Output Parser",
         "Themes": "Themes",
         "TGeneral": "General Theme",

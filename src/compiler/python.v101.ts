@@ -143,6 +143,7 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
     readonly allowsPersistentArguments = false
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
+    readonly experimental = false
     isReady = true
     isRunning = false
 
@@ -196,6 +197,7 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
     readonly allowsPersistentArguments = false
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
+    readonly experimental = false
     isReady = true
     isRunning = false
 

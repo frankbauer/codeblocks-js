@@ -156,6 +156,7 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = true
+    readonly experimental = false
     libraries = [
         {
             key: 'd3-101',

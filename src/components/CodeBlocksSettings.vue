@@ -23,9 +23,9 @@
                         </div>
 
                         <div
-                            :class="`col-xs-12 col-md-${runCode ? 8 : 12} ${
-                                runCode ? 'q-pr-md-sm' : ''
-                            }`"
+                            :class="`col-xs-12 col-sm-${runCode ? 6 : 12} col-md-${
+                                runCode ? 8 : 12
+                            } ${runCode ? 'q-pr-md-sm' : ''}`"
                         >
                             <q-select
                                 :options="compiledLanguages"
@@ -33,13 +33,73 @@
                                 :label="$t('CodeBlocksSettings.Language')"
                             />
                         </div>
-                        <div class="col-xs-12 col-md-4" v-if="runCode">
+                        <div class="col-xs-12 col-sm-6 col-md-4" v-if="runCode">
                             <q-select
                                 :options="compilerVersions"
                                 v-model="compilerVersion"
+                                stack-label
                                 :label="$t('CodeBlocksSettings.CVersion')"
-                            />
+                            >
+                                <template v-slot:selected>
+                                    <q-chip
+                                        v-if="isExperimental"
+                                        dense
+                                        square
+                                        color="white"
+                                        text-color="orange-13"
+                                        class="q-my-none q-ml-xs q-mr-none"
+                                    >
+                                        <q-avatar
+                                            color="orange"
+                                            text-color="white"
+                                            icon="whatshot"
+                                        />
+                                        {{ compilerVersion }}
+                                    </q-chip>
+                                    <div v-else>
+                                        {{ compilerVersion }}
+                                    </div>
+                                </template>
+                                <template v-slot:option="scope">
+                                    <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
+                                        <q-item-section
+                                            v-if="
+                                                isExperimentalVersion(compilerLanguage, scope.opt)
+                                            "
+                                        >
+                                            <q-item-label>
+                                                (<q-icon name="whatshot" /> {{ scope.opt }})
+                                            </q-item-label>
+                                        </q-item-section>
+                                        <q-item-section v-else>
+                                            <q-item-label>{{ scope.opt }}</q-item-label>
+                                        </q-item-section>
+                                    </q-item>
+                                </template>
+                            </q-select>
                         </div>
+                        <q-slide-transition>
+                            <q-banner
+                                rounded
+                                dense
+                                class="bg-orange text-white col-12 q-mt-xs"
+                                v-if="isExperimental"
+                            >
+                                <q-item>
+                                    <q-item-section avatar>
+                                        <q-icon name="whatshot" style="font-size: 3em"></q-icon>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label overline>
+                                            {{ $t('CodeBlocksSettings.ExperimentalCompiler') }}
+                                        </q-item-label>
+                                        <q-item-label>
+                                            {{ $t('CodeBlocksSettings.ExperimentalCompilerDesc') }}
+                                        </q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </q-banner>
+                        </q-slide-transition>
                         <div class="col-12" v-if="runCode">
                             <q-input
                                 v-model="maxRuntime"
@@ -317,6 +377,25 @@ export default class CodeBlocksSettings extends Vue {
     }
     get compilerVersions(): string[] {
         return this.$compilerRegistry.versionsForLanguage(this.compilerLanguage)
+    }
+
+    isExperimentalVersion(language: string, version: string): boolean {
+        const c = this.$compilerRegistry.getCompiler({
+            languageType: language,
+            version: version,
+        })
+        if (c === undefined) {
+            return false
+        }
+        return c.experimental
+    }
+
+    get isExperimental(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            return cmp.experimental
+        }
+        return false
     }
     get languageHasCompiler(): boolean {
         if (this.runCode) {

@@ -52,6 +52,8 @@
         "RunTime": "Max. Laufzeit in ms.",
         "Output": "Ausgabe",
         "MaxCharacters": "Max. Textlänge",
+        "ExperimentalCompiler":"Experimentelle Sprache",
+        "ExperimentalCompilerDesc":"Diese Compilerversion ist experimentell. Sowohl die Eigenschaften also auch das Verhalten können sich daher im nächsten Update ändern. Diese Version sollte nicht in Produktivumgebungen eingestezt werden.",
         "Parser": "Ausgabe Behandlung",
         "Themes": "Stile",
         "TGeneral": "Allgemeine Darstellung",
