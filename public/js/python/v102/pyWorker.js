@@ -19,11 +19,13 @@ CodeBlocks._endSession = function () {
 }
 
 async function listener(input) {
+    const o = input.data
+    const script = o.code
+
     if (typeof self.__pyodideLoading === 'undefined') {
         await loadPyodide({ indexURL: './pyodide-0.17.0/' })
     }
-    const o = input.data
-    const script = o.code
+
     switch (input.data.command) {
         case 'session-ended':
             CodeBlocks._endSession()
@@ -75,9 +77,38 @@ async function listener(input) {
             }
 
             try {
-                console.log('STARTING...', new Date())
-                const output = await self.pyodide.runPythonAsync(script)
+                if (args) {
+                    self.pyodide.globals.set('args', self.pyodide.toPy(args))
+                }
+
+                pyodide.runPython(`import sys
+import io
+sys.stdout = io.StringIO()`)
+                await pyodide.loadPackagesFromImports(script)
+                let coroutine = pyodide.pyodide_py.eval_code_async(script, pyodide.globals)
+                try {
+                    const output = await coroutine
+                    if (output) {
+                        clog(output)
+                    }
+                } catch (err) {
+                    this.console.error(err)
+                } finally {
+                    coroutine.destroy()
+                }
+
+                const output = pyodide.runPython('sys.stdout.getvalue()')
                 this.console.log(output)
+
+                const nargs = self.pyodide.globals.get('args').toJs()
+                if (nargs instanceof Map) {
+                    args = {}
+                    for (var [key, value] of nargs) {
+                        args[key] = value
+                    }
+                } else {
+                    args = nargs
+                }
             } catch (err) {
                 this.console.error(err)
             }
