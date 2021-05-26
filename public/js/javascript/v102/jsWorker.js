@@ -16,7 +16,7 @@ self.importScripts('./codeblocks.js')
 CodeBlocks.worker = self
 
 const olog = console.log
-const oerr = console.err
+const oerr = console.error
 const clog = function (...args) {
     olog('[Worker]', ...args)
 }
