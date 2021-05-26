@@ -21,9 +21,33 @@ CodeBlocks._endSession = function () {
 async function listener(input) {
     const o = input.data
     const script = o.code
+    let dict = undefined
 
     if (typeof self.__pyodideLoading === 'undefined') {
         await loadPyodide({ indexURL: './pyodide-0.17.0/' })
+        dict = pyodide.globals.get('dict')
+
+        // custom logging
+        this.console = {
+            log(...s) {
+                clog(...s)
+                if (Array.isArray(s)) {
+                    s = s.join(', ')
+                }
+                //postMessage(['log', '' + s])
+                self.postMessage({ command: 'log', s: '' + s })
+            },
+            error(...s) {
+                cerr(...s)
+                if (Array.isArray(s)) {
+                    s = s.join(', ')
+                }
+                //postMessage(['err', '' + s])
+                self.postMessage({ command: 'err', s: '' + s })
+            },
+        }
+        this.console.warn = this.console.log
+        self.console = console
     }
 
     switch (input.data.command) {
@@ -50,42 +74,24 @@ async function listener(input) {
             args = o.args
             this.args = args
 
-            // custom logging
-            this.console = {
-                log(...s) {
-                    clog(...s)
-                    if (Array.isArray(s)) {
-                        s = s.join(', ')
-                    }
-                    //postMessage(['log', '' + s])
-                    self.postMessage({ command: 'log', s: '' + s })
-                },
-                error(...s) {
-                    cerr(...s)
-                    if (Array.isArray(s)) {
-                        s = s.join(', ')
-                    }
-                    //postMessage(['err', '' + s])
-                    self.postMessage({ command: 'err', s: '' + s })
-                },
-            }
-            self.console = console
-
             //postMessage(['finished', func(args), args])
             if (o.messagePosting) {
                 self.postMessage({ command: 'main-will-start', id: o.id })
             }
 
             try {
+                let globals = dict()
                 if (args) {
-                    self.pyodide.globals.set('args', self.pyodide.toPy(args))
+                    globals.set('args', self.pyodide.toPy(args))
                 }
-
-                pyodide.runPython(`import sys
+                pyodide.runPython(
+                    `import sys
 import io
-sys.stdout = io.StringIO()`)
+sys.stdout = io.StringIO()`,
+                    globals
+                )
                 await pyodide.loadPackagesFromImports(script)
-                let coroutine = pyodide.pyodide_py.eval_code_async(script, pyodide.globals)
+                let coroutine = pyodide.pyodide_py.eval_code_async(script, globals)
                 try {
                     const output = await coroutine
                     if (output) {
@@ -97,10 +103,10 @@ sys.stdout = io.StringIO()`)
                     coroutine.destroy()
                 }
 
-                const output = pyodide.runPython('sys.stdout.getvalue()')
+                const output = pyodide.runPython('sys.stdout.getvalue()', globals)
                 this.console.log(output)
 
-                const nargs = self.pyodide.globals.get('args').toJs()
+                const nargs = globals.get('args').toJs()
                 if (nargs instanceof Map) {
                     args = {}
                     for (var [key, value] of nargs) {
