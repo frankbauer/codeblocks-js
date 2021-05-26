@@ -103,7 +103,7 @@ exports = {
     },
     addArgumentsTo(args) {
         console.log("Input State", args)
-        args.push("Hello");
+        args[0] = "Hello";
     },
     reset(canvasElement) {},
     onMessage(cmd, data) {
