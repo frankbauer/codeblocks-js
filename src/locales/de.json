@@ -90,7 +90,11 @@
     "CodePlayground": {
         "InvalidJson": "Ausgabe ist nicht JSON-Formatiert",
         "Output": "Ausgabe:",
-        "Message": "Meldung:"
+        "Message": "Meldung:",
+        "ExperimentalScriptVersion":"Experimentelle Scriptversion",
+        "ExperimentalScriptVersionDesc":"Diese Scriptversion ist experimentell. Sowohl die Eigenschaften also auch das Verhalten können sich daher im nächsten Update ändern. Diese Version sollte nicht in Produktivumgebungen eingestezt werden.",
+        "DeprecatedScriptVersion":"Veralteter Scriptversion",
+        "DeprecatedScriptVersionDesc":"Diese Scriptversion ist veraltet und wird in einem der nächsten Updates entfernt. Bitte aktualisieren Sie Ihr Projekt auf eine aktuelle Version."
     },
     "Tagger": {
         "ConfirmRepl": "Ersetzung Bestätigen",

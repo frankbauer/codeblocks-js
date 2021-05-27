@@ -229,6 +229,44 @@
                 ></textarea>
             </q-card-section>
             <q-slide-transition>
+                <q-card-section v-if="this.isExperimentalScriptVersion">
+                    <q-banner rounded dense class="bg-orange text-white col-12 q-mt-xs">
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon name="whatshot" style="font-size: 3em"></q-icon>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label overline>
+                                    {{ $t('CodePlayground.ExperimentalScriptVersion') }}
+                                </q-item-label>
+                                <q-item-label>
+                                    {{ $t('CodePlayground.ExperimentalScriptVersionDesc') }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-banner>
+                </q-card-section>
+            </q-slide-transition>
+            <q-slide-transition>
+                <q-card-section v-if="this.isDeprecatedScriptVersion">
+                    <q-banner rounded dense class="bg-yellow-12 text-black col-12 q-mt-xs">
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon name="hourglass_disabled" style="font-size: 3em"></q-icon>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label overline>
+                                    {{ $t('CodePlayground.DeprecatedScriptVersion') }}
+                                </q-item-label>
+                                <q-item-label>
+                                    {{ $t('CodePlayground.DeprecatedScriptVersionDesc') }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-banner>
+                </q-card-section>
+            </q-slide-transition>
+            <q-slide-transition>
                 <q-card-section class="my-0 q-pt-1 q-pb-0" v-show="expanded">
                     <slot></slot>
                 </q-card-section>
@@ -282,6 +320,22 @@ export default class CodeBlocksContainer extends Vue {
             },
         ]
     }
+    get alignments(): IListItemData[] {
+        return [
+            {
+                label: this.$l('CodeBlockContainer.Start'),
+                value: 'left',
+            },
+            {
+                label: this.$l('CodeBlockContainer.Center'),
+                value: 'center',
+            },
+            {
+                label: this.$l('CodeBlockContainer.End'),
+                value: 'right',
+            },
+        ]
+    }
     get scriptVersions(): IListItemData[] {
         return [
             {
@@ -298,21 +352,13 @@ export default class CodeBlocksContainer extends Vue {
             },
         ]
     }
-    get alignments(): IListItemData[] {
-        return [
-            {
-                label: this.$l('CodeBlockContainer.Start'),
-                value: 'left',
-            },
-            {
-                label: this.$l('CodeBlockContainer.Center'),
-                value: 'center',
-            },
-            {
-                label: this.$l('CodeBlockContainer.End'),
-                value: 'right',
-            },
-        ]
+
+    get isDeprecatedScriptVersion(): boolean {
+        return this.scriptVersion === '100'
+    }
+
+    get isExperimentalScriptVersion(): boolean {
+        return this.scriptVersion === '102'
     }
 
     // mounted() {

@@ -90,7 +90,11 @@
     "CodePlayground": {
         "InvalidJson": "Output is not a valid JSON-Object",
         "Output": "Output:",
-        "Message": "Message:"
+        "Message": "Message:",
+        "ExperimentalScriptVersion":"Experimental Scripting Version",
+        "ExperimentalScriptVersionDesc":"This scripting version is experimental. The properties and behaviour of this version might changen in the next update. You should not use this version for production.",
+        "DeprecatedScriptVersion":"Deprecated Scripting Version",
+        "DeprecatedScriptVersionDesc":"This scripting version is deprecated and will be removed in upcoming updates. Please upgrade your project to a later version."
     },
     "Tagger": {
         "ConfirmRepl": "Confirm Tag Replacement",
