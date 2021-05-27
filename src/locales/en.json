@@ -54,6 +54,8 @@
         "MaxCharacters": "Max. Output Characters",
         "ExperimentalCompiler":"Experimental Compiler",
         "ExperimentalCompilerDesc":"This compiler version is experimental. The properties and behaviour of this version might changen in the next update. You should not use this version for production.",
+        "DeprecatedCompiler":"Deprecated Compiler",
+        "DeprecatedCompilerDesc":"This compiler version is deprecated and will be removed in upcoming updates. Pleas upgrade your project to a later version.",
         "Parser": "Output Parser",
         "Themes": "Themes",
         "TGeneral": "General Theme",

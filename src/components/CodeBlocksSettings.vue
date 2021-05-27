@@ -41,38 +41,61 @@
                                 :label="$t('CodeBlocksSettings.CVersion')"
                             >
                                 <template v-slot:selected>
-                                    <q-chip
+                                    {{ compilerVersion }}
+                                    <q-avatar
+                                        rounded
+                                        size="xs"
+                                        color="yellow"
+                                        text-color="brown-10"
+                                        icon="hourglass_disabled"
+                                        v-if="isDeprecated"
+                                        class="q-ml-xs"
+                                    />
+                                    <q-avatar
+                                        rounded
+                                        size="xs"
+                                        color="orange"
+                                        text-color="white"
+                                        icon="whatshot"
                                         v-if="isExperimental"
-                                        dense
-                                        square
-                                        color="white"
-                                        text-color="orange-13"
-                                        class="q-my-none q-ml-xs q-mr-none"
-                                    >
-                                        <q-avatar
-                                            color="orange"
-                                            text-color="white"
-                                            icon="whatshot"
-                                        />
-                                        {{ compilerVersion }}
-                                    </q-chip>
-                                    <div v-else>
-                                        {{ compilerVersion }}
-                                    </div>
+                                        class="q-ml-xs"
+                                    />
                                 </template>
                                 <template v-slot:option="scope">
                                     <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
-                                        <q-item-section
-                                            v-if="
-                                                isExperimentalVersion(compilerLanguage, scope.opt)
-                                            "
-                                        >
+                                        <q-item-section>
                                             <q-item-label>
-                                                (<q-icon name="whatshot" /> {{ scope.opt }})
+                                                {{ scope.opt }}
+
+                                                <q-avatar
+                                                    rounded
+                                                    size="xs"
+                                                    color="yellow"
+                                                    text-color="brown-10"
+                                                    icon="hourglass_disabled"
+                                                    v-if="
+                                                        isDeprecatedVersion(
+                                                            compilerLanguage,
+                                                            scope.opt
+                                                        )
+                                                    "
+                                                    class="q-ml-xs"
+                                                />
+                                                <q-avatar
+                                                    rounded
+                                                    size="xs"
+                                                    color="orange"
+                                                    text-color="white"
+                                                    icon="whatshot"
+                                                    v-if="
+                                                        isExperimentalVersion(
+                                                            compilerLanguage,
+                                                            scope.opt
+                                                        )
+                                                    "
+                                                    class="q-ml-xs"
+                                                />
                                             </q-item-label>
-                                        </q-item-section>
-                                        <q-item-section v-else>
-                                            <q-item-label>{{ scope.opt }}</q-item-label>
                                         </q-item-section>
                                     </q-item>
                                 </template>
@@ -95,6 +118,31 @@
                                         </q-item-label>
                                         <q-item-label>
                                             {{ $t('CodeBlocksSettings.ExperimentalCompilerDesc') }}
+                                        </q-item-label>
+                                    </q-item-section>
+                                </q-item>
+                            </q-banner>
+                        </q-slide-transition>
+                        <q-slide-transition>
+                            <q-banner
+                                rounded
+                                dense
+                                class="bg-yellow-12 text-black col-12 q-mt-xs"
+                                v-if="isDeprecated"
+                            >
+                                <q-item>
+                                    <q-item-section avatar>
+                                        <q-icon
+                                            name="hourglass_disabled"
+                                            style="font-size: 3em"
+                                        ></q-icon>
+                                    </q-item-section>
+                                    <q-item-section>
+                                        <q-item-label overline>
+                                            {{ $t('CodeBlocksSettings.DeprecatedCompiler') }}
+                                        </q-item-label>
+                                        <q-item-label>
+                                            {{ $t('CodeBlocksSettings.DeprecatedCompilerDesc') }}
                                         </q-item-label>
                                     </q-item-section>
                                 </q-item>
@@ -390,6 +438,17 @@ export default class CodeBlocksSettings extends Vue {
         return c.experimental
     }
 
+    isDeprecatedVersion(language: string, version: string): boolean {
+        const c = this.$compilerRegistry.getCompiler({
+            languageType: language,
+            version: version,
+        })
+        if (c === undefined) {
+            return false
+        }
+        return c.deprecated
+    }
+
     get isExperimental(): boolean {
         const cmp = this.$compilerRegistry.getCompiler(this.compiler)
         if (cmp) {
@@ -397,6 +456,15 @@ export default class CodeBlocksSettings extends Vue {
         }
         return false
     }
+
+    get isDeprecated(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            return cmp.deprecated
+        }
+        return false
+    }
+
     get languageHasCompiler(): boolean {
         if (this.runCode) {
             return true

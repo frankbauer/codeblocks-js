@@ -101,6 +101,7 @@ export interface ICompilerInstance {
     readonly allowsPersistentArguments: boolean
     readonly acceptsJSONArgument: boolean
     readonly experimental: boolean
+    readonly deprecated: boolean
     isReady: boolean
     isRunning: boolean
     readonly libraries?: ICompilerLibraryInfo[]

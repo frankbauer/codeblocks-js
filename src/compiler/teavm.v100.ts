@@ -29,6 +29,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = true
     readonly experimental = false
+    readonly deprecated = false
     didPreload: boolean = false
     teaworker: Worker | undefined = undefined
     isReady = false
