@@ -93,7 +93,7 @@
     },
     "Tagger": {
         "ConfirmRepl": "Confirm Tag Replacement",
-        "ConfirmReplMsg": "Do you really want to replace <b>all</b> occurrences of {name} with the below value?"
+        "ConfirmReplMsg": "Do you really want to replace <b>all</b> occurrences of {name} with the value below?"
     },
     "RandomizerSetEditor": {
         "Caption": "Edit Set {nr}"
