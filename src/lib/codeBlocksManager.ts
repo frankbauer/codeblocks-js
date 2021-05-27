@@ -231,6 +231,8 @@ function isTrue(val: any): boolean {
     return val !== undefined && val != 'false' && val != '0'
 }
 
+const useShadowDOM = true
+
 //this will handle the vue mounting on the dom
 class InternalCodeBlocksManager {
     constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
@@ -253,7 +255,32 @@ class InternalCodeBlocksManager {
     readonly element: HTMLElement
     readonly data: IAppSettings
     constructor(el: HTMLElement) {
-        this.element = el
+        if (useShadowDOM) {
+            const parent = el.parentElement!
+            const content = el.outerHTML
+            const rewrap = document.createElement('DIV')
+            parent.replaceChild(rewrap, el)
+
+            const shadow = parent.attachShadow({ mode: 'open' })
+            shadow.innerHTML = ''
+
+            $('style').each((idx, style) => {
+                const st = document.createElement('STYLE')
+                st.innerHTML = style.innerHTML
+                shadow.appendChild(st)
+            })
+
+            const root = document.createElement('DIV')
+            root.id = 'root'
+            root.innerHTML = content
+            shadow.appendChild(root)
+            console.log($('style').length)
+
+            this.element = root
+        } else {
+            this.element = el
+        }
+        console.log(this.element)
         const inData = el.dataset as IAppElementData
         const data: IAppSettings = {
             id: -1,
