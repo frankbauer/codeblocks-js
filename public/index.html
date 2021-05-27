@@ -29,19 +29,74 @@
         </noscript>
         <div codeblockseditor data-compiler="python3" data-compiler-version="102" data-run-code="true"
             data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1
-            data-persistent-arguments=1 data-keep-alive=0>
+            data-persistent-arguments=1 data-keep-alive=0 data-dom-libs='["chart-3.3.0"]'>
 
-            <block data-visible-lines="auto" data-expanded=1>#import sys
-def ddd():                
-    print(1+3)
-print(args["test"])
-ddd()
-args["test"] = 53
-#print(sys.version)</block><script as="playground" type="application/javascript" data-expanded=0>
+            <block data-visible-lines="auto" data-expanded=1>print('[{"x":0,"y":0}, {"x":0.5,"y":0.25}, {"x":1,"y":1}, {"x":2,"y":4}, {"x":3,"y":9}]')
+#print(sys.version)</block><script as="playground" type="application/javascript" data-expanded=1>
     exports = {
         runner: null,
+        chart:undefined,
         init: function (canvasElement, outputElement, scope, runner) {
-            canvasElement.hide();
+            const ctx = $(document.createElement('canvas'))
+            ctx.width('100%')
+            ctx.height('100%')
+            
+            canvasElement.append(ctx);
+            
+            // const myChart = new Chart(ctx, {
+            //     type: 'bar',
+            //     data: {
+            //         datasets: [{                        
+            //             label: '# of Stuff',
+            //             data: [{x:'Red', y:12}, {x:'Blue', y:19}, {x:'Yellow', y:3}, {x:'Green', y:5}, {x:'Purple', y:2}, {x:'Orange', y:3} ],
+            //             backgroundColor: [
+            //                 'rgba(255, 99, 132, 0.2)',
+            //                 'rgba(54, 162, 235, 0.2)',
+            //                 'rgba(255, 206, 86, 0.2)',
+            //                 'rgba(75, 192, 192, 0.2)',
+            //                 'rgba(153, 102, 255, 0.2)',
+            //                 'rgba(255, 159, 64, 0.2)'
+            //             ],
+            //             borderColor: [
+            //                 'rgba(255, 99, 132, 1)',
+            //                 'rgba(54, 162, 235, 1)',
+            //                 'rgba(255, 206, 86, 1)',
+            //                 'rgba(75, 192, 192, 1)',
+            //                 'rgba(153, 102, 255, 1)',
+            //                 'rgba(255, 159, 64, 1)'
+            //             ],
+            //             borderWidth: 1
+            //         }]
+            //     },
+            //     options: {
+            //         scales: {
+            //             y: {
+            //                 beginAtZero: true
+            //             }
+            //         }
+            //     }
+            // })
+            this.chart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{                        
+                        label: '# of Stuff',
+                        showLine:true,
+                        data: [{x:0, y:12}, {x:1, y:19}, {x:2.5, y:3}, {x:3, y:5}, {x:3.5, y:2}, {x:4, y:3} ],                        
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    parsing: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            })
+            
+
             this.runner = runner
             runner.postMessage('from-init', {})
         },
@@ -62,7 +117,10 @@ args["test"] = 53
             console.log("Finished", args)
         },
         update: function (txt, json, canvasElement, outputElement) {
-    
+                if (Array.isArray(json)){
+                    this.chart.data.datasets[0].data = json
+                    this.chart.update();
+                }
         }
     }
                 </script>
