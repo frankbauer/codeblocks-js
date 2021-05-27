@@ -9,14 +9,14 @@
             v-if="editMode"
             :class="`q-mx-none q-my-xs q-pa-none editModeBlockContainer ${colorClass} ${bgClass}`"
         >
-            <q-card-section class="q-mb-none q-pb-sm q-pt-sm ">
+            <q-card-section class="q-mb-none q-pb-sm q-pt-sm">
                 <div class="row q-my-none q-py-none" dense>
                     <div class="col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none">
                         <q-select
                             :options="types"
                             v-model="typeObj"
                             dense
-                            style="margin-top:-5px !important"
+                            style="margin-top: -5px !important"
                         >
                             <template v-slot:after>
                                 <q-btn
@@ -58,7 +58,7 @@
                                                 v-model="visibleLines"
                                                 :rules="[validNumber]"
                                                 maxlength="4"
-                                                style="width:132px"
+                                                style="width: 132px"
                                             />
                                         </div>
                                     </div>
@@ -216,7 +216,7 @@
                             small
                             flat
                             round
-                            style="margin-right:-9px"
+                            style="margin-right: -9px"
                             @click="toggleExpanded"
                         >
                         </q-btn>
@@ -258,56 +258,60 @@ export default class CodeBlocksContainer extends Vue {
         return [
             {
                 label: this.$l('CodeBlockContainer.Canvas'),
-                value: KnownBlockTypes.PLAYGROUND
+                value: KnownBlockTypes.PLAYGROUND,
             },
             {
                 label: this.$l('CodeBlockContainer.Text'),
-                value: KnownBlockTypes.TEXT
+                value: KnownBlockTypes.TEXT,
             },
             {
                 label: this.$l('CodeBlockContainer.Hidden'),
-                value: KnownBlockTypes.BLOCKHIDDEN
+                value: KnownBlockTypes.BLOCKHIDDEN,
             },
             {
                 label: this.$l('CodeBlockContainer.Static'),
-                value: KnownBlockTypes.BLOCKSTATIC
+                value: KnownBlockTypes.BLOCKSTATIC,
             },
             {
                 label: this.$l('CodeBlockContainer.Block'),
-                value: KnownBlockTypes.BLOCK
+                value: KnownBlockTypes.BLOCK,
             },
             {
                 label: this.$l('CodeBlockContainer.Blockly'),
-                value: KnownBlockTypes.BLOCKLY
-            }
+                value: KnownBlockTypes.BLOCKLY,
+            },
         ]
     }
     get scriptVersions(): IListItemData[] {
         return [
             {
                 label: this.$l('CodeBlockContainer.ScriptVersion_1'),
-                value: '100'
+                value: '100',
             },
             {
                 label: this.$l('CodeBlockContainer.ScriptVersion_2'),
-                value: '101'
-            }
+                value: '101',
+            },
+            {
+                label: this.$l('CodeBlockContainer.ScriptVersion_3'),
+                value: '102',
+            },
         ]
     }
     get alignments(): IListItemData[] {
         return [
             {
                 label: this.$l('CodeBlockContainer.Start'),
-                value: 'left'
+                value: 'left',
             },
             {
                 label: this.$l('CodeBlockContainer.Center'),
-                value: 'center'
+                value: 'center',
             },
             {
                 label: this.$l('CodeBlockContainer.End'),
-                value: 'right'
-            }
+                value: 'right',
+            },
         ]
     }
 
@@ -341,7 +345,7 @@ export default class CodeBlocksContainer extends Vue {
                 title: this.$l('CodeBlockContainer.TypesCaption'),
                 message: this.$l('CodeBlockContainer.Types'),
                 html: true,
-                style: 'width:75%'
+                style: 'width:75%',
             })
             .onOk(() => {
                 // console.log('OK')
@@ -364,13 +368,13 @@ export default class CodeBlocksContainer extends Vue {
                 ok: {
                     push: true,
                     color: 'negative',
-                    icon: 'warning'
+                    icon: 'warning',
                 },
                 cancel: {
                     push: true,
-                    color: 'positive'
+                    color: 'positive',
                 },
-                persistent: true
+                persistent: true,
             })
             .onOk(() => {
                 this.$emit('remove-block', this.block.id)
@@ -399,7 +403,7 @@ export default class CodeBlocksContainer extends Vue {
         let obj = {}
         Object.keys(objIn)
             .filter(
-                k =>
+                (k) =>
                     k.indexOf('appSettings') != 0 &&
                     k.indexOf('$') != 0 &&
                     k.indexOf('_') != 0 &&
@@ -419,7 +423,7 @@ export default class CodeBlocksContainer extends Vue {
                     k != 'scopeUUID' &&
                     k != 'scopeSelector'
             )
-            .forEach(k => {
+            .forEach((k) => {
                 let v = objIn[k]
                 if (v !== undefined && v !== null && typeof v === 'object') {
                     if (Array.isArray(v)) {
@@ -465,7 +469,7 @@ export default class CodeBlocksContainer extends Vue {
     set shouldAutoReset(v: boolean) {
         this.$emit('auto-reset-change', {
             shouldAutoreset: v,
-            id: this.block.id
+            id: this.block.id,
         })
     }
 
@@ -485,7 +489,7 @@ export default class CodeBlocksContainer extends Vue {
     set scriptVersionObj(v: IListItemData) {
         this.$emit('script-version-change', {
             version: v.value,
-            id: this.block.id
+            id: this.block.id,
         })
     }
 
@@ -495,10 +499,10 @@ export default class CodeBlocksContainer extends Vue {
     set hasAltComntent(v: boolean) {
         if (v != this.block.hasAlternativeContent && v) {
             this.$nextTick(() => {
-                setTimeout(function() {
+                setTimeout(function () {
                     $('.CodeMirror')
                         .toArray()
-                        .forEach(cm => {
+                        .forEach((cm) => {
                             const element = cm as any
                             element.CodeMirror.refresh()
                         })
@@ -550,7 +554,7 @@ export default class CodeBlocksContainer extends Vue {
             hidden: v == KnownBlockTypes.BLOCKHIDDEN,
             static: v == KnownBlockTypes.BLOCKSTATIC,
             id: this.block.id,
-            hasCode: false
+            hasCode: false,
         }
         ret.hasCode = ret.type == KnownBlockTypes.BLOCK
 
@@ -587,7 +591,7 @@ export default class CodeBlocksContainer extends Vue {
 
         this.$emit('visible-lines-change', {
             visibleLines: v,
-            id: this.block.id
+            id: this.block.id,
         })
     }
 
@@ -599,7 +603,7 @@ export default class CodeBlocksContainer extends Vue {
             width: v,
             height: this.block.height,
             align: this.block.align,
-            id: this.block.id
+            id: this.block.id,
         })
     }
     get height(): string {
@@ -610,7 +614,7 @@ export default class CodeBlocksContainer extends Vue {
             width: this.block.width,
             height: v,
             align: this.block.align,
-            id: this.block.id
+            id: this.block.id,
         })
     }
     get align(): IListItemData {
@@ -621,7 +625,7 @@ export default class CodeBlocksContainer extends Vue {
             width: this.block.width,
             height: this.block.height,
             align: v.value,
-            id: this.block.id
+            id: this.block.id,
         })
     }
 }

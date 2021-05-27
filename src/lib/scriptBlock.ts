@@ -9,6 +9,7 @@ import {
     IScriptBlock,
 } from '@/lib/IScriptBlock'
 import { ICompileAndRunArguments } from './ICompilerRegistry'
+import compilerRegistry from './CompilerRegistry'
 interface ICodeTemplate {
     prefix: string
     postfix: string
@@ -22,6 +23,10 @@ const legacyCodeTemplate: ICodeTemplate = {
 const v101CodeTemplate: ICodeTemplate = {
     prefix: '"use strict"; return function(){ return {o:',
     postfix: '}.o}.call({})',
+}
+const v102CodeTemplate: ICodeTemplate = {
+    prefix: 'with(sandbox) { return function(){ return {o:',
+    postfix: '}.o}.call({})}',
 }
 
 const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedError {
@@ -67,6 +72,38 @@ const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedError {
 }
 Vue.prototype.$jsErrorParser = jsErrorParser
 
+const sandboxProxies = new WeakMap()
+
+function compileCode(src) {
+    const code = new Function('sandbox', src)
+
+    return function (sandbox) {
+        compilerRegistry.addLoadedToSandbox(sandbox)
+
+        sandbox.console = console
+        sandbox.document = {
+            createElement: (what: any) => document.createElement(what),
+        }
+
+        if (!sandboxProxies.has(sandbox)) {
+            const sandboxProxy = new Proxy(sandbox, { has, get })
+            sandboxProxies.set(sandbox, sandboxProxy)
+        }
+        return code(sandboxProxies.get(sandbox))
+    }
+}
+
+function has(target, key) {
+    return true
+}
+
+function get(target, key) {
+    if (key === Symbol.unscopables) {
+        return undefined
+    }
+    return target[key]
+}
+
 export class ScriptBlock implements IScriptBlock {
     public err: IParsedError[] = []
 
@@ -110,21 +147,29 @@ export class ScriptBlock implements IScriptBlock {
                 //we also return a function to make and call (.call({})) it with a clean object
                 //to ensure that 'this' is will allways be in a defined state inside the users code
                 if (this.requestsOriginalVersion()) {
+                    console.log('ANCIENT ANCIENT ANCIENT')
                     this.fkt = new Function(
                         legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix
                     )
-                } else {
+                } else if (this.version === '101') {
+                    console.log('OLD OLD OLD')
                     this.fkt = new Function(
                         v101CodeTemplate.prefix + code + v101CodeTemplate.postfix
                     )
+                } else {
+                    console.log('NEW NEW NEW')
+                    this.fkt = compileCode(
+                        v102CodeTemplate.prefix + code + v102CodeTemplate.postfix
+                    )
                 }
-                this.obj = this.fkt()
+
+                this.obj = this.fkt({})
                 this.dequeueIncoming()
             } catch (e) {
                 this.pushError(e)
             }
         } else if (this.fkt !== undefined) {
-            this.obj = this.fkt()
+            this.obj = this.fkt({})
             this.dequeueIncoming()
         }
     }
