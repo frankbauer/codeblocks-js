@@ -224,7 +224,7 @@ compilerRegistry.registerDOMLib(
     '5.13.4',
     'D3',
     false,
-    10000
+    1100
 )
 
 compilerRegistry.registerDOMLib(
@@ -236,7 +236,18 @@ compilerRegistry.registerDOMLib(
     '6.2.0',
     'D3',
     false,
-    1100
+    1000
+)
+
+compilerRegistry.registerDOMLib(
+    [
+        Vue.$CodeBlock.baseurl + 'js/chart.js/3.3.0/chart.min.js'        
+    ],
+    'chart',
+    '3.3.0',
+    'Chart.JS',
+    false,
+    2000
 )
 
 compilerRegistry.registerDOMLib(
@@ -251,7 +262,7 @@ compilerRegistry.registerDOMLib(
     'r0',
     'Three.JS',
     false,
-    2000
+    3000
 )
 
 compilerRegistry.registerDOMLib(
@@ -260,7 +271,7 @@ compilerRegistry.registerDOMLib(
     '2.0.0',
     'Brain.JS',
     false,
-    3000
+    4000
 )
 
 compilerRegistry.registerDOMLib(
@@ -272,7 +283,9 @@ compilerRegistry.registerDOMLib(
     '3.54',
     'Phaser',
     false,
-    4000
+    5000
 )
+
+
 
 export default compilerRegistry
