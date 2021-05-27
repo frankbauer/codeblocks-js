@@ -175,6 +175,12 @@ function runJavaScriptWorker(
                 worker.postMessage({ command: 'importBrain' })
                 startExecution(args, options)
             })
+        }else if (l === 'tf-2.0.0') {
+            willStartExecution = true
+            callingCodeBlocks.$compilerRegistry.loadLibraries([], function () {
+                worker.postMessage({ command: 'importTF' })
+                startExecution(args, options)
+            })
         }
     })
 
@@ -210,6 +216,12 @@ export class JavascriptV102Compiler extends Vue implements ICompilerInstance {
             name: 'Brain.js',
             version: '2.0.0-alpha',
             displayName: 'Brain.js',
+        },
+        {
+            key: 'tf-2.0.0',
+            name: 'tf',
+            version: '2.0.0',
+            displayName: 'TensorFlow.js',
         },
     ]
 

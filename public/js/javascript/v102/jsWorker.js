@@ -50,6 +50,11 @@ function listener(input) {
             __whitelist.add('brain')
             __whitelist.add('window')
             break
+        case 'importTF':
+            clog('[Importing TensorFlow.JS]')
+            self.importScripts('../../tensorflow.js/2.0.0/tf.min.js')            
+            __whitelist.add('tf')            
+            break
         case 'start':
             const o = input.data
 

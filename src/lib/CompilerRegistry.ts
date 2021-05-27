@@ -275,6 +275,16 @@ compilerRegistry.registerDOMLib(
 )
 
 compilerRegistry.registerDOMLib(
+    [Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js',
+    Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tfjs-vis.umd.min.js'],
+    'tf',
+    '2.0.0',
+    'TensorFlow.JS',
+    false,
+    5000
+)
+
+compilerRegistry.registerDOMLib(
     [
         Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/phaser.min.js',
         Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/support.js',
@@ -283,7 +293,7 @@ compilerRegistry.registerDOMLib(
     '3.54',
     'Phaser',
     false,
-    5000
+    6000
 )
 
 
