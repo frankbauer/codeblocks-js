@@ -33,6 +33,7 @@ export interface IDomLibraray {
     didLoad: boolean
     utility: boolean
     order: number
+    onBuildSandboxEnv: (sandbox: any) => void
 }
 
 export interface ICompilerHashMap {

@@ -83,7 +83,8 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
         version: string,
         displayName: string,
         utility: boolean = false,
-        order: number = 0
+        order: number = 0,
+        onBuildSandboxEnv: (sandbox: any) => void = () => {}
     ): void {
         this.libraries.push({
             key: name + '-' + version,
@@ -94,7 +95,12 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             didLoad: false,
             utility: utility,
             order: order,
+            onBuildSandboxEnv: onBuildSandboxEnv,
         })
+    }
+
+    addLoadedToSandbox(sandbox: any) {
+        this.libraries.filter((l) => l.didLoad).forEach((l) => l.onBuildSandboxEnv(sandbox))
     }
 
     getLibObjects(domLibs: string[]): IDomLibraray[] {
@@ -224,7 +230,10 @@ compilerRegistry.registerDOMLib(
     '5.13.4',
     'D3',
     false,
-    1100
+    1100,
+    (sandbox) => {
+        sandbox.d3 = (window as any).d3
+    }
 )
 
 compilerRegistry.registerDOMLib(
@@ -236,18 +245,22 @@ compilerRegistry.registerDOMLib(
     '6.2.0',
     'D3',
     false,
-    1000
+    1000,
+    (sandbox) => {
+        sandbox.d3 = (window as any).d3
+    }
 )
 
 compilerRegistry.registerDOMLib(
-    [
-        Vue.$CodeBlock.baseurl + 'js/chart.js/3.3.0/chart.min.js'        
-    ],
+    [Vue.$CodeBlock.baseurl + 'js/chart.js/3.3.0/chart.min.js'],
     'chart',
     '3.3.0',
     'Chart.JS',
     false,
-    2000
+    2000,
+    (sandbox) => {
+        sandbox.Chart = (window as any).Chart
+    }
 )
 
 compilerRegistry.registerDOMLib(
@@ -262,7 +275,10 @@ compilerRegistry.registerDOMLib(
     'r0',
     'Three.JS',
     false,
-    3000
+    3000,
+    (sandbox) => {
+        sandbox.THREE = (window as any).THREE
+    }
 )
 
 compilerRegistry.registerDOMLib(
@@ -271,17 +287,26 @@ compilerRegistry.registerDOMLib(
     '2.0.0',
     'Brain.JS',
     false,
-    4000
+    4000,
+    (sandbox) => {
+        sandbox.brain = (window as any).brain
+    }
 )
 
 compilerRegistry.registerDOMLib(
-    [Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js',
-    Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tfjs-vis.umd.min.js'],
+    [
+        Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js',
+        //Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tfjs-vis.umd.min.js',
+    ],
     'tf',
     '2.0.0',
     'TensorFlow.JS',
     false,
-    5000
+    5000,
+    (sandbox) => {
+        sandbox.tf = (window as any).tf
+        //sandbox.tfvis = (window as any).tfvis
+    }
 )
 
 compilerRegistry.registerDOMLib(
@@ -293,9 +318,11 @@ compilerRegistry.registerDOMLib(
     '3.54',
     'Phaser',
     false,
-    6000
+    6000,
+    (sandbox: any) => {
+        sandbox.Phaser = (window as any).Phaser
+        sandbox.IsometricMapGame = (window as any).IsometricMapGame
+    }
 )
-
-
 
 export default compilerRegistry
