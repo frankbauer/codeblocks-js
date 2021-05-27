@@ -18,6 +18,55 @@ CodeBlocks._endSession = function () {
     close()
 }
 
+function parseError(err) {
+    const traceback = []
+    let deepest = undefined
+    let msg = ''
+    if (err.message) {
+        if (err.message.indexOf('Traceback') >= 0) {
+            const ep = /File\s*"(\S*?)",\s*line\s*(\d*),\s*in\s*(\S.*)|File\s*"(\S*?)",\s*line\s*(\d*)/gm
+            let m
+
+            while ((m = ep.exec(err.message)) !== null) {
+                if (m.index === ep.lastIndex) {
+                    ep.lastIndex++
+                }
+
+                if (m.length >= 4) {
+                    if (m[2] && m[1] && m[3]) {
+                        traceback.push({ line: m[2] - 1, file: m[1], module: m[3] })
+                    } else if (m[4] && m[5]) {
+                        traceback.push({ line: m[5] - 1, file: m[4] })
+                    }
+                }
+            }
+
+            deepest = traceback.reverse().find((t) => t.file === '<exec>' || t.file === '<unknown>')
+        }
+
+        const lines = err.message.trim().split('\n')
+        if (lines.length > 0) {
+            msg = lines[lines.length - 1]
+        }
+    }
+
+    const res = {
+        message: msg,
+        trace: traceback,
+        deepest: deepest,
+    }
+    if (deepest) {
+        self.postMessage({
+            command: 'exception',
+            text: msg,
+            lineNumber: deepest.line,
+            severity: 'ERROR',
+        })
+    }
+    cerr('EEEE', res.trace.map((t) => JSON.stringify(t)).join('\n'), res.message, res.deepest)
+    return res
+}
+
 async function listener(input) {
     const o = input.data
     const script = o.code
@@ -98,6 +147,7 @@ sys.stdout = io.StringIO()`,
                         clog(output)
                     }
                 } catch (err) {
+                    parseError(err)
                     this.console.error(err)
                 } finally {
                     coroutine.destroy()
@@ -116,6 +166,7 @@ sys.stdout = io.StringIO()`,
                     args = nargs
                 }
             } catch (err) {
+                parseError(err)
                 this.console.error(err)
             }
 

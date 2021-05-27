@@ -64,6 +64,22 @@ function runPythonWorker(
             console.i('Execution finished in ' + time + ' ms\n')
             //info_callback('Info: Execution finished in ' + time + ' ms\n')
             worker.end()
+        } else if (msg.data.command == 'exception') {
+            if (compileFailedCallback) {
+                compileFailedCallback({
+                    message: msg.data.text,
+                    start: {
+                        line: msg.data.lineNumber,
+                        column: 0,
+                    },
+                    end: {
+                        line: msg.data.lineNumber,
+                        column: 0,
+                    },
+                    severity:
+                        msg.data.severity == 'ERROR' ? ErrorSeverity.Error : ErrorSeverity.Warning,
+                })
+            }
         } else if (msg.data.command == 'log') {
             log_callback(msg.data.s + '\n')
         } else if (msg.data.command == 'err') {
