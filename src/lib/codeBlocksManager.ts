@@ -61,7 +61,7 @@ export interface IAppSettings {
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean
-    shadowRoot?:ShadowRoot
+    shadowRoot?: ShadowRoot
 }
 
 interface IAppElementData {
@@ -255,7 +255,7 @@ class InternalCodeBlocksManager {
 
     readonly element: HTMLElement
     readonly data: IAppSettings
-    readonly shadowRoot:ShadowRoot|undefined = undefined
+    readonly shadowRoot: ShadowRoot | undefined = undefined
     constructor(el: HTMLElement) {
         if (useShadowDOM) {
             const parent = el.parentElement!
@@ -263,7 +263,7 @@ class InternalCodeBlocksManager {
             const rewrap = document.createElement('DIV')
             parent.replaceChild(rewrap, el)
 
-            const shadow = parent.attachShadow({ mode: 'open' })
+            const shadow = parent.shadowRoot || parent.attachShadow({ mode: 'open' })
             this.shadowRoot = shadow
             shadow.innerHTML = ''
 
@@ -315,7 +315,7 @@ class InternalCodeBlocksManager {
             messagePassing: isTrue(inData.messagePassing),
             keepAlive: isTrue(inData.keepAlive),
             persistentArguments: isTrue(inData.persistentArguments),
-            shadowRoot:this.shadowRoot,
+            shadowRoot: this.shadowRoot,
         }
 
         if (inData.randomizerActive !== undefined) {
