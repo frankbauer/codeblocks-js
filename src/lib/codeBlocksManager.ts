@@ -258,28 +258,37 @@ class InternalCodeBlocksManager {
     readonly shadowRoot: ShadowRoot | undefined = undefined
     constructor(el: HTMLElement) {
         if (useShadowDOM) {
-            const parent = el.parentElement!
             const content = el.outerHTML
+
+            //replace original element with empty div that will store the shadowDOM
+            const parent = el.parentElement!
             const rewrap = document.createElement('DIV')
             parent.replaceChild(rewrap, el)
 
-            const shadow = parent.shadowRoot || parent.attachShadow({ mode: 'open' })
+            //add shadowDOM and clear content
+            const shadow = rewrap.attachShadow({ mode: 'open' })
             this.shadowRoot = shadow
             shadow.innerHTML = ''
 
+            //copy root-level styles into the shadowDOM
             $('style').each((idx, style) => {
                 const st = document.createElement('STYLE')
                 st.innerHTML = style.innerHTML
                 shadow.appendChild(st)
             })
 
-            const root = document.createElement('DIV')
-            root.id = 'root'
-            root.innerHTML = content
-            shadow.appendChild(root)
-            console.log($('style').length)
+            // //add new root and append original Element
+            // const root = document.createElement('DIV')
+            // root.id = 'root'
+            // //root.innerHTML = noContent
+            // root.appendChild(el)
+            // shadow.appendChild(root)
+            // console.log($('style').length)
+            // this.element = root
 
-            this.element = root
+            //append original element to shadowDOM
+            shadow.appendChild(el)
+            this.element = el
         } else {
             this.shadowRoot = undefined
             this.element = el
