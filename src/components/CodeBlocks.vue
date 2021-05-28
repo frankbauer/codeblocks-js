@@ -181,7 +181,7 @@ import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import CodePanel from '@/components/CodePanel.vue'
-import Blockly from '@/components/Blockly/Blockly.vue'
+//import Blockly from '@/components/Blockly/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import { BlockData, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
@@ -198,6 +198,8 @@ import {
     IBlockDataPlayground,
 } from '@/lib/ICodeBlocks'
 
+
+const Blockly = () => import('@/components/Blockly/Blockly.vue')
 export interface IOnTypeChangeInfo {
     type: KnownBlockTypes
     hidden: boolean

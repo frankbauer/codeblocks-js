@@ -32,7 +32,7 @@ import './plugins/compilerState'
 import './plugins/codemirror'
 import './plugins/highlight'
 import './plugins/tagger'
-import './plugins/blocklyEnv'
+//import './plugins/blocklyEnv'
 //remove "noImplicitAny": false from tsconfig when this file goes ts
 import { CodeBlocksManager, MountableArray } from './lib/codeBlocksManager'
 

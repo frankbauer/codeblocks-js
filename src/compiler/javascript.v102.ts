@@ -8,7 +8,6 @@ import {
     finishedCallbackSignatur,
     ICompileAndRunArguments,
 } from '@/lib/ICompilerRegistry'
-import { Msg, Options } from '@/lib/blockly/blockly'
 
 declare global {
     interface Worker {

@@ -105,7 +105,9 @@ import BlocklyToolboxEditor from '@/components/Blockly/BlocklyToolboxEditor.vue'
 import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '@/lib/IBlocklyHelper'
-import { blocklyHelper, theme } from '@/lib/BlocklyHelper'
+import { blocklyHelper, blockStyles, categoryStyles } from '@/lib/BlocklyHelper'
+
+const blocklyTheme = new Blockly.Theme('CodeBlocks', blockStyles as any, categoryStyles)
 
 @Component({
     components: {
@@ -174,7 +176,7 @@ export default class BlocklyBlock extends Vue {
             options.toolbox = this.blocklyToolbox
         }
         if (!options.theme) {
-            options.theme = theme
+            options.theme = blocklyTheme
         }
         this.block.blockly.blocks.forEach(bl => {
             const B = Blockly as any

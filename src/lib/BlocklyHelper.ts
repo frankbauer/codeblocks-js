@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Blockly from './blockly/blockly'
+
 import {
     IBlocklyToolbox,
     IBlocklyToolboxItem,
@@ -156,9 +156,10 @@ export const categoryStyles = {
     },
 }
 
-export const theme = new Blockly.Theme('CodeBlocks', blockStyles as any, categoryStyles)
+//export const theme = new Blockly.Theme('CodeBlocks', blockStyles as any, categoryStyles)
 
 export class BlocklyHelper {
+    
     public toArgumentDescription(a: BlockArgumentTypes) {
         const n = Vue.$l(`Blockly.ArgumentTypeNames.${a}`)
         return n ? `${n} (${a})` : a

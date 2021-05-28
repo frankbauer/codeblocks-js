@@ -1,5 +1,3 @@
-import { QuasarIconSetRating } from 'quasar'
-
 export enum BlockPrimaryColors {
     Colour = '#cf63cf',
     List = '#5cb1d6',
