@@ -71,7 +71,7 @@ Blockly.Css.inject = function(hasCss, pathToMedia, shadowRoot) {
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
   if (shadowRoot) {
-    console.log("[Blockly Shadow CSS]", shadowRoot);
+    console.log("[Blockly Shadow CSS]");
     shadowRoot.appendChild(cssNode);
   } else {
     document.head.insertBefore(cssNode, document.head.firstChild);
