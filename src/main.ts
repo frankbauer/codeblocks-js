@@ -34,7 +34,7 @@ import './plugins/highlight'
 import './plugins/tagger'
 //import './plugins/blocklyEnv'
 //remove "noImplicitAny": false from tsconfig when this file goes ts
-import { CodeBlocksManager, MountableArray } from './lib/codeBlocksManager'
+import { CodeBlocksManager } from './lib/codeBlocksManager'
 
 Vue.config.productionTip = false
 CodeBlocksManager.find(document).mount()

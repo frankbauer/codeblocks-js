@@ -89,6 +89,9 @@ Blockly.Options = function(options) {
         Blockly.utils.toolbox.Position.RIGHT : Blockly.utils.toolbox.Position.LEFT;
   }
 
+  this.shadowRoot = options['shadowRoot'];
+  Blockly.shadowRoot = this.shadowRoot;
+
   var hasCss = options['css'];
   if (hasCss === undefined) {
     hasCss = true;

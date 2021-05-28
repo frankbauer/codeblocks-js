@@ -50,12 +50,17 @@ Blockly.inject = function(container, opt_options) {
     container = document.getElementById(container) ||
         document.querySelector(container);
   }
-  // Verify that the container is in document.
-  if (!container || !Blockly.utils.dom.containsNode(document, container)) {
-    throw Error('Error: container is not in current document.');
-  }
+  //   // Verify that the container is in document.
+  //   if (!container || !Blockly.utils.dom.containsNode(document, container)) {
+  //     throw Error('Error: container is not in current document.');
+  //   }
   var options = new Blockly.Options(opt_options ||
     (/** @type {!Blockly.BlocklyOptions} */ ({})));
+
+  // Verify that the container is in document or shadowRoot.
+  if (!Blockly.utils.dom.containsNode(options.shadowRoot || document, container)) {
+    throw 'Error: container is neither in current document nor in shadow root.';
+  }
   var subContainer = document.createElement('div');
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
@@ -101,7 +106,7 @@ Blockly.createDom_ = function(container, options) {
   container.setAttribute('dir', 'LTR');
 
   // Load CSS.
-  Blockly.Css.inject(options.hasCss, options.pathToMedia);
+  Blockly.Css.inject(options.hasCss, options.pathToMedia, options.shadowRoot);
 
   // Build the SVG DOM.
   /*

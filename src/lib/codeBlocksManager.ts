@@ -277,6 +277,10 @@ class InternalCodeBlocksManager {
                 shadow.appendChild(st)
             })
 
+            $('link[shadow]').each((idx, link) => {
+                shadow.appendChild(link.cloneNode())
+            })
+
             // //add new root and append original Element
             // const root = document.createElement('DIV')
             // root.id = 'root'

@@ -48,8 +48,9 @@ Blockly.Css.register = function(cssArray) {
  * @param {boolean} hasCss If false, don't inject CSS
  *     (providing CSS becomes the document's responsibility).
  * @param {string} pathToMedia Path from page to the Blockly media directory.
+ * @param {string} shadowRoot The root ShadowDOM Object.
  */
-Blockly.Css.inject = function(hasCss, pathToMedia) {
+Blockly.Css.inject = function(hasCss, pathToMedia, shadowRoot) {
   // Only inject the CSS once.
   if (Blockly.Css.injected_) {
     return;
@@ -69,7 +70,12 @@ Blockly.Css.inject = function(hasCss, pathToMedia) {
   cssNode.id = 'blockly-common-style';
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
-  document.head.insertBefore(cssNode, document.head.firstChild);
+  if (shadowRoot) {
+    console.log("[Blockly Shadow CSS]", shadowRoot);
+    shadowRoot.appendChild(cssNode);
+  } else {
+    document.head.insertBefore(cssNode, document.head.firstChild);
+  }
 };
 
 /**

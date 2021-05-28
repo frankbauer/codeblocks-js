@@ -1150,6 +1150,8 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
   }
 };
 
+var shadowR = undefined;
+
 /**
  * Inject renderer specific CSS into the page.
  * @param {string} tagName The name of the style tag to use.
@@ -1158,10 +1160,18 @@ Blockly.blockRendering.ConstantProvider.prototype.createDom = function(svg,
  */
 Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
     tagName, selector) {
+  if (Blockly.shadowRoot === undefined) {Blockly.shadowRoot = shadowR;}
   var cssArray = this.getCSS_(selector);
   var cssNodeId = 'blockly-renderer-style-' + tagName;
-  this.cssNode_ =
-    /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
+  
+  if (Blockly.shadowRoot){
+    shadowR = Blockly.shadowRoot;
+    this.cssNode_ =
+    /** @type {!HTMLStyleElement} */ (Blockly.shadowRoot.getElementById(cssNodeId));
+  } else {
+    this.cssNode_ =
+      /** @type {!HTMLStyleElement} */ (document.getElementById(cssNodeId));
+  }
   var text = cssArray.join('\n');
   if (this.cssNode_) {
     // Already injected, update if the theme changed.
@@ -1174,7 +1184,12 @@ Blockly.blockRendering.ConstantProvider.prototype.injectCSS_ = function(
   cssNode.id = cssNodeId;
   var cssTextNode = document.createTextNode(text);
   cssNode.appendChild(cssTextNode);
-  document.head.insertBefore(cssNode, document.head.firstChild);
+  if (Blockly.shadowRoot){
+    console.log("[Blockly Shadow CSS II]");
+    Blockly.shadowRoot.appendChild(cssNode);
+  } else {
+    document.head.insertBefore(cssNode, document.head.firstChild);
+  }
   this.cssNode_ = cssNode;
 };
 
