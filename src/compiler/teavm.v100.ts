@@ -139,13 +139,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         questionID,
                         code,
                         callingCodeBlocks,
-                        max_ms,
-                        log_callback,
-                        info_callback,
-                        err_callback,
-                        compileFailedCallback,
-                        finishedExecutionCB,
-                        args,
+                        options,
                         false
                     )
                 })
