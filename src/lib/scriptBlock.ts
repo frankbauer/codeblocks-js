@@ -300,8 +300,10 @@ export class ScriptBlock implements IScriptBlock {
                 const o = this.obj as ILegacyPlaygroundObject
                 o.init(canvasElement)
             } else {
-                runner.run = runner
-                runner.postMessage = this.doPostMessageToWorker.bind(this)
+                const arunner: any = runner
+                arunner.run = runner
+                arunner.postMessage = this.doPostMessageToWorker.bind(this)
+
                 let outputElement: JQuery<HTMLElement> | undefined = undefined
                 if (scope === undefined || scope.length === 0) {
                     scope = canvasElement.parents('.codeblocks')
