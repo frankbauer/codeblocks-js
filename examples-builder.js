@@ -7,7 +7,7 @@ const conf = require('./package.json'),
 const base = path.join('docs', 'examples')
 const lib = path.join(base, 'js')
 const dest = path.join(lib, 'codeblocks-js')
-    
+
 console.log("Deploying CodeBlocks to '" + dest + "'")
 
 const vue = path.join(lib, 'vue')
@@ -21,28 +21,24 @@ shell.mkdir('-p', vue)
 shell.cp(path.join('node_modules', 'vue', 'dist', 'vue.runtime.min.js'), vue)
 
 shell.mkdir('-p', jquery)
-shell.cp(
-    path.join('node_modules', 'jquery', 'dist', 'jquery.min.js'),
-    jquery
-)
-shell.cp(
-    path.join('node_modules', 'jquery', 'dist', 'jquery.min.map'),
-    jquery
-)
+shell.cp(path.join('node_modules', 'jquery', 'dist', 'jquery.min.js'), jquery)
+shell.cp(path.join('node_modules', 'jquery', 'dist', 'jquery.min.map'), jquery)
 const vuecli = exec(
     'vue-cli-service build  --entry ./src/main.ts --target lib --dest ' + dest,
-    function(code, stdout, stderr) {
+    function (code, stdout, stderr) {
         //console.log('Exit code:', code);
         shell.rm(path.join(dest, 'demo.html'))
         shell.rm(path.join(dest, 'codeblocks.common.js'))
         shell.rm(path.join(dest, 'codeblocks.common.js.map'))
+        shell.rm(path.join(dest, 'codeblocks.common.1.js'))
+        shell.rm(path.join(dest, 'codeblocks.common.1.js.map'))
     }
 )
 
-vuecli.stdout.on('data', function(data) {
+vuecli.stdout.on('data', function (data) {
     console.log(data)
 })
 
-vuecli.stderr.on('data', function(data) {
+vuecli.stderr.on('data', function (data) {
     console.error(data)
 })
