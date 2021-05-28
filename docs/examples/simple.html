@@ -24,13 +24,12 @@
   </style>
   <script src="./js/jquery/jquery.min.js?v=3.5.1"></script>
   <script src="./js/vue/vue.runtime.min.js?v=2.6.11"></script>
-  <link rel="stylesheet" href="./js/codeblocks-js/codeblocks.css">
+  <link rel="stylesheet" href="./js/codeblocks-js/codeblocks.css" shadow type="text/css">
 </head>
 
 <body>
   <div id="content">
   <h1>This is JavaScript:</h1>
-  <div>
     <div codeblocks data-compiler="javascript" data-run-code="true">
       <loading><div></div><div></div></loading> 
       <block data-static>console.log("Welcome to codeblocks-js")
@@ -38,7 +37,6 @@
       <block data-visible-lines="5">// your code goes here</block>
       <block data-static>console.log("Thanks :)")</block>
     </div>
-</div>
 
     <h1>This is Java:</h1>
     <div codeblocks data-compiler="java" data-run-code="true">
@@ -63,10 +61,7 @@
       <block data-static>print("Thanks :)")</block>
     </div>
   </div>
-  <script>
-    document.body.onload = () => {
-      import ("./js/codeblocks-js/codeblocks.umd.min.js")      
-    }
-  </script>  
+
+  <script src="./js/codeblocks-js/codeblocks.umd.min.js"></script>
 </body>
 </html>
