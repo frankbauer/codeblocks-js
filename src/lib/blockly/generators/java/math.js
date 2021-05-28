@@ -249,7 +249,7 @@ Blockly.Java['math_change'] = function(block) {
   // Add to a variable in place.
   var argument0 = Blockly.Java.valueToCode(block, 'DELTA',
       Blockly.Java.ORDER_ADDITIVE) || '0';
-  var varName = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
+  var varName = Blockly.Java.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   return varName + ' = ' + varName + ' + ' + argument0 + ';\n';
 };

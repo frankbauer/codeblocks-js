@@ -42,11 +42,11 @@ Blockly.Java['controls_repeat_ext'] = function(block) {
   var branch = Blockly.Java.statementToCode(block, 'DO');
   branch = Blockly.Java.addLoopTrap(branch, block.id);
   var code = '';
-  var loopVar = Blockly.Java.variableDB_.getDistinctName(
+  var loopVar = Blockly.Java.nameDB_.getDistinctName(
       'count', Blockly.Variables.NAME_TYPE);
   var endVar = repeats;
   if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
-    var endVar = Blockly.Java.variableDB_.getDistinctName(
+    var endVar = Blockly.Java.nameDB_.getDistinctName(
         'repeat_end', Blockly.Variables.NAME_TYPE);
     code += 'int ' + endVar + ' = int(' + repeats + ');\n';
   }
@@ -72,7 +72,7 @@ Blockly.Java['controls_whileUntil'] = function(block) {
       Blockly.Java.PASS;
 
   if ((until && (argument0 === 'true')) || (!until && (argument0 === 'false'))){
-    var argvar = Blockly.Java.variableDB_.getDistinctName(
+    var argvar = Blockly.Java.nameDB_.getDistinctName(
       argument0, Blockly.Variables.NAME_TYPE);
     Blockly.Java.stashStatement('boolean ' + argvar + ' = ' + argument0 + ';\n');
     argument0 = argvar;
@@ -88,7 +88,7 @@ Blockly.Java['controls_whileUntil'] = function(block) {
 
 Blockly.Java['controls_for'] = function(block) {
   // For loop.
-  var variable0 = Blockly.Java.variableDB_.getName(
+  var variable0 = Blockly.Java.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var vartype0 = Blockly.Java.GetVariableType(block.getFieldValue('VAR'));
   var argument0 = Blockly.Java.valueToCode(block, 'FROM',
@@ -140,19 +140,19 @@ Blockly.Java['controls_for'] = function(block) {
     // Cache non-trivial values to variables to prevent repeated look-ups.
     var startVar = argument0;
     if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
-      startVar = Blockly.Java.variableDB_.getDistinctName(
+      startVar = Blockly.Java.nameDB_.getDistinctName(
           variable0 + '_start', Blockly.Variables.NAME_TYPE);
       code += 'double ' + startVar + ' = ' + argument0 + ';\n';
     }
     var endVar = argument1;
     if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
-      var endVar = Blockly.Java.variableDB_.getDistinctName(
+      var endVar = Blockly.Java.nameDB_.getDistinctName(
           variable0 + '_end', Blockly.Variables.NAME_TYPE);
       code += 'double ' + endVar + ' = ' + argument1 + ';\n';
     }
     // Determine loop direction at start, in case one of the bounds
     // changes during loop execution.
-    var incVar = Blockly.Java.variableDB_.getDistinctName(
+    var incVar = Blockly.Java.nameDB_.getDistinctName(
         variable0 + '_inc', Blockly.Variables.NAME_TYPE);
     code += 'double ' + incVar + ' = ';
     if (Blockly.isNumber(increment)) {
@@ -185,7 +185,7 @@ Blockly.Java['controls_for'] = function(block) {
 
 Blockly.Java['controls_forEach'] = function(block) {
   // For each loop.
-  var variable0 = Blockly.Java.variableDB_.getName(
+  var variable0 = Blockly.Java.nameDB_.getName(
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   var vartype0 = Blockly.Java.GetVariableType(block.getFieldValue('VAR'));
   var argument0 = Blockly.Java.valueToCode(block, 'LIST',
@@ -197,7 +197,7 @@ Blockly.Java['controls_forEach'] = function(block) {
   var code = '';
 
   if (vartype0 === 'Var') {
-    var loopVar = Blockly.Java.variableDB_.getDistinctName(
+    var loopVar = Blockly.Java.nameDB_.getDistinctName(
       'it', Blockly.Variables.NAME_TYPE);
     setvar0 = variable0 + '.setObject(' + loopVar + '.next())';
 

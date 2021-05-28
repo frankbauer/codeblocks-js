@@ -32,7 +32,7 @@ goog.require('Blockly.Java');
 Blockly.Java['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcPrefix = block.getFieldValue('NAME');
-  var funcName = Blockly.Java.variableDB_.getName(funcPrefix,
+  var funcName = Blockly.Java.nameDB_.getName(funcPrefix,
       Blockly.Procedures.NAME_TYPE);
   var branch = Blockly.Java.statementToCode(block, 'STACK');
   if (Blockly.Java.STATEMENT_PREFIX) {
@@ -65,7 +65,7 @@ Blockly.Java['procedures_defreturn'] = function(block) {
     var type = Blockly.Java.GetVariableType(funcPrefix + '.' +
                                             block.arguments_[x]['name']);
     args[x] = type + ' ' +
-              Blockly.Java.variableDB_.getName(block.arguments_[x]['name'],
+              Blockly.Java.nameDB_.getName(block.arguments_[x]['name'],
                                                Blockly.Variables.NAME_TYPE);
   }
 
@@ -84,7 +84,7 @@ Blockly.Java['procedures_defnoreturn'] =
 
 Blockly.Java['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  var funcName = Blockly.Java.variableDB_.getName(block.getFieldValue('NAME'),
+  var funcName = Blockly.Java.nameDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {
@@ -97,7 +97,7 @@ Blockly.Java['procedures_callreturn'] = function(block) {
 
 Blockly.Java['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
-  var funcName = Blockly.Java.variableDB_.getName(block.getFieldValue('NAME'),
+  var funcName = Blockly.Java.nameDB_.getName(block.getFieldValue('NAME'),
       Blockly.Procedures.NAME_TYPE);
   var args = [];
   for (var x = 0; x < block.arguments_.length; x++) {

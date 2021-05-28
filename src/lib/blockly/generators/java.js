@@ -198,7 +198,7 @@ Blockly.Java.setAppName = function(name) {
  * @return {string} name Name for the application for any generated code
  */
 Blockly.Java.getAppName = function() {
-  return Blockly.Java.variableDB_.getName(this.AppName_,'CLASS');
+  return Blockly.Java.nameDB_.getName(this.AppName_,'CLASS');
 };
 /**
  * Set the package for this generated Java code
@@ -252,7 +252,7 @@ Blockly.Java.setBaseclass = function(baseclass) {
 Blockly.Java.getBaseclass = function() {
   var baseClass = this.Baseclass_;
   if (baseClass != '') {
-    baseClass = Blockly.Java.variableDB_.getName(baseClass,'CLASS');
+    baseClass = Blockly.Java.nameDB_.getName(baseClass,'CLASS');
   }
   return baseClass;
 };
@@ -1169,11 +1169,11 @@ Blockly.Java.init = function(workspace, imports) {
   for(var i = 0; i < this.needImports_.length; i++) {
     this.addImport(this.needImports_[i]);
   }
-  if (!this.variableDB_) {
-    this.variableDB_ =
+  if (!this.nameDB_) {
+    this.nameDB_ =
         new Blockly.Names(this.RESERVED_WORDS_);
   } else {
-    this.variableDB_.reset();
+    this.nameDB_.reset();
   }
 
   // var defvars = [];
@@ -1237,7 +1237,7 @@ Blockly.Java.finish = function(code) {
     } else if (type === 'String') {
       initializer = ' = ""';
     }
-    var varname = Blockly.Java.variableDB_.getName(def,
+    var varname = Blockly.Java.nameDB_.getName(def,
         Blockly.Variables.NAME_TYPE);
     allDefs += 'protected ' + type + ' ' + varname + initializer + ';\n';
   }
@@ -1285,7 +1285,7 @@ Blockly.Java.finish = function(code) {
   // Clean up temporary data.
   delete Blockly.Java.definitions_;
   delete Blockly.Java.functionNames_;
-  Blockly.Java.variableDB_.reset();
+  Blockly.Java.nameDB_.reset();
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 

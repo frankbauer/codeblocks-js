@@ -35,7 +35,7 @@ Blockly.Java['maps_create_empty'] = function(block) {
 
 Blockly.Java['maps_create_with'] = function(block) {
   // Create a list with any number of elements of any type.
-  var declVar = Blockly.Java.variableDB_.getDistinctName(
+  var declVar = Blockly.Java.nameDB_.getDistinctName(
       'hashMap', Blockly.Variables.NAME_TYPE);
   var declCode = 'HashMap ' + declVar + ' = new HashMap();\n';
   Blockly.Java.addImport('java.util.HashMap');
@@ -91,7 +91,7 @@ Blockly.Java['maps_create'] = function(block) {
       Blockly.Java.ORDER_NONE) || 'null';
   var key = Blockly.Java.valueToCode(block, 'KEY',
       Blockly.Java.ORDER_NONE) || '""';
-  var declVar = Blockly.Java.variableDB_.getDistinctName(
+  var declVar = Blockly.Java.nameDB_.getDistinctName(
       'hashMap', Blockly.Variables.NAME_TYPE);
 
   var declCode = 'HashMap ' + declVar + ' = new HashMap();\n' +

@@ -33,7 +33,7 @@ Blockly.Java['variables_get'] = function(block) {
   // Remember if this is a global variable to be initialized
   Blockly.Java.setGlobalVar(block,block.getFieldValue('VAR'), null);
   // Variable getter.
-  var code = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
+  var code = Blockly.Java.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   if(Blockly.Java.GetVariableType(this.procedurePrefix_+
       block.getFieldValue('VAR')) === 'Var') {
@@ -48,7 +48,7 @@ Blockly.Java['variables_set'] = function(block) {
   // Variable setter.
   var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_NONE) || '0';
-  var varName = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
+  var varName = Blockly.Java.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   // See if we have to handle the case where the type of the variable doesn't
   // match the type of what is being assigned.
@@ -78,7 +78,7 @@ Blockly.Java['hash_variables_get'] = function(block) {
   var varName = block.getFieldValue('VAR');
   Blockly.Java.setGlobalVar(block,varName, null);
   var vartype = Blockly.Java.GetVariableType(this.procedurePrefix_ + varName);
-  var code = Blockly.Java.variableDB_.getName(varName,
+  var code = Blockly.Java.nameDB_.getName(varName,
       Blockly.Variables.NAME_TYPE);
   if (Blockly.VariableTypeEquivalence[vartype]) {
     code += '.' + block.getFieldValue('HASHKEY');
@@ -148,7 +148,7 @@ Blockly.Java['hash_variables_set'] = function(block) {
   // Variable setter.
   var argument0 = Blockly.Java.valueToCode(block, 'VALUE',
       Blockly.Java.ORDER_NONE) || '0';
-  var varName = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
+  var varName = Blockly.Java.nameDB_.getName(block.getFieldValue('VAR'),
       Blockly.Variables.NAME_TYPE);
   return varName + '{' + block.getFieldValue('HASHKEY') + '}' +
                      ' = ' + argument0 + ';\n';
@@ -164,7 +164,7 @@ Blockly.Java['initialize_variable'] = function (block) {
     if ('LinkedList' === vartype) {
         Blockly.Java.addImport('java.util.LinkedList');
     }
-    var varName = Blockly.Java.variableDB_.getName(block.getFieldValue('VAR'),
+    var varName = Blockly.Java.nameDB_.getName(block.getFieldValue('VAR'),
         Blockly.Variables.NAME_TYPE);
     return vartype + ' ' + varName + ' = ' + argument0 + ';\n';
   } else {

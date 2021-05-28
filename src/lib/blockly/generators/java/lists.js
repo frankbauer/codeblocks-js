@@ -241,7 +241,7 @@ Blockly.Java['lists_setIndex'] = function(block) {
     if (list.match(/^\w+$/)) {
       return '';
     }
-    var listVar = Blockly.Java.variableDB_.getDistinctName(
+    var listVar = Blockly.Java.nameDB_.getDistinctName(
         'tmp_list', Blockly.Variables.NAME_TYPE);
     var code = listVar + ' = ' + list + '\n';
     list = listVar;
@@ -290,7 +290,7 @@ Blockly.Java['lists_setIndex'] = function(block) {
   } else if (where == 'RANDOM') {
     Blockly.Java.addImport('java.util.Random');
     var code = cacheList();
-    var xVar = Blockly.Java.variableDB_.getDistinctName(
+    var xVar = Blockly.Java.nameDB_.getDistinctName(
         'tmp_x', Blockly.Variables.NAME_TYPE);
     code += 'int ' + xVar + ' = (int)(Math.random() * ' + list + '.size());\n';
     if (mode == 'SET') {
