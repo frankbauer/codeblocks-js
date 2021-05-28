@@ -51,7 +51,7 @@
                 />
             </q-item-section>
         </q-item>
-        <q-card-section style="display:none">
+        <q-card-section style="display: none">
             <xml
                 xmlns="https://developers.google.com/blockly/xml"
                 id="blockfactory_toolbox"
@@ -143,7 +143,7 @@
                 ></div>
             </div>
 
-            <div style="display:none">
+            <div style="display: none">
                 <div class="blocklyPreviewContainer" ref="blocklyPreviewContainer"></div>
             </div>
         </q-card-section>
@@ -154,11 +154,9 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import Blockly from '@/plugins/blocklyEnv'
-
-import { blocklyHelper, ColorSelectionWithNone, theme } from '@/lib/BlocklyHelper'
-import { IBlocklyToolboxCategory, IBlockDefinition, BlockPrimaryColors } from '@/lib/IBlocklyHelper'
-
-import { uuid } from 'vue-uuid'
+import { blocklyHelper } from '@/lib/BlocklyHelper'
+import { IBlockDefinition, BlockPrimaryColors } from '@/lib/IBlocklyHelper'
+import { blocklyTheme } from '@/lib/BlocklyStyle'
 
 const STARTER_BLOCK_XML_TEXT =
     '<xml xmlns="https://developers.google.com/blockly/xml">' +
@@ -307,9 +305,9 @@ export default class BlockEditor extends Vue {
                 } else if (field instanceof Blockly.FieldAngle) {
                     // Subclass of Blockly.FieldTextInput, must test first.
                     code.push(makeVar('angle', name) + " = block.getFieldValue('" + name + "')")
-                } else if (Blockly.FieldDate && field instanceof Blockly.FieldDate) {
-                    // Blockly.FieldDate may not be compiled into Blockly.
-                    code.push(makeVar('date', name) + " = block.getFieldValue('" + name + "')")
+                    // } else if (Blockly.FieldDate && field instanceof Blockly.FieldDate) {
+                    //     // Blockly.FieldDate may not be compiled into Blockly.
+                    //     code.push(makeVar('date', name) + " = block.getFieldValue('" + name + "')")
                 } else if (field instanceof Blockly.FieldColour) {
                     code.push(makeVar('colour', name) + " = block.getFieldValue('" + name + "')")
                 } else if (field instanceof Blockly.FieldCheckbox) {
@@ -358,7 +356,7 @@ export default class BlockEditor extends Vue {
             Python: '',
             PHP: ';',
             Lua: '',
-            Dart: ';'
+            Dart: ';',
         }
         code.push('    // TODO: Assemble ' + language + ' into code variable.')
         if (block.outputConnection) {
@@ -435,21 +433,21 @@ export default class BlockEditor extends Vue {
                         fields.push({
                             type: block.type,
                             name: block.getFieldValue('FIELDNAME'),
-                            text: block.getFieldValue('TEXT')
+                            text: block.getFieldValue('TEXT'),
                         })
                         break
                     case 'field_input':
                         fields.push({
                             type: block.type,
                             name: block.getFieldValue('FIELDNAME'),
-                            text: block.getFieldValue('TEXT')
+                            text: block.getFieldValue('TEXT'),
                         })
                         break
                     case 'field_number':
                         var obj: any = {
                             type: block.type,
                             name: block.getFieldValue('FIELDNAME'),
-                            value: Number(block.getFieldValue('VALUE'))
+                            value: Number(block.getFieldValue('VALUE')),
                         }
                         var min = Number(block.getFieldValue('MIN'))
                         if (min > -Infinity) {
@@ -469,35 +467,35 @@ export default class BlockEditor extends Vue {
                         fields.push({
                             type: block.type,
                             name: block.getFieldValue('FIELDNAME'),
-                            angle: Number(block.getFieldValue('ANGLE'))
+                            angle: Number(block.getFieldValue('ANGLE')),
                         })
                         break
                     case 'field_checkbox':
                         fields.push({
                             type: block.type,
                             name: block.getFieldValue('FIELDNAME'),
-                            checked: block.getFieldValue('CHECKED') == 'TRUE'
+                            checked: block.getFieldValue('CHECKED') == 'TRUE',
                         })
                         break
                     case 'field_colour':
                         fields.push({
                             type: block.type,
                             name: block.getFieldValue('FIELDNAME'),
-                            colour: block.getFieldValue('COLOUR')
+                            colour: block.getFieldValue('COLOUR'),
                         })
                         break
                     case 'field_date':
                         fields.push({
                             type: block.type,
                             name: block.getFieldValue('FIELDNAME'),
-                            date: block.getFieldValue('DATE')
+                            date: block.getFieldValue('DATE'),
                         })
                         break
                     case 'field_variable':
                         fields.push({
                             type: block.type,
                             name: block.getFieldValue('FIELDNAME'),
-                            variable: block.getFieldValue('TEXT') || null
+                            variable: block.getFieldValue('TEXT') || null,
                         })
                         break
                     case 'field_dropdown':
@@ -509,7 +507,7 @@ export default class BlockEditor extends Vue {
                             fields.push({
                                 type: block.type,
                                 name: block.getFieldValue('FIELDNAME'),
-                                options: options
+                                options: options,
                             })
                         }
                         break
@@ -520,7 +518,7 @@ export default class BlockEditor extends Vue {
                             width: Number(block.getFieldValue('WIDTH')),
                             height: Number(block.getFieldValue('HEIGHT')),
                             alt: block.getFieldValue('ALT'),
-                            flipRtl: block.getFieldValue('FLIP_RTL') == 'TRUE'
+                            flipRtl: block.getFieldValue('FLIP_RTL') == 'TRUE',
                         })
                         break
                 }
@@ -663,12 +661,7 @@ export default class BlockEditor extends Vue {
         // Remove last input if dummy and not empty.
         if (lastInput && lastInput.type == 'input_dummy') {
             const innerFields = lastInput.getInputTargetBlock('FIELDS')
-            if (
-                innerFields &&
-                this.getFieldsJson_(innerFields)
-                    .join('')
-                    .trim() != ''
-            ) {
+            if (innerFields && this.getFieldsJson_(innerFields).join('').trim() != '') {
                 var innerAlign = lastInput.getFieldValue('ALIGN')
                 if (innerAlign != 'LEFT') {
                     JS.lastDummyAlign0 = innerAlign
@@ -734,16 +727,18 @@ export default class BlockEditor extends Vue {
                 comments: false,
                 disable: false,
                 renderer: 'minimalist',
-                theme: theme,
-                scrollbars: true,
+                theme: blocklyTheme,
                 zoom: {
                     controls: true,
                     wheel: false,
                     startScale: 0.75,
                     maxScale: 2,
                     minScale: 0.3,
-                    scaleSpeed: 1.2
-                }
+                    scaleSpeed: 1.2,
+                },
+                move: {
+                    scrollbars: true,
+                },
             })
 
             if (this.blockDefinition.XML && this.blockDefinition.XML.trim() != '') {
@@ -806,9 +801,11 @@ export default class BlockEditor extends Vue {
         if (!this.previewWorkspace) {
             console.d('INJECT BLOCKLY PREVIEW', this.blocklyPreviewContainer)
             this.previewWorkspace = Blockly.inject(this.blocklyPreviewContainer, {
-                scrollbars: true,
-                theme: theme,
-                renderer: 'minimalist'
+                move: {
+                    scrollbars: false,
+                },
+                theme: blocklyTheme,
+                renderer: 'minimalist',
             })
         }
 
@@ -833,18 +830,16 @@ export default class BlockEditor extends Vue {
 
             const json = JSON.parse(code)
             Blockly.Blocks[json.type || UNNAMED] = {
-                init: function() {
+                init: function (this: Blockly.Block) {
                     this.jsonInit(json)
-                }
+                },
             }
 
             // Look for a block on Blockly.Blocks that does not match the backup.
             let blockType: string | null = null
             for (let type in Blockly.Blocks) {
-                if (
-                    typeof Blockly.Blocks[type].init == 'function' &&
-                    Blockly.Blocks[type] != backupBlocks[type]
-                ) {
+                let bl: any = Blockly.Blocks[type]
+                if (typeof bl.init == 'function' && bl != backupBlocks[type]) {
                     blockType = type
                     break
                 }

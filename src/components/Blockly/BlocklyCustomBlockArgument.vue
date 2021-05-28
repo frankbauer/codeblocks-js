@@ -3,7 +3,7 @@
         <q-card-section>
             <div class="row q-pa-none">
                 <q-input
-                    class="col-12 q-pl-lg "
+                    class="col-12 q-pl-lg"
                     v-model="argument.name"
                     :label="$t('Blockly.Block.ArgumentName')"
                 />
@@ -27,7 +27,7 @@ import {
     IBlockDefinition,
     IBlockLine,
     IBlockArgument,
-    BlockArgumentTypes
+    BlockArgumentTypes,
 } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, PredefinedBlockTypes, PredefinedArgumentTypes } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'

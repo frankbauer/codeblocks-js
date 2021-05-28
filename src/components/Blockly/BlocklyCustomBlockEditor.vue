@@ -8,7 +8,7 @@
                         :label="$t('Blockly.Block.TypeName')"
                     />
 
-                    <q-select v-model="color" :options="colors" label="Color" class="q-mt-md ">
+                    <q-select v-model="color" :options="colors" label="Color" class="q-mt-md">
                         <template v-slot:before>
                             <div class="colorBlockContainer">
                                 <div
@@ -36,7 +36,7 @@
                 <div class="text-overline">{{ $t('Blockly.Block.Properties') }}</div>
             </div>
         </q-card-section>
-        <q-card-section><BlockEditor :blockDefinition="blockDefinition"/></q-card-section>
+        <q-card-section><BlockEditor :blockDefinition="blockDefinition" /></q-card-section>
 
         <q-card-section class="q-pb-xs q-pt-lg">
             <div class="row no-wrap q-pa-none">
@@ -117,14 +117,14 @@ export default class BlocklyCustomBlockEditor extends Vue {
     }
 
     dismissError() {
-        const err = this.block.blockly._blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        const err = this.block.blockly._blockErrors.find((e) => e.uuid == this.blockDefinition.uuid)
         if (err != undefined) {
             err.error = ''
         }
     }
 
     get errorString(): string {
-        const err = this.block.blockly._blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        const err = this.block.blockly._blockErrors.find((e) => e.uuid == this.blockDefinition.uuid)
         if (err === undefined) {
             return ''
         }
@@ -132,7 +132,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
     }
 
     get hasError() {
-        const err = this.block.blockly._blockErrors.find(e => e.uuid == this.blockDefinition.uuid)
+        const err = this.block.blockly._blockErrors.find((e) => e.uuid == this.blockDefinition.uuid)
         return err !== undefined && err.error !== undefined && err.error.trim() != ''
     }
 
@@ -168,7 +168,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
             indentUnit: 4,
             readOnly: false,
             firstLineNumber: 1,
-            gutters: []
+            gutters: [],
         }
     }
     get codeString(): string {
@@ -194,7 +194,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
             id: this.block.id,
             actualContent: () => {
                 return this.blockDefinition.codeString
-            }
+            },
         }
     }
 
@@ -208,7 +208,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
             indentUnit: 4,
             readOnly: true,
             firstLineNumber: 1,
-            gutters: []
+            gutters: [],
         }
     }
     get prefixCodeBlock() {
@@ -225,7 +225,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
             id: this.block.id,
             actualContent: () => {
                 return 'function(block) {'
-            }
+            },
         }
     }
     codeLen: number = 0
@@ -243,7 +243,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
             id: this.block.id,
             actualContent: () => {
                 return '}'
-            }
+            },
         }
     }
 

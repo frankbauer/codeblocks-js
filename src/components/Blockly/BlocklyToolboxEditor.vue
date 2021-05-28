@@ -19,7 +19,7 @@
                 @click="addCategory"
             />
         </div>
-        <q-list dark bordered class="rounded-borders q-mt-sm ">
+        <q-list dark bordered class="rounded-borders q-mt-sm">
             <q-expansion-item
                 v-for="category in categories"
                 v-bind:key="category.uuid"
@@ -30,7 +30,7 @@
                 :caption="descriptionForCategory(category)"
             >
                 <template v-slot:header>
-                    <q-item style="width:100%">
+                    <q-item style="width: 100%">
                         <q-item-section>
                             <q-item-label>{{ category.name }}</q-item-label>
                             <q-item-label caption>
@@ -92,7 +92,7 @@ export default class BlocklyToolboxEditor extends Vue {
                 uuid: uuid.v4(),
                 name: '',
                 items: [],
-                color: ''
+                color: '',
             }
             this.block.blockly.toolbox.categories.push(cat)
         }

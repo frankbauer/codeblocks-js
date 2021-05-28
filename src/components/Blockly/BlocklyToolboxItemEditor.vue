@@ -14,9 +14,7 @@
                 >
                     <template v-slot:no-option>
                         <q-item>
-                            <q-item-section class="text-grey">
-                                No results
-                            </q-item-section>
+                            <q-item-section class="text-grey"> No results </q-item-section>
                         </q-item>
                     </template>
                 </q-select>
@@ -46,13 +44,13 @@ export default class BlocklyToolboxItemEditor extends Vue {
     }
 
     get blockTypes(): IListItemData[] {
-        const custom: IListItemData[] = this.customBlocks.map(bl => {
+        const custom: IListItemData[] = this.customBlocks.map((bl) => {
             const ret: IListItemData = {
                 label:
                     bl.JSON.message0 && bl.JSON.message0.trim() != ''
                         ? bl.JSON.message0
                         : bl.JSON.type,
-                value: bl.JSON.type
+                value: bl.JSON.type,
             }
             return ret
         })
@@ -72,7 +70,7 @@ export default class BlocklyToolboxItemEditor extends Vue {
         update(() => {
             const needle = val.toLowerCase()
             this.filteredBlockTypes = this.blockTypes.filter(
-                v => v.label.toLowerCase().indexOf(needle) > -1
+                (v) => v.label.toLowerCase().indexOf(needle) > -1
             )
         })
     }

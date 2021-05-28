@@ -5,13 +5,13 @@
             :data-question="block.parentID"
             :data-nr="block.id"
         >
-            <div :class="`col-12 text-${block.align} q-mx-none q-pa-none`" style="padding-top:6px">
+            <div :class="`col-12 text-${block.align} q-mx-none q-pa-none`" style="padding-top: 6px">
                 <div class="blocklyCanvas" :style="`width:${block.width};height:${block.height}`">
                     <div class="blocklyContainer" ref="blocklyContainer"></div>
                 </div>
             </div>
         </div>
-        <xml ref="blocklyToolbox" style="display:none" v-html="toolboxContent"> </xml>
+        <xml ref="blocklyToolbox" style="display: none" v-html="toolboxContent"> </xml>
         <div v-if="editMode">
             <q-list bordered class="rounded-borders q-mt-sm">
                 <q-expansion-item
@@ -24,7 +24,7 @@
                     <textarea
                         :name="`block[${block.parentID}][${block.id}]`"
                         v-html="block.content"
-                        style="display:none"
+                        style="display: none"
                     ></textarea>
                     <CodeBlock
                         v-if="editMode"
@@ -105,16 +105,15 @@ import BlocklyToolboxEditor from '@/components/Blockly/BlocklyToolboxEditor.vue'
 import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '@/lib/IBlocklyHelper'
-import { blocklyHelper, blockStyles, categoryStyles } from '@/lib/BlocklyHelper'
-
-const blocklyTheme = new Blockly.Theme('CodeBlocks', blockStyles as any, categoryStyles)
+import { blocklyHelper } from '@/lib/BlocklyHelper'
+import { blocklyTheme } from '@/lib/BlocklyStyle'
 
 @Component({
     components: {
         CodeBlock,
         BlocklyCustomBlocksEditor,
-        BlocklyToolboxEditor
-    }
+        BlocklyToolboxEditor,
+    },
 })
 export default class BlocklyBlock extends Vue {
     @Prop({ default: '' }) namePrefix!: string
@@ -178,19 +177,19 @@ export default class BlocklyBlock extends Vue {
         if (!options.theme) {
             options.theme = blocklyTheme
         }
-        this.block.blockly.blocks.forEach(bl => {
+        this.block.blockly.blocks.forEach((bl) => {
             const B = Blockly as any
             B.Blocks[bl.JSON.type] = {
-                init: function() {
+                init: function () {
                     this.jsonInit(blocklyHelper.getBlockDescription(bl))
-                }
+                },
             }
             if (bl._code === undefined) {
-                let err = this.block.blockly._blockErrors.find(e => e.uuid == bl.uuid)
+                let err = this.block.blockly._blockErrors.find((e) => e.uuid == bl.uuid)
                 if (err === undefined) {
                     err = {
                         error: '',
-                        uuid: bl.uuid
+                        uuid: bl.uuid,
                     }
                     this.block.blockly._blockErrors.push(err)
                 }
@@ -213,7 +212,7 @@ export default class BlocklyBlock extends Vue {
             startScale: 1.0,
             maxScale: 2,
             minScale: 0.3,
-            scaleSpeed: 1.2
+            scaleSpeed: 1.2,
         }
         options.shadowRoot = this.blockInfo.shadowRoot
         if (this.workspace) {
@@ -228,7 +227,7 @@ export default class BlocklyBlock extends Vue {
         if (!this.block._oac) {
             let self = this
             this.block._oac = this.block.actualContent
-            this.block.actualContent = function() {
+            this.block.actualContent = function () {
                 return self.code
             }
         }
@@ -247,7 +246,7 @@ export default class BlocklyBlock extends Vue {
             autoCloseBrackets: true,
             readOnly: true,
             firstLineNumber: 1,
-            gutters: ['diagnostics', 'CodeMirror-linenumbers']
+            gutters: ['diagnostics', 'CodeMirror-linenumbers'],
         }
     }
     get cmblock() {
@@ -264,7 +263,7 @@ export default class BlocklyBlock extends Vue {
             id: this.block.id,
             actualContent: () => {
                 return this.code
-            }
+            },
         }
     }
     get useToolboxOverride(): boolean {
@@ -280,7 +279,7 @@ export default class BlocklyBlock extends Vue {
             indentUnit: 4,
             readOnly: !this.useToolboxOverride,
             firstLineNumber: 1,
-            gutters: []
+            gutters: [],
         }
     }
     get tbblock() {
@@ -297,7 +296,7 @@ export default class BlocklyBlock extends Vue {
             id: this.block.id,
             actualContent: () => {
                 return this.unparsedOverrideToolboxContent
-            }
+            },
         }
     }
 
@@ -401,19 +400,19 @@ export default class BlocklyBlock extends Vue {
     }
 
     private parseToolboxCode(toolboxXML: string) {
-        Object.keys(BlockPrimaryColors).forEach(key => {
+        Object.keys(BlockPrimaryColors).forEach((key) => {
             toolboxXML = toolboxXML.replaceAllPoly(
                 `{!PrimaryColors.${key}}`,
                 BlockPrimaryColors[key]
             )
         })
-        Object.keys(BlockSecondaryColors).forEach(key => {
+        Object.keys(BlockSecondaryColors).forEach((key) => {
             toolboxXML = toolboxXML.replaceAllPoly(
                 `{!SecondaryColors.${key}}`,
                 BlockSecondaryColors[key]
             )
         })
-        Object.keys(BlockTertiaryColors).forEach(key => {
+        Object.keys(BlockTertiaryColors).forEach((key) => {
             toolboxXML = toolboxXML.replaceAllPoly(
                 `{!TertiaryColors.${key}}`,
                 BlockTertiaryColors[key]
@@ -502,7 +501,7 @@ export default class BlocklyBlock extends Vue {
             return
         }
         console.log('Changed Language')
-        this.block.blockly.blocks.forEach(b => (b._code = undefined))
+        this.block.blockly.blocks.forEach((b) => (b._code = undefined))
         this.$nextTick(() => {
             this.remountBlockly()
         })

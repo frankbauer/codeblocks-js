@@ -26,7 +26,7 @@
                 </div>
             </div>
         </q-card-section>
-        <q-card-section class="q-pb-none  q-mb-none">
+        <q-card-section class="q-pb-none q-mb-none">
             <div class="text-overline text-black q-pa-none q-ma-none">
                 {{ $t('Blockly.ToolboxItems') }}
                 <q-btn
@@ -42,7 +42,7 @@
             </div>
         </q-card-section>
         <q-card-section class="q-mb-none q-pt-none">
-            <q-list dense dark bordered class="rounded-borders q-mt-sm " style="max-width:400px">
+            <q-list dense dark bordered class="rounded-borders q-mt-sm" style="max-width: 400px">
                 <q-expansion-item
                     dense
                     v-model="item._expanded"
@@ -55,7 +55,7 @@
                     :caption="item.type"
                 >
                     <template v-slot:header>
-                        <q-item style="width:100%">
+                        <q-item style="width: 100%">
                             <q-item-section>
                                 <q-item-label>{{ labelForItem(item.type) }}</q-item-label>
                                 <q-item-label caption>
@@ -88,7 +88,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import {
     IBlocklyToolboxCategory,
     IBlocklyToolboxItem,
-    IBlockDefinition
+    IBlockDefinition,
 } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
@@ -131,7 +131,7 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
 
     addItem() {
         //close others
-        this.category.items.forEach(item => {
+        this.category.items.forEach((item) => {
             item._expanded = false
         })
 
@@ -139,7 +139,7 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
         const item: IBlocklyToolboxItem = {
             uuid: uuid.v4(),
             type: '',
-            _expanded: true
+            _expanded: true,
         }
         this.category.items.push(item)
     }

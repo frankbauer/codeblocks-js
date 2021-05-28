@@ -13,7 +13,7 @@
                 @click="addBlock"
             />
         </div>
-        <q-list dense bordered class="rounded-borders q-mt-sm ">
+        <q-list dense bordered class="rounded-borders q-mt-sm">
             <q-expansion-item
                 v-model="item._expanded"
                 v-for="item in customBlocks"
@@ -27,7 +27,7 @@
                 @show="onShowBlock"
             >
                 <template v-slot:header>
-                    <q-item style="width:100%">
+                    <q-item style="width: 100%">
                         <q-item-section>
                             <q-item-label>{{ labelForBlock(item) }}</q-item-label>
                             <q-item-label caption>
@@ -97,22 +97,22 @@ export default class BlocklyCustomBlocksEditor extends Vue {
                 html: true,
                 prompt: {
                     model: '',
-                    isValid: val =>
+                    isValid: (val) =>
                         val.length > 2 &&
                         this.customBlocks.find(
-                            bl => bl.JSON.type.toLowerCase() == val.toLowerCase()
+                            (bl) => bl.JSON.type.toLowerCase() == val.toLowerCase()
                         ) === undefined &&
                         PredefinedBlockTypes.find(
-                            bl => bl.value.toLowerCase() == val.toLowerCase()
+                            (bl) => bl.value.toLowerCase() == val.toLowerCase()
                         ) === undefined,
-                    type: 'text'
+                    type: 'text',
                 },
                 persistent: true,
                 cancel: true,
                 ok: {
                     push: true,
-                    color: 'positive'
-                }
+                    color: 'positive',
+                },
             })
             .onOk((data: string) => {
                 this._addBlock(data)
@@ -123,7 +123,7 @@ export default class BlocklyCustomBlocksEditor extends Vue {
 
     private _addBlock(type: string) {
         //close others
-        this.customBlocks.forEach(item => {
+        this.customBlocks.forEach((item) => {
             item._expanded = false
         })
 
@@ -140,9 +140,9 @@ export default class BlocklyCustomBlocksEditor extends Vue {
                 nextStatement: null,
                 colour: '',
                 tooltip: '',
-                helpUrl: ''
+                helpUrl: '',
             },
-            codeString: 'return ""'
+            codeString: 'return ""',
         }
         this.customBlocks.push(item)
     }

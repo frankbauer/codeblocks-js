@@ -20,26 +20,24 @@
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict'
-import Blockly from '@/lib/blockly/blockly'
+import Blockly from '@/lib/blockly'
 import Vue from 'vue'
 import { blocklyHelper, ColorThemeSelection } from '@/lib/BlocklyHelper'
 import { BlockPrimaryColors } from '@/lib/IBlocklyHelper'
 
 Blockly.Blocks['factory_base'] = {
     // Base of new block.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Text))
         this.appendDummyInput().appendField(Vue.$l('Blockly.Block.DesignBlockName'))
         // this.appendDummyInput()
         //     .appendField(Vue.$l('Blockly.Block.TypeName'))
         //     .appendField(new Blockly.FieldTextInput('block_type'), 'NAME')
-        this.appendStatementInput('INPUTS')
-            .setCheck('Input')
-            .appendField('inputs')
-        var dropdown = new Blockly.FieldDropdown([
+        this.appendStatementInput('INPUTS').setCheck('Input').appendField('inputs')
+        let dropdown = new Blockly.FieldDropdown([
             ['automatic inputs', 'AUTO'],
             ['external inputs', 'EXT'],
-            ['inline inputs', 'INT']
+            ['inline inputs', 'INT'],
         ])
         this.appendDummyInput().appendField(dropdown, 'INLINE')
         dropdown = new Blockly.FieldDropdown(
@@ -48,21 +46,17 @@ Blockly.Blocks['factory_base'] = {
                 ['← left output', 'LEFT'],
                 ['↕ top+bottom connections', 'BOTH'],
                 ['↑ top connection', 'TOP'],
-                ['↓ bottom connection', 'BOTTOM']
+                ['↓ bottom connection', 'BOTTOM'],
             ],
-            function(this: any, option) {
+            function (this: any, option) {
                 this.getSourceBlock().updateShape_(option)
                 // Connect a shadow block to this new input.
                 this.getSourceBlock().spawnOutputShadow_(option)
             }
         )
         this.appendDummyInput().appendField(dropdown, 'CONNECTIONS')
-        this.appendValueInput('TOOLTIP')
-            .setCheck('String')
-            .appendField('tooltip')
-        this.appendValueInput('HELPURL')
-            .setCheck('String')
-            .appendField('help url')
+        this.appendValueInput('TOOLTIP').setCheck('String').appendField('tooltip')
+        this.appendValueInput('HELPURL').setCheck('String').appendField('help url')
         // this.appendValueInput('COLOUR')
         //     .setCheck('Colour')
         //     .appendField('colour')
@@ -73,16 +67,16 @@ Blockly.Blocks['factory_base'] = {
             'https://developers.google.com/blockly/guides/create-custom-blocks/block-factory'
         )
     },
-    mutationToDom: function() {
-        var container = Blockly.utils.xml.createElement('mutation')
+    mutationToDom: function (this: any) {
+        const container = Blockly.utils.xml.createElement('mutation')
         container.setAttribute('connections', this.getFieldValue('CONNECTIONS'))
         return container
     },
-    domToMutation: function(xmlElement) {
-        var connections = xmlElement.getAttribute('connections')
+    domToMutation: function (this: any, xmlElement) {
+        const connections = xmlElement.getAttribute('connections')
         this.updateShape_(connections)
     },
-    spawnOutputShadow_: function(option) {
+    spawnOutputShadow_: function (this: any, option) {
         // Helper method for deciding which type of outputs this block needs
         // to attach shaddow blocks to.
         switch (option) {
@@ -101,18 +95,18 @@ Blockly.Blocks['factory_base'] = {
                 break
         }
     },
-    connectOutputShadow_: function(outputType) {
+    connectOutputShadow_: function (this: any, outputType) {
         // Helper method to create & connect shadow block.
-        var type = this.workspace.newBlock('type_null')
+        const type = this.workspace.newBlock('type_null')
         type.setShadow(true)
         type.outputConnection.connect(this.getInput(outputType).connection)
         type.initSvg()
         type.render()
     },
-    updateShape_: function(option) {
-        var outputExists = this.getInput('OUTPUTTYPE')
-        var topExists = this.getInput('TOPTYPE')
-        var bottomExists = this.getInput('BOTTOMTYPE')
+    updateShape_: function (this: any, option) {
+        const outputExists = this.getInput('OUTPUTTYPE')
+        const topExists = this.getInput('TOPTYPE')
+        const bottomExists = this.getInput('BOTTOMTYPE')
         if (option == 'LEFT') {
             if (!outputExists) {
                 this.addTypeInput_('OUTPUTTYPE', 'output type')
@@ -135,56 +129,54 @@ Blockly.Blocks['factory_base'] = {
             this.removeInput('BOTTOMTYPE')
         }
     },
-    addTypeInput_: function(name, label) {
-        this.appendValueInput(name)
-            .setCheck('Type')
-            .appendField(label)
+    addTypeInput_: function (this: any, name, label) {
+        this.appendValueInput(name).setCheck('Type').appendField(label)
         //this.moveInputBEFORE(name, 'COLOUR')
-    }
+    },
 }
 
-var FIELD_MESSAGE = 'fields %1 %2'
-var FIELD_ARGS = [
+const FIELD_MESSAGE = 'fields %1 %2'
+const FIELD_ARGS = [
     {
         type: 'field_dropdown',
         name: 'ALIGN',
         options: [
             ['left', 'LEFT'],
             ['right', 'RIGHT'],
-            ['centre', 'CENTRE']
-        ]
+            ['centre', 'CENTRE'],
+        ],
     },
     {
         type: 'input_statement',
         name: 'FIELDS',
-        check: 'Field'
-    }
+        check: 'Field',
+    },
 ]
 
-var TYPE_MESSAGE = 'type %1'
-var TYPE_ARGS = [
+const TYPE_MESSAGE = 'type %1'
+const TYPE_ARGS = [
     {
         type: 'input_value',
         name: 'TYPE',
         check: 'Type',
-        align: 'RIGHT'
-    }
+        align: 'RIGHT',
+    },
 ]
 
 Blockly.Blocks['input_value'] = {
     // Value input.
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'value input %1 %2',
             args0: [
                 {
                     type: 'field_input',
                     name: 'INPUTNAME',
-                    text: 'NAME'
+                    text: 'NAME',
                 },
                 {
-                    type: 'input_dummy'
-                }
+                    type: 'input_dummy',
+                },
             ],
             message1: FIELD_MESSAGE,
             args1: FIELD_ARGS,
@@ -194,28 +186,28 @@ Blockly.Blocks['input_value'] = {
             nextStatement: 'Input',
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.Math),
             tooltip: 'A value socket for horizontal connections.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=71'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=71',
         })
     },
-    onchange: function() {
+    onchange: function () {
         inputNameCheck(this)
-    }
+    },
 }
 
 Blockly.Blocks['input_statement'] = {
     // Statement input.
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'statement input %1 %2',
             args0: [
                 {
                     type: 'field_input',
                     name: 'INPUTNAME',
-                    text: 'NAME'
+                    text: 'NAME',
                 },
                 {
-                    type: 'input_dummy'
-                }
+                    type: 'input_dummy',
+                },
             ],
             message1: FIELD_MESSAGE,
             args1: FIELD_ARGS,
@@ -225,17 +217,17 @@ Blockly.Blocks['input_statement'] = {
             nextStatement: 'Input',
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.Math),
             tooltip: 'A statement socket for enclosed vertical stacks.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=246'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=246',
         })
     },
-    onchange: function() {
+    onchange: function () {
         inputNameCheck(this)
-    }
+    },
 }
 
 Blockly.Blocks['input_dummy'] = {
     // Dummy input.
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'dummy input',
             message1: FIELD_MESSAGE,
@@ -247,14 +239,14 @@ Blockly.Blocks['input_dummy'] = {
                 'For adding fields on a separate row with no ' +
                 'connections. Alignment options (left, right, centre) ' +
                 'apply only to multi-line fields.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=293'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=293',
         })
-    }
+    },
 }
 
 Blockly.Blocks['field_static'] = {
     // Text value.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput('FIRST')
             .appendField('text')
@@ -263,12 +255,12 @@ Blockly.Blocks['field_static'] = {
         this.setNextStatement(true, 'Field')
         this.setTooltip('Static text that serves as a label.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=88')
-    }
+    },
 }
 
 Blockly.Blocks['field_label_serializable'] = {
     // Text value that is saved to XML.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput('FIRST')
             .appendField('text')
@@ -283,14 +275,14 @@ Blockly.Blocks['field_label_serializable'] = {
         )
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=88')
     },
-    onchange: function() {
+    onchange: function () {
         fieldNameCheck(this)
-    }
+    },
 }
 
 Blockly.Blocks['field_input'] = {
     // Text input.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput()
             .appendField('text input')
@@ -302,14 +294,14 @@ Blockly.Blocks['field_input'] = {
         this.setTooltip('An input field for the user to enter text.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=319')
     },
-    onchange: function() {
+    onchange: function () {
         fieldNameCheck(this)
-    }
+    },
 }
 
 Blockly.Blocks['field_number'] = {
     // Numeric input.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput()
             .appendField('numeric input')
@@ -328,14 +320,14 @@ Blockly.Blocks['field_number'] = {
         this.setTooltip('An input field for the user to enter a number.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=319')
     },
-    onchange: function() {
+    onchange: function () {
         fieldNameCheck(this)
-    }
+    },
 }
 
 Blockly.Blocks['field_angle'] = {
     // Angle input.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput()
             .appendField('angle input')
@@ -347,14 +339,14 @@ Blockly.Blocks['field_angle'] = {
         this.setTooltip('An input field for the user to enter an angle.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=372')
     },
-    onchange: function() {
+    onchange: function () {
         fieldNameCheck(this)
-    }
+    },
 }
 
 Blockly.Blocks['field_dropdown'] = {
     // Dropdown menu.
-    init: function() {
+    init: function (this: any) {
         this.appendDummyInput()
             .appendField('dropdown')
             .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME')
@@ -369,19 +361,19 @@ Blockly.Blocks['field_dropdown'] = {
         this.setTooltip('Dropdown menu with a list of options.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386')
     },
-    mutationToDom: function(workspace) {
+    mutationToDom: function (this: any, workspace) {
         // Create XML to represent menu options.
-        var container = Blockly.utils.xml.createElement('mutation')
+        const container = Blockly.utils.xml.createElement('mutation')
         container.setAttribute('options', JSON.stringify(this.optionList_))
         return container
     },
-    domToMutation: function(container) {
+    domToMutation: function (this: any, container) {
         // Parse XML to restore the menu options.
-        var value = JSON.parse(container.getAttribute('options'))
+        const value = JSON.parse(container.getAttribute('options'))
         if (typeof value == 'number') {
             // Old format from before images were added.  November 2016.
             this.optionList_ = []
-            for (var i = 0; i < value; i++) {
+            for (let i = 0; i < value; i++) {
                 this.optionList_.push('text')
             }
         } else {
@@ -389,25 +381,25 @@ Blockly.Blocks['field_dropdown'] = {
         }
         this.updateShape_()
     },
-    decompose: function(workspace) {
+    decompose: function (this: any, workspace) {
         // Populate the mutator's dialog with this block's components.
-        var containerBlock = workspace.newBlock('field_dropdown_container')
+        const containerBlock = workspace.newBlock('field_dropdown_container')
         containerBlock.initSvg()
-        var connection = containerBlock.getInput('STACK').connection
-        for (var i = 0; i < this.optionList_.length; i++) {
-            var optionBlock = workspace.newBlock('field_dropdown_option_' + this.optionList_[i])
+        let connection = containerBlock.getInput('STACK').connection
+        for (let i = 0; i < this.optionList_.length; i++) {
+            const optionBlock = workspace.newBlock('field_dropdown_option_' + this.optionList_[i])
             optionBlock.initSvg()
             connection.connect(optionBlock.previousConnection)
             connection = optionBlock.nextConnection
         }
         return containerBlock
     },
-    compose: function(containerBlock) {
+    compose: function (this: any, containerBlock) {
         // Reconfigure this block based on the mutator dialog's components.
-        var optionBlock = containerBlock.getInputTargetBlock('STACK')
+        let optionBlock = containerBlock.getInputTargetBlock('STACK')
         // Count number of inputs.
         this.optionList_.length = 0
-        var data: any[] = []
+        const data: any[] = []
         while (optionBlock) {
             if (optionBlock.type == 'field_dropdown_option_text') {
                 this.optionList_.push('text')
@@ -419,8 +411,8 @@ Blockly.Blocks['field_dropdown'] = {
         }
         this.updateShape_()
         // Restore any data.
-        for (var i = 0; i < this.optionList_.length; i++) {
-            var userData = data[i][0]
+        for (let i = 0; i < this.optionList_.length; i++) {
+            const userData = data[i][0]
             if (userData !== undefined) {
                 if (typeof userData == 'string') {
                     this.setFieldValue(userData || 'option', 'USER' + i)
@@ -434,10 +426,10 @@ Blockly.Blocks['field_dropdown'] = {
             }
         }
     },
-    saveConnections: function(containerBlock) {
+    saveConnections: function (this: any, containerBlock) {
         // Store all data for each option.
-        var optionBlock = containerBlock.getInputTargetBlock('STACK')
-        var i = 0
+        let optionBlock = containerBlock.getInputTargetBlock('STACK')
+        let i = 0
         while (optionBlock) {
             optionBlock.userData_ = this.getUserData(i)
             optionBlock.cpuData_ = this.getFieldValue('CPU' + i)
@@ -445,18 +437,18 @@ Blockly.Blocks['field_dropdown'] = {
             optionBlock = optionBlock.nextConnection && optionBlock.nextConnection.targetBlock()
         }
     },
-    updateShape_: function() {
+    updateShape_: function (this: any) {
         // Delete everything.
-        var i = 0
+        let i = 0
         while (this.getInput('OPTION' + i)) {
             this.removeInput('OPTION' + i)
             this.removeInput('OPTION_IMAGE' + i, true)
             i++
         }
         // Rebuild block.
-        var src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif'
-        for (var i = 0; i <= this.optionList_.length; i++) {
-            var type = this.optionList_[i]
+        const src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif'
+        for (i = 0; i <= this.optionList_.length; i++) {
+            const type = this.optionList_[i]
             if (type == 'text') {
                 this.appendDummyInput('OPTION' + i)
                     .appendField('•')
@@ -481,14 +473,14 @@ Blockly.Blocks['field_dropdown'] = {
             }
         }
     },
-    onchange: function() {
+    onchange: function (this: any) {
         if (this.workspace && this.optionList_.length < 1) {
             this.setWarningText('Drop down menu must\nhave at least one option.')
         } else {
             fieldNameCheck(this)
         }
     },
-    getUserData: function(n) {
+    getUserData: function (this: any, n) {
         if (this.optionList_[n] == 'text') {
             return this.getFieldValue('USER' + n)
         }
@@ -497,28 +489,28 @@ Blockly.Blocks['field_dropdown'] = {
                 src: this.getFieldValue('SRC' + n),
                 width: Number(this.getFieldValue('WIDTH' + n)),
                 height: Number(this.getFieldValue('HEIGHT' + n)),
-                alt: this.getFieldValue('ALT' + n)
+                alt: this.getFieldValue('ALT' + n),
             }
         }
         throw 'Unknown dropdown type'
-    }
+    },
 }
 
 Blockly.Blocks['field_dropdown_container'] = {
     // Container.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput().appendField('add options')
         this.appendStatementInput('STACK')
         this.setTooltip('Add, remove, or reorder options\n' + 'to reconfigure this dropdown menu.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386')
         this.contextMenu = false
-    }
+    },
 }
 
 Blockly.Blocks['field_dropdown_option_text'] = {
     // Add text option.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Math))
         this.appendDummyInput().appendField('text option')
         this.setPreviousStatement(true)
@@ -526,12 +518,12 @@ Blockly.Blocks['field_dropdown_option_text'] = {
         this.setTooltip('Add a new text option to the dropdown menu.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386')
         this.contextMenu = false
-    }
+    },
 }
 
 Blockly.Blocks['field_dropdown_option_image'] = {
     // Add image option.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Math))
         this.appendDummyInput().appendField('image option')
         this.setPreviousStatement(true)
@@ -539,12 +531,12 @@ Blockly.Blocks['field_dropdown_option_image'] = {
         this.setTooltip('Add a new image option to the dropdown menu.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=386')
         this.contextMenu = false
-    }
+    },
 }
 
 Blockly.Blocks['field_checkbox'] = {
     // Checkbox.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput()
             .appendField('checkbox')
@@ -556,14 +548,14 @@ Blockly.Blocks['field_checkbox'] = {
         this.setTooltip('Checkbox field.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=485')
     },
-    onchange: function() {
+    onchange: function () {
         fieldNameCheck(this)
-    }
+    },
 }
 
 Blockly.Blocks['field_colour'] = {
     // Colour input.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput()
             .appendField('colour')
@@ -575,32 +567,32 @@ Blockly.Blocks['field_colour'] = {
         this.setTooltip('Colour input field.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=495')
     },
-    onchange: function() {
+    onchange: function () {
         fieldNameCheck(this)
-    }
+    },
 }
 
-Blockly.Blocks['field_date'] = {
-    // Date input.
-    init: function() {
-        this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
-        this.appendDummyInput()
-            .appendField('date')
-            .appendField(new Blockly.FieldDate(), 'DATE')
-            .appendField(',')
-            .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME')
-        this.setPreviousStatement(true, 'Field')
-        this.setNextStatement(true, 'Field')
-        this.setTooltip('Date input field.')
-    },
-    onchange: function() {
-        fieldNameCheck(this)
-    }
-}
+// Blockly.Blocks['field_date'] = {
+//     // Date input.
+//     init: function (this: any) {
+//         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
+//         this.appendDummyInput()
+//             .appendField('date')
+//             .appendField(new Blockly.FieldDate(), 'DATE')
+//             .appendField(',')
+//             .appendField(new Blockly.FieldTextInput('NAME'), 'FIELDNAME')
+//         this.setPreviousStatement(true, 'Field')
+//         this.setNextStatement(true, 'Field')
+//         this.setTooltip('Date input field.')
+//     },
+//     onchange: function () {
+//         fieldNameCheck(this)
+//     },
+// }
 
 Blockly.Blocks['field_variable'] = {
     // Dropdown for variables.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
         this.appendDummyInput()
             .appendField('variable')
@@ -612,16 +604,16 @@ Blockly.Blocks['field_variable'] = {
         this.setTooltip('Dropdown menu for variable names.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=510')
     },
-    onchange: function() {
+    onchange: function () {
         fieldNameCheck(this)
-    }
+    },
 }
 
 Blockly.Blocks['field_image'] = {
     // Image.
-    init: function() {
+    init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Logic))
-        var src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif'
+        const src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif'
         this.appendDummyInput()
             .appendField('image')
             .appendField(new Blockly.FieldTextInput(src), 'SRC')
@@ -642,12 +634,12 @@ Blockly.Blocks['field_image'] = {
                 'Alt text is for when collapsed.'
         )
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=567')
-    }
+    },
 }
 
 Blockly.Blocks['type_group'] = {
     // Group of types.
-    init: function() {
+    init: function (this: any) {
         this.typeCount_ = 2
         this.updateShape_()
         this.setOutput(true, 'Type')
@@ -656,51 +648,51 @@ Blockly.Blocks['type_group'] = {
         this.setTooltip('Allows more than one type to be accepted.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677')
     },
-    mutationToDom: function(workspace) {
+    mutationToDom: function (this: any, workspace) {
         // Create XML to represent a group of types.
-        var container = Blockly.utils.xml.createElement('mutation')
+        const container = Blockly.utils.xml.createElement('mutation')
         container.setAttribute('types', this.typeCount_)
         return container
     },
-    domToMutation: function(container) {
+    domToMutation: function (this: any, container) {
         // Parse XML to restore the group of types.
         this.typeCount_ = parseInt(container.getAttribute('types'), 10)
         this.updateShape_()
-        for (var i = 0; i < this.typeCount_; i++) {
+        for (let i = 0; i < this.typeCount_; i++) {
             this.removeInput('TYPE' + i)
         }
-        for (var i = 0; i < this.typeCount_; i++) {
-            var input = this.appendValueInput('TYPE' + i).setCheck('Type')
+        for (let i = 0; i < this.typeCount_; i++) {
+            const input = this.appendValueInput('TYPE' + i).setCheck('Type')
             if (i == 0) {
                 input.appendField('any of')
             }
         }
     },
-    decompose: function(workspace) {
+    decompose: function (this: any, workspace) {
         // Populate the mutator's dialog with this block's components.
-        var containerBlock = workspace.newBlock('type_group_container')
+        const containerBlock = workspace.newBlock('type_group_container')
         containerBlock.initSvg()
-        var connection = containerBlock.getInput('STACK').connection
-        for (var i = 0; i < this.typeCount_; i++) {
-            var typeBlock = workspace.newBlock('type_group_item')
+        let connection = containerBlock.getInput('STACK').connection
+        for (let i = 0; i < this.typeCount_; i++) {
+            const typeBlock = workspace.newBlock('type_group_item')
             typeBlock.initSvg()
             connection.connect(typeBlock.previousConnection)
             connection = typeBlock.nextConnection
         }
         return containerBlock
     },
-    compose: function(containerBlock) {
+    compose: function (this: any, containerBlock) {
         // Reconfigure this block based on the mutator dialog's components.
-        var typeBlock = containerBlock.getInputTargetBlock('STACK')
+        let typeBlock = containerBlock.getInputTargetBlock('STACK')
         // Count number of inputs.
-        var connections: any[] = []
+        const connections: any[] = []
         while (typeBlock) {
             connections.push(typeBlock.valueConnection_)
             typeBlock = typeBlock.nextConnection && typeBlock.nextConnection.targetBlock()
         }
         // Disconnect any children that don't belong.
-        for (var i = 0; i < this.typeCount_; i++) {
-            var connection = this.getInput('TYPE' + i).connection.targetConnection
+        for (let i = 0; i < this.typeCount_; i++) {
+            const connection = this.getInput('TYPE' + i).connection.targetConnection
             if (connection && connections.indexOf(connection) == -1) {
                 connection.disconnect()
             }
@@ -708,184 +700,184 @@ Blockly.Blocks['type_group'] = {
         this.typeCount_ = connections.length
         this.updateShape_()
         // Reconnect any child blocks.
-        for (var i = 0; i < this.typeCount_; i++) {
+        for (let i = 0; i < this.typeCount_; i++) {
             Blockly.Mutator.reconnect(connections[i], this, 'TYPE' + i)
         }
     },
-    saveConnections: function(containerBlock) {
+    saveConnections: function (this: any, containerBlock) {
         // Store a pointer to any connected child blocks.
-        var typeBlock = containerBlock.getInputTargetBlock('STACK')
-        var i = 0
+        let typeBlock = containerBlock.getInputTargetBlock('STACK')
+        let i = 0
         while (typeBlock) {
-            var input = this.getInput('TYPE' + i)
+            const input = this.getInput('TYPE' + i)
             typeBlock.valueConnection_ = input && input.connection.targetConnection
             i++
             typeBlock = typeBlock.nextConnection && typeBlock.nextConnection.targetBlock()
         }
     },
-    updateShape_: function() {
+    updateShape_: function (this: any) {
         // Modify this block to have the correct number of inputs.
         // Add new inputs.
-        for (var i = 0; i < this.typeCount_; i++) {
+        let i = 0
+        for (i = 0; i < this.typeCount_; i++) {
             if (!this.getInput('TYPE' + i)) {
-                var input = this.appendValueInput('TYPE' + i)
+                const input = this.appendValueInput('TYPE' + i)
                 if (i == 0) {
                     input.appendField('any of')
                 }
             }
         }
+
         // Remove deleted inputs.
         while (this.getInput('TYPE' + i)) {
             this.removeInput('TYPE' + i)
             i++
         }
-    }
+    },
 }
 
 Blockly.Blocks['type_group_container'] = {
     // Container.
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'add types %1 %2',
             args0: [{ type: 'input_dummy' }, { type: 'input_statement', name: 'STACK' }],
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.List),
             tooltip: 'Add, or remove allowed type.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677',
         })
-    }
+    },
 }
 
 Blockly.Blocks['type_group_item'] = {
     // Add type.
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'type',
             previousStatement: null,
             nextStatement: null,
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.List),
             tooltip: 'Add a new allowed type.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=677',
         })
-    }
+    },
 }
 
 Blockly.Blocks['type_null'] = {
     // Null type.
     valueType: null,
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'any',
             output: 'Type',
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.List),
             tooltip: 'Any type is allowed.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602',
         })
-    }
+    },
 }
 
 Blockly.Blocks['type_boolean'] = {
     // Boolean type.
     valueType: 'Boolean',
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'Boolean',
             output: 'Type',
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.List),
             tooltip: 'Booleans (true/false) are allowed.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602',
         })
-    }
+    },
 }
 
 Blockly.Blocks['type_number'] = {
     // Number type.
     valueType: 'Number',
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'Number',
             output: 'Type',
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.List),
             tooltip: 'Numbers (int/float) are allowed.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602',
         })
-    }
+    },
 }
 
 Blockly.Blocks['type_string'] = {
     // String type.
     valueType: 'String',
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'String',
             output: 'Type',
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.List),
             tooltip: 'Strings (text) are allowed.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602',
         })
-    }
+    },
 }
 
 Blockly.Blocks['type_list'] = {
     // List type.
     valueType: 'Array',
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'Array',
             output: 'Type',
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.List),
             tooltip: 'Arrays (lists) are allowed.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=602',
         })
-    }
+    },
 }
 
 Blockly.Blocks['type_other'] = {
     // Other type.
-    init: function() {
+    init: function (this: any) {
         this.jsonInit({
             message0: 'other %1',
             args0: [{ type: 'field_input', name: 'TYPE', text: '' }],
             output: 'Type',
             colour: blocklyHelper.toHTMLColor(BlockPrimaryColors.List),
             tooltip: 'Custom type to allow.',
-            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=702'
+            helpUrl: 'https://www.youtube.com/watch?v=s2_xaEvcVI0#t=702',
         })
-    }
+    },
 }
 
 Blockly.Blocks['colour_constants'] = {
     // Base of new block.
-    init: function() {
-        const colors = ColorThemeSelection.map(c => {
+    init: function (this: any) {
+        const colors = ColorThemeSelection.map((c) => {
             return [c.label, c.value]
         })
         console.i('Blockly Color Categories', colors)
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Colour))
-        var dropdown = new Blockly.FieldDropdown(colors, this.validator)
-        this.appendDummyInput()
-            .appendField('Color Category')
-            .appendField(dropdown, 'CATEGORY')
+        const dropdown = new Blockly.FieldDropdown(colors, this.validator)
+        this.appendDummyInput().appendField('Color Category').appendField(dropdown, 'CATEGORY')
         this.setOutput(true, 'Colour')
         this.setTooltip('Paint the block with define colour-constant.')
     },
-    validator: function(text) {
+    validator: function (this: any, text) {
         // Update the current block's colour to match.
         const hue = blocklyHelper.toHTMLColor(text)
         this.getSourceBlock().setColour(hue)
     },
-    mutationToDom: function(workspace) {
-        var container = Blockly.utils.xml.createElement('mutation')
+    mutationToDom: function (this: any, workspace) {
+        const container = Blockly.utils.xml.createElement('mutation')
         container.setAttribute('colour', this.getColour())
         return container
     },
-    domToMutation: function(container) {
+    domToMutation: function (this: any, container) {
         this.setColour(container.getAttribute('colour'))
-    }
+    },
 }
 
 Blockly.Blocks['colour_hue'] = {
     // Set the colour of the block.
-    init: function() {
+    init: function (this: any) {
         this.appendDummyInput()
             .appendField('hue:')
             .appendField(new Blockly.FieldAngle('0', this.validator), 'HUE')
@@ -893,21 +885,21 @@ Blockly.Blocks['colour_hue'] = {
         this.setTooltip('Paint the block with this colour.')
         this.setHelpUrl('https://www.youtube.com/watch?v=s2_xaEvcVI0#t=55')
     },
-    validator: function(text) {
+    validator: function (this: any, text) {
         // Update the current block's colour to match.
-        var hue = parseInt(text, 10)
+        const hue = parseInt(text, 10)
         if (!isNaN(hue)) {
             this.getSourceBlock().setColour(hue)
         }
     },
-    mutationToDom: function(workspace) {
-        var container = Blockly.utils.xml.createElement('mutation')
+    mutationToDom: function (this: any, workspace) {
+        const container = Blockly.utils.xml.createElement('mutation')
         container.setAttribute('colour', this.getColour())
         return container
     },
-    domToMutation: function(container) {
+    domToMutation: function (this: any, container) {
         this.setColour(container.getAttribute('colour'))
-    }
+    },
 }
 
 /**
@@ -920,11 +912,11 @@ function fieldNameCheck(referenceBlock) {
         // Block has been deleted.
         return
     }
-    var name = referenceBlock.getFieldValue('FIELDNAME').toLowerCase()
-    var count = 0
-    var blocks = referenceBlock.workspace.getAllBlocks(false)
-    for (var i = 0, block; (block = blocks[i]); i++) {
-        var otherName = block.getFieldValue('FIELDNAME')
+    const name = referenceBlock.getFieldValue('FIELDNAME').toLowerCase()
+    let count = 0
+    const blocks = referenceBlock.workspace.getAllBlocks(false)
+    for (let i = 0, block; (block = blocks[i]); i++) {
+        const otherName = block.getFieldValue('FIELDNAME')
         if (
             !block.disabled &&
             !block.getInheritedDisabled() &&
@@ -934,7 +926,7 @@ function fieldNameCheck(referenceBlock) {
             count++
         }
     }
-    var msg = count > 1 ? 'There are ' + count + ' field blocks\n with this name.' : null
+    const msg = count > 1 ? 'There are ' + count + ' field blocks\n with this name.' : null
     referenceBlock.setWarningText(msg)
 }
 
@@ -948,11 +940,11 @@ function inputNameCheck(referenceBlock) {
         // Block has been deleted.
         return
     }
-    var name = referenceBlock.getFieldValue('INPUTNAME').toLowerCase()
-    var count = 0
-    var blocks = referenceBlock.workspace.getAllBlocks(false)
-    for (var i = 0, block; (block = blocks[i]); i++) {
-        var otherName = block.getFieldValue('INPUTNAME')
+    const name = referenceBlock.getFieldValue('INPUTNAME').toLowerCase()
+    let count = 0
+    const blocks = referenceBlock.workspace.getAllBlocks(false)
+    for (let i = 0, block; (block = blocks[i]); i++) {
+        const otherName = block.getFieldValue('INPUTNAME')
         if (
             !block.disabled &&
             !block.getInheritedDisabled() &&
@@ -962,6 +954,6 @@ function inputNameCheck(referenceBlock) {
             count++
         }
     }
-    var msg = count > 1 ? 'There are ' + count + ' input blocks\n with this name.' : null
+    const msg = count > 1 ? 'There are ' + count + ' input blocks\n with this name.' : null
     referenceBlock.setWarningText(msg)
 }

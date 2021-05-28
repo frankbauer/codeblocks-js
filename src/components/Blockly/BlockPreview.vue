@@ -13,10 +13,11 @@ import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import Blockly from '@/plugins/blocklyEnv'
 
-import { blocklyHelper, ColorSelectionWithNone, theme } from '@/lib/BlocklyHelper'
-import { IBlocklyToolboxCategory, IBlockDefinition, BlockPrimaryColors } from '@/lib/IBlocklyHelper'
+import { blocklyHelper } from '@/lib/BlocklyHelper'
+import { IBlockDefinition } from '@/lib/IBlocklyHelper'
 
 import { uuid } from 'vue-uuid'
+import { blocklyTheme } from '@/lib/BlocklyStyle'
 
 /**
  * Name of block if not named.
@@ -49,8 +50,7 @@ export default class BlockEditor extends Vue {
         if (!this.previewWorkspace) {
             console.d('INJECT BLOCKLY PREVIEW', this.blocklyPreviewContainer)
             this.previewWorkspace = Blockly.inject(this.blocklyPreviewContainer, {
-                scrollbars: false,
-                theme: theme,
+                theme: blocklyTheme,
                 renderer: 'minimalist',
                 zoom: {
                     controls: false,
@@ -58,8 +58,11 @@ export default class BlockEditor extends Vue {
                     startScale: 0.75,
                     maxScale: 2,
                     minScale: 0.3,
-                    scaleSpeed: 1.2
-                }
+                    scaleSpeed: 1.2,
+                },
+                move: {
+                    scrollbars: false,
+                },
             })
         }
 
@@ -82,18 +85,16 @@ export default class BlockEditor extends Vue {
 
             const json = JSON.parse(code)
             Blockly.Blocks[json.type || UNNAMED] = {
-                init: function() {
+                init: function (this: Blockly.Block) {
                     this.jsonInit(json)
-                }
+                },
             }
 
             // Look for a block on Blockly.Blocks that does not match the backup.
             let blockType: string | null = null
             for (let type in Blockly.Blocks) {
-                if (
-                    typeof Blockly.Blocks[type].init == 'function' &&
-                    Blockly.Blocks[type] != backupBlocks[type]
-                ) {
+                const bl: any = Blockly.Blocks[type]
+                if (typeof bl.init == 'function' && bl != backupBlocks[type]) {
                     blockType = type
                     break
                 }
