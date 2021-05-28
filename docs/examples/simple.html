@@ -30,6 +30,7 @@
 <body>
   <div id="content">
   <h1>This is JavaScript:</h1>
+  <div>
     <div codeblocks data-compiler="javascript" data-run-code="true">
       <loading><div></div><div></div></loading> 
       <block data-static>console.log("Welcome to codeblocks-js")
@@ -37,6 +38,7 @@
       <block data-visible-lines="5">// your code goes here</block>
       <block data-static>console.log("Thanks :)")</block>
     </div>
+</div>
 
     <h1>This is Java:</h1>
     <div codeblocks data-compiler="java" data-run-code="true">
@@ -63,7 +65,7 @@
   </div>
   <script>
     document.body.onload = () => {
-      import ("./js/codeblocks-js/codeblocks.umd.min.js")
+      import ("./js/codeblocks-js/codeblocks.umd.min.js")      
     }
   </script>  
 </body>
