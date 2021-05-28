@@ -61,6 +61,7 @@ export interface IAppSettings {
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean
+    shadowRoot?:ShadowRoot
 }
 
 interface IAppElementData {
@@ -231,7 +232,7 @@ function isTrue(val: any): boolean {
     return val !== undefined && val != 'false' && val != '0'
 }
 
-const useShadowDOM = true
+const useShadowDOM = false
 
 //this will handle the vue mounting on the dom
 class InternalCodeBlocksManager {
@@ -254,6 +255,7 @@ class InternalCodeBlocksManager {
 
     readonly element: HTMLElement
     readonly data: IAppSettings
+    readonly shadowRoot:ShadowRoot|undefined = undefined
     constructor(el: HTMLElement) {
         if (useShadowDOM) {
             const parent = el.parentElement!
@@ -262,6 +264,7 @@ class InternalCodeBlocksManager {
             parent.replaceChild(rewrap, el)
 
             const shadow = parent.attachShadow({ mode: 'open' })
+            this.shadowRoot = shadow
             shadow.innerHTML = ''
 
             $('style').each((idx, style) => {
@@ -278,6 +281,7 @@ class InternalCodeBlocksManager {
 
             this.element = root
         } else {
+            this.shadowRoot = undefined
             this.element = el
         }
         console.log(this.element)
@@ -311,6 +315,7 @@ class InternalCodeBlocksManager {
             messagePassing: isTrue(inData.messagePassing),
             keepAlive: isTrue(inData.keepAlive),
             persistentArguments: isTrue(inData.persistentArguments),
+            shadowRoot:this.shadowRoot,
         }
 
         if (inData.randomizerActive !== undefined) {
