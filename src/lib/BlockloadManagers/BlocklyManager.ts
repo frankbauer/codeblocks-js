@@ -177,7 +177,7 @@ export class BlocklyLoadManager implements IBlockloadManager {
                         { _expanded: false, type: 'text', uuid: uuid.v4() },
                         { _expanded: false, type: 'text_length', uuid: uuid.v4() },
                         { _expanded: false, type: 'text_print', uuid: uuid.v4() },
-
+                        { _expanded: false, type: 'text_join', uuid: uuid.v4() },
                         { _expanded: false, type: 'colour_rgb', uuid: uuid.v4() }
                     ]
                 },

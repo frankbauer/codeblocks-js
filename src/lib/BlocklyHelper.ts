@@ -84,49 +84,60 @@ export const blockStyles = {
         colourPrimary: BlockPrimaryColors.Colour,
         colourSecondary: BlockSecondaryColors.Colour,
         colourTertiary: BlockTertiaryColors.Colour,
+        hat:'cap',
     },
     list_blocks: {
         colourPrimary: BlockPrimaryColors.List,
         colourSecondary: BlockSecondaryColors.List,
         colourTertiary: BlockTertiaryColors.List,
+        hat:'cap',
     },
     logic_blocks: {
         colourPrimary: BlockPrimaryColors.Logic,
         colourSecondary: BlockSecondaryColors.Logic,
         colourTertiary: BlockTertiaryColors.Logic,
+        hat:'cap',
     },
     loop_blocks: {
         colourPrimary: BlockPrimaryColors.Loop,
         colourSecondary: BlockSecondaryColors.Loop,
         colourTertiary: BlockTertiaryColors.Loop,
+        hat:'cap',
     },
     math_blocks: {
         colourPrimary: BlockPrimaryColors.Math,
         colourSecondary: BlockSecondaryColors.Math,
         colourTertiary: BlockTertiaryColors.Math,
+        hat:'cap',
     },
     procedure_blocks: {
         colourPrimary: BlockPrimaryColors.Procedure,
         colourSecondary: BlockSecondaryColors.Procedure,
         colourTertiary: BlockTertiaryColors.Procedure,
+        hat:'cap',
     },
     text_blocks: {
         colourPrimary: BlockPrimaryColors.Text,
         colourSecondary: BlockSecondaryColors.Text,
         colourTertiary: BlockTertiaryColors.Text,
+        hat:'cap',
     },
     variable_blocks: {
         colourPrimary: BlockPrimaryColors.Variable,
         colourSecondary: BlockSecondaryColors.Variable,
         colourTertiary: BlockTertiaryColors.Variable,
+        hat:'cap',
     },
     variable_dynamic_blocks: {
         colourPrimary: BlockPrimaryColors.Variable_dynamic,
         colourSecondary: BlockSecondaryColors.Variable_dynamic,
         colourTertiary: BlockTertiaryColors.Variable_dynamic,
+        hat:'cap',
     },
     hat_blocks: {
         colourPrimary: '330',
+        colourSecondary: '330',
+        colourTertiary: '330',
         hat: 'cap',
     },
 }
@@ -145,7 +156,7 @@ export const categoryStyles = {
     },
 }
 
-export const theme = new Blockly.Theme(blockStyles as any, categoryStyles)
+export const theme = new Blockly.Theme('CodeBlocks', blockStyles as any, categoryStyles)
 
 export class BlocklyHelper {
     public toArgumentDescription(a: BlockArgumentTypes) {

@@ -102,7 +102,7 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import BlocklyCustomBlocksEditor from '@/components/Blockly/BlocklyCustomBlocksEditor.vue'
 import BlocklyToolboxEditor from '@/components/Blockly/BlocklyToolboxEditor.vue'
 
-import { BlockData } from '@/lib/codeBlocksManager'
+import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, theme } from '@/lib/BlocklyHelper'
@@ -124,6 +124,7 @@ export default class BlocklyBlock extends Vue {
     @Prop({ default: undefined }) tagSet!: IRandomizerSet
     @Prop({ required: true }) block!: BlockData
     @Prop({ default: false }) emitWhenTypingInViewMode!: boolean
+    @Prop({ required: true }) blockInfo!: IMainBlock
 
     workspace: Blockly.Workspace | null = null
     tmpcode: string = ''
@@ -212,6 +213,7 @@ export default class BlocklyBlock extends Vue {
             minScale: 0.3,
             scaleSpeed: 1.2
         }
+        options.shadowRoot = this.blockInfo.shadowRoot
         if (this.workspace) {
             this.workspace.dispose()
         }

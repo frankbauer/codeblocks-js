@@ -91,6 +91,7 @@
                 :readonly="readonly"
                 :tagSet="activeTagSet"
                 :emitWhenTypingInViewMode="continuousCompile"
+                :blockInfo="blockInfo"
                 @code-changed-in-view-mode="onViewCodeChange"
             />
         </CodeBlockContainer>
@@ -183,7 +184,7 @@ import CodePanel from '@/components/CodePanel.vue'
 import Blockly from '@/components/Blockly/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
-import { BlockData, IAppSettings, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
+import { BlockData, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
 import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import {
     ICompilerID,
