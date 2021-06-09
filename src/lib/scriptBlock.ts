@@ -74,15 +74,39 @@ Vue.prototype.$jsErrorParser = jsErrorParser
 
 const sandboxProxies = new WeakMap()
 
-function compileCode(src) {
+function compileCode(src: string) {
     const code = new Function('sandbox', src)
 
-    return function (sandbox) {
+    return function (sandbox: any) {
         compilerRegistry.addLoadedToSandbox(sandbox)
 
+        sandbox.$ = (input: any) => {
+            if (typeof input === 'string') {
+                console.error('You can not use JQuerry globally from this context')
+            } else {
+                if (input.getAttribute === undefined) {
+                    console.error('You may only wrap DOMElements using $')
+                    return
+                }
+                return $(input)
+            }
+        }
         sandbox.console = console
         sandbox.document = {
+            create$: (what: any) => $(document.createElement(what)),
             createElement: (what: any) => document.createElement(what),
+            getElementById: (id: String) =>
+                console.error(
+                    `document.getElementById is not supported. Please use scope.find('#${id}') instead`
+                ),
+            getElementsByTagName: (tag: String) =>
+                console.error(
+                    `document.getElementsByTagName is not supported. Please use scope.find('${tag}') instead`
+                ),
+            getElementsByClassName: (cl: String) =>
+                console.error(
+                    `document.getElementsByClassName is not supported. Please use scope.find('.${cl}') instead`
+                ),
         }
 
         if (!sandboxProxies.has(sandbox)) {
@@ -93,11 +117,11 @@ function compileCode(src) {
     }
 }
 
-function has(target, key) {
+function has(target: any, key: any) {
     return true
 }
 
-function get(target, key) {
+function get(target: any, key: any) {
     if (key === Symbol.unscopables) {
         return undefined
     }
@@ -147,17 +171,14 @@ export class ScriptBlock implements IScriptBlock {
                 //we also return a function to make and call (.call({})) it with a clean object
                 //to ensure that 'this' is will allways be in a defined state inside the users code
                 if (this.requestsOriginalVersion()) {
-                    console.log('ANCIENT ANCIENT ANCIENT')
                     this.fkt = new Function(
                         legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix
                     )
                 } else if (this.version === '101') {
-                    console.log('OLD OLD OLD')
                     this.fkt = new Function(
                         v101CodeTemplate.prefix + code + v101CodeTemplate.postfix
                     )
                 } else {
-                    console.log('NEW NEW NEW')
                     this.fkt = compileCode(
                         v102CodeTemplate.prefix + code + v102CodeTemplate.postfix
                     )
