@@ -232,7 +232,7 @@ function isTrue(val: any): boolean {
     return val !== undefined && val != 'false' && val != '0'
 }
 
-const useShadowDOM = true
+const useShadowDOM = false
 
 //this will handle the vue mounting on the dom
 class InternalCodeBlocksManager {
