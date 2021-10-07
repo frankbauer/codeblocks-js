@@ -87,7 +87,8 @@ export class GlobalState implements IGlobalState {
             const pString = outputObject.substr(idx + magicString.length)
             try {
                 json = JSON.parse(pString)
-            } catch (e) {
+            } catch (ee) {
+                const e: any = ee
                 e.parsedString = pString
                 console.log('catch')
                 throw e
