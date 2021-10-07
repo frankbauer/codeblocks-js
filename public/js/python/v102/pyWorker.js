@@ -24,7 +24,8 @@ function parseError(err) {
     let msg = ''
     if (err.message) {
         if (err.message.indexOf('Traceback') >= 0) {
-            const ep = /File\s*"(\S*?)",\s*line\s*(\d*),\s*in\s*(\S.*)|File\s*"(\S*?)",\s*line\s*(\d*)/gm
+            const ep =
+                /File\s*"(\S*?)",\s*line\s*(\d*),\s*in\s*(\S.*)|File\s*"(\S*?)",\s*line\s*(\d*)/gm
             let m
 
             while ((m = ep.exec(err.message)) !== null) {
@@ -75,7 +76,6 @@ async function listener(input) {
     if (typeof self.__pyodideLoading === 'undefined') {
         await loadPyodide({ indexURL: './pyodide-0.17.0/' })
         dict = pyodide.globals.get('dict')
-
         // custom logging
         this.console = {
             log(...s) {
@@ -136,6 +136,7 @@ async function listener(input) {
                 pyodide.runPython(
                     `import sys
 import io
+sys.setrecursionlimit(200)
 sys.stdout = io.StringIO()`,
                     globals
                 )
