@@ -222,19 +222,50 @@ import { GLSLCompilers } from '../compiler/glsl'
 compilerRegistry.register(GLSLCompilers)
 
 compilerRegistry.registerDOMLib(
-    [
-        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js',
-        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js',
-    ],
-    'd3',
-    '5.3.8',
-    'D3',
+    [Vue.$CodeBlock.baseurl + 'js/chart.js/3.6.0/chart.min.js'],
+    'chart',
+    '3.6.0',
+    'Chart.JS',
     false,
-    2200,
+    1000,
     (sandbox) => {
-        sandbox.d3 = (window as any).d3
+        sandbox.Chart = (window as any).Chart
     }
 )
+compilerRegistry.registerDOMLib(
+    [
+        Vue.$CodeBlock.baseurl + 'js/three.js/r0/three.min.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/r0/controls/OrbitControls.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/r0/controls/TrackballControls.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/r0/Detector.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/helper.r0.js',
+    ],
+    '3js',
+    'r0',
+    'Three.JS',
+    false,
+    2000,
+    (sandbox) => {
+        sandbox.THREE = (window as any).THREE
+    }
+)
+
+compilerRegistry.registerDOMLib(
+    [
+        Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/phaser.min.js',
+        Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/support.js',
+    ],
+    'phaser',
+    '3.54',
+    'Phaser',
+    false,
+    3000,
+    (sandbox: any) => {
+        sandbox.Phaser = (window as any).Phaser
+        sandbox.IsometricMapGame = (window as any).IsometricMapGame
+    }
+)
+
 compilerRegistry.registerDOMLib(
     [
         Vue.$CodeBlock.baseurl + 'js/d3/5.16.0/d3.v5.min.js',
@@ -244,7 +275,21 @@ compilerRegistry.registerDOMLib(
     '5.16.0',
     'D3',
     false,
-    2210,
+    4210,
+    (sandbox) => {
+        sandbox.d3 = (window as any).d3
+    }
+)
+compilerRegistry.registerDOMLib(
+    [
+        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js',
+        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js',
+    ],
+    'd3',
+    '5.3.8',
+    'D3',
+    false,
+    4200,
     (sandbox) => {
         sandbox.d3 = (window as any).d3
     }
@@ -258,7 +303,7 @@ compilerRegistry.registerDOMLib(
     '6.7.0',
     'D3',
     false,
-    2010,
+    4010,
     (sandbox) => {
         sandbox.d3 = (window as any).d3
     }
@@ -272,7 +317,7 @@ compilerRegistry.registerDOMLib(
     '6.2.0',
     'D3',
     false,
-    2000,
+    4000,
     (sandbox) => {
         sandbox.d3 = (window as any).d3
     }
@@ -283,39 +328,9 @@ compilerRegistry.registerDOMLib(
     '7.1.1',
     'D3',
     false,
-    2100,
+    4100,
     (sandbox) => {
         sandbox.d3 = (window as any).d3
-    }
-)
-
-compilerRegistry.registerDOMLib(
-    [Vue.$CodeBlock.baseurl + 'js/chart.js/3.6.0/chart.min.js'],
-    'chart',
-    '3.6.0',
-    'Chart.JS',
-    false,
-    1000,
-    (sandbox) => {
-        sandbox.Chart = (window as any).Chart
-    }
-)
-
-compilerRegistry.registerDOMLib(
-    [
-        Vue.$CodeBlock.baseurl + 'js/three.js/r0/three.min.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/r0/controls/OrbitControls.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/r0/controls/TrackballControls.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/r0/Detector.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/helper.r0.js',
-    ],
-    '3js',
-    'r0',
-    'Three.JS',
-    false,
-    3000,
-    (sandbox) => {
-        sandbox.THREE = (window as any).THREE
     }
 )
 
@@ -344,22 +359,6 @@ compilerRegistry.registerDOMLib(
     (sandbox) => {
         sandbox.tf = (window as any).tf
         //sandbox.tfvis = (window as any).tfvis
-    }
-)
-
-compilerRegistry.registerDOMLib(
-    [
-        Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/phaser.min.js',
-        Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/support.js',
-    ],
-    'phaser',
-    '3.54',
-    'Phaser',
-    false,
-    4000,
-    (sandbox: any) => {
-        sandbox.Phaser = (window as any).Phaser
-        sandbox.IsometricMapGame = (window as any).IsometricMapGame
     }
 )
 
