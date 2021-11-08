@@ -173,7 +173,7 @@ export class ScriptBlock implements IScriptBlock {
                     this.fkt = new Function(
                         legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix
                     )
-                } else if (this.version === '101') {
+                } else if (this.version === '101' || this.version === '102') {
                     this.fkt = new Function(
                         v101CodeTemplate.prefix + code + v101CodeTemplate.postfix
                     )
