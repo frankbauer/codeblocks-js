@@ -66,7 +66,8 @@ export class GlobalState implements IGlobalState {
     processMixedOutput(
         outputObject: string[] | string,
         type: CodeOutputTypes,
-        magicString?: string
+        magicString?: string,
+        resultData?: object | any[]
     ): IProcessedScriptOutput {
         if (outputObject !== undefined && Array.isArray(outputObject)) {
             return {
@@ -81,7 +82,13 @@ export class GlobalState implements IGlobalState {
         }
         const idx = outputObject.indexOf(magicString)
 
-        if ((type === CodeOutputTypes.AUTO && idx >= 0) || type === CodeOutputTypes.MAGIC) {
+        if (type === CodeOutputTypes.AUTO && resultData != undefined) {
+            return {
+                type: 'dual',
+                json: resultData,
+                text: outputObject,
+            }
+        } else if ((type === CodeOutputTypes.AUTO && idx >= 0) || type === CodeOutputTypes.MAGIC) {
             const str = outputObject.substr(0, idx)
             let json = undefined
             const pString = outputObject.substr(idx + magicString.length)
@@ -100,6 +107,13 @@ export class GlobalState implements IGlobalState {
                 text: str,
             }
         } else {
+            if (type === CodeOutputTypes.JSON && resultData !== undefined) {
+                return {
+                    type: CodeOutputTypes.JSON,
+                    json: resultData,
+                    text: '',
+                }
+            }
             const too = outputObject.trim()
             if (
                 (type === CodeOutputTypes.AUTO &&
@@ -116,7 +130,7 @@ export class GlobalState implements IGlobalState {
 
         return {
             type: 'text',
-            json: undefined,
+            json: resultData,
             text: outputObject,
         }
     }

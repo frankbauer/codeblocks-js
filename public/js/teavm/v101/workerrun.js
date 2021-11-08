@@ -69,7 +69,8 @@ function listener(event) {
             }
             main(request.args)
             rArgs = $rt_last_run_args.data.map((j) => j.toString())
-            if (request.messagePosting) {
+            //if (request.messagePosting)
+            {
                 self.postMessage({ command: 'main-finished', id: reqID, args: rArgs })
             }
         } catch (EE) {

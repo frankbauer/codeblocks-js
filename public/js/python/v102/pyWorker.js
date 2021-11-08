@@ -176,7 +176,8 @@ sys.stdout = io.StringIO()`,
                 this.console.error(err)
             }
 
-            if (o.messagePosting) {
+            //if (o.messagePosting)
+            {
                 self.postMessage({ command: 'main-finished', id: o.id, args: args })
             }
             if (!o.keepAlive) {

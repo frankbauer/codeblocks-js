@@ -52,8 +52,8 @@ function listener(input) {
             break
         case 'importTF':
             clog('[Importing TensorFlow.JS]')
-            self.importScripts('../../tensorflow.js/2.0.0/tf.min.js')            
-            __whitelist.add('tf')            
+            self.importScripts('../../tensorflow.js/2.0.0/tf.min.js')
+            __whitelist.add('tf')
             break
         case 'start':
             const o = input.data
@@ -97,7 +97,8 @@ function listener(input) {
                 self.postMessage({ command: 'main-will-start', id: o.id })
             }
             result = func(args)
-            if (o.messagePosting) {
+            //if (o.messagePosting)
+            {
                 self.postMessage({ command: 'main-finished', id: o.id, args: args })
             }
             if (!o.keepAlive) {

@@ -16,8 +16,7 @@ interface ICodeTemplate {
 }
 
 const legacyCodeTemplate: ICodeTemplate = {
-    prefix:
-        'let editors=[]; $(".CodeMirror").toArray().forEach(cm =>  {if (!cm.CodeMirror.getTextArea().hasAttribute("is-editmode")) editors[cm.CodeMirror.getTextArea().id] = cm.CodeMirror}); return function(){ return {o:',
+    prefix: 'let editors=[]; $(".CodeMirror").toArray().forEach(cm =>  {if (!cm.CodeMirror.getTextArea().hasAttribute("is-editmode")) editors[cm.CodeMirror.getTextArea().id] = cm.CodeMirror}); return function(){ return {o:',
     postfix: '}.o}.call({})',
 }
 const v101CodeTemplate: ICodeTemplate = {
@@ -296,13 +295,13 @@ export class ScriptBlock implements IScriptBlock {
         }
     }
 
-    whenFinished(args: string[] | object) {
+    whenFinished(args: string[] | object, resultData?: object | any[]) {
         this.lazyInit()
         if (this.obj && !this.requestsOriginalVersion()) {
             const o = this.obj as IPlaygroundObject
             if (o.whenFinished) {
                 console.i('MESSAGE - whenFinished')
-                o.whenFinished(args)
+                o.whenFinished(args, resultData)
             }
         }
     }

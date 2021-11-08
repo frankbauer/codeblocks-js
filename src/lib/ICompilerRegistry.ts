@@ -90,6 +90,7 @@ export interface ICompileAndRunArguments {
     whenFinishedHandler(args: string[] | object): void
     allowMessagePassing: boolean
     keepAlive: boolean
+    resultData: Object | any[] | undefined
 }
 
 export interface ICompilerInstance {
