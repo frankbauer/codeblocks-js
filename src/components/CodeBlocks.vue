@@ -198,6 +198,37 @@ import {
     IBlockDataPlayground,
 } from '@/lib/ICodeBlocks'
 
+function formatOutput(result) {
+    const regex =
+        /^@(bold|italic|em)?(red|green|blue|cyan|magenta|yellow|orange|gray|#[\da-f]{6}|#[\da-f]{8}):(.*)/gim
+
+    return result
+        .split('\n')
+        .map((line, nr) => {
+            let m
+
+            if ((m = regex.exec(result)) !== null) {
+                let style = ''
+                if (m[2] === 'gray') {
+                    style = 'style="color:silver"'
+                } else if (m[2] !== undefined) {
+                    style = `style="color:${m[2]}"`
+                }
+
+                if (m[1] === 'bold') {
+                    line = `<b ${style}>${m[3]}</b>`
+                } else if (m[1] === 'italic' || m[1] === 'em') {
+                    line = `<em ${style}>${m[3]}</em>`
+                } else {
+                    line = `<span ${style}>${m[3]}</span>`
+                }
+            }
+
+            return line
+        })
+        .join('\n')
+}
+
 const Blockly = () => import('@/components/Blockly/Blockly.vue')
 export interface IOnTypeChangeInfo {
     type: KnownBlockTypes
@@ -458,12 +489,12 @@ export default class CodeBlocks extends Vue {
         if (this.output != newOutput) {
             this.output = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
-                this.outputHTML = this.output.substr(0, this.maxCharacters)
+                this.outputHTML = formatOutput(this.output.substr(0, this.maxCharacters))
                 this.outputHTML += this.$CodeBlock.format_info(
                     'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
                 )
             } else {
-                this.outputHTML = this.output
+                this.outputHTML = formatOutput(this.output)
             }
             this.outputHTML += this.sansoutput
         }
@@ -487,7 +518,7 @@ export default class CodeBlocks extends Vue {
                 )
                 this.didClip = true
             } else {
-                this.outputHTML += text
+                this.outputHTML += formatOutput(text)
             }
         }
     }
