@@ -97,8 +97,7 @@ function listener(input) {
                 self.postMessage({ command: 'main-will-start', id: o.id })
             }
             result = func(args)
-            //if (o.messagePosting)
-            {
+            if (o.messagePosting) {
                 self.postMessage({ command: 'main-finished', id: o.id, args: args })
             }
             if (!o.keepAlive) {

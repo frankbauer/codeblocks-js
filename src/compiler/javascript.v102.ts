@@ -104,6 +104,8 @@ function runJavaScriptWorker(
             }
         } else if (msg.data.command.indexOf('w-') == 0) {
             msg.data.command = msg.data.command.substr(2)
+        } else if (msg.data.command == 'f-FINAL') {
+            options.resultData = msg.data.value
         } else {
             console.i('MESSAGE - ', msg.data)
             worker.end(
@@ -174,7 +176,7 @@ function runJavaScriptWorker(
                 worker.postMessage({ command: 'importBrain' })
                 startExecution(args, options)
             })
-        }else if (l === 'tf-2.0.0') {
+        } else if (l === 'tf-2.0.0') {
             willStartExecution = true
             callingCodeBlocks.$compilerRegistry.loadLibraries([], function () {
                 worker.postMessage({ command: 'importTF' })
