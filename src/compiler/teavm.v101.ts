@@ -72,8 +72,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                         this.teaworker.postMessage({
                             command: 'compile',
                             id: 'prep',
-                            text:
-                                'public class Bootstrap { public static void main(String[] args){}}',
+                            text: 'public class Bootstrap { public static void main(String[] args){}}',
                             mainClass: 'Bootstrap',
                         })
                     }
@@ -176,7 +175,8 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
         const getMainClass = (_code: string) => {
             let ret = 'Unknown'
             //above replaces all {} with [], so look for public class <name> []
-            const regexpMainClass = /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
+            const regexpMainClass =
+                /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
             let match: RegExpExecArray | null
             while ((match = regexpMainClass.exec(_code)) !== null) {
                 if (match[1]) {
@@ -349,6 +349,10 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                                 options.whenFinishedHandler(ee.data.args)
                             } else if (ee.data.command == 'main-will-start') {
                                 options.beforeStartHandler()
+                            } else if (ee.data.command == 'f-FINAL') {
+                                options.resultData = JSON.parse(ee.data.value)
+                            } else {
+                                console.log('Unknown Message', ee.data)
                             }
                         }
 
