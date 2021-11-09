@@ -629,96 +629,98 @@ export default class CodeBlocks extends Vue {
             console.d('compileAndRun')
             self.didRunOnce = true
 
-            let _args: object | string[] = {}
-            if (cmp.acceptsJSONArgument) {
-                _args = this.blockInfo.initArgsForLanguage()
-                this.blocks.forEach((bl) => {
-                    if (bl.obj) {
-                        console.i('!!! ADD ARGUMENTS TO !!!')
-                        bl.obj.addArgumentsTo(_args)
-                    }
-                })
-            }
+            self.$nextTick(() => {
+                let _args: object | string[] = {}
+                if (cmp.acceptsJSONArgument) {
+                    _args = this.blockInfo.initArgsForLanguage()
+                    this.blocks.forEach((bl) => {
+                        if (bl.obj) {
+                            console.i('!!! ADD ARGUMENTS TO !!!')
+                            bl.obj.addArgumentsTo(_args)
+                        }
+                    })
+                }
 
-            const runOptions: ICompileAndRunArguments = {
-                max_ms: self.executionTimeout,
-                log_callback: self.log.bind(this),
-                info_callback: self.logInfo.bind(this),
-                err_callback: self.logError.bind(this),
-                compileFailedCallback: self.processDiagnostics.bind(this),
-                finishedExecutionCB: (
-                    success = true,
-                    overrideOutput = undefined,
-                    returnState = undefined
-                ) => {
-                    console.i('returnState:', returnState, _args)
-                    if (!success) {
+                const runOptions: ICompileAndRunArguments = {
+                    max_ms: self.executionTimeout,
+                    log_callback: self.log.bind(this),
+                    info_callback: self.logInfo.bind(this),
+                    err_callback: self.logError.bind(this),
+                    compileFailedCallback: self.processDiagnostics.bind(this),
+                    finishedExecutionCB: (
+                        success = true,
+                        overrideOutput = undefined,
+                        returnState = undefined
+                    ) => {
+                        console.i('returnState:', returnState, _args)
+                        if (!success) {
+                            self.$compilerState.hideGlobalState()
+                            self.$compilerState.setAllRunButtons(true)
+                            return undefined
+                        }
+                        let res = self.finishedExecution(
+                            overrideOutput ? overrideOutput : self.output,
+                            self.sansoutput,
+                            runOptions.resultData
+                        )
+
+                        if (returnState !== undefined) {
+                            if (this.blockInfo.persistentArguments) {
+                                console.i('Store Default State', returnState)
+                                this.blockInfo.storeDefaultArgs(returnState)
+                            } else {
+                                this.blockInfo.clearDefaultArgs()
+                            }
+                        }
                         self.$compilerState.hideGlobalState()
                         self.$compilerState.setAllRunButtons(true)
-                        return undefined
-                    }
-                    let res = self.finishedExecution(
-                        overrideOutput ? overrideOutput : self.output,
-                        self.sansoutput,
-                        runOptions.resultData
-                    )
+                        return res
+                    },
+                    args: _args,
+                    didReceiveMessage: (cmd, data) => {
+                        console.i('MESSAGE - Received', cmd)
+                        this.blocks.forEach((bl) => {
+                            if (bl.obj) {
+                                bl.obj.didReceiveMessage(cmd, data)
+                            }
+                        })
+                    },
+                    postMessageFunction: null,
+                    dequeuePostponedMessages: () => {},
+                    allowMessagePassing: cmp.allowsMessagePassing && self.options.messagePassing,
+                    keepAlive:
+                        cmp.allowsMessagePassing &&
+                        self.options.messagePassing &&
+                        self.options.keepAlive,
+                    beforeStartHandler: () => {
+                        this.blocks.forEach((bl) => {
+                            console.d('MESSAGE - Before Start')
+                            if (bl.obj) {
+                                bl.obj.beforeStart()
+                            }
+                        })
+                    },
+                    whenFinishedHandler: (args: object | string[]) => {
+                        this.blocks.forEach((bl) => {
+                            console.d('MESSAGE - When Finished')
+                            if (bl.obj) {
+                                bl.obj.whenFinished(args, runOptions.resultData)
+                            }
+                        })
+                    },
+                    resultData: undefined,
+                }
 
-                    if (returnState !== undefined) {
-                        if (this.blockInfo.persistentArguments) {
-                            console.i('Store Default State', returnState)
-                            this.blockInfo.storeDefaultArgs(returnState)
-                        } else {
-                            this.blockInfo.clearDefaultArgs()
-                        }
-                    }
-                    self.$compilerState.hideGlobalState()
-                    self.$compilerState.setAllRunButtons(true)
-                    return res
-                },
-                args: _args,
-                didReceiveMessage: (cmd, data) => {
-                    console.i('MESSAGE - Received', cmd)
+                if (runOptions.keepAlive) {
                     this.blocks.forEach((bl) => {
                         if (bl.obj) {
-                            bl.obj.didReceiveMessage(cmd, data)
+                            bl.obj.runConfig = runOptions
                         }
                     })
-                },
-                postMessageFunction: null,
-                dequeuePostponedMessages: () => {},
-                allowMessagePassing: cmp.allowsMessagePassing && self.options.messagePassing,
-                keepAlive:
-                    cmp.allowsMessagePassing &&
-                    self.options.messagePassing &&
-                    self.options.keepAlive,
-                beforeStartHandler: () => {
-                    this.blocks.forEach((bl) => {
-                        console.d('MESSAGE - Before Start')
-                        if (bl.obj) {
-                            bl.obj.beforeStart()
-                        }
-                    })
-                },
-                whenFinishedHandler: (args: object | string[]) => {
-                    this.blocks.forEach((bl) => {
-                        console.d('MESSAGE - When Finished')
-                        if (bl.obj) {
-                            bl.obj.whenFinished(args, runOptions.resultData)
-                        }
-                    })
-                },
-                resultData: undefined,
-            }
+                }
 
-            if (runOptions.keepAlive) {
-                this.blocks.forEach((bl) => {
-                    if (bl.obj) {
-                        bl.obj.runConfig = runOptions
-                    }
-                })
-            }
-
-            cmp.compileAndRun('' + self.blockid, self.completeSource, self, runOptions)
+                cmp.compileAndRun('' + self.blockid, self.completeSource, self, runOptions)
+            })
         })
 
         return true

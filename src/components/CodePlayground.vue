@@ -262,6 +262,7 @@ export default class CodePlayground extends BaseBlock {
         if (reInitCode) {
             this.initAndRebuildErrors = []
             let doInit = () => {
+                console.i('!!! DO INIT !!!')
                 if (this.block.obj !== null && this.canvas !== undefined) {
                     this.block.obj.init(
                         $(this.canvas) as JQuery<HTMLElement>,
