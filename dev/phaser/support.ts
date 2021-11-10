@@ -691,6 +691,7 @@ class IsometricMapGame {
         this.beforeStart = () => {}
         this.whenFinished = () => {}
         this.addArgumentsTo = () => {}
+        this.onUpdate = () => {}
     }
 
     private scope: JQuery
@@ -761,26 +762,27 @@ class IsometricMapGame {
         game.start(false)
     }
 
+    update(
+        txt: string,
+        json: object | undefined,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>
+    ) {
+        this.onUpdate(txt, json, canvasElement, outputElement)
+    }
+
     public onCreate: () => void
     public onClick: (tile: IMapTile) => void
     public onEnterTile: (tile: IMapTile, figure: WalkingSprite) => void
     public onLeaveTile: (tile: IMapTile, figure: WalkingSprite) => void
     public onFinishedWalking: (figure: WalkingSprite) => void
 
-    public onPassingArguments: (args: object | string[]) => void
     public onUpdate: (
         txt: string,
-        json: object,
+        json: object | undefined,
         canvasElement: JQuery,
         outputElement: JQuery
     ) => any
-
-    public update: (
-        txt: string,
-        json: object | undefined,
-        canvasElement: JQuery<HTMLElement>,
-        outputElement: JQuery<HTMLElement>
-    ) => string | undefined
 
     public onMessage: (cmd: string, data: any) => void
     public beforeStart: () => void
