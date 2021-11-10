@@ -27,128 +27,7 @@
             <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to
                 continue.</strong>
         </noscript>
-        <div codeblockseditor data-compiler="javascript" data-compiler-version=102 data-run-code="true"
-        data-max-characters="10000" data-message-passing=1
-        data-persistent-arguments=1 data-keep-alive=0>
-            <block>
-console.log("@blue:Hello")            
-console.error("What?")
-console.log("\n\n<JSON>\n")
-console.log("[1, 2, 3]")
-CodeBlocks.postResult({hello:true})
-            </block>
-            <script as="playground" type="application/javascript">
-                exports = {
-                    init: function (canvasElement, outputElement, scope, runner) {
-                    },                     
-                    whenFinished(args, json) {
-                        console.log("Finished", args, json)
-                    },
-                    update: function (txt, json, canvasElement, outputElement) {
-                        console.log("Text:" , txt)
-                        console.log("Data:", json)
-                    }
-                }
-            </script>
-        </div>
-        <div codeblockseditor data-compiler="python3" data-compiler-version="102" data-run-code="true"
-            data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1
-            data-persistent-arguments=1 data-keep-alive=0 data-dom-libs='["chart-3.6.0"]'>
-
-            <block data-visible-lines="auto" data-expanded=1>print('[{"x":0,"y":0}, {"x":0.5,"y":0.25}, {"x":1,"y":1}, {"x":2,"y":4}, {"x":3,"y":9}]')
-#print(sys.version)</block><script as="playground" type="application/javascript" data-expanded=1>
-    exports = {
-        runner: null,
-        chart:undefined,
-        init: function (canvasElement, outputElement, scope, runner) {
-            const ctx = $(document.createElement('canvas'))
-            ctx.width('100%')
-            ctx.height('100%')
-            
-            canvasElement.append(ctx);
-            
-            // const myChart = new Chart(ctx, {
-            //     type: 'bar',
-            //     data: {
-            //         datasets: [{                        
-            //             label: '# of Stuff',
-            //             data: [{x:'Red', y:12}, {x:'Blue', y:19}, {x:'Yellow', y:3}, {x:'Green', y:5}, {x:'Purple', y:2}, {x:'Orange', y:3} ],
-            //             backgroundColor: [
-            //                 'rgba(255, 99, 132, 0.2)',
-            //                 'rgba(54, 162, 235, 0.2)',
-            //                 'rgba(255, 206, 86, 0.2)',
-            //                 'rgba(75, 192, 192, 0.2)',
-            //                 'rgba(153, 102, 255, 0.2)',
-            //                 'rgba(255, 159, 64, 0.2)'
-            //             ],
-            //             borderColor: [
-            //                 'rgba(255, 99, 132, 1)',
-            //                 'rgba(54, 162, 235, 1)',
-            //                 'rgba(255, 206, 86, 1)',
-            //                 'rgba(75, 192, 192, 1)',
-            //                 'rgba(153, 102, 255, 1)',
-            //                 'rgba(255, 159, 64, 1)'
-            //             ],
-            //             borderWidth: 1
-            //         }]
-            //     },
-            //     options: {
-            //         scales: {
-            //             y: {
-            //                 beginAtZero: true
-            //             }
-            //         }
-            //     }
-            // })
-            this.chart = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    datasets: [{                        
-                        label: '# of Stuff',
-                        showLine:true,
-                        data: [{x:0, y:12}, {x:1, y:19}, {x:2.5, y:3}, {x:3, y:5}, {x:3.5, y:2}, {x:4, y:3} ],                        
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    parsing: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            })
-            
-
-            this.runner = runner
-            runner.postMessage('from-init', {})
-        },
-        addArgumentsTo(args) {
-            args.test = 42;
-        },
-        reset(canvasElement) {},
-        onMessage(cmd, data) {
-            console.log("Message", cmd, data)
-        },
-        beforeStart() {
-            console.log("Starting")
-            setTimeout(() => {
-                this.runner.postMessage('nonce', {})
-            }, 2000)
-        },
-        whenFinished(args) {
-            console.log("Finished", args)
-        },
-        update: function (txt, json, canvasElement, outputElement) {
-                if (Array.isArray(json)){
-                    this.chart.data.datasets[0].data = json
-                    this.chart.update();
-                }
-        }
-    }
-                </script>
-        </div>
+        
         <div codeblockseditor data-compiler="javascript" data-compiler-version="101" data-run-code="true"
             data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1
             data-persistent-arguments=1 data-keep-alive=1>
@@ -209,25 +88,58 @@ exports = {
             </script>
         </div>
         <div style="padding-left:50px;padding-right:50px">
-            <div codeblockseditor data-compiler="javascript" data-compiler-version=102 data-run-code="true"
-                data-max-characters="10000000" data-dom-libs='["phaser-3.54"]'>
+            <div codeblockseditor data-compiler="java" data-compiler-version=101 data-run-code="true"
+            data-execution-timeout="50000" data-dom-libs='["phaser-3.54"]' data-message-passing=1
+            data-persistent-arguments=1 data-keep-alive=1>
                 <loading>
                     <div></div>
                     <div></div>
                 </loading>
 
-                <block data-visible-lines="auto" data-expanded=0>
-                    console.log("IN ARGS", args)
-                    args.t = "Foo"
-                    args.ct++
-                    CodeBlocks.startReceivingEvents((request) => {
-                    console.log("Hello", request.command);
+                <block data-visible-lines="auto" data-expanded=0>import org.lgdv.*;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.JSProperty;
 
-                    CodeBlocks.postMessage("echo", request.id);
-                    if (request.command == "nonce") {
-                    System.exit(0);
-                    }
-                    });
+interface CodeBlocksClickMessage extends CodeBlocksBaseMessage {
+    @JSProperty
+    int getC();
+
+    @JSProperty
+    void setC(int value);
+    
+    @JSProperty
+    int getR();
+
+    @JSProperty
+    void setR(int value);
+}
+
+public class One{
+    public static void main(String[] args){
+        System.out.println("BEGIN" + args.length);
+        CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {
+            System.out.println("Hello" + request.getCommand());
+            
+            if (request.getCommand().equals("click")){
+                CodeBlocksClickMessage m = request.cast();
+                System.out.println(m.getC() + "/" + m.getR());
+
+                CodeBlocksClickMessage reply = CodeBlocks.createJSObject();
+                reply.setCommand("walk");
+                reply.setC(m.getC());
+                reply.setR(m.getR());
+                CodeBlocks.postMessage(reply);
+                return;                
+            }
+            CodeBlocks.postMessage("echo", request.getId());
+            if (request.getCommand().equals("nonce")) {
+                System.out.println("SHUTDOWN");
+                System.exit(0);
+            }
+        });
+        System.out.println("ENDE");
+    }
+}                                    
                 </block>
 
                 <script as="playground" type="application/javascript">
@@ -238,7 +150,16 @@ exports = new IsometricMapGame(4, 3, 'resources/tile/checker.png', ['resources/s
     }
 
     manager.onClick = (tile) => {
-        manager.figures[0].walkToTile(tile.column, tile.row)
+        //manager.figures[0].walkToTile(tile.column, tile.row)
+        runner.postMessage('click', {c:tile.column, r:tile.row})
+    }
+
+    manager.onMessage = (cmd, data) => {
+        if (cmd === 'walk') {
+            manager.figures[0].walkToTile(data.c, data.r)
+        } else {
+            console.log(cmd + " - " + data)
+        }
     }
 })
 
