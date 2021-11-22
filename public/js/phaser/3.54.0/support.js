@@ -2,15 +2,249 @@
 /// <reference path="./types/phaser.d.ts" />
 const animNamesByDir = ['N', 'NO', 'O', 'SO', 'S', 'SW', 'W', 'NW'];
 const sheetIndex = [0, 1, 3, 5, 4, 6, 7, 2];
-class AnimatedSprite {
+class Tiles {
 }
-class WalkingSprite {
+Tiles.Checkers = { uri: 'resources/tile/checker.png' };
+Tiles.Gras = { uri: 'resources/tile/gras.png' };
+class Sprites {
+}
+Sprites.Fire = {
+    uri: 'resources/tile/fire_00.png',
+    repeat: 0,
+    frameConfig: {
+        frameWidth: 90,
+        frameHeight: 83,
+        startFrame: 0,
+        endFrame: 251,
+    },
+};
+Sprites.Snow = [0, 1, 2, 3].map((nr) => {
+    return {
+        uri: `resources/tile/snow_${('00' + nr).slice(-2)}.png`,
+        repeat: -1,
+        frameConfig: {
+            frameWidth: 90,
+            frameHeight: 83,
+            startFrame: 0,
+            endFrame: 125,
+        },
+    };
+});
+Sprites.Snowman = [0, 1, 2, 3, 4].map((nr) => {
+    return {
+        uri: `resources/tile/snowman_${('00' + nr).slice(-2)}.png`,
+        repeat: 0,
+        frameConfig: {
+            frameWidth: 90,
+            frameHeight: 53,
+            startFrame: 0,
+            endFrame: 59,
+        },
+    };
+});
+Sprites.HolidaySnowman = [0, 1, 2, 3, 4, 5].map((nr) => {
+    return {
+        uri: `resources/tile/snowman_xmas_${('00' + nr).slice(-2)}.png`,
+        repeat: 0,
+        frameConfig: {
+            frameWidth: 90,
+            frameHeight: 53,
+            startFrame: 0,
+            endFrame: 59,
+        },
+    };
+});
+Sprites.Hut = [0, 1, 2, 3, 4, 5].map((nr) => {
+    return {
+        uri: `resources/tile/huts_${('00' + nr).slice(-2)}.png`,
+        repeat: 0,
+        frameConfig: {
+            frameWidth: 120,
+            frameHeight: 64,
+            startFrame: 0,
+            endFrame: 0,
+        },
+    };
+});
+Sprites.Stones = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+].map((nr) => {
+    return {
+        uri: `resources/tile/stones_${('00' + nr).slice(-2)}.png`,
+        repeat: 0,
+        frameConfig: {
+            frameWidth: 120,
+            frameHeight: 64,
+            startFrame: 0,
+            endFrame: 0,
+        },
+    };
+});
+Sprites.Trees = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+].map((nr) => {
+    return {
+        uri: `resources/tile/trees_${('00' + nr).slice(-2)}.png`,
+        repeat: 0,
+        frameConfig: {
+            frameWidth: 120,
+            frameHeight: 64,
+            startFrame: 0,
+            endFrame: 0,
+        },
+    };
+});
+class Figures {
+}
+Figures.Blue = {
+    type: 'blue',
+    big: false,
+    loaded: false,
+};
+Figures.BlueLoaded = {
+    type: 'blue',
+    big: false,
+    loaded: true,
+};
+Figures.BigBlue = {
+    type: 'blue',
+    big: true,
+    loaded: false,
+};
+Figures.BigBlueLoaded = {
+    type: 'blue',
+    big: true,
+    loaded: true,
+};
+Figures.Green = {
+    type: 'blue',
+    big: false,
+    loaded: false,
+};
+Figures.GreenLoaded = {
+    type: 'blue',
+    big: false,
+    loaded: true,
+};
+Figures.BigGreen = {
+    type: 'blue',
+    big: true,
+    loaded: false,
+};
+Figures.BigGreenLoaded = {
+    type: 'green',
+    big: true,
+    loaded: true,
+};
+Figures.Snowman = {
+    type: 'snowman',
+    big: false,
+    loaded: false,
+};
+Figures.SnowmanLoaded = {
+    type: 'snowman',
+    big: false,
+    loaded: true,
+};
+Figures.BigSnowman = {
+    type: 'snowman',
+    big: true,
+    loaded: false,
+};
+Figures.BigSnowmanLoaded = {
+    type: 'snowman',
+    big: true,
+    loaded: true,
+};
+Figures.HolidaySnowman = {
+    type: 'snowman_xmas',
+    big: false,
+    loaded: false,
+};
+Figures.HolidaySnowmanLoaded = {
+    type: 'snowman_xmas',
+    big: false,
+    loaded: true,
+};
+Figures.BigHolidaySnowman = {
+    type: 'snowman_xmas',
+    big: true,
+    loaded: false,
+};
+Figures.BigHolidaySnowmanLoaded = {
+    type: 'snowman_xmas',
+    big: true,
+    loaded: true,
+};
+Figures.Grinch = {
+    type: 'grinch',
+    big: false,
+    loaded: false,
+};
+Figures.GrinchLoaded = {
+    type: 'grinch',
+    big: false,
+    loaded: true,
+};
+Figures.BigGrinch = {
+    type: 'grinch',
+    big: true,
+    loaded: false,
+};
+Figures.BigGrinchLoaded = {
+    type: 'grinch',
+    big: true,
+    loaded: true,
+};
+class BaseAnimatedSprite {
     constructor(game, sprite, config) {
         this.base_v = 5;
-        this.move = undefined;
         this.sprite = sprite;
         this.game = game;
         this.animKey = config.texture;
+    }
+    setOrigin(x, y) {
+        this.sprite.setOrigin(x, y);
+    }
+    setBaseSpeed(bsp) {
+        this.base_v = bsp;
+    }
+    remove() {
+        this.game.removeSprite(this);
+    }
+    update(time, delta) { }
+}
+class AnimatedSprite extends BaseAnimatedSprite {
+    constructor(game, sprite, config) {
+        super(game, sprite, config);
+        this.onFinishedAnimation = () => { };
+        sprite.on('animationcomplete', this.finishedAnimation, this);
+    }
+    static add(game, scene, config) {
+        const s = scene.add.sprite(config.x, config.y, config.texture, config.frame);
+        const oy = config.originY ? config.originY : 36 / 64;
+        const ox = config.originX ? config.originX : 37 / 76;
+        s.setOrigin(ox, oy);
+        const sprite = new AnimatedSprite(game, s, config);
+        if (config.speed) {
+            sprite.setBaseSpeed(config.speed);
+        }
+        return sprite;
+    }
+    finishedAnimation() {
+        this.onFinishedAnimation(this);
+    }
+    play() {
+        this.sprite.anims.play(`${this.animKey}`, true);
+    }
+    stop() {
+        this.sprite.anims.stop();
+    }
+}
+class WalkingSprite extends BaseAnimatedSprite {
+    constructor(game, sprite, config) {
+        super(game, sprite, config);
+        this.move = undefined;
         this.onEnterTile = () => { };
         this.onLeaveTile = () => { };
         this.onFinishedWalking = () => { };
@@ -26,9 +260,6 @@ class WalkingSprite {
             sprite.setBaseSpeed(config.speed);
         }
         return sprite;
-    }
-    setOrigin(x, y) {
-        this.sprite.setOrigin(x, y);
     }
     moveToTile(c, r) {
         var _a;
@@ -65,9 +296,6 @@ class WalkingSprite {
                 d: -1,
             },
         };
-    }
-    setBaseSpeed(bsp) {
-        this.base_v = bsp;
     }
     get currentTile() {
         return this._currentTile;
@@ -247,7 +475,7 @@ class IsometricMap extends TiledMap {
 class Game {
     constructor(domElement, backgroundColor) {
         this.created = false;
-        this.walkingSprites = [];
+        this.animatedSprites = [];
         this.imagesResources = [];
         this.spritesheetResources = [];
         this.spriteConfigs = [];
@@ -273,17 +501,35 @@ class Game {
     generateSpriteSheetDirections(cfg) {
         const self = this;
         if (self._scene && this.created) {
-            animNamesByDir.forEach((name, nr) => {
-                const idx = sheetIndex[nr];
-                const conf = { start: idx * 20, end: idx * 20 + 19 };
-                console.log(`[PHASER] Add Anim ${cfg.key}-${name}`);
+            if (cfg.directional) {
+                animNamesByDir.forEach((name, nr) => {
+                    const idx = sheetIndex[nr];
+                    const conf = {
+                        start: idx * 20,
+                        end: idx * 20 + 19,
+                    };
+                    console.log(`[PHASER] Add Directional Anim ${cfg.key}-${name}`);
+                    self._scene.anims.create({
+                        key: `${cfg.key}-${name}`,
+                        frames: self._scene.anims.generateFrameNumbers(cfg.key, conf),
+                        frameRate: 25,
+                        repeat: -1,
+                    });
+                });
+            }
+            else {
+                const conf = {
+                    start: cfg.frameConfig.startFrame,
+                    end: cfg.frameConfig.endFrame,
+                };
+                console.log(`[PHASER] Add Anim ${cfg.key}`);
                 self._scene.anims.create({
-                    key: `${cfg.key}-${name}`,
+                    key: `${cfg.key}`,
                     frames: self._scene.anims.generateFrameNumbers(cfg.key, conf),
                     frameRate: 25,
-                    repeat: -1,
+                    repeat: cfg.repeat,
                 });
-            });
+            }
         }
     }
     generateSpriteSheet(cfg) {
@@ -302,38 +548,86 @@ class Game {
             uri: uri,
             frameConfig: frameConfig,
             directional: directional,
+            repeat: -1,
         };
+        this.pushSpriteSheet(cfg);
+    }
+    addSpriteSheetConfig(key, cfg) {
+        this.pushSpriteSheet({
+            key: key,
+            uri: cfg.uri,
+            frameConfig: cfg.frameConfig,
+            directional: false,
+            repeat: cfg.repeat,
+        });
+    }
+    addFigure(key, type, big = false, loaded = false) {
+        const cfg = {
+            key: key,
+            uri: `resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${big ? '_big' : ''}.png`,
+            frameConfig: {
+                frameWidth: big ? 76 : 38,
+                frameHeight: big ? 64 : 32,
+            },
+            directional: true,
+            repeat: -1,
+        };
+        this.pushSpriteSheet(cfg);
+    }
+    pushSpriteSheet(cfg) {
         this.spritesheetResources.push(cfg);
         if (this._scene) {
             this.generateSpriteSheet(cfg);
         }
     }
-    generateWalkingSprite(config) {
+    removeSprite(ctx) {
+        ctx.sprite.destroy();
+        this.animatedSprites = this.animatedSprites.filter((s) => s !== ctx);
+    }
+    generateSprite(config) {
         if (this.scene && this.created) {
             console.log('[PHASER] Adding Sprite');
-            const ws = WalkingSprite.add(this, this.scene, config);
-            if (ws) {
-                this.walkingSprites.push(ws);
+            let sprite;
+            if (config.type === 'walking') {
+                sprite = WalkingSprite.add(this, this.scene, config);
             }
-            return ws;
+            else {
+                sprite = AnimatedSprite.add(this, this.scene, config);
+            }
+            if (sprite) {
+                this.animatedSprites.push(sprite);
+            }
+            return sprite;
         }
         return undefined;
     }
     addWalkingSpriteOnTile(c, r, texture, frame, originX, originY, speed) {
+        return this.addSpriteOnTile('walking', r, c, texture, frame, originX, originY, speed);
+    }
+    addWalkingSprite(x, y, texture, frame, originX, originY, speed) {
+        return this.addSprite('walking', x, y, texture, frame, originX, originY, speed);
+    }
+    addAnimatedSpriteOnTile(c, r, texture, frame, originX, originY, speed) {
+        return this.addSpriteOnTile('animated', r, c, texture, frame, originX, originY, speed);
+    }
+    addAnimatedSprite(x, y, texture, frame, originX, originY, speed) {
+        return this.addSprite('animated', x, y, texture, frame, originX, originY, speed);
+    }
+    addSpriteOnTile(type, c, r, texture, frame, originX, originY, speed) {
         var _a;
         const tile = (_a = this.map) === null || _a === void 0 ? void 0 : _a.getTile(c, r);
         if (tile) {
             const p = tile.center;
-            return this.addWalkingSprite(p.x, p.y, texture, frame, originX, originY, speed);
+            return this.addSprite(type, p.x, p.y, texture, frame, originX, originY, speed);
         }
         else {
             console.error(`[PHASER] Tile ${c}/${r} does not exists.`);
         }
         return undefined;
     }
-    addWalkingSprite(x, y, texture, frame, originX, originY, speed) {
+    addSprite(type, x, y, texture, frame, originX, originY, speed) {
         const cfg = {
-            type: 'walking',
+            type: type,
             x: x,
             y: y,
             texture: texture,
@@ -344,7 +638,7 @@ class Game {
         };
         this.spriteConfigs.push(cfg);
         if (this.scene && this.created) {
-            const s = this.generateWalkingSprite(cfg);
+            const s = this.generateSprite(cfg);
             return s;
         }
         return undefined;
@@ -417,16 +711,12 @@ class Game {
         scene.cameras.main.setRoundPixels(true);
         this.created = true;
         this.attachMap();
-        this.spritesheetResources
-            .filter((c) => c.directional)
-            .forEach((r) => this.generateSpriteSheetDirections(r));
-        this.spriteConfigs
-            .filter((c) => c.type === 'walking')
-            .forEach((c) => this.generateWalkingSprite(c));
+        this.spritesheetResources.forEach((r) => this.generateSpriteSheetDirections(r));
+        this.spriteConfigs.forEach((c) => this.generateSprite(c));
         this.onCreate(scene, this);
     }
     update(scene, time = 0, delta = 0) {
-        this.walkingSprites.forEach((s) => s.update(time, delta));
+        this.animatedSprites.forEach((s) => s.update(time, delta));
         this.onUpdate(scene, this, time, delta);
     }
     resize() {
@@ -451,11 +741,11 @@ class Game {
     }
 }
 class IsometricMapGame {
-    constructor(columns, rows, tileURI, figureURIs, backgroundColor, onPreload) {
+    constructor(columns, rows, tileConfig, figureConfigs, backgroundColor, onPreload) {
         this.columns = columns;
         this.rows = rows;
-        this.tileURI = tileURI;
-        this.figureURIs = figureURIs;
+        this.tileConfig = tileConfig;
+        this.figureConfigs = figureConfigs;
         this.backgroundColor = backgroundColor;
         this.onPreload = onPreload;
         this.scope = jQuery();
@@ -481,25 +771,12 @@ class IsometricMapGame {
         this.scope = scope;
         const game = new Game(canvasElement, this.backgroundColor);
         this.game = game;
-        this.figureURIs
+        this.figureConfigs
             .filter((v, i, a) => a.indexOf(v) === i)
-            .forEach((uri, idx) => {
-            let fInfo;
-            if (uri.indexOf('_big') >= 0) {
-                fInfo = {
-                    frameWidth: 76,
-                    frameHeight: 64,
-                };
-            }
-            else {
-                fInfo = {
-                    frameWidth: 38,
-                    frameHeight: 32,
-                };
-            }
-            game.addSpriteSheet(`figure.${idx}`, uri, fInfo, true);
+            .forEach((cfg, idx) => {
+            game.addFigure(`figure.${idx}`, cfg.type, cfg.big, cfg.loaded);
         });
-        game.addImage('tile', this.tileURI);
+        game.addImage('tile', this.tileConfig.uri);
         game.useIsometricMap(0, 30, this.columns, this.rows, 'tile');
         game.onPreload = (scene, game) => {
             if (this.onPreload) {
@@ -507,8 +784,8 @@ class IsometricMapGame {
             }
         };
         game.onCreate = (scene, game) => {
-            this.figures = this.figureURIs.map((uri, i, a) => {
-                const idx = a.indexOf(uri);
+            this.figures = this.figureConfigs.map((cfg, i, a) => {
+                const idx = a.indexOf(cfg);
                 const name = `figure.${idx}`;
                 const f = game.addWalkingSpriteOnTile(0, 0, name, 0);
                 f.onEnterTile = this.onEnterTile.bind(this);

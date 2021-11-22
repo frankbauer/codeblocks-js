@@ -23,6 +23,28 @@ function write(dir, files, sprite_width, sprite_height, max_col, max_row) {
     })
 }
 
+function writeMax(dir, outName, files, sprite_width, sprite_height, max_col, max_row, max_width) {
+    const max_in_col = Math.min(max_col, Math.floor(max_width / sprite_width))
+    max_row = Math.ceil((max_col * max_row) / max_in_col)
+    const canvas = createCanvas(sprite_width * max_in_col, sprite_height * max_row)
+    const ctx = canvas.getContext('2d')
+
+    let counter = files.length
+    files.forEach((data) => {
+        loadImage(data.file).then((image) => {
+            const idx = data.col + data.row * max_col
+            const col = idx % max_in_col
+            const row = Math.floor(idx / max_in_col)
+            ctx.drawImage(image, col * sprite_width, row * sprite_height)
+            counter--
+            if (counter === 0) {
+                const buffer = canvas.toBuffer('image/png')
+                fs.writeFileSync(path.join(dir, '..', outName), buffer)
+            }
+        })
+    })
+}
+
 function buildFigures(dir, indent = '') {
     console.log(`${indent}|-- ${dir}`)
 
@@ -74,10 +96,10 @@ function buildTiles(dir, indent = '') {
             let row = 0
             if (parts.length > 2) {
                 row = +parts[2]
-                col = +parts[1]
+                col = +parts[1] - 1
             } else if (parts.length > 1) {
                 col = 0
-                row = +parts[1]
+                row = +parts[1] - 1
             }
 
             max_col = Math.max(max_col, col + 1)
@@ -86,11 +108,24 @@ function buildTiles(dir, indent = '') {
                 folder: dir,
                 name: file,
                 file: fileName,
-                row: row,
+                row: 0,
                 col: col,
+                outName: `${path.basename(dir)}_${('00' + row).slice(-2)}.png`,
             }
         })
-    write(dir, files, tile_width, tile_height, max_col, max_row)
+    const variants = files.map((data) => data.outName).filter((v, i, a) => a.indexOf(v) === i)
+    variants.forEach((variant) => {
+        writeMax(
+            dir,
+            variant,
+            files.filter((data) => data.outName === variant),
+            tile_width,
+            tile_height,
+            max_col,
+            1,
+            2048
+        )
+    })
 }
 
 const baseSpritePath =

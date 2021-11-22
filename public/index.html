@@ -143,10 +143,21 @@ public class One{
                 </block>
 
                 <script as="playground" type="application/javascript">
-exports = new IsometricMapGame(4, 3, 'resources/tile/checker.png', ['resources/sprite/figure_blue_big.png', 'resources/sprite/figure_blue.png'], '#fdfdfd', (game, manager, canvasElement, outputElement, scope, runner)=>{
+exports = new IsometricMapGame(4, 3, Tiles.Checkers, [Figures.BigGrinch, Figures.Blue], '#fdfdfd', (game, manager, canvasElement, outputElement, scope, runner)=>{
+    game.addSpriteSheetConfig(`fire`, Sprites.Snowman[2])
+    manager.onPreload = () => {
+        
+    }
     manager.onCreate = () => {
         manager.figures[0].moveToTile(2, 1)
         manager.figures[1].moveToTile(3, 2)
+
+        const f = game.addAnimatedSpriteOnTile(0, 0, "fire", 1)
+        f.onFinishedAnimation = ()=> {
+            console.log("REMOVING")
+            f.remove()
+        }
+        f.play()
     }
 
     manager.onClick = (tile) => {
