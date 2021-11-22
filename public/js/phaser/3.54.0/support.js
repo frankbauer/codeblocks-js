@@ -8,16 +8,16 @@ Tiles.Checkers = { uri: 'resources/tile/checker.png' };
 Tiles.Gras = { uri: 'resources/tile/gras.png' };
 class Sprites {
 }
-Sprites.Fire = {
-    uri: 'resources/tile/fire_00.png',
-    repeat: 0,
-    frameConfig: {
-        frameWidth: 90,
-        frameHeight: 83,
-        startFrame: 0,
-        endFrame: 251,
-    },
-};
+Sprites.Fire = [{
+        uri: 'resources/tile/fire_00.png',
+        repeat: 0,
+        frameConfig: {
+            frameWidth: 90,
+            frameHeight: 83,
+            startFrame: 0,
+            endFrame: 251,
+        },
+    }];
 Sprites.Snow = [0, 1, 2, 3].map((nr) => {
     return {
         uri: `resources/tile/snow_${('00' + nr).slice(-2)}.png`,

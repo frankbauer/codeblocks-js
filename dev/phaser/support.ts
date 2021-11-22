@@ -67,7 +67,7 @@ class Tiles {
 }
 
 class Sprites {
-    public static readonly Fire: SpriteConfig = {
+    public static readonly Fire: SpriteConfig[] = [{
         uri: 'resources/tile/fire_00.png',
         repeat: 0,
         frameConfig: {
@@ -76,7 +76,7 @@ class Sprites {
             startFrame: 0,
             endFrame: 251,
         },
-    }
+    }]
 
     public static readonly Snow: SpriteConfig[] = [0, 1, 2, 3].map((nr) => {
         return {
