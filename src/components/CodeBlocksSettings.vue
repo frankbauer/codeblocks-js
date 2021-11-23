@@ -1,7 +1,7 @@
 <template>
     <div class="row q-pa-none q-mb-md">
-        <div class="col-xs-12 col-sm-4">
-            <q-card class="q-mb-sm q-mr-sm-xs">
+        <div class="col-xs-12 col-sm-12 col-md-4">
+            <q-card class="q-mb-sm q-mr-sm-none">
                 <q-card-section class="text-overline">{{
                     $t('CodeBlocksSettings.Language')
                 }}</q-card-section>
@@ -33,7 +33,7 @@
                                 :label="$t('CodeBlocksSettings.Language')"
                             />
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4" v-if="runCode">
+                        <div class="col-xs-12 col-sm-12 col-md-4" v-if="runCode">
                             <q-select
                                 :options="compilerVersions"
                                 v-model="compilerVersion"
@@ -218,9 +218,9 @@
             </q-card>
         </div>
 
-        <div class="col-xs-12 col-sm-4">
+        <div class="col-xs-12 col-sm-12 col-md-4">
             <q-slide-transition>
-                <q-card class="q-mb-sm q-mr-sm-xs" v-if="runCode">
+                <q-card class="q-mb-sm q-mr-sm-none" v-if="runCode">
                     <q-card-section class="text-overline">{{
                         $t('CodeBlocksSettings.Output')
                     }}</q-card-section>
@@ -245,7 +245,7 @@
                     </q-card-section>
                 </q-card>
             </q-slide-transition>
-            <q-card class="q-mr-sm-xs">
+            <q-card class="q-mr-sm-none">
                 <q-card-section class="text-overline">{{
                     $t('CodeBlocksSettings.Themes')
                 }}</q-card-section>
@@ -271,14 +271,14 @@
         </div>
 
         <q-slide-transition>
-            <div class="col-xs-12 col-sm-4" v-if="runCode">
-                <q-card>
+            <div class="col-xs-12 col-sm-12 col-md-4" v-if="runCode">
+                <q-card class="q-mr-sm-none q-mt-sm-sm">
                     <q-card-section class="text-overline">{{
                         $t('CodeBlocksSettings.Libraries')
                     }}</q-card-section>
                     <q-card-section class="q-ml-md">
                         <div class="row q-my-none q-py-none" dense>
-                            <div class="col-xs-12 q-my-none q-py-none">
+                            <div class="col-xs-12 col-sm-12 q-my-none q-py-none">
                                 <q-select
                                     :options="domLibraries"
                                     v-model="domLibrary"
@@ -290,7 +290,7 @@
                                 />
                             </div>
                             <div
-                                class="col-xs-12 q-my-none q-py-none"
+                                class="col-xs-12 col-sm-12 q-my-none q-py-none"
                                 v-if="runCode && workerLibraries.length > 0"
                             >
                                 <q-select
