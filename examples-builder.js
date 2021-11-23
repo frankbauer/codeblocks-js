@@ -16,6 +16,7 @@ const jquery = path.join(lib, 'jquery')
 shell.mkdir('-p', base)
 
 shell.cp('-r', path.join('public', 'js'), base)
+shell.cp('-r', path.join('public', 'resources'), base)
 
 shell.mkdir('-p', vue)
 shell.cp(path.join('node_modules', 'vue', 'dist', 'vue.runtime.min.js'), vue)
