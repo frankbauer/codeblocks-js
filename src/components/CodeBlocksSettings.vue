@@ -1,7 +1,7 @@
 <template>
     <div class="row q-pa-none q-mb-md">
-        <div class="col-xs-12 col-sm-12 col-md-4">
-            <q-card class="q-mb-sm q-mr-sm-none">
+        <div class="col-xs-12 col-sm-12 col-md-6">
+            <q-card class="q-mb-sm q-mr-sm-none q-mr-md-sm">
                 <q-card-section class="text-overline">{{
                     $t('CodeBlocksSettings.Language')
                 }}</q-card-section>
@@ -33,7 +33,7 @@
                                 :label="$t('CodeBlocksSettings.Language')"
                             />
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-4" v-if="runCode">
+                        <div class="col-xs-12 col-sm-12 col-md-6" v-if="runCode">
                             <q-select
                                 :options="compilerVersions"
                                 v-model="compilerVersion"
@@ -218,9 +218,9 @@
             </q-card>
         </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-4">
+        <div class="col-xs-12 col-sm-12 col-md-6">
             <q-slide-transition>
-                <q-card class="q-mb-sm q-mr-sm-none" v-if="runCode">
+                <q-card class="q-mb-sm q-mr-none" v-if="runCode">
                     <q-card-section class="text-overline">{{
                         $t('CodeBlocksSettings.Output')
                     }}</q-card-section>
@@ -245,7 +245,7 @@
                     </q-card-section>
                 </q-card>
             </q-slide-transition>
-            <q-card class="q-mr-sm-none">
+            <q-card class="q-mr-none">
                 <q-card-section class="text-overline">{{
                     $t('CodeBlocksSettings.Themes')
                 }}</q-card-section>
@@ -268,11 +268,9 @@
                     </div>
                 </q-card-section>
             </q-card>
-        </div>
 
-        <q-slide-transition>
-            <div class="col-xs-12 col-sm-12 col-md-4" v-if="runCode">
-                <q-card class="q-mr-sm-none q-mt-sm-sm">
+            <q-slide-transition>
+                <q-card class="q-mr-sm-none q-mt-sm" v-if="runCode">
                     <q-card-section class="text-overline">{{
                         $t('CodeBlocksSettings.Libraries')
                     }}</q-card-section>
@@ -306,8 +304,8 @@
                         </div>
                     </q-card-section>
                 </q-card>
-            </div>
-        </q-slide-transition>
+            </q-slide-transition>
+        </div>
         <div :class="`col-xs-${options.randomizer.active ? '12' : '12'} q-mt-sm`">
             <RandomizerSettings :options="options" />
         </div>
