@@ -15,6 +15,7 @@ export enum CodeOutputTypes {
     AUTO = 'auto',
     TEXT = 'text',
     JSON = 'json',
+    DATA = 'data',
     MAGIC = 'magic',
 }
 

@@ -82,7 +82,10 @@ export class GlobalState implements IGlobalState {
         }
         const idx = outputObject.indexOf(magicString)
 
-        if (type === CodeOutputTypes.AUTO && resultData != undefined) {
+        if (
+            type === CodeOutputTypes.DATA ||
+            (type === CodeOutputTypes.AUTO && resultData != undefined)
+        ) {
             return {
                 type: 'dual',
                 json: resultData,

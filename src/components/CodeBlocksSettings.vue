@@ -371,6 +371,7 @@ export default class CodeBlocksSettings extends Vue {
             { label: this.$l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
             { label: this.$l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
             { label: this.$l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
+            { label: this.$l('CodeBlocksSettings.PData'), value: CodeOutputTypes.DATA },
             { label: this.$l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
         ]
     }

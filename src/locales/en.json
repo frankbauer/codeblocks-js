@@ -68,6 +68,7 @@
         "PText": "Text Passthrough",
         "PJSON": "JSON",
         "PMagic": "Text+JSON (seperated by '\\n\\n&lt;JSON>\\n')",
+        "PData": "Text+Data (send using 'CodeBlocks.postResult(data)')",
         "NumberErr": "Muss ein gültiger Zahlenwert sein",
         "ContinousCompile": "Automatic Execution (while typing)",
         "PersistentArguments": "Persistente Arguments (between calls)",
