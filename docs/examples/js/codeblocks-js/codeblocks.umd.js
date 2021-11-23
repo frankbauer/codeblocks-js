@@ -2207,17 +2207,6 @@ if (isSSR === true) {
 
 /***/ }),
 
-/***/ "096f":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePlayground_vue_vue_type_style_index_0_id_27994e1a_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("371f");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePlayground_vue_vue_type_style_index_0_id_27994e1a_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePlayground_vue_vue_type_style_index_0_id_27994e1a_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
-
-/***/ }),
-
 /***/ "0b25":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7661,20 +7650,17 @@ $({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, 
 /* harmony import */ var core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("b0c0");
 /* harmony import */ var core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_object_assign_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("cca6");
-/* harmony import */ var core_js_modules_es_object_assign_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_assign_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("ac1f");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("5319");
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("159b");
-/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("8bbf");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _styles_blockly_styl__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__("4723");
-/* harmony import */ var _styles_blockly_styl__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_styles_blockly_styl__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__("b3e9");
-
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("ac1f");
+/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("5319");
+/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("159b");
+/* harmony import */ var core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_for_each_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("8bbf");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _styles_blockly_styl__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("4723");
+/* harmony import */ var _styles_blockly_styl__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_styles_blockly_styl__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__("b3e9");
 
 
 
@@ -7790,10 +7776,10 @@ var ColorHues = [{
   label: '345°',
   value: '345'
 }];
-var PredefinedBlockTypes = Object.keys(_lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* KnownBlocklyTypes */ "e"]).map(function (key) {
+var PredefinedBlockTypes = Object.keys(_lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* KnownBlocklyTypes */ "e"]).map(function (key) {
   var ret = {
-    label: vue__WEBPACK_IMPORTED_MODULE_12___default.a.$l("Blockly.BlockTypeNames.".concat(key)),
-    value: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* KnownBlocklyTypes */ "e"][key]
+    label: vue__WEBPACK_IMPORTED_MODULE_11___default.a.$l("Blockly.BlockTypeNames.".concat(key)),
+    value: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* KnownBlocklyTypes */ "e"][key]
   };
   return ret;
 });
@@ -7802,66 +7788,66 @@ var ColorSelectionWithNone = [{
   label: 'None',
   value: ''
 }].concat(Object(_Users_frank_Documents_docker_ilias_data_assCodeQuestion_dev_codeblocks_js_node_modules_babel_runtime_helpers_esm_toConsumableArray__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(ColorSelection));
-var PredefinedArgumentTypes = Object.keys(_lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockArgumentTypes */ "a"]).map(function (key) {
+var PredefinedArgumentTypes = Object.keys(_lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockArgumentTypes */ "a"]).map(function (key) {
   var ret = {
-    label: vue__WEBPACK_IMPORTED_MODULE_12___default.a.$l("Blockly.ArgumentTypeNames.".concat(key)),
+    label: vue__WEBPACK_IMPORTED_MODULE_11___default.a.$l("Blockly.ArgumentTypeNames.".concat(key)),
     value: key
   };
   return ret;
 });
 var blockStyles = {
   colour_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].Colour,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].Colour,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].Colour,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].Colour,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].Colour,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].Colour,
     hat: 'cap'
   },
   list_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].List,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].List,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].List,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].List,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].List,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].List,
     hat: 'cap'
   },
   logic_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].Logic,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].Logic,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].Logic,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].Logic,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].Logic,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].Logic,
     hat: 'cap'
   },
   loop_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].Loop,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].Loop,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].Loop,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].Loop,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].Loop,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].Loop,
     hat: 'cap'
   },
   math_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].Math,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].Math,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].Math,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].Math,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].Math,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].Math,
     hat: 'cap'
   },
   procedure_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].Procedure,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].Procedure,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].Procedure,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].Procedure,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].Procedure,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].Procedure,
     hat: 'cap'
   },
   text_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].Text,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].Text,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].Text,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].Text,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].Text,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].Text,
     hat: 'cap'
   },
   variable_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].Variable,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].Variable,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].Variable,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].Variable,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].Variable,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].Variable,
     hat: 'cap'
   },
   variable_dynamic_blocks: {
-    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"].Variable_dynamic,
-    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockSecondaryColors */ "c"].Variable_dynamic,
-    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockTertiaryColors */ "d"].Variable_dynamic,
+    colourPrimary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"].Variable_dynamic,
+    colourSecondary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockSecondaryColors */ "c"].Variable_dynamic,
+    colourTertiary: _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockTertiaryColors */ "d"].Variable_dynamic,
     hat: 'cap'
   },
   hat_blocks: {
@@ -7909,7 +7895,7 @@ var BlocklyHelper = /*#__PURE__*/function () {
   Object(_Users_frank_Documents_docker_ilias_data_assCodeQuestion_dev_codeblocks_js_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(BlocklyHelper, [{
     key: "toArgumentDescription",
     value: function toArgumentDescription(a) {
-      var n = vue__WEBPACK_IMPORTED_MODULE_12___default.a.$l("Blockly.ArgumentTypeNames.".concat(a));
+      var n = vue__WEBPACK_IMPORTED_MODULE_11___default.a.$l("Blockly.ArgumentTypeNames.".concat(a));
       return n ? "".concat(n, " (").concat(a, ")") : a;
     }
   }, {
@@ -8033,7 +8019,7 @@ var BlocklyHelper = /*#__PURE__*/function () {
   }, {
     key: "itemForValue",
     value: function itemForValue(items, value) {
-      return vue__WEBPACK_IMPORTED_MODULE_12___default.a.$CodeBlock.itemForValue(items, value);
+      return vue__WEBPACK_IMPORTED_MODULE_11___default.a.$CodeBlock.itemForValue(items, value);
     }
   }, {
     key: "toColorCode",
@@ -8051,9 +8037,9 @@ var BlocklyHelper = /*#__PURE__*/function () {
         return '';
       }
 
-      Object.keys(_lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"]).forEach(function (key) {
+      Object.keys(_lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"]).forEach(function (key) {
         if (color == "{!PrimaryColors.".concat(key, "}")) {
-          color = _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_14__[/* BlockPrimaryColors */ "b"][key];
+          color = _lib_IBlocklyHelper__WEBPACK_IMPORTED_MODULE_13__[/* BlockPrimaryColors */ "b"][key];
         }
       });
       return color;
@@ -11569,13 +11555,6 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ "371f":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "37e8":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11597,6 +11576,13 @@ module.exports = DESCRIPTORS ? Object.defineProperties : function defineProperti
   return O;
 };
 
+
+/***/ }),
+
+/***/ "393f":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -27899,7 +27885,7 @@ function _arrayLikeToArray(arr, len) {
 /***/ "6ce2":
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"Dismiss\":\"Verwerfen\",\"CodeBlock\":{\"Initial_Content\":\"Lösungsvorgabe\"},\"CodeBlockContainer\":{\"Display\":\"Darstellung\",\"Lines\":\"Zeilen\",\"Lines_detail\":\"Anzahl sichtbarer Zeilen oder <b>auto</b>.\",\"Prepopulate\":\"Antwort Vorbelegen\",\"Prepopulate_detail\":\"Lösungsvorgabe für neue Fragen angeben.\",\"Behaviour\":\"Verhalten\",\"ScriptV\":\"Script-Version\",\"ScriptV_detail\":\"API-Version des Visualisierungsobjektes.\",\"AutoReset\":\"Autom. Reset\",\"AutoReset_detail\":\"Canvas-Element bei jeder Ausführung neu erzeugen.\",\"Positioning\":\"Positionierung\",\"Width\":\"Breite\",\"Width_detail\":\"CSS-Eigenschaft für die Breite\",\"Height\":\"Höhe\",\"Height_detail\":\"CSS-Eigenschaft für die Höhe\",\"Alignment\":\"Ausrichtung\",\"Alignment_detail\":\"Horizontale Ausrichtung des Canvas-Element\",\"Delete\":\"Löschen\",\"Start\":\"Anfang\",\"Center\":\"Mitte\",\"End\":\"Ende\",\"ScriptVersion_1\":\"1.0 (original)\",\"ScriptVersion_2\":\"2.0 (seit 2020)\",\"ScriptVersion_3\":\"3.0 (experimental)\",\"Canvas\":\"Visualisierungsbereich\",\"Text\":\"Text\",\"Hidden\":\"Quellcode (Versteckt)\",\"Static\":\"Quellcode (Angabe)\",\"Block\":\"Antwortfeld/Lösung\",\"Blockly\":\"Blockly (Experimental!!!)\",\"Confirm\":\"Bestätigung\",\"DeleteQuestion\":\"Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?\",\"TypesCaption\":\"Blocktypen\",\"Types\":\"Die Frage wird aus den folgenden Blöcken zusammengestellt. Möglichen Typen sind:<ul><li><b>Text</b>: Text der wie der ursprüngliche Fragetext ohne Syntax highlighting angezeigt wird. Die <b>[code][/code]</b> und <b>[hl][/hl]</b> können verwendet werden</li><li><b>Quellcode (Angabe)</b>: Nicht veränderbarer Quellcode mit Syntax highlighting. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Quellcode (Versteckt)</b>: Der Quellcode ist teil der ausgelieferten Webseite, wird jedoch nicht angezeigt. Diese Variante kann code enthalten der Hilfsmethoden o.ä. definiert. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Antwortfeld/Lösung</b>: Quellcode mit Syntax highlighting. Hier sollte die Musterlösung angegeben werden. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Visualisierungsbereich</b>: Eine Zeichenfläche die nutzbar ist um die Ergebnisse der Studenten zu visualisieren. Der Code (für Version 2.0) <b> muss ein JavaScript Object</b> mit den Methoden <ul><li><code>init(canvasElement, outputElement, scope)</code> und </li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> definieren</b>.</li></ul>\"},\"CodeBlocks\":{\"run_hint\":\"<code>Ctrl</code>+<code>W</code> oder <code>Ctrl</code>+<code>J</code> drücken um Code auszuführen\",\"run\":\"Ausführen\",\"stop\":\"Anhalten\",\"AddBlock\":\"Neuen Block Anlegen\",\"UserCanceled\":\"Vom Benutzer Abgebrochen\"},\"CodeBlocksSettings\":{\"Language\":\"Sprache\",\"AllowExec\":\"Ausführung zulassen\",\"CVersion\":\"Version\",\"RunTime\":\"Max. Laufzeit in ms.\",\"Output\":\"Ausgabe\",\"MaxCharacters\":\"Max. Textlänge\",\"ExperimentalCompiler\":\"Experimentelle Sprache\",\"ExperimentalCompilerDesc\":\"Diese Sprachversion ist experimentell. Sowohl die Eigenschaften also auch das Verhalten können sich daher im nächsten Update ändern. Diese Version sollte nicht in Produktivumgebungen eingestezt werden.\",\"DeprecatedCompiler\":\"Veralteter Sprache\",\"DeprecatedCompilerDesc\":\"Diese Sprachversion ist veraltet und wird in einem der nächsten Updates entfernt. Bitte aktualisieren Sie Ihr Projekt auf eine aktuelle Version.\",\"Parser\":\"Ausgabe Behandlung\",\"Themes\":\"Stile\",\"TGeneral\":\"Allgemeine Darstellung\",\"TSolution\":\"Lösungsdarstellung\",\"Libraries\":\"Bibliotheken\",\"DomLibs\":\"DOM-Bibliotheken\",\"WorkLibs\":\"Worker-Bibliotheken\",\"PAutomatic\":\"Automatisch\",\"PText\":\"Als Text\",\"PJSON\":\"Als JSON\",\"PMagic\":\"Text+JSON (getrennt mit '\\\\n\\\\n&lt;JSON>\\\\n')\",\"NumberErr\":\"Muss eine gültige Zahl sein.\",\"ContinousCompile\":\"Automatisch Ausführen\",\"PersistentArguments\":\"Persistente Argumente\",\"MessagePassing\":\"Nachrichtenaustauch (DOM und Worker)\",\"KeepAlive\":\"Worker nicht automatisch beenden\",\"AllowArguments\":\"Untersützt das Senden von Argumenten\",\"AllowArgumentsCaption\":\"Senden von Argumenten\",\"AllowArgumentsHint\":\"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden.\",\"AllowArgumentsHintJava\":\"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> können die Einträge eines String-Array festgelegt werden, welches der <code>main</code>-Methode als Parameter übergeben wird.\",\"UsePersistentArgumentsCaption\":\"Persistente Argumente\",\"UsePersistentArgumentsHint\":\"Wenn diese Option aktiviert ist werden die Werte die vom Worker in der <code>args</code>-Variable abgelegt wurden direkt an <code>addArgumentsTo(args)</code> übergeben. Andernfalls ist <code>args</code> ein leers Objekt.\",\"UsePersistentArgumentsHintJava\":\"Wenn diese Option aktiviert ist werden die Werte im java-code in der <code>args</code>-Variable abgelegt wurden direkt an <code>addArgumentsTo(args)</code> übergeben. Andernfalls ist <code>args</code> ein leers Array.\",\"AllowMessagePassingCaption\":\"Nachrichtenaustauch\",\"AllowMessagePassingHint\":\"<b style=color:red>[EXPERIMENTAL]</b> Ermöglicht den Nachrichtenaustausch zwischen dem Wroker und dem (Canvas)DOM-Code.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Empföngt Nachrichten vom worker</li><li><code>runner.postMessage(cmd, data)</code>: Sendet Nachrichten an den Worker. Die runner-Instanz wird der <code>init</code>-Method übergeben.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((request) => {})</code>: Die übergebene Methode empfäöngt die Nachrichten des DOM-Codes</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: Sendet eine Nachricht an den DOM-Code.</li></ul>\",\"AllowMessagePassingHintJava\":\"<b style=color:red>[EXPERIMENTAL]</b> Ermöglicht den Nachrichtenaustausch zwischen dem Wroker und dem (Canvas)DOM-Code.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Empföngt Nachrichten vom worker</li><li><code>runner.postMessage(cmd, data)</code>: Sendet Nachrichten an den Worker. Die runner-Instanz wird der <code>init</code>-Method übergeben.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {})</code>: Die übergebene Methode empfäöngt die Nachrichten des DOM-Codes</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: Sendet eine Nachricht an den DOM-Code.</li></ul>\",\"KeepAliveCaption\":\"Worker nicht automatisch beenden\",\"KeepAliveHint\":\"<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden des studentischen Codes nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Teste oder durch erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>process.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Visualisierungsbereiche</b> wird sofort nach dem Ende des studentischen Codes, aber noch vor der Beendigung des Workers aufberufen.\",\"KeepAliveHintJava\":\"<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden der studentischen <code>main</code>-methode nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Taste oder durch das erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>System.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Visualisierungsbereiche</b> wird sofort nach dem Ende der <code>main</code>-Methode, aber noch vor der Beendigung des Workers aufberufen.\"},\"CodePlayground\":{\"InvalidJson\":\"Ausgabe ist nicht JSON-Formatiert\",\"Output\":\"Ausgabe:\",\"Message\":\"Meldung:\",\"ExperimentalScriptVersion\":\"Experimentelle Scriptversion\",\"ExperimentalScriptVersionDesc\":\"Diese Scriptversion ist experimentell. Sowohl die Eigenschaften also auch das Verhalten können sich daher im nächsten Update ändern. Diese Version sollte nicht in Produktivumgebungen eingestezt werden.\",\"DeprecatedScriptVersion\":\"Veralteter Scriptversion\",\"DeprecatedScriptVersionDesc\":\"Diese Scriptversion ist veraltet und wird in einem der nächsten Updates entfernt. Bitte aktualisieren Sie Ihr Projekt auf eine aktuelle Version.\"},\"Tagger\":{\"ConfirmRepl\":\"Ersetzung Bestätigen\",\"ConfirmReplMsg\":\"Sollen <b>alle</b> vorkomnisse von {name} mit dem untenstehenden Wert ersetzt werden?\"},\"RandomizerSetEditor\":{\"Caption\":\"Bearbeit Zusammenstellung {nr}\"},\"RandomizerSettings\":{\"Caption\":\"Würfler\",\"Available\":\"Definierte Platzhalter\",\"Sets\":\"Zusammenstellungen\"},\"Blockly\":{\"CodePreviewLabel\":\"Code-Vorschau\",\"CodePreviewCaption\":\"Der durch die Sequenz erzeugte Quellcode\",\"RAWToolboxLabel\":\"RAW Toolbox Definition\",\"RAWToolboxCaption\":\"Die Toolbox Definition als XML Quelltext\",\"CustomBlocksLabel\":\"Angepasste Blöcke\",\"CustomBlocksCaption\":\"Erstellen und Anpassen von eigenen Blöcken\",\"ToolboxLabel\":\"Toolbox Anpassen\",\"ToolboxCaption\":\"Die Toolbox mit einer UI verwalten und gestalten\",\"ToolboxCategories\":\"Kategorien\",\"ToolboxItems\":\"Blöcke\",\"Properties\":\"Eigenschaften\",\"UseCustomToolbox\":\"Toolbox selbst definieren\",\"ShowControls\":\"Kontrolleiste Anzeigen\",\"Block\":{\"TypeName\":\"Unique Type ID\",\"MainDescription\":\"Main Description (use %1, %2... for Argument PlaceHolders)\",\"CreateCustomTitle\":\"Create a new Block\",\"CreateCustomMessage\":\"Please specify a unique Type-Name (at least <b>three characters</b>) for your new Block.\",\"Arguments\":\"Argument List\",\"ArgumentName\":\"Argument Name\",\"Header\":\"Header\",\"HeaderDescription\":\"The main Row of your Block\",\"AdditionalLines\":\"Additional Lines\",\"AddonLineTitle\":\"Additional Line {nr}\",\"CompileError\":\"Error Compiling Block:\",\"CodeGeneratorFunction\":\"Code-Generator Function\",\"Properties\":\"Block-Eigenschaften\",\"BlockEditTitle\":\"Block Designer\",\"BlockEditDescription\":\"Define the Properties of Your Block with a simple Blockly-Interface.\",\"DesignBlockName\":\"DESIGNER BLOCK\"},\"ArgumentTypeNames\":{\"field_input\":\"field_input\",\"field_dropdown\":\"field_dropdown\",\"field_checkbox\":\"field_checkbox\",\"field_colour\":\"Farbe\",\"field_number\":\"Zahl\",\"field_angle\":\"Winkel\",\"field_variable\":\"field_variable\",\"field_date\":\"Datum\",\"field_label\":\"field_label\",\"field_image\":\"Bild\",\"input_value\":\"input_value\",\"input_statement\":\"input_statement\",\"input_dummy\":\"input_dummy\"},\"BlockTypeNames\":{\"controls_if\":\"Kontrolle: Bedingung (if)\",\"logic_compare\":\"Logik: Vergleich\",\"logic_operation\":\"Logik: Logische Operation\",\"logic_negate\":\"Logik: Logisches Nicht\",\"logic_boolean\":\"Logik: Wahrheitswert\",\"logic_null\":\"Logik: null\",\"logic_ternary\":\"Logik: Ternäre Logikoperation (?:)\",\"controls_repeat_ext\":\"Kontrolle: Schleife: n-Mal Wiederholen\",\"controls_whileUntil\":\"Kontrolle: Schleife: While-Until\",\"controls_for\":\"Kontrolle: Schleife: For\",\"controls_forEach\":\"Kontrolle: Schleife: For-Each\",\"controls_flow_statements\":\"Kontrolle: Schliefen Operationen (continue/break)\",\"math_number\":\"Mathe: Zahl\",\"math_arithmetic\":\"Mathe: Arithmetische Operation\",\"math_single\":\"Mathe: Unöre Operation\",\"math_trig\":\"Mathe: Trigonometrische Funktionen\",\"math_constant\":\"Mathe: Konstanten (pi, ...)\",\"math_number_property\":\"Mathe: Zahleigenschaften (gerade, prim...)\",\"math_round\":\"Mathe: Runden\",\"math_on_list\":\"Mathe: Reduktion auf Liste (summe, min/max, ...)\",\"math_modulo\":\"Mathe: Rest (Modulo)\",\"math_constrain\":\"Mathe: Intervall Begrenzen\",\"math_random_int\":\"Mathe: Zufallszahl (Ganzzahlig)\",\"math_random_float\":\"Mathe: Zufallszahl\",\"text\":\"Text\",\"text_join\":\"text_join\",\"text_append\":\"text_append\",\"text_length\":\"text_length\",\"text_isEmpty\":\"text_isEmpty\",\"text_indexOf\":\"text_indexOf\",\"variables_get\":\"variables_get\",\"text_charAt\":\"text_charAt\",\"text_getSubstring\":\"text_getSubstring\",\"text_changeCase\":\"text_changeCase\",\"text_trim\":\"text_trim\",\"text_print\":\"text_print\",\"text_prompt_ext\":\"text_prompt_ext\",\"lists_create_with\":\"lists_create_with\",\"lists_repeat\":\"lists_repeat\",\"lists_length\":\"lists_length\",\"lists_isEmpty\":\"lists_isEmpty\",\"lists_indexOf\":\"lists_indexOf\",\"lists_getIndex\":\"lists_getIndex\",\"lists_setIndex\":\"lists_setIndex\",\"lists_getSublist\":\"lists_getSublist\",\"lists_split\":\"lists_split\",\"lists_sort\":\"lists_sort\",\"colour_picker\":\"colour_picker\",\"colour_random\":\"colour_random\",\"colour_rgb\":\"colour_rgb\",\"colour_blend\":\"colour_blend\"}}}");
+module.exports = JSON.parse("{\"Dismiss\":\"Verwerfen\",\"CodeBlock\":{\"Initial_Content\":\"Lösungsvorgabe\"},\"CodeBlockContainer\":{\"Display\":\"Darstellung\",\"Lines\":\"Zeilen\",\"Lines_detail\":\"Anzahl sichtbarer Zeilen oder <b>auto</b>.\",\"Prepopulate\":\"Antwort Vorbelegen\",\"Prepopulate_detail\":\"Lösungsvorgabe für neue Fragen angeben.\",\"Behaviour\":\"Verhalten\",\"ScriptV\":\"Script-Version\",\"ScriptV_detail\":\"API-Version des Visualisierungsobjektes.\",\"AutoReset\":\"Autom. Reset\",\"AutoReset_detail\":\"Canvas-Element bei jeder Ausführung neu erzeugen.\",\"Positioning\":\"Positionierung\",\"Width\":\"Breite\",\"Width_detail\":\"CSS-Eigenschaft für die Breite\",\"Height\":\"Höhe\",\"Height_detail\":\"CSS-Eigenschaft für die Höhe\",\"Alignment\":\"Ausrichtung\",\"Alignment_detail\":\"Horizontale Ausrichtung des Canvas-Element\",\"Delete\":\"Löschen\",\"Start\":\"Anfang\",\"Center\":\"Mitte\",\"End\":\"Ende\",\"ScriptVersion_1\":\"1.0 (original)\",\"ScriptVersion_2\":\"2.0 (seit 2020)\",\"ScriptVersion_3\":\"3.0 (experimental)\",\"Canvas\":\"Visualisierungsbereich\",\"Text\":\"Text\",\"Hidden\":\"Quellcode (Versteckt)\",\"Static\":\"Quellcode (Angabe)\",\"Block\":\"Antwortfeld/Lösung\",\"Blockly\":\"Blockly (Experimental!!!)\",\"Confirm\":\"Bestätigung\",\"DeleteQuestion\":\"Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?\",\"TypesCaption\":\"Blocktypen\",\"Types\":\"Die Frage wird aus den folgenden Blöcken zusammengestellt. Möglichen Typen sind:<ul><li><b>Text</b>: Text der wie der ursprüngliche Fragetext ohne Syntax highlighting angezeigt wird. Die <b>[code][/code]</b> und <b>[hl][/hl]</b> können verwendet werden</li><li><b>Quellcode (Angabe)</b>: Nicht veränderbarer Quellcode mit Syntax highlighting. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Quellcode (Versteckt)</b>: Der Quellcode ist teil der ausgelieferten Webseite, wird jedoch nicht angezeigt. Diese Variante kann code enthalten der Hilfsmethoden o.ä. definiert. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Antwortfeld/Lösung</b>: Quellcode mit Syntax highlighting. Hier sollte die Musterlösung angegeben werden. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Visualisierungsbereich</b>: Eine Zeichenfläche die nutzbar ist um die Ergebnisse der Studenten zu visualisieren. Der Code (für Version 2.0) <b> muss ein JavaScript Object</b> mit den Methoden <ul><li><code>init(canvasElement, outputElement, scope)</code> und </li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> definieren</b>.</li></ul>\"},\"CodeBlocks\":{\"run_hint\":\"<code>Ctrl</code>+<code>W</code> oder <code>Ctrl</code>+<code>J</code> drücken um Code auszuführen\",\"run\":\"Ausführen\",\"stop\":\"Anhalten\",\"AddBlock\":\"Neuen Block Anlegen\",\"UserCanceled\":\"Vom Benutzer Abgebrochen\"},\"CodeBlocksSettings\":{\"Language\":\"Sprache\",\"AllowExec\":\"Ausführung zulassen\",\"CVersion\":\"Version\",\"RunTime\":\"Max. Laufzeit in ms.\",\"Output\":\"Ausgabe\",\"MaxCharacters\":\"Max. Textlänge\",\"ExperimentalCompiler\":\"Experimentelle Sprache\",\"ExperimentalCompilerDesc\":\"Diese Sprachversion ist experimentell. Sowohl die Eigenschaften also auch das Verhalten können sich daher im nächsten Update ändern. Diese Version sollte nicht in Produktivumgebungen eingestezt werden.\",\"DeprecatedCompiler\":\"Veralteter Sprache\",\"DeprecatedCompilerDesc\":\"Diese Sprachversion ist veraltet und wird in einem der nächsten Updates entfernt. Bitte aktualisieren Sie Ihr Projekt auf eine aktuelle Version.\",\"Parser\":\"Ausgabe Behandlung\",\"Themes\":\"Stile\",\"TGeneral\":\"Allgemeine Darstellung\",\"TSolution\":\"Lösungsdarstellung\",\"Libraries\":\"Bibliotheken\",\"DomLibs\":\"DOM-Bibliotheken\",\"WorkLibs\":\"Worker-Bibliotheken\",\"PAutomatic\":\"Automatisch\",\"PText\":\"Als Text\",\"PJSON\":\"Als JSON\",\"PMagic\":\"Text+JSON (getrennt mit '\\\\n\\\\n&lt;JSON>\\\\n')\",\"PData\":\"Text+Daten (Senden mit 'CodeBlocks.postResult(data)')\",\"NumberErr\":\"Muss eine gültige Zahl sein.\",\"ContinousCompile\":\"Automatisch Ausführen\",\"PersistentArguments\":\"Persistente Argumente\",\"MessagePassing\":\"Nachrichtenaustauch (DOM und Worker)\",\"KeepAlive\":\"Worker nicht automatisch beenden\",\"AllowArguments\":\"Untersützt das Senden von Argumenten\",\"AllowArgumentsCaption\":\"Senden von Argumenten\",\"AllowArgumentsHint\":\"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden.\",\"AllowArgumentsHintJava\":\"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> können die Einträge eines String-Array festgelegt werden, welches der <code>main</code>-Methode als Parameter übergeben wird.\",\"UsePersistentArgumentsCaption\":\"Persistente Argumente\",\"UsePersistentArgumentsHint\":\"Wenn diese Option aktiviert ist werden die Werte die vom Worker in der <code>args</code>-Variable abgelegt wurden direkt an <code>addArgumentsTo(args)</code> übergeben. Andernfalls ist <code>args</code> ein leers Objekt.\",\"UsePersistentArgumentsHintJava\":\"Wenn diese Option aktiviert ist werden die Werte im java-code in der <code>args</code>-Variable abgelegt wurden direkt an <code>addArgumentsTo(args)</code> übergeben. Andernfalls ist <code>args</code> ein leers Array.\",\"AllowMessagePassingCaption\":\"Nachrichtenaustauch\",\"AllowMessagePassingHint\":\"<b style=color:red>[EXPERIMENTAL]</b> Ermöglicht den Nachrichtenaustausch zwischen dem Wroker und dem (Canvas)DOM-Code.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Empföngt Nachrichten vom worker</li><li><code>runner.postMessage(cmd, data)</code>: Sendet Nachrichten an den Worker. Die runner-Instanz wird der <code>init</code>-Method übergeben.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((request) => {})</code>: Die übergebene Methode empfäöngt die Nachrichten des DOM-Codes</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: Sendet eine Nachricht an den DOM-Code.</li></ul>\",\"AllowMessagePassingHintJava\":\"<b style=color:red>[EXPERIMENTAL]</b> Ermöglicht den Nachrichtenaustausch zwischen dem Wroker und dem (Canvas)DOM-Code.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Empföngt Nachrichten vom worker</li><li><code>runner.postMessage(cmd, data)</code>: Sendet Nachrichten an den Worker. Die runner-Instanz wird der <code>init</code>-Method übergeben.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {})</code>: Die übergebene Methode empfäöngt die Nachrichten des DOM-Codes</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: Sendet eine Nachricht an den DOM-Code.</li></ul>\",\"KeepAliveCaption\":\"Worker nicht automatisch beenden\",\"KeepAliveHint\":\"<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden des studentischen Codes nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Teste oder durch erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>process.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Visualisierungsbereiche</b> wird sofort nach dem Ende des studentischen Codes, aber noch vor der Beendigung des Workers aufberufen.\",\"KeepAliveHintJava\":\"<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden der studentischen <code>main</code>-methode nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Taste oder durch das erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>System.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Visualisierungsbereiche</b> wird sofort nach dem Ende der <code>main</code>-Methode, aber noch vor der Beendigung des Workers aufberufen.\"},\"CodePlayground\":{\"InvalidJson\":\"Ausgabe ist nicht JSON-Formatiert\",\"Output\":\"Ausgabe:\",\"Message\":\"Meldung:\",\"ExperimentalScriptVersion\":\"Experimentelle Scriptversion\",\"ExperimentalScriptVersionDesc\":\"Diese Scriptversion ist experimentell. Sowohl die Eigenschaften also auch das Verhalten können sich daher im nächsten Update ändern. Diese Version sollte nicht in Produktivumgebungen eingestezt werden.\",\"DeprecatedScriptVersion\":\"Veralteter Scriptversion\",\"DeprecatedScriptVersionDesc\":\"Diese Scriptversion ist veraltet und wird in einem der nächsten Updates entfernt. Bitte aktualisieren Sie Ihr Projekt auf eine aktuelle Version.\"},\"Tagger\":{\"ConfirmRepl\":\"Ersetzung Bestätigen\",\"ConfirmReplMsg\":\"Sollen <b>alle</b> vorkomnisse von {name} mit dem untenstehenden Wert ersetzt werden?\"},\"RandomizerSetEditor\":{\"Caption\":\"Bearbeit Zusammenstellung {nr}\"},\"RandomizerSettings\":{\"Caption\":\"Würfler\",\"Available\":\"Definierte Platzhalter\",\"Sets\":\"Zusammenstellungen\"},\"Blockly\":{\"CodePreviewLabel\":\"Code-Vorschau\",\"CodePreviewCaption\":\"Der durch die Sequenz erzeugte Quellcode\",\"RAWToolboxLabel\":\"RAW Toolbox Definition\",\"RAWToolboxCaption\":\"Die Toolbox Definition als XML Quelltext\",\"CustomBlocksLabel\":\"Angepasste Blöcke\",\"CustomBlocksCaption\":\"Erstellen und Anpassen von eigenen Blöcken\",\"ToolboxLabel\":\"Toolbox Anpassen\",\"ToolboxCaption\":\"Die Toolbox mit einer UI verwalten und gestalten\",\"ToolboxCategories\":\"Kategorien\",\"ToolboxItems\":\"Blöcke\",\"Properties\":\"Eigenschaften\",\"UseCustomToolbox\":\"Toolbox selbst definieren\",\"ShowControls\":\"Kontrolleiste Anzeigen\",\"Block\":{\"TypeName\":\"Unique Type ID\",\"MainDescription\":\"Main Description (use %1, %2... for Argument PlaceHolders)\",\"CreateCustomTitle\":\"Create a new Block\",\"CreateCustomMessage\":\"Please specify a unique Type-Name (at least <b>three characters</b>) for your new Block.\",\"Arguments\":\"Argument List\",\"ArgumentName\":\"Argument Name\",\"Header\":\"Header\",\"HeaderDescription\":\"The main Row of your Block\",\"AdditionalLines\":\"Additional Lines\",\"AddonLineTitle\":\"Additional Line {nr}\",\"CompileError\":\"Error Compiling Block:\",\"CodeGeneratorFunction\":\"Code-Generator Function\",\"Properties\":\"Block-Eigenschaften\",\"BlockEditTitle\":\"Block Designer\",\"BlockEditDescription\":\"Define the Properties of Your Block with a simple Blockly-Interface.\",\"DesignBlockName\":\"DESIGNER BLOCK\"},\"ArgumentTypeNames\":{\"field_input\":\"field_input\",\"field_dropdown\":\"field_dropdown\",\"field_checkbox\":\"field_checkbox\",\"field_colour\":\"Farbe\",\"field_number\":\"Zahl\",\"field_angle\":\"Winkel\",\"field_variable\":\"field_variable\",\"field_date\":\"Datum\",\"field_label\":\"field_label\",\"field_image\":\"Bild\",\"input_value\":\"input_value\",\"input_statement\":\"input_statement\",\"input_dummy\":\"input_dummy\"},\"BlockTypeNames\":{\"controls_if\":\"Kontrolle: Bedingung (if)\",\"logic_compare\":\"Logik: Vergleich\",\"logic_operation\":\"Logik: Logische Operation\",\"logic_negate\":\"Logik: Logisches Nicht\",\"logic_boolean\":\"Logik: Wahrheitswert\",\"logic_null\":\"Logik: null\",\"logic_ternary\":\"Logik: Ternäre Logikoperation (?:)\",\"controls_repeat_ext\":\"Kontrolle: Schleife: n-Mal Wiederholen\",\"controls_whileUntil\":\"Kontrolle: Schleife: While-Until\",\"controls_for\":\"Kontrolle: Schleife: For\",\"controls_forEach\":\"Kontrolle: Schleife: For-Each\",\"controls_flow_statements\":\"Kontrolle: Schliefen Operationen (continue/break)\",\"math_number\":\"Mathe: Zahl\",\"math_arithmetic\":\"Mathe: Arithmetische Operation\",\"math_single\":\"Mathe: Unöre Operation\",\"math_trig\":\"Mathe: Trigonometrische Funktionen\",\"math_constant\":\"Mathe: Konstanten (pi, ...)\",\"math_number_property\":\"Mathe: Zahleigenschaften (gerade, prim...)\",\"math_round\":\"Mathe: Runden\",\"math_on_list\":\"Mathe: Reduktion auf Liste (summe, min/max, ...)\",\"math_modulo\":\"Mathe: Rest (Modulo)\",\"math_constrain\":\"Mathe: Intervall Begrenzen\",\"math_random_int\":\"Mathe: Zufallszahl (Ganzzahlig)\",\"math_random_float\":\"Mathe: Zufallszahl\",\"text\":\"Text\",\"text_join\":\"text_join\",\"text_append\":\"text_append\",\"text_length\":\"text_length\",\"text_isEmpty\":\"text_isEmpty\",\"text_indexOf\":\"text_indexOf\",\"variables_get\":\"variables_get\",\"text_charAt\":\"text_charAt\",\"text_getSubstring\":\"text_getSubstring\",\"text_changeCase\":\"text_changeCase\",\"text_trim\":\"text_trim\",\"text_print\":\"text_print\",\"text_prompt_ext\":\"text_prompt_ext\",\"lists_create_with\":\"lists_create_with\",\"lists_repeat\":\"lists_repeat\",\"lists_length\":\"lists_length\",\"lists_isEmpty\":\"lists_isEmpty\",\"lists_indexOf\":\"lists_indexOf\",\"lists_getIndex\":\"lists_getIndex\",\"lists_setIndex\":\"lists_setIndex\",\"lists_getSublist\":\"lists_getSublist\",\"lists_split\":\"lists_split\",\"lists_sort\":\"lists_sort\",\"colour_picker\":\"colour_picker\",\"colour_random\":\"colour_random\",\"colour_rgb\":\"colour_rgb\",\"colour_blend\":\"colour_blend\"}}}");
 
 /***/ }),
 
@@ -29077,6 +29063,17 @@ var listeners = __webpack_require__("87e8");
 
 /***/ }),
 
+/***/ "7f50":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePlayground_vue_vue_type_style_index_0_id_02275a87_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("88f9");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePlayground_vue_vue_type_style_index_0_id_02275a87_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodePlayground_vue_vue_type_style_index_0_id_02275a87_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "7f9a":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29096,7 +29093,7 @@ module.exports = isCallable(WeakMap) && /native code/.test(inspectSource(WeakMap
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlock.vue?vue&type=template&id=0368514c&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlock.vue?vue&type=template&id=0368514c&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:("codeblock block-" + _vm.typeName)},[_c('CodeBlockButton',{directives:[{name:"show",rawName:"v-show",value:(_vm.showBookmarkButton),expression:"showBookmarkButton"}],attrs:{"block":_vm.block,"isBookmarkPanel":_vm.isBookmarkPanel}}),_c('codemirror',{ref:"codeBox",class:("accqstXmlInput noRTEditor codebox " + _vm.boxClass),attrs:{"value":_vm.code,"options":_vm.options,"name":(_vm.namePrefix + "block[" + (_vm.block.parentID) + "][" + (_vm.block.id) + "]"),"id":("teQ" + (_vm.block.parentID) + "B" + (_vm.block.id)),"data-question":_vm.block.parentID,"events":['keyup']},on:{"ready":_vm.onCodeReady,"focus":_vm.onCodeFocus,"input":_vm.onCodeChangeDefered,"input-read":_vm.onCodeKeyHandle,"keyup":_vm.onCodeKeyHandle}}),(_vm.editMode)?_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasAlternativeContent),expression:"hasAlternativeContent"}]},[_c('div',{staticClass:"q-mt-lg text-subtitle2"},[_vm._v(_vm._s(_vm.$t('CodeBlock.Initial_Content')))]),_c('codemirror',{ref:"altBox",class:("accqstXmlInput noRTEditor " + _vm.boxClass),attrs:{"value":_vm.altCode,"options":_vm.altOptions,"name":(_vm.namePrefix + "alt_block[" + (_vm.block.parentID) + "][" + (_vm.block.id) + "]")},on:{"ready":_vm.onAltCodeReady,"focus":_vm.onAltCodeFocus,"input":_vm.onAltCodeChangeDefered}})],1):_vm._e()],1)}
 var staticRenderFns = []
 
@@ -29133,7 +29130,7 @@ var Reflect = __webpack_require__("98db");
 // EXTERNAL MODULE: ./node_modules/vue-property-decorator/lib/index.js + 15 modules
 var lib = __webpack_require__("1b40");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ErrorTip.vue?vue&type=template&id=67eb593e&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/ErrorTip.vue?vue&type=template&id=67eb593e&
 var ErrorTipvue_type_template_id_67eb593e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-icon',{class:("mdi " + _vm.severityClass + " mainTipIcon"),attrs:{"name":_vm.severityIcon}},[_c('q-tooltip',[_c('div',[_c('ul',{staticClass:"tiplist"},_vm._l((_vm.errors),function(error){return _c('li',{key:error.message},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-1"},[_c('q-icon',{attrs:{"name":_vm.iconForSeverity(error.severity)}})],1),_c('div',{staticClass:"col-11 q-pr-md"},[_c('div',{staticClass:"q-my-none tipper"},[_vm._v(_vm._s(error.message))])])])])}),0)])])],1)}
 var ErrorTipvue_type_template_id_67eb593e_staticRenderFns = []
 
@@ -29316,7 +29313,7 @@ var glsl = __webpack_require__("5e79");
 // EXTERNAL MODULE: ./node_modules/codemirror/addon/edit/closebrackets.js
 var closebrackets = __webpack_require__("10b2");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockButton.vue?vue&type=template&id=0bd2a5d9&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockButton.vue?vue&type=template&id=0bd2a5d9&scoped=true&
 var CodeBlockButtonvue_type_template_id_0bd2a5d9_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"floatingButton"},[_c('q-btn',{attrs:{"color":_vm.color,"text-color":"black","icon":_vm.iconName,"round":"","size":"xs"},on:{"click":_vm.onClick}})],1)}
 var CodeBlockButtonvue_type_template_id_0bd2a5d9_scoped_true_staticRenderFns = []
 
@@ -32896,6 +32893,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
+/***/ "88f9":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "8925":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -32913,13 +32917,6 @@ if (!isCallable(store.inspectSource)) {
 
 module.exports = store.inspectSource;
 
-
-/***/ }),
-
-/***/ "8a34":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -37839,6 +37836,7 @@ var CodeOutputTypes;
   CodeOutputTypes["AUTO"] = "auto";
   CodeOutputTypes["TEXT"] = "text";
   CodeOutputTypes["JSON"] = "json";
+  CodeOutputTypes["DATA"] = "data";
   CodeOutputTypes["MAGIC"] = "magic";
 })(CodeOutputTypes || (CodeOutputTypes = {}));
 
@@ -39624,6 +39622,54 @@ module.exports = function (METHOD_NAME, argument) {
     method.call(null, argument || function () { throw 1; }, 1);
   });
 };
+
+
+/***/ }),
+
+/***/ "a79d":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var IS_PURE = __webpack_require__("c430");
+var NativePromise = __webpack_require__("fea9");
+var fails = __webpack_require__("d039");
+var getBuiltIn = __webpack_require__("d066");
+var isCallable = __webpack_require__("1626");
+var speciesConstructor = __webpack_require__("4840");
+var promiseResolve = __webpack_require__("cdf9");
+var redefine = __webpack_require__("6eeb");
+
+// Safari bug https://bugs.webkit.org/show_bug.cgi?id=200829
+var NON_GENERIC = !!NativePromise && fails(function () {
+  NativePromise.prototype['finally'].call({ then: function () { /* empty */ } }, function () { /* empty */ });
+});
+
+// `Promise.prototype.finally` method
+// https://tc39.es/ecma262/#sec-promise.prototype.finally
+$({ target: 'Promise', proto: true, real: true, forced: NON_GENERIC }, {
+  'finally': function (onFinally) {
+    var C = speciesConstructor(this, getBuiltIn('Promise'));
+    var isFunction = isCallable(onFinally);
+    return this.then(
+      isFunction ? function (x) {
+        return promiseResolve(C, onFinally()).then(function () { return x; });
+      } : onFinally,
+      isFunction ? function (e) {
+        return promiseResolve(C, onFinally()).then(function () { throw e; });
+      } : onFinally
+    );
+  }
+});
+
+// makes sure that native promise-based APIs `Promise#finally` properly works with patched `Promise#then`
+if (!IS_PURE && isCallable(NativePromise)) {
+  var method = getBuiltIn('Promise').prototype['finally'];
+  if (NativePromise.prototype['finally'] !== method) {
+    redefine(NativePromise.prototype, 'finally', method, { unsafe: true });
+  }
+}
 
 
 /***/ }),
@@ -41852,6 +41898,17 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
 
 /***/ }),
 
+/***/ "d393":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_0d37c1de_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("393f");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_0d37c1de_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_0d37c1de_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "d3b7":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -41992,17 +42049,6 @@ exportTypedArrayMethod('forEach', function forEach(callbackfn /* , thisArg */) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "d6ef":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_75cfd4ae_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("8a34");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_75cfd4ae_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_vue_cli_plugin_quasar_lib_loader_auto_import_js_kebab_node_modules_cache_loader_dist_cjs_js_ref_0_1_node_modules_vue_loader_lib_index_js_vue_loader_options_CodeBlocksSettings_vue_vue_type_style_index_0_id_75cfd4ae_lang_sass_scoped_true___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
 
 /***/ }),
 
@@ -47414,7 +47460,7 @@ function getLocale() {
 /***/ "edd4":
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"Dismiss\":\"Dismiss\",\"CodeBlock\":{\"Initial_Content\":\"Initial Content\"},\"CodeBlockContainer\":{\"Display\":\"Display\",\"Lines\":\"Lines\",\"Lines_detail\":\"Number of Visible lines or <b>auto</b>.\",\"Prepopulate\":\"Prepopulate Answer\",\"Prepopulate_detail\":\"Define content that is displayed in a new answer.\",\"Behaviour\":\"Behaviour\",\"ScriptV\":\"Script Version\",\"ScriptV_detail\":\"API-Version for the Visualization Object.\",\"AutoReset\":\"Auto Reset\",\"AutoReset_detail\":\"Recreate Canvas-Element for each run\",\"Positioning\":\"Positioning\",\"Width\":\"Width\",\"Width_detail\":\"CSS Property for the canvas-width.\",\"Height\":\"Height\",\"Height_detail\":\"CSS Property for the canvas-height.\",\"Alignment\":\"Alignment\",\"Alignment_detail\":\"Horizontal Positioning of the canvas.\",\"Delete\":\"Delete\",\"Start\":\"Start\",\"Center\":\"Center\",\"End\":\"End\",\"ScriptVersion_1\":\"1.0 (original)\",\"ScriptVersion_2\":\"2.0 (since 2020)\",\"ScriptVersion_3\":\"3.0 (experimental)\",\"Canvas\":\"Visualization Canvas\",\"Text\":\"Plain Text\",\"Hidden\":\"Code (Hidden)\",\"Static\":\"Code (Static)\",\"Block\":\"Solution\",\"Blockly\":\"Blockly (Experimental!!!)\",\"Confirm\":\"Confirm\",\"DeleteQuestion\":\"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?\",\"TypesCaption\":\"Block-Types\",\"Types\":\"The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Visualization Canvas</b>: A 2D-drawing area you may use to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>\"},\"CodeBlocks\":{\"run_hint\":\"Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.\",\"run\":\"Run\",\"stop\":\"Stop\",\"AddBlock\":\"Add new Block\",\"UserCanceled\":\"Stopped By User\"},\"CodeBlocksSettings\":{\"Language\":\"Language\",\"AllowExec\":\"Allow Code Execution\",\"CVersion\":\"Version\",\"RunTime\":\"Max. Runtime in ms.\",\"Output\":\"Output\",\"MaxCharacters\":\"Max. Output Characters\",\"ExperimentalCompiler\":\"Experimental Language\",\"ExperimentalCompilerDesc\":\"This language version is experimental. The properties and behaviour of this version might changen in the next update. You should not use this version for production.\",\"DeprecatedCompiler\":\"Deprecated Language\",\"DeprecatedCompilerDesc\":\"This language version is deprecated and will be removed in upcoming updates. Please upgrade your project to a later version.\",\"Parser\":\"Output Parser\",\"Themes\":\"Themes\",\"TGeneral\":\"General Theme\",\"TSolution\":\"Solution Theme\",\"Libraries\":\"Libraries\",\"DomLibs\":\"DOM-Libraries\",\"WorkLibs\":\"Worker-Libraries\",\"PAutomatic\":\"Automatisch\",\"PText\":\"Text Passthrough\",\"PJSON\":\"JSON\",\"PMagic\":\"Text+JSON (seperated by '\\\\n\\\\n&lt;JSON>\\\\n')\",\"NumberErr\":\"Muss ein gültiger Zahlenwert sein\",\"ContinousCompile\":\"Automatic Execution (while typing)\",\"PersistentArguments\":\"Persistente Arguments (between calls)\",\"MessagePassing\":\"Message exchange between DOM and Worker\",\"KeepAlive\":\"Keep Worker alive after main Finishes\",\"AllowArguments\":\"Supports Runtime-Arguments\",\"AllowArgumentsCaption\":\"Send Runtime-Arguments\",\"AllowArgumentsHint\":\"Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can add data to the passed argument-object. The object is available in the worker-code as a variable named <code>args</code>.\",\"AllowArgumentsHintJava\":\"Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can push strings to the passed arguments-array. The array is passed to <code>args</code>-parameter of the <code>main</code>-Method.\",\"UsePersistentArgumentsCaption\":\"Persistente Arguments\",\"UsePersistentArgumentsHint\":\"When set, the <args>args</args>-Value passed to <code>addArgumentsTo(args)</code> will contain the values written to <code>args</code> by the worker-code in the last run. If not set, the method will allways receiv an empty object.\",\"UsePersistentArgumentsHintJava\":\"When set, the <args>args</args>-Value passed to <code>addArgumentsTo(args)</code> will contain the values written to <code>args</code> by the java-code in the last run. If not set, the method will allways receiv an empty array.\",\"AllowMessagePassingCaption\":\"Message exchange\",\"AllowMessagePassingHint\":\"<b style=color:red>[EXPERIMENTAL]</b> When enabled, worker and DOM can exchange messages.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Receives messages from the worker</li><li><code>runner.postMessage(cmd, data)</code>: sends a message to the worker. The runner instance is passed to your <code>init</code>-method.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((request) => {})</code>: the handler receives messages sent from the DOM</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: sends a message to the DOM-Code.</li></ul>\",\"AllowMessagePassingHintJava\":\"<b style=color:red>[EXPERIMENTAL]</b> When enabled, worker and DOM can exchange messages.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Receives messages from the worker</li><li><code>runner.postMessage(cmd, data)</code>: sends a message to the worker. The runner instance is passed to your <code>init</code>-method.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {})</code>: the handler receives messages sent from the DOM</li><li><code>CodeBlocks.postMessage(String cmd, Object data)</code>: sends a message to the DOM-Code.</li></ul>\",\"KeepAliveCaption\":\"Keep Worker alive\",\"KeepAliveHint\":\"<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the student code finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>process.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Visualization Canvas</b> is called as soon as the student code finishes, which may be before the worker is terminated.\",\"KeepAliveHintJava\":\"<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the students <code>main</code>-Method finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>System.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Visualization Canvas</b> is called as soon as the <code>main</code>-Method finishes, which may be before the worker is terminated.\"},\"CodePlayground\":{\"InvalidJson\":\"Output is not a valid JSON-Object\",\"Output\":\"Output:\",\"Message\":\"Message:\",\"ExperimentalScriptVersion\":\"Experimental Scripting Version\",\"ExperimentalScriptVersionDesc\":\"This scripting version is experimental. The properties and behaviour of this version might changen in the next update. You should not use this version for production.\",\"DeprecatedScriptVersion\":\"Deprecated Scripting Version\",\"DeprecatedScriptVersionDesc\":\"This scripting version is deprecated and will be removed in upcoming updates. Please upgrade your project to a later version.\"},\"Tagger\":{\"ConfirmRepl\":\"Confirm Tag Replacement\",\"ConfirmReplMsg\":\"Do you really want to replace <b>all</b> occurrences of {name} with the value below?\"},\"RandomizerSetEditor\":{\"Caption\":\"Edit Set {nr}\"},\"RandomizerSettings\":{\"Caption\":\"Randomizer\",\"Available\":\"Available Tags\",\"Sets\":\"Defined Sets\"},\"Blockly\":{\"CodePreviewLabel\":\"Code Preview\",\"CodePreviewCaption\":\"The source-code generated by the above sequence\",\"RAWToolboxLabel\":\"RAW Toolbox Definition\",\"RAWToolboxCaption\":\"The raw XML-Definition of your toolbox\",\"CustomBlocksLabel\":\"Custom Blocks\",\"CustomBlocksCaption\":\"Create and manage Custom Blocks\",\"ToolboxLabel\":\"Customize Toolbox\",\"ToolboxCaption\":\"Manage Categories and the general look of your toolbox\",\"ToolboxCategories\":\"Categories\",\"ToolboxItems\":\"Blocks\",\"Properties\":\"Properties\",\"UseCustomToolbox\":\"Define Customized Toolbox XML\",\"BlockTypeNames\":{\"controls_if\":\"controls_if\",\"logic_compare\":\"logic_compare\",\"logic_operation\":\"logic_operation\",\"logic_negate\":\"logic_negate\",\"logic_boolean\":\"logic_boolean\",\"logic_null\":\"logic_null\",\"logic_ternary\":\"logic_ternary\",\"controls_repeat_ext\":\"controls_repeat_ext\",\"controls_whileUntil\":\"controls_whileUntil\",\"controls_for\":\"controls_for\",\"controls_forEach\":\"controls_forEach\",\"controls_flow_statements\":\"controls_flow_statements\",\"math_number\":\"math_number\",\"math_arithmetic\":\"math_arithmetic\",\"math_single\":\"math_single\",\"math_trig\":\"math_trig\",\"math_constant\":\"math_constant\",\"math_number_property\":\"math_number_property\",\"math_round\":\"math_round\",\"math_on_list\":\"math_on_list\",\"math_modulo\":\"math_modulo\",\"math_constrain\":\"math_constrain\",\"math_random_int\":\"math_random_int\",\"math_random_float\":\"math_random_float\",\"text\":\"text\",\"text_join\":\"text_join\",\"text_append\":\"text_append\",\"text_length\":\"text_length\",\"text_isEmpty\":\"text_isEmpty\",\"text_indexOf\":\"text_indexOf\",\"variables_get\":\"variables_get\",\"text_charAt\":\"text_charAt\",\"text_getSubstring\":\"text_getSubstring\",\"text_changeCase\":\"text_changeCase\",\"text_trim\":\"text_trim\",\"text_print\":\"text_print\",\"text_prompt_ext\":\"text_prompt_ext\",\"lists_create_with\":\"lists_create_with\",\"lists_repeat\":\"lists_repeat\",\"lists_length\":\"lists_length\",\"lists_isEmpty\":\"lists_isEmpty\",\"lists_indexOf\":\"lists_indexOf\",\"lists_getIndex\":\"lists_getIndex\",\"lists_setIndex\":\"lists_setIndex\",\"lists_getSublist\":\"lists_getSublist\",\"lists_split\":\"lists_split\",\"lists_sort\":\"lists_sort\",\"colour_picker\":\"colour_picker\",\"colour_random\":\"colour_random\",\"colour_rgb\":\"colour_rgb\",\"colour_blend\":\"colour_blend\"}}}");
+module.exports = JSON.parse("{\"Dismiss\":\"Dismiss\",\"CodeBlock\":{\"Initial_Content\":\"Initial Content\"},\"CodeBlockContainer\":{\"Display\":\"Display\",\"Lines\":\"Lines\",\"Lines_detail\":\"Number of Visible lines or <b>auto</b>.\",\"Prepopulate\":\"Prepopulate Answer\",\"Prepopulate_detail\":\"Define content that is displayed in a new answer.\",\"Behaviour\":\"Behaviour\",\"ScriptV\":\"Script Version\",\"ScriptV_detail\":\"API-Version for the Visualization Object.\",\"AutoReset\":\"Auto Reset\",\"AutoReset_detail\":\"Recreate Canvas-Element for each run\",\"Positioning\":\"Positioning\",\"Width\":\"Width\",\"Width_detail\":\"CSS Property for the canvas-width.\",\"Height\":\"Height\",\"Height_detail\":\"CSS Property for the canvas-height.\",\"Alignment\":\"Alignment\",\"Alignment_detail\":\"Horizontal Positioning of the canvas.\",\"Delete\":\"Delete\",\"Start\":\"Start\",\"Center\":\"Center\",\"End\":\"End\",\"ScriptVersion_1\":\"1.0 (original)\",\"ScriptVersion_2\":\"2.0 (since 2020)\",\"ScriptVersion_3\":\"3.0 (experimental)\",\"Canvas\":\"Visualization Canvas\",\"Text\":\"Plain Text\",\"Hidden\":\"Code (Hidden)\",\"Static\":\"Code (Static)\",\"Block\":\"Solution\",\"Blockly\":\"Blockly (Experimental!!!)\",\"Confirm\":\"Confirm\",\"DeleteQuestion\":\"Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?\",\"TypesCaption\":\"Block-Types\",\"Types\":\"The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Visualization Canvas</b>: A 2D-drawing area you may use to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>\"},\"CodeBlocks\":{\"run_hint\":\"Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.\",\"run\":\"Run\",\"stop\":\"Stop\",\"AddBlock\":\"Add new Block\",\"UserCanceled\":\"Stopped By User\"},\"CodeBlocksSettings\":{\"Language\":\"Language\",\"AllowExec\":\"Allow Code Execution\",\"CVersion\":\"Version\",\"RunTime\":\"Max. Runtime in ms.\",\"Output\":\"Output\",\"MaxCharacters\":\"Max. Output Characters\",\"ExperimentalCompiler\":\"Experimental Language\",\"ExperimentalCompilerDesc\":\"This language version is experimental. The properties and behaviour of this version might changen in the next update. You should not use this version for production.\",\"DeprecatedCompiler\":\"Deprecated Language\",\"DeprecatedCompilerDesc\":\"This language version is deprecated and will be removed in upcoming updates. Please upgrade your project to a later version.\",\"Parser\":\"Output Parser\",\"Themes\":\"Themes\",\"TGeneral\":\"General Theme\",\"TSolution\":\"Solution Theme\",\"Libraries\":\"Libraries\",\"DomLibs\":\"DOM-Libraries\",\"WorkLibs\":\"Worker-Libraries\",\"PAutomatic\":\"Automatisch\",\"PText\":\"Text Passthrough\",\"PJSON\":\"JSON\",\"PMagic\":\"Text+JSON (seperated by '\\\\n\\\\n&lt;JSON>\\\\n')\",\"PData\":\"Text+Data (send using 'CodeBlocks.postResult(data)')\",\"NumberErr\":\"Muss ein gültiger Zahlenwert sein\",\"ContinousCompile\":\"Automatic Execution (while typing)\",\"PersistentArguments\":\"Persistente Arguments (between calls)\",\"MessagePassing\":\"Message exchange between DOM and Worker\",\"KeepAlive\":\"Keep Worker alive after main Finishes\",\"AllowArguments\":\"Supports Runtime-Arguments\",\"AllowArgumentsCaption\":\"Send Runtime-Arguments\",\"AllowArgumentsHint\":\"Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can add data to the passed argument-object. The object is available in the worker-code as a variable named <code>args</code>.\",\"AllowArgumentsHintJava\":\"Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can push strings to the passed arguments-array. The array is passed to <code>args</code>-parameter of the <code>main</code>-Method.\",\"UsePersistentArgumentsCaption\":\"Persistente Arguments\",\"UsePersistentArgumentsHint\":\"When set, the <args>args</args>-Value passed to <code>addArgumentsTo(args)</code> will contain the values written to <code>args</code> by the worker-code in the last run. If not set, the method will allways receiv an empty object.\",\"UsePersistentArgumentsHintJava\":\"When set, the <args>args</args>-Value passed to <code>addArgumentsTo(args)</code> will contain the values written to <code>args</code> by the java-code in the last run. If not set, the method will allways receiv an empty array.\",\"AllowMessagePassingCaption\":\"Message exchange\",\"AllowMessagePassingHint\":\"<b style=color:red>[EXPERIMENTAL]</b> When enabled, worker and DOM can exchange messages.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Receives messages from the worker</li><li><code>runner.postMessage(cmd, data)</code>: sends a message to the worker. The runner instance is passed to your <code>init</code>-method.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((request) => {})</code>: the handler receives messages sent from the DOM</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: sends a message to the DOM-Code.</li></ul>\",\"AllowMessagePassingHintJava\":\"<b style=color:red>[EXPERIMENTAL]</b> When enabled, worker and DOM can exchange messages.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Receives messages from the worker</li><li><code>runner.postMessage(cmd, data)</code>: sends a message to the worker. The runner instance is passed to your <code>init</code>-method.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {})</code>: the handler receives messages sent from the DOM</li><li><code>CodeBlocks.postMessage(String cmd, Object data)</code>: sends a message to the DOM-Code.</li></ul>\",\"KeepAliveCaption\":\"Keep Worker alive\",\"KeepAliveHint\":\"<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the student code finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>process.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Visualization Canvas</b> is called as soon as the student code finishes, which may be before the worker is terminated.\",\"KeepAliveHintJava\":\"<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the students <code>main</code>-Method finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>System.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Visualization Canvas</b> is called as soon as the <code>main</code>-Method finishes, which may be before the worker is terminated.\"},\"CodePlayground\":{\"InvalidJson\":\"Output is not a valid JSON-Object\",\"Output\":\"Output:\",\"Message\":\"Message:\",\"ExperimentalScriptVersion\":\"Experimental Scripting Version\",\"ExperimentalScriptVersionDesc\":\"This scripting version is experimental. The properties and behaviour of this version might changen in the next update. You should not use this version for production.\",\"DeprecatedScriptVersion\":\"Deprecated Scripting Version\",\"DeprecatedScriptVersionDesc\":\"This scripting version is deprecated and will be removed in upcoming updates. Please upgrade your project to a later version.\"},\"Tagger\":{\"ConfirmRepl\":\"Confirm Tag Replacement\",\"ConfirmReplMsg\":\"Do you really want to replace <b>all</b> occurrences of {name} with the value below?\"},\"RandomizerSetEditor\":{\"Caption\":\"Edit Set {nr}\"},\"RandomizerSettings\":{\"Caption\":\"Randomizer\",\"Available\":\"Available Tags\",\"Sets\":\"Defined Sets\"},\"Blockly\":{\"CodePreviewLabel\":\"Code Preview\",\"CodePreviewCaption\":\"The source-code generated by the above sequence\",\"RAWToolboxLabel\":\"RAW Toolbox Definition\",\"RAWToolboxCaption\":\"The raw XML-Definition of your toolbox\",\"CustomBlocksLabel\":\"Custom Blocks\",\"CustomBlocksCaption\":\"Create and manage Custom Blocks\",\"ToolboxLabel\":\"Customize Toolbox\",\"ToolboxCaption\":\"Manage Categories and the general look of your toolbox\",\"ToolboxCategories\":\"Categories\",\"ToolboxItems\":\"Blocks\",\"Properties\":\"Properties\",\"UseCustomToolbox\":\"Define Customized Toolbox XML\",\"BlockTypeNames\":{\"controls_if\":\"controls_if\",\"logic_compare\":\"logic_compare\",\"logic_operation\":\"logic_operation\",\"logic_negate\":\"logic_negate\",\"logic_boolean\":\"logic_boolean\",\"logic_null\":\"logic_null\",\"logic_ternary\":\"logic_ternary\",\"controls_repeat_ext\":\"controls_repeat_ext\",\"controls_whileUntil\":\"controls_whileUntil\",\"controls_for\":\"controls_for\",\"controls_forEach\":\"controls_forEach\",\"controls_flow_statements\":\"controls_flow_statements\",\"math_number\":\"math_number\",\"math_arithmetic\":\"math_arithmetic\",\"math_single\":\"math_single\",\"math_trig\":\"math_trig\",\"math_constant\":\"math_constant\",\"math_number_property\":\"math_number_property\",\"math_round\":\"math_round\",\"math_on_list\":\"math_on_list\",\"math_modulo\":\"math_modulo\",\"math_constrain\":\"math_constrain\",\"math_random_int\":\"math_random_int\",\"math_random_float\":\"math_random_float\",\"text\":\"text\",\"text_join\":\"text_join\",\"text_append\":\"text_append\",\"text_length\":\"text_length\",\"text_isEmpty\":\"text_isEmpty\",\"text_indexOf\":\"text_indexOf\",\"variables_get\":\"variables_get\",\"text_charAt\":\"text_charAt\",\"text_getSubstring\":\"text_getSubstring\",\"text_changeCase\":\"text_changeCase\",\"text_trim\":\"text_trim\",\"text_print\":\"text_print\",\"text_prompt_ext\":\"text_prompt_ext\",\"lists_create_with\":\"lists_create_with\",\"lists_repeat\":\"lists_repeat\",\"lists_length\":\"lists_length\",\"lists_isEmpty\":\"lists_isEmpty\",\"lists_indexOf\":\"lists_indexOf\",\"lists_getIndex\":\"lists_getIndex\",\"lists_setIndex\":\"lists_setIndex\",\"lists_getSublist\":\"lists_getSublist\",\"lists_split\":\"lists_split\",\"lists_sort\":\"lists_sort\",\"colour_picker\":\"colour_picker\",\"colour_random\":\"colour_random\",\"colour_rgb\":\"colour_rgb\",\"colour_blend\":\"colour_blend\"}}}");
 
 /***/ }),
 
@@ -49559,6 +49605,18 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
+var es_array_iterator = __webpack_require__("e260");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
+var es_promise = __webpack_require__("e6cf");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
+var es_object_assign = __webpack_require__("cca6");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.finally.js
+var es_promise_finally = __webpack_require__("a79d");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
 var es_regexp_exec = __webpack_require__("ac1f");
 
@@ -50742,7 +50800,7 @@ var codeBlocks_GlobalState = /*#__PURE__*/function () {
 
   }, {
     key: "processMixedOutput",
-    value: function processMixedOutput(outputObject, type, magicString) {
+    value: function processMixedOutput(outputObject, type, magicString, resultData) {
       if (outputObject !== undefined && Array.isArray(outputObject)) {
         return {
           type: 'json',
@@ -50757,7 +50815,13 @@ var codeBlocks_GlobalState = /*#__PURE__*/function () {
 
       var idx = outputObject.indexOf(magicString);
 
-      if (type === ICodeBlocks["b" /* CodeOutputTypes */].AUTO && idx >= 0 || type === ICodeBlocks["b" /* CodeOutputTypes */].MAGIC) {
+      if (type === ICodeBlocks["b" /* CodeOutputTypes */].DATA || type === ICodeBlocks["b" /* CodeOutputTypes */].AUTO && resultData != undefined) {
+        return {
+          type: 'dual',
+          json: resultData,
+          text: outputObject
+        };
+      } else if (type === ICodeBlocks["b" /* CodeOutputTypes */].AUTO && idx >= 0 || type === ICodeBlocks["b" /* CodeOutputTypes */].MAGIC) {
         var str = outputObject.substr(0, idx);
         var json = undefined;
         var pString = outputObject.substr(idx + magicString.length);
@@ -50777,6 +50841,14 @@ var codeBlocks_GlobalState = /*#__PURE__*/function () {
           text: str
         };
       } else {
+        if (type === ICodeBlocks["b" /* CodeOutputTypes */].JSON && resultData !== undefined) {
+          return {
+            type: ICodeBlocks["b" /* CodeOutputTypes */].JSON,
+            json: resultData,
+            text: ''
+          };
+        }
+
         var too = outputObject.trim();
 
         if (type === ICodeBlocks["b" /* CodeOutputTypes */].AUTO && (too.indexOf('[') == 0 || too.indexOf('{') == 0) || type === ICodeBlocks["b" /* CodeOutputTypes */].JSON) {
@@ -50790,7 +50862,7 @@ var codeBlocks_GlobalState = /*#__PURE__*/function () {
 
       return {
         type: 'text',
-        json: undefined,
+        json: resultData,
         text: outputObject
       };
     }
@@ -51058,9 +51130,6 @@ var createSuper = __webpack_require__("2caf");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
 var es_string_split = __webpack_require__("1276");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.iterator.js
-var es_array_iterator = __webpack_require__("e260");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
 var es_object_to_string = __webpack_require__("d3b7");
 
@@ -51080,7 +51149,6 @@ var i18n = __webpack_require__("fe0b");
 var tagger = __webpack_require__("ea5a");
 
 // CONCATENATED MODULE: ./src/plugins/tagger.ts
-
 
 
 
@@ -51415,9 +51483,6 @@ function wrapNativeSuper_wrapNativeSuper(Class) {
 
   return wrapNativeSuper_wrapNativeSuper(Class);
 }
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.assign.js
-var es_object_assign = __webpack_require__("cca6");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__("a434");
 
@@ -52110,7 +52175,6 @@ var javaCompiler_V100 = new teavm_v100_JavaV100Compiler();
 
 
 
-
 var teavm_v101_teaVMRunOverhead = 30000; //ICompilerInstance
 
 var teavm_v101_JavaV101Compiler = /*#__PURE__*/function (_Vue) {
@@ -52440,6 +52504,10 @@ var teavm_v101_JavaV101Compiler = /*#__PURE__*/function (_Vue) {
                   options.whenFinishedHandler(ee.data.args);
                 } else if (ee.data.command == 'main-will-start') {
                   options.beforeStartHandler();
+                } else if (ee.data.command == 'f-FINAL') {
+                  options.resultData = JSON.parse(ee.data.value);
+                } else {
+                  console.log('Unknown Message', ee.data);
                 }
               };
 
@@ -52619,7 +52687,6 @@ var web_url = __webpack_require__("2b3d");
 var web_url_search_params = __webpack_require__("9861");
 
 // CONCATENATED MODULE: ./src/compiler/javascript.v100.ts
-
 
 
 
@@ -53043,7 +53110,6 @@ var javascriptCompiler_V101 = new javascript_v101_JavascriptV101Compiler();
 
 
 
-
 function javascript_v102_runJavaScriptWorker(questionID, code, callingCodeBlocks, options) {
   var max_ms = options.max_ms,
       log_callback = options.log_callback,
@@ -53124,6 +53190,8 @@ function javascript_v102_runJavaScriptWorker(questionID, code, callingCodeBlocks
       }
     } else if (msg.data.command.indexOf('w-') == 0) {
       msg.data.command = msg.data.command.substr(2);
+    } else if (msg.data.command == 'f-FINAL') {
+      options.resultData = msg.data.value;
     } else {
       console.i('MESSAGE - ', msg.data);
       worker.end('HackerError: Great! You invaded our System. Sadly this will lead you nowhere. Please focus on the Test.');
@@ -53749,7 +53817,6 @@ var pythonLegacyCompiler_V101 = new python_v101_PythonV101LegacyCompiler();
   python3: pythonCompiler_V101
 });
 // CONCATENATED MODULE: ./src/compiler/python.v102.ts
-
 
 
 
@@ -54470,33 +54537,42 @@ CompilerRegistry_compilerRegistry.register(JavascriptCompilers);
 CompilerRegistry_compilerRegistry.register(PythonCompilers);
 
 CompilerRegistry_compilerRegistry.register(GLSLCompilers);
-CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js'], 'd3', '5.13.4', 'D3', false, 1100, function (sandbox) {
-  sandbox.d3 = window.d3;
-});
-CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/6.2.0/d3.v6.min.js' //Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js'
-], 'd3', '6.2.0', 'D3', false, 1000, function (sandbox) {
-  sandbox.d3 = window.d3;
-});
-CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/chart.js/3.3.0/chart.min.js'], 'chart', '3.3.0', 'Chart.JS', false, 2000, function (sandbox) {
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/chart.js/3.6.0/chart.min.js'], 'chart', '3.6.0', 'Chart.JS', false, 1000, function (sandbox) {
   sandbox.Chart = window.Chart;
 });
-CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/r0/three.min.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/r0/controls/OrbitControls.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/r0/controls/TrackballControls.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/r0/Detector.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/helper.r0.js'], '3js', 'r0', 'Three.JS', false, 3000, function (sandbox) {
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/r0/three.min.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/r0/controls/OrbitControls.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/r0/controls/TrackballControls.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/r0/Detector.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/three.js/helper.r0.js'], '3js', 'r0', 'Three.JS', false, 2000, function (sandbox) {
   sandbox.THREE = window.THREE;
 });
-CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/brain.js/2.0.0-alpha/brain-browser.min.js'], 'brain', '2.0.0', 'Brain.JS', false, 4000, function (sandbox) {
-  sandbox.brain = window.brain;
-});
-CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js' //Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tfjs-vis.umd.min.js',
-], 'tf', '2.0.0', 'TensorFlow.JS', false, 5000, function (sandbox) {
-  sandbox.tf = window.tf; //sandbox.tfvis = (window as any).tfvis
-});
-CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/phaser/3.54.0/phaser.min.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/phaser/3.54.0/support.js'], 'phaser', '3.54', 'Phaser', false, 6000, function (sandbox) {
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/phaser/3.54.0/phaser.min.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/phaser/3.54.0/support.js'], 'phaser', '3.54', 'Phaser', false, 3000, function (sandbox) {
   sandbox.Phaser = window.Phaser;
   sandbox.IsometricMapGame = window.IsometricMapGame;
 });
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/5.16.0/d3.v5.min.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js'], 'd3', '5.16.0', 'D3', false, 4210, function (sandbox) {
+  sandbox.d3 = window.d3;
+});
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js', lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js'], 'd3', '5.3.8', 'D3', false, 4200, function (sandbox) {
+  sandbox.d3 = window.d3;
+});
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/6.7.0/d3.v6.min.js' //Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js'
+], 'd3', '6.7.0', 'D3', false, 4010, function (sandbox) {
+  sandbox.d3 = window.d3;
+});
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/6.2.0/d3.v6.min.js' //Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js'
+], 'd3', '6.2.0', 'D3', false, 4000, function (sandbox) {
+  sandbox.d3 = window.d3;
+});
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/d3/7.1.1/d3.v7.min.js'], 'd3', '7.1.1', 'D3', false, 4100, function (sandbox) {
+  sandbox.d3 = window.d3;
+});
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/brain.js/2.0.0-alpha/brain-browser.min.js'], 'brain', '2.0.0', 'Brain.JS', false, 5000, function (sandbox) {
+  sandbox.brain = window.brain;
+});
+CompilerRegistry_compilerRegistry.registerDOMLib([lib["c" /* Vue */].$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js' //Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tfjs-vis.umd.min.js',
+], 'tf', '2.0.0', 'TensorFlow.JS', false, 6000, function (sandbox) {
+  sandbox.tf = window.tf; //sandbox.tfvis = (window as any).tfvis
+});
 /* harmony default export */ var lib_CompilerRegistry = (CompilerRegistry_compilerRegistry);
 // CONCATENATED MODULE: ./src/lib/scriptBlock.ts
-
 
 
 
@@ -54695,7 +54771,7 @@ var scriptBlock_ScriptBlock = /*#__PURE__*/function () {
 
           if (this.requestsOriginalVersion()) {
             this.fkt = new Function(legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix);
-          } else if (this.version === '101') {
+          } else if (this.version === '101' || this.version === '102') {
             this.fkt = new Function(v101CodeTemplate.prefix + code + v101CodeTemplate.postfix);
           } else {
             this.fkt = compileCode(v102CodeTemplate.prefix + code + v102CodeTemplate.postfix);
@@ -54848,7 +54924,7 @@ var scriptBlock_ScriptBlock = /*#__PURE__*/function () {
     }
   }, {
     key: "whenFinished",
-    value: function whenFinished(args) {
+    value: function whenFinished(args, resultData) {
       this.lazyInit();
 
       if (this.obj && !this.requestsOriginalVersion()) {
@@ -54856,7 +54932,7 @@ var scriptBlock_ScriptBlock = /*#__PURE__*/function () {
 
         if (o.whenFinished) {
           console.i('MESSAGE - whenFinished');
-          o.whenFinished(args);
+          o.whenFinished(args, resultData);
         }
       }
     }
@@ -54979,24 +55055,21 @@ var scriptBlock_ScriptBlock = /*#__PURE__*/function () {
 
   return ScriptBlock;
 }();
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=eaf51832&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=eaf51832&
 var Appvue_type_template_id_eaf51832_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-layout',{staticStyle:{"min-height":"0"},attrs:{"view":"hHh lpR fFf"}},[_c('q-page-container',[_c('CodeBlocks',{attrs:{"blockInfo":_vm.blocks}})],1)],1)}
 var staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=eaf51832&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocks.vue?vue&type=template&id=7980f09b&
-var CodeBlocksvue_type_template_id_7980f09b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:("codeblocks " + _vm.addonClass + "  " + _vm.backgroundColorClass + " q-mx-sm q-mb-md"),attrs:{"data-question":_vm.blockInfo.id,"uuid":_vm.blockInfo.uuid}},[_c('CodePanel',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasBookmark && _vm.editMode),expression:"hasBookmark && editMode"}],attrs:{"editMode":_vm.editMode,"visibleLines":"auto","block":_vm.panelBlock}}),(_vm.editMode)?_c('CodeBlocksSettings',{attrs:{"options":_vm.options},on:{"compiler-change":_vm.onCompilerChange,"compiler-version-change":_vm.onCompilerVersionChange,"run-state-change":_vm.onRunStateChange,"continuous-compile-change":_vm.onContinousCompileStateChange,"message-passing-change":_vm.onMessagePassingChange,"keep-alive-change":_vm.onKeepAliveChange,"persistent-arguments-change":_vm.onPersistentArgumentsChange,"language-change":_vm.onLanguageChange,"character-limit-change":_vm.onCharacterLimitChange,"timeout-change":_vm.onTimeoutChange,"worker-libs-change":_vm.onWorkerLibChange,"dom-libs-change":_vm.onDomLibChange,"theme-change":_vm.onThemeChange,"output-parser-change":_vm.onOutputParserChange}}):_vm._e(),_vm._l((_vm.blocks),function(block){return _c('CodeBlockContainer',{key:block.id,attrs:{"block":block,"editMode":_vm.editMode},on:{"type-change":_vm.onTypeChange,"visible-lines-change":_vm.onVisibleLinesChange,"placement-change":_vm.onPlacementChange,"script-version-change":_vm.onScriptVersionChange,"move-up":_vm.moveUp,"move-down":_vm.moveDown,"remove-block":_vm.removeBlock,"auto-reset-change":_vm.onSetAutoReset}},[(block.hasCode && block.type != 'BLOCKLY')?_c('CodeBlock',{attrs:{"block":block,"theme":_vm.themeForBlock(block),"mode":_vm.mimeType,"visibleLines":block.visibleLines,"editMode":_vm.editMode,"readonly":_vm.readonly,"tagSet":_vm.activeTagSet,"emitWhenTypingInViewMode":_vm.continuousCompile},on:{"ready":_vm.blockBecameReady,"build":_vm.run,"code-changed-in-view-mode":_vm.onViewCodeChange}}):(block.type == 'PLAYGROUND')?_c('CodePlayground',{attrs:{"block":block,"editMode":_vm.editMode,"finalOutputObject":_vm.finalOutputObject,"theme":_vm.themeForBlock(block),"tagSet":_vm.activeTagSet,"eventHub":_vm.eventHub},on:{"changeOutput":_vm.onPlaygroundChangedOutput,"ready":_vm.blockBecameReady,"run":_vm.onRunFromPlayground}}):(block.type == 'TEXT')?_c('SimpleText',{attrs:{"block":block,"previewValue":block.actualContent(),"editMode":_vm.editMode,"name":("block[" + (block.parentID) + "][" + (block.id) + "]"),"scopeUUID":block.scopeUUID,"tagSet":_vm.activeTagSet,"language":_vm.language},on:{"ready":_vm.blockBecameReady},model:{value:(block.content),callback:function ($$v) {_vm.$set(block, "content", $$v)},expression:"block.content"}}):(block.type == 'BLOCKLY')?_c('Blockly',{attrs:{"block":block,"mode":_vm.mimeType,"theme":_vm.themeForBlock(block),"editMode":_vm.editMode,"readonly":_vm.readonly,"tagSet":_vm.activeTagSet,"emitWhenTypingInViewMode":_vm.continuousCompile,"blockInfo":_vm.blockInfo},on:{"code-changed-in-view-mode":_vm.onViewCodeChange}}):_vm._e()],1)}),(_vm.editMode)?_c('div',{staticClass:"row justify-end"},[_c('div',[_c('q-btn',{attrs:{"push":"","color":"green"},on:{"click":_vm.addNewBlock}},[_vm._v(_vm._s(_vm.$t('CodeBlocks.AddBlock'))+" "),_c('q-icon',{staticClass:"q-ml-sm",attrs:{"name":"library_add"}})],1)],1)]):_vm._e(),(_vm.canRun)?_c('div',{class:("runner " + (_vm.editMode ? 'q-pt-lg q-mx-lg' : '')),attrs:{"id":"runContainer","data-question":_vm.blockInfo.id}},[_c('div',{staticClass:"row runnerState",attrs:{"id":"stateBox","data-question":_vm.blockInfo.id}},[_c('q-btn',{staticClass:"white--text",staticStyle:{"border-radius":"0px"},attrs:{"id":"allow_run_button","loading":!_vm.isReady,"disabled":!_vm.isReady,"color":"primary","ripple":{ center: true },"data-question":_vm.blockInfo.id},on:{"click":_vm.run}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocks.run'))+" "),_c('q-icon',{attrs:{"right":"","dark":"","name":"play_arrow"}}),(_vm.editMode)?_c('q-tooltip',{attrs:{"delay":200}},[_c('span',{domProps:{"innerHTML":_vm._s(_vm.$t('CodeBlocks.run_hint'))}})]):_vm._e()],1),_c('div',{staticClass:"animated fadeIn"}),_c('transition',{attrs:{"appear":"","enter-active-class":"animated fadeIn","leave-active-class":"animated fadeOut"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.canStop),expression:"canStop"}],staticClass:"q-pl-sm"},[_c('q-btn',{staticStyle:{"border-radius":"0px"},attrs:{"id":"cancel_button","color":"negative","ripple":{ center: true },"data-question":_vm.blockInfo.id},on:{"click":_vm.stop}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocks.stop'))+" "),_c('q-icon',{attrs:{"right":"","dark":"","name":"stop"}})],1)],1)]),_c('transition',{attrs:{"appear":"","enter-active-class":"animated fadeIn","leave-active-class":"animated fadeOut"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showGlobalMessages),expression:"showGlobalMessages"}],staticClass:"globalState col-grow",staticStyle:{"align-self":"center"}},[_c('div',{attrs:{"id":"message"},domProps:{"innerHTML":_vm._s(_vm.$compilerState.globalStateMessage)}})])])],1),_c('q-slide-transition',[(_vm.hasOutput)?_c('pre',{ref:"output",staticClass:"output",attrs:{"id":((_vm.blockInfo.id) + "Output")}},[_c('div',{attrs:{"id":"out"},domProps:{"innerHTML":_vm._s(_vm.outputHTML)}})]):_vm._e()])],1):_vm._e()],2)}
-var CodeBlocksvue_type_template_id_7980f09b_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocks.vue?vue&type=template&id=ae8624ca&
+var CodeBlocksvue_type_template_id_ae8624ca_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:("codeblocks " + _vm.addonClass + "  " + _vm.backgroundColorClass + " q-mx-sm q-mb-md"),attrs:{"data-question":_vm.blockInfo.id,"uuid":_vm.blockInfo.uuid}},[_c('CodePanel',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasBookmark && _vm.editMode),expression:"hasBookmark && editMode"}],attrs:{"editMode":_vm.editMode,"visibleLines":"auto","block":_vm.panelBlock}}),(_vm.editMode)?_c('CodeBlocksSettings',{attrs:{"options":_vm.options},on:{"compiler-change":_vm.onCompilerChange,"compiler-version-change":_vm.onCompilerVersionChange,"run-state-change":_vm.onRunStateChange,"continuous-compile-change":_vm.onContinousCompileStateChange,"message-passing-change":_vm.onMessagePassingChange,"keep-alive-change":_vm.onKeepAliveChange,"persistent-arguments-change":_vm.onPersistentArgumentsChange,"language-change":_vm.onLanguageChange,"character-limit-change":_vm.onCharacterLimitChange,"timeout-change":_vm.onTimeoutChange,"worker-libs-change":_vm.onWorkerLibChange,"dom-libs-change":_vm.onDomLibChange,"theme-change":_vm.onThemeChange,"output-parser-change":_vm.onOutputParserChange}}):_vm._e(),_vm._l((_vm.blocks),function(block){return _c('CodeBlockContainer',{key:block.id,attrs:{"block":block,"editMode":_vm.editMode},on:{"type-change":_vm.onTypeChange,"visible-lines-change":_vm.onVisibleLinesChange,"placement-change":_vm.onPlacementChange,"script-version-change":_vm.onScriptVersionChange,"move-up":_vm.moveUp,"move-down":_vm.moveDown,"remove-block":_vm.removeBlock,"auto-reset-change":_vm.onSetAutoReset}},[(block.hasCode && block.type != 'BLOCKLY')?_c('CodeBlock',{attrs:{"block":block,"theme":_vm.themeForBlock(block),"mode":_vm.mimeType,"visibleLines":block.visibleLines,"editMode":_vm.editMode,"readonly":_vm.readonly,"tagSet":_vm.activeTagSet,"emitWhenTypingInViewMode":_vm.continuousCompile},on:{"ready":_vm.blockBecameReady,"build":_vm.run,"code-changed-in-view-mode":_vm.onViewCodeChange}}):(block.type == 'PLAYGROUND')?_c('CodePlayground',{attrs:{"block":block,"editMode":_vm.editMode,"finalOutputObject":_vm.finalOutputObject,"theme":_vm.themeForBlock(block),"tagSet":_vm.activeTagSet,"eventHub":_vm.eventHub},on:{"changeOutput":_vm.onPlaygroundChangedOutput,"ready":_vm.blockBecameReady,"run":_vm.onRunFromPlayground}}):(block.type == 'TEXT')?_c('SimpleText',{attrs:{"block":block,"previewValue":block.actualContent(),"editMode":_vm.editMode,"name":("block[" + (block.parentID) + "][" + (block.id) + "]"),"scopeUUID":block.scopeUUID,"tagSet":_vm.activeTagSet,"language":_vm.language},on:{"ready":_vm.blockBecameReady},model:{value:(block.content),callback:function ($$v) {_vm.$set(block, "content", $$v)},expression:"block.content"}}):(block.type == 'BLOCKLY')?_c('Blockly',{attrs:{"block":block,"mode":_vm.mimeType,"theme":_vm.themeForBlock(block),"editMode":_vm.editMode,"readonly":_vm.readonly,"tagSet":_vm.activeTagSet,"emitWhenTypingInViewMode":_vm.continuousCompile,"blockInfo":_vm.blockInfo},on:{"code-changed-in-view-mode":_vm.onViewCodeChange}}):_vm._e()],1)}),(_vm.editMode)?_c('div',{staticClass:"row justify-end"},[_c('div',[_c('q-btn',{attrs:{"push":"","color":"green"},on:{"click":_vm.addNewBlock}},[_vm._v(_vm._s(_vm.$t('CodeBlocks.AddBlock'))+" "),_c('q-icon',{staticClass:"q-ml-sm",attrs:{"name":"library_add"}})],1)],1)]):_vm._e(),(_vm.canRun)?_c('div',{class:("runner " + (_vm.editMode ? 'q-pt-lg q-mx-lg' : '')),attrs:{"id":"runContainer","data-question":_vm.blockInfo.id}},[_c('div',{staticClass:"row runnerState",attrs:{"id":"stateBox","data-question":_vm.blockInfo.id}},[_c('q-btn',{staticClass:"white--text",staticStyle:{"border-radius":"0px"},attrs:{"id":"allow_run_button","loading":!_vm.isReady,"disabled":!_vm.isReady,"color":"primary","ripple":{ center: true },"data-question":_vm.blockInfo.id},on:{"click":_vm.run}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocks.run'))+" "),_c('q-icon',{attrs:{"right":"","dark":"","name":"play_arrow"}}),(_vm.editMode)?_c('q-tooltip',{attrs:{"delay":200}},[_c('span',{domProps:{"innerHTML":_vm._s(_vm.$t('CodeBlocks.run_hint'))}})]):_vm._e()],1),_c('div',{staticClass:"animated fadeIn"}),_c('transition',{attrs:{"appear":"","enter-active-class":"animated fadeIn","leave-active-class":"animated fadeOut"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.canStop),expression:"canStop"}],staticClass:"q-pl-sm"},[_c('q-btn',{staticStyle:{"border-radius":"0px"},attrs:{"id":"cancel_button","color":"negative","ripple":{ center: true },"data-question":_vm.blockInfo.id},on:{"click":_vm.stop}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocks.stop'))+" "),_c('q-icon',{attrs:{"right":"","dark":"","name":"stop"}})],1)],1)]),_c('transition',{attrs:{"appear":"","enter-active-class":"animated fadeIn","leave-active-class":"animated fadeOut"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showGlobalMessages),expression:"showGlobalMessages"}],staticClass:"globalState col-grow",staticStyle:{"align-self":"center"}},[_c('div',{attrs:{"id":"message"},domProps:{"innerHTML":_vm._s(_vm.$compilerState.globalStateMessage)}})])])],1),_c('q-slide-transition',[(_vm.hasOutput)?_c('pre',{ref:"output",staticClass:"output",attrs:{"id":((_vm.blockInfo.id) + "Output")}},[_c('div',{attrs:{"id":"out"},domProps:{"innerHTML":_vm._s(_vm.outputHTML)}})]):_vm._e()])],1):_vm._e()],2)}
+var CodeBlocksvue_type_template_id_ae8624ca_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodeBlocks.vue?vue&type=template&id=7980f09b&
+// CONCATENATED MODULE: ./src/components/CodeBlocks.vue?vue&type=template&id=ae8624ca&
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
-var es_promise = __webpack_require__("e6cf");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockContainer.vue?vue&type=template&id=998d0d38&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlockContainer.vue?vue&type=template&id=998d0d38&
 var CodeBlockContainervue_type_template_id_998d0d38_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"block-container",attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id,"uuid":_vm.block.uuid}},[(_vm.editMode)?_c('q-card',{class:("q-mx-none q-my-xs q-pa-none editModeBlockContainer " + _vm.colorClass + " " + _vm.bgClass)},[_c('q-card-section',{staticClass:"q-mb-none q-pb-sm q-pt-sm"},[_c('div',{staticClass:"row q-my-none q-py-none",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 col-sm-4 col-md-4 q-my-none q-py-none"},[_c('q-select',{staticStyle:{"margin-top":"-5px !important"},attrs:{"options":_vm.types,"dense":""},scopedSlots:_vm._u([{key:"after",fn:function(){return [_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showTypeInfoDialog}})]},proxy:true}],null,false,3671508059),model:{value:(_vm.typeObj),callback:function ($$v) {_vm.typeObj=$$v},expression:"typeObj"}})],1),_c('div',{staticClass:"col-grow"}),_c('div',{staticClass:"order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right"},[(_vm.hasExtendedSettings)?_c('q-btn',{attrs:{"icon":"settings","color":"blue-7","push":"","dense":""}},[_c('q-popup-proxy',[(_vm.canSetLineNumbers)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Display'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Lines'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4",domProps:{"innerHTML":_vm._s(_vm.$l('CodeBlockContainer.Lines_detail'))}})]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{staticStyle:{"width":"132px"},attrs:{"rules":[_vm.validNumber],"maxlength":"4"},model:{value:(_vm.visibleLines),callback:function ($$v) {_vm.visibleLines=$$v},expression:"visibleLines"}})],1)]),(_vm.canHaveAlternativeContent)?_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Prepopulate'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4",attrs:{"lines":"2"}},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Prepopulate_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-toggle',{model:{value:(_vm.hasAltComntent),callback:function ($$v) {_vm.hasAltComntent=$$v},expression:"hasAltComntent"}})],1)]):_vm._e()]):_vm._e(),(_vm.isVersionedPlayground)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Behaviour'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.ScriptV'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.ScriptV_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-select',{attrs:{"options":_vm.scriptVersions},model:{value:(_vm.scriptVersionObj),callback:function ($$v) {_vm.scriptVersionObj=$$v},expression:"scriptVersionObj"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.AutoReset'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.AutoReset_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-toggle',{model:{value:(_vm.shouldAutoReset),callback:function ($$v) {_vm.shouldAutoReset=$$v},expression:"shouldAutoReset"}})],1)])]):_vm._e(),(_vm.canDefinePlacement)?_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Positioning'))+" ")])]),_c('div',{staticClass:"row no-wrap q-pl-md q-pb-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Width'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Width_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{attrs:{"maxlength":"7","dense":""},model:{value:(_vm.width),callback:function ($$v) {_vm.width=$$v},expression:"width"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md q-pb-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Height'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Height_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-input',{attrs:{"maxlength":"7","dense":""},model:{value:(_vm.height),callback:function ($$v) {_vm.height=$$v},expression:"height"}})],1)]),_c('div',{staticClass:"row no-wrap q-pl-md"},[_c('div',{staticClass:"col-7"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Alignment'))+" ")]),_c('div',{staticClass:"text-caption text-blue-grey-4"},[_vm._v(" "+_vm._s(_vm.$l('CodeBlockContainer.Alignment_detail'))+" ")])]),_c('div',{staticClass:"col-5 q-pl-sm"},[_c('q-select',{attrs:{"options":_vm.alignments,"dense":""},model:{value:(_vm.align),callback:function ($$v) {_vm.align=$$v},expression:"align"}})],1)])]):_vm._e()])],1):_vm._e(),_c('q-btn',{staticClass:"q-ml-md q-mr-xs",attrs:{"disable":!_vm.canMoveUp,"icon":"arrow_drop_up","push":"","dense":"","color":"orange-6","ripple":{ center: true }},on:{"click":_vm.moveUp}}),_c('q-btn',{staticClass:"q-mr-md",attrs:{"disabled":!_vm.canMoveDown,"icon":"arrow_drop_down","push":"","dense":"","color":"orange-6","ripple":{ center: true }},on:{"click":_vm.moveDown}}),_c('q-btn',{staticClass:"gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm",attrs:{"label":_vm.$l('CodeBlockContainer.Delete'),"icon":"warning","push":"","dense":"","color":"red-6","right":"","ripple":{ center: true }},on:{"click":_vm.removeBlock}}),_c('q-btn',{staticClass:"lt-sm q-mr-lg q-pr-none",attrs:{"icon":"warning","push":"","dense":"","color":"red-6","right":"","ripple":{ center: true }},on:{"click":_vm.removeBlock}}),_c('q-btn',{staticStyle:{"margin-right":"-9px"},attrs:{"icon":_vm.expanded ? 'expand_less' : 'expand_more',"color":"primary","small":"","flat":"","round":""},on:{"click":_vm.toggleExpanded}})],1)]),_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.serializedOptions),expression:"serializedOptions"}],staticClass:"blockoptions",attrs:{"name":("block_options[" + (this.block.parentID) + "][" + (this.block.id) + "]")},domProps:{"value":(_vm.serializedOptions)},on:{"input":function($event){if($event.target.composing){ return; }_vm.serializedOptions=$event.target.value}}})]),_c('q-slide-transition',[(this.isExperimentalScriptVersion)?_c('q-card-section',[_c('q-banner',{staticClass:"bg-orange text-white col-12 q-mt-xs",attrs:{"rounded":"","dense":""}},[_c('q-item',[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-icon',{staticStyle:{"font-size":"3em"},attrs:{"name":"whatshot"}})],1),_c('q-item-section',[_c('q-item-label',{attrs:{"overline":""}},[_vm._v(" "+_vm._s(_vm.$t('CodePlayground.ExperimentalScriptVersion'))+" ")]),_c('q-item-label',[_vm._v(" "+_vm._s(_vm.$t('CodePlayground.ExperimentalScriptVersionDesc'))+" ")])],1)],1)],1)],1):_vm._e()],1),_c('q-slide-transition',[(this.isDeprecatedScriptVersion)?_c('q-card-section',[_c('q-banner',{staticClass:"bg-yellow-12 text-black col-12 q-mt-xs",attrs:{"rounded":"","dense":""}},[_c('q-item',[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-icon',{staticStyle:{"font-size":"3em"},attrs:{"name":"hourglass_disabled"}})],1),_c('q-item-section',[_c('q-item-label',{attrs:{"overline":""}},[_vm._v(" "+_vm._s(_vm.$t('CodePlayground.DeprecatedScriptVersion'))+" ")]),_c('q-item-label',[_vm._v(" "+_vm._s(_vm.$t('CodePlayground.DeprecatedScriptVersionDesc'))+" ")])],1)],1)],1)],1):_vm._e()],1),_c('q-slide-transition',[_c('q-card-section',{directives:[{name:"show",rawName:"v-show",value:(_vm.expanded),expression:"expanded"}],staticClass:"my-0 q-pt-1 q-pb-0"},[_vm._t("default")],2)],1)],1):_c('div',{staticClass:"ma-0 pa-0"},[_vm._t("default")],2)],1)}
 var CodeBlockContainervue_type_template_id_998d0d38_staticRenderFns = []
 
@@ -55895,8 +55968,8 @@ var CodeBlockContainer_component = Object(componentNormalizer["a" /* default */]
 
 runtime_auto_import_default()(CodeBlockContainer_component, 'components', {QCard: QCard["a" /* default */],QCardSection: QCardSection["a" /* default */],QSelect: QSelect["a" /* default */],QBtn: QBtn["a" /* default */],QPopupProxy: QPopupProxy,QInput: QInput["a" /* default */],QToggle: QToggle["a" /* default */],QSlideTransition: QSlideTransition["a" /* default */],QBanner: QBanner["a" /* default */],QItem: QItem["a" /* default */],QItemSection: QItemSection["a" /* default */],QIcon: QIcon["a" /* default */],QItemLabel: QItemLabel["a" /* default */]});
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocksSettings.vue?vue&type=template&id=75cfd4ae&scoped=true&
-var CodeBlocksSettingsvue_type_template_id_75cfd4ae_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row q-pa-none q-mb-md"},[_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-card',{staticClass:"q-mb-sm q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Language')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.languageHasCompiler,"label":_vm.$t('CodeBlocksSettings.AllowExec')},model:{value:(_vm.runCode),callback:function ($$v) {_vm.runCode=$$v},expression:"runCode"}})],1),_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.canContinousCompile,"label":_vm.$t('CodeBlocksSettings.ContinousCompile')},model:{value:(_vm.continuousCompile),callback:function ($$v) {_vm.continuousCompile=$$v},expression:"continuousCompile"}})],1),_c('div',{class:("col-xs-12 col-sm-" + (_vm.runCode ? 6 : 12) + " col-md-" + (_vm.runCode ? 8 : 12) + " " + (_vm.runCode ? 'q-pr-md-sm' : ''))},[_c('q-select',{attrs:{"options":_vm.compiledLanguages,"label":_vm.$t('CodeBlocksSettings.Language')},model:{value:(_vm.compilerLanguageObj),callback:function ($$v) {_vm.compilerLanguageObj=$$v},expression:"compilerLanguageObj"}})],1),(_vm.runCode)?_c('div',{staticClass:"col-xs-12 col-sm-6 col-md-4"},[_c('q-select',{attrs:{"options":_vm.compilerVersions,"stack-label":"","label":_vm.$t('CodeBlocksSettings.CVersion')},scopedSlots:_vm._u([{key:"selected",fn:function(){return [_vm._v(" "+_vm._s(_vm.compilerVersion)+" "),(_vm.isDeprecated)?_c('q-avatar',{staticClass:"q-ml-xs",attrs:{"rounded":"","size":"xs","color":"yellow","text-color":"brown-10","icon":"hourglass_disabled"}}):_vm._e(),(_vm.isExperimental)?_c('q-avatar',{staticClass:"q-ml-xs",attrs:{"rounded":"","size":"xs","color":"orange","text-color":"white","icon":"whatshot"}}):_vm._e()]},proxy:true},{key:"option",fn:function(scope){return [_c('q-item',_vm._g(_vm._b({},'q-item',scope.itemProps,false),scope.itemEvents),[_c('q-item-section',[_c('q-item-label',[_vm._v(" "+_vm._s(scope.opt)+" "),(
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodeBlocksSettings.vue?vue&type=template&id=0d37c1de&scoped=true&
+var CodeBlocksSettingsvue_type_template_id_0d37c1de_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row q-pa-none q-mb-md"},[_c('div',{staticClass:"col-xs-12 col-sm-12 col-md-6"},[_c('q-card',{staticClass:"q-mb-sm q-mr-sm-none q-mr-md-sm"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Language')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.languageHasCompiler,"label":_vm.$t('CodeBlocksSettings.AllowExec')},model:{value:(_vm.runCode),callback:function ($$v) {_vm.runCode=$$v},expression:"runCode"}})],1),_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.canContinousCompile,"label":_vm.$t('CodeBlocksSettings.ContinousCompile')},model:{value:(_vm.continuousCompile),callback:function ($$v) {_vm.continuousCompile=$$v},expression:"continuousCompile"}})],1),_c('div',{class:("col-xs-12 col-sm-" + (_vm.runCode ? 6 : 12) + " col-md-" + (_vm.runCode ? 8 : 12) + " " + (_vm.runCode ? 'q-pr-md-sm' : ''))},[_c('q-select',{attrs:{"options":_vm.compiledLanguages,"label":_vm.$t('CodeBlocksSettings.Language')},model:{value:(_vm.compilerLanguageObj),callback:function ($$v) {_vm.compilerLanguageObj=$$v},expression:"compilerLanguageObj"}})],1),(_vm.runCode)?_c('div',{staticClass:"col-xs-12 col-sm-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.compilerVersions,"stack-label":"","label":_vm.$t('CodeBlocksSettings.CVersion')},scopedSlots:_vm._u([{key:"selected",fn:function(){return [_vm._v(" "+_vm._s(_vm.compilerVersion)+" "),(_vm.isDeprecated)?_c('q-avatar',{staticClass:"q-ml-xs",attrs:{"rounded":"","size":"xs","color":"yellow","text-color":"brown-10","icon":"hourglass_disabled"}}):_vm._e(),(_vm.isExperimental)?_c('q-avatar',{staticClass:"q-ml-xs",attrs:{"rounded":"","size":"xs","color":"orange","text-color":"white","icon":"whatshot"}}):_vm._e()]},proxy:true},{key:"option",fn:function(scope){return [_c('q-item',_vm._g(_vm._b({},'q-item',scope.itemProps,false),scope.itemEvents),[_c('q-item-section',[_c('q-item-label',[_vm._v(" "+_vm._s(scope.opt)+" "),(
                                                     _vm.isDeprecatedVersion(
                                                         _vm.compilerLanguage,
                                                         scope.opt
@@ -55906,20 +55979,20 @@ var CodeBlocksSettingsvue_type_template_id_75cfd4ae_scoped_true_render = functio
                                                         _vm.compilerLanguage,
                                                         scope.opt
                                                     )
-                                                )?_c('q-avatar',{staticClass:"q-ml-xs",attrs:{"rounded":"","size":"xs","color":"orange","text-color":"white","icon":"whatshot"}}):_vm._e()],1)],1)],1)]}}],null,false,541447989),model:{value:(_vm.compilerVersion),callback:function ($$v) {_vm.compilerVersion=$$v},expression:"compilerVersion"}})],1):_vm._e(),_c('q-slide-transition',[(_vm.isExperimental)?_c('q-banner',{staticClass:"bg-orange text-white col-12 q-mt-xs",attrs:{"rounded":"","dense":""}},[_c('q-item',[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-icon',{staticStyle:{"font-size":"3em"},attrs:{"name":"whatshot"}})],1),_c('q-item-section',[_c('q-item-label',{attrs:{"overline":""}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.ExperimentalCompiler'))+" ")]),_c('q-item-label',[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.ExperimentalCompilerDesc'))+" ")])],1)],1)],1):_vm._e()],1),_c('q-slide-transition',[(_vm.isDeprecated)?_c('q-banner',{staticClass:"bg-yellow-12 text-black col-12 q-mt-xs",attrs:{"rounded":"","dense":""}},[_c('q-item',[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-icon',{staticStyle:{"font-size":"3em"},attrs:{"name":"hourglass_disabled"}})],1),_c('q-item-section',[_c('q-item-label',{attrs:{"overline":""}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.DeprecatedCompiler'))+" ")]),_c('q-item-label',[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.DeprecatedCompilerDesc'))+" ")])],1)],1)],1):_vm._e()],1),(_vm.runCode)?_c('div',{staticClass:"col-12"},[_c('q-input',{attrs:{"rules":[_vm.validNumber],"label":_vm.$t('CodeBlocksSettings.RunTime'),"maxlength":"6"},model:{value:(_vm.maxRuntime),callback:function ($$v) {_vm.maxRuntime=$$v},expression:"maxRuntime"}})],1):_vm._e(),(_vm.runCode && (_vm.accepstArguments || _vm.allowsMessagePassing))?_c('div',{staticClass:"col-12 text-body2"},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.AllowArguments'))+" "),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showArgsInfoDialog}})],1):_vm._e(),(_vm.runCode && _vm.accepstArguments)?_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.canPersistentArguments,"label":_vm.$t('CodeBlocksSettings.PersistentArguments')},model:{value:(_vm.persistentArguments),callback:function ($$v) {_vm.persistentArguments=$$v},expression:"persistentArguments"}}),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showPersistentArgsInfoDialog}})],1):_vm._e(),(_vm.runCode && _vm.allowsMessagePassing)?_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.allowsMessagePassing,"label":_vm.$t('CodeBlocksSettings.MessagePassing')},model:{value:(_vm.messagePassing),callback:function ($$v) {_vm.messagePassing=$$v},expression:"messagePassing"}}),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showMessagesInfoDialog}})],1):_vm._e(),(_vm.runCode && _vm.allowsMessagePassing)?_c('div',{staticClass:"col-12 q-pl-lg"},[_c('q-toggle',{attrs:{"disabled":!_vm.allowsMessagePassing || !_vm.messagePassing,"label":_vm.$t('CodeBlocksSettings.KeepAlive')},model:{value:(_vm.keepAlive),callback:function ($$v) {_vm.keepAlive=$$v},expression:"keepAlive"}}),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showAliveInfoDialog}})],1):_vm._e()],1)])],1)],1),_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-slide-transition',[(_vm.runCode)?_c('q-card',{staticClass:"q-mb-sm q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Output')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-12 col-md-6 col-12 q-pr-md-sm"},[_c('q-input',{attrs:{"rules":[_vm.validNumber],"label":_vm.$t('CodeBlocksSettings.MaxCharacters'),"maxlength":"6"},model:{value:(_vm.maxCharacters),callback:function ($$v) {_vm.maxCharacters=$$v},expression:"maxCharacters"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.outputParsers,"label":_vm.$t('CodeBlocksSettings.Parser')},model:{value:(_vm.outputParser),callback:function ($$v) {_vm.outputParser=$$v},expression:"outputParser"}})],1)])])],1):_vm._e()],1),_c('q-card',{staticClass:"q-mr-sm-xs"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Themes')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 col-md-6 q-pr-md-sm"},[_c('q-select',{attrs:{"options":_vm.themes,"label":_vm.$t('CodeBlocksSettings.TGeneral')},model:{value:(_vm.codeTheme),callback:function ($$v) {_vm.codeTheme=$$v},expression:"codeTheme"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.themes,"label":_vm.$t('CodeBlocksSettings.TSolution')},model:{value:(_vm.solutionTheme),callback:function ($$v) {_vm.solutionTheme=$$v},expression:"solutionTheme"}})],1)])])],1)],1),_c('q-slide-transition',[(_vm.runCode)?_c('div',{staticClass:"col-xs-12 col-sm-4"},[_c('q-card',[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Libraries')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row q-my-none q-py-none",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 q-my-none q-py-none"},[_c('q-select',{attrs:{"options":_vm.domLibraries,"multiple":"","use-chips":"","stack-label":"","deletable-chips":"","label":_vm.$t('CodeBlocksSettings.DomLibs')},model:{value:(_vm.domLibrary),callback:function ($$v) {_vm.domLibrary=$$v},expression:"domLibrary"}})],1),(_vm.runCode && _vm.workerLibraries.length > 0)?_c('div',{staticClass:"col-xs-12 q-my-none q-py-none"},[_c('q-select',{attrs:{"options":_vm.workerLibraries,"multiple":"","use-chips":"","stack-label":"","deletable-chips":"","label":_vm.$t('CodeBlocksSettings.WorkLibs')},model:{value:(_vm.workerLibrary),callback:function ($$v) {_vm.workerLibrary=$$v},expression:"workerLibrary"}})],1):_vm._e()])])],1)],1):_vm._e()]),_c('div',{class:("col-xs-" + (_vm.options.randomizer.active ? '12' : '12') + " q-mt-sm")},[_c('RandomizerSettings',{attrs:{"options":_vm.options}})],1),_c('div',{staticClass:"col-xs-12"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.serializedOptions),expression:"serializedOptions"}],staticClass:"blocksettings",attrs:{"name":("block_settings[" + (this.options.id) + "]")},domProps:{"value":(_vm.serializedOptions)},on:{"input":function($event){if($event.target.composing){ return; }_vm.serializedOptions=$event.target.value}}})])],1)}
-var CodeBlocksSettingsvue_type_template_id_75cfd4ae_scoped_true_staticRenderFns = []
+                                                )?_c('q-avatar',{staticClass:"q-ml-xs",attrs:{"rounded":"","size":"xs","color":"orange","text-color":"white","icon":"whatshot"}}):_vm._e()],1)],1)],1)]}}],null,false,541447989),model:{value:(_vm.compilerVersion),callback:function ($$v) {_vm.compilerVersion=$$v},expression:"compilerVersion"}})],1):_vm._e(),_c('q-slide-transition',[(_vm.isExperimental)?_c('q-banner',{staticClass:"bg-orange text-white col-12 q-mt-xs",attrs:{"rounded":"","dense":""}},[_c('q-item',[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-icon',{staticStyle:{"font-size":"3em"},attrs:{"name":"whatshot"}})],1),_c('q-item-section',[_c('q-item-label',{attrs:{"overline":""}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.ExperimentalCompiler'))+" ")]),_c('q-item-label',[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.ExperimentalCompilerDesc'))+" ")])],1)],1)],1):_vm._e()],1),_c('q-slide-transition',[(_vm.isDeprecated)?_c('q-banner',{staticClass:"bg-yellow-12 text-black col-12 q-mt-xs",attrs:{"rounded":"","dense":""}},[_c('q-item',[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-icon',{staticStyle:{"font-size":"3em"},attrs:{"name":"hourglass_disabled"}})],1),_c('q-item-section',[_c('q-item-label',{attrs:{"overline":""}},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.DeprecatedCompiler'))+" ")]),_c('q-item-label',[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.DeprecatedCompilerDesc'))+" ")])],1)],1)],1):_vm._e()],1),(_vm.runCode)?_c('div',{staticClass:"col-12"},[_c('q-input',{attrs:{"rules":[_vm.validNumber],"label":_vm.$t('CodeBlocksSettings.RunTime'),"maxlength":"6"},model:{value:(_vm.maxRuntime),callback:function ($$v) {_vm.maxRuntime=$$v},expression:"maxRuntime"}})],1):_vm._e(),(_vm.runCode && (_vm.accepstArguments || _vm.allowsMessagePassing))?_c('div',{staticClass:"col-12 text-body2"},[_vm._v(" "+_vm._s(_vm.$t('CodeBlocksSettings.AllowArguments'))+" "),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showArgsInfoDialog}})],1):_vm._e(),(_vm.runCode && _vm.accepstArguments)?_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.canPersistentArguments,"label":_vm.$t('CodeBlocksSettings.PersistentArguments')},model:{value:(_vm.persistentArguments),callback:function ($$v) {_vm.persistentArguments=$$v},expression:"persistentArguments"}}),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showPersistentArgsInfoDialog}})],1):_vm._e(),(_vm.runCode && _vm.allowsMessagePassing)?_c('div',{staticClass:"col-12"},[_c('q-toggle',{attrs:{"disabled":!_vm.allowsMessagePassing,"label":_vm.$t('CodeBlocksSettings.MessagePassing')},model:{value:(_vm.messagePassing),callback:function ($$v) {_vm.messagePassing=$$v},expression:"messagePassing"}}),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showMessagesInfoDialog}})],1):_vm._e(),(_vm.runCode && _vm.allowsMessagePassing)?_c('div',{staticClass:"col-12 q-pl-lg"},[_c('q-toggle',{attrs:{"disabled":!_vm.allowsMessagePassing || !_vm.messagePassing,"label":_vm.$t('CodeBlocksSettings.KeepAlive')},model:{value:(_vm.keepAlive),callback:function ($$v) {_vm.keepAlive=$$v},expression:"keepAlive"}}),_c('q-btn',{attrs:{"flat":"","round":"","color":"primary","icon":"info","size":"xs"},on:{"click":_vm.showAliveInfoDialog}})],1):_vm._e()],1)])],1)],1),_c('div',{staticClass:"col-xs-12 col-sm-12 col-md-6"},[_c('q-slide-transition',[(_vm.runCode)?_c('q-card',{staticClass:"q-mb-sm q-mr-none"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Output')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row"},[_c('div',{staticClass:"col-xs-12 col-md-6 col-12 q-pr-md-sm"},[_c('q-input',{attrs:{"rules":[_vm.validNumber],"label":_vm.$t('CodeBlocksSettings.MaxCharacters'),"maxlength":"6"},model:{value:(_vm.maxCharacters),callback:function ($$v) {_vm.maxCharacters=$$v},expression:"maxCharacters"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.outputParsers,"label":_vm.$t('CodeBlocksSettings.Parser')},model:{value:(_vm.outputParser),callback:function ($$v) {_vm.outputParser=$$v},expression:"outputParser"}})],1)])])],1):_vm._e()],1),_c('q-card',{staticClass:"q-mr-none"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Themes')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 col-md-6 q-pr-md-sm"},[_c('q-select',{attrs:{"options":_vm.themes,"label":_vm.$t('CodeBlocksSettings.TGeneral')},model:{value:(_vm.codeTheme),callback:function ($$v) {_vm.codeTheme=$$v},expression:"codeTheme"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6"},[_c('q-select',{attrs:{"options":_vm.themes,"label":_vm.$t('CodeBlocksSettings.TSolution')},model:{value:(_vm.solutionTheme),callback:function ($$v) {_vm.solutionTheme=$$v},expression:"solutionTheme"}})],1)])])],1),_c('q-slide-transition',[(_vm.runCode)?_c('q-card',{staticClass:"q-mr-sm-none q-mt-sm"},[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('CodeBlocksSettings.Libraries')))]),_c('q-card-section',{staticClass:"q-ml-md"},[_c('div',{staticClass:"row q-my-none q-py-none",attrs:{"dense":""}},[_c('div',{staticClass:"col-xs-12 col-sm-12 q-my-none q-py-none"},[_c('q-select',{attrs:{"options":_vm.domLibraries,"multiple":"","use-chips":"","stack-label":"","deletable-chips":"","label":_vm.$t('CodeBlocksSettings.DomLibs')},model:{value:(_vm.domLibrary),callback:function ($$v) {_vm.domLibrary=$$v},expression:"domLibrary"}})],1),(_vm.runCode && _vm.workerLibraries.length > 0)?_c('div',{staticClass:"col-xs-12 col-sm-12 q-my-none q-py-none"},[_c('q-select',{attrs:{"options":_vm.workerLibraries,"multiple":"","use-chips":"","stack-label":"","deletable-chips":"","label":_vm.$t('CodeBlocksSettings.WorkLibs')},model:{value:(_vm.workerLibrary),callback:function ($$v) {_vm.workerLibrary=$$v},expression:"workerLibrary"}})],1):_vm._e()])])],1):_vm._e()],1)],1),_c('div',{class:("col-xs-" + (_vm.options.randomizer.active ? '12' : '12') + " q-mt-sm")},[_c('RandomizerSettings',{attrs:{"options":_vm.options}})],1),_c('div',{staticClass:"col-xs-12"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.serializedOptions),expression:"serializedOptions"}],staticClass:"blocksettings",attrs:{"name":("block_settings[" + (this.options.id) + "]")},domProps:{"value":(_vm.serializedOptions)},on:{"input":function($event){if($event.target.composing){ return; }_vm.serializedOptions=$event.target.value}}})])])}
+var CodeBlocksSettingsvue_type_template_id_0d37c1de_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=template&id=75cfd4ae&scoped=true&
+// CONCATENATED MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=template&id=0d37c1de&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSettings.vue?vue&type=template&id=8b99c0d6&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSettings.vue?vue&type=template&id=8b99c0d6&scoped=true&
 var RandomizerSettingsvue_type_template_id_8b99c0d6_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('q-card',[_c('q-card-section',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('RandomizerSettings.Caption'))+" "),_c('q-toggle',{model:{value:(_vm.options.randomizer.active),callback:function ($$v) {_vm.$set(_vm.options.randomizer, "active", $$v)},expression:"options.randomizer.active"}})],1),_c('q-slide-transition',[_c('q-card-section',{directives:[{name:"show",rawName:"v-show",value:(_vm.options.randomizer.active),expression:"options.randomizer.active"}],staticClass:"q-ml-md"},[_c('div',{staticClass:"tagList"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$t('RandomizerSettings.Available'))+" "),_c('q-btn',{staticClass:"gt-xs",attrs:{"color":"primary","size":"12px","flat":"","dense":"","round":"","icon":"add"},on:{"click":_vm.addTag}})],1),_c('div',{staticClass:"row q-mb-sm"},_vm._l((_vm.options.randomizer.knownTags),function(tag,i){return _c('div',{key:tag,class:("tagItem q-ml-sm " + _vm.tagClass)},[_c('div',{staticClass:"row no-wrap"},[_c('div',{staticClass:"tagInfo col-shrink"},[_c('div',{staticClass:"tagName"},[_vm._v(_vm._s(tag))]),_c('div',{staticClass:"tagString"},[_vm._v("{:"+_vm._s(tag)+"}")])]),_c('div',{staticClass:"tagAction col-4 q-pl-sm text-right"},[_c('q-btn',{staticClass:"gt-xs",attrs:{"size":"12px","flat":"","dense":"","round":"","icon":"delete"},on:{"click":function($event){return _vm.removeTag(i)}}})],1)])])}),0)]),_c('div',{staticClass:"tagList q-mt-lg"},[_c('div',{staticClass:"text-subtitle2"},[_vm._v(" "+_vm._s(_vm.$t('RandomizerSettings.Sets'))+" "),_c('q-btn',{staticClass:"gt-xs",attrs:{"color":"primary","size":"12px","flat":"","dense":"","round":"","icon":"add"},on:{"click":_vm.addSet}})],1),_c('q-list',{staticClass:"setList"},_vm._l((_vm.options.randomizer.sets),function(s,i){return _c('q-item',{key:s.uuid},[_c('q-item-section',{attrs:{"avatar":""}},[_c('q-avatar',{attrs:{"color":"primary","text-color":"white","disabled":!_vm.isVisible(i)}},[_vm._v(" "+_vm._s(i)+" ")])],1),_c('q-item-section',[_c('q-item-label',[_vm._v(_vm._s(s.title))]),_c('q-item-label',{attrs:{"caption":"","lines":"2"}},[_c('div',{staticClass:"row q-mb-sm"},_vm._l((s.values),function(tag){return _c('div',{key:tag.name,class:("tagItem q-ml-sm " + _vm.tagClass)},[_c('div',{staticClass:"row no-wrap"},[_c('div',{staticClass:"tagInfo col-shrink"},[_c('div',{staticClass:"tagName"},[_vm._v(_vm._s(tag.tag))]),_c('div',{staticClass:"tagString"},[_vm._v(_vm._s(tag.value))])])])])}),0)])],1),_c('q-item-section',{attrs:{"side":"","top":""}},[_c('div',{staticClass:"text-grey-8 q-gutter-xs"},[_c('q-icon',{staticClass:"q-mr-lg",attrs:{"name":_vm.isCompleteSet(s) ? 'check' : 'warning',"color":_vm.isCompleteSet(s) ? 'positive' : 'negative',"size":"24px"}}),_c('q-btn',{staticClass:"gt-xs",attrs:{"size":"12px","flat":"","dense":"","round":"","icon":_vm.isVisible(i) ? 'visibility' : 'visibility_off'},on:{"click":function($event){return _vm.setVisible(i)}}},[_c('q-tooltip',{attrs:{"delay":200,"offset":[0, 10]}},[_vm._v(" Use this set when running code in preview or editMode. ")])],1),_c('q-btn',{staticClass:"gt-xs",attrs:{"size":"12px","flat":"","dense":"","round":"","icon":"edit"}},[_c('RandomizerSetEditor',{attrs:{"options":_vm.options,"tagSet":_vm.getFullSet(s),"nr":i}})],1),_c('q-btn',{staticClass:"gt-xs",attrs:{"size":"12px","flat":"","dense":"","round":"","icon":"delete"},on:{"click":function($event){return _vm.removeSet(i)}}})],1)])],1)}),1)],1)])],1)],1)],1)}
 var RandomizerSettingsvue_type_template_id_8b99c0d6_scoped_true_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/RandomizerSettings.vue?vue&type=template&id=8b99c0d6&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSetEditor.vue?vue&type=template&id=e5082460&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/RandomizerSetEditor.vue?vue&type=template&id=e5082460&
 var RandomizerSetEditorvue_type_template_id_e5082460_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-popup-proxy',{attrs:{"transition-show":"flip-up","transition-hide":"flip-down"},on:{"before-show":_vm.onShow}},[_c('div',{staticClass:"q-pa-md"},[_c('div',{staticClass:"row no-wrap q-pa-none"},[_c('div',{staticClass:"text-overline"},[_vm._v(_vm._s(_vm.$t('RandomizerSetEditor.Caption', { nr: _vm.nr })))])]),_vm._l((_vm.tagSet.values),function(tag){return _c('div',{key:tag.tag,staticClass:"q-pl-md"},[_c('q-input',{attrs:{"label":tag.tag},model:{value:(tag.value),callback:function ($$v) {_vm.$set(tag, "value", $$v)},expression:"tag.value"}})],1)})],2)])}
 var RandomizerSetEditorvue_type_template_id_e5082460_staticRenderFns = []
 
@@ -56366,6 +56439,9 @@ var CodeBlocksSettingsvue_type_script_lang_ts_CodeBlocksSettings = /*#__PURE__*/
         label: this.$l('CodeBlocksSettings.PJSON'),
         value: ICodeBlocks["b" /* CodeOutputTypes */].JSON
       }, {
+        label: this.$l('CodeBlocksSettings.PData'),
+        value: ICodeBlocks["b" /* CodeOutputTypes */].DATA
+      }, {
         label: this.$l('CodeBlocksSettings.PMagic'),
         value: ICodeBlocks["b" /* CodeOutputTypes */].MAGIC
       }];
@@ -56753,8 +56829,8 @@ CodeBlocksSettingsvue_type_script_lang_ts_CodeBlocksSettings = Object(tslib_es6[
 /* harmony default export */ var CodeBlocksSettingsvue_type_script_lang_ts_ = (CodeBlocksSettingsvue_type_script_lang_ts_CodeBlocksSettings);
 // CONCATENATED MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_CodeBlocksSettingsvue_type_script_lang_ts_ = (CodeBlocksSettingsvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=style&index=0&id=75cfd4ae&lang=sass&scoped=true&
-var CodeBlocksSettingsvue_type_style_index_0_id_75cfd4ae_lang_sass_scoped_true_ = __webpack_require__("d6ef");
+// EXTERNAL MODULE: ./src/components/CodeBlocksSettings.vue?vue&type=style&index=0&id=0d37c1de&lang=sass&scoped=true&
+var CodeBlocksSettingsvue_type_style_index_0_id_0d37c1de_lang_sass_scoped_true_ = __webpack_require__("d393");
 
 // CONCATENATED MODULE: ./src/components/CodeBlocksSettings.vue
 
@@ -56767,11 +56843,11 @@ var CodeBlocksSettingsvue_type_style_index_0_id_75cfd4ae_lang_sass_scoped_true_ 
 
 var CodeBlocksSettings_component = Object(componentNormalizer["a" /* default */])(
   components_CodeBlocksSettingsvue_type_script_lang_ts_,
-  CodeBlocksSettingsvue_type_template_id_75cfd4ae_scoped_true_render,
-  CodeBlocksSettingsvue_type_template_id_75cfd4ae_scoped_true_staticRenderFns,
+  CodeBlocksSettingsvue_type_template_id_0d37c1de_scoped_true_render,
+  CodeBlocksSettingsvue_type_template_id_0d37c1de_scoped_true_staticRenderFns,
   false,
   null,
-  "75cfd4ae",
+  "0d37c1de",
   null
   
 )
@@ -56796,7 +56872,7 @@ runtime_auto_import_default()(CodeBlocksSettings_component, 'components', {QCard
 // EXTERNAL MODULE: ./src/components/CodeBlock.vue + 14 modules
 var CodeBlock = __webpack_require__("800b");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePanel.vue?vue&type=template&id=b56b8b2a&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePanel.vue?vue&type=template&id=b56b8b2a&scoped=true&
 var CodePanelvue_type_template_id_b56b8b2a_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.editMode),expression:"editMode"}],staticClass:"blocksEditorPanelContainer",style:(("width:" + _vm.width + "px"))},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.block !== null),expression:"block !== null"}],staticClass:"blocksEditorPanelLeft"},[_c('q-btn',{staticClass:"expander",attrs:{"icon":_vm.expanded ? 'chevron_right' : 'chevron_left',"size":"sm","unelevated":"","align":"center","color":"blue-grey-4"},on:{"click":_vm.onExpandClick}}),_c('CodeBlock',{attrs:{"block":_vm.saveBlock,"theme":_vm.themeForBlock(_vm.block),"mode":"","visibleLines":_vm.visibleLinesNow,"editMode":true,"muteReadyState":true,"isBookmarkPanel":true,"namePrefix":"panel_"},on:{"code-changed-in-edit-mode":_vm.onCodeChange}})],1)])}
 var CodePanelvue_type_template_id_b56b8b2a_scoped_true_staticRenderFns = []
 
@@ -56977,14 +57053,14 @@ var CodePanel_component = Object(componentNormalizer["a" /* default */])(
 
 runtime_auto_import_default()(CodePanel_component, 'components', {QBtn: QBtn["a" /* default */]});
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePlayground.vue?vue&type=template&id=27994e1a&scoped=true&
-var CodePlaygroundvue_type_template_id_27994e1a_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('PlaygroundCanvas',{key:_vm.runCount,ref:"playgroundContainer",attrs:{"output":_vm.finalOutputObject.initialOutput,"obj":_vm.block.obj,"block":_vm.block,"eventHub":_vm.eventHub,"tagSet":_vm.tagSet,"data-question":_vm.block.parentID,"runner":_vm.emitRun},on:{"canvas-change":_vm.onCanvasChange,"did-init":_vm.onDidInit}}),_c('div',{staticClass:"row justify-end"},[(_vm.editMode)?_c('q-btn-group',{staticClass:"q-mb-sm",attrs:{"rounded":""}},[_c('q-btn',{attrs:{"color":_vm.isExpandedAuto ? 'primary' : 'blue-grey-4',"small":"","label":"Auto","icon":"video_label"},on:{"click":_vm.setExpandedAuto}}),_c('q-btn',{attrs:{"color":_vm.isExpandedLarge ? 'primary' : 'blue-grey-4',"small":"","label":"Large","icon":"call_to_action"},on:{"click":_vm.setExpandedLarge}}),_c('q-btn',{attrs:{"color":_vm.isExpandedTiny ? 'primary' : 'blue-grey-4',"small":"","label":"Small","icon":"visibility_off"},on:{"click":_vm.setExpandedTiny}})],1):_vm._e()],1),_c('q-slide-transition',[(_vm.editMode)?_c('CodeBlock',{attrs:{"block":_vm.block,"theme":_vm.options.theme,"mode":_vm.options.mode,"visibleLines":_vm.visibleLinesNow,"editMode":this.editMode,"muteReadyState":true},on:{"code-changed-in-edit-mode":_vm.onCodeChange}}):_vm._e()],1)],1)}
-var CodePlaygroundvue_type_template_id_27994e1a_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CodePlayground.vue?vue&type=template&id=02275a87&scoped=true&
+var CodePlaygroundvue_type_template_id_02275a87_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('PlaygroundCanvas',{key:_vm.runCount,ref:"playgroundContainer",attrs:{"output":_vm.finalOutputObject.initialOutput,"obj":_vm.block.obj,"block":_vm.block,"eventHub":_vm.eventHub,"tagSet":_vm.tagSet,"data-question":_vm.block.parentID,"runner":_vm.emitRun},on:{"canvas-change":_vm.onCanvasChange,"did-init":_vm.onDidInit}}),_c('div',{staticClass:"row justify-end"},[(_vm.editMode)?_c('q-btn-group',{staticClass:"q-mb-sm",attrs:{"rounded":""}},[_c('q-btn',{attrs:{"color":_vm.isExpandedAuto ? 'primary' : 'blue-grey-4',"small":"","label":"Auto","icon":"video_label"},on:{"click":_vm.setExpandedAuto}}),_c('q-btn',{attrs:{"color":_vm.isExpandedLarge ? 'primary' : 'blue-grey-4',"small":"","label":"Large","icon":"call_to_action"},on:{"click":_vm.setExpandedLarge}}),_c('q-btn',{attrs:{"color":_vm.isExpandedTiny ? 'primary' : 'blue-grey-4',"small":"","label":"Small","icon":"visibility_off"},on:{"click":_vm.setExpandedTiny}})],1):_vm._e()],1),_c('q-slide-transition',[(_vm.editMode)?_c('CodeBlock',{attrs:{"block":_vm.block,"theme":_vm.options.theme,"mode":_vm.options.mode,"visibleLines":_vm.visibleLinesNow,"editMode":this.editMode,"muteReadyState":true},on:{"code-changed-in-edit-mode":_vm.onCodeChange}}):_vm._e()],1)],1)}
+var CodePlaygroundvue_type_template_id_02275a87_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CodePlayground.vue?vue&type=template&id=27994e1a&scoped=true&
+// CONCATENATED MODULE: ./src/components/CodePlayground.vue?vue&type=template&id=02275a87&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PlaygroundCanvas.vue?vue&type=template&id=29a639c7&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PlaygroundCanvas.vue?vue&type=template&id=29a639c7&scoped=true&
 var PlaygroundCanvasvue_type_template_id_29a639c7_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row ma-0 pa-0 block-playground",attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id}},[_c('div',{class:("col-12 text-" + (_vm.block.align))},[_c('div',{ref:"innerPlaygroundContainer",staticClass:"playground",style:(("width:" + (_vm.block.width) + ";height:" + (_vm.block.height))),attrs:{"data-question":_vm.block.parentID,"data-nr":_vm.block.id}},[_vm._v(" "+_vm._s(_vm.output)+" ")])])])}
 var PlaygroundCanvasvue_type_template_id_29a639c7_scoped_true_staticRenderFns = []
 
@@ -57365,6 +57441,8 @@ var CodePlaygroundvue_type_script_lang_ts_CodePlayground = /*#__PURE__*/function
         this.initAndRebuildErrors = [];
 
         var doInit = function doInit() {
+          console.i('!!! DO INIT !!!');
+
           if (_this3.block.obj !== null && _this3.canvas !== undefined) {
             _this3.block.obj.init($(_this3.canvas), $(_this3.block.scopeSelector), _this3.emitRun);
 
@@ -57543,8 +57621,8 @@ CodePlaygroundvue_type_script_lang_ts_CodePlayground = Object(tslib_es6["a" /* _
 /* harmony default export */ var CodePlaygroundvue_type_script_lang_ts_ = (CodePlaygroundvue_type_script_lang_ts_CodePlayground);
 // CONCATENATED MODULE: ./src/components/CodePlayground.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_CodePlaygroundvue_type_script_lang_ts_ = (CodePlaygroundvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/CodePlayground.vue?vue&type=style&index=0&id=27994e1a&lang=sass&scoped=true&
-var CodePlaygroundvue_type_style_index_0_id_27994e1a_lang_sass_scoped_true_ = __webpack_require__("096f");
+// EXTERNAL MODULE: ./src/components/CodePlayground.vue?vue&type=style&index=0&id=02275a87&lang=sass&scoped=true&
+var CodePlaygroundvue_type_style_index_0_id_02275a87_lang_sass_scoped_true_ = __webpack_require__("7f50");
 
 // EXTERNAL MODULE: ./src/components/CodePlayground.vue?vue&type=style&index=1&lang=stylus&
 var CodePlaygroundvue_type_style_index_1_lang_stylus_ = __webpack_require__("d5a0");
@@ -57601,11 +57679,11 @@ var CodePlaygroundvue_type_style_index_1_lang_stylus_ = __webpack_require__("d5a
 
 var CodePlayground_component = Object(componentNormalizer["a" /* default */])(
   components_CodePlaygroundvue_type_script_lang_ts_,
-  CodePlaygroundvue_type_template_id_27994e1a_scoped_true_render,
-  CodePlaygroundvue_type_template_id_27994e1a_scoped_true_staticRenderFns,
+  CodePlaygroundvue_type_template_id_02275a87_scoped_true_render,
+  CodePlaygroundvue_type_template_id_02275a87_scoped_true_staticRenderFns,
   false,
   null,
-  "27994e1a",
+  "02275a87",
   null
   
 )
@@ -57617,14 +57695,14 @@ var CodePlayground_component = Object(componentNormalizer["a" /* default */])(
 
 runtime_auto_import_default()(CodePlayground_component, 'components', {QBtnGroup: QBtnGroup,QBtn: QBtn["a" /* default */],QSlideTransition: QSlideTransition["a" /* default */]});
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/SimpleText.vue?vue&type=template&id=fead5814&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/SimpleText.vue?vue&type=template&id=fead5814&scoped=true&
 var SimpleTextvue_type_template_id_fead5814_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(!_vm.editMode)?_c('div',{directives:[{name:"highlight",rawName:"v-highlight",value:(_vm.language),expression:"language"}],domProps:{"innerHTML":_vm._s(_vm.previewValue)}}):_c('TipTap',{staticClass:"editor q-my-3",attrs:{"value":_vm.value,"name":_vm.name,"language":_vm.language,"scopUUID":_vm.scopeUUID,"editMode":_vm.editMode},on:{"input":_vm.updatedContentDefered}})],1)}
 var SimpleTextvue_type_template_id_fead5814_scoped_true_staticRenderFns = []
 
 
 // CONCATENATED MODULE: ./src/components/SimpleText.vue?vue&type=template&id=fead5814&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/TipTap.vue?vue&type=template&id=5a368702&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/components/TipTap.vue?vue&type=template&id=5a368702&scoped=true&
 var TipTapvue_type_template_id_5a368702_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"row q-ma-0 q-pa-0"},[_c('div',{staticClass:"col-xs-12 col-md-6 q-px-sm"},[_c('q-input',{ref:"editBox",staticClass:"plain accqstXmlInput noRTEditor",attrs:{"type":"textarea","autogrow":"","filled":"","name":_vm.name,"label":"HTML Source","background-color":"blue-grey darken-3"},model:{value:(_vm.text),callback:function ($$v) {_vm.text=$$v},expression:"text"}})],1),_c('div',{staticClass:"col-xs-12 col-md-6 q-px-sm"},[_c('div',{staticClass:"q-field__label no-pointer-events ellipsis text-caption wysiwyg"},[_vm._v(" Preview ")]),_c('div',{directives:[{name:"highlight",rawName:"v-highlight",value:(_vm.language),expression:"language"},{name:"tagged",rawName:"v-tagged",value:(_vm.scopeUUID),expression:"scopeUUID"}],domProps:{"innerHTML":_vm._s(_vm.text)}})])])}
 var TipTapvue_type_template_id_5a368702_scoped_true_staticRenderFns = []
 
@@ -57900,10 +57978,39 @@ var SimpleText_component = Object(componentNormalizer["a" /* default */])(
 
 
 
+
+
  //import Blockly from '@/components/Blockly/Blockly.vue'
 
 
 
+
+function formatOutput(result) {
+  var regex = /^@(bold|italic|em)?(red|green|blue|cyan|magenta|yellow|orange|gray|#[\da-f]{6}|#[\da-f]{8}):(.*)/gim;
+  return result.split('\n').map(function (line, nr) {
+    var m;
+
+    if ((m = regex.exec(result)) !== null) {
+      var style = '';
+
+      if (m[2] === 'gray') {
+        style = 'style="color:silver"';
+      } else if (m[2] !== undefined) {
+        style = "style=\"color:".concat(m[2], "\"");
+      }
+
+      if (m[1] === 'bold') {
+        line = "<b ".concat(style, ">").concat(m[3], "</b>");
+      } else if (m[1] === 'italic' || m[1] === 'em') {
+        line = "<em ".concat(style, ">").concat(m[3], "</em>");
+      } else {
+        line = "<span ".concat(style, ">").concat(m[3], "</span>");
+      }
+    }
+
+    return line;
+  }).join('\n');
+}
 
 var Blockly = function Blockly() {
   return __webpack_require__.e(/* import() */ 1).then(__webpack_require__.bind(null, "c3c6"));
@@ -58269,10 +58376,10 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
         this.output = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;');
 
         if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
-          this.outputHTML = this.output.substr(0, this.maxCharacters);
+          this.outputHTML = formatOutput(this.output.substr(0, this.maxCharacters));
           this.outputHTML += this.$CodeBlock.format_info('Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n');
         } else {
-          this.outputHTML = this.output;
+          this.outputHTML = formatOutput(this.output);
         }
 
         this.outputHTML += this.sansoutput;
@@ -58298,7 +58405,7 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
           this.outputHTML += this.$CodeBlock.format_info('Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n');
           this.didClip = true;
         } else {
-          this.outputHTML += text;
+          this.outputHTML += formatOutput(text);
         }
       }
     }
@@ -58358,7 +58465,7 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
 
   }, {
     key: "finishedExecution",
-    value: function finishedExecution(output, infoErrorOutput) {
+    value: function finishedExecution(output, infoErrorOutput, resultData) {
       var parseError = undefined;
       var processed = {
         type: 'text',
@@ -58368,7 +58475,7 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
 
       if (output !== undefined && this.playgrounds.length > 0) {
         try {
-          processed = this.$CodeBlock.processMixedOutput(output, this.outputParser);
+          processed = this.$CodeBlock.processMixedOutput(output, this.outputParser, undefined, resultData);
         } catch (e) {
           parseError = e;
         }
@@ -58421,96 +58528,99 @@ var CodeBlocksvue_type_script_lang_ts_CodeBlocks = /*#__PURE__*/function (_Vue) 
         self.eventHub.$emit('before-run', {});
         console.d('compileAndRun');
         self.didRunOnce = true;
-        var _args = {};
+        self.$nextTick(function () {
+          var _args = {};
 
-        if (cmp.acceptsJSONArgument) {
-          _args = _this3.blockInfo.initArgsForLanguage();
-
-          _this3.blocks.forEach(function (bl) {
-            if (bl.obj) {
-              console.i('!!! ADD ARGUMENTS TO !!!');
-              bl.obj.addArgumentsTo(_args);
-            }
-          });
-        }
-
-        var runOptions = {
-          max_ms: self.executionTimeout,
-          log_callback: self.log.bind(_this3),
-          info_callback: self.logInfo.bind(_this3),
-          err_callback: self.logError.bind(_this3),
-          compileFailedCallback: self.processDiagnostics.bind(_this3),
-          finishedExecutionCB: function finishedExecutionCB() {
-            var success = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-            var overrideOutput = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
-            var returnState = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
-            console.i('returnState:', returnState, _args);
-
-            if (!success) {
-              self.$compilerState.hideGlobalState();
-              self.$compilerState.setAllRunButtons(true);
-              return undefined;
-            }
-
-            var res = self.finishedExecution(overrideOutput ? overrideOutput : self.output, self.sansoutput);
-
-            if (returnState !== undefined) {
-              if (_this3.blockInfo.persistentArguments) {
-                console.i('Store Default State', returnState);
-
-                _this3.blockInfo.storeDefaultArgs(returnState);
-              } else {
-                _this3.blockInfo.clearDefaultArgs();
-              }
-            }
-
-            self.$compilerState.hideGlobalState();
-            self.$compilerState.setAllRunButtons(true);
-            return res;
-          },
-          args: _args,
-          didReceiveMessage: function didReceiveMessage(cmd, data) {
-            console.i('MESSAGE - Received', cmd);
+          if (cmp.acceptsJSONArgument) {
+            _args = _this3.blockInfo.initArgsForLanguage();
 
             _this3.blocks.forEach(function (bl) {
               if (bl.obj) {
-                bl.obj.didReceiveMessage(cmd, data);
-              }
-            });
-          },
-          postMessageFunction: null,
-          dequeuePostponedMessages: function dequeuePostponedMessages() {},
-          allowMessagePassing: cmp.allowsMessagePassing && self.options.messagePassing,
-          keepAlive: cmp.allowsMessagePassing && self.options.messagePassing && self.options.keepAlive,
-          beforeStartHandler: function beforeStartHandler() {
-            _this3.blocks.forEach(function (bl) {
-              console.d('MESSAGE - Before Start');
-
-              if (bl.obj) {
-                bl.obj.beforeStart();
-              }
-            });
-          },
-          whenFinishedHandler: function whenFinishedHandler(args) {
-            _this3.blocks.forEach(function (bl) {
-              console.d('MESSAGE - When Finished');
-
-              if (bl.obj) {
-                bl.obj.whenFinished(args);
+                console.i('!!! ADD ARGUMENTS TO !!!');
+                bl.obj.addArgumentsTo(_args);
               }
             });
           }
-        };
 
-        if (runOptions.keepAlive) {
-          _this3.blocks.forEach(function (bl) {
-            if (bl.obj) {
-              bl.obj.runConfig = runOptions;
-            }
-          });
-        }
+          var runOptions = {
+            max_ms: self.executionTimeout,
+            log_callback: self.log.bind(_this3),
+            info_callback: self.logInfo.bind(_this3),
+            err_callback: self.logError.bind(_this3),
+            compileFailedCallback: self.processDiagnostics.bind(_this3),
+            finishedExecutionCB: function finishedExecutionCB() {
+              var success = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+              var overrideOutput = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+              var returnState = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
+              console.i('returnState:', returnState, _args);
 
-        cmp.compileAndRun('' + self.blockid, self.completeSource, self, runOptions);
+              if (!success) {
+                self.$compilerState.hideGlobalState();
+                self.$compilerState.setAllRunButtons(true);
+                return undefined;
+              }
+
+              var res = self.finishedExecution(overrideOutput ? overrideOutput : self.output, self.sansoutput, runOptions.resultData);
+
+              if (returnState !== undefined) {
+                if (_this3.blockInfo.persistentArguments) {
+                  console.i('Store Default State', returnState);
+
+                  _this3.blockInfo.storeDefaultArgs(returnState);
+                } else {
+                  _this3.blockInfo.clearDefaultArgs();
+                }
+              }
+
+              self.$compilerState.hideGlobalState();
+              self.$compilerState.setAllRunButtons(true);
+              return res;
+            },
+            args: _args,
+            didReceiveMessage: function didReceiveMessage(cmd, data) {
+              console.i('MESSAGE - Received', cmd);
+
+              _this3.blocks.forEach(function (bl) {
+                if (bl.obj) {
+                  bl.obj.didReceiveMessage(cmd, data);
+                }
+              });
+            },
+            postMessageFunction: null,
+            dequeuePostponedMessages: function dequeuePostponedMessages() {},
+            allowMessagePassing: cmp.allowsMessagePassing && self.options.messagePassing,
+            keepAlive: cmp.allowsMessagePassing && self.options.messagePassing && self.options.keepAlive,
+            beforeStartHandler: function beforeStartHandler() {
+              _this3.blocks.forEach(function (bl) {
+                console.d('MESSAGE - Before Start');
+
+                if (bl.obj) {
+                  bl.obj.beforeStart();
+                }
+              });
+            },
+            whenFinishedHandler: function whenFinishedHandler(args) {
+              _this3.blocks.forEach(function (bl) {
+                console.d('MESSAGE - When Finished');
+
+                if (bl.obj) {
+                  bl.obj.whenFinished(args, runOptions.resultData);
+                }
+              });
+            },
+            resultData: undefined
+          };
+
+          if (runOptions.keepAlive) {
+            _this3.blocks.forEach(function (bl) {
+              if (bl.obj) {
+                bl.obj.runConfig = runOptions;
+              }
+            });
+          }
+
+          cmp.compileAndRun('' + self.blockid, self.completeSource, self, runOptions);
+        });
       });
       return true;
     }
@@ -58659,8 +58769,8 @@ var CodeBlocksvue_type_style_index_0_lang_sass_ = __webpack_require__("7a59");
 
 var CodeBlocks_component = Object(componentNormalizer["a" /* default */])(
   components_CodeBlocksvue_type_script_lang_ts_,
-  CodeBlocksvue_type_template_id_7980f09b_render,
-  CodeBlocksvue_type_template_id_7980f09b_staticRenderFns,
+  CodeBlocksvue_type_template_id_ae8624ca_render,
+  CodeBlocksvue_type_template_id_ae8624ca_staticRenderFns,
   false,
   null,
   null,
@@ -59220,7 +59330,7 @@ var App_component = Object(componentNormalizer["a" /* default */])(
 
 runtime_auto_import_default()(App_component, 'components', {QLayout: QLayout,QPageContainer: QPageContainer});
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"c782ab42-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/AppEditor.vue?vue&type=template&id=0797aa13&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"0ac272e2-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-cli-plugin-quasar/lib/loader.auto-import.js?kebab!./node_modules/cache-loader/dist/cjs.js??ref--0-1!./node_modules/vue-loader/lib??vue-loader-options!./src/AppEditor.vue?vue&type=template&id=0797aa13&
 var AppEditorvue_type_template_id_0797aa13_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('q-layout',{staticStyle:{"min-height":"0"},attrs:{"view":"hHh lpR fFf"}},[_c('q-page-container',[_c('CodeBlocksEditor',{attrs:{"blockInfo":_vm.blocks}})],1)],1)}
 var AppEditorvue_type_template_id_0797aa13_staticRenderFns = []
 
@@ -59597,8 +59707,6 @@ var playgroundLoader = new PlaygroundManager_PlaygroundLoadManager();
   loaders[playgroundLoader.blockTag] = playgroundLoader;
 });
 // CONCATENATED MODULE: ./src/lib/codeBlocksManager.ts
-
-
 
 
 
@@ -60271,6 +60379,10 @@ var CodeBlocksManager = {
   }
 };
 // CONCATENATED MODULE: ./src/main.ts
+
+
+
+
 
 
 
