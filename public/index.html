@@ -141,33 +141,54 @@ public class One{
     }
 }                                    
                 </block>
+<block>
+class MapGame {
 
+}    
+</block>
                 <script as="playground" type="application/javascript">
-exports = new IsometricMapGame(4, 3, Tiles.Checkers, [Figures.BigGrinch, Figures.Blue], '#fdfdfd', (game, manager, canvasElement, outputElement, scope, runner)=>{
-    game.addSpriteSheetConfig(`fire`, Sprites.Fire[0])
+exports = new IsometricMapGame(4, 3, Tiles.Checkers, [], '#fdfdfd', (game, manager, canvasElement, outputElement, scope, runner)=>{
+    game.resources.loadSprite('snow', Sprites.random(Sprites.Snow))
+    game.resources.loadFigure('grinch', Figures.BigGrinch)
+    game.resources.loadFigure('blue', Figures.Blue)
+    let f1 = undefined
+    
     manager.onPreload = () => {
         
     }
-    manager.onCreate = () => {
-        manager.figures[0].moveToTile(2, 1)
-        manager.figures[1].moveToTile(3, 2)
 
-        const f = game.addAnimatedSpriteOnTile(0, 0, "fire", 1)
-        f.onFinishedAnimation = ()=> {
+    manager.onEnterTile = (tile, figure) => {
+            console.log("Enter", tile.row, tile.column)
+    }
+    manager.onLeaveTile = (tile, figure) => {
+            console.log("Leave", tile.row, tile.column)
+    }
+    manager.onFinishedWalking = (figure) => {
+        console.log("Stopped")
+    }
+
+    manager.onCreate = () => {
+        f1 = manager.createFigureOnTile("grinch", 2, 1)
+        const f2 = manager.createFigureOnTile("blue", 3, 2)
+
+        const sprite = manager.createSpriteOnTile("snow", 0, 0, false, 1)
+        sprite.onFinishedAnimation = ()=> {
             console.log("REMOVING")
-            f.remove()
-        }
-        f.play()
+            sprite.remove()
+        }        
+        sprite.play()
+
+        //game.scene.add.circle(45, 134, 5, 0x6666ff)
     }
 
     manager.onClick = (tile) => {
-        //manager.figures[0].walkToTile(tile.column, tile.row)
+        f1.walkToTile(tile.column, tile.row)
         runner.postMessage('click', {c:tile.column, r:tile.row})
     }
 
     manager.onMessage = (cmd, data) => {
         if (cmd === 'walk') {
-            manager.figures[0].walkToTile(data.c, data.r)
+            f1.walkToTile(data.c, data.r)
         } else {
             console.log(cmd + " - " + data)
         }

@@ -7,8 +7,12 @@ class Tiles {
 Tiles.Checkers = { uri: 'resources/tile/checker.png' };
 Tiles.Gras = { uri: 'resources/tile/gras.png' };
 class Sprites {
+    static random(type) {
+        return type[Math.floor(Math.random() * Sprites.Snow.length)];
+    }
 }
-Sprites.Fire = [{
+Sprites.Fire = [
+    {
         uri: 'resources/tile/fire_00.png',
         repeat: 0,
         frameConfig: {
@@ -17,8 +21,11 @@ Sprites.Fire = [{
             startFrame: 0,
             endFrame: 251,
         },
-    }];
+        shiftY: 0,
+    },
+];
 Sprites.Snow = [0, 1, 2, 3].map((nr) => {
+    const shift = [-8, 3, -8, 3];
     return {
         uri: `resources/tile/snow_${('00' + nr).slice(-2)}.png`,
         repeat: -1,
@@ -28,6 +35,7 @@ Sprites.Snow = [0, 1, 2, 3].map((nr) => {
             startFrame: 0,
             endFrame: 125,
         },
+        shiftY: shift[nr],
     };
 });
 Sprites.Snowman = [0, 1, 2, 3, 4].map((nr) => {
@@ -40,6 +48,7 @@ Sprites.Snowman = [0, 1, 2, 3, 4].map((nr) => {
             startFrame: 0,
             endFrame: 59,
         },
+        shiftY: 0,
     };
 });
 Sprites.HolidaySnowman = [0, 1, 2, 3, 4, 5].map((nr) => {
@@ -52,6 +61,7 @@ Sprites.HolidaySnowman = [0, 1, 2, 3, 4, 5].map((nr) => {
             startFrame: 0,
             endFrame: 59,
         },
+        shiftY: 0,
     };
 });
 Sprites.Hut = [0, 1, 2, 3, 4, 5].map((nr) => {
@@ -64,6 +74,7 @@ Sprites.Hut = [0, 1, 2, 3, 4, 5].map((nr) => {
             startFrame: 0,
             endFrame: 0,
         },
+        shiftY: 0,
     };
 });
 Sprites.Stones = [
@@ -78,6 +89,7 @@ Sprites.Stones = [
             startFrame: 0,
             endFrame: 0,
         },
+        shiftY: 0,
     };
 });
 Sprites.Trees = [
@@ -92,6 +104,7 @@ Sprites.Trees = [
             startFrame: 0,
             endFrame: 0,
         },
+        shiftY: 0,
     };
 });
 class Figures {
@@ -222,9 +235,36 @@ class AnimatedSprite extends BaseAnimatedSprite {
     }
     static add(game, scene, config) {
         const s = scene.add.sprite(config.x, config.y, config.texture, config.frame);
-        const oy = config.originY ? config.originY : 36 / 64;
-        const ox = config.originX ? config.originX : 37 / 76;
+        const shiftY = config.shiftY ? config.shiftY : 0;
+        const oy = (config.originY
+            ? config.originY
+            : config.tile
+                ? (config.y - config.tile.bottom.y) / s.height + 1
+                : 0.5) +
+            shiftY / s.height;
+        const ox = config.originX ? config.originX : 0.5;
         s.setOrigin(ox, oy);
+        // scene.add.circle(config.x, config.y, 2, 0x6666ff)
+        // scene.add.rectangle(
+        //     s.getBounds().centerX,
+        //     s.getBounds().centerY,
+        //     s.getBounds().width,
+        //     s.getBounds().height,
+        //     0x6666ff,
+        //     0.3
+        // )
+        // console.log(config.x, config.y)
+        // console.log(config.tile?.bottom)
+        // console.log(config.tile?.center)
+        // console.log(
+        //     oy,
+        //     game.map?.tileWidth,
+        //     game.map?.tileHeight,
+        //     game.map?.tileOverhang,
+        //     s.width,
+        //     s.height,
+        //     s.getBounds()
+        // )
         const sprite = new AnimatedSprite(game, s, config);
         if (config.speed) {
             sprite.setBaseSpeed(config.speed);
@@ -252,7 +292,8 @@ class WalkingSprite extends BaseAnimatedSprite {
     }
     static add(game, scene, config) {
         const s = scene.add.sprite(config.x, config.y, config.texture, config.frame);
-        const oy = config.originY ? config.originY : 36 / 64;
+        const shiftY = config.shiftY ? config.shiftY : 0;
+        const oy = (config.originY ? config.originY : 36 / 64) + shiftY / s.height;
         const ox = config.originX ? config.originX : 37 / 76;
         s.setOrigin(ox, oy);
         const sprite = new WalkingSprite(game, s, config);
@@ -472,6 +513,49 @@ class IsometricMap extends TiledMap {
         }
     }
 }
+class ResoureManager {
+    constructor(game) {
+        this.game = game;
+    }
+    loadSprite(key, cfg) {
+        this.game.pushSpriteSheet({
+            key: key,
+            uri: cfg.uri,
+            frameConfig: cfg.frameConfig,
+            directional: false,
+            repeat: cfg.repeat,
+            shiftY: cfg.shiftY,
+        });
+    }
+    loadCustomSprite(key, uri, frameConfig, directional = false, shiftY = 0) {
+        const cfg = {
+            key: key,
+            uri: uri,
+            frameConfig: frameConfig,
+            directional: directional,
+            repeat: -1,
+            shiftY: shiftY,
+        };
+        this.game.pushSpriteSheet(cfg);
+    }
+    loadFigure(key, cfg) {
+        this.loadCustomFigure(key, cfg.type, cfg.big, cfg.loaded);
+    }
+    loadCustomFigure(key, type, big = false, loaded = false) {
+        const cfg = {
+            key: key,
+            uri: `resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${big ? '_big' : ''}.png`,
+            frameConfig: {
+                frameWidth: big ? 76 : 38,
+                frameHeight: big ? 64 : 32,
+            },
+            directional: true,
+            repeat: -1,
+            shiftY: 0,
+        };
+        this.game.pushSpriteSheet(cfg);
+    }
+}
 class Game {
     constructor(domElement, backgroundColor) {
         this.created = false;
@@ -479,6 +563,7 @@ class Game {
         this.imagesResources = [];
         this.spritesheetResources = [];
         this.spriteConfigs = [];
+        this.resources = new ResoureManager(this);
         const self = this;
         this.domElement = domElement;
         this.backgroundColor = backgroundColor;
@@ -542,38 +627,6 @@ class Game {
             }
         }
     }
-    addSpriteSheet(key, uri, frameConfig, directional = false) {
-        const cfg = {
-            key: key,
-            uri: uri,
-            frameConfig: frameConfig,
-            directional: directional,
-            repeat: -1,
-        };
-        this.pushSpriteSheet(cfg);
-    }
-    addSpriteSheetConfig(key, cfg) {
-        this.pushSpriteSheet({
-            key: key,
-            uri: cfg.uri,
-            frameConfig: cfg.frameConfig,
-            directional: false,
-            repeat: cfg.repeat,
-        });
-    }
-    addFigure(key, type, big = false, loaded = false) {
-        const cfg = {
-            key: key,
-            uri: `resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${big ? '_big' : ''}.png`,
-            frameConfig: {
-                frameWidth: big ? 76 : 38,
-                frameHeight: big ? 64 : 32,
-            },
-            directional: true,
-            repeat: -1,
-        };
-        this.pushSpriteSheet(cfg);
-    }
     pushSpriteSheet(cfg) {
         this.spritesheetResources.push(cfg);
         if (this._scene) {
@@ -602,13 +655,13 @@ class Game {
         return undefined;
     }
     addWalkingSpriteOnTile(c, r, texture, frame, originX, originY, speed) {
-        return this.addSpriteOnTile('walking', r, c, texture, frame, originX, originY, speed);
+        return this.addSpriteOnTile('walking', c, r, texture, frame, originX, originY, speed);
     }
     addWalkingSprite(x, y, texture, frame, originX, originY, speed) {
         return this.addSprite('walking', x, y, texture, frame, originX, originY, speed);
     }
     addAnimatedSpriteOnTile(c, r, texture, frame, originX, originY, speed) {
-        return this.addSpriteOnTile('animated', r, c, texture, frame, originX, originY, speed);
+        return this.addSpriteOnTile('animated', c, r, texture, frame, originX, originY, speed);
     }
     addAnimatedSprite(x, y, texture, frame, originX, originY, speed) {
         return this.addSprite('animated', x, y, texture, frame, originX, originY, speed);
@@ -618,14 +671,20 @@ class Game {
         const tile = (_a = this.map) === null || _a === void 0 ? void 0 : _a.getTile(c, r);
         if (tile) {
             const p = tile.center;
-            return this.addSprite(type, p.x, p.y, texture, frame, originX, originY, speed);
+            return this.addSprite(type, p.x, p.y, texture, frame, originX, originY, speed, tile);
         }
         else {
             console.error(`[PHASER] Tile ${c}/${r} does not exists.`);
         }
         return undefined;
     }
-    addSprite(type, x, y, texture, frame, originX, originY, speed) {
+    addSprite(type, x, y, texture, frame, originX, originY, speed, tile) {
+        const sheetCfg = this.spritesheetResources.find((c) => c.key === texture);
+        let shiftY = 0;
+        if (sheetCfg) {
+            shiftY = sheetCfg.shiftY;
+        }
+        console.log(sheetCfg);
         const cfg = {
             type: type,
             x: x,
@@ -635,6 +694,8 @@ class Game {
             originX: originX,
             originY: originY,
             speed: speed,
+            tile: tile,
+            shiftY: shiftY,
         };
         this.spriteConfigs.push(cfg);
         if (this.scene && this.created) {
@@ -755,6 +816,8 @@ class IsometricMapGame {
         this.onEnterTile = () => { };
         this.onLeaveTile = () => { };
         this.onFinishedWalking = () => { };
+        this.onFinishedAnimation = () => { };
+        this.onTick = () => { };
         this.update = (txt) => {
             return txt;
         };
@@ -763,6 +826,44 @@ class IsometricMapGame {
         this.whenFinished = () => { };
         this.addArgumentsTo = () => { };
         this.onUpdate = () => { };
+    }
+    createFigureOnTile(key, col, row, startFrame = 0) {
+        if (this.game) {
+            const f = this.game.addWalkingSpriteOnTile(col, row, key, startFrame);
+            f.onEnterTile = this.onEnterTile.bind(this);
+            f.onLeaveTile = this.onLeaveTile.bind(this);
+            f.onFinishedWalking = this.onFinishedWalking.bind(this);
+            return f;
+        }
+        else {
+            throw new Error('Unable to create new Figure. Game not yet initialized');
+        }
+    }
+    createSpriteOnTile(key, col, row, startPlaying = true, startFrame = 0) {
+        if (this.game) {
+            const f = this.game.addAnimatedSpriteOnTile(col, row, key, startFrame);
+            f.onFinishedAnimation = this.onFinishedAnimation.bind(this);
+            if (startPlaying) {
+                f.play();
+            }
+            return f;
+        }
+        else {
+            throw new Error('Unable to create new Sprite. Game not yet initialized');
+        }
+    }
+    createSprite(key, x, y, startPlaying = true, startFrame = 0) {
+        if (this.game) {
+            const f = this.game.addAnimatedSprite(x, y, key, startFrame);
+            f.onFinishedAnimation = this.onFinishedAnimation.bind(this);
+            if (startPlaying) {
+                f.play();
+            }
+            return f;
+        }
+        else {
+            throw new Error('Unable to create new Sprite. Game not yet initialized');
+        }
     }
     init(canvasElement, outputElement, scope, runner) {
         console.log('[PHASER] INIT ISOMETRIC GAME');
@@ -774,7 +875,7 @@ class IsometricMapGame {
         this.figureConfigs
             .filter((v, i, a) => a.indexOf(v) === i)
             .forEach((cfg, idx) => {
-            game.addFigure(`figure.${idx}`, cfg.type, cfg.big, cfg.loaded);
+            game.resources.loadCustomFigure(`figure.${idx}`, cfg.type, cfg.big, cfg.loaded);
         });
         game.addImage('tile', this.tileConfig.uri);
         game.useIsometricMap(0, 30, this.columns, this.rows, 'tile');
@@ -787,11 +888,7 @@ class IsometricMapGame {
             this.figures = this.figureConfigs.map((cfg, i, a) => {
                 const idx = a.indexOf(cfg);
                 const name = `figure.${idx}`;
-                const f = game.addWalkingSpriteOnTile(0, 0, name, 0);
-                f.onEnterTile = this.onEnterTile.bind(this);
-                f.onLeaveTile = this.onLeaveTile.bind(this);
-                f.onFinishedWalking = this.onFinishedWalking.bind(this);
-                return f;
+                return self.createFigureOnTile(name, 0, 0);
             });
             this.onCreate();
             scene.input.on('pointerdown', (e) => {
@@ -806,6 +903,9 @@ class IsometricMapGame {
                     });
                 }
             });
+        };
+        game.onUpdate = (scene, game, time, delta) => {
+            self.onTick(time, delta);
         };
         game.start(false);
     }

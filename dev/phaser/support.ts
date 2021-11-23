@@ -22,6 +22,14 @@ interface GameSheetResource extends GameResource {
     frameConfig: Phaser.Types.Loader.FileTypes.ImageFrameConfig
     directional: boolean
     repeat: number
+    shiftY: number
+}
+
+interface SpriteConfig {
+    uri: string
+    repeat: number
+    frameConfig: Phaser.Types.Loader.FileTypes.ImageFrameConfig
+    shiftY: number
 }
 
 interface MapConfig {
@@ -43,18 +51,14 @@ interface AnimatedSpriteConfig {
     texture: string
     frame?: string | number
     speed?: number
+    tile?: IMapTile
+    shiftY?: number
 }
 
 interface FigureConfig {
     type: string
     big: boolean
     loaded: boolean
-}
-
-interface SpriteConfig {
-    uri: string
-    repeat: number
-    frameConfig: Phaser.Types.Loader.FileTypes.ImageFrameConfig
 }
 
 interface TileConfig {
@@ -67,18 +71,25 @@ class Tiles {
 }
 
 class Sprites {
-    public static readonly Fire: SpriteConfig[] = [{
-        uri: 'resources/tile/fire_00.png',
-        repeat: 0,
-        frameConfig: {
-            frameWidth: 90,
-            frameHeight: 83,
-            startFrame: 0,
-            endFrame: 251,
+    public static random(type: SpriteConfig[]): SpriteConfig {
+        return type[Math.floor(Math.random() * Sprites.Snow.length)]
+    }
+    public static readonly Fire: SpriteConfig[] = [
+        {
+            uri: 'resources/tile/fire_00.png',
+            repeat: 0,
+            frameConfig: {
+                frameWidth: 90,
+                frameHeight: 83,
+                startFrame: 0,
+                endFrame: 251,
+            },
+            shiftY: 0,
         },
-    }]
+    ]
 
     public static readonly Snow: SpriteConfig[] = [0, 1, 2, 3].map((nr) => {
+        const shift = [-8, 3, -8, 3]
         return {
             uri: `resources/tile/snow_${('00' + nr).slice(-2)}.png`,
             repeat: -1,
@@ -88,6 +99,7 @@ class Sprites {
                 startFrame: 0,
                 endFrame: 125,
             },
+            shiftY: shift[nr],
         }
     })
 
@@ -101,6 +113,7 @@ class Sprites {
                 startFrame: 0,
                 endFrame: 59,
             },
+            shiftY: 0,
         }
     })
 
@@ -114,6 +127,7 @@ class Sprites {
                 startFrame: 0,
                 endFrame: 59,
             },
+            shiftY: 0,
         }
     })
 
@@ -127,6 +141,7 @@ class Sprites {
                 startFrame: 0,
                 endFrame: 0,
             },
+            shiftY: 0,
         }
     })
 
@@ -142,6 +157,7 @@ class Sprites {
                 startFrame: 0,
                 endFrame: 0,
             },
+            shiftY: 0,
         }
     })
 
@@ -157,6 +173,7 @@ class Sprites {
                 startFrame: 0,
                 endFrame: 0,
             },
+            shiftY: 0,
         }
     })
 }
@@ -313,9 +330,38 @@ class AnimatedSprite extends BaseAnimatedSprite {
 
     static add(game: Game, scene: Phaser.Scene, config: AnimatedSpriteConfig): AnimatedSprite {
         const s = scene.add.sprite(config.x, config.y, config.texture, config.frame)
-        const oy = config.originY ? config.originY : 36 / 64
-        const ox = config.originX ? config.originX : 37 / 76
+        const shiftY = config.shiftY ? config.shiftY : 0
+        const oy =
+            (config.originY
+                ? config.originY
+                : config.tile
+                ? (config.y - config.tile.bottom.y) / s.height + 1
+                : 0.5) +
+            shiftY / s.height
+        const ox = config.originX ? config.originX : 0.5
         s.setOrigin(ox, oy)
+
+        // scene.add.circle(config.x, config.y, 2, 0x6666ff)
+        // scene.add.rectangle(
+        //     s.getBounds().centerX,
+        //     s.getBounds().centerY,
+        //     s.getBounds().width,
+        //     s.getBounds().height,
+        //     0x6666ff,
+        //     0.3
+        // )
+        // console.log(config.x, config.y)
+        // console.log(config.tile?.bottom)
+        // console.log(config.tile?.center)
+        // console.log(
+        //     oy,
+        //     game.map?.tileWidth,
+        //     game.map?.tileHeight,
+        //     game.map?.tileOverhang,
+        //     s.width,
+        //     s.height,
+        //     s.getBounds()
+        // )
 
         const sprite = new AnimatedSprite(game, s, config)
         if (config.speed) {
@@ -360,7 +406,8 @@ class WalkingSprite extends BaseAnimatedSprite {
 
     static add(game: Game, scene: Phaser.Scene, config: AnimatedSpriteConfig): WalkingSprite {
         const s = scene.add.sprite(config.x, config.y, config.texture, config.frame)
-        const oy = config.originY ? config.originY : 36 / 64
+        const shiftY = config.shiftY ? config.shiftY : 0
+        const oy = (config.originY ? config.originY : 36 / 64) + shiftY / s.height
         const ox = config.originX ? config.originX : 37 / 76
         s.setOrigin(ox, oy)
 
@@ -547,6 +594,7 @@ class IsometricTile implements IMapTile {
 interface ITiledMap {
     readonly tileWidth: number
     readonly tileHeight: number
+    readonly tileOverhang: number
     readonly rows: number
     readonly columns: number
 
@@ -664,6 +712,65 @@ class IsometricMap extends TiledMap {
     }
 }
 
+class ResoureManager {
+    constructor(private readonly game: Game) {}
+
+    public loadSprite(key: string, cfg: SpriteConfig) {
+        this.game.pushSpriteSheet({
+            key: key,
+            uri: cfg.uri,
+            frameConfig: cfg.frameConfig,
+            directional: false,
+            repeat: cfg.repeat,
+            shiftY: cfg.shiftY,
+        })
+    }
+
+    public loadCustomSprite(
+        key: string,
+        uri: string,
+        frameConfig: Phaser.Types.Loader.FileTypes.ImageFrameConfig,
+        directional: boolean = false,
+        shiftY: number = 0
+    ) {
+        const cfg: GameSheetResource = {
+            key: key,
+            uri: uri,
+            frameConfig: frameConfig,
+            directional: directional,
+            repeat: -1,
+            shiftY: shiftY,
+        }
+        this.game.pushSpriteSheet(cfg)
+    }
+
+    public loadFigure(key: string, cfg: FigureConfig) {
+        this.loadCustomFigure(key, cfg.type, cfg.big, cfg.loaded)
+    }
+
+    public loadCustomFigure(
+        key: string,
+        type: string,
+        big: boolean = false,
+        loaded: boolean = false
+    ) {
+        const cfg = {
+            key: key,
+            uri: `resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${
+                big ? '_big' : ''
+            }.png`,
+            frameConfig: {
+                frameWidth: big ? 76 : 38,
+                frameHeight: big ? 64 : 32,
+            },
+            directional: true,
+            repeat: -1,
+            shiftY: 0,
+        }
+        this.game.pushSpriteSheet(cfg)
+    }
+}
+
 class Game {
     private game: Phaser.Game | undefined
     public readonly domElement: JQuery
@@ -739,7 +846,7 @@ class Game {
                     key: `${cfg.key}`,
                     frames: self._scene!.anims.generateFrameNumbers(cfg.key, conf),
                     frameRate: 25,
-                    repeat: cfg.repeat ,
+                    repeat: cfg.repeat,
                 })
             }
         }
@@ -756,48 +863,7 @@ class Game {
         }
     }
 
-    public addSpriteSheet(
-        key: string,
-        uri: string,
-        frameConfig: Phaser.Types.Loader.FileTypes.ImageFrameConfig,
-        directional: boolean = false
-    ) {
-        const cfg = {
-            key: key,
-            uri: uri,
-            frameConfig: frameConfig,
-            directional: directional,
-            repeat: -1,
-        }
-        this.pushSpriteSheet(cfg)
-    }
-
-    public addSpriteSheetConfig(key: string, cfg: SpriteConfig) {
-        this.pushSpriteSheet({
-            key: key,
-            uri: cfg.uri,
-            frameConfig: cfg.frameConfig,
-            directional: false,
-            repeat: cfg.repeat,
-        })
-    }
-
-    public addFigure(key: string, type: string, big: boolean = false, loaded: boolean = false) {
-        const cfg = {
-            key: key,
-            uri: `resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${
-                big ? '_big' : ''
-            }.png`,
-            frameConfig: {
-                frameWidth: big ? 76 : 38,
-                frameHeight: big ? 64 : 32,
-            },
-            directional: true,
-            repeat: -1,
-        }
-        this.pushSpriteSheet(cfg)
-    }
-
+    public readonly resources = new ResoureManager(this)
     public pushSpriteSheet(cfg: GameSheetResource) {
         this.spritesheetResources.push(cfg)
         if (this._scene) {
@@ -836,7 +902,7 @@ class Game {
         originY?: number,
         speed?: number
     ) {
-        return this.addSpriteOnTile('walking', r, c, texture, frame, originX, originY, speed)
+        return this.addSpriteOnTile('walking', c, r, texture, frame, originX, originY, speed)
     }
 
     public addWalkingSprite(
@@ -860,7 +926,7 @@ class Game {
         originY?: number,
         speed?: number
     ) {
-        return this.addSpriteOnTile('animated', r, c, texture, frame, originX, originY, speed)
+        return this.addSpriteOnTile('animated', c, r, texture, frame, originX, originY, speed)
     }
 
     public addAnimatedSprite(
@@ -888,7 +954,7 @@ class Game {
         const tile = this.map?.getTile(c, r)
         if (tile) {
             const p = tile.center
-            return this.addSprite(type, p.x, p.y, texture, frame, originX, originY, speed)
+            return this.addSprite(type, p.x, p.y, texture, frame, originX, originY, speed, tile)
         } else {
             console.error(`[PHASER] Tile ${c}/${r} does not exists.`)
         }
@@ -903,8 +969,17 @@ class Game {
         frame?: string | number,
         originX?: number,
         originY?: number,
-        speed?: number
+        speed?: number,
+        tile?: IMapTile
     ) {
+        const sheetCfg: GameSheetResource | undefined = this.spritesheetResources.find(
+            (c) => c.key === texture
+        )
+        let shiftY = 0
+        if (sheetCfg) {
+            shiftY = sheetCfg.shiftY
+        }
+        console.log(sheetCfg)
         const cfg: AnimatedSpriteConfig = {
             type: type,
             x: x,
@@ -914,6 +989,8 @@ class Game {
             originX: originX,
             originY: originY,
             speed: speed,
+            tile: tile,
+            shiftY: shiftY,
         }
 
         this.spriteConfigs.push(cfg)
@@ -1067,6 +1144,9 @@ class IsometricMapGame {
         this.onEnterTile = () => {}
         this.onLeaveTile = () => {}
         this.onFinishedWalking = () => {}
+        this.onFinishedAnimation = () => {}
+        this.onTick = () => {}
+
         this.update = (txt) => {
             return txt
         }
@@ -1081,6 +1161,65 @@ class IsometricMapGame {
     private game: Game | undefined
     private figures: WalkingSprite[]
 
+    public createFigureOnTile(
+        key: string,
+        col: number,
+        row: number,
+        startFrame: number = 0
+    ): WalkingSprite {
+        if (this.game) {
+            const f = this.game.addWalkingSpriteOnTile(col, row, key, startFrame) as WalkingSprite
+
+            f.onEnterTile = this.onEnterTile.bind(this)
+            f.onLeaveTile = this.onLeaveTile.bind(this)
+            f.onFinishedWalking = this.onFinishedWalking.bind(this)
+
+            return f
+        } else {
+            throw new Error('Unable to create new Figure. Game not yet initialized')
+        }
+    }
+
+    public createSpriteOnTile(
+        key: string,
+        col: number,
+        row: number,
+        startPlaying: boolean = true,
+        startFrame: number = 0
+    ): AnimatedSprite {
+        if (this.game) {
+            const f = this.game.addAnimatedSpriteOnTile(col, row, key, startFrame) as AnimatedSprite
+            f.onFinishedAnimation = this.onFinishedAnimation.bind(this)
+            if (startPlaying) {
+                f.play()
+            }
+
+            return f
+        } else {
+            throw new Error('Unable to create new Sprite. Game not yet initialized')
+        }
+    }
+
+    public createSprite(
+        key: string,
+        x: number,
+        y: number,
+        startPlaying: boolean = true,
+        startFrame: number = 0
+    ): AnimatedSprite {
+        if (this.game) {
+            const f = this.game.addAnimatedSprite(x, y, key, startFrame) as AnimatedSprite
+            f.onFinishedAnimation = this.onFinishedAnimation.bind(this)
+            if (startPlaying) {
+                f.play()
+            }
+
+            return f
+        } else {
+            throw new Error('Unable to create new Sprite. Game not yet initialized')
+        }
+    }
+
     init(canvasElement: JQuery, outputElement: JQuery, scope: JQuery, runner: any) {
         console.log('[PHASER] INIT ISOMETRIC GAME')
         canvasElement.css('border', 'none')
@@ -1093,7 +1232,7 @@ class IsometricMapGame {
         this.figureConfigs
             .filter((v, i, a) => a.indexOf(v) === i)
             .forEach((cfg, idx) => {
-                game.addFigure(`figure.${idx}`, cfg.type, cfg.big, cfg.loaded)
+                game.resources.loadCustomFigure(`figure.${idx}`, cfg.type, cfg.big, cfg.loaded)
             })
 
         game.addImage('tile', this.tileConfig.uri)
@@ -1109,12 +1248,7 @@ class IsometricMapGame {
                 const idx = a.indexOf(cfg)
                 const name = `figure.${idx}`
 
-                const f = game.addWalkingSpriteOnTile(0, 0, name, 0) as WalkingSprite
-                f.onEnterTile = this.onEnterTile.bind(this)
-                f.onLeaveTile = this.onLeaveTile.bind(this)
-                f.onFinishedWalking = this.onFinishedWalking.bind(this)
-
-                return f
+                return self.createFigureOnTile(name, 0, 0)
             })
             this.onCreate()
 
@@ -1130,6 +1264,11 @@ class IsometricMapGame {
                 }
             })
         }
+
+        game.onUpdate = (scene: Phaser.Scene, game: Game, time: number, delta: number) => {
+            self.onTick(time, delta)
+        }
+
         game.start(false)
     }
 
@@ -1147,6 +1286,8 @@ class IsometricMapGame {
     public onEnterTile: (tile: IMapTile, figure: WalkingSprite) => void
     public onLeaveTile: (tile: IMapTile, figure: WalkingSprite) => void
     public onFinishedWalking: (figure: WalkingSprite) => void
+    public onFinishedAnimation: (sprite: AnimatedSprite) => void
+    public onTick: (time: number, delta: number) => void
 
     public onUpdate: (
         txt: string,
