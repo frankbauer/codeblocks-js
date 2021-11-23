@@ -209,12 +209,16 @@ Figures.BigGrinchLoaded = {
     big: true,
     loaded: true,
 };
+let serial = 10000000;
+let objectCache = [];
 class BaseAnimatedSprite {
-    constructor(game, sprite, config) {
+    constructor(game, sprite, config, prefix = '') {
         this.base_v = 5;
         this.sprite = sprite;
         this.game = game;
         this.animKey = config.texture;
+        this.uid = `${prefix}${serial++}`;
+        objectCache.push(this);
     }
     setOrigin(x, y) {
         this.sprite.setOrigin(x, y);
@@ -224,12 +228,28 @@ class BaseAnimatedSprite {
     }
     remove() {
         this.game.removeSprite(this);
+        objectCache = objectCache.filter((o) => o.uid !== this.uid);
     }
     update(time, delta) { }
+    static getObject(uid) {
+        return objectCache.find((o) => o.uid === uid);
+    }
+    moveToTile(c, r) {
+        var _a;
+        const tile = (_a = this.game.map) === null || _a === void 0 ? void 0 : _a.getTile(c, r);
+        if (tile) {
+            const p = tile.center;
+            this.moveTo(p.x, p.y);
+        }
+    }
+    moveTo(x, y) {
+        this.sprite.x = x;
+        this.sprite.y = y;
+    }
 }
 class AnimatedSprite extends BaseAnimatedSprite {
     constructor(game, sprite, config) {
-        super(game, sprite, config);
+        super(game, sprite, config, 'animated');
         this.onFinishedAnimation = () => { };
         sprite.on('animationcomplete', this.finishedAnimation, this);
     }
@@ -283,7 +303,7 @@ class AnimatedSprite extends BaseAnimatedSprite {
 }
 class WalkingSprite extends BaseAnimatedSprite {
     constructor(game, sprite, config) {
-        super(game, sprite, config);
+        super(game, sprite, config, 'walking');
         this.move = undefined;
         this.onEnterTile = () => { };
         this.onLeaveTile = () => { };
@@ -301,19 +321,6 @@ class WalkingSprite extends BaseAnimatedSprite {
             sprite.setBaseSpeed(config.speed);
         }
         return sprite;
-    }
-    moveToTile(c, r) {
-        var _a;
-        const tile = (_a = this.game.map) === null || _a === void 0 ? void 0 : _a.getTile(c, r);
-        if (tile) {
-            const p = tile.center;
-            this.moveTo(p.x, p.y);
-        }
-    }
-    moveTo(x, y) {
-        this.sprite.x = x;
-        this.sprite.y = y;
-        this.updateCurrentTile();
     }
     walkToTile(c, r) {
         var _a;
@@ -337,6 +344,10 @@ class WalkingSprite extends BaseAnimatedSprite {
                 d: -1,
             },
         };
+    }
+    moveTo(x, y) {
+        super.moveTo(x, y);
+        this.updateCurrentTile();
     }
     get currentTile() {
         return this._currentTile;
@@ -801,14 +812,158 @@ class Game {
         }
     }
 }
+class ObjectMessage {
+    constructor(data) {
+        this.object = BaseAnimatedSprite.getObject(data.ID);
+        this.data = data;
+    }
+    get sprite() {
+        return this.object;
+    }
+    get walkingSprite() {
+        return this.object;
+    }
+    get animatedSprite() {
+        return this.object;
+    }
+    get r() {
+        return this.data.r ? this.data.r : 0;
+    }
+    get c() {
+        return this.data.c ? this.data.c : 0;
+    }
+    get type() {
+        return this.data.type;
+    }
+    get ID() {
+        return this.data.ID;
+    }
+    get start() {
+        return this.data.start;
+    }
+    get frame() {
+        return this.data.frame;
+    }
+}
+class IsometricMapGameRPC {
+    constructor(game, manager, runner) {
+        this.game = game;
+        this.manager = manager;
+        this.runner = runner;
+    }
+    defaultMessageHandling() {
+        this.manager.onMessage = this.handleMessage.bind(this);
+        this.manager.onClick = this.onClick.bind(this);
+        this.manager.addArgumentsTo = this.addArgumentsTo.bind(this);
+        this.manager.onEnterTile = this.onEnterTile.bind(this);
+        this.manager.onLeaveTile = this.onLeaveTile.bind(this);
+        this.manager.onFinishedWalking = this.onFinishedWalking.bind(this);
+        this.manager.onFinishedAnimation = this.onFinishedAnimation.bind(this);
+        return this;
+    }
+    handleMessage(cmd, data) {
+        const msg = new ObjectMessage(data);
+        if (cmd === 'createSpriteOnTile' && data.ID) {
+            this.createSpriteOnTile(msg);
+            return true;
+        }
+        else if (cmd === 'createFigureOnTile' && data.ID) {
+            this.createFigureOnTile(msg);
+            return true;
+        }
+        else if (cmd === 'walkToTile' && data.ID) {
+            this.walkToTile(msg);
+            return true;
+        }
+        else if (cmd === 'walkTo' && data.ID) {
+            this.walkTo(msg);
+            return true;
+        }
+        else if (cmd === 'moveToTile' && data.ID) {
+            this.moveToTile(msg);
+            return true;
+        }
+        else if (cmd === 'moveTo' && data.ID) {
+            this.moveTo(msg);
+            return true;
+        }
+        else if (cmd === 'remove' && data.ID) {
+            this.remove(msg);
+            return true;
+        }
+        else if (cmd === 'startAnimation' && data.ID) {
+            this.startAnimation(msg);
+            return true;
+        }
+        else if (cmd === 'stopAnimation' && data.ID) {
+            this.stopAnimation(msg);
+            return true;
+        }
+        else {
+            console.log('Received:', cmd, data);
+            return false;
+        }
+    }
+    addArgumentsTo(args) {
+        if (Array.isArray(args)) {
+            args[0] = 'isometric';
+            args[1] = `${this.manager.columns}`;
+            args[2] = `${this.manager.rows}`;
+        }
+    }
+    onClick(tile) {
+        this.runner.postMessage('clickedTile', { c: tile.column, r: tile.row });
+    }
+    onEnterTile(tile, figure) {
+        this.runner.postMessage('onEnterTile', { ID: figure.uid, c: tile.column, r: tile.row });
+    }
+    onLeaveTile(tile, figure) {
+        this.runner.postMessage('onLeaveTile', { ID: figure.uid, c: tile.column, r: tile.row });
+    }
+    onFinishedWalking(figure) {
+        this.runner.postMessage('onFinishedWalking', { ID: figure.uid });
+    }
+    onFinishedAnimation(sprite) {
+        this.runner.postMessage('onFinishedAnimation', { ID: sprite.uid });
+    }
+    remove(msg) {
+        msg.sprite.remove();
+    }
+    startAnimation(msg) {
+        msg.animatedSprite.play();
+    }
+    stopAnimation(msg) {
+        msg.animatedSprite.stop();
+    }
+    walkToTile(msg) {
+        msg.walkingSprite.walkToTile(msg.c, msg.r);
+    }
+    walkTo(msg) {
+        msg.walkingSprite.walkTo(msg.c, msg.r);
+    }
+    moveToTile(msg) {
+        msg.sprite.moveToTile(msg.c, msg.r);
+    }
+    moveTo(msg) {
+        msg.sprite.moveTo(msg.c, msg.r);
+    }
+    createFigureOnTile(msg) {
+        const figure = this.manager.createFigureOnTile(msg.type, msg.c, msg.r, msg.frame !== undefined ? msg.frame : 0);
+        figure.uid = msg.ID;
+        console.log('[PHASER] RPC createFigureOnTile', figure.uid, msg.type, msg.c, msg.r);
+    }
+    createSpriteOnTile(msg) {
+        const sprite = this.manager.createSpriteOnTile(msg.type, msg.c, msg.r, msg.start !== undefined ? msg.start : true, msg.frame !== undefined ? msg.frame : 0);
+        sprite.uid = msg.ID;
+    }
+}
 class IsometricMapGame {
-    constructor(columns, rows, tileConfig, figureConfigs, backgroundColor, onPreload) {
+    constructor(columns, rows, tileConfig, backgroundColor, onInit) {
         this.columns = columns;
         this.rows = rows;
         this.tileConfig = tileConfig;
-        this.figureConfigs = figureConfigs;
         this.backgroundColor = backgroundColor;
-        this.onPreload = onPreload;
+        this.onInit = onInit;
         this.scope = jQuery();
         this.figures = [];
         this.onCreate = () => { };
@@ -826,6 +981,7 @@ class IsometricMapGame {
         this.whenFinished = () => { };
         this.addArgumentsTo = () => { };
         this.onUpdate = () => { };
+        this.onPreload = () => { };
     }
     createFigureOnTile(key, col, row, startFrame = 0) {
         if (this.game) {
@@ -870,34 +1026,26 @@ class IsometricMapGame {
         canvasElement.css('border', 'none');
         const self = this;
         this.scope = scope;
+        objectCache = [];
+        serial = 10000000;
         const game = new Game(canvasElement, this.backgroundColor);
         this.game = game;
-        this.figureConfigs
-            .filter((v, i, a) => a.indexOf(v) === i)
-            .forEach((cfg, idx) => {
-            game.resources.loadCustomFigure(`figure.${idx}`, cfg.type, cfg.big, cfg.loaded);
-        });
         game.addImage('tile', this.tileConfig.uri);
         game.useIsometricMap(0, 30, this.columns, this.rows, 'tile');
+        if (this.onInit) {
+            this.onInit(game, this, canvasElement, outputElement, scope, runner);
+        }
         game.onPreload = (scene, game) => {
-            if (this.onPreload) {
-                this.onPreload(game, this, canvasElement, outputElement, scope, runner);
-            }
+            this.onPreload(game, this);
         };
         game.onCreate = (scene, game) => {
-            this.figures = this.figureConfigs.map((cfg, i, a) => {
-                const idx = a.indexOf(cfg);
-                const name = `figure.${idx}`;
-                return self.createFigureOnTile(name, 0, 0);
-            });
             this.onCreate();
             scene.input.on('pointerdown', (e) => {
                 var _a;
                 const t = (_a = game.map) === null || _a === void 0 ? void 0 : _a.getTileAt(e.x, e.y);
                 if (t !== undefined) {
                     this.onClick(t);
-                    console.log('[PHASER] tile = ', t.column, t.row);
-                    runner.postMessage('click', {
+                    runner.postMessage('clickedTile', {
                         r: t.row,
                         c: t.column,
                     });

@@ -284,21 +284,27 @@ class Figures {
         loaded: true,
     }
 }
-
+let serial = 10000000
+let objectCache: BaseAnimatedSprite[] = []
 class BaseAnimatedSprite {
     public readonly sprite: Phaser.GameObjects.Sprite
     protected readonly game: Game
     protected base_v: number = 5
     protected animKey: string
+    public uid: string
 
     protected constructor(
         game: Game,
         sprite: Phaser.GameObjects.Sprite,
-        config: AnimatedSpriteConfig
+        config: AnimatedSpriteConfig,
+        prefix: string = ''
     ) {
         this.sprite = sprite
         this.game = game
         this.animKey = config.texture
+        this.uid = `${prefix}${serial++}`
+
+        objectCache.push(this)
     }
 
     setOrigin(x: number, y: number) {
@@ -311,9 +317,27 @@ class BaseAnimatedSprite {
 
     remove() {
         this.game.removeSprite(this)
+        objectCache = objectCache.filter((o) => o.uid !== this.uid)
     }
 
     update(time: number, delta: number) {}
+
+    public static getObject(uid: string) {
+        return objectCache.find((o) => o.uid === uid)
+    }
+
+    moveToTile(c: number, r: number) {
+        const tile = this.game.map?.getTile(c, r)
+        if (tile) {
+            const p = tile.center
+            this.moveTo(p.x, p.y)
+        }
+    }
+
+    moveTo(x: number, y: number) {
+        this.sprite.x = x
+        this.sprite.y = y
+    }
 }
 
 class AnimatedSprite extends BaseAnimatedSprite {
@@ -323,7 +347,7 @@ class AnimatedSprite extends BaseAnimatedSprite {
         sprite: Phaser.GameObjects.Sprite,
         config: AnimatedSpriteConfig
     ) {
-        super(game, sprite, config)
+        super(game, sprite, config, 'animated')
         this.onFinishedAnimation = () => {}
         sprite.on('animationcomplete', this.finishedAnimation, this)
     }
@@ -395,7 +419,7 @@ class WalkingSprite extends BaseAnimatedSprite {
         sprite: Phaser.GameObjects.Sprite,
         config: AnimatedSpriteConfig
     ) {
-        super(game, sprite, config)
+        super(game, sprite, config, 'walking')
 
         this.onEnterTile = () => {}
         this.onLeaveTile = () => {}
@@ -416,21 +440,6 @@ class WalkingSprite extends BaseAnimatedSprite {
             sprite.setBaseSpeed(config.speed)
         }
         return sprite
-    }
-
-    moveToTile(c: number, r: number) {
-        const tile = this.game.map?.getTile(c, r)
-        if (tile) {
-            const p = tile.center
-            this.moveTo(p.x, p.y)
-        }
-    }
-
-    moveTo(x: number, y: number) {
-        this.sprite.x = x
-        this.sprite.y = y
-
-        this.updateCurrentTile()
     }
 
     walkToTile(c: number, r: number) {
@@ -455,6 +464,11 @@ class WalkingSprite extends BaseAnimatedSprite {
                 d: -1,
             },
         }
+    }
+
+    moveTo(x: number, y: number) {
+        super.moveTo(x, y)
+        this.updateCurrentTile()
     }
 
     _currentTile: IMapTile | undefined
@@ -1120,14 +1134,189 @@ class Game {
     }
 }
 
+class ObjectMessage {
+    public readonly object: BaseAnimatedSprite | undefined
+    protected readonly data: any
+    constructor(data: any) {
+        this.object = BaseAnimatedSprite.getObject(data.ID)
+        this.data = data
+    }
+
+    public get sprite(): BaseAnimatedSprite {
+        return this.object as BaseAnimatedSprite
+    }
+
+    public get walkingSprite(): WalkingSprite {
+        return this.object as WalkingSprite
+    }
+
+    public get animatedSprite(): AnimatedSprite {
+        return this.object as AnimatedSprite
+    }
+
+    public get r(): number {
+        return this.data.r ? this.data.r : 0
+    }
+
+    public get c(): number {
+        return this.data.c ? this.data.c : 0
+    }
+
+    public get type(): string {
+        return this.data.type
+    }
+
+    public get ID(): string {
+        return this.data.ID
+    }
+
+    public get start(): boolean | undefined {
+        return this.data.start
+    }
+
+    public get frame(): number | undefined {
+        return this.data.frame
+    }
+}
+
+class IsometricMapGameRPC {
+    constructor(
+        public readonly game: Game,
+        public readonly manager: IsometricMapGame,
+        protected readonly runner: any
+    ) {}
+
+    public defaultMessageHandling(): IsometricMapGameRPC {
+        this.manager.onMessage = this.handleMessage.bind(this)
+        this.manager.onClick = this.onClick.bind(this)
+        this.manager.addArgumentsTo = this.addArgumentsTo.bind(this)
+
+        this.manager.onEnterTile = this.onEnterTile.bind(this)
+        this.manager.onLeaveTile = this.onLeaveTile.bind(this)
+        this.manager.onFinishedWalking = this.onFinishedWalking.bind(this)
+
+        this.manager.onFinishedAnimation = this.onFinishedAnimation.bind(this)
+
+        return this
+    }
+
+    public handleMessage(cmd: string, data: any): boolean {
+        const msg = new ObjectMessage(data)
+        if (cmd === 'createSpriteOnTile' && data.ID) {
+            this.createSpriteOnTile(msg)
+            return true
+        } else if (cmd === 'createFigureOnTile' && data.ID) {
+            this.createFigureOnTile(msg)
+            return true
+        } else if (cmd === 'walkToTile' && data.ID) {
+            this.walkToTile(msg)
+            return true
+        } else if (cmd === 'walkTo' && data.ID) {
+            this.walkTo(msg)
+            return true
+        } else if (cmd === 'moveToTile' && data.ID) {
+            this.moveToTile(msg)
+            return true
+        } else if (cmd === 'moveTo' && data.ID) {
+            this.moveTo(msg)
+            return true
+        } else if (cmd === 'remove' && data.ID) {
+            this.remove(msg)
+            return true
+        } else if (cmd === 'startAnimation' && data.ID) {
+            this.startAnimation(msg)
+            return true
+        } else if (cmd === 'stopAnimation' && data.ID) {
+            this.stopAnimation(msg)
+            return true
+        } else {
+            console.log('Received:', cmd, data)
+            return false
+        }
+    }
+
+    public addArgumentsTo(args: object | string[]) {
+        if (Array.isArray(args)) {
+            args[0] = 'isometric'
+            args[1] = `${this.manager.columns}`
+            args[2] = `${this.manager.rows}`
+        }
+    }
+
+    public onClick(tile: IMapTile) {
+        this.runner.postMessage('clickedTile', { c: tile.column, r: tile.row })
+    }
+    public onEnterTile(tile: IMapTile, figure: WalkingSprite) {
+        this.runner.postMessage('onEnterTile', { ID: figure.uid, c: tile.column, r: tile.row })
+    }
+    public onLeaveTile(tile: IMapTile, figure: WalkingSprite) {
+        this.runner.postMessage('onLeaveTile', { ID: figure.uid, c: tile.column, r: tile.row })
+    }
+    public onFinishedWalking(figure: WalkingSprite) {
+        this.runner.postMessage('onFinishedWalking', { ID: figure.uid })
+    }
+    public onFinishedAnimation(sprite: AnimatedSprite) {
+        this.runner.postMessage('onFinishedAnimation', { ID: sprite.uid })
+    }
+
+    private remove(msg: ObjectMessage) {
+        msg.sprite.remove()
+    }
+
+    private startAnimation(msg: ObjectMessage) {
+        msg.animatedSprite.play()
+    }
+
+    private stopAnimation(msg: ObjectMessage) {
+        msg.animatedSprite.stop()
+    }
+
+    private walkToTile(msg: ObjectMessage) {
+        msg.walkingSprite.walkToTile(msg.c, msg.r)
+    }
+
+    private walkTo(msg: ObjectMessage) {
+        msg.walkingSprite.walkTo(msg.c, msg.r)
+    }
+
+    private moveToTile(msg: ObjectMessage) {
+        msg.sprite.moveToTile(msg.c, msg.r)
+    }
+
+    private moveTo(msg: ObjectMessage) {
+        msg.sprite.moveTo(msg.c, msg.r)
+    }
+
+    private createFigureOnTile(msg: ObjectMessage) {
+        const figure = this.manager.createFigureOnTile(
+            msg.type,
+            msg.c,
+            msg.r,
+            msg.frame !== undefined ? msg.frame : 0
+        )
+        figure.uid = msg.ID
+        console.log('[PHASER] RPC createFigureOnTile', figure.uid, msg.type, msg.c, msg.r)
+    }
+
+    private createSpriteOnTile(msg: ObjectMessage) {
+        const sprite = this.manager.createSpriteOnTile(
+            msg.type,
+            msg.c,
+            msg.r,
+            msg.start !== undefined ? msg.start : true,
+            msg.frame !== undefined ? msg.frame : 0
+        )
+        sprite.uid = msg.ID
+    }
+}
+
 class IsometricMapGame {
     constructor(
         public readonly columns: number,
         public readonly rows: number,
         private readonly tileConfig: TileConfig,
-        private readonly figureConfigs: FigureConfig[],
         private readonly backgroundColor: string,
-        private readonly onPreload?: (
+        private readonly onInit?: (
             game: Game,
             manager: IsometricMapGame,
             canvasElement: JQuery,
@@ -1155,6 +1344,7 @@ class IsometricMapGame {
         this.whenFinished = () => {}
         this.addArgumentsTo = () => {}
         this.onUpdate = () => {}
+        this.onPreload = () => {}
     }
 
     private scope: JQuery
@@ -1225,39 +1415,31 @@ class IsometricMapGame {
         canvasElement.css('border', 'none')
         const self = this
         this.scope = scope
+        objectCache = []
+        serial = 10000000
 
         const game = new Game(canvasElement, this.backgroundColor)
         this.game = game
 
-        this.figureConfigs
-            .filter((v, i, a) => a.indexOf(v) === i)
-            .forEach((cfg, idx) => {
-                game.resources.loadCustomFigure(`figure.${idx}`, cfg.type, cfg.big, cfg.loaded)
-            })
-
         game.addImage('tile', this.tileConfig.uri)
         game.useIsometricMap(0, 30, this.columns, this.rows, 'tile')
 
-        game.onPreload = (scene, game) => {
-            if (this.onPreload) {
-                this.onPreload(game, this, canvasElement, outputElement, scope, runner)
-            }
+        if (this.onInit) {
+            this.onInit(game, this, canvasElement, outputElement, scope, runner)
         }
-        game.onCreate = (scene, game) => {
-            this.figures = this.figureConfigs.map((cfg, i, a) => {
-                const idx = a.indexOf(cfg)
-                const name = `figure.${idx}`
 
-                return self.createFigureOnTile(name, 0, 0)
-            })
+        game.onPreload = (scene, game) => {
+            this.onPreload(game, this)
+        }
+
+        game.onCreate = (scene, game) => {
             this.onCreate()
 
             scene.input.on('pointerdown', (e: any) => {
                 const t = game.map?.getTileAt(e.x, e.y)
                 if (t !== undefined) {
                     this.onClick(t)
-                    console.log('[PHASER] tile = ', t.column, t.row)
-                    runner.postMessage('click', {
+                    runner.postMessage('clickedTile', {
                         r: t.row,
                         c: t.column,
                     })
@@ -1281,6 +1463,7 @@ class IsometricMapGame {
         this.onUpdate(txt, json, canvasElement, outputElement)
     }
 
+    public onPreload: (game: Game, manager: IsometricMapGame) => void
     public onCreate: () => void
     public onClick: (tile: IMapTile) => void
     public onEnterTile: (tile: IMapTile, figure: WalkingSprite) => void
