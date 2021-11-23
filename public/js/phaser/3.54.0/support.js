@@ -8,7 +8,7 @@ Tiles.Checkers = { uri: 'resources/tile/checker.png' };
 Tiles.Gras = { uri: 'resources/tile/gras.png' };
 class Sprites {
     static random(type) {
-        return type[Math.floor(Math.random() * Sprites.Snow.length)];
+        return type[Math.floor(Math.random() * type.length)];
     }
 }
 Sprites.Fire = [
@@ -615,8 +615,8 @@ class Game {
             }
             else {
                 const conf = {
-                    start: cfg.frameConfig.startFrame,
-                    end: cfg.frameConfig.endFrame,
+                    start: cfg.frameConfig.startFrame === undefined ? 0 : cfg.frameConfig.startFrame,
+                    end: cfg.frameConfig.endFrame === undefined ? 0 : cfg.frameConfig.endFrame,
                 };
                 console.log(`[PHASER] Add Anim ${cfg.key}`);
                 self._scene.anims.create({
@@ -695,7 +695,6 @@ class Game {
         if (sheetCfg) {
             shiftY = sheetCfg.shiftY;
         }
-        console.log(sheetCfg);
         const cfg = {
             type: type,
             x: x,
@@ -900,7 +899,7 @@ class IsometricMapGameRPC {
             return true;
         }
         else {
-            console.log('Received:', cmd, data);
+            console.log('Unhandled message:', cmd, data);
             return false;
         }
     }

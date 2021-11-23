@@ -72,7 +72,7 @@ class Tiles {
 
 class Sprites {
     public static random(type: SpriteConfig[]): SpriteConfig {
-        return type[Math.floor(Math.random() * Sprites.Snow.length)]
+        return type[Math.floor(Math.random() * type.length)]
     }
     public static readonly Fire: SpriteConfig[] = [
         {
@@ -851,8 +851,9 @@ class Game {
                 })
             } else {
                 const conf = {
-                    start: cfg.frameConfig.startFrame,
-                    end: cfg.frameConfig.endFrame,
+                    start:
+                        cfg.frameConfig.startFrame === undefined ? 0 : cfg.frameConfig.startFrame,
+                    end: cfg.frameConfig.endFrame === undefined ? 0 : cfg.frameConfig.endFrame,
                 }
 
                 console.log(`[PHASER] Add Anim ${cfg.key}`)
@@ -993,7 +994,7 @@ class Game {
         if (sheetCfg) {
             shiftY = sheetCfg.shiftY
         }
-        console.log(sheetCfg)
+
         const cfg: AnimatedSpriteConfig = {
             type: type,
             x: x,
@@ -1230,7 +1231,7 @@ class IsometricMapGameRPC {
             this.stopAnimation(msg)
             return true
         } else {
-            console.log('Received:', cmd, data)
+            console.log('Unhandled message:', cmd, data)
             return false
         }
     }

@@ -99,16 +99,19 @@ exports = {
                 <block data-visible-lines="auto" data-expanded=1>import de.fau.tf.lgdv.phaser.*;
 import de.fau.tf.lgdv.*;
 
-class MyGame extends MapGame implements GameEventHandler{
+class MyGame extends MapGame implements GameEventHandler, AnimatedSpriteEventHandler{
     private final Figure blue;
     private final Figure grinch;
+    private final AnimatedSprite fire;
     private final AnimatedSprite snow;
 
     public MyGame(String[] args){
         super(args);
-        blue = this.createFigureOnTile("blue", 1, 1);
-        grinch = this.createFigureOnTile("grinch", 2, 1);
         snow = this.createAnimatedSpriteOnTile("snow", 0, 0, true, 10);
+        fire = new AnimatedSprite(this, "fire", this.columns-1, this.rows-1);
+        blue = new Figure(this, "blue", 1, 1);
+        grinch = this.createFigureOnTile("grinch", 2, 1);
+        
     }
 
     @Override
@@ -122,6 +125,16 @@ class MyGame extends MapGame implements GameEventHandler{
         System.out.println("Tile:" + c + " " + r);
         grinch.walkToTile(c, r);
         blue.walkToTile(r, c);
+    }
+
+    @Override
+    public void onFinishedAnimation(AnimatedSprite s){
+        s.remove();
+        
+        System.out.println("Removed " + s);                     
+        System.out.println(this);        
+        this.getFigureStream().forEach(f -> System.out.println(f));
+        this.getSpriteStream().forEach(f -> System.out.println(f));
     }
 }
 
@@ -141,6 +154,7 @@ public class One {
 </block>
                 <script as="playground" type="application/javascript">
 exports = new IsometricMapGame(4, 3, Tiles.Checkers, '#fdfdfd', (game, manager, canvasElement, outputElement, scope, runner)=>{
+    game.resources.loadSprite('fire', Sprites.random(Sprites.Fire))
     game.resources.loadSprite('snow', Sprites.random(Sprites.Snow))
     game.resources.loadFigure('grinch', Figures.BigGrinch)
     game.resources.loadFigure('blue', Figures.Blue)
