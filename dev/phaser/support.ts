@@ -289,7 +289,6 @@ let objectCache: BaseAnimatedSprite[] = []
 class BaseAnimatedSprite {
     public readonly sprite: Phaser.GameObjects.Sprite
     protected readonly game: Game
-    protected base_v: number = 5
     protected animKey: string
     public uid: string
 
@@ -309,10 +308,6 @@ class BaseAnimatedSprite {
 
     setOrigin(x: number, y: number) {
         this.sprite.setOrigin(x, y)
-    }
-
-    setBaseSpeed(bsp: number) {
-        this.base_v = bsp
     }
 
     remove() {
@@ -388,9 +383,6 @@ class AnimatedSprite extends BaseAnimatedSprite {
         // )
 
         const sprite = new AnimatedSprite(game, s, config)
-        if (config.speed) {
-            sprite.setBaseSpeed(config.speed)
-        }
         return sprite
     }
 
@@ -409,6 +401,7 @@ class AnimatedSprite extends BaseAnimatedSprite {
 
 class WalkingSprite extends BaseAnimatedSprite {
     private move: GdIMove | undefined = undefined
+    protected base_v: number = 5
 
     public onEnterTile: (tile: IMapTile, figure: WalkingSprite) => void
     public onLeaveTile: (tile: IMapTile, figure: WalkingSprite) => void
@@ -440,6 +433,10 @@ class WalkingSprite extends BaseAnimatedSprite {
             sprite.setBaseSpeed(config.speed)
         }
         return sprite
+    }
+
+    setBaseSpeed(bsp: number) {
+        this.base_v = bsp
     }
 
     walkToTile(c: number, r: number) {
@@ -488,6 +485,13 @@ class WalkingSprite extends BaseAnimatedSprite {
             }
             this._currentTile = tile
         }
+    }
+
+    public stopWalking() {
+        this.sprite.anims.stop()
+        this.sprite.setFrame(0)
+        this.move = undefined
+        this.onFinishedWalking(this)
     }
 
     update(time: number, delta: number) {
@@ -727,12 +731,28 @@ class IsometricMap extends TiledMap {
 }
 
 class ResoureManager {
-    constructor(private readonly game: Game) {}
+    public readonly baseURL: string
+    constructor(private readonly game: Game) {
+        this.baseURL = this.loadBaseURL(document)
+    }
+    private loadBaseURL(scope: HTMLElement | Document): string {
+        let baseurl = ''
+        const settings = scope.querySelectorAll('meta[name^=codeblocks]')
+        settings.forEach((opt) => {
+            const name = opt.getAttribute('name')
+            const value = opt.getAttribute('content')
+
+            if (name == 'codeblocks-baseurl' && value) {
+                baseurl = value
+            }
+        })
+        return baseurl + './'
+    }
 
     public loadSprite(key: string, cfg: SpriteConfig) {
         this.game.pushSpriteSheet({
             key: key,
-            uri: cfg.uri,
+            uri: this.baseURL + cfg.uri,
             frameConfig: cfg.frameConfig,
             directional: false,
             repeat: cfg.repeat,
@@ -749,7 +769,7 @@ class ResoureManager {
     ) {
         const cfg: GameSheetResource = {
             key: key,
-            uri: uri,
+            uri: this.baseURL + uri,
             frameConfig: frameConfig,
             directional: directional,
             repeat: -1,
@@ -770,7 +790,7 @@ class ResoureManager {
     ) {
         const cfg = {
             key: key,
-            uri: `resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${
+            uri: `${this.baseURL}resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${
                 big ? '_big' : ''
             }.png`,
             frameConfig: {
@@ -782,6 +802,10 @@ class ResoureManager {
             shiftY: 0,
         }
         this.game.pushSpriteSheet(cfg)
+    }
+
+    public loadImage(key: string, uri: String) {
+        this.game.pushImage('tile', this.baseURL + uri)
     }
 }
 
@@ -822,7 +846,7 @@ class Game {
         return this._scene
     }
 
-    public addImage(key: string, uri: string) {
+    public pushImage(key: string, uri: string) {
         this.imagesResources.push({ key: key, uri: uri })
 
         if (this._scene) {
@@ -1178,6 +1202,10 @@ class ObjectMessage {
     public get frame(): number | undefined {
         return this.data.frame
     }
+
+    public get speed(): number | undefined {
+        return this.data.speed
+    }
 }
 
 class IsometricMapGameRPC {
@@ -1230,6 +1258,12 @@ class IsometricMapGameRPC {
         } else if (cmd === 'stopAnimation' && data.ID) {
             this.stopAnimation(msg)
             return true
+        } else if (cmd === 'setBaseSpeed' && data.ID) {
+            this.setBaseSpeed(msg)
+            return true
+        } else if (cmd === 'stopWalking' && data.ID) {
+            this.stopWalking(msg)
+            return true
         } else {
             console.log('Unhandled message:', cmd, data)
             return false
@@ -1272,6 +1306,10 @@ class IsometricMapGameRPC {
         msg.animatedSprite.stop()
     }
 
+    private stopWalking(msg: ObjectMessage) {
+        msg.walkingSprite.stopWalking()
+    }
+
     private walkToTile(msg: ObjectMessage) {
         msg.walkingSprite.walkToTile(msg.c, msg.r)
     }
@@ -1308,6 +1346,11 @@ class IsometricMapGameRPC {
             msg.frame !== undefined ? msg.frame : 0
         )
         sprite.uid = msg.ID
+        console.log('[PHASER] RPC createSpriteOnTile', sprite.uid, msg.type, msg.c, msg.r)
+    }
+
+    private setBaseSpeed(msg: ObjectMessage) {
+        msg.walkingSprite.setBaseSpeed(msg.speed === undefined ? 5 : msg.speed)
     }
 }
 
@@ -1422,7 +1465,7 @@ class IsometricMapGame {
         const game = new Game(canvasElement, this.backgroundColor)
         this.game = game
 
-        game.addImage('tile', this.tileConfig.uri)
+        game.resources.loadImage('tile', this.tileConfig.uri)
         game.useIsometricMap(0, 30, this.columns, this.rows, 'tile')
 
         if (this.onInit) {

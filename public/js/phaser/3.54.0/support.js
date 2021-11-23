@@ -213,7 +213,6 @@ let serial = 10000000;
 let objectCache = [];
 class BaseAnimatedSprite {
     constructor(game, sprite, config, prefix = '') {
-        this.base_v = 5;
         this.sprite = sprite;
         this.game = game;
         this.animKey = config.texture;
@@ -222,9 +221,6 @@ class BaseAnimatedSprite {
     }
     setOrigin(x, y) {
         this.sprite.setOrigin(x, y);
-    }
-    setBaseSpeed(bsp) {
-        this.base_v = bsp;
     }
     remove() {
         this.game.removeSprite(this);
@@ -286,9 +282,6 @@ class AnimatedSprite extends BaseAnimatedSprite {
         //     s.getBounds()
         // )
         const sprite = new AnimatedSprite(game, s, config);
-        if (config.speed) {
-            sprite.setBaseSpeed(config.speed);
-        }
         return sprite;
     }
     finishedAnimation() {
@@ -305,6 +298,7 @@ class WalkingSprite extends BaseAnimatedSprite {
     constructor(game, sprite, config) {
         super(game, sprite, config, 'walking');
         this.move = undefined;
+        this.base_v = 5;
         this.onEnterTile = () => { };
         this.onLeaveTile = () => { };
         this.onFinishedWalking = () => { };
@@ -321,6 +315,9 @@ class WalkingSprite extends BaseAnimatedSprite {
             sprite.setBaseSpeed(config.speed);
         }
         return sprite;
+    }
+    setBaseSpeed(bsp) {
+        this.base_v = bsp;
     }
     walkToTile(c, r) {
         var _a;
@@ -365,6 +362,12 @@ class WalkingSprite extends BaseAnimatedSprite {
             }
             this._currentTile = tile;
         }
+    }
+    stopWalking() {
+        this.sprite.anims.stop();
+        this.sprite.setFrame(0);
+        this.move = undefined;
+        this.onFinishedWalking(this);
     }
     update(time, delta) {
         delta /= 1000;
@@ -527,11 +530,24 @@ class IsometricMap extends TiledMap {
 class ResoureManager {
     constructor(game) {
         this.game = game;
+        this.baseURL = this.loadBaseURL(document);
+    }
+    loadBaseURL(scope) {
+        let baseurl = '';
+        const settings = scope.querySelectorAll('meta[name^=codeblocks]');
+        settings.forEach((opt) => {
+            const name = opt.getAttribute('name');
+            const value = opt.getAttribute('content');
+            if (name == 'codeblocks-baseurl' && value) {
+                baseurl = value;
+            }
+        });
+        return baseurl + './';
     }
     loadSprite(key, cfg) {
         this.game.pushSpriteSheet({
             key: key,
-            uri: cfg.uri,
+            uri: this.baseURL + cfg.uri,
             frameConfig: cfg.frameConfig,
             directional: false,
             repeat: cfg.repeat,
@@ -541,7 +557,7 @@ class ResoureManager {
     loadCustomSprite(key, uri, frameConfig, directional = false, shiftY = 0) {
         const cfg = {
             key: key,
-            uri: uri,
+            uri: this.baseURL + uri,
             frameConfig: frameConfig,
             directional: directional,
             repeat: -1,
@@ -555,7 +571,7 @@ class ResoureManager {
     loadCustomFigure(key, type, big = false, loaded = false) {
         const cfg = {
             key: key,
-            uri: `resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${big ? '_big' : ''}.png`,
+            uri: `${this.baseURL}resources/sprite/figure_${type}${loaded ? '_loaded' : ''}${big ? '_big' : ''}.png`,
             frameConfig: {
                 frameWidth: big ? 76 : 38,
                 frameHeight: big ? 64 : 32,
@@ -565,6 +581,9 @@ class ResoureManager {
             shiftY: 0,
         };
         this.game.pushSpriteSheet(cfg);
+    }
+    loadImage(key, uri) {
+        this.game.pushImage('tile', this.baseURL + uri);
     }
 }
 class Game {
@@ -588,7 +607,7 @@ class Game {
     get scene() {
         return this._scene;
     }
-    addImage(key, uri) {
+    pushImage(key, uri) {
         this.imagesResources.push({ key: key, uri: uri });
         if (this._scene) {
             this._scene.load.image(key, uri);
@@ -843,6 +862,9 @@ class ObjectMessage {
     get frame() {
         return this.data.frame;
     }
+    get speed() {
+        return this.data.speed;
+    }
 }
 class IsometricMapGameRPC {
     constructor(game, manager, runner) {
@@ -898,6 +920,14 @@ class IsometricMapGameRPC {
             this.stopAnimation(msg);
             return true;
         }
+        else if (cmd === 'setBaseSpeed' && data.ID) {
+            this.setBaseSpeed(msg);
+            return true;
+        }
+        else if (cmd === 'stopWalking' && data.ID) {
+            this.stopWalking(msg);
+            return true;
+        }
         else {
             console.log('Unhandled message:', cmd, data);
             return false;
@@ -934,6 +964,9 @@ class IsometricMapGameRPC {
     stopAnimation(msg) {
         msg.animatedSprite.stop();
     }
+    stopWalking(msg) {
+        msg.walkingSprite.stopWalking();
+    }
     walkToTile(msg) {
         msg.walkingSprite.walkToTile(msg.c, msg.r);
     }
@@ -954,6 +987,10 @@ class IsometricMapGameRPC {
     createSpriteOnTile(msg) {
         const sprite = this.manager.createSpriteOnTile(msg.type, msg.c, msg.r, msg.start !== undefined ? msg.start : true, msg.frame !== undefined ? msg.frame : 0);
         sprite.uid = msg.ID;
+        console.log('[PHASER] RPC createSpriteOnTile', sprite.uid, msg.type, msg.c, msg.r);
+    }
+    setBaseSpeed(msg) {
+        msg.walkingSprite.setBaseSpeed(msg.speed === undefined ? 5 : msg.speed);
     }
 }
 class IsometricMapGame {
@@ -1029,7 +1066,7 @@ class IsometricMapGame {
         serial = 10000000;
         const game = new Game(canvasElement, this.backgroundColor);
         this.game = game;
-        game.addImage('tile', this.tileConfig.uri);
+        game.resources.loadImage('tile', this.tileConfig.uri);
         game.useIsometricMap(0, 30, this.columns, this.rows, 'tile');
         if (this.onInit) {
             this.onInit(game, this, canvasElement, outputElement, scope, runner);

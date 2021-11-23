@@ -110,6 +110,7 @@ class MyGame extends MapGame implements GameEventHandler, AnimatedSpriteEventHan
         snow = this.createAnimatedSpriteOnTile("snow", 0, 0, true, 10);
         fire = new AnimatedSprite(this, "fire", this.columns-1, this.rows-1);
         blue = new Figure(this, "blue", 1, 1);
+        blue.setBaseSpeed(10);
         grinch = this.createFigureOnTile("grinch", 2, 1);
         
     }
