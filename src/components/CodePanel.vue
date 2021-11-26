@@ -34,7 +34,7 @@ import {
     IBlockData,
     KnownBlockTypes,
     ICodeBlockDataState,
-    CodeExpansionType
+    CodeExpansionType,
 } from '../lib/ICodeBlocks'
 
 interface IBlockDataExtended extends IBlockData {
@@ -76,6 +76,7 @@ export default class CodePanel extends Vue {
             visibleLines: 'auto',
             hasAlternativeContent: false,
             shouldAutoreset: false,
+            generateTemplate: true,
             firstLine: 1,
             actualContent: '',
             actualAltContent: '',
@@ -94,12 +95,12 @@ export default class CodePanel extends Vue {
                 _blockErrors: [],
                 useOverride: false,
                 toolbox: {
-                    categories: []
+                    categories: [],
                 },
                 showControls: false,
                 toolboxOverride: '',
-                blocks: []
-            }
+                blocks: [],
+            },
         }
         return ret
     }

@@ -41,6 +41,7 @@
             @move-down="moveDown"
             @remove-block="removeBlock"
             @auto-reset-change="onSetAutoReset"
+            @generate-template-change="onSetGenerateTemplate"
         >
             <CodeBlock
                 v-if="block.hasCode && block.type != 'BLOCKLY'"
@@ -257,6 +258,11 @@ export interface IOnSetAutoResetInfo {
     id: number
 }
 
+export interface IOnGenerateTemplateInfo {
+    generateTemplate: boolean
+    id: number
+}
+
 export interface IOnThemeChangeInfo {
     solution: string
     code: string
@@ -464,6 +470,7 @@ export default class CodeBlocks extends Vue {
     onPlacementChange(nfo: IOnPlacementChangeInfo): void {}
     onScriptVersionChange(nfo: IOnScriptVersionChangeInfo): void {}
     onSetAutoReset(nfo: IOnSetAutoResetInfo): void {}
+    onSetGenerateTemplate(nfo: IOnGenerateTemplateInfo): void {}
     onCompilerChange(v: string): void {}
     onCompilerVersionChange(v: string): void {}
     onRunStateChange(v: boolean): void {}

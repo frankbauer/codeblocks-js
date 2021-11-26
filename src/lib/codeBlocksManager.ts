@@ -120,6 +120,7 @@ export class BlockData extends Vue implements IBlockData {
     visibleLines!: number | 'auto'
     hasAlternativeContent!: boolean
     shouldAutoreset!: boolean
+    generateTemplate!: boolean
     width!: string
     height!: string
     align!: string
@@ -481,6 +482,9 @@ class InternalCodeBlocksManager {
                         ? 'auto'
                         : Number(inBlock.visibleLines),
                 shouldAutoreset: isTrue(inBlock.shouldAutoreset),
+                generateTemplate:
+                    undefined ||
+                    (inBlock.generateTemplate != 'false' && inBlock.generateTemplate != '0'),
 
                 expanded:
                     inBlock.expanded === undefined ||
@@ -651,6 +655,7 @@ class InternalCodeBlocksManager {
                             visibleLines: 10,
                             hasAlternativeContent: false,
                             shouldAutoreset: false,
+                            generateTemplate: true,
                             blockly: {
                                 showControls: false,
                                 useOverride: false,

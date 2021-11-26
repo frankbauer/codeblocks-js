@@ -11,9 +11,11 @@
         "Prepopulate_detail": "Lösungsvorgabe für neue Fragen angeben.",
         "Behaviour": "Verhalten",
         "ScriptV": "Script-Version",
-        "ScriptV_detail": "API-Version des Visualisierungsobjektes.",
+        "ScriptV_detail": "API-Version des Sandkastens.",
         "AutoReset": "Autom. Reset",
-        "AutoReset_detail": "Canvas-Element bei jeder Ausführung neu erzeugen.",
+        "AutoReset_detail": "Sandkasten bei jeder Ausführung neu erzeugen.",
+        "GenerateTemplate": "Canvas erzeugen",
+        "GenerateTemplate_detail":"Erstellt ein Canvas-Element für diesen Sandkasten",
         "Positioning": "Positionierung",
         "Width": "Breite",
         "Width_detail": "CSS-Eigenschaft für die Breite",
@@ -28,7 +30,7 @@
         "ScriptVersion_1": "1.0 (original)",
         "ScriptVersion_2": "2.0 (seit 2020)",
         "ScriptVersion_3": "3.0 (experimental)",
-        "Canvas": "Visualisierungsbereich",
+        "Canvas": "Sandkasten",
         "Text": "Text",
         "Hidden": "Quellcode (Versteckt)",
         "Static": "Quellcode (Angabe)",
@@ -37,7 +39,7 @@
         "Confirm": "Bestätigung",
         "DeleteQuestion": "Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?",
         "TypesCaption": "Blocktypen",
-        "Types": "Die Frage wird aus den folgenden Blöcken zusammengestellt. Möglichen Typen sind:<ul><li><b>Text</b>: Text der wie der ursprüngliche Fragetext ohne Syntax highlighting angezeigt wird. Die <b>[code][/code]</b> und <b>[hl][/hl]</b> können verwendet werden</li><li><b>Quellcode (Angabe)</b>: Nicht veränderbarer Quellcode mit Syntax highlighting. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Quellcode (Versteckt)</b>: Der Quellcode ist teil der ausgelieferten Webseite, wird jedoch nicht angezeigt. Diese Variante kann code enthalten der Hilfsmethoden o.ä. definiert. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Antwortfeld/Lösung</b>: Quellcode mit Syntax highlighting. Hier sollte die Musterlösung angegeben werden. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Visualisierungsbereich</b>: Eine Zeichenfläche die nutzbar ist um die Ergebnisse der Studenten zu visualisieren. Der Code (für Version 2.0) <b> muss ein JavaScript Object</b> mit den Methoden <ul><li><code>init(canvasElement, outputElement, scope)</code> und </li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> definieren</b>.</li></ul>"
+        "Types": "Die Frage wird aus den folgenden Blöcken zusammengestellt. Möglichen Typen sind:<ul><li><b>Text</b>: Text der wie der ursprüngliche Fragetext ohne Syntax highlighting angezeigt wird. Die <b>[code][/code]</b> und <b>[hl][/hl]</b> können verwendet werden</li><li><b>Quellcode (Angabe)</b>: Nicht veränderbarer Quellcode mit Syntax highlighting. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Quellcode (Versteckt)</b>: Der Quellcode ist teil der ausgelieferten Webseite, wird jedoch nicht angezeigt. Diese Variante kann code enthalten der Hilfsmethoden o.ä. definiert. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Antwortfeld/Lösung</b>: Quellcode mit Syntax highlighting. Hier sollte die Musterlösung angegeben werden. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Sandkasten</b>: Eine möglichkeit um vorgegebenen Code im DOM des Browsers auszuführen. Zum Beispiel für eine Zeichenfläche die nutzbar ist um die Ergebnisse der Studenten zu visualisieren. Der Code (für Version 2.0) <b> muss ein JavaScript Object</b> mit den Methoden <ul><li><code>init(canvasElement, outputElement, scope)</code> und </li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> definieren</b>.</li></ul>"
     },
     "CodeBlocks": {
         "run_hint": "<code>Ctrl</code>+<code>W</code> oder <code>Ctrl</code>+<code>J</code> drücken um Code auszuführen",
@@ -76,8 +78,8 @@
         "KeepAlive": "Worker nicht automatisch beenden",
         "AllowArguments": "Untersützt das Senden von Argumenten",
         "AllowArgumentsCaption": "Senden von Argumenten",
-        "AllowArgumentsHint": "Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> kann ein Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden.",
-        "AllowArgumentsHintJava":"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Visualisierungsbereiches</b> können die Einträge eines String-Array festgelegt werden, welches der <code>main</code>-Methode als Parameter übergeben wird.",
+        "AllowArgumentsHint": "Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Sandkastens</b> kann ein Objekt definiert werden, welches an den Programmcode weitergereicht wird. Innerhalb des Programmcodes kann über die Variable <code>args</code> auf das so erstellte Objekt zugegriffen werden.",
+        "AllowArgumentsHintJava":"Mit Hilfer der Methode <code>addArgumentsTo(args)</code> eines <b>Sandkastens</b> können die Einträge eines String-Array festgelegt werden, welches der <code>main</code>-Methode als Parameter übergeben wird.",
         "UsePersistentArgumentsCaption":"Persistente Argumente",
         "UsePersistentArgumentsHint":"Wenn diese Option aktiviert ist werden die Werte die vom Worker in der <code>args</code>-Variable abgelegt wurden direkt an <code>addArgumentsTo(args)</code> übergeben. Andernfalls ist <code>args</code> ein leers Objekt.",
         "UsePersistentArgumentsHintJava":"Wenn diese Option aktiviert ist werden die Werte im java-code in der <code>args</code>-Variable abgelegt wurden direkt an <code>addArgumentsTo(args)</code> übergeben. Andernfalls ist <code>args</code> ein leers Array.",
@@ -85,8 +87,8 @@
         "AllowMessagePassingHint":"<b style=color:red>[EXPERIMENTAL]</b> Ermöglicht den Nachrichtenaustausch zwischen dem Wroker und dem (Canvas)DOM-Code.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Empföngt Nachrichten vom worker</li><li><code>runner.postMessage(cmd, data)</code>: Sendet Nachrichten an den Worker. Die runner-Instanz wird der <code>init</code>-Method übergeben.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((request) => {})</code>: Die übergebene Methode empfäöngt die Nachrichten des DOM-Codes</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: Sendet eine Nachricht an den DOM-Code.</li></ul>",
         "AllowMessagePassingHintJava":"<b style=color:red>[EXPERIMENTAL]</b> Ermöglicht den Nachrichtenaustausch zwischen dem Wroker und dem (Canvas)DOM-Code.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Empföngt Nachrichten vom worker</li><li><code>runner.postMessage(cmd, data)</code>: Sendet Nachrichten an den Worker. Die runner-Instanz wird der <code>init</code>-Method übergeben.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {})</code>: Die übergebene Methode empfäöngt die Nachrichten des DOM-Codes</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: Sendet eine Nachricht an den DOM-Code.</li></ul>",
         "KeepAliveCaption":"Worker nicht automatisch beenden",
-        "KeepAliveHint":"<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden des studentischen Codes nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Teste oder durch erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>process.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Visualisierungsbereiche</b> wird sofort nach dem Ende des studentischen Codes, aber noch vor der Beendigung des Workers aufberufen.",
-        "KeepAliveHintJava":"<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden der studentischen <code>main</code>-methode nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Taste oder durch das erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>System.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Visualisierungsbereiche</b> wird sofort nach dem Ende der <code>main</code>-Methode, aber noch vor der Beendigung des Workers aufberufen."
+        "KeepAliveHint":"<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden des studentischen Codes nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Teste oder durch erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>process.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Sandkästen</b> wird sofort nach dem Ende des studentischen Codes, aber noch vor der Beendigung des Workers aufberufen.",
+        "KeepAliveHintJava":"<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden der studentischen <code>main</code>-methode nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Taste oder durch das erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>System.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Sandkästen</b> wird sofort nach dem Ende der <code>main</code>-Methode, aber noch vor der Beendigung des Workers aufberufen."
     },
     "CodePlayground": {
         "InvalidJson": "Ausgabe ist nicht JSON-Formatiert",

@@ -11,9 +11,11 @@
         "Prepopulate_detail": "Define content that is displayed in a new answer.",
         "Behaviour": "Behaviour",
         "ScriptV": "Script Version",
-        "ScriptV_detail": "API-Version for the Visualization Object.",
+        "ScriptV_detail": "API-Version for the Playground.",
         "AutoReset": "Auto Reset",
-        "AutoReset_detail": "Recreate Canvas-Element for each run",
+        "AutoReset_detail": "Recreate Playground-Object for each run",
+        "GenerateTemplate": "Create Canvas",
+        "GenerateTemplate_detail":"Create a Canvas-Element for this Playground",
         "Positioning": "Positioning",
         "Width": "Width",
         "Width_detail": "CSS Property for the canvas-width.",
@@ -28,7 +30,7 @@
         "ScriptVersion_1": "1.0 (original)",
         "ScriptVersion_2": "2.0 (since 2020)",
         "ScriptVersion_3": "3.0 (experimental)",
-        "Canvas": "Visualization Canvas",
+        "Canvas": "Playground",
         "Text": "Plain Text",
         "Hidden": "Code (Hidden)",
         "Static": "Code (Static)",
@@ -37,7 +39,7 @@
         "Confirm": "Confirm",
         "DeleteQuestion": "Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?",
         "TypesCaption": "Block-Types",
-        "Types": "The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Visualization Canvas</b>: A 2D-drawing area you may use to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>"
+        "Types": "The final Question is assembled using the following blocks. You my use the following block types:<ul><li><b>Plain Text</b>: Regular Text that is displayd as you Type it without any Syntax Highlighting. You may use <b>[code][/code]</b> and <b>[hl][/hl]</b> as a markup for inline source-code</li><li><b>Code (Static)</b>: read-only Source Code with Syntax highlighting. The content is used to assemble the final Program.</li><li><b>Code (Hidden)</b>: This Source Code is delivered to the client browser but invisible to the students. You may use this type for boiler-plate code you need for processing. The content is used to assemble the final Program.</li><li><b>Solution</b>: Source Code with Syntax highlighting. Should contain the best solution. The content is used to assemble the final Program.</li><li><b>Playgournd</b>: Enables you to execute predfined Code in th DOM. For example for a 2D-drawing area to visualize the results produced by the studen. The code you specify (for Version 2.0) <b> has to return a JavaScript Object</b> providing an <ul><li><code>init(canvasElement, outputElement, scope)</code> and</li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> method.</li></ul>"
     },
     "CodeBlocks": {
         "run_hint": "Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.",
@@ -76,8 +78,8 @@
         "KeepAlive": "Keep Worker alive after main Finishes",
         "AllowArguments": "Supports Runtime-Arguments",
         "AllowArgumentsCaption": "Send Runtime-Arguments",
-        "AllowArgumentsHint": "Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can add data to the passed argument-object. The object is available in the worker-code as a variable named <code>args</code>.",
-        "AllowArgumentsHintJava":"Using <code>addArgumentsTo(args)</code> in your <b>Visualization Canvas</b> you can push strings to the passed arguments-array. The array is passed to <code>args</code>-parameter of the <code>main</code>-Method.",
+        "AllowArgumentsHint": "Using <code>addArgumentsTo(args)</code> in your <b>Playground</b> you can add data to the passed argument-object. The object is available in the worker-code as a variable named <code>args</code>.",
+        "AllowArgumentsHintJava":"Using <code>addArgumentsTo(args)</code> in your <b>Playground</b> you can push strings to the passed arguments-array. The array is passed to <code>args</code>-parameter of the <code>main</code>-Method.",
         "UsePersistentArgumentsCaption":"Persistente Arguments",
         "UsePersistentArgumentsHint":"When set, the <args>args</args>-Value passed to <code>addArgumentsTo(args)</code> will contain the values written to <code>args</code> by the worker-code in the last run. If not set, the method will allways receiv an empty object.",
         "UsePersistentArgumentsHintJava":"When set, the <args>args</args>-Value passed to <code>addArgumentsTo(args)</code> will contain the values written to <code>args</code> by the java-code in the last run. If not set, the method will allways receiv an empty array.",
@@ -85,8 +87,8 @@
         "AllowMessagePassingHint":"<b style=color:red>[EXPERIMENTAL]</b> When enabled, worker and DOM can exchange messages.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Receives messages from the worker</li><li><code>runner.postMessage(cmd, data)</code>: sends a message to the worker. The runner instance is passed to your <code>init</code>-method.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((request) => {})</code>: the handler receives messages sent from the DOM</li><li><code>CodeBlocks.postMessage(cmd, data)</code>: sends a message to the DOM-Code.</li></ul>",
         "AllowMessagePassingHintJava":"<b style=color:red>[EXPERIMENTAL]</b> When enabled, worker and DOM can exchange messages.<br><b>Canvas-Code:</b><ul><li><code>onMessage(cmd, data)</code>: Receives messages from the worker</li><li><code>runner.postMessage(cmd, data)</code>: sends a message to the worker. The runner instance is passed to your <code>init</code>-method.</li></ul><b>Worker-Code:</b><ul><li><code>CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {})</code>: the handler receives messages sent from the DOM</li><li><code>CodeBlocks.postMessage(String cmd, Object data)</code>: sends a message to the DOM-Code.</li></ul>",
         "KeepAliveCaption":"Keep Worker alive",
-        "KeepAliveHint":"<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the student code finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>process.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Visualization Canvas</b> is called as soon as the student code finishes, which may be before the worker is terminated.",
-        "KeepAliveHintJava":"<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the students <code>main</code>-Method finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>System.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Visualization Canvas</b> is called as soon as the <code>main</code>-Method finishes, which may be before the worker is terminated."
+        "KeepAliveHint":"<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the student code finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>process.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Playground</b> is called as soon as the student code finishes, which may be before the worker is terminated.",
+        "KeepAliveHintJava":"<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the students <code>main</code>-Method finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>System.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Playground</b> is called as soon as the <code>main</code>-Method finishes, which may be before the worker is terminated."
     },
     "CodePlayground": {
         "InvalidJson": "Output is not a valid JSON-Object",

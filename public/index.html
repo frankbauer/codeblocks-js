@@ -88,7 +88,7 @@ exports = {
             </script>
         </div>
         <div style="padding-left:50px;padding-right:50px">
-            <div codeblockseditor data-compiler="java" data-compiler-version=101 data-run-code="true"
+            <div codeblocks data-compiler="java" data-compiler-version=101 data-run-code="true"
             data-execution-timeout="50000" data-dom-libs='["phaser-3.54"]' data-message-passing=1
             data-persistent-arguments=1 data-keep-alive=1>
                 <loading>
@@ -162,8 +162,11 @@ class MainOverride{
 
     
 </block>
-                <script as="playground" type="application/javascript">
+                <script as="playground" type="application/javascript" data-generate-template="true" data-should-autoreset="true">
 exports = new IsometricMapGame(4, 3, Tiles.Checkers, '#fdfdfd', (game, manager, canvasElement, outputElement, scope, runner)=>{
+    console.log("HERE")
+    console.log("CANVAS", canvasElement)
+
     game.resources.loadSprite('fire', Sprites.random(Sprites.Fire))
     game.resources.loadSprite('snow', Sprites.random(Sprites.Snow))
     game.resources.loadFigure('grinch', Figures.BigGrinch)

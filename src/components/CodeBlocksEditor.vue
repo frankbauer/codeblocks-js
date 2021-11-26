@@ -8,6 +8,7 @@ import CodeBlocks, {
     IOnScriptVersionChangeInfo,
     IOnSetAutoResetInfo,
     IOnThemeChangeInfo,
+    IOnGenerateTemplateInfo,
 } from '@/components/CodeBlocks.vue'
 import { KnownBlockTypes, CodeOutputTypes } from '@/lib/ICodeBlocks'
 
@@ -133,6 +134,15 @@ export default class CodeBlocksEditor extends CodeBlocks {
         }
         bl.shouldAutoreset = nfo.shouldAutoreset
     }
+
+    onSetGenerateTemplate(nfo: IOnGenerateTemplateInfo): void {
+        let bl = this.blockById(nfo.id)
+        if (bl === undefined) {
+            return
+        }
+        bl.generateTemplate = nfo.generateTemplate
+    }
+
     onThemeChange(nfo: IOnThemeChangeInfo): void {
         this.blockInfo.solutionTheme = nfo.solution
         this.blockInfo.codeTheme = nfo.code

@@ -32,7 +32,12 @@
                     </div>
                     <div class="col-grow"></div>
                     <div
-                        class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right"
+                        class="
+                            order-xs-first order-sm-last
+                            col-xs-12 col-sm-8 col-md-5
+                            q-my-none q-py-none
+                            text-right
+                        "
                     >
                         <q-btn icon="settings" color="blue-7" push dense v-if="hasExtendedSettings">
                             <q-popup-proxy>
@@ -117,10 +122,29 @@
                                             <q-toggle v-model="shouldAutoReset" />
                                         </div>
                                     </div>
+
+                                    <div class="row no-wrap q-pl-md">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.GenerateTemplate') }}
+                                            </div>
+                                            <div class="text-caption text-blue-grey-4">
+                                                {{
+                                                    $l('CodeBlockContainer.GenerateTemplate_detail')
+                                                }}
+                                            </div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-toggle v-model="shouldGenerateTemplate" />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Positioning -->
-                                <div class="q-pa-md" v-if="canDefinePlacement">
+                                <div
+                                    class="q-pa-md"
+                                    v-if="canDefinePlacement && shouldGenerateTemplate"
+                                >
                                     <div class="row no-wrap q-pa-none">
                                         <div class="text-overline">
                                             {{ $l('CodeBlockContainer.Positioning') }}
@@ -515,6 +539,15 @@ export default class CodeBlocksContainer extends Vue {
     set shouldAutoReset(v: boolean) {
         this.$emit('auto-reset-change', {
             shouldAutoreset: v,
+            id: this.block.id,
+        })
+    }
+    get shouldGenerateTemplate(): boolean {
+        return this.block.generateTemplate
+    }
+    set shouldGenerateTemplate(v: boolean) {
+        this.$emit('generate-template-change', {
+            generateTemplate: v,
             id: this.block.id,
         })
     }

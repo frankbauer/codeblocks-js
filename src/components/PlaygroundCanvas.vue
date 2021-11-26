@@ -1,6 +1,6 @@
 <template>
     <div class="row ma-0 pa-0 block-playground" :data-question="block.parentID" :data-nr="block.id">
-        <div :class="`col-12 text-${block.align}`">
+        <div :class="`col-12 text-${block.align}`" v-if="block.generateTemplate">
             <div
                 ref="innerPlaygroundContainer"
                 class="playground"

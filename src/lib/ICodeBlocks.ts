@@ -68,6 +68,7 @@ export interface IBlockElementData {
     hidden?: string
     visibleLines?: string
     shouldAutoreset?: string
+    generateTemplate?: string
     expanded?: string
     codeExpanded?: string
     noContent?: string
@@ -116,6 +117,7 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
     visibleLines: number | 'auto'
     hasAlternativeContent: boolean
     shouldAutoreset: boolean
+    generateTemplate: boolean
     blockly: IBlockDataBlockly
     lineCountHint: number
     as?: KnownBlockTypes
