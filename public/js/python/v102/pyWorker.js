@@ -93,6 +93,9 @@ sys.stdout = io.StringIO()`,
             )
             self.postMessage({ command: 'finished-init', id: o.id })
             break
+        case 'preload-imports':
+            //await pyodide.loadPackage(o.names, (msg) => clog('Preloading Import: ' + msg))
+            break
         case 'start':
             args = o.args
             this.args = args
@@ -108,6 +111,11 @@ sys.stdout = io.StringIO()`,
                 }
 
                 await pyodide.loadPackagesFromImports(script)
+                self.postMessage({
+                    command: 'loaded-imports',
+                    id: o.id,
+                    names: Object.keys(pyodide.loadedPackages),
+                })
 
                 if (this.console.redirected === undefined) {
                     // custom logging

@@ -118,6 +118,13 @@ function runPythonWorker(
             log_callback(msg.data.s + '\n')
         } else if (msg.data.command == 'err') {
             err_callback(msg.data.s + '\n')
+        } else if (msg.data.command == 'loaded-imports') {
+            if (spareWorker !== undefined) {
+                spareWorker.postMessage({
+                    command: 'preload-imports',
+                    names: msg.data.names,
+                })
+            }
         } else if (msg.data.command == 'main-will-start') {
             options.beforeStartHandler()
         } else if (msg.data.command == 'main-finished') {
