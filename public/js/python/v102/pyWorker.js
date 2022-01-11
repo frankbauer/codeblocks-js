@@ -3,6 +3,8 @@ let result = undefined
 
 self.importScripts('./pyodide-0.17.0/pyodide.js')
 self.importScripts('./codeblocks.js')
+self.importScripts('./phaser.js')
+
 CodeBlocks.worker = self
 const olog = console.log
 const oerr = console.error
@@ -84,6 +86,15 @@ async function listener(input) {
             CodeBlocks._endSession()
             break
         case 'initialize':
+            // eslint-disable-next-line no-case-declarations
+            let codeBlocksNamespace = {
+                // eslint-disable-next-line no-undef
+                CodeBlocks: CodeBlocksClient,
+                Phaser: PhaserInterop,
+            }
+
+            pyodide.registerJsModule('fau_gdi', codeBlocksNamespace)
+            pyodide.registerJsModule('fau_gdi_phaser', PhaserInterop)
             pyodide.runPython(
                 `import sys
 import io

@@ -10,6 +10,7 @@ import {
 
 let spareWorker: Worker | undefined
 let runningWorker: Worker | undefined
+
 function getWorker(setReady: (boolean) => void) {
     if (!window.Worker) {
         return undefined
@@ -241,7 +242,7 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance {
     readonly language = 'python'
     readonly canRun = true
     readonly canStop = true
-    readonly allowsContinousCompilation = true
+    readonly allowsContinousCompilation = false
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = true
