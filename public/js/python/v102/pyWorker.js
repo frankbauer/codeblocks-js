@@ -67,7 +67,7 @@ function parseError(err) {
     cerr('EEEE', res.trace.map((t) => JSON.stringify(t)).join('\n'), res.message, res.deepest)
     return res
 }
-
+let globals = undefined
 async function listener(input) {
     const o = input.data
     const script = o.code
@@ -76,28 +76,23 @@ async function listener(input) {
     if (typeof self.__pyodideLoading === 'undefined') {
         await loadPyodide({ indexURL: './pyodide-0.17.0/' })
         dict = pyodide.globals.get('dict')
+        globals = dict()
     }
 
     switch (input.data.command) {
         case 'session-ended':
             CodeBlocks._endSession()
             break
-        // case 'importD3':
-        //     clog('[Importing D3-Proxy]')
-        //     self.importScripts('./d3DomProxy.js') //to be included before d3
-        //     self.importScripts('../../d3/5.3.8/d3.v5.min.js')
-        //     __whitelist.add('d3')
-        //     __whitelist.add('document')
-        //     break
-        // case 'importBrain':
-        //     clog('[Importing Brain.JS]')
-        //     self.importScripts('../../brain.js/2.0.0-alpha/brain-browser.min.js')
-
-        //     var brain = window.brain
-        //     this.brain = window.brain
-        //     __whitelist.add('brain')
-        //     __whitelist.add('window')
-        //     break
+        case 'initialize':
+            pyodide.runPython(
+                `import sys
+import io
+sys.setrecursionlimit(200)
+sys.stdout = io.StringIO()`,
+                globals
+            )
+            self.postMessage({ command: 'finished-init', id: o.id })
+            break
         case 'start':
             args = o.args
             this.args = args
@@ -108,17 +103,10 @@ async function listener(input) {
             }
 
             try {
-                let globals = dict()
                 if (args) {
                     globals.set('args', self.pyodide.toPy(args))
                 }
-                pyodide.runPython(
-                    `import sys
-import io
-sys.setrecursionlimit(200)
-sys.stdout = io.StringIO()`,
-                    globals
-                )
+
                 await pyodide.loadPackagesFromImports(script)
 
                 if (this.console.redirected === undefined) {

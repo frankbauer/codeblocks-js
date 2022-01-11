@@ -8,11 +8,41 @@ import {
     ICompileAndRunArguments,
 } from '@/lib/ICompilerRegistry'
 
+let spareWorker: Worker | undefined
+let runningWorker: Worker | undefined
+function getWorker(setReady: (boolean) => void) {
+    if (!window.Worker) {
+        return undefined
+    }
+
+    setReady(false)
+    if (runningWorker !== undefined) {
+        console.d('FORCE STOPPING ON RERUN')
+        runningWorker.end(Vue.$l('CodeBlocks.UserCanceled'))
+        runningWorker = undefined
+    }
+
+    runningWorker = spareWorker
+    console.i('Starting Spare Pyodide Server')
+    spareWorker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v102/pyWorker.js')
+    spareWorker.onmessage = function (msg: any) {
+        if (msg.data.command == 'finished-init') {
+            setReady(true)
+        }
+    }
+    spareWorker.postMessage({
+        command: 'initialize',
+        id: '0',
+    })
+    return runningWorker
+}
+
 function runPythonWorker(
     questionID: string,
     code: string,
     callingCodeBlocks: any,
-    options: ICompileAndRunArguments
+    options: ICompileAndRunArguments,
+    setReady: (boolean) => void
 ): Worker | undefined {
     const {
         max_ms,
@@ -35,7 +65,11 @@ function runPythonWorker(
     //const lines = code.split('\n').length;
     const startTime = performance.now()
     let executionFinished = false
-    const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v102/pyWorker.js')
+    const worker = getWorker(setReady)
+    if (worker === undefined) {
+        err_callback('CRITICAL-ERROR: Unable to get background worker.')
+        return
+    }
 
     worker.onmessage = function (msg: any) {
         console.d('jsrunner message', questionID, executionFinished, msg.data, msg.data.command)
@@ -206,10 +240,17 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance {
     readonly acceptsJSONArgument = true
     readonly experimental = true
     readonly deprecated = false
-    isReady = true
+    isReady = false
     isRunning = false
 
-    preload() {}
+    preload() {
+        getWorker(this.setReady.bind(this)) //this will initialize our first worker
+    }
+
+    private setReady(val: boolean) {
+        console.i('Changing READY-State to ' + val)
+        this.isReady = val
+    }
 
     private worker: Worker | undefined = undefined
     compileAndRun(
@@ -218,7 +259,13 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance {
         callingCodeBlocks: any,
         options: ICompileAndRunArguments
     ): void {
-        this.worker = runPythonWorker(questionID, code, callingCodeBlocks, options)
+        this.worker = runPythonWorker(
+            questionID,
+            code,
+            callingCodeBlocks,
+            options,
+            this.setReady.bind(this)
+        )
     }
 
     stop() {

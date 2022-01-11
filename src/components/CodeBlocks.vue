@@ -808,6 +808,7 @@ export default class CodeBlocks extends Vue {
     }
 
     onRunFinished() {
+        this.didRunOnce = false
         if (this.triggerRecompileWhenFinished) {
             console.d('Continuous Compile - ', 'RE-RUN')
             this.triggerRecompileWhenFinished = false
