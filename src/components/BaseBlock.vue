@@ -14,6 +14,7 @@ export default class BaseBlock extends Vue {
         this.block.readyCount++
         this.$emit('ready', this.block)
     }
+
     whenBlockIsDestroyed() {
         if (this.muteReadyState) {
             return

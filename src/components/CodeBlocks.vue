@@ -95,6 +95,14 @@
                 :blockInfo="blockInfo"
                 @code-changed-in-view-mode="onViewCodeChange"
             />
+            <CodeREPL
+                v-if="block.type == 'REPL'"
+                :block="block"
+                :eventHub="eventHub"
+                :blockInfo="blockInfo"
+                @ready="blockBecameReady"
+                @run="run"
+            />
         </CodeBlockContainer>
 
         <div class="row justify-end" v-if="editMode">
@@ -184,6 +192,7 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import CodePanel from '@/components/CodePanel.vue'
 //import Blockly from '@/components/Blockly/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
+import CodeREPL from '@/components/CodeREPL.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import { BlockData, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
 import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
@@ -277,6 +286,7 @@ export interface IOnThemeChangeInfo {
         SimpleText,
         Blockly,
         CodePanel,
+        CodeREPL,
     },
 })
 export default class CodeBlocks extends Vue {
@@ -452,7 +462,7 @@ export default class CodeBlocks extends Vue {
                 this.eventHub.$emit('all-mounted', {})
             })
         }
-        //console.log("Ready", readyCount, this.blockInfo.blocks.length);
+        console.log('Ready', readyCount, this.blockInfo.blocks.length)
     }
 
     tagSet(nr: number): IRandomizerSet {

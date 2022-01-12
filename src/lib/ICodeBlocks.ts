@@ -9,6 +9,7 @@ export enum KnownBlockTypes {
     BLOCKSTATIC = 'BLOCK-static',
     BLOCK = 'BLOCK',
     BLOCKLY = 'BLOCKLY',
+    REPL = 'REPL',
 }
 
 export enum CodeOutputTypes {

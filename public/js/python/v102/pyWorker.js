@@ -1,5 +1,6 @@
 let args = {}
 let result = undefined
+let runREPL = true
 
 self.importScripts('./pyodide-0.17.0/pyodide.js')
 self.importScripts('./codeblocks.js')
@@ -84,6 +85,7 @@ async function listener(input) {
     switch (input.data.command) {
         case 'session-ended':
             CodeBlocks._endSession()
+            globals.destroy()
             break
         case 'initialize':
             // eslint-disable-next-line no-case-declarations
@@ -107,9 +109,94 @@ sys.stdout = io.StringIO()`,
         case 'preload-imports':
             //await pyodide.loadPackage(o.names, (msg) => clog('Preloading Import: ' + msg))
             break
+        case 'interpreter':
+            let run_complete = pyconsole.run_complete
+            try {
+                const incomplete = pyconsole.push(o.code)
+                self.postMessage({
+                    command: 'interpreter',
+                    sub: 'did-push',
+                    incomplete: incomplete,
+                    id: o.id,
+                })
+                let r = await run_complete
+                if (pyodide.isPyProxy(r)) {
+                    r.destroy()
+                }
+                self.postMessage({
+                    command: 'interpreter',
+                    sub: 'finished',
+                    incomplete: incomplete,
+                    id: o.id,
+                })
+            } catch (e) {
+                if (e.name !== 'PythonError') {
+                    self.postMessage({
+                        command: 'interpreter',
+                        sub: 'exception',
+                        fatal: false,
+                        value: e,
+                        id: o.id,
+                    })
+                }
+            }
+            run_complete.destroy()
+            break
         case 'start':
             args = o.args
             this.args = args
+
+            if (runREPL) {
+                pyodide.runPython(
+                    `
+import sys
+import js
+from pyodide import console
+import __main__
+
+class PyConsole(console._InteractiveConsole):
+    def __init__(self):
+        super().__init__(
+            __main__.__dict__,
+            persistent_stream_redirection=False,
+        )
+
+    def banner(self):
+        return f"Welcome to the Pyodide terminal emulator 🐍\\n{super().banner()}"
+
+
+js.pyconsole = PyConsole()
+`,
+                    globals
+                )
+                pyconsole.stdout_callback = (s) =>
+                    self.postMessage({
+                        command: 'interpreter',
+                        sub: 'out',
+                        value: s,
+                        id: o.id,
+                    })
+
+                pyconsole.stderr_callback = (s) => {
+                    self.postMessage({
+                        command: 'interpreter',
+                        sub: 'err',
+                        value: s.trimEnd(),
+                        id: o.id,
+                    })
+                }
+
+                pyodide._module.on_fatal = async (e) => {
+                    self.postMessage({
+                        command: 'interpreter',
+                        sub: 'exception',
+                        value: `Pyodide has suffered a fatal error. Please report this. The cause of the fatal error was:
+                        ${e}`,
+                        fatal: true,
+                        id: o.id,
+                    })
+                }
+            }
 
             //postMessage(['finished', func(args), args])
             if (o.messagePosting) {
