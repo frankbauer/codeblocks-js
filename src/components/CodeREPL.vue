@@ -55,8 +55,25 @@
                 </div>
             </transition>
         </div>
+        <transition
+            appear
+            enter-active-class="animated fadeInup"
+            leave-active-class="animated fadeOutDown"
+        >
+            <div class="q-mt-md" v-if="!isRunning">
+                <q-banner class="bg-warning">
+                    Interpreter is not yet Ready. You may need to start it first.
+                    <template v-slot:action>
+                        <q-btn flat color="white" @click="emitRun" v-if="isReady && !canStop">
+                            {{ $t('CodeBlocks.start') }}
+                            <q-icon right dark name="play_arrow"></q-icon>
+                        </q-btn>
+                    </template>
+                </q-banner>
+            </div>
+        </transition>
         <Terminal
-            v-show="allowsREPL && canStartREPL && (isRunning || hasContent)"
+            v-show="allowsREPL && canStartREPL"
             console-sign="$"
             allow-arbitrary
             height="500px"
@@ -65,9 +82,7 @@
             @run="emitRun"
             @stop="emitStop"
         ></Terminal>
-        <div class="q-mt-md" v-if="!isRunning">
-            Interpreter is not yet Ready. You may need to start it first.
-        </div>
+
         <div class="q-mt-md" v-if="!allowsREPL">
             The current language does not support a REPL-Element
         </div>

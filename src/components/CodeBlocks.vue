@@ -654,6 +654,7 @@ export default class CodeBlocks extends Vue {
         this.$compilerState.setAllRunButtons(false)
 
         this.resetOutput()
+        this.eventHub.$emit('clicked-run')
         this.clearDiagnostics()
         const self = this
 

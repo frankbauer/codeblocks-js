@@ -28,15 +28,31 @@ export default class Terminal extends Vue {
         return this.blockInfo.compiler
     }
 
+    get welcomeMessage(): string {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        let language = ''
+        if (cmp !== undefined) {
+            language = cmp.language
+        }
+        return `{*_*} Interactive ${language} Shell\n------------------------------`
+    }
+
     emitRun() {
         if (this.term !== undefined) {
-            this.term.clear()
+            this.clear()
         }
         this.$emit('run')
     }
 
     emitStop() {
         this.$emit('stop')
+    }
+
+    clear() {
+        if (this.term !== undefined) {
+            this.term.clear()
+            this.term.echo(this.welcomeMessage)
+        }
     }
 
     mounted() {
@@ -66,7 +82,7 @@ export default class Terminal extends Vue {
                         }
                         if (c === '.restart') {
                             self.emitStop()
-                            self.term.clear()
+                            self.clear()
                             await sleep(1000)
                             self.emitRun()
                             return
@@ -101,7 +117,7 @@ export default class Terminal extends Vue {
 
         const el: any = $('#terminal', '.vue-terminal-wrapper')
         self.term = el.terminal(interpreter, {
-            greetings: `{*_*} Interactive ${cmp.language} Shell\n------------------------------`,
+            greetings: self.welcomeMessage,
             name: 'codeblocks_repl',
             height: this.height,
             prompt: ps1,
@@ -112,6 +128,15 @@ export default class Terminal extends Vue {
         if (this.eventHub) {
             this.eventHub.$on('console-log', (msg) => self.term.echo(msg))
             this.eventHub.$on('console-err', (msg) => self.term.error(msg))
+            this.eventHub.$on('clicked-run', () => self.clear())
+        }
+    }
+
+    beforeDestroy() {
+        if (this.eventHub) {
+            this.eventHub.$off('console-log')
+            this.eventHub.$off('console-err')
+            this.eventHub.$off('clicked-run')
         }
     }
 }
@@ -120,7 +145,7 @@ export default class Terminal extends Vue {
 <style lang="css">
 .terminal {
     --size: 1.5;
-    border-radius: 0 4px 4px 4px;
+    border-radius: 0px 0px 4px 4px;
 }
 .visually-hidden {
     display: none;
