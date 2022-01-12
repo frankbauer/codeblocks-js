@@ -61,7 +61,7 @@
             leave-active-class="animated fadeOutDown"
         >
             <div class="q-mt-md" v-if="!isRunning">
-                <q-banner class="bg-warning">
+                <q-banner class="bg-warning" inline-actions>
                     Interpreter is not yet Ready. You may need to start it first.
                     <template v-slot:action>
                         <q-btn flat color="white" @click="emitRun" v-if="isReady && !canStop">
