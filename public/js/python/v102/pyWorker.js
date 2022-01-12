@@ -146,58 +146,6 @@ sys.stdout = io.StringIO()`,
             args = o.args
             this.args = args
 
-            if (runREPL) {
-                pyodide.runPython(
-                    `
-import sys
-import js
-from pyodide import console
-import __main__
-
-class PyConsole(console._InteractiveConsole):
-    def __init__(self):
-        super().__init__(
-            __main__.__dict__,
-            persistent_stream_redirection=False,
-        )
-
-    def banner(self):
-        return f"Welcome to the Pyodide terminal emulator 🐍\\n{super().banner()}"
-
-
-js.pyconsole = PyConsole()
-`,
-                    globals
-                )
-                pyconsole.stdout_callback = (s) =>
-                    self.postMessage({
-                        command: 'interpreter',
-                        sub: 'out',
-                        value: s,
-                        id: o.id,
-                    })
-
-                pyconsole.stderr_callback = (s) => {
-                    self.postMessage({
-                        command: 'interpreter',
-                        sub: 'err',
-                        value: s.trimEnd(),
-                        id: o.id,
-                    })
-                }
-
-                pyodide._module.on_fatal = async (e) => {
-                    self.postMessage({
-                        command: 'interpreter',
-                        sub: 'exception',
-                        value: `Pyodide has suffered a fatal error. Please report this. The cause of the fatal error was:
-                        ${e}`,
-                        fatal: true,
-                        id: o.id,
-                    })
-                }
-            }
-
             //postMessage(['finished', func(args), args])
             if (o.messagePosting) {
                 self.postMessage({ command: 'main-will-start', id: o.id })
@@ -275,7 +223,59 @@ js.pyconsole = PyConsole()
             }
             if (!o.keepAlive) {
                 CodeBlocks._endSession()
+            } else if (runREPL) {
+                const namespace = pyodide.globals.get('dict')()
+                namespace.set('runnerSpace', globals)
+                pyodide.runPython(
+                    `    
+    import sys
+    import js
+    from pyodide import console
+    class PyConsole(console._InteractiveConsole):
+        def __init__(self):
+            super().__init__(
+                runnerSpace,
+                persistent_stream_redirection=False,
+            )            
+
+        def banner(self):
+            return f"Welcome to the Pyodide terminal emulator 🐍\\n{super().banner()}"
+    
+    
+    js.pyconsole = PyConsole()
+    `,
+                    namespace
+                )
+                namespace.destroy()
+                pyconsole.stdout_callback = (s) =>
+                    self.postMessage({
+                        command: 'interpreter',
+                        sub: 'out',
+                        value: s,
+                        id: o.id,
+                    })
+
+                pyconsole.stderr_callback = (s) => {
+                    self.postMessage({
+                        command: 'interpreter',
+                        sub: 'err',
+                        value: s.trimEnd(),
+                        id: o.id,
+                    })
+                }
+
+                pyodide._module.on_fatal = async (e) => {
+                    self.postMessage({
+                        command: 'interpreter',
+                        sub: 'exception',
+                        value: `Pyodide has suffered a fatal error. Please report this. The cause of the fatal error was:
+                            ${e}`,
+                        fatal: true,
+                        id: o.id,
+                    })
+                }
             }
+
             break
         default:
             clog('FWD', input, input.data)
