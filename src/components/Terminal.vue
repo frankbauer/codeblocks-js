@@ -10,6 +10,8 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import '@/lib/jquery.terminal.js'
 import $ from 'jquery'
 import { PythonV102Compiler } from '@/compiler/python.v102'
+import { ICompilerID } from '@/lib/ICompilerRegistry'
+import { IMainBlock } from '@/lib/codeBlocksManager'
 
 function sleep(s) {
     return new Promise((resolve) => setTimeout(resolve, s))
@@ -83,7 +85,8 @@ export default class Terminal extends Vue {
             }
         }
 
-        self.term = $('#terminal', '.vue-terminal-wrapper').terminal(interpreter, {
+        const el: any = $('#terminal', '.vue-terminal-wrapper')
+        self.term = el.terminal(interpreter, {
             greetings: 'Live Interpreter',
             name: 'codeblocks_repl',
             height: this.height,

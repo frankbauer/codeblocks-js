@@ -344,6 +344,7 @@ export default class CodeBlocks extends Vue {
             persistentArguments: this.blockInfo.persistentArguments,
             messagePassing: this.blockInfo.messagePassing,
             keepAlive: this.blockInfo.keepAlive,
+            startREPL: this.blockInfo.startREPL,
         }
     }
     get blocks(): BlockData[] {

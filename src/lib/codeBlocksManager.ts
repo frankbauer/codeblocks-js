@@ -62,6 +62,7 @@ export interface IAppSettings {
     continuousCompilation: boolean
     messagePassing: boolean
     keepAlive: boolean
+    startREPL: boolean
     persistentArguments: boolean
     shadowRoot?: ShadowRoot
 }
@@ -90,6 +91,7 @@ interface IAppElementData {
     outputParser?: CodeOutputTypes
     solutionTheme?: string
     codeTheme?: string
+    startRepl?: string
 }
 
 export interface IBlockBookmarkPayload {
@@ -330,6 +332,7 @@ class InternalCodeBlocksManager {
             continuousCompilation: isTrue(inData.continuousCompilation),
             messagePassing: isTrue(inData.messagePassing),
             keepAlive: isTrue(inData.keepAlive),
+            startREPL: isTrue(inData.startRepl),
             persistentArguments: isTrue(inData.persistentArguments),
             shadowRoot: this.shadowRoot,
         }
@@ -581,6 +584,7 @@ class InternalCodeBlocksManager {
                     messagePassing!: boolean
                     keepAlive!: boolean
                     persistentArguments!: boolean
+                    startREPL!: boolean
 
                     initArgsForLanguage() {
                         console.d('Constructing args for', this.language, this.defaultArgs)

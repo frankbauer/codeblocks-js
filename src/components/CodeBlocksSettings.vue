@@ -213,6 +213,20 @@
                                 @click="showAliveInfoDialog"
                             ></q-btn>
                         </div>
+                        <div class="col-12 q-pl-lg" v-if="runCode && allowsMessagePassing">
+                            <q-toggle
+                                v-model="startREPL"
+                                :disabled="!allowsREPL || !messagePassing || !keepAlive"
+                                :label="$t('CodeBlocksSettings.REPL')"
+                            /><q-btn
+                                flat
+                                round
+                                color="primary"
+                                icon="info"
+                                size="xs"
+                                @click="showREPLInfoDialog"
+                            ></q-btn>
+                        </div>
                     </div>
                 </q-card-section>
             </q-card>
@@ -343,6 +357,7 @@ export interface ICodeBlockSettingsOptions {
     persistentArguments: boolean
     messagePassing: boolean
     keepAlive: boolean
+    startREPL: boolean
 }
 
 @Component({ components: { RandomizerSettings } })
@@ -614,6 +629,22 @@ export default class CodeBlocksSettings extends Vue {
         this.$emit('keep-alive-change', v)
     }
 
+    get allowsREPL(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp) {
+            console.d('REPL - ', 'can', cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun)
+            return cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
+        }
+        return false
+    }
+
+    get startREPL(): boolean {
+        return this.options.startREPL
+    }
+    set startREPL(v: boolean) {
+        this.$emit('repl-change', v)
+    }
+
     get persistentArguments(): boolean {
         return this.options.persistentArguments
     }
@@ -670,6 +701,14 @@ export default class CodeBlocksSettings extends Vue {
             this.compiler.languageType == 'java'
                 ? 'CodeBlocksSettings.KeepAliveHintJava'
                 : 'CodeBlocksSettings.KeepAliveHint'
+        )
+    }
+    showREPLInfoDialog(): void {
+        this.showInfoDialog(
+            'CodeBlocksSettings.REPLCaption',
+            this.compiler.languageType == 'python3'
+                ? 'CodeBlocksSettings.REPLHintPython'
+                : 'CodeBlocksSettings.REPLHint'
         )
     }
 

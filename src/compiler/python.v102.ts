@@ -6,6 +6,7 @@ import {
     ErrorSeverity,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
+    IReplInstance,
 } from '@/lib/ICompilerRegistry'
 
 interface REPLWorker extends Worker {
@@ -249,7 +250,7 @@ function runPythonWorker(
 
 //ICompilerInstance
 @Component
-export class PythonV102Compiler extends Vue implements ICompilerInstance {
+export class PythonV102Compiler extends Vue implements ICompilerInstance, IReplInstance {
     readonly version = '102'
     readonly language = 'python'
     readonly canRun = true
@@ -258,6 +259,7 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance {
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
+    readonly allowsREPL = true
     readonly experimental = true
     readonly deprecated = false
     isReady = false
@@ -297,7 +299,7 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance {
 
     async interpreter(command, onStateChange, onLog, onError) {
         const self = this
-        return new Promise((resolve, reject) => {
+        return new Promise<object>((resolve, reject) => {
             if (self.worker === undefined) {
                 reject('Interpreter not Running')
                 return

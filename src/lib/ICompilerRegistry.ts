@@ -93,12 +93,21 @@ export interface ICompileAndRunArguments {
     resultData: Object | any[] | undefined
 }
 
+export interface IReplInstance {
+    interpreter(
+        command: string,
+        onStateChange: (incomplete) => void,
+        onLog: (msg) => void,
+        onError: (msg) => void
+    ): Promise<object>
+}
 export interface ICompilerInstance {
     readonly version: string
     readonly language: string
     readonly canRun: boolean
     readonly canStop: boolean
     readonly allowsMessagePassing: boolean
+    readonly allowsREPL: boolean
     readonly allowsContinousCompilation: boolean
     readonly allowsPersistentArguments: boolean
     readonly acceptsJSONArgument: boolean
