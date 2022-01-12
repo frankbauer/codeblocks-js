@@ -21,30 +21,29 @@ function sleep(s) {
 export default class Terminal extends Vue {
     @Prop({ default: '250px' }) height!: string
     @Prop({ required: true }) blockInfo!: IMainBlock
+    @Prop({ required: true }) eventHub!: Vue
 
     private term: any
     get compiler(): ICompilerID {
         return this.blockInfo.compiler
     }
 
+    emitRun() {
+        if (this.term !== undefined) {
+            this.term.clear()
+        }
+        this.$emit('run')
+    }
+
+    emitStop() {
+        this.$emit('stop')
+    }
+
     mounted() {
         const self = this
         const cmp = this.$compilerRegistry.getCompiler(this.compiler) as PythonV102Compiler
-        let ps1 = '>>> ',
+        let ps1 = cmp.language === 'python' ? 'py> ' : '>>> ',
             ps2 = '... '
-
-        const on_fatal = async (e) => {
-            self.term.error(
-                'Pyodide has suffered a fatal error. Please report this to the Pyodide maintainers.'
-            )
-            self.term.error('The cause of the fatal error was:')
-            self.term.error(e)
-            self.term.error('Look in the browser console for more details.')
-            await self.term.ready
-            self.term.pause()
-            await sleep(15)
-            self.term.pause()
-        }
 
         async function lock() {
             let resolve
@@ -61,6 +60,21 @@ export default class Terminal extends Vue {
 
                 for (const c of command.split('\n')) {
                     try {
+                        if (c === '.stop') {
+                            self.emitStop()
+                            return
+                        }
+                        if (c === '.restart') {
+                            self.emitStop()
+                            self.term.clear()
+                            await sleep(1000)
+                            self.emitRun()
+                            return
+                        }
+                        if (c === '.clear') {
+                            self.term.clear()
+                            return
+                        }
                         self.term.set_prompt(ps2)
                         await cmp.interpreter(
                             c,
@@ -87,13 +101,18 @@ export default class Terminal extends Vue {
 
         const el: any = $('#terminal', '.vue-terminal-wrapper')
         self.term = el.terminal(interpreter, {
-            greetings: 'Live Interpreter',
+            greetings: `{*_*} Interactive ${cmp.language} Shell\n------------------------------`,
             name: 'codeblocks_repl',
             height: this.height,
             prompt: ps1,
         })
 
         self.term.ready = Promise.resolve()
+
+        if (this.eventHub) {
+            this.eventHub.$on('console-log', (msg) => self.term.echo(msg))
+            this.eventHub.$on('console-err', (msg) => self.term.error(msg))
+        }
     }
 }
 </script>
@@ -101,7 +120,10 @@ export default class Terminal extends Vue {
 <style lang="css">
 .terminal {
     --size: 1.5;
-    border-radius: 4px;
+    border-radius: 0 4px 4px 4px;
+}
+.visually-hidden {
+    display: none;
 }
 /*!
  *       __ _____                     ________                              __

@@ -213,6 +213,7 @@ function runPythonWorker(
             args: args,
             messagePosting: options.allowMessagePassing,
             keepAlive: options.keepAlive,
+            withREPL: options.withREPL,
         })
 
         //stop Worker execution when the time limit is exceeded;

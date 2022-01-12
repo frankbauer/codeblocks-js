@@ -1,6 +1,5 @@
 let args = {}
 let result = undefined
-let runREPL = true
 
 self.importScripts('./pyodide-0.17.0/pyodide.js')
 self.importScripts('./codeblocks.js')
@@ -223,7 +222,7 @@ sys.stdout = io.StringIO()`,
             }
             if (!o.keepAlive) {
                 CodeBlocks._endSession()
-            } else if (runREPL) {
+            } else if (o.withREPL) {
                 const namespace = pyodide.globals.get('dict')()
                 namespace.set('runnerSpace', globals)
                 pyodide.runPython(

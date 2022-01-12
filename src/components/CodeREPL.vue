@@ -1,12 +1,80 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
+        <div
+            v-if="allowsREPL && canStartREPL"
+            class="row runnerState"
+            id="stateBox"
+            :data-question="blockInfo.id"
+        >
+            <q-btn
+                v-show="!isRunning"
+                id="allow_run_button"
+                :loading="!isReady"
+                :disabled="!isReady"
+                color="primary"
+                class="white--text q-pr-sm"
+                @click="emitRun"
+                :ripple="{ center: true }"
+                style="border-radius: 0px"
+                :data-question="blockInfo.id"
+            >
+                {{ $t('CodeBlocks.start') }}
+                <q-icon right dark name="play_arrow"></q-icon>
+            </q-btn>
+            <div class="animated fadeIn"></div>
+            <transition
+                appear
+                enter-active-class="animated fadeIn"
+                leave-active-class="animated fadeOut"
+            >
+                <div class="q-pl-0" v-show="canStop">
+                    <q-btn
+                        id="cancel_button"
+                        color="negative"
+                        :ripple="{ center: true }"
+                        style="border-radius: 0px"
+                        :data-question="blockInfo.id"
+                        @click="emitStop"
+                    >
+                        {{ $t('CodeBlocks.stop') }}
+                        <q-icon right dark name="stop"></q-icon>
+                    </q-btn>
+                </div>
+            </transition>
+            <transition
+                appear
+                enter-active-class="animated fadeIn"
+                leave-active-class="animated fadeOut"
+            >
+                <div
+                    class="globalState col-grow"
+                    style="align-self: center"
+                    v-show="showGlobalMessages"
+                >
+                    <div id="message" v-html="globalStateMessage"></div>
+                </div>
+            </transition>
+        </div>
         <Terminal
+            v-show="allowsREPL && canStartREPL && (isRunning || hasContent)"
             console-sign="$"
             allow-arbitrary
             height="500px"
-            @command="onCommand"
             :blockInfo="blockInfo"
+            :eventHub="eventHub"
+            @run="emitRun"
+            @stop="emitStop"
         ></Terminal>
+        <div class="q-mt-md" v-if="!isRunning">
+            Interpreter is not yet Ready. You may need to start it first.
+        </div>
+        <div class="q-mt-md" v-if="!allowsREPL">
+            The current language does not support a REPL-Element
+        </div>
+        <div class="q-mt-md" v-if="!canStartREPL">
+            Unable to start REPL-Environment. (Code execution, message passing and keep-alive need
+            to be enabled)
+        </div>
     </div>
 </template>
 
@@ -24,9 +92,30 @@ import Terminal from '@/components/Terminal.vue'
 export default class CodeREPL extends BaseBlock {
     @Prop({ required: true }) eventHub!: Vue
     @Prop({ required: true }) blockInfo!: IMainBlock
-    @Prop({ default: 'auto' }) visibleLines!: number | 'auto'
-    @Prop({ default: 'base16-dark' }) theme!: string
-    @Prop({ default: 'text/python' }) mode!: string
+    @Prop({ required: true }) isReady!: boolean
+    @Prop({ required: true }) canStop!: boolean
+    @Prop({ required: true }) showGlobalMessages!: boolean
+    @Prop({ required: true }) globalStateMessage!: string
+
+    get hasContent(): boolean {
+        return false
+    }
+
+    get isRunning(): boolean {
+        return this.canStop
+    }
+
+    get canStartREPL(): boolean {
+        return this.blockInfo.runCode && this.blockInfo.messagePassing && this.blockInfo.keepAlive
+    }
+
+    get allowsREPL(): boolean {
+        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
+        if (cmp === undefined) {
+            return false
+        }
+        return cmp.allowsREPL
+    }
 
     get compiler(): ICompilerID {
         return this.blockInfo.compiler
@@ -43,21 +132,6 @@ export default class CodeREPL extends BaseBlock {
         return s
     }
 
-    get options() {
-        return {
-            // codemirror options
-            mode: this.mode,
-            theme: this.theme,
-            lineNumbers: false,
-            line: true,
-            tabSize: 4,
-            indentUnit: 4,
-            autoCloseBrackets: true,
-            readOnly: false,
-            gutters: ['diagnostics', 'CodeMirror-linenumbers'],
-        }
-    }
-
     get readyWhenMounted() {
         return false
     }
@@ -66,16 +140,12 @@ export default class CodeREPL extends BaseBlock {
         return this.$refs.terminal as Vue
     }
 
-    onCommand(data, resolve, reject) {
-        // typed command is available in data.text
-        // don't forget to resolve or reject the Promise
-        setTimeout(() => {
-            resolve('')
-        }, 300)
-    }
-
     emitRun() {
         this.$emit('run', this.block)
+    }
+
+    emitStop() {
+        this.$emit('stop', this.block)
     }
 
     mounted() {

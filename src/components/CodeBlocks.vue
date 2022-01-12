@@ -100,8 +100,13 @@
                 :block="block"
                 :eventHub="eventHub"
                 :blockInfo="blockInfo"
+                :isReady="isReady"
+                :canStop="canStop"
+                :showGlobalMessages="showGlobalMessages"
+                :globalStateMessage="$compilerState.globalStateMessage"
                 @ready="blockBecameReady"
                 @run="run"
+                @stop="stop"
             />
         </CodeBlockContainer>
 
@@ -115,6 +120,7 @@
 
         <div
             :class="`runner ${editMode ? 'q-pt-lg q-mx-lg' : ''}`"
+            v-show="!hasREPL"
             v-if="canRun"
             id="runContainer"
             :data-question="blockInfo.id"
@@ -344,7 +350,6 @@ export default class CodeBlocks extends Vue {
             persistentArguments: this.blockInfo.persistentArguments,
             messagePassing: this.blockInfo.messagePassing,
             keepAlive: this.blockInfo.keepAlive,
-            startREPL: this.blockInfo.startREPL,
         }
     }
     get blocks(): BlockData[] {
@@ -530,19 +535,24 @@ export default class CodeBlocks extends Vue {
         this.output += text
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         if (!this.didClip) {
+            let formatedText
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
-                this.outputHTML += this.$CodeBlock.format_info(
+                formatedText = this.$CodeBlock.format_info(
                     'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
                 )
                 this.didClip = true
             } else {
-                this.outputHTML += formatOutput(text)
+                formatedText = formatOutput(text)
             }
+
+            this.outputHTML += formatedText
+            this.eventHub.$emit('console-log', formatedText)
         }
     }
 
     logError(text: string): void {
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+        this.eventHub.$emit('console-err', text)
         text = this.$CodeBlock.format_error(text)
         //console.log("err", text);
         this.sansoutput += text
@@ -551,6 +561,7 @@ export default class CodeBlocks extends Vue {
 
     logInfo(text: string): void {
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+        this.eventHub.$emit('console-nfo', text)
         text = this.$CodeBlock.format_info(text)
         //console.log("nfo", text);
         this.sansoutput += text
@@ -616,6 +627,10 @@ export default class CodeBlocks extends Vue {
         this.eventHub.$emit('output-updated', this._finalOutputObject)
 
         this.onRunFinished()
+    }
+
+    get hasREPL(): boolean {
+        return this.blocks.filter((bl) => bl.type === KnownBlockTypes.REPL).length > 0
     }
 
     get canStop(): boolean {
@@ -710,6 +725,11 @@ export default class CodeBlocks extends Vue {
                         cmp.allowsMessagePassing &&
                         self.options.messagePassing &&
                         self.options.keepAlive,
+                    withREPL:
+                        cmp.allowsMessagePassing &&
+                        self.options.messagePassing &&
+                        self.options.keepAlive &&
+                        this.hasREPL,
                     beforeStartHandler: () => {
                         this.blocks.forEach((bl) => {
                             console.d('MESSAGE - Before Start')
