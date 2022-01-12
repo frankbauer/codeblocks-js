@@ -53,6 +53,7 @@ function runPythonWorker(
         compileFailedCallback,
         finishedExecutionCB,
         args,
+        keepAlive,
     } = options
 
     //WebWorkers need to be supported
@@ -73,14 +74,14 @@ function runPythonWorker(
     }
 
     worker.onmessage = function (msg: any) {
-        console.d('jsrunner message', questionID, executionFinished, msg.data, msg.data.command)
+        console.d('pyrunner message', questionID, executionFinished, msg.data, msg.data.command)
         //only accept messages, as long as the worker is not terminated
         if (executionFinished) {
             return
         }
 
         const time = performance.now() - startTime
-        if (time > max_ms) {
+        if (time > max_ms && !keepAlive) {
             triggerTimeout()
         }
 
@@ -187,11 +188,13 @@ function runPythonWorker(
     }
 
     function triggerTimeout() {
-        worker.end(
-            'TimeoutError:  Execution took too long (>' +
-                (performance.now() - startTime) +
-                'ms) and was terminated. There might be an endless loop in your code.'
-        )
+        if (worker !== undefined) {
+            worker.end(
+                'TimeoutError:  Execution took too long (>' +
+                    (performance.now() - startTime) +
+                    'ms) and was terminated. There might be an endless loop in your code.'
+            )
+        }
     }
 
     const startExecution = function (args: object, options: ICompileAndRunArguments) {
@@ -205,7 +208,9 @@ function runPythonWorker(
         })
 
         //stop Worker execution when the time limit is exceeded;
-        setTimeout(triggerTimeout, max_ms)
+        if (!keepAlive) {
+            setTimeout(triggerTimeout, max_ms)
+        }
     }
 
     let willStartExecution = false
@@ -242,9 +247,9 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance {
     readonly language = 'python'
     readonly canRun = true
     readonly canStop = true
-    readonly allowsContinousCompilation = false
+    readonly allowsContinousCompilation = true
     readonly allowsPersistentArguments = true
-    readonly allowsMessagePassing = false
+    readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
     readonly experimental = true
     readonly deprecated = false

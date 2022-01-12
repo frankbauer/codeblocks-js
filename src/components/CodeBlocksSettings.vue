@@ -148,7 +148,7 @@
                                 </q-item>
                             </q-banner>
                         </q-slide-transition>
-                        <div class="col-12" v-if="runCode">
+                        <div class="col-12" v-if="runCode && !keepAlive">
                             <q-input
                                 v-model="maxRuntime"
                                 :rules="[validNumber]"
