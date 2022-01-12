@@ -213,7 +213,10 @@
                                 @click="showAliveInfoDialog"
                             ></q-btn>
                         </div>
-                        <div class="col-12 q-pl-lg" v-if="runCode && allowsMessagePassing">
+                        <div
+                            class="col-12 q-pl-lg"
+                            v-if="runCode && allowsMessagePassing && allowsREPL"
+                        >
                             <q-toggle
                                 v-model="startREPL"
                                 :disabled="!allowsREPL || !messagePassing || !keepAlive"
