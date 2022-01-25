@@ -40,6 +40,10 @@ export interface ICompilerHashMap {
     [lang: string]: ICompilerInfo
 }
 
+export interface IUpdateMappingMap {
+    [old: string]: string
+}
+
 export interface ICompilerState {
     hideGlobalState(): void
     setAllRunButtons(what: boolean): void

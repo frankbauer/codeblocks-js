@@ -8,7 +8,7 @@ import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
 import { uuid } from 'vue-uuid'
 
-import { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
+import compilerRegistry, { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
 import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
 import {
     IRandomizerSettings,
@@ -384,7 +384,9 @@ class InternalCodeBlocksManager {
         }
 
         if (inData.domLibs !== undefined) {
-            data.domLibs = JSON.parse(inData.domLibs)
+            data.domLibs = JSON.parse(inData.domLibs).map((l: string) =>
+                compilerRegistry.mapLibrary(l)
+            )
         }
 
         if (inData.readonly !== undefined) {
