@@ -148,7 +148,7 @@
                                 </q-item>
                             </q-banner>
                         </q-slide-transition>
-                        <div class="col-12" v-if="runCode && !keepAlive">
+                        <div class="col-12" v-if="showMaxRuntime">
                             <q-input
                                 v-model="maxRuntime"
                                 :rules="[validNumber]"
@@ -612,6 +612,10 @@ export default class CodeBlocksSettings extends Vue {
     }
     set keepAlive(v: boolean) {
         this.$emit('keep-alive-change', v)
+    }
+
+    get showMaxRuntime(): boolean {
+        return this.runCode && !(this.keepAlive && this.messagePassing)
     }
 
     get allowsREPL(): boolean {
