@@ -6,10 +6,16 @@ import {
     ErrorSeverity,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
+    IReplInstance,
 } from '@/lib/ICompilerRegistry'
 
-let spareWorker: Worker | undefined
-let runningWorker: Worker | undefined
+interface REPLWorker extends Worker {
+    interpreter: any
+}
+
+let spareWorker: REPLWorker | undefined
+let runningWorker: REPLWorker | undefined
+
 function getWorker(setReady: (boolean) => void) {
     if (!window.Worker) {
         return undefined
@@ -24,12 +30,13 @@ function getWorker(setReady: (boolean) => void) {
 
     runningWorker = spareWorker
     console.i('Starting Spare Pyodide Server')
-    spareWorker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v102/pyWorker.js')
+    spareWorker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v102/pyWorker.js') as REPLWorker
     spareWorker.onmessage = function (msg: any) {
         if (msg.data.command == 'finished-init') {
             setReady(true)
         }
     }
+    spareWorker.interpreter = () => {}
     spareWorker.postMessage({
         command: 'initialize',
         id: '0',
@@ -43,7 +50,7 @@ function runPythonWorker(
     callingCodeBlocks: any,
     options: ICompileAndRunArguments,
     setReady: (boolean) => void
-): Worker | undefined {
+): REPLWorker | undefined {
     const {
         max_ms,
         log_callback,
@@ -52,6 +59,7 @@ function runPythonWorker(
         compileFailedCallback,
         finishedExecutionCB,
         args,
+        keepAlive,
     } = options
 
     //WebWorkers need to be supported
@@ -72,14 +80,14 @@ function runPythonWorker(
     }
 
     worker.onmessage = function (msg: any) {
-        console.d('jsrunner message', questionID, executionFinished, msg.data, msg.data.command)
+        console.d('pyrunner message', questionID, executionFinished, msg.data, msg.data.command)
         //only accept messages, as long as the worker is not terminated
         if (executionFinished) {
             return
         }
 
         const time = performance.now() - startTime
-        if (time > max_ms) {
+        if (time > max_ms && !keepAlive) {
             triggerTimeout()
         }
 
@@ -118,6 +126,13 @@ function runPythonWorker(
             log_callback(msg.data.s + '\n')
         } else if (msg.data.command == 'err') {
             err_callback(msg.data.s + '\n')
+        } else if (msg.data.command == 'loaded-imports') {
+            if (spareWorker !== undefined) {
+                spareWorker.postMessage({
+                    command: 'preload-imports',
+                    names: msg.data.names,
+                })
+            }
         } else if (msg.data.command == 'main-will-start') {
             options.beforeStartHandler()
         } else if (msg.data.command == 'main-finished') {
@@ -137,6 +152,8 @@ function runPythonWorker(
             options.dequeuePostponedMessages()
 
             options.whenFinishedHandler(msg.data.args)
+        } else if (msg.data.command == 'interpreter') {
+            worker.interpreter(msg.data)
         } else if (msg.data.command == 'w-exit-keepalive' || msg.data.command == 'exit-keepalive') {
             //Make sure a keep-alive session can do proper cleanup
             if (options.keepAlive) {
@@ -179,11 +196,13 @@ function runPythonWorker(
     }
 
     function triggerTimeout() {
-        worker.end(
-            'TimeoutError:  Execution took too long (>' +
-                (performance.now() - startTime) +
-                'ms) and was terminated. There might be an endless loop in your code.'
-        )
+        if (worker !== undefined) {
+            worker.end(
+                'TimeoutError:  Execution took too long (>' +
+                    (performance.now() - startTime) +
+                    'ms) and was terminated. There might be an endless loop in your code.'
+            )
+        }
     }
 
     const startExecution = function (args: object, options: ICompileAndRunArguments) {
@@ -194,10 +213,13 @@ function runPythonWorker(
             args: args,
             messagePosting: options.allowMessagePassing,
             keepAlive: options.keepAlive,
+            withREPL: options.withREPL,
         })
 
         //stop Worker execution when the time limit is exceeded;
-        setTimeout(triggerTimeout, max_ms)
+        if (!keepAlive) {
+            setTimeout(triggerTimeout, max_ms)
+        }
     }
 
     let willStartExecution = false
@@ -229,15 +251,16 @@ function runPythonWorker(
 
 //ICompilerInstance
 @Component
-export class PythonV102Compiler extends Vue implements ICompilerInstance {
+export class PythonV102Compiler extends Vue implements ICompilerInstance, IReplInstance {
     readonly version = '102'
     readonly language = 'python'
     readonly canRun = true
     readonly canStop = true
     readonly allowsContinousCompilation = true
     readonly allowsPersistentArguments = true
-    readonly allowsMessagePassing = false
+    readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
+    readonly allowsREPL = true
     readonly experimental = true
     readonly deprecated = false
     isReady = false
@@ -252,7 +275,7 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance {
         this.isReady = val
     }
 
-    private worker: Worker | undefined = undefined
+    private worker: REPLWorker | undefined = undefined
     compileAndRun(
         questionID: string,
         code: string,
@@ -273,6 +296,48 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance {
         if (this.worker) {
             this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
         }
+    }
+
+    async interpreter(command, onStateChange, onLog, onError) {
+        const self = this
+        return new Promise<object>((resolve, reject) => {
+            if (self.worker === undefined) {
+                reject('Interpreter not Running')
+                return
+            }
+
+            self.worker.interpreter = (msg) => {
+                console.log('Message: ' + msg)
+                switch (msg.sub) {
+                    case 'did-push':
+                        onStateChange(msg.incomplete)
+                        break
+                    case 'out':
+                        onLog(msg.value)
+                        break
+                    case 'err':
+                        onError(msg.value)
+                        break
+                    case 'exception':
+                        if (msg.fatal) {
+                            reject(msg.value)
+                        } else {
+                            onError(msg.value)
+                        }
+                        break
+                    case 'finished':
+                        resolve({})
+                        break
+                    default:
+                        console.log('Unknown Message: ' + msg.sub)
+                }
+            }
+
+            self.worker.postMessage({
+                command: 'interpreter',
+                code: command,
+            })
+        })
     }
 }
 

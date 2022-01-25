@@ -342,6 +342,10 @@ export default class CodeBlocksContainer extends Vue {
                 label: this.$l('CodeBlockContainer.Blockly'),
                 value: KnownBlockTypes.BLOCKLY,
             },
+            {
+                label: this.$l('CodeBlockContainer.REPL'),
+                value: KnownBlockTypes.REPL,
+            },
         ]
     }
     get alignments(): IListItemData[] {
@@ -603,6 +607,8 @@ export default class CodeBlocksContainer extends Vue {
             return 'block-hidden-border'
         } else if (t == KnownBlockTypes.BLOCKSTATIC) {
             return 'block-static-border'
+        } else if (t == KnownBlockTypes.REPL) {
+            return 'repl-border'
         }
         return 'default-border'
     }

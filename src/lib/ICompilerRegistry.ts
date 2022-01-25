@@ -40,6 +40,10 @@ export interface ICompilerHashMap {
     [lang: string]: ICompilerInfo
 }
 
+export interface IUpdateMappingMap {
+    [old: string]: string
+}
+
 export interface ICompilerState {
     hideGlobalState(): void
     setAllRunButtons(what: boolean): void
@@ -90,15 +94,25 @@ export interface ICompileAndRunArguments {
     whenFinishedHandler(args: string[] | object): void
     allowMessagePassing: boolean
     keepAlive: boolean
+    withREPL: boolean
     resultData: Object | any[] | undefined
 }
 
+export interface IReplInstance {
+    interpreter(
+        command: string,
+        onStateChange: (incomplete) => void,
+        onLog: (msg) => void,
+        onError: (msg) => void
+    ): Promise<object>
+}
 export interface ICompilerInstance {
     readonly version: string
     readonly language: string
     readonly canRun: boolean
     readonly canStop: boolean
     readonly allowsMessagePassing: boolean
+    readonly allowsREPL: boolean
     readonly allowsContinousCompilation: boolean
     readonly allowsPersistentArguments: boolean
     readonly acceptsJSONArgument: boolean

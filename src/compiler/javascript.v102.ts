@@ -29,6 +29,7 @@ function runJavaScriptWorker(
         compileFailedCallback,
         finishedExecutionCB,
         args,
+        keepAlive,
     } = options
 
     //WebWorkers need to be supported
@@ -52,7 +53,7 @@ function runJavaScriptWorker(
         }
 
         const time = performance.now() - startTime
-        if (time > max_ms) {
+        if (time > max_ms && !keepAlive) {
             triggerTimeout()
         }
 
@@ -155,8 +156,10 @@ function runJavaScriptWorker(
             keepAlive: options.keepAlive,
         })
 
-        //stop Worker execution when the time limit is exceeded;
-        setTimeout(triggerTimeout, max_ms)
+        if (!keepAlive) {
+            //stop Worker execution when the time limit is exceeded;
+            setTimeout(triggerTimeout, max_ms)
+        }
     }
 
     let willStartExecution = false
@@ -203,6 +206,7 @@ export class JavascriptV102Compiler extends Vue implements ICompilerInstance {
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
+    readonly allowsREPL = false
     readonly experimental = true
     readonly deprecated = false
     libraries = [

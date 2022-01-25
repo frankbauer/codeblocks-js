@@ -9,6 +9,7 @@ import {
     ICompilerInstance,
     ICompilerRegistry,
     ICompilerIDQuery,
+    IUpdateMappingMap,
 } from './ICompilerRegistry'
 
 //prepare Compiler Registry
@@ -17,6 +18,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
     compilers: ICompilerHashMap = {}
     libraries: IDomLibraray[] = []
     loadedURIs: string[] = []
+    public updateMappings: IUpdateMappingMap = {}
     afterLoadFinished: (() => void)[] = []
     isLoadingLibs = false
 
@@ -75,6 +77,17 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             return ['none']
         }
         return c.versions.map((v) => v.version)
+    }
+
+    addUpdateMapping(name: string, oldVersion: string, newVersion: string) {
+        const oldName = `${name}-${oldVersion}`
+        const newName = `${name}-${newVersion}`
+        this.updateMappings[oldName] = newName
+    }
+
+    mapLibrary(loadedName: string): string {
+        const name = this.updateMappings[loadedName]
+        return name === undefined ? loadedName : name
     }
 
     registerDOMLib(
@@ -309,20 +322,6 @@ compilerRegistry.registerDOMLib(
     }
 )
 compilerRegistry.registerDOMLib(
-    [
-        Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/d3.v6.min.js',
-        //Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js'
-    ],
-    'd3',
-    '6.2.0',
-    'D3',
-    false,
-    4000,
-    (sandbox) => {
-        sandbox.d3 = (window as any).d3
-    }
-)
-compilerRegistry.registerDOMLib(
     [Vue.$CodeBlock.baseurl + 'js/d3/7.1.1/d3.v7.min.js'],
     'd3',
     '7.1.1',
@@ -333,6 +332,9 @@ compilerRegistry.registerDOMLib(
         sandbox.d3 = (window as any).d3
     }
 )
+
+compilerRegistry.addUpdateMapping('d3', '5.13.4', '5.16.0')
+compilerRegistry.addUpdateMapping('d3', '6.2.0', '6.7.0')
 
 compilerRegistry.registerDOMLib(
     [Vue.$CodeBlock.baseurl + 'js/brain.js/2.0.0-alpha/brain-browser.min.js'],

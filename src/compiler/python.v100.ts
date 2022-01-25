@@ -120,6 +120,7 @@ export class PythonV100Compiler extends Vue implements ICompilerInstance {
     readonly allowsPersistentArguments = false
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
+    readonly allowsREPL = false
     readonly experimental = false
     readonly deprecated = true
     isReady = true

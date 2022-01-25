@@ -28,6 +28,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
     readonly allowsPersistentArguments = false
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = true
+    readonly allowsREPL = false
     readonly experimental = false
     readonly deprecated = false
     didPreload: boolean = false
@@ -72,8 +73,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
                         this.teaworker.postMessage({
                             command: 'compile',
                             id: 'prep',
-                            text:
-                                'public class Bootstrap { public static void main(String[] args){}}',
+                            text: 'public class Bootstrap { public static void main(String[] args){}}',
                             mainClass: 'Bootstrap',
                         })
                     }
@@ -135,13 +135,7 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
             if (
                 this.createTeaWorker(() => {
                     this.isRunning = false
-                    this.compileAndRun(
-                        questionID,
-                        code,
-                        callingCodeBlocks,
-                        options,
-                        false
-                    )
+                    this.compileAndRun(questionID, code, callingCodeBlocks, options, false)
                 })
             ) {
                 return
@@ -181,7 +175,8 @@ export class JavaV100Compiler extends Vue implements ICompilerInstance {
         const getMainClass = (_code: string) => {
             let ret = 'Unknown'
             //above replaces all {} with [], so look for public class <name> []
-            const regexpMainClass = /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
+            const regexpMainClass =
+                /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
             let match: RegExpExecArray | null
             while ((match = regexpMainClass.exec(_code)) !== null) {
                 if (match[1]) {

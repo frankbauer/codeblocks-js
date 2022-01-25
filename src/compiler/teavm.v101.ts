@@ -28,6 +28,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
+    readonly allowsREPL = false
     readonly experimental = true
     readonly deprecated = false
     didPreload: boolean = false
@@ -120,6 +121,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
             compileFailedCallback,
             finishedExecutionCB,
             args,
+            keepAlive,
         } = options
         console.log(`[Starting TeaVM${options.keepAlive ? ' keepAlive' : ''}]`, args)
         const start = Date.now()
@@ -392,14 +394,16 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                         }
 
                         const runStart = Date.now()
-                        runTimeout = setTimeout(function () {
-                            const time = Date.now() - runStart
-                            workerrun.end(
-                                'TimeoutError:  Execution took too long (>' +
-                                    time +
-                                    'ms) and was terminated. There might be an endless loop in your code.'
-                            )
-                        }, max_ms)
+                        if (!keepAlive) {
+                            runTimeout = setTimeout(function () {
+                                const time = Date.now() - runStart
+                                workerrun.end(
+                                    'TimeoutError:  Execution took too long (>' +
+                                        time +
+                                        'ms) and was terminated. There might be an endless loop in your code.'
+                                )
+                            }, max_ms)
+                        }
                     }
                 }
             }

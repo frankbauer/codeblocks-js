@@ -138,6 +138,7 @@ const singleton = new Vue({
             allowsPersistentArguments: false,
             allowsMessagePassing: false,
             acceptsJSONArgument: false,
+            allowsREPL: false,
             didPreload: false,
             requestedPreload: false,
             isReady: false,

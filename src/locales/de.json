@@ -36,6 +36,7 @@
         "Static": "Quellcode (Angabe)",
         "Block": "Antwortfeld/Lösung",
         "Blockly": "Blockly (Experimental!!!)",
+        "REPL": "Interaktive Eingabe",
         "Confirm": "Bestätigung",
         "DeleteQuestion": "Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?",
         "TypesCaption": "Blocktypen",
@@ -44,6 +45,7 @@
     "CodeBlocks": {
         "run_hint": "<code>Ctrl</code>+<code>W</code> oder <code>Ctrl</code>+<code>J</code> drücken um Code auszuführen",
         "run": "Ausführen",
+        "start": "Starten",
         "stop": "Anhalten",
         "AddBlock": "Neuen Block Anlegen",
         "UserCanceled": "Vom Benutzer Abgebrochen"

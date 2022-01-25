@@ -8,7 +8,7 @@ import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
 import { uuid } from 'vue-uuid'
 
-import { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
+import compilerRegistry, { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
 import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
 import {
     IRandomizerSettings,
@@ -29,12 +29,14 @@ import {
 import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
 import blocklyInstaller from '@/lib/BlockloadManagers/BlocklyManager'
 import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
+import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
 import { trim } from 'jquery'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
 blocklyInstaller(loaders)
 playgroundInstaller(loaders)
+REPLInstaller(loaders)
 
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
@@ -298,7 +300,7 @@ class InternalCodeBlocksManager {
             this.shadowRoot = undefined
             this.element = el
         }
-        console.log(this.element)
+        //console.log(this.element)
         const inData = el.dataset as IAppElementData
         const data: IAppSettings = {
             id: -1,
@@ -382,7 +384,9 @@ class InternalCodeBlocksManager {
         }
 
         if (inData.domLibs !== undefined) {
-            data.domLibs = JSON.parse(inData.domLibs)
+            data.domLibs = JSON.parse(inData.domLibs).map((l: string) =>
+                compilerRegistry.mapLibrary(l)
+            )
         }
 
         if (inData.readonly !== undefined) {
