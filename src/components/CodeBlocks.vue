@@ -468,7 +468,7 @@ export default class CodeBlocks extends Vue {
                 this.eventHub.$emit('all-mounted', {})
             })
         }
-        console.log('Ready', readyCount, this.blockInfo.blocks.length)
+        console.d('Ready', readyCount, this.blockInfo.blocks.length)
     }
 
     tagSet(nr: number): IRandomizerSet {
