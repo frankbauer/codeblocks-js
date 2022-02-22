@@ -42,12 +42,15 @@ sizeValue(s, p)
     return sz.x if p=='-left'
     return sz.x if p=='-right' 
     return sz.y
+body
+    -webkit-font-smoothing: unset
+    -moz-osx-font-smoothing: unset
+    font-smoothing: unset
 
-html[lang]
-    font-size: 16px
-html
-    font-size: 16px
+
 .q-layout, .q-menu, .q-dialog, .q-tooltip   
+    font-family: Roboto, "Open Sans", Verdana, Arial, Helvetica, sans-serif
+    font-size: 16px
     .row 
         margin-left: 0px
         margin-right: 0px
