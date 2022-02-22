@@ -1,6 +1,6 @@
 <template>
     <div class="q-ml-lg q-pb-sm q-pl-lg">
-        <div class="row no-wrap q-pa-none">
+        <div class="row no-wrap q-pt-none q-pb-md">
             <div class="text-overline">{{ $t('Blockly.ToolboxItems') }}</div>
             <q-btn
                 color="primary"

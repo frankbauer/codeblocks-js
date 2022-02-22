@@ -23,7 +23,7 @@
         </codemirror>
 
         <div v-show="hasAlternativeContent" v-if="editMode">
-            <div class="q-mt-lg text-subtitle2">{{ $t('CodeBlock.Initial_Content') }}</div>
+            <div class="q-mt-lg text-subtitle2 q-pb-xs">{{ $t('CodeBlock.Initial_Content') }}</div>
             <codemirror
                 ref="altBox"
                 :value="altCode"
@@ -97,7 +97,7 @@ export default class CodeBlock extends BaseBlock {
     @Prop({ default: undefined }) tagSet!: IRandomizerSet
     @Prop({
         required: true,
-        validator: function(b) {
+        validator: function (b) {
             if (b === null || b.content === undefined) {
                 return false
             }
@@ -105,7 +105,7 @@ export default class CodeBlock extends BaseBlock {
                 return false
             }
             return true
-        }
+        },
     })
     block!: BlockData
 
@@ -119,7 +119,7 @@ export default class CodeBlock extends BaseBlock {
         }
 
         let allMarks = this.codemirror.getDoc().getAllMarks()
-        allMarks.forEach(e => {
+        allMarks.forEach((e) => {
             if (
                 e.className == Vue.$tagger.className.rnd ||
                 e.className == Vue.$tagger.className.templ
@@ -130,7 +130,7 @@ export default class CodeBlock extends BaseBlock {
 
         if (this.altcodemirror) {
             allMarks = this.altcodemirror.getDoc().getAllMarks()
-            allMarks.forEach(e => {
+            allMarks.forEach((e) => {
                 if (
                     e.className == Vue.$tagger.className.rnd ||
                     e.className == Vue.$tagger.className.templ
@@ -146,7 +146,7 @@ export default class CodeBlock extends BaseBlock {
         }
         let allMarks = this.codemirror.getDoc().getAllMarks()
         //console.log("marks", this.block.type, allMarks)
-        allMarks.forEach(e => {
+        allMarks.forEach((e) => {
             if (e.className == 'red-wave') {
                 e.clear()
             }
@@ -164,7 +164,7 @@ export default class CodeBlock extends BaseBlock {
         ) {
             this.codemirror.display.input.textarea.className = 'noRTEditor'
         }
-        this.codeBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
+        this.codeBox!.$el.querySelectorAll('textarea[name]').forEach((el) => {
             el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
             el.id = this.codeBox!.$el.id
 
@@ -191,7 +191,7 @@ export default class CodeBlock extends BaseBlock {
         ) {
             this.altcodemirror.display.input.textarea.className = 'noRTEditor'
         }
-        this.altBox!.$el.querySelectorAll('textarea[name]').forEach(el => {
+        this.altBox!.$el.querySelectorAll('textarea[name]').forEach((el) => {
             el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
         })
         this.$nextTick(() => {
@@ -283,7 +283,7 @@ export default class CodeBlock extends BaseBlock {
         //console.log('IR', e, arguments)
         if (arguments.length > 1 && arguments[1] !== undefined) {
             if (arguments[1].text !== undefined) {
-                arguments[1].text.forEach(t => {
+                arguments[1].text.forEach((t) => {
                     this.didAddText(t)
                 })
             } else if (arguments[1].key !== undefined) {
@@ -380,14 +380,14 @@ export default class CodeBlock extends BaseBlock {
         this.codeNeedsTagUpdate = false
         //console.log('Updating Tags')
         this.clearTagMarkers()
-        Vue.$tagger.getMarkers(this.block.content).forEach(m => {
+        Vue.$tagger.getMarkers(this.block.content).forEach((m) => {
             this.codemirror.getDoc().markText(m.start, m.end, {
                 className: Vue.$tagger.className[m.type],
                 inclusiveLeft: true,
                 inclusiveRight: true,
                 title: m.name,
                 startStyle: 'tag-mark-start',
-                endStyle: 'tag-mark-end'
+                endStyle: 'tag-mark-end',
             })
         })
         this.$nextTick(() => {
@@ -395,14 +395,14 @@ export default class CodeBlock extends BaseBlock {
         })
 
         if (this.altcodemirror) {
-            Vue.$tagger.getMarkers(this.block.alternativeContent).forEach(m => {
+            Vue.$tagger.getMarkers(this.block.alternativeContent).forEach((m) => {
                 this.altcodemirror.getDoc().markText(m.start, m.end, {
                     className: Vue.$tagger.className[m.type],
                     inclusiveLeft: true,
                     inclusiveRight: true,
                     title: m.name,
                     startStyle: 'tag-mark-start',
-                    endStyle: 'tag-mark-end'
+                    endStyle: 'tag-mark-end',
                 })
             })
 
@@ -419,7 +419,7 @@ export default class CodeBlock extends BaseBlock {
             this.clearErrorDisplay()
 
             const first = this.block.firstLine
-            val.forEach(error => {
+            val.forEach((error) => {
                 if (error.start.column >= 0) {
                     //console.log("squiggle", this.block.type);
                     //put a squigly line as code marker
@@ -430,7 +430,7 @@ export default class CodeBlock extends BaseBlock {
                             className: 'red-wave',
                             inclusiveLeft: true,
                             inclusiveRight: true,
-                            title: error.message
+                            title: error.message,
                         }
                     )
                 }
@@ -451,8 +451,8 @@ export default class CodeBlock extends BaseBlock {
                     element.$component = new ErrorTipCtor({
                         propsData: {
                             errors: [],
-                            severity: error.severity
-                        }
+                            severity: error.severity,
+                        },
                     }).$mount(element)
 
                     element = element.$component
@@ -560,7 +560,7 @@ export default class CodeBlock extends BaseBlock {
                 !this.editMode &&
                 (this.block.readonly || this.block.static || this.block.hidden || this.readonly),
             //firstLineNumber: this.block.firstLine, //make sure to change altOptions as well when activating this
-            gutters: ['diagnostics', 'CodeMirror-linenumbers']
+            gutters: ['diagnostics', 'CodeMirror-linenumbers'],
         }
     }
     get altOptions() {
@@ -614,18 +614,18 @@ export default class CodeBlock extends BaseBlock {
             }
 
             this.codemirror.addKeyMap({
-                'Cmd-B': function(cMirror) {
+                'Cmd-B': function (cMirror) {
                     buildIt()
                 },
-                'Ctrl-B': function(cMirror) {
+                'Ctrl-B': function (cMirror) {
                     buildIt()
-                }
+                },
             })
 
             this.codemirror.addKeyMap({
-                Tab: function(cMirror) {
+                Tab: function (cMirror) {
                     cMirror.execCommand('insertSoftTab')
-                }
+                },
             })
         }
 

@@ -32,14 +32,14 @@
             </div>
         </q-card-section>
         <q-card-section class="q-pb-xs q-pt-lg">
-            <div class="row no-wrap q-pa-none">
+            <div class="row no-wrap q-pt-none q-pb-md">
                 <div class="text-overline">{{ $t('Blockly.Block.Properties') }}</div>
             </div>
         </q-card-section>
         <q-card-section><BlockEditor :blockDefinition="blockDefinition" /></q-card-section>
 
         <q-card-section class="q-pb-xs q-pt-lg">
-            <div class="row no-wrap q-pa-none">
+            <div class="row no-wrap q-pt-none q-pb-md">
                 <div class="text-overline">{{ $t('Blockly.Block.CodeGeneratorFunction') }}</div>
             </div>
         </q-card-section>

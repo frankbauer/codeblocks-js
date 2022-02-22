@@ -32,18 +32,13 @@
                     </div>
                     <div class="col-grow"></div>
                     <div
-                        class="
-                            order-xs-first order-sm-last
-                            col-xs-12 col-sm-8 col-md-5
-                            q-my-none q-py-none
-                            text-right
-                        "
+                        class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right"
                     >
                         <q-btn icon="settings" color="blue-7" push dense v-if="hasExtendedSettings">
                             <q-popup-proxy>
                                 <!-- LineNumbers -->
                                 <div class="q-pa-md" v-if="canSetLineNumbers">
-                                    <div class="row no-wrap q-pa-none">
+                                    <div class="row no-wrap q-pt-none q-pb-md">
                                         <div class="text-overline">
                                             {{ $l('CodeBlockContainer.Display') }}
                                         </div>
@@ -87,7 +82,7 @@
 
                                 <!-- Playground Versioning -->
                                 <div class="q-pa-md" v-if="isVersionedPlayground">
-                                    <div class="row no-wrap q-pa-none">
+                                    <div class="row no-wrap q-pt-none q-pb-md">
                                         <div class="text-overline">
                                             {{ $l('CodeBlockContainer.Behaviour') }}
                                         </div>
@@ -145,7 +140,7 @@
                                     class="q-pa-md"
                                     v-if="canDefinePlacement && shouldGenerateTemplate"
                                 >
-                                    <div class="row no-wrap q-pa-none">
+                                    <div class="row no-wrap q-pt-none q-pb-md">
                                         <div class="text-overline">
                                             {{ $l('CodeBlockContainer.Positioning') }}
                                         </div>
@@ -254,7 +249,7 @@
             </q-card-section>
             <q-slide-transition>
                 <q-card-section v-if="this.isExperimentalScriptVersion">
-                    <q-banner rounded dense class="bg-orange text-white col-12 q-mt-xs">
+                    <q-banner rounded dense class="bg-orange text-white col-12 q-mt-xs q-mb-md">
                         <q-item>
                             <q-item-section avatar>
                                 <q-icon name="whatshot" style="font-size: 3em"></q-icon>
@@ -273,7 +268,7 @@
             </q-slide-transition>
             <q-slide-transition>
                 <q-card-section v-if="this.isDeprecatedScriptVersion">
-                    <q-banner rounded dense class="bg-yellow-12 text-black col-12 q-mt-xs">
+                    <q-banner rounded dense class="bg-yellow-12 text-black col-12 q-mt-xs q-mb-md">
                         <q-item>
                             <q-item-section avatar>
                                 <q-icon name="hourglass_disabled" style="font-size: 3em"></q-icon>

@@ -105,7 +105,7 @@
                             <q-banner
                                 rounded
                                 dense
-                                class="bg-orange text-white col-12 q-mt-xs"
+                                class="bg-orange text-white col-12 q-mt-xs q-mb-md"
                                 v-if="isExperimental"
                             >
                                 <q-item>
@@ -127,7 +127,7 @@
                             <q-banner
                                 rounded
                                 dense
-                                class="bg-yellow-12 text-black col-12 q-mt-xs"
+                                class="bg-yellow-12 text-black col-12 q-mt-xs q-mb-md"
                                 v-if="isDeprecated"
                             >
                                 <q-item>

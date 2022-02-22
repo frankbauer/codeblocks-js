@@ -2,7 +2,7 @@
     <q-popup-proxy transition-show="flip-up" transition-hide="flip-down" @before-show="onShow">
         <!-- LineNumbers -->
         <div class="q-pa-md">
-            <div class="row no-wrap q-pa-none">
+            <div class="row no-wrap q-pt-none q-pb-md">
                 <div class="text-overline">{{ $t('RandomizerSetEditor.Caption', { nr: nr }) }}</div>
             </div>
             <div class="q-pl-md" v-for="tag in tagSet.values" v-bind:key="tag.tag">
@@ -24,18 +24,18 @@ export default class RandomizerSetEditor extends Vue {
     @Prop({ required: true }) nr!: number
 
     get tags(): string[] {
-        return this.tagSet.values.map(v => v.tag)
+        return this.tagSet.values.map((v) => v.tag)
     }
 
     onShow(o) {
         this.tagSet.values = this.tagSet.values.filter(
-            v => this.options.randomizer.knownTags.indexOf(v.tag) >= 0
+            (v) => this.options.randomizer.knownTags.indexOf(v.tag) >= 0
         )
-        this.options.randomizer.knownTags.forEach(t => {
-            if (this.tagSet.values.find(v => v.tag == t) === undefined) {
+        this.options.randomizer.knownTags.forEach((t) => {
+            if (this.tagSet.values.find((v) => v.tag == t) === undefined) {
                 this.tagSet.values.push({
                     tag: t,
-                    value: ''
+                    value: '',
                 })
             }
         })
