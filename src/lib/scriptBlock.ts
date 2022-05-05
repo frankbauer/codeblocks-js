@@ -78,10 +78,11 @@ function compileCode(src: string) {
 
     return function (sandbox: any) {
         compilerRegistry.addLoadedToSandbox(sandbox)
-
         sandbox.$ = (input: any) => {
             if (typeof input === 'string') {
-                console.error('You can not use JQuerry globally from this context')
+                console.error(
+                    `You can not use JQuerry globally from this context. Please try scope.find('${input}') instead.`
+                )
             } else {
                 if (input.getAttribute === undefined) {
                     console.error('You may only wrap DOMElements using $')
@@ -90,10 +91,29 @@ function compileCode(src: string) {
                 return $(input)
             }
         }
+
+        const oldFetch = fetch
+        const oldRequestAnimationFrame = requestAnimationFrame
+        sandbox.fetch = (uri, options) => {
+            console.i('Fetching', uri, 'from Sandbox')
+            return oldFetch(uri, options)
+        }
+        sandbox.requestAnimationFrame = (callback) => {
+            oldRequestAnimationFrame(callback)
+        }
+        sandbox.jQuery = sandbox.$
         sandbox.console = console
+        sandbox.Promise = Promise
+        sandbox.Number = Number
+        sandbox.Map = Map
+        sandbox.String = String
+        sandbox.Array = Array
+        sandbox.RegExp = RegExp
+        sandbox.Math = Math
         sandbox.document = {
             create$: (what: any) => $(document.createElement(what)),
             createElement: (what: any) => document.createElement(what),
+            createTextNode: (what: any) => document.createTextNode(what),
             getElementById: (id: String) =>
                 console.error(
                     `document.getElementById is not supported. Please use scope.find('#${id}') instead`
@@ -106,6 +126,9 @@ function compileCode(src: string) {
                 console.error(
                     `document.getElementsByClassName is not supported. Please use scope.find('.${cl}') instead`
                 ),
+        }
+        sandbox.window = {
+            devicePixelRatio: window.devicePixelRatio,
         }
 
         if (!sandboxProxies.has(sandbox)) {
@@ -173,7 +196,7 @@ export class ScriptBlock implements IScriptBlock {
                     this.fkt = new Function(
                         legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix
                     )
-                } else if (this.version === '101' || this.version === '102') {
+                } else if (this.version === '101') {
                     this.fkt = new Function(
                         v101CodeTemplate.prefix + code + v101CodeTemplate.postfix
                     )
