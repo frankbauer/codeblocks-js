@@ -216,6 +216,12 @@ export class BlockData extends Vue implements IBlockData {
             this.recreateScriptObject()
         }
     }
+
+    get scope(): JQuery<HTMLElement> {
+        return this.scopeSelector
+            ? $(this.scopeSelector)
+            : $(`.codeblocks[uuid="${this.appSettings.uuid}"]`)
+    }
 }
 
 export interface IMainBlock extends IAppSettings {
