@@ -265,6 +265,24 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
+        Vue.$CodeBlock.baseurl + 'js/three.js/r140/three.min.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/r140/js/controls/OrbitControls.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/r140/js/controls/TrackballControls.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/r140/jsm/controls/CinematicCamera.js',
+        Vue.$CodeBlock.baseurl + 'js/three.js/r140/jsm/libs/lil-gui.module.min.js',
+    ],
+    '3js',
+    'r140',
+    'Three.JS',
+    false,
+    2000,
+    (sandbox) => {
+        sandbox.THREE = (window as any).THREE
+    }
+)
+
+compilerRegistry.registerDOMLib(
+    [
         Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/phaser.min.js',
         Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/support.js',
     ],
