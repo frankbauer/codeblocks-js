@@ -270,7 +270,7 @@
             </q-card>
 
             <q-slide-transition>
-                <q-card class="q-mr-sm-none q-mt-sm" v-if="runCode">
+                <q-card class="q-mr-sm-none q-mt-sm">
                     <q-card-section class="text-overline">{{
                         $t('CodeBlocksSettings.Libraries')
                     }}</q-card-section>
