@@ -137,7 +137,14 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             libs,
             function () {
                 dlibs.forEach((l) => (l.didLoad = true))
-                whenLoaded()
+
+                if (window.MathJax === undefined) {
+                    whenLoaded()
+                } else {
+                    MathJax.Hub.Register.StartupHook('End', () => {
+                        whenLoaded()
+                    })
+                }
             }.bind(this)
         )
     }
