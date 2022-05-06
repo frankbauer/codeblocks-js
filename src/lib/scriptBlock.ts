@@ -92,12 +92,12 @@ function compileCode(src: string) {
             }
         }
 
-        const oldFetch = fetch
+        //const oldFetch = fetch
         const oldRequestAnimationFrame = requestAnimationFrame
-        sandbox.fetch = (uri, options) => {
-            console.i('Fetching', uri, 'from Sandbox')
-            return oldFetch(uri, options)
-        }
+        // sandbox.fetch = (uri, options) => {
+        //     console.i('Fetching', uri, 'from Sandbox')
+        //     return oldFetch(uri, options)
+        // }
         sandbox.requestAnimationFrame = (callback) => {
             oldRequestAnimationFrame(callback)
         }
