@@ -118,6 +118,22 @@
                                         </div>
                                     </div>
 
+                                    <div class="row no-wrap q-pl-md" v-if="canLoadResources">
+                                        <div class="col-7">
+                                            <div class="text-subtitle2">
+                                                {{ $l('CodeBlockContainer.ReloadResources') }}
+                                            </div>
+                                            <div class="text-caption text-blue-grey-4">
+                                                {{
+                                                    $l('CodeBlockContainer.ReloadResources_detail')
+                                                }}
+                                            </div>
+                                        </div>
+                                        <div class="col-5 q-pl-sm">
+                                            <q-toggle v-model="shouldReloadResources" />
+                                        </div>
+                                    </div>
+
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
@@ -312,7 +328,7 @@ import { IListItemData } from '@/lib/ICompilerRegistry'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { blocklyLoader } from '@/lib/BlockloadManagers/BlocklyManager'
-import { IOnChangeOrder } from './CodeBlocks.vue'
+import { IOnChangeOrder, IOnReloadResourcesInfo } from './CodeBlocks.vue'
 
 @Component
 export default class CodeBlocksContainer extends Vue {
@@ -569,6 +585,16 @@ export default class CodeBlocksContainer extends Vue {
             id: this.block.id,
         })
     }
+    get shouldReloadResources(): boolean {
+        return this.block.shouldReloadResources
+    }
+    set shouldReloadResources(v: boolean) {
+        const data: IOnReloadResourcesInfo = {
+            shouldReloadResources: v,
+            id: this.block.id,
+        }
+        this.$emit('reload-resources-change', data)
+    }
     get shouldGenerateTemplate(): boolean {
         return this.block.generateTemplate
     }
@@ -597,6 +623,10 @@ export default class CodeBlocksContainer extends Vue {
             version: v.value,
             id: this.block.id,
         })
+    }
+
+    get canLoadResources(): boolean {
+        return +this.scriptVersion > 100
     }
 
     get hasAltComntent(): boolean {

@@ -329,7 +329,12 @@ export class ScriptBlock implements IScriptBlock {
         }
     }
 
+    RESOURCES: any[] | undefined = undefined
+    resetResources() {
+        this.RESOURCES = undefined
+    }
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void {
+        const self = this
         this.queuedMessages = []
         this.queuedIncomingMessages = []
         this.lazyInit()
@@ -338,32 +343,108 @@ export class ScriptBlock implements IScriptBlock {
             return
         }
         try {
-            console.i('!!! INIT CANVAS !!!')
             if (this.requestsOriginalVersion()) {
+                console.i('!!! INIT CANVAS (original) !!!')
                 const o = this.obj as ILegacyPlaygroundObject
                 o.init(canvasElement)
             } else {
-                const arunner: any = runner
-                arunner.run = runner
-                arunner.postMessage = this.doPostMessageToWorker.bind(this)
+                const o = this.obj as IPlaygroundObject
 
-                let outputElement: JQuery<HTMLElement> | undefined = undefined
-                if (scope === undefined || scope.length === 0) {
-                    scope = canvasElement.parents('.codeblocks')
-                }
-                if (scope !== undefined) {
-                    outputElement = scope.find('div.runner pre.output')
-                }
-                if (outputElement === undefined) {
-                    console.error('[Internal Error] No Output Element found!')
-                    this.pushError('[Internal Error] No Output Element found!')
+                if (o.resources) {
+                    if (self.RESOURCES === undefined) {
+                        console.i('!!! FETCHING RESOURCES !!!')
+                        self.RESOURCES = []
+                        const requests = o.resources().map((res, idx, array) => {
+                            return fetch(res.uri)
+                                .then((response) => {
+                                    if (!response.ok) {
+                                        throw new Error('Unable to retrive ' + res.uri)
+                                    }
+                                    if (res.type === 'json') {
+                                        return response.json()
+                                    } else if (res.type === 'text') {
+                                        return response.text()
+                                    } else if (res.type === 'image') {
+                                        return response.blob()
+                                    } else if (res.type === 'buffer') {
+                                        return response.arrayBuffer()
+                                    }
+                                    return response.blob()
+                                })
+                                .then((data) => {
+                                    if (res.type === 'image') {
+                                        data = URL.createObjectURL(data)
+                                    }
+                                    if (self.RESOURCES === undefined) {
+                                        self.RESOURCES = []
+                                    }
+                                    self.RESOURCES[idx] = data
+
+                                    if (res.name) {
+                                        self.RESOURCES[res.name] = data
+                                        const a = o as any
+                                        a[res.name] = data
+                                    }
+                                    return data
+                                })
+                        })
+
+                        Promise.all(requests)
+                            .then((values) => {
+                                if (self.RESOURCES === undefined) {
+                                    self.RESOURCES = []
+                                }
+                                o.RESOURCES = self.RESOURCES
+                                self._runInit(canvasElement, scope, runner)
+                            })
+                            .catch((e) => console.error(e))
+                    } else {
+                        console.i('!!! READING CACHED RESOURCES !!!')
+                        o.RESOURCES = self.RESOURCES
+                        o.resources().forEach((res) => {
+                            if (res.name) {
+                                const a = o as any
+                                if (self.RESOURCES !== undefined) {
+                                    a[res.name] = self.RESOURCES[res.name]
+                                }
+                            }
+                        })
+                        self._runInit(canvasElement, scope, runner)
+                    }
                 } else {
-                    const o = this.obj as IPlaygroundObject
-                    o.init(canvasElement, outputElement, scope, runner)
+                    o.RESOURCES = []
+                    this._runInit(canvasElement, scope, runner)
                 }
             }
         } catch (e) {
             this.pushError(e)
+        }
+    }
+
+    _runInit(
+        canvasElement: JQuery<HTMLElement>,
+        scope: JQuery<HTMLElement>,
+        runner: () => void
+    ): void {
+        console.i('!!! INIT CANVAS !!!')
+
+        const arunner: any = runner
+        arunner.run = runner
+        arunner.postMessage = this.doPostMessageToWorker.bind(this)
+
+        let outputElement: JQuery<HTMLElement> | undefined = undefined
+        if (scope === undefined || scope.length === 0) {
+            scope = canvasElement.parents('.codeblocks')
+        }
+        if (scope !== undefined) {
+            outputElement = scope.find('div.runner pre.output')
+        }
+        if (outputElement === undefined) {
+            console.error('[Internal Error] No Output Element found!')
+            this.pushError('[Internal Error] No Output Element found!')
+        } else {
+            const o = this.obj as IPlaygroundObject
+            o.init(canvasElement, outputElement, scope, runner)
         }
     }
 

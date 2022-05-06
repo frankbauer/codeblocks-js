@@ -10,6 +10,7 @@ import CodeBlocks, {
     IOnThemeChangeInfo,
     IOnGenerateTemplateInfo,
     IOnChangeOrder,
+    IOnReloadResourcesInfo,
 } from '@/components/CodeBlocks.vue'
 import { KnownBlockTypes, CodeOutputTypes } from '@/lib/ICodeBlocks'
 
@@ -134,6 +135,14 @@ export default class CodeBlocksEditor extends CodeBlocks {
             return
         }
         bl.shouldAutoreset = nfo.shouldAutoreset
+    }
+
+    onReloadResources(nfo: IOnReloadResourcesInfo): void {
+        let bl = this.blockById(nfo.id)
+        if (bl === undefined) {
+            return
+        }
+        bl.shouldReloadResources = nfo.shouldReloadResources
     }
 
     onSetGenerateTemplate(nfo: IOnGenerateTemplateInfo): void {

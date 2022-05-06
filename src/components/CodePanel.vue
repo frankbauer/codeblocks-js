@@ -76,6 +76,7 @@ export default class CodePanel extends Vue {
             visibleLines: 'auto',
             hasAlternativeContent: false,
             shouldAutoreset: false,
+            shouldReloadResources: false,
             generateTemplate: true,
             firstLine: 1,
             actualContent: '',

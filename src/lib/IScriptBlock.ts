@@ -6,6 +6,11 @@ export interface IParsedError {
     msg: string
 }
 
+export interface IResourceInfo {
+    uri: string
+    type: 'json' | 'image' | 'text' | 'blob' | 'buffer'
+    name?: string
+}
 export interface ILegacyPlaygroundObject {
     init(canvasElement: JQuery<HTMLElement>): void
     reset?(canvasElement: JQuery<HTMLElement>): void
@@ -34,6 +39,8 @@ export interface IPlaygroundObject {
     beforeStart?(): void
     whenFinished?(args: string[] | object, resultData?: object | any[]): void
     addArgumentsTo?(args: object | string[]): void
+    resources?(): IResourceInfo[]
+    RESOURCES: any[]
 }
 
 export interface IProcessedScriptOutput {
@@ -71,4 +78,5 @@ export interface IScriptBlock {
     didReceiveMessage(cmd: string, data: any)
     beforeStart()
     whenFinished(args: string[] | object, resultData: object | any[])
+    resetResources()
 }

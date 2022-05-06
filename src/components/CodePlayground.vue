@@ -266,6 +266,9 @@ export default class CodePlayground extends BaseBlock {
                 if (this.block.obj !== null) {
                     const canvas: any = $(this.canvas as HTMLElement)
                     const scope: any = this.block.scope
+                    if (this.block.shouldReloadResources) {
+                        this.block.obj.resetResources()
+                    }
                     this.block.obj.init(
                         canvas as JQuery<HTMLElement>,
                         scope as JQuery<HTMLElement>,

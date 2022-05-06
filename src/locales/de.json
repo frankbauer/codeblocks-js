@@ -4,6 +4,8 @@
         "Initial_Content": "Lösungsvorgabe"
     },
     "CodeBlockContainer": {
+        "ReloadResources":"Resourcen immer neu laden",
+        "ReloadResources_detail":"Resourcen in Sandkästen die über die resources()-Methode geladen werden immer abrufen bevor init aufgerufen wird.",
         "Order":"Reihenfolge",
         "Display": "Darstellung",
         "Lines": "Zeilen",

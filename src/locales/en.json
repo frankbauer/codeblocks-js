@@ -4,6 +4,8 @@
         "Initial_Content": "Initial Content"
     },
     "CodeBlockContainer": {
+        "ReloadResources":"No Resource Cache",
+        "ReloadResources_detail":"Allways fetch resources from a Sandboxes resources()-Method before init is called.",
         "Order": "Order",
         "Display": "Display",
         "Lines": "Lines",
