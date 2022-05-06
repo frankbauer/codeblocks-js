@@ -4,6 +4,7 @@
         "Initial_Content": "Lösungsvorgabe"
     },
     "CodeBlockContainer": {
+        "Order":"Reihenfolge",
         "Display": "Darstellung",
         "Lines": "Zeilen",
         "Lines_detail": "Anzahl sichtbarer Zeilen oder <b>auto</b>.",

@@ -9,6 +9,7 @@ import CodeBlocks, {
     IOnSetAutoResetInfo,
     IOnThemeChangeInfo,
     IOnGenerateTemplateInfo,
+    IOnChangeOrder,
 } from '@/components/CodeBlocks.vue'
 import { KnownBlockTypes, CodeOutputTypes } from '@/lib/ICodeBlocks'
 
@@ -152,6 +153,13 @@ export default class CodeBlocksEditor extends CodeBlocks {
     }
     moveDown(idx: number): void {
         this.blockInfo.moveDown(idx)
+    }
+    onChangeOrder(nfo: IOnChangeOrder): void {
+        let bl = this.blockById(nfo.id)
+        if (bl === undefined) {
+            return
+        }
+        this.blockInfo.changeOrder(nfo.id, nfo.newID)
     }
     addNewBlock(): void {
         this.blockInfo.addNewBlock()

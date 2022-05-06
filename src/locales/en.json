@@ -4,6 +4,7 @@
         "Initial_Content": "Initial Content"
     },
     "CodeBlockContainer": {
+        "Order": "Order",
         "Display": "Display",
         "Lines": "Lines",
         "Lines_detail": "Number of Visible lines or <b>auto</b>.",

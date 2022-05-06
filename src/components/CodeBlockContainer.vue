@@ -198,6 +198,14 @@
                             color="orange-6"
                             :ripple="{ center: true }"
                         ></q-btn>
+                        <div class="inlined-input q-pl-sm q-pr-md q-m-none" style="width: 80px">
+                            <q-select
+                                :options="positions"
+                                v-model="order"
+                                dense
+                                style="margin-top: -5px !important"
+                            ></q-select>
+                        </div>
                         <q-btn
                             @click="moveDown"
                             :disabled="!canMoveDown"
@@ -304,6 +312,7 @@ import { IListItemData } from '@/lib/ICompilerRegistry'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { blocklyLoader } from '@/lib/BlockloadManagers/BlocklyManager'
+import { IOnChangeOrder } from './CodeBlocks.vue'
 
 @Component
 export default class CodeBlocksContainer extends Vue {
@@ -376,6 +385,15 @@ export default class CodeBlocksContainer extends Vue {
         ]
     }
 
+    get positions(): IListItemData[] {
+        return this.block.appSettings.blocks.map((bl) => {
+            return {
+                label: `${bl.id + 1}`,
+                value: `${bl.id}`,
+            }
+        })
+    }
+
     get isDeprecatedScriptVersion(): boolean {
         return this.scriptVersion === '100'
     }
@@ -408,6 +426,16 @@ export default class CodeBlocksContainer extends Vue {
     moveDown(): void {
         this.$emit('move-down', this.block.id)
     }
+
+    get order(): IListItemData {
+        return Vue.$CodeBlock.itemForValue(this.positions, this.block.id)
+    }
+
+    set order(val: IListItemData) {
+        const data: IOnChangeOrder = { id: this.block.id, newID: +val.value }
+        this.$emit('change-order', data)
+    }
+
     showTypeInfoDialog(): void {
         this.$q
             .dialog({
@@ -712,7 +740,8 @@ export default class CodeBlocksContainer extends Vue {
 </script>
 
 <style lang="sass">
-
+.inlined-input
+    display : inline-block
 .editModeBlockContainer
     border-radius : 0px !important
     border-left-width : 4px !important

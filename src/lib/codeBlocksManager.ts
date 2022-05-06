@@ -228,6 +228,7 @@ export interface IMainBlock extends IAppSettings {
     swap(id1: number, id2: number): void
     moveUp(id: number): void
     moveDown(id: number): void
+    changeOrder(id: number, newID: number): void
     removeBlock(idx: number): void
     addNewBlock(): void
 
@@ -631,6 +632,9 @@ class InternalCodeBlocksManager {
                             return
                         }
                         this.swap(id, id + 1)
+                    }
+                    changeOrder(id: number, newID: number): void {
+                        this.swap(id, newID)
                     }
                     removeBlock(idx: number) {
                         data.blocks.splice(idx, 1)

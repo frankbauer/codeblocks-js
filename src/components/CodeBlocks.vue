@@ -42,6 +42,7 @@
             @remove-block="removeBlock"
             @auto-reset-change="onSetAutoReset"
             @generate-template-change="onSetGenerateTemplate"
+            @change-order="onChangeOrder"
         >
             <CodeBlock
                 v-if="block.hasCode && block.type != 'BLOCKLY'"
@@ -283,6 +284,11 @@ export interface IOnThemeChangeInfo {
     code: string
 }
 
+export interface IOnChangeOrder {
+    id: number
+    newID: number
+}
+
 @Component({
     components: {
         CodeBlockContainer,
@@ -503,6 +509,7 @@ export default class CodeBlocks extends Vue {
     onOutputParserChange(v: CodeOutputTypes): void {}
     moveUp(idx: number): void {}
     moveDown(idx: number): void {}
+    onChangeOrder(nfo: IOnChangeOrder): void {}
     removeBlock(idx: number): void {}
     addNewBlock(): void {}
     onPlaygroundChangedOutput(newOutput: string | undefined): void {
