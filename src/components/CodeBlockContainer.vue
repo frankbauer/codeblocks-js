@@ -343,6 +343,10 @@ export default class CodeBlocksContainer extends Vue {
                 value: KnownBlockTypes.PLAYGROUND,
             },
             {
+                label: this.$l('CodeBlockContainer.DataBlock'),
+                value: KnownBlockTypes.DATA,
+            },
+            {
                 label: this.$l('CodeBlockContainer.Text'),
                 value: KnownBlockTypes.TEXT,
             },
@@ -654,6 +658,8 @@ export default class CodeBlocksContainer extends Vue {
             return 'text-border'
         } else if (t == KnownBlockTypes.PLAYGROUND) {
             return 'playground-border'
+        } else if (t == KnownBlockTypes.DATA) {
+            return 'data-border'
         } else if (t == KnownBlockTypes.BLOCK) {
             return 'block-border'
         } else if (t == KnownBlockTypes.BLOCKHIDDEN) {

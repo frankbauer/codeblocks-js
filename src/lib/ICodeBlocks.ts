@@ -10,6 +10,7 @@ export enum KnownBlockTypes {
     BLOCK = 'BLOCK',
     BLOCKLY = 'BLOCKLY',
     REPL = 'REPL',
+    DATA = 'DATA',
 }
 
 export enum CodeOutputTypes {
@@ -58,6 +59,10 @@ export interface IBlockDataPlayground {
     align: string
 }
 
+export interface IBlockDataData {
+    name: string
+}
+
 export interface IBlockError {
     error: string
     uuid: string
@@ -83,6 +88,7 @@ export interface IBlockElementData {
     scopeSelector?: string
     showControls?: boolean
     as?: string
+    name?: string
 }
 
 export interface IBlockDataBlockly {
@@ -99,7 +105,7 @@ export interface ICodeBlockDataState {
     static: boolean
     hidden: boolean
 }
-export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataState {
+export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataState, IBlockDataData {
     hasCode: boolean
     type: KnownBlockTypes
     content: string

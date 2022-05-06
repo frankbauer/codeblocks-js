@@ -110,6 +110,17 @@
                 @run="run"
                 @stop="stop"
             />
+
+            <DataBlock
+                v-else-if="block.type == 'DATA'"
+                :block="block"
+                :editMode="editMode"
+                :finalOutputObject="finalOutputObject"
+                :theme="themeForBlock(block)"
+                :tagSet="activeTagSet"
+                @ready="blockBecameReady"
+                :eventHub="eventHub"
+            />
         </CodeBlockContainer>
 
         <div class="row justify-end" v-if="editMode">
@@ -202,6 +213,7 @@ import CodePanel from '@/components/CodePanel.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
 import SimpleText from '@/components/SimpleText.vue'
+import DataBlock from '@/components/DataBlock.vue'
 import { BlockData, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
 import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import {
@@ -305,6 +317,7 @@ export interface IOnChangeOrder {
         Blockly,
         CodePanel,
         CodeREPL,
+        DataBlock,
     },
 })
 export default class CodeBlocks extends Vue {
@@ -455,6 +468,9 @@ export default class CodeBlocks extends Vue {
     }
     get playgrounds(): BlockData[] {
         return this.blocks.filter((b) => b.type == 'PLAYGROUND')
+    }
+    get dataBlocks(): BlockData[] {
+        return this.blocks.filter((b) => b.type == 'DATA')
     }
     get outputElement(): HTMLElement {
         return this.$refs.output as HTMLElement

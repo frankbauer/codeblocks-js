@@ -10,6 +10,7 @@ import {
 } from '@/lib/IScriptBlock'
 import { ICompileAndRunArguments } from './ICompilerRegistry'
 import compilerRegistry from './CompilerRegistry'
+import { IBlockData } from './ICodeBlocks'
 interface ICodeTemplate {
     prefix: string
     postfix: string
@@ -329,6 +330,29 @@ export class ScriptBlock implements IScriptBlock {
         }
     }
 
+    DATA: any[] = []
+    resetBlockData(blocks: IBlockData[] | undefined) {
+        this.DATA = []
+        if (blocks !== undefined) {
+            this.addBlockDataFromBlocks(blocks)
+        }
+    }
+
+    addBlockDataFromBlocks(blocks: IBlockData[]): void {
+        blocks.filter((b) => b.type == 'DATA').forEach((b) => this.addBlockDataFromBlock(b))
+    }
+    addBlockDataFromBlock(block: IBlockData): void {
+        this.addBlockData(block.name, block.content)
+    }
+
+    addBlockData(name: string, content: string): void {
+        try {
+            this.DATA[name] = JSON.parse(content)
+        } catch (e) {
+            this.DATA[name] = undefined
+            console.error(`Unable to parse JSON from '${name}'`, e)
+        }
+    }
     RESOURCES: any[] | undefined = undefined
     resetResources() {
         this.RESOURCES = undefined
@@ -349,7 +373,7 @@ export class ScriptBlock implements IScriptBlock {
                 o.init(canvasElement)
             } else {
                 const o = this.obj as IPlaygroundObject
-
+                o.DATA = this.DATA
                 if (o.resources) {
                     if (self.RESOURCES === undefined) {
                         console.i('!!! FETCHING RESOURCES !!!')

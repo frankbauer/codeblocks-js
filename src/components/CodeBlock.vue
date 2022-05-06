@@ -522,6 +522,9 @@ export default class CodeBlock extends BaseBlock {
         if (t == 'blockly') {
             return 5
         }
+        if (t == 'data') {
+            return 6
+        }
         return -1
     }
     get typeName() {

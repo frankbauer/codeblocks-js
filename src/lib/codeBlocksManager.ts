@@ -29,6 +29,7 @@ import {
 import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
 import blocklyInstaller from '@/lib/BlockloadManagers/BlocklyManager'
 import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
+import dataInstaller from '@/lib/BlockloadManagers/DataManager'
 import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
 import { trim } from 'jquery'
 
@@ -37,6 +38,7 @@ blockInstaller(loaders)
 blocklyInstaller(loaders)
 playgroundInstaller(loaders)
 REPLInstaller(loaders)
+dataInstaller(loaders)
 
 Vue.prototype.$compilerRegistry = CompilerRegistry
 
@@ -96,7 +98,6 @@ export interface IBlockBookmarkPayload {
     uuid: string
     block: BlockData | null
 }
-
 @Component
 export class BlockData extends Vue implements IBlockData {
     appSettings!: IAppSettings
@@ -111,6 +112,7 @@ export class BlockData extends Vue implements IBlockData {
     expanded!: boolean
     codeExpanded!: CodeExpansionType
     obj!: ScriptBlock | null
+    dataObj!: any | null
     readonly!: boolean
     static!: boolean
     hidden!: boolean
@@ -129,6 +131,7 @@ export class BlockData extends Vue implements IBlockData {
     align!: string
     blockly!: IBlockDataBlockly
     lineCountHint!: number
+    name!: string
     _oac?: () => string //used by Blockly to re-place the actualContent-Method while keeping the old implementation around
 
     actualContent() {
@@ -143,10 +146,18 @@ export class BlockData extends Vue implements IBlockData {
     }
     recreateScriptObject() {
         if (this.type === KnownBlockTypes.PLAYGROUND) {
-            console.i('recreateScriptObject')
+            console.i('recreateScriptObject - Playground')
 
             const so = new ScriptBlock(this.actualContent(), this.version)
             this.obj = so
+            console.i('Block Rebuild', this.obj, this.uuid)
+        } else if (this.type === KnownBlockTypes.DATA) {
+            console.i('recreateScriptObject - Data')
+
+            this.dataObj = {
+                name: '',
+                content: '',
+            }
             console.i('Block Rebuild', this.obj, this.uuid)
         }
     }
@@ -248,7 +259,7 @@ const useShadowDOM = false
 //this will handle the vue mounting on the dom
 class InternalCodeBlocksManager {
     constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
-        if (bl.type === KnownBlockTypes.PLAYGROUND) {
+        if (bl.type === KnownBlockTypes.PLAYGROUND || bl.type === KnownBlockTypes.DATA) {
             if (bl.content == '' || bl.content === undefined || bl.content === null) {
                 bl.content = '{}'
             }
@@ -473,6 +484,7 @@ class InternalCodeBlocksManager {
                 align: 'center',
                 readyCount: 0,
                 obj: null,
+                name: `v${data.blocks.length}`,
                 lineCountHint: -1,
                 blockly: {
                     showControls: false,
@@ -653,6 +665,7 @@ class InternalCodeBlocksManager {
                             content: '',
                             id: data.blocks.length,
                             uuid: uuid.v4(),
+                            name: `v${data.blocks.length}`,
                             parentID: data.id,
                             expanded: true,
                             codeExpanded: CodeExpansionType.AUTO,

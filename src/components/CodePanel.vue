@@ -89,6 +89,7 @@ export default class CodePanel extends Vue {
             hidden: false,
             themeForCodeBlock: '',
             lineCountHint: -0,
+            name: '',
             getThemeForBlock: (bl: ICodeBlockDataState) => {
                 return ''
             },

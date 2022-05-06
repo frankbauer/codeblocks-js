@@ -1,3 +1,4 @@
+import { IBlockData } from './ICodeBlocks'
 import { ICompileAndRunArguments } from './ICompilerRegistry'
 
 export interface IParsedError {
@@ -41,6 +42,7 @@ export interface IPlaygroundObject {
     addArgumentsTo?(args: object | string[]): void
     resources?(): IResourceInfo[]
     RESOURCES: any[]
+    DATA: any[]
 }
 
 export interface IProcessedScriptOutput {
@@ -79,4 +81,5 @@ export interface IScriptBlock {
     beforeStart()
     whenFinished(args: string[] | object, resultData: object | any[])
     resetResources()
+    resetBlockData(blocks: IBlockData[] | undefined)
 }

@@ -42,6 +42,7 @@ export default class PlaygroundCanvas extends Vue {
                 this.$nextTick(() => {
                     this.$nextTick(() => {
                         this.obj.resetResources()
+                        this.obj.resetBlockData(this.block.appSettings.blocks)
                         this.obj.rebuild() //we need to rebuild the script to make sure its context is the current state of the DOM
                         this.obj.init($(this.canvas), this.block.scope, this.runner)
                         this.$emit('did-init', this.canvas)
