@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-grow"></div>
                     <div
-                        class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none text-right"
+                        class="order-xs-first order-sm-last col-xs-12 col-sm-8 col-md-5 q-my-none q-py-none rightContentContainerHeader"
                     >
                         <q-btn icon="settings" color="blue-7" push dense v-if="hasExtendedSettings">
                             <q-popup-proxy>
@@ -776,6 +776,10 @@ export default class CodeBlocksContainer extends Vue {
 </script>
 
 <style lang="sass">
+.rightContentContainerHeader
+    display: flex
+    justify-content: flex-end
+    align-items: center
 .inlined-input
     display : inline-block
 .editModeBlockContainer

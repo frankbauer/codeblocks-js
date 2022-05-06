@@ -8,8 +8,8 @@
                 </template>
             </q-banner>
         </transition>
-        <div class="row justify-between" style="width: 100%">
-            <div>
+        <div class="row justify-between controlContainer">
+            <div class="multiDiv">
                 <div class="inlined-input q-mr-sm">
                     <q-btn
                         flat
@@ -20,8 +20,9 @@
                         @click="showInfoDialog"
                     ></q-btn>
                 </div>
-                <div class="q-mr-lg inlined-input">
-                    <q-input label="Name" v-model="name" rounded filled> </q-input>
+                <div class="q-mr-lg inlined-input noMoreBottomMargin">
+                    <q-input label="Name" v-model="name" rounded filled class="noMoreBottomMargin">
+                    </q-input>
                 </div>
                 <div class="inlined-input">
                     <input
@@ -41,30 +42,32 @@
                     </q-btn>
                 </div>
             </div>
-
-            <q-btn-group rounded class="q-mb-sm" v-if="editMode">
-                <q-btn
-                    :color="isExpandedAuto ? 'primary' : 'blue-grey-4'"
-                    small
-                    label="Auto"
-                    icon="video_label"
-                    @click="setExpandedAuto"
-                />
-                <q-btn
-                    :color="isExpandedLarge ? 'primary' : 'blue-grey-4'"
-                    small
-                    label="Large"
-                    icon="call_to_action"
-                    @click="setExpandedLarge"
-                />
-                <q-btn
-                    :color="isExpandedTiny ? 'primary' : 'blue-grey-4'"
-                    small
-                    label="Small"
-                    icon="visibility_off"
-                    @click="setExpandedTiny"
-                />
-            </q-btn-group>
+            <div class="col-grow"></div>
+            <div>
+                <q-btn-group rounded class="q-mb-sm" v-if="editMode">
+                    <q-btn
+                        :color="isExpandedAuto ? 'primary' : 'blue-grey-4'"
+                        small
+                        label="Auto"
+                        icon="video_label"
+                        @click="setExpandedAuto"
+                    />
+                    <q-btn
+                        :color="isExpandedLarge ? 'primary' : 'blue-grey-4'"
+                        small
+                        label="Large"
+                        icon="call_to_action"
+                        @click="setExpandedLarge"
+                    />
+                    <q-btn
+                        :color="isExpandedTiny ? 'primary' : 'blue-grey-4'"
+                        small
+                        label="Small"
+                        icon="visibility_off"
+                        @click="setExpandedTiny"
+                    />
+                </q-btn-group>
+            </div>
         </div>
         <q-slide-transition>
             <CodeBlock
@@ -136,7 +139,9 @@ export default class DataBlock extends BaseBlock {
     get name(): string {
         return this.block.name
     }
-    set name(newName: string) {}
+    set name(newName: string) {
+        this.block.name = newName
+    }
 
     get visibleLinesNow(): 'auto' | string {
         if (this.block.codeExpanded == CodeExpansionType.TINY) {
@@ -300,6 +305,19 @@ export default class DataBlock extends BaseBlock {
 </script>
 
 <style lang="sass" scoped>
+.noMoreBottomMargin
+    margin-bottom: 0px!important
+.controlContainer
+    display: flex
+    justify-content: space-between
+    width: 100%
+    flex-wrap: nowrap
+    flex-direction: row
+    align-content: flex-end
+    align-items: flex-end
+.multiDiv
+    display: flex
+    align-items: flex-end
 .fileUploader
     display: none!important
 .inlined-input
