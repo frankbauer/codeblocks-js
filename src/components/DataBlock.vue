@@ -1,19 +1,45 @@
 <template>
     <div>
+        <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
+            <q-banner inline-actions class="text-white bg-red q-mb-md" v-if="hasError">
+                {{ error }}
+                <template v-slot:action>
+                    <q-btn flat color="white" label="OK" @click="error = ''" />
+                </template>
+            </q-banner>
+        </transition>
         <div class="row justify-between" style="width: 100%">
-            <div class="q-mr-lg">
-                <q-input label="Name" v-model="name" rounded filled>
-                    <template v-slot:after>
-                        <q-btn
-                            flat
-                            round
-                            color="primary"
-                            icon="info"
-                            size="xs"
-                            @click="showInfoDialog"
-                        ></q-btn>
-                    </template>
-                </q-input>
+            <div>
+                <div class="inlined-input q-mr-sm">
+                    <q-btn
+                        flat
+                        round
+                        color="primary"
+                        icon="info"
+                        size="xs"
+                        @click="showInfoDialog"
+                    ></q-btn>
+                </div>
+                <div class="q-mr-lg inlined-input">
+                    <q-input label="Name" v-model="name" rounded filled> </q-input>
+                </div>
+                <div class="inlined-input">
+                    <input
+                        class="fileUploader"
+                        type="file"
+                        ref="fileUploader"
+                        @change="onUpload($event)"
+                    />
+
+                    <q-btn
+                        color="teal"
+                        filled
+                        label="Add Image Data"
+                        icon="cloud_upload"
+                        @click="openImage"
+                    >
+                    </q-btn>
+                </div>
             </div>
 
             <q-btn-group rounded class="q-mb-sm" v-if="editMode">
@@ -198,10 +224,86 @@ export default class DataBlock extends BaseBlock {
                 // console.log('I am triggered on both OK and Cancel')
             })
     }
+
+    openImage(): void {
+        const uploader: any = this.$refs['fileUploader']
+        uploader.click()
+    }
+    error: string = ''
+    get hasError(): boolean {
+        return this.error !== ''
+    }
+
+    onUpload(event): void {
+        const uploader: any = this.$refs['fileUploader']
+        console.log('Selected Files: ', uploader.files.length)
+        if (uploader.files === undefined || uploader.files.length < 1) {
+            return
+        }
+
+        const files = uploader.files
+        for (let i = 0; i < files.length; i++) {
+            const fl = files[i]
+            //console.log(fl)
+            if (!fl.type.startsWith('image/')) {
+                this.error = `Uploads of type '${fl.type}' are not allowed.`
+                console.error(this.error)
+                break
+            }
+
+            if (fl.size > 500 * 1025) {
+                this.error = `Maximum allowed upload size are 500kB.`
+                console.error(this.error)
+                break
+            }
+            const fr = new FileReader()
+            fr.onload = () => {
+                this.addImageURL(fl.name, fr.result)
+            }
+            fr.onerror = (e) => {
+                console.error(fr.error)
+                this.error = fr.error === undefined || fr.error === null ? '' : fr.error.message
+            }
+            fr.readAsDataURL(fl)
+        }
+        uploader.value = ''
+    }
+
+    addImageURL(fileName, img) {
+        let json = {}
+        try {
+            json = JSON.parse(this.block.content)
+        } catch (e) {
+            console.error(e)
+        }
+        let i = -1
+        let name
+        do {
+            i++
+            if (i == 0) {
+                name = fileName
+            } else {
+                name = `${fileName}_${i}`
+            }
+        } while (json[name] !== undefined)
+        json[name] = img
+        this.block.content = JSON.stringify(json, undefined, 4)
+    }
+    get images(): any {
+        return []
+    }
+
+    set images(val: any) {
+        console.log('IMAGES:' + val)
+    }
 }
 </script>
 
 <style lang="sass" scoped>
+.fileUploader
+    display: none!important
+.inlined-input
+    display: inline-block
 .playgroundedit
     border-radius: 5px
 .hiddenBlock
