@@ -166,7 +166,7 @@ export class BlockData extends Vue implements IBlockData {
     }
 
     getThemeForBlock(bl: ICodeBlockDataState): string {
-        if (bl.static || bl.readonly || bl.hidden) {
+        if (bl.static || bl.readonly || bl.hidden || this.type === KnownBlockTypes.DATA) {
             return this.appSettings.codeTheme
         }
 
@@ -174,7 +174,7 @@ export class BlockData extends Vue implements IBlockData {
     }
 
     get themeForCodeBlock(): string {
-        if (this.static || this.readonly || this.hidden) {
+        if (this.static || this.readonly || this.hidden || this.type === KnownBlockTypes.DATA) {
             return this.appSettings.codeTheme
         }
 
@@ -648,7 +648,12 @@ class InternalCodeBlocksManager {
                         this.swap(id, id + 1)
                     }
                     changeOrder(id: number, newID: number): void {
-                        this.swap(id, newID)
+                        //this.swap(id, newID)
+                        const a = this.blocks[id]
+                        this.blocks.splice(id, 1)
+                        this.blocks.splice(newID, 0, a)
+
+                        this.blocks.forEach((v, i) => (v.id = i))
                     }
                     removeBlock(idx: number) {
                         data.blocks.splice(idx, 1)

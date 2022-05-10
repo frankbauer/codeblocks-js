@@ -8,7 +8,7 @@
                 </template>
             </q-banner>
         </transition>
-        <div class="row justify-between controlContainer">
+        <div class="row justify-between controlContainer" v-if="editMode">
             <div class="multiDiv">
                 <div class="inlined-input q-mr-sm">
                     <q-btn
@@ -24,19 +24,53 @@
                     <q-input label="Name" v-model="name" rounded filled class="noMoreBottomMargin">
                     </q-input>
                 </div>
+                <div class="inlined-input q-mr-md">
+                    <input
+                        class="jsonFileUploader"
+                        type="file"
+                        ref="jsonFileUploader"
+                        @change="onUploadJson($event)"
+                    />
+
+                    <q-btn
+                        color="teal-9"
+                        filled
+                        label="Load JSON"
+                        icon="cloud_upload"
+                        @click="openJson"
+                    >
+                    </q-btn>
+                </div>
+                <div class="inlined-input q-mr-md">
+                    <input
+                        class="plainFileUploader"
+                        type="file"
+                        ref="plainFileUploader"
+                        @change="onUploadPlain($event)"
+                    />
+
+                    <q-btn
+                        color="teal-8"
+                        filled
+                        label="Add Text Data"
+                        icon="post_add"
+                        @click="openPlain"
+                    >
+                    </q-btn>
+                </div>
                 <div class="inlined-input">
                     <input
-                        class="fileUploader"
+                        class="imageFileUploader"
                         type="file"
-                        ref="fileUploader"
-                        @change="onUpload($event)"
+                        ref="imageFileUploader"
+                        @change="onUploadImage($event)"
                     />
 
                     <q-btn
                         color="teal"
                         filled
                         label="Add Image Data"
-                        icon="cloud_upload"
+                        icon="add_photo_alternate"
                         @click="openImage"
                     >
                     </q-btn>
@@ -70,48 +104,74 @@
             </div>
         </div>
         <q-slide-transition>
-            <CodeBlock
-                v-if="editMode"
-                :block="block"
-                :theme="options.theme"
-                :mode="options.mode"
-                :visibleLines="visibleLinesNow"
-                :editMode="this.editMode"
-                :muteReadyState="true"
-                @code-changed-in-edit-mode="onCodeChange"
-            />
+            <codemirror
+                ref="codeBox"
+                :value="code"
+                :options="options"
+                :class="`accqstXmlInput noRTEditor codebox`"
+                @ready="onCodeReady"
+                @focus="onCodeFocus"
+                @input="onCodeChange"
+                :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
+                :id="`teQ${block.parentID}B${block.id}`"
+                :data-question="block.parentID"
+            ></codemirror>
         </q-slide-transition>
     </div>
 </template>
 
 <script lang="ts">
 import 'reflect-metadata'
-import codemirror from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
 
 //helper to reset the canvas area if needed
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import BaseBlock from '@/components/BaseBlock.vue'
 
-import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
 
+import codemirror from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+
+//themes
+import 'codemirror/theme/solarized.css'
+import 'codemirror/theme/base16-dark.css'
+import 'codemirror/theme/base16-light.css'
+import 'codemirror/theme/duotone-dark.css'
+import 'codemirror/theme/duotone-light.css'
+import 'codemirror/theme/xq-dark.css'
+import 'codemirror/theme/xq-light.css'
+import 'codemirror/theme/blackboard.css'
+import 'codemirror/theme/midnight.css'
+import 'codemirror/theme/neo.css'
+import 'codemirror/theme/mbo.css'
+import 'codemirror/theme/mdn-like.css'
+
+//languages
+import 'codemirror/mode/javascript/javascript.js'
+
 @Component({
-    components: { CodeBlock },
+    components: {},
 })
 export default class DataBlock extends BaseBlock {
+    @Prop({ default: '' }) namePrefix!: string
     @Prop({ required: true }) finalOutputObject!: IScriptOutputObject
     @Prop({ required: true })
     block!: BlockData
 
     @Prop({ default: false }) editMode!: boolean
-    @Prop({ default: 'auto' }) visibleLines!: 'auto' | string
     @Prop({ default: 'base16-dark' }) theme!: string
     @Prop({ required: true }) eventHub!: Vue
     @Prop() tagSet?: IRandomizerSet
+
+    get codeBox(): Vue {
+        return this.$refs.codeBox as Vue
+    }
+    get codemirror(): any | undefined {
+        return (this.codeBox as any).codemirror
+    }
 
     get originalMode(): boolean {
         if (this.block.obj === null) {
@@ -136,6 +196,13 @@ export default class DataBlock extends BaseBlock {
         }
     }
 
+    get code() {
+        if (!this.editMode) {
+            return this.block.actualContent()
+        }
+        return this.block.content
+    }
+
     get name(): string {
         return this.block.name
     }
@@ -143,7 +210,7 @@ export default class DataBlock extends BaseBlock {
         this.block.name = newName
     }
 
-    get visibleLinesNow(): 'auto' | string {
+    get visibleLines(): 'auto' | string {
         if (this.block.codeExpanded == CodeExpansionType.TINY) {
             return '2.4'
         } else if (this.block.codeExpanded == CodeExpansionType.LARGE) {
@@ -160,17 +227,14 @@ export default class DataBlock extends BaseBlock {
         if (hasErrors) {
             this.updateErrors()
         }
+        this.updateHeight()
     }
     beforeDestroy() {
         this.eventHub.$off('before-run', this.resetBeforeRun)
         this.eventHub.$off('render-diagnostics', this.updateErrors)
     }
-    isPreparingRun: boolean = false
-    lastRun: Date = new Date()
-    runCount: number = 0
-    canvas: HTMLElement | undefined = undefined
+
     needsCodeRebuild: boolean = false
-    initAndRebuildErrors: any[] = []
 
     get isExpandedLarge(): boolean {
         return this.block.codeExpanded == CodeExpansionType.LARGE
@@ -196,19 +260,65 @@ export default class DataBlock extends BaseBlock {
         if (this.block.codeExpanded != CodeExpansionType.TINY) {
             this.$CodeBlock.refreshAllCodeMirrors()
         }
+        this.updateHeight()
     }
     updateErrors(): boolean {
         return false
     }
     resetBeforeRun(): void {}
 
-    onCodeChange(newCode: string): void {
+    onCodeChange(newCode) {
+        //copy the content to the actual textbox processed by StudON
+        const tb = this.codeBox.$el.querySelector('textarea[name]') as HTMLTextAreaElement
+        tb.value = newCode
+
+        //copy code to the block structure
+        this.block.content = newCode
+
         if (this.editMode) {
             this.needsCodeRebuild = true
         }
     }
+
+    onCodeFocus(editor) {}
     onDidInit(): void {
         this.updateErrors()
+    }
+    onCodeReady(editor) {
+        //we need this for StudON to make sure tinyMCE is not taking over :D
+        if (
+            this.codemirror &&
+            this.codemirror.display &&
+            this.codemirror.display.input &&
+            this.codemirror.display.input.textarea
+        ) {
+            this.codemirror.display.input.textarea.className = 'noRTEditor'
+        }
+        this.codeBox!.$el.querySelectorAll('textarea[name]').forEach((el) => {
+            el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
+            el.id = this.codeBox!.$el.id
+
+            $(el).text(this.block.content)
+            el.setAttribute('data-question', `${this.block.parentID}`)
+
+            if (this.editMode) {
+                el.setAttribute('is-editmode', `${this.editMode}`)
+            }
+        })
+        this.onCodeChange(this.block.content)
+
+        this.whenBlockIsReady()
+    }
+    updateHeight() {
+        if (this.visibleLines === 'auto') {
+            if (this.codemirror) {
+                this.codemirror.setSize('height', 'auto')
+            }
+        } else {
+            if (this.codemirror) {
+                this.codemirror.setSize(null, Math.round(20 * Math.max(1, +this.visibleLines)) + 9)
+            }
+        }
     }
 
     showInfoDialog(): void {
@@ -230,18 +340,17 @@ export default class DataBlock extends BaseBlock {
             })
     }
 
-    openImage(): void {
-        const uploader: any = this.$refs['fileUploader']
-        uploader.click()
-    }
     error: string = ''
     get hasError(): boolean {
         return this.error !== ''
     }
 
-    onUpload(event): void {
-        const uploader: any = this.$refs['fileUploader']
-        console.log('Selected Files: ', uploader.files.length)
+    onUpload(
+        uploader: any,
+        validateFileType: (type: string) => boolean,
+        processor: (fl: File, fr: FileReader) => void,
+        action: (name: string, content: string | ArrayBuffer | null) => void
+    ): void {
         if (uploader.files === undefined || uploader.files.length < 1) {
             return
         }
@@ -249,9 +358,19 @@ export default class DataBlock extends BaseBlock {
         const files = uploader.files
         for (let i = 0; i < files.length; i++) {
             const fl = files[i]
+            let type: string = fl.type
+            if (fl.type == '') {
+                const ext = fl.name.split('.').pop()
+
+                const knownTextExtensions = ['obj', 'mat', 'vsh', 'fsh', 'ply']
+                if (knownTextExtensions.indexOf(ext) === 0) {
+                    type = 'text/' + ext
+                }
+                console.log(ext, type)
+            }
             //console.log(fl)
-            if (!fl.type.startsWith('image/')) {
-                this.error = `Uploads of type '${fl.type}' are not allowed.`
+            if (!validateFileType(type)) {
+                this.error = `Uploads of type '${type}' are not allowed.`
                 console.error(this.error)
                 break
             }
@@ -263,18 +382,72 @@ export default class DataBlock extends BaseBlock {
             }
             const fr = new FileReader()
             fr.onload = () => {
-                this.addImageURL(fl.name, fr.result)
+                action(fl.name, fr.result)
             }
             fr.onerror = (e) => {
                 console.error(fr.error)
                 this.error = fr.error === undefined || fr.error === null ? '' : fr.error.message
             }
-            fr.readAsDataURL(fl)
+            processor(fl, fr)
         }
         uploader.value = ''
     }
 
+    openImage(): void {
+        const uploader: any = this.$refs['imageFileUploader']
+        uploader.click()
+    }
+    openPlain(): void {
+        const uploader: any = this.$refs['plainFileUploader']
+        uploader.click()
+    }
+    openJson(): void {
+        const uploader: any = this.$refs['jsonFileUploader']
+        uploader.click()
+    }
+
+    onUploadImage(event): void {
+        const uploader: any = this.$refs['imageFileUploader']
+        this.onUpload(
+            uploader,
+            (type) => type.startsWith('image/'),
+            (fl, fr) => fr.readAsDataURL(fl),
+            (fileName, content) => this.addImageURL(fileName, content)
+        )
+    }
+
+    onUploadPlain(event): void {
+        const uploader: any = this.$refs['plainFileUploader']
+        this.onUpload(
+            uploader,
+            (type) => type.startsWith('text/'),
+            (fl, fr) => fr.readAsText(fl),
+            (fileName, content) => this.loadPlain(fileName, content)
+        )
+    }
+
+    onUploadJson(event): void {
+        const uploader: any = this.$refs['jsonFileUploader']
+        this.onUpload(
+            uploader,
+            (type) => type.trim() === 'application/json' || type.trim() === 'text/json',
+            (fl, fr) => fr.readAsText(fl),
+            (fileName, content) => this.loadJson(fileName, content)
+        )
+    }
+
+    loadJson(fileName, txt) {
+        this.block.content = txt
+    }
+
+    loadPlain(fileName, txt) {
+        this.addToContent(fileName, txt)
+    }
     addImageURL(fileName, img) {
+        this.addToContent(fileName, img)
+    }
+
+    addToContent(fileName: string, data: string) {
         let json = {}
         try {
             json = JSON.parse(this.block.content)
@@ -291,8 +464,8 @@ export default class DataBlock extends BaseBlock {
                 name = `${fileName}_${i}`
             }
         } while (json[name] !== undefined)
-        json[name] = img
-        this.block.content = JSON.stringify(json, undefined, 4)
+        json[name] = data
+        this.block.content = JSON.stringify(json, undefined, 2)
     }
     get images(): any {
         return []
@@ -318,7 +491,11 @@ export default class DataBlock extends BaseBlock {
 .multiDiv
     display: flex
     align-items: flex-end
-.fileUploader
+.imageFileUploader
+    display: none!important
+.plainFileUploader
+    display: none!important
+.jsonFileUploader
     display: none!important
 .inlined-input
     display: inline-block
