@@ -456,7 +456,7 @@ export class ScriptBlock implements IScriptBlock {
                     } else {
                         console.i('!!! READING CACHED RESOURCES !!!')
                         o.RESOURCES = self.RESOURCES
-                        o.resources().forEach((res) => {
+                        o.getResources().forEach((res) => {
                             if (res.name) {
                                 const a = o as any
                                 if (self.RESOURCES !== undefined) {
