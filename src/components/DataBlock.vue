@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="editMode">
         <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
             <q-banner inline-actions class="text-white bg-red q-mb-md" v-if="hasError">
                 {{ error }}
@@ -170,6 +170,9 @@ export default class DataBlock extends BaseBlock {
         return this.$refs.codeBox as Vue
     }
     get codemirror(): any | undefined {
+        if (this.codeBox === undefined || this.codeBox === null) {
+            return undefined
+        }
         return (this.codeBox as any).codemirror
     }
 
