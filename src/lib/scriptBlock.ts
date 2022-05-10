@@ -357,6 +357,37 @@ export class ScriptBlock implements IScriptBlock {
     resetResources() {
         this.RESOURCES = undefined
     }
+    setupDOM(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void {
+        const self = this
+        this.queuedMessages = []
+        this.queuedIncomingMessages = []
+        this.lazyInit()
+        console.i('MESSAGE - Reset Queue from Init')
+        if (this.obj === undefined) {
+            return
+        }
+
+        try {
+            if (!this.requestsOriginalVersion()) {
+                const o = this.obj as IPlaygroundObject
+                o.DATA = this.DATA
+
+                console.i('!!! SETUP CANVAS !!!')
+                if (o.setupDOM) {
+                    let outputElement: JQuery<HTMLElement> | undefined = undefined
+                    if (scope === undefined || scope.length === 0) {
+                        scope = canvasElement.parents('.codeblocks')
+                    }
+                    if (scope !== undefined) {
+                        outputElement = scope.find('div.runner pre.output')
+                    }
+                    o.setupDOM(canvasElement, outputElement, scope)
+                }
+            }
+        } catch (e) {
+            this.pushError(e)
+        }
+    }
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void {
         const self = this
         this.queuedMessages = []
@@ -374,11 +405,11 @@ export class ScriptBlock implements IScriptBlock {
             } else {
                 const o = this.obj as IPlaygroundObject
                 o.DATA = this.DATA
-                if (o.resources) {
+                if (o.getResources) {
                     if (self.RESOURCES === undefined) {
                         console.i('!!! FETCHING RESOURCES !!!')
                         self.RESOURCES = []
-                        const requests = o.resources().map((res, idx, array) => {
+                        const requests = o.getResources().map((res, idx, array) => {
                             return fetch(res.uri)
                                 .then((response) => {
                                     if (!response.ok) {

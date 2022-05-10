@@ -40,7 +40,12 @@ export interface IPlaygroundObject {
     beforeStart?(): void
     whenFinished?(args: string[] | object, resultData?: object | any[]): void
     addArgumentsTo?(args: object | string[]): void
-    resources?(): IResourceInfo[]
+    getResources?(): IResourceInfo[]
+    setupDOM?(
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement> | undefined,
+        scope: JQuery<HTMLElement>
+    ): void
     RESOURCES: any[]
     DATA: any[]
 }
@@ -67,6 +72,7 @@ export interface IScriptBlock {
     rebuild(code?: string): void
     pushError(e: any): void
 
+    setupDOM(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void
     reset(canvasElement: JQuery<HTMLElement>): void
     update(
