@@ -99,7 +99,7 @@ async function listener(input) {
             pyodide.runPython(
                 `import sys
 import io
-sys.setrecursionlimit(200)
+sys.setrecursionlimit(1000)
 sys.stdout = io.StringIO()`,
                 globals
             )
