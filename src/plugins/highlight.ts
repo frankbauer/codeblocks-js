@@ -111,6 +111,7 @@ hljs.$vue = {
                 .replace(/&lt;/g, '<')
                 .replace(/&gt;/g, '>')
                 .replace(/&amp;/g, '&')
+                .replace(/&#38;/g, '&')
 
             if (lang) {
                 return '<pre is-code>' + hljs.highlight(lang, m4).value + '</pre>'
