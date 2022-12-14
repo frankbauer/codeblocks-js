@@ -28,187 +28,32 @@
                 continue.</strong>
         </noscript>
         
-        <div codeblockseditor data-compiler="javascript" data-compiler-version="101" data-run-code="true"
-            data-max-characters="10000000" data-execution-timeout="50000" data-message-passing=1
-            data-persistent-arguments=1 data-keep-alive=1>
+        <div codeblockseditor data-compiler="javascript" data-compiler-version="101" data-run-code="false"
+            data-max-characters="10000" data-execution-timeout="5000" data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]' >
             <loading>
                 <div></div>
                 <div></div>
             </loading>
-
-            <block data-visible-lines="auto" data-expanded=0>import org.lgdv.*;
-
-                public class One{
-                public static void main(String[] args){
-                System.out.println("START " + args[0]);
-                args[0] = "Test";
-                CodeBlocks.startReceivingEvents((CodeBlocksBaseMessage request) -> {
-                System.out.println("Hello" + request.getCommand());
-
-                CodeBlocks.postMessage("echo", request.getId());
-                if (request.getCommand().equals("nonce")) {
-                System.exit(0);
+            <block data-hidden="true">Hello2</block>
+            <Data data-name="HELLO">{"hello":42}</Data>
+            <script as="data" type="application/json" data-name="WORLD">{"world":1}</script>
+            <script as="playground" type="application/javascript" data-generate-template="true" data-should-autoreset="true" data-version="102">exports = {
+                getResources(){
+                    return [
+                            {name:"CUBE", uri:"http://localhost:8080/js/three.js/r140/quadCube.json", type:"json"}                            
+                        ]
+                },
+                setupDOM(canvasElement, outputElement, scope, runner) {
+                    canvasElement.hide()
+                    console.log("FROM SETUP", this.DATA)
+                },
+                init(canvasElement, outputElement, scope, runner) {
+                    console.log("FROM INIT", this.RESOURCES, this.DATA)
+                },
+                update: function(txt, json, canvasElement, outputElement) {
                 }
-                });
-                int[] a = {1, 2, 3};
-                System.out.println("ENDE" + a[0]);
-                System.err.println("ERR");
-                }
-                }</block>
-
-            <script as="playground" type="application/javascript">
-exports = {
-    runner: null,
-    init: function (canvasElement, outputElement, scope, runner) {
-        canvasElement.hide();
-        this.runner = runner
-        runner.postMessage('from-init', {})
-    },
-    addArgumentsTo(args) {
-        console.log("Input State", args)
-        args[0] = "Hello";
-    },
-    reset(canvasElement) {},
-    onMessage(cmd, data) {
-        console.log("Message", cmd, data)
-    },
-    beforeStart() {
-        console.log("Starting")
-        setTimeout(() => {
-            this.runner.postMessage('nonce', {})
-        }, 2000)
-    },
-    whenFinished(args) {
-        console.log("Finished", args)
-    },
-    update: function (txt, json, canvasElement, outputElement) {
-
-    }
-}
+            }                
             </script>
-        </div>
-        <div style="padding-left:50px;padding-right:50px">
-            <div codeblocks data-compiler="java" data-compiler-version=101 data-run-code="true"
-            data-execution-timeout="50000" data-dom-libs='["phaser-3.54"]' data-message-passing=1
-            data-persistent-arguments=1 data-keep-alive=1>
-                <loading>
-                    <div></div>
-                    <div></div>
-                </loading>
-
-                <block data-visible-lines="auto" data-expanded=1>import de.fau.tf.lgdv.phaser.*;
-import de.fau.tf.lgdv.*;
-
-class MyGame extends MapGame implements GameEventHandler, AnimatedSpriteEventHandler{
-    private final Figure blue;
-    private final Figure grinch;
-    private final AnimatedSprite fire;
-    private final AnimatedSprite snow;
-
-    public MyGame(String[] args){
-        super(args);
-        snow = this.createAnimatedSpriteOnTile("snow", 0, 0, true, 10);
-        fire = new AnimatedSprite(this, "fire", this.columns-1, this.rows-1);
-        blue = new Figure(this, "blue", 1, 1);
-        blue.setBaseSpeed(10);
-        grinch = this.createFigureOnTile("grinch", 2, 1);
-        
-    }
-
-    @Override
-    protected void onMessage(CodeBlocksBaseMessage request){
-        System.out.println(request.getCommand());
-        super.onMessage(request);
-    }
-
-    @Override
-    public void onClick(int c, int r){
-        System.out.println("Tile:" + c + " " + r);
-        grinch.walkToTile(c, r);
-        blue.walkToTile(r, c);
-    }
-
-    @Override
-    public void onFinishedAnimation(AnimatedSprite s){
-        s.remove();
-        
-        System.out.println("Removed " + s);                     
-        System.out.println(this);        
-        this.getFigureStream().forEach(f -> System.out.println(f));
-        this.getSpriteStream().forEach(f -> System.out.println(f));
-    }
-}
-
-public class One {
-    public static void main(String[] args){
-        System.out.println("BEGIN" + args.length);        
-
-        MapGame game = new MyGame(args);
-
-        System.out.println("ENDE");
-    }
-
-    
-}   
-
-class MainOverride{
-    public static void main(String[] args){
-        System.out.println("HIDDEN");
-        One.main(args);
-    }
-}
-                </block>
-<block data-expanded=0>
-
-    
-</block>
-                <script as="playground" type="application/javascript" data-generate-template="true" data-should-autoreset="true">
-exports = new IsometricMapGame(4, 3, Tiles.Checkers, '#fdfdfd', (game, manager, canvasElement, outputElement, scope, runner)=>{
-    console.log("HERE")
-    console.log("CANVAS", canvasElement)
-
-    game.resources.loadSprite('fire', Sprites.random(Sprites.Fire))
-    game.resources.loadSprite('snow', Sprites.random(Sprites.Snow))
-    game.resources.loadFigure('grinch', Figures.BigGrinch)
-    game.resources.loadFigure('blue', Figures.Blue)
-    let f1 = undefined
-
-    const rpc = new IsometricMapGameRPC(game, manager, runner).defaultMessageHandling()
-
-    
-
-    manager.onCreate = () => {
-        //f1 = manager.createFigureOnTile("grinch", 2, 1)
-        //const f2 = manager.createFigureOnTile("blue", 3, 2)
-
-        // const sprite = manager.createSpriteOnTile("snow", 0, 0, false, 1)
-        // sprite.onFinishedAnimation = ()=> {
-        //     console.log("REMOVING")
-        //     sprite.remove()
-        // }        
-        // sprite.play()
-
-        //game.scene.add.circle(45, 134, 5, 0x6666ff)
-    }
-
-    manager.onClick = (tile) => {
-        //f1.walkToTile(tile.column, tile.row)
-        rpc.onClick(tile)        
-    }
-
-    manager.onMessage = (cmd, data) => {
-        if (!rpc.handleMessage(cmd, data)) {
-            console.log(cmd + " - " + data)     
-        }   
-    }
-
-})
-
-
-                </script>
-
-
-            </div>
         </div>
 
 
