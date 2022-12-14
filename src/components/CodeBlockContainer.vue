@@ -210,6 +210,7 @@
                             icon="arrow_drop_up"
                             push
                             dense
+                            size="sm"
                             class="q-ml-md q-mr-xs"
                             color="orange-6"
                             :ripple="{ center: true }"
@@ -228,6 +229,7 @@
                             icon="arrow_drop_down"
                             push
                             dense
+                            size="sm"
                             class="q-mr-md"
                             color="orange-6"
                             :ripple="{ center: true }"
@@ -238,6 +240,7 @@
                             icon="warning"
                             push
                             dense
+                            size="md"
                             class="gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm"
                             color="red-6"
                             right
@@ -251,6 +254,7 @@
                             class="lt-sm q-mr-lg q-pr-none"
                             color="red-6"
                             right
+                            size="md"
                             :ripple="{ center: true }"
                         ></q-btn>
                         <q-btn
@@ -259,6 +263,7 @@
                             small
                             flat
                             round
+                            size="sm"
                             style="margin-right: -9px"
                             @click="toggleExpanded"
                         >
