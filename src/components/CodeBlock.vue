@@ -1,10 +1,6 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
-        <CodeBlockButton
-            :block="block"
-            v-show="showBookmarkButton"
-            :isBookmarkPanel="isBookmarkPanel"
-        />
+        
         <codemirror
             ref="codeBox"
             :value="code"

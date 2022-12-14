@@ -18,6 +18,7 @@
                 <q-btn
                     :color="isExpandedAuto ? 'primary' : 'blue-grey-4'"
                     small
+                    size="sm"
                     label="Auto"
                     icon="video_label"
                     @click="setExpandedAuto"
@@ -25,6 +26,7 @@
                 <q-btn
                     :color="isExpandedLarge ? 'primary' : 'blue-grey-4'"
                     small
+                    size="sm"
                     label="Large"
                     icon="call_to_action"
                     @click="setExpandedLarge"
@@ -32,6 +34,7 @@
                 <q-btn
                     :color="isExpandedTiny ? 'primary' : 'blue-grey-4'"
                     small
+                    size="sm"
                     label="Small"
                     icon="visibility_off"
                     @click="setExpandedTiny"

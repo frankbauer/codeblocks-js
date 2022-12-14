@@ -35,7 +35,9 @@
                     <q-btn
                         color="teal-9"
                         filled
+                        size="sm"
                         label="Load JSON"
+                        class="q-mb-sm"
                         icon="cloud_upload"
                         @click="openJson"
                     >
@@ -52,6 +54,8 @@
                     <q-btn
                         color="teal-8"
                         filled
+                        size="sm"
+                        class="q-mb-sm"
                         label="Add Text Data"
                         icon="post_add"
                         @click="openPlain"
@@ -69,7 +73,9 @@
                     <q-btn
                         color="teal"
                         filled
+                        size="sm"
                         label="Add Image Data"
+                        class="q-mb-sm"
                         icon="add_photo_alternate"
                         @click="openImage"
                     >
@@ -78,24 +84,24 @@
             </div>
             <div class="col-grow"></div>
             <div>
-                <q-btn-group rounded class="q-mb-sm" v-if="editMode">
+                <q-btn-group rounded dense class="q-mb-sm" v-if="editMode">
                     <q-btn
                         :color="isExpandedAuto ? 'primary' : 'blue-grey-4'"
-                        small
+                        size="sm"
                         label="Auto"
                         icon="video_label"
                         @click="setExpandedAuto"
                     />
                     <q-btn
                         :color="isExpandedLarge ? 'primary' : 'blue-grey-4'"
-                        small
+                        size="sm"
                         label="Large"
                         icon="call_to_action"
                         @click="setExpandedLarge"
                     />
                     <q-btn
                         :color="isExpandedTiny ? 'primary' : 'blue-grey-4'"
-                        small
+                        size="sm"
                         label="Small"
                         icon="visibility_off"
                         @click="setExpandedTiny"
