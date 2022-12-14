@@ -24,7 +24,7 @@
                     <q-input label="Name" v-model="name" rounded filled class="noMoreBottomMargin">
                     </q-input>
                 </div>
-                <div class="inlined-input q-mr-md">
+                <div class="inlined-input q-mr-sm">
                     <input
                         class="jsonFileUploader"
                         type="file"
@@ -43,7 +43,7 @@
                     >
                     </q-btn>
                 </div>
-                <div class="inlined-input q-mr-md">
+                <div class="inlined-input q-mr-sm">
                     <input
                         class="plainFileUploader"
                         type="file"
