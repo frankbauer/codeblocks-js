@@ -16,6 +16,7 @@ declare global {
         MathJax: any
         highlightAll(): void
         highlightElement(element: HTMLElement): void
+        codeblocks: any
     }
 
     interface String {

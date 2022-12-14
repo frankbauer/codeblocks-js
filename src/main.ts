@@ -39,6 +39,10 @@ import { CodeBlocksManager } from './lib/codeBlocksManager'
 Vue.config.productionTip = false
 CodeBlocksManager.find(document).mount()
 
+window.codeblocks = {
+    scale:1.0
+}
+
 window.mountInElement = function(element: any): void {
     Vue.$hljs.$vue.processElements(element)
     Vue.$tagger.processElements(element)

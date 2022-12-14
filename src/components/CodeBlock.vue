@@ -93,8 +93,8 @@ export default class CodeBlock extends BaseBlock {
     @Prop({ default: undefined }) tagSet!: IRandomizerSet
     @Prop({
         required: true,
-        validator: function (b) {
-            if (b === null || b.content === undefined) {
+        validator: function (b:any) {
+            if (b === null || b === undefined || b.content === undefined) {
                 return false
             }
             if (b.firstLine === undefined) {
