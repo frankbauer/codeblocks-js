@@ -399,4 +399,26 @@ compilerRegistry.registerDOMLib(
     }
 )
 
+compilerRegistry.registerDOMLib(
+    [Vue.$CodeBlock.baseurl + 'js/leaflet.js/1.9/leaflet.js'],
+    'leaflet',
+    '1.9',
+    'Leaflet',
+    false,
+    7000,
+    (sandbox) => {
+        sandbox.L = (window as any).L
+    }
+)
+
+compilerRegistry.registerDOMLib(
+    [Vue.$CodeBlock.baseurl + 'js/modelviewer.js/2.1.1/model-viewer-umd.min.js'],
+    'modelviewer',
+    '2.1.1',
+    '&lt;model-viewer&gt;',
+    false,
+    8000,
+    (sandbox) => {}
+)
+
 export default compilerRegistry
