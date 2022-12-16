@@ -109,6 +109,11 @@
                 </q-btn-group>
             </div>
         </div>
+        <MonacoEditor
+            class="accqstXmlInput noRTEditor codebox monaco"
+            value="Hello World"
+            language="javascript"
+        />
         <q-slide-transition>
             <codemirror
                 ref="codeBox"
@@ -121,6 +126,7 @@
                 :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
                 :id="`teQ${block.parentID}B${block.id}`"
                 :data-question="block.parentID"
+                v-if="false"
             ></codemirror>
         </q-slide-transition>
     </div>
@@ -137,7 +143,7 @@ import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
-
+import MonacoEditor from 'vue-monaco'
 import codemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 
@@ -159,7 +165,7 @@ import 'codemirror/theme/mdn-like.css'
 import 'codemirror/mode/javascript/javascript.js'
 
 @Component({
-    components: {},
+    components: { MonacoEditor },
 })
 export default class DataBlock extends BaseBlock {
     @Prop({ default: '' }) namePrefix!: string
@@ -534,4 +540,6 @@ export default class DataBlock extends BaseBlock {
 .jsonErrTitle
     padding-left: 8px
     text-transform: uppercase
+.monaco.codebox
+    min-height: 19px
 </style>
