@@ -1,6 +1,6 @@
 import { IBlockloadManager, IBlockElementData, IBlockDataBase } from '@/lib/ICodeBlocks'
 import { positioninLoadManager } from '@/lib/BlockloadManagers/PositioningManager'
-import { uuid } from 'vue-uuid'
+
 export class PlaygroundLoadManager implements IBlockloadManager {
     get blockTag(): string {
         return 'PLAYGROUND'

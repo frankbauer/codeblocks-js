@@ -328,14 +328,16 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Prop } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { blocklyLoader } from '@/lib/BlockloadManagers/BlocklyManager'
 import { IOnChangeOrder, IOnReloadResourcesInfo } from './CodeBlocks.vue'
+import { CodeBlocksGlobal } from '@/lib/global'
 
-@Component
+@Options({})
 export default class CodeBlocksContainer extends Vue {
     frank = 'hello'
     settingsMenu: boolean = false
@@ -344,35 +346,35 @@ export default class CodeBlocksContainer extends Vue {
     get types(): IListItemData[] {
         return [
             {
-                label: this.$l('CodeBlockContainer.Canvas'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.Canvas'),
                 value: KnownBlockTypes.PLAYGROUND,
             },
             {
-                label: this.$l('CodeBlockContainer.DataBlock'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.DataBlock'),
                 value: KnownBlockTypes.DATA,
             },
             {
-                label: this.$l('CodeBlockContainer.Text'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.Text'),
                 value: KnownBlockTypes.TEXT,
             },
             {
-                label: this.$l('CodeBlockContainer.Hidden'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.Hidden'),
                 value: KnownBlockTypes.BLOCKHIDDEN,
             },
             {
-                label: this.$l('CodeBlockContainer.Static'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.Static'),
                 value: KnownBlockTypes.BLOCKSTATIC,
             },
             {
-                label: this.$l('CodeBlockContainer.Block'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.Block'),
                 value: KnownBlockTypes.BLOCK,
             },
             {
-                label: this.$l('CodeBlockContainer.Blockly'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.Blockly'),
                 value: KnownBlockTypes.BLOCKLY,
             },
             {
-                label: this.$l('CodeBlockContainer.REPL'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.REPL'),
                 value: KnownBlockTypes.REPL,
             },
         ]
@@ -380,15 +382,15 @@ export default class CodeBlocksContainer extends Vue {
     get alignments(): IListItemData[] {
         return [
             {
-                label: this.$l('CodeBlockContainer.Start'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.Start'),
                 value: 'left',
             },
             {
-                label: this.$l('CodeBlockContainer.Center'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.Center'),
                 value: 'center',
             },
             {
-                label: this.$l('CodeBlockContainer.End'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.End'),
                 value: 'right',
             },
         ]
@@ -396,15 +398,15 @@ export default class CodeBlocksContainer extends Vue {
     get scriptVersions(): IListItemData[] {
         return [
             {
-                label: this.$l('CodeBlockContainer.ScriptVersion_1'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.ScriptVersion_1'),
                 value: '100',
             },
             {
-                label: this.$l('CodeBlockContainer.ScriptVersion_2'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.ScriptVersion_2'),
                 value: '101',
             },
             {
-                label: this.$l('CodeBlockContainer.ScriptVersion_3'),
+                label: CodeBlocksGlobal.$l('CodeBlockContainer.ScriptVersion_3'),
                 value: '102',
             },
         ]
@@ -442,7 +444,7 @@ export default class CodeBlocksContainer extends Vue {
         return true
     }
     toggleExpanded(): void {
-        this.$CodeBlock.refreshAllCodeMirrors()
+        CodeBlocksGlobal.$CodeBlock.refreshAllCodeMirrors()
         this.expanded = !this.expanded
     }
     moveUp(): void {
@@ -453,7 +455,7 @@ export default class CodeBlocksContainer extends Vue {
     }
 
     get order(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.positions, this.block.id)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.positions, this.block.id)
     }
 
     set order(val: IListItemData) {
@@ -464,8 +466,8 @@ export default class CodeBlocksContainer extends Vue {
     showTypeInfoDialog(): void {
         this.$q
             .dialog({
-                title: this.$l('CodeBlockContainer.TypesCaption'),
-                message: this.$l('CodeBlockContainer.Types'),
+                title: CodeBlocksGlobal.$l('CodeBlockContainer.TypesCaption'),
+                message: CodeBlocksGlobal.$l('CodeBlockContainer.Types'),
                 html: true,
                 style: 'width:75%',
             })
@@ -484,8 +486,8 @@ export default class CodeBlocksContainer extends Vue {
         self.highlighted = true
         this.$q
             .dialog({
-                title: this.$l('CodeBlockContainer.Confirm'),
-                message: this.$l('CodeBlockContainer.DeleteQuestion'),
+                title: CodeBlocksGlobal.$l('CodeBlockContainer.Confirm'),
+                message: CodeBlocksGlobal.$l('CodeBlockContainer.DeleteQuestion'),
                 html: true,
                 ok: {
                     push: true,
@@ -625,7 +627,7 @@ export default class CodeBlocksContainer extends Vue {
         return this.block.version
     }
     get scriptVersionObj(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.scriptVersions, this.scriptVersion)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.scriptVersions, this.scriptVersion)
     }
     set scriptVersionObj(v: IListItemData) {
         this.$emit('script-version-change', {
@@ -694,7 +696,7 @@ export default class CodeBlocksContainer extends Vue {
         return this.block.type
     }
     get typeObj(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.types, this.type)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.types, this.type)
     }
     set typeObj(val: IListItemData) {
         const v = val.value
@@ -767,7 +769,7 @@ export default class CodeBlocksContainer extends Vue {
         })
     }
     get align(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.alignments, this.block.align)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.alignments, this.block.align)
     }
     set align(v: IListItemData) {
         this.$emit('placement-change', {

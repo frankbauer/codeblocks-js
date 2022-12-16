@@ -321,10 +321,12 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import {  Prop } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import RandomizerSettings from '@/components/RandomizerSettings.vue'
 import { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
 import { CodeOutputTypes, IRandomizerSettings } from '@/lib/ICodeBlocks'
+import { CodeBlocksGlobal } from '@/lib/global'
 
 export interface ICodeBlockSettingsOptions {
     language: string
@@ -345,7 +347,7 @@ export interface ICodeBlockSettingsOptions {
     keepAlive: boolean
 }
 
-@Component({ components: { RandomizerSettings } })
+@Options({ components: { RandomizerSettings } })
 export default class CodeBlocksSettings extends Vue {
     get themes(): IListItemData[] {
         return [
@@ -366,11 +368,11 @@ export default class CodeBlocksSettings extends Vue {
 
     get outputParsers(): IListItemData[] {
         return [
-            { label: this.$l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
-            { label: this.$l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
-            { label: this.$l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
-            { label: this.$l('CodeBlocksSettings.PData'), value: CodeOutputTypes.DATA },
-            { label: this.$l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
+            { label: CodeBlocksGlobal.$l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
+            { label: CodeBlocksGlobal.$l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
+            { label: CodeBlocksGlobal.$l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
+            { label: CodeBlocksGlobal.$l('CodeBlocksSettings.PData'), value: CodeOutputTypes.DATA },
+            { label: CodeBlocksGlobal.$l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
         ]
     }
     @Prop({ required: true }) options!: ICodeBlockSettingsOptions
@@ -420,7 +422,7 @@ export default class CodeBlocksSettings extends Vue {
         })
     }
     get languages(): IListItemData[] {
-        return this.$CodeBlock.knownLanguages()
+        return CodeBlocksGlobal.$CodeBlock.knownLanguages()
     }
     get compilerVersions(): string[] {
         return this.$compilerRegistry.versionsForLanguage(this.compilerLanguage)
@@ -478,7 +480,7 @@ export default class CodeBlocksSettings extends Vue {
         return this.options.compiler.languageType
     }
     get compilerLanguageObj(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.compiledLanguages, this.compilerLanguage)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.compiledLanguages, this.compilerLanguage)
     }
     set compilerLanguageObj(v: IListItemData) {
         if (this.options.runCode === false) {
@@ -540,7 +542,7 @@ export default class CodeBlocksSettings extends Vue {
     }
 
     get solutionTheme(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.themes, this.options.solutionTheme)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.themes, this.options.solutionTheme)
     }
     set solutionTheme(v: IListItemData) {
         this.$emit('theme-change', {
@@ -550,7 +552,7 @@ export default class CodeBlocksSettings extends Vue {
     }
 
     get codeTheme(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.themes, this.options.codeTheme)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.themes, this.options.codeTheme)
     }
     set codeTheme(v: IListItemData) {
         this.$emit('theme-change', {
@@ -560,7 +562,7 @@ export default class CodeBlocksSettings extends Vue {
     }
 
     get outputParser(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.outputParsers, this.options.outputParser)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.outputParsers, this.options.outputParser)
     }
     set outputParser(v: IListItemData) {
         this.$emit('output-parser-change', v.value)
@@ -689,8 +691,8 @@ export default class CodeBlocksSettings extends Vue {
     showInfoDialog(title, message): void {
         this.$q
             .dialog({
-                title: this.$l(title),
-                message: this.$l(message),
+                title: CodeBlocksGlobal.$l(title),
+                message: CodeBlocksGlobal.$l(message),
                 html: true,
                 style: 'width:75%',
             })

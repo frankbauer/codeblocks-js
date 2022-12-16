@@ -1,11 +1,11 @@
 import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 
 //load all versions
 import { v100 } from './glsl.v100'
 
-@Component
+@Options({})
 export class GLSLCompilerInfo extends Vue implements ICompilerInfo {
     readonly type = 'glsl'
     readonly displayName = 'GLSL Shader'

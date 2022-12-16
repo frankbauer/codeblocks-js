@@ -1,6 +1,7 @@
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Prop } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import CodeBlocks, {
     IOnTypeChangeInfo,
     IOnVisibleLinesChangeInfo,
@@ -19,7 +20,7 @@ var mixin = {
         console.log(1)
     },
 }
-@Component
+@Options({})
 export default class CodeBlocksEditor extends CodeBlocks {
     get editMode(): boolean {
         return true

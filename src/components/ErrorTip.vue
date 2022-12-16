@@ -21,10 +21,11 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 
-@Component
+@Options({})
 export default class ErrorTip extends Vue {
     @Prop() errors!: ICompilerErrorDescription
     @Prop() severity!: ErrorSeverity

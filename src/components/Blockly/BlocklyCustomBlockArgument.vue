@@ -21,7 +21,8 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     IBlocklyToolboxItem,
     IBlockDefinition,
@@ -31,8 +32,9 @@ import {
 } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, PredefinedBlockTypes, PredefinedArgumentTypes } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
+import { CodeBlocksGlobal } from '@/lib/global'
 
-@Component
+@Options({})
 export default class BlocklyCustomBlockArgument extends Vue {
     @Prop() block!: IBlockDefinition
     @Prop() line!: IBlockLine
@@ -44,7 +46,7 @@ export default class BlocklyCustomBlockArgument extends Vue {
     }
 
     get argumentType(): IListItemData {
-        return this.$CodeBlock.itemForValue(this.argumentTypes, this.argument.type)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.argumentTypes, this.argument.type)
     }
 
     set argumentType(v: IListItemData) {

@@ -13,10 +13,12 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
+import { Prop, Emit } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { BlockData, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
+import { CodeBlocksGlobal } from '@/lib/global'
 
-@Component
+@Options({})
 export default class CodeBlockButton extends Vue {
     @Prop({ required: true }) block!: BlockData
     @Prop({ default: false }) isBookmarkPanel!: boolean
@@ -36,9 +38,9 @@ export default class CodeBlockButton extends Vue {
     bookmarkMe() {
         const data: IBlockBookmarkPayload = {
             uuid: this.block.appSettings.uuid,
-            block: this.isBookmarkPanel ? null : this.block
+            block: this.isBookmarkPanel ? null : this.block,
         }
-        Vue.$GlobalEventHub.$emit('bookmark-block', data)
+        CodeBlocksGlobal.$GlobalEventHub.$emit('bookmark-block', data)
     }
     onClick() {
         this.bookmarkMe()
@@ -50,11 +52,11 @@ export default class CodeBlockButton extends Vue {
     }
 
     mounted() {
-        Vue.$GlobalEventHub.$on('bookmark-block', this.onBookmark)
+        CodeBlocksGlobal.$GlobalEventHub.$on('bookmark-block', this.onBookmark)
     }
 
     beforeDestroy() {
-        Vue.$GlobalEventHub.$off('bookmark-block')
+        CodeBlocksGlobal.$GlobalEventHub.$off('bookmark-block')
     }
 }
 </script>

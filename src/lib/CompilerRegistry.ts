@@ -1,5 +1,7 @@
+import { CodeBlocksGlobal } from '@/lib/global';
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import {  Prop } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     ICompilerHashMap,
     IDomLibraray,
@@ -13,7 +15,7 @@ import {
 } from './ICompilerRegistry'
 
 //prepare Compiler Registry
-@Component
+@Options({})
 export class CompilerRegistry extends Vue implements ICompilerRegistry {
     compilers: ICompilerHashMap = {}
     libraries: IDomLibraray[] = []
@@ -242,7 +244,7 @@ import { GLSLCompilers } from '../compiler/glsl'
 compilerRegistry.register(GLSLCompilers)
 
 compilerRegistry.registerDOMLib(
-    [Vue.$CodeBlock.baseurl + 'js/chart.js/3.6.0/chart.min.js'],
+    [CodeBlocksGlobal.$CodeBlock.baseurl + 'js/chart.js/3.6.0/chart.min.js'],
     'chart',
     '3.6.0',
     'Chart.JS',
@@ -254,11 +256,11 @@ compilerRegistry.registerDOMLib(
 )
 compilerRegistry.registerDOMLib(
     [
-        Vue.$CodeBlock.baseurl + 'js/three.js/r0/three.min.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/r0/controls/OrbitControls.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/r0/controls/TrackballControls.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/r0/Detector.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/helper.r0.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/three.js/r0/three.min.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/three.js/r0/controls/OrbitControls.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/three.js/r0/controls/TrackballControls.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/three.js/r0/Detector.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/three.js/helper.r0.js',
     ],
     '3js',
     'r0',
@@ -272,9 +274,9 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        Vue.$CodeBlock.baseurl + 'js/three.js/r140/three.min.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/r140/js/controls/OrbitControls.js',
-        Vue.$CodeBlock.baseurl + 'js/three.js/r140/js/controls/TrackballControls.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/three.js/r140/three.min.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/three.js/r140/js/controls/OrbitControls.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/three.js/r140/js/controls/TrackballControls.js',
     ],
     '3js',
     'r140',
@@ -287,7 +289,7 @@ compilerRegistry.registerDOMLib(
 )
 
 compilerRegistry.registerDOMLib(
-    [Vue.$CodeBlock.baseurl + 'js/lil-gui/0.16/lil-gui.min.js'],
+    [CodeBlocksGlobal.$CodeBlock.baseurl + 'js/lil-gui/0.16/lil-gui.min.js'],
     'lil-gui',
     '0.16',
     'lil GUI',
@@ -300,8 +302,8 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/phaser.min.js',
-        Vue.$CodeBlock.baseurl + 'js/phaser/3.54.0/support.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/phaser/3.54.0/phaser.min.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/phaser/3.54.0/support.js',
     ],
     'phaser',
     '3.54',
@@ -316,8 +318,8 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        Vue.$CodeBlock.baseurl + 'js/d3/5.16.0/d3.v5.min.js',
-        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/d3/5.16.0/d3.v5.min.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js',
     ],
     'd3',
     '5.16.0',
@@ -330,8 +332,8 @@ compilerRegistry.registerDOMLib(
 )
 compilerRegistry.registerDOMLib(
     [
-        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js',
-        Vue.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/d3/5.3.8/d3.v5.min.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/d3/5.3.8/helper.js',
     ],
     'd3',
     '5.3.8',
@@ -344,8 +346,8 @@ compilerRegistry.registerDOMLib(
 )
 compilerRegistry.registerDOMLib(
     [
-        Vue.$CodeBlock.baseurl + 'js/d3/6.7.0/d3.v6.min.js',
-        //Vue.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js'
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/d3/6.7.0/d3.v6.min.js',
+        //CodeBlocksGlobal.$CodeBlock.baseurl + 'js/d3/6.2.0/helper.v6.js'
     ],
     'd3',
     '6.7.0',
@@ -357,7 +359,7 @@ compilerRegistry.registerDOMLib(
     }
 )
 compilerRegistry.registerDOMLib(
-    [Vue.$CodeBlock.baseurl + 'js/d3/7.1.1/d3.v7.min.js'],
+    [CodeBlocksGlobal.$CodeBlock.baseurl + 'js/d3/7.1.1/d3.v7.min.js'],
     'd3',
     '7.1.1',
     'D3',
@@ -372,7 +374,7 @@ compilerRegistry.addUpdateMapping('d3', '5.13.4', '5.16.0')
 compilerRegistry.addUpdateMapping('d3', '6.2.0', '6.7.0')
 
 compilerRegistry.registerDOMLib(
-    [Vue.$CodeBlock.baseurl + 'js/brain.js/2.0.0-alpha/brain-browser.min.js'],
+    [CodeBlocksGlobal.$CodeBlock.baseurl + 'js/brain.js/2.0.0-alpha/brain-browser.min.js'],
     'brain',
     '2.0.0',
     'Brain.JS',
@@ -385,8 +387,8 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js',
-        //Vue.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tfjs-vis.umd.min.js',
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js',
+        //CodeBlocksGlobal.$CodeBlock.baseurl + 'js/tensorflow.js/2.0.0/tfjs-vis.umd.min.js',
     ],
     'tf',
     '2.0.0',
@@ -400,7 +402,7 @@ compilerRegistry.registerDOMLib(
 )
 
 compilerRegistry.registerDOMLib(
-    [Vue.$CodeBlock.baseurl + 'js/leaflet.js/1.9/leaflet.js'],
+    [CodeBlocksGlobal.$CodeBlock.baseurl + 'js/leaflet.js/1.9/leaflet.js'],
     'leaflet',
     '1.9',
     'Leaflet',
@@ -412,7 +414,7 @@ compilerRegistry.registerDOMLib(
 )
 
 compilerRegistry.registerDOMLib(
-    [Vue.$CodeBlock.baseurl + 'js/modelviewer.js/2.1.1/model-viewer-umd.min.js'],
+    [CodeBlocksGlobal.$CodeBlock.baseurl + 'js/modelviewer.js/2.1.1/model-viewer-umd.min.js'],
     'modelviewer',
     '2.1.1',
     '&lt;model-viewer&gt;',

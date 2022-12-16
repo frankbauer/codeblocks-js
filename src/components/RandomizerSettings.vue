@@ -155,19 +155,23 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import RandomizerSetEditor from '@/components/RandomizerSetEditor.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
+import { CodeBlocksGlobal } from '@/lib/global'
 
-@Component({ components: { RandomizerSetEditor } })
+@Options({ components: { RandomizerSetEditor } })
 export default class RandomizerSettings extends Vue {
     _newTagName: string = ''
 
     @Prop({ required: true }) options!: ICodeBlockSettingsOptions
 
     get tagClass(): string {
-        return Vue.$tagger.className.rnd + ' tag-mark-start tag-mark-end tag-mark-shadow'
+        return (
+            CodeBlocksGlobal.$tagger.className.rnd + ' tag-mark-start tag-mark-end tag-mark-shadow'
+        )
     }
 
     isVisible(nr: number): boolean {
@@ -177,15 +181,17 @@ export default class RandomizerSettings extends Vue {
         this.options.randomizer.previewIndex = nr
     }
     isValidTag(tag: string): boolean {
-        return this.options.randomizer.knownTags.find(t => t == tag) !== undefined
+        return this.options.randomizer.knownTags.find((t) => t == tag) !== undefined
     }
     isCompleteSet(s: IRandomizerSet): boolean {
-        if (s.values.filter(v => this.options.randomizer.knownTags.indexOf(v.tag) < 0).length > 0) {
+        if (
+            s.values.filter((v) => this.options.randomizer.knownTags.indexOf(v.tag) < 0).length > 0
+        ) {
             return false
         }
         if (
             this.options.randomizer.knownTags.filter(
-                t => s.values.find(v => v.tag == t) === undefined
+                (t) => s.values.find((v) => v.tag == t) === undefined
             ).length > 0
         ) {
             return false
@@ -213,26 +219,26 @@ export default class RandomizerSettings extends Vue {
                 persistent: true,
                 prompt: {
                     model: 'tag_name',
-                    type: 'text'
+                    type: 'text',
                 },
                 ok: {
-                    push: true
+                    push: true,
                 },
                 cancel: {
                     flat: true,
-                    color: 'gray'
-                }
+                    color: 'gray',
+                },
             })
-            .onOk(data => {
+            .onOk((data) => {
                 data = data.replace(/\W/g, '_')
                 //have this name
-                if (this.options.randomizer.knownTags.filter(t => t == data).length > 0) {
+                if (this.options.randomizer.knownTags.filter((t) => t == data).length > 0) {
                     let ct = 1
                     const odata = data
                     do {
                         data = odata + '_' + ct
                         ct++
-                    } while (this.options.randomizer.knownTags.filter(t => t == data).length > 0)
+                    } while (this.options.randomizer.knownTags.filter((t) => t == data).length > 0)
                 }
                 this.options.randomizer.knownTags.push(data)
             })
@@ -245,7 +251,7 @@ export default class RandomizerSettings extends Vue {
 </script>
 
 <style lang="stylus" scoped>
-@import '../styles/quasar.variables.styl'
+@import '../styles/quasar.variables.legacy.styl'
 .tagItem
     width:auto
     padding-bottom:1px

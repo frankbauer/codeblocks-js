@@ -7,7 +7,7 @@ import {
 } from '@/lib/IBlocklyHelper'
 import { blocklyHelper } from '@/lib/BlocklyHelper'
 import { positioninLoadManager } from '@/lib/BlockloadManagers/PositioningManager'
-import { uuid } from 'vue-uuid'
+import { uuid } from 'vue3-uuid'
 
 export class BlocklyLoadManager implements IBlockloadManager {
     get blockTag(): string {

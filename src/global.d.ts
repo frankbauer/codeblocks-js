@@ -25,23 +25,12 @@ declare global {
     }
 }
 
-declare module 'vue/types/vue' {
-    interface VueConstructor {
-        $l: (key: string, values?: any[]) => string
-        $hljs: any
-        $tagger: any
-        $CodeBlock: any
-        $SEVERITY_ERROR: number
-        $SEVERITY_WARNING: number
-        $GlobalEventHub: Vue
-    }
-    interface Vue {
-        $l: (key: string, values?: any[]) => string
+declare module '@vue/runtime-core' {
+    //Bind to `this` keyword
+    interface ComponentCustomProperties {
         $CodeBlock: IGlobalState
         $compilerState: ICompilerState
         $compilerRegistry: ICompilerRegistry
-        SEVERITY_ERROR: number
-        SEVERITY_WARNING: number
         $uuid: any
     }
 }

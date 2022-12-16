@@ -1,11 +1,12 @@
+import { CodeBlocksGlobal } from '@/lib/global'
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import i18n from './i18n'
 //!!! make sure to also change the expression in ilias-builder.js !!!
 const randomAndTemplateTag = /\{(:|!)([\w]*)}/g
 
 import '../styles/tagger.styl'
-import { DirectiveBinding } from 'vue/types/options'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 
 export interface ITagReplaceAction {
@@ -20,22 +21,22 @@ export interface ITagMarkers {
     type: 'rnd' | 'templ'
     name: string
 }
-@Component
+@Options({})
 export default class Tagger extends Vue {
     private className = {
         rnd: 'random-tag-placeholder',
-        templ: 'template-tag-placeholder'
+        templ: 'template-tag-placeholder',
     }
 
     getMarkers(s: string): ITagMarkers[] {
         if (s === undefined || s === null) {
             return []
         }
-        let lines = s.split('\n')
-        let markers: ITagMarkers[] = []
+        const lines = s.split('\n')
+        const markers: ITagMarkers[] = []
         let m: RegExpExecArray | null
         for (let i = 0; i < lines.length; i++) {
-            let regex = new RegExp(randomAndTemplateTag)
+            const regex = new RegExp(randomAndTemplateTag)
 
             while ((m = regex.exec(lines[i])) !== null) {
                 if (m.index === regex.lastIndex) {
@@ -46,7 +47,7 @@ export default class Tagger extends Vue {
                     start: { line: i, ch: m.index },
                     end: { line: i, ch: regex.lastIndex },
                     type: m[1] == ':' ? 'rnd' : 'templ',
-                    name: m[2]
+                    name: m[2],
                 }
                 markers.push(marker)
             }
@@ -69,7 +70,7 @@ export default class Tagger extends Vue {
 
         const elements = scope.querySelectorAll('[tagged]')
         const calle = () => {
-            elements.forEach(el => {
+            elements.forEach((el) => {
                 this.processElement(el as HTMLElement, uuid)
             })
         }
@@ -94,10 +95,10 @@ export default class Tagger extends Vue {
         })
     }
     hookClick(el: HTMLElement, scopeUUID: string): void {
-        let tags = el.querySelectorAll('.' + this.className.templ)
-        tags.forEach(inTag => {
+        const tags = el.querySelectorAll('.' + this.className.templ)
+        tags.forEach((inTag) => {
             const tag = inTag as HTMLElement
-            let name = tag.innerText.replace(randomAndTemplateTag, (m0, m1, m2) => {
+            const name = tag.innerText.replace(randomAndTemplateTag, (m0, m1, m2) => {
                 return m2
             })
             tag.onclick = () => {
@@ -113,8 +114,8 @@ export default class Tagger extends Vue {
         if (scope === undefined) {
             scope = document
         }
-        let tags = scope.querySelectorAll('.' + this.className.templ)
-        tags.forEach(tag => {
+        const tags = scope.querySelectorAll('.' + this.className.templ)
+        tags.forEach((tag) => {
             tag.innerHTML = this.replaceTemplateTagInString(tag.innerHTML, name, newValue)
         })
     }
@@ -129,7 +130,7 @@ export default class Tagger extends Vue {
     replaceRandomTagsInString(str: string, tagSet: IRandomizerSet): string {
         return str.replace(randomAndTemplateTag, (m0, m1, m2) => {
             if (m1 == ':') {
-                const tag = tagSet.values.find(t => t.tag == m2)
+                const tag = tagSet.values.find((t) => t.tag == m2)
                 if (tag !== undefined) {
                     return tag.value
                 }
@@ -140,27 +141,28 @@ export default class Tagger extends Vue {
     }
     clickFunction(name: string, tagEl: HTMLElement, scopeUUID: string): void {
         //console.log(i18n)
-        Vue.prototype.$q
+        const anyVue: any = Vue
+        anyVue.$q
             .dialog({
-                title: i18n.t('Tagger.ConfirmRepl'),
-                message: i18n.t('Tagger.ConfirmReplMsg', {
-                    name: '<span class="template-tag-placeholder-noclick">' + name + '</span>'
+                title: i18n.global.t('Tagger.ConfirmRepl'),
+                message: i18n.global.t('Tagger.ConfirmReplMsg', {
+                    name: '<span class="template-tag-placeholder-noclick">' + name + '</span>',
                 }),
                 html: true,
                 persistent: true,
                 prompt: {
                     model: '{!' + name + '}',
-                    type: 'text' // optional
+                    type: 'text', // optional
                 },
                 ok: {
                     push: true,
                     color: 'negative',
-                    icon: 'warning'
+                    icon: 'warning',
                 },
                 cancel: {
                     push: true,
-                    color: 'positive'
-                }
+                    color: 'positive',
+                },
             })
             .onOk((data: string) => {
                 //this.replaceTemplateTag($(tagEl).parents(".codeblocks").get(0), name, data)
@@ -169,7 +171,7 @@ export default class Tagger extends Vue {
                 this.$emit('replace-template-tag', {
                     name: name,
                     newValue: data,
-                    scopeUUID: scopeUUID
+                    scopeUUID: scopeUUID,
                 })
             })
             .onCancel(() => {})
@@ -179,16 +181,3 @@ export default class Tagger extends Vue {
             })
     }
 }
-
-Vue.directive('tagged', {
-    //deep: true,
-    bind: function(el: HTMLElement, binding: DirectiveBinding) {
-        Vue.$tagger.processElement(el, binding.value)
-    },
-    componentUpdated: function(el: HTMLElement, binding: DirectiveBinding) {
-        //console.log("DIRECTIVE - update", el, binding)
-        Vue.$tagger.processElement(el, binding.value)
-    }
-})
-
-Vue.$tagger = new Tagger()

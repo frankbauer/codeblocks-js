@@ -1,29 +1,22 @@
-import Vue from 'vue'
-import { ErrorSeverity } from '@/lib/ICompilerRegistry'
+import { Vue, Options } from 'vue-class-component'
 
-Vue.prototype.SEVERITY_ERROR = ErrorSeverity.Error
-Vue.prototype.SEVERITY_WARNING = ErrorSeverity.Warning
-Vue.$SEVERITY_ERROR = ErrorSeverity.Error
-Vue.$SEVERITY_WARNING = ErrorSeverity.Warning
+@Options({})
+export default class CompilerState extends Vue {
+    public globalStateHidden = true
+    public globalStateMessage = ''
+    public runButtonForceHide = false
 
-Vue.prototype.$compilerState = new Vue({
-    data: function() {
-        return {
-            globalStateHidden: true,
-            globalStateMessage: '',
-            runButtonForceHide: false
-        }
-    },
-    methods: {
-        hideGlobalState() {
-            this.displayGlobalState(null)
-        },
-        setAllRunButtons(what: boolean) {
-            this.runButtonForceHide = !what
-        },
-        displayGlobalState(message: string | null) {
-            this.globalStateHidden = message === null || message === undefined || message === ''
-            this.globalStateMessage = message ? message : ''
-        }
+    hideGlobalState() {
+        this.displayGlobalState(null)
     }
-})
+    setAllRunButtons(what: boolean) {
+        this.runButtonForceHide = !what
+    }
+    displayGlobalState(message: string | null) {
+        this.globalStateHidden = message === null || message === undefined || message === ''
+        this.globalStateMessage = message ? message : ''
+    }
+}
+
+const anyVue: any = Vue
+anyVue.prototype.$compilerState = new CompilerState()

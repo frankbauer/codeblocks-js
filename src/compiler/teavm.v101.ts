@@ -1,5 +1,6 @@
+import { CodeBlocksGlobal } from '@/lib/global'
 import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -18,7 +19,7 @@ declare global {
 const teaVMRunOverhead = 30000
 
 //ICompilerInstance
-@Component
+@Options({})
 export class JavaV101Compiler extends Vue implements ICompilerInstance {
     readonly version = '101'
     readonly language = 'java'
@@ -457,7 +458,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.sessionWorker) {
-            this.sessionWorker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.sessionWorker.end(CodeBlocksGlobal.$l('CodeBlocks.UserCanceled'))
         } else if (this.teaworker) {
             if (this.sessionCompileListener) {
                 // this.sessionCompileListener({
@@ -465,13 +466,13 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                 //         id: '' + this.sessionID,
                 //         command: 'compilation-complete',
                 //         status: 'errors',
-                //         errors: [Vue.$l('CodeBlocks.UserCanceled')]
+                //         errors: [CodeBlocksGlobal.$l('CodeBlocks.UserCanceled')]
                 //     }
                 // })
                 this.teaworker.removeEventListener('message', this.sessionCompileListener)
                 this.sessionCompileListener = undefined
             }
-            this.teaworker.end(Vue.$l('CodeBlocks.UserCanceled'), false)
+            this.teaworker.end(CodeBlocksGlobal.$l('CodeBlocks.UserCanceled'), false)
         }
     }
 }

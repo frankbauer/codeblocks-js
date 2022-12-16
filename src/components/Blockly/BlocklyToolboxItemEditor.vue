@@ -25,18 +25,20 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { IBlocklyToolboxItem, IBlockDefinition } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, PredefinedBlockTypes } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
+import { CodeBlocksGlobal } from '@/lib/global'
 
-@Component
+@Options({})
 export default class BlocklyToolboxItemEditor extends Vue {
     @Prop() item!: IBlocklyToolboxItem
     @Prop() customBlocks!: IBlockDefinition[]
 
     get type(): IListItemData {
-        return this.$CodeBlock.itemForValue(this.blockTypes, this.item.type)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.blockTypes, this.item.type)
     }
 
     set type(v: IListItemData) {

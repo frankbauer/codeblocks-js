@@ -1,5 +1,6 @@
+import { CodeBlocksGlobal } from '@/lib/global'
 import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -38,7 +39,9 @@ function runJavaScriptWorker(
     //const lines = code.split('\n').length;
     const startTime = performance.now()
     let executionFinished = false
-    const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/javascript/v101/jsWorker.js')
+    const worker = new Worker(
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/javascript/v101/jsWorker.js'
+    )
 
     worker.onmessage = function (msg) {
         //only accept messages, as long as the worker is not terminated
@@ -144,7 +147,7 @@ function runJavaScriptWorker(
 
     return worker
 }
-@Component
+@Options({})
 export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
     readonly version = '101'
     readonly language = 'javascript'
@@ -176,7 +179,7 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
 
     registerLibs?(compilerRegistry: ICompilerRegistry): void {
         compilerRegistry.registerDOMLib(
-            [Vue.$CodeBlock.baseurl + 'js/javascript/v101/d3DomProxyToHTML.js'],
+            [CodeBlocksGlobal.$CodeBlock.baseurl + 'js/javascript/v101/d3DomProxyToHTML.js'],
             'd3proxy',
             '101',
             'D3 - Proxy',
@@ -217,7 +220,7 @@ export class JavascriptV101Compiler extends Vue implements ICompilerInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.worker) {
-            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.worker.end(CodeBlocksGlobal.$l('CodeBlocks.UserCanceled'))
         }
     }
 }

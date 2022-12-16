@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -36,7 +36,7 @@ function runGLSLWorker(
     finishCallback(true, outputData)
 }
 
-@Component
+@Options({})
 export class GLSLV100Compiler extends Vue implements ICompilerInstance {
     readonly version = '100'
     readonly language = 'glsl'

@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { Vue, Prop } from 'vue-property-decorator'
 import {
     IParsedError,
     ILegacyPlaygroundObject,
@@ -70,7 +70,9 @@ const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedError {
     }
     return { line: line!, column: column!, msg: e.message }
 }
-Vue.prototype.$jsErrorParser = jsErrorParser
+
+const anyVue: any = Vue
+anyVue.prototype.$jsErrorParser = jsErrorParser
 
 const sandboxProxies = new WeakMap()
 

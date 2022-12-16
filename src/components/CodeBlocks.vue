@@ -204,7 +204,9 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import BlockEvent from '../lib/events'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
@@ -227,6 +229,7 @@ import {
     KnownBlockTypes,
     IBlockDataPlayground,
 } from '@/lib/ICodeBlocks'
+import { CodeBlocksGlobal } from '@/lib/global'
 
 function formatOutput(result) {
     const regex =
@@ -307,7 +310,7 @@ export interface IOnChangeOrder {
     newID: number
 }
 
-@Component({
+@Options({
     components: {
         CodeBlockContainer,
         CodeBlocksSettings,
@@ -327,7 +330,7 @@ export default class CodeBlocks extends Vue {
     sansoutput: string = ''
     didClip: boolean = false
     _finalOutputObject: IScriptOutputObject | null = null
-    eventHub: Vue = new Vue()
+    eventHub: BlockEvent = new BlockEvent()
 
     get continuousCompile(): boolean {
         if (this.editMode) {
@@ -424,7 +427,7 @@ export default class CodeBlocks extends Vue {
         return this.outputHTML !== undefined && this.outputHTML != ''
     }
     get mimeType(): string {
-        return this.$CodeBlock.mimeType(this.language)
+        return CodeBlocksGlobal.$CodeBlock.mimeType(this.language)
     }
     get isReady(): boolean {
         let cmp = this.$compilerRegistry.getCompiler(this.compiler)
@@ -543,7 +546,7 @@ export default class CodeBlocks extends Vue {
             this.output = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
                 this.outputHTML = formatOutput(this.output.substr(0, this.maxCharacters))
-                this.outputHTML += this.$CodeBlock.format_info(
+                this.outputHTML += CodeBlocksGlobal.$CodeBlock.format_info(
                     'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
                 )
             } else {
@@ -567,7 +570,7 @@ export default class CodeBlocks extends Vue {
         if (!this.didClip) {
             let formatedText
             if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
-                formatedText = this.$CodeBlock.format_info(
+                formatedText = CodeBlocksGlobal.$CodeBlock.format_info(
                     'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
                 )
                 this.didClip = true
@@ -583,7 +586,7 @@ export default class CodeBlocks extends Vue {
     logError(text: string): void {
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         this.eventHub.$emit('console-err', text)
-        text = this.$CodeBlock.format_error(text)
+        text = CodeBlocksGlobal.$CodeBlock.format_error(text)
         //console.log("err", text);
         this.sansoutput += text
         this.outputHTML += text
@@ -592,7 +595,7 @@ export default class CodeBlocks extends Vue {
     logInfo(text: string): void {
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         this.eventHub.$emit('console-nfo', text)
-        text = this.$CodeBlock.format_info(text)
+        text = CodeBlocksGlobal.$CodeBlock.format_info(text)
         //console.log("nfo", text);
         this.sansoutput += text
         this.outputHTML += text
@@ -634,7 +637,7 @@ export default class CodeBlocks extends Vue {
 
         if (output !== undefined && this.playgrounds.length > 0) {
             try {
-                processed = this.$CodeBlock.processMixedOutput(
+                processed = CodeBlocksGlobal.$CodeBlock.processMixedOutput(
                     output,
                     this.outputParser,
                     undefined,
@@ -684,7 +687,7 @@ export default class CodeBlocks extends Vue {
         this.$compilerState.setAllRunButtons(false)
 
         this.resetOutput()
-        this.eventHub.$emit('clicked-run')
+        this.eventHub.$emit('clicked-run', {})
         this.clearDiagnostics()
         const self = this
 
@@ -824,11 +827,11 @@ export default class CodeBlocks extends Vue {
             window.addEventListener('keydown', this.onkey, false)
         }
 
-        Vue.$GlobalEventHub.$on('bookmark-block', this.onBookmarkBlock)
+        CodeBlocksGlobal.$GlobalEventHub.$on('bookmark-block', this.onBookmarkBlock)
     }
     beforeDestroy() {
         window.removeEventListener('keydown', this.onkey)
-        Vue.$GlobalEventHub.$off('bookmark-block')
+        CodeBlocksGlobal.$GlobalEventHub.$off('bookmark-block')
     }
 
     bookmarkedBlock: BlockData | null = null

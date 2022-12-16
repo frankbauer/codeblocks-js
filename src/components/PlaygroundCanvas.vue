@@ -16,17 +16,19 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IScriptBlock } from '@/lib/IScriptBlock'
+import BlockEvent from '@/lib/events'
 
-@Component
+@Options({})
 export default class PlaygroundCanvas extends Vue {
     @Prop() output: string = ''
     @Prop({ required: true }) obj!: IScriptBlock
     @Prop({ required: true }) block!: BlockData
-    @Prop({ required: true }) eventHub!: Vue
+    @Prop({ required: true }) eventHub!: BlockEvent
     @Prop({ default: () => {} }) runner!: () => void
     @Prop() tagSet?: IRandomizerSet
 

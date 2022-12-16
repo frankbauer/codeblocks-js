@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 
 //load all versions
@@ -7,7 +7,7 @@ import v100 from './javascript.v100'
 import v101 from './javascript.v101'
 import v102 from './javascript.v102'
 
-@Component
+@Options({})
 export class JavascriptCompilerInfo extends Vue implements ICompilerInfo {
     type = 'javascript'
     displayName = 'JavaScript'

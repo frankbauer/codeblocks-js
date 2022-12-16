@@ -27,7 +27,8 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import {  Prop } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '../lib/codeBlocksManager'
 import {
@@ -42,7 +43,7 @@ interface IBlockDataExtended extends IBlockData {
     actualContent: string
     actualAltContent: string
 }
-@Component({ components: { CodeBlock } })
+@Options({ components: { CodeBlock } })
 export default class CodePanel extends Vue {
     @Prop({ default: false }) editMode!: boolean
     @Prop({ default: 'auto' }) visibleLines!: number | 'auto'

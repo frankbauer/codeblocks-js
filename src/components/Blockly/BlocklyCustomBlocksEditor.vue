@@ -59,16 +59,18 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import Blockly from '@/plugins/blocklyEnv'
-import { uuid } from 'vue-uuid'
+import { uuid } from 'vue3-uuid'
 
 import { blocklyHelper, PredefinedBlockTypes } from '@/lib/BlocklyHelper'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IBlockDefinition, KnownBlocklyTypes } from '@/lib/IBlocklyHelper'
 
 import BlocklyCustomBlockEditor from '@/components/Blockly/BlocklyCustomBlockEditor.vue'
-@Component({ components: { BlocklyCustomBlockEditor } })
+import { CodeBlocksGlobal } from '@/lib/global'
+@Options({ components: { BlocklyCustomBlockEditor } })
 export default class BlocklyCustomBlocksEditor extends Vue {
     @Prop({ required: true }) block!: BlockData
 
@@ -92,8 +94,8 @@ export default class BlocklyCustomBlocksEditor extends Vue {
     addBlock() {
         this.$q
             .dialog({
-                title: Vue.$l('Blockly.Block.CreateCustomTitle'),
-                message: Vue.$l('Blockly.Block.CreateCustomMessage'),
+                title: CodeBlocksGlobal.$l('Blockly.Block.CreateCustomTitle'),
+                message: CodeBlocksGlobal.$l('Blockly.Block.CreateCustomMessage'),
                 html: true,
                 prompt: {
                     model: '',
@@ -148,7 +150,7 @@ export default class BlocklyCustomBlocksEditor extends Vue {
     }
 
     onShowBlock() {
-        this.$CodeBlock.refreshAllCodeMirrors()
+        CodeBlocksGlobal.$CodeBlock.refreshAllCodeMirrors()
     }
 }
 </script>

@@ -1,5 +1,6 @@
+import { CodeBlocksGlobal } from '@/lib/global'
 import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -29,7 +30,7 @@ function runPythonWorker(
         return
     }
 
-    const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v100/pyWorker.js')
+    const worker = new Worker(CodeBlocksGlobal.$CodeBlock.baseurl + 'js/python/v100/pyWorker.js')
 
     // construct message for worker
     const pyInp = [] // not used jet
@@ -110,7 +111,7 @@ function runPythonWorker(
 }
 
 //ICompilerInstance
-@Component
+@Options({})
 export class PythonV100Compiler extends Vue implements ICompilerInstance {
     readonly version = '100'
     readonly language = 'python'

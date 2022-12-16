@@ -136,7 +136,8 @@
 import 'reflect-metadata'
 
 //helper to reset the canvas area if needed
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import BaseBlock from '@/components/BaseBlock.vue'
 
 import { BlockData } from '@/lib/codeBlocksManager'
@@ -163,8 +164,10 @@ import 'codemirror/theme/mdn-like.css'
 
 //languages
 import 'codemirror/mode/javascript/javascript.js'
+import BlockEvent from '@/lib/events'
+import { CodeBlocksGlobal } from '@/lib/global'
 
-@Component({
+@Options({
     components: { MonacoEditor },
 })
 export default class DataBlock extends BaseBlock {
@@ -175,7 +178,7 @@ export default class DataBlock extends BaseBlock {
 
     @Prop({ default: false }) editMode!: boolean
     @Prop({ default: 'base16-dark' }) theme!: string
-    @Prop({ required: true }) eventHub!: Vue
+    @Prop({ required: true }) eventHub!: BlockEvent
     @Prop() tagSet?: IRandomizerSet
 
     get codeBox(): Vue {
@@ -198,7 +201,7 @@ export default class DataBlock extends BaseBlock {
     get options(): ICodePlaygroundOptions {
         return {
             // codemirror options
-            mode: this.$CodeBlock.mimeType('javascript'),
+            mode: CodeBlocksGlobal.$CodeBlock.mimeType('javascript'),
             theme: this.theme,
             lineNumbers: true,
             line: true,
@@ -273,7 +276,7 @@ export default class DataBlock extends BaseBlock {
         this.block.codeExpanded = val
 
         if (this.block.codeExpanded != CodeExpansionType.TINY) {
-            this.$CodeBlock.refreshAllCodeMirrors()
+            CodeBlocksGlobal.$CodeBlock.refreshAllCodeMirrors()
         }
         this.updateHeight()
     }
@@ -339,8 +342,8 @@ export default class DataBlock extends BaseBlock {
     showInfoDialog(): void {
         this.$q
             .dialog({
-                title: this.$l('DataBlock.InfoCaption'),
-                message: this.$l('DataBlock.Info').replace('{NAME}', this.name),
+                title: CodeBlocksGlobal.$l('DataBlock.InfoCaption'),
+                message: CodeBlocksGlobal.$l('DataBlock.Info').replace('{NAME}', this.name),
                 html: true,
                 style: 'width:75%',
             })
@@ -524,7 +527,7 @@ export default class DataBlock extends BaseBlock {
     visibility: hidden
 </style>
 <style lang="stylus">
-@import '../styles/quasar.variables.styl'
+@import '../styles/quasar.variables.legacy.styl'
 .jsonErrObj, .jsonErr
     margin-left: 16px
     font-weight: bold

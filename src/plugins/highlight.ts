@@ -1,9 +1,10 @@
-import Vue from 'vue'
+import { GlobalState } from './codeBlocks'
+import Vue, { App } from 'vue'
 import hljs from 'highlight.js/lib/core'
 //import 'highlight.js/styles/ocean.css'
 import 'highlight.js/styles/tomorrow.css'
 import '../styles/highlight.styl'
-import { DirectiveBinding } from 'vue/types/options'
+import { CodeBlocksGlobal } from '@/lib/global'
 
 hljs.configure({ useBR: false })
 
@@ -140,16 +141,17 @@ window.highlightElement = function (el: HTMLElement) {
     hljs.$vue.processElement(el, el.getAttribute('highlight'))
 }
 window.hljs = hljs
-Vue.$hljs = hljs
+CodeBlocksGlobal.$hljs = hljs
 
-Vue.directive('highlight', {
-    //deep: true,
-    bind: function (el: HTMLElement, binding: DirectiveBinding) {
-        console.log('DIRECTIVE - bind', el, binding)
-        hljs.$vue.processElement(el, binding.value)
-    },
-    componentUpdated: function (el: HTMLElement, binding: DirectiveBinding) {
-        console.log('DIRECTIVE - update', el, binding)
-        hljs.$vue.processElement(el, binding.value)
-    },
-})
+export default function install(app: App) {
+    app.directive('highlight', {
+        beforeMount: function (el: HTMLElement, binding) {
+            console.log('DIRECTIVE - bind', el, binding)
+            hljs.$vue.processElement(el, binding.value)
+        },
+        updated: function (el: HTMLElement, binding) {
+            console.log('DIRECTIVE - update', el, binding)
+            hljs.$vue.processElement(el, binding.value)
+        },
+    })
+}

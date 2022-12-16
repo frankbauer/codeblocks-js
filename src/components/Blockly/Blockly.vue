@@ -96,7 +96,8 @@
 <script lang="ts">
 import Blockly from '@/plugins/blocklyEnv'
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 
 import CodeBlock from '@/components/CodeBlock.vue'
 import BlocklyCustomBlocksEditor from '@/components/Blockly/BlocklyCustomBlocksEditor.vue'
@@ -107,8 +108,9 @@ import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { BlockPrimaryColors, BlockSecondaryColors, BlockTertiaryColors } from '@/lib/IBlocklyHelper'
 import { blocklyHelper } from '@/lib/BlocklyHelper'
 import { blocklyTheme } from '@/lib/BlocklyStyle'
+import { CodeBlocksGlobal } from '@/lib/global'
 
-@Component({
+@Options({
     components: {
         CodeBlock,
         BlocklyCustomBlocksEditor,
@@ -170,7 +172,7 @@ export default class BlocklyBlock extends Vue {
     }
 
     mountBlockly() {
-        const options = this.$props.options || {}
+        const options = (this.$props as any).options || {}
         if (!options.toolbox) {
             options.toolbox = this.blocklyToolbox
         }
@@ -237,7 +239,7 @@ export default class BlocklyBlock extends Vue {
     get cmoptions() {
         return {
             // codemirror options
-            mode: this.$CodeBlock.mimeType('javascript'),
+            mode: CodeBlocksGlobal.$CodeBlock.mimeType('javascript'),
             theme: this.block.getThemeForBlock(this.cmblock),
             lineNumbers: true,
             line: true,
@@ -271,7 +273,7 @@ export default class BlocklyBlock extends Vue {
     }
     get tboptions() {
         return {
-            mode: this.$CodeBlock.mimeType('xml'),
+            mode: CodeBlocksGlobal.$CodeBlock.mimeType('xml'),
             theme: this.block.getThemeForBlock(this.tbblock),
             lineNumbers: true,
             line: true,
@@ -371,8 +373,8 @@ export default class BlocklyBlock extends Vue {
         }
     }
 
-    private onBeforeShow(e: MouseEvent) {
-        this.$CodeBlock.refreshAllCodeMirrors()
+    onBeforeShow(e: MouseEvent) {
+        CodeBlocksGlobal.$CodeBlock.refreshAllCodeMirrors()
     }
 
     onCodeChange(newCode) {

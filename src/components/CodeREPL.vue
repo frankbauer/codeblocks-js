@@ -97,15 +97,17 @@
 import 'reflect-metadata'
 
 //helper to reset the canvas area if needed
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options} from 'vue-class-component'
 import BaseBlock from '@/components/BaseBlock.vue'
 import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import { ICompilerID, ICompilerInstance } from '@/lib/ICompilerRegistry'
 import Terminal from '@/components/Terminal.vue'
+import BlockEvent from '@/lib/events'
 
-@Component({ components: { Terminal } })
+@Options({ components: { Terminal } })
 export default class CodeREPL extends BaseBlock {
-    @Prop({ required: true }) eventHub!: Vue
+    @Prop({ required: true }) eventHub!: BlockEvent
     @Prop({ required: true }) blockInfo!: IMainBlock
     @Prop({ required: true }) isReady!: boolean
     @Prop({ required: true }) canStop!: boolean

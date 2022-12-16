@@ -1,6 +1,5 @@
 import { IBlockloadManager, IBlockElementData, IBlockDataBase } from '@/lib/ICodeBlocks'
-import { positioninLoadManager } from '@/lib/BlockloadManagers/PositioningManager'
-import { uuid } from 'vue-uuid'
+
 export class BlockLoadManager implements IBlockloadManager {
     get blockTag(): string {
         return 'BLOCK'

@@ -89,17 +89,18 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { IBlocklyToolboxItem, IBlockDefinition, IBlockLine } from '@/lib/IBlocklyHelper'
 import { blocklyHelper, PredefinedBlockTypes, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 import BlockPreview from '@/components/Blockly/BlockPreview.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import BlockEditor from '@/components/Blockly/BlockEditor.vue'
-import { uuid } from 'vue-uuid'
 import { BlockData } from '../../lib/codeBlocksManager'
+import { CodeBlocksGlobal } from '@/lib/global'
 
-@Component({ components: { CodeBlock, BlockPreview, BlockEditor } })
+@Options({ components: { CodeBlock, BlockPreview, BlockEditor } })
 export default class BlocklyCustomBlockEditor extends Vue {
     @Prop() customBlocks!: IBlockDefinition[]
     @Prop() blockDefinition!: IBlockDefinition
@@ -142,7 +143,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
             cl = ''
         }
 
-        return Vue.$CodeBlock.itemForValue(this.colors, cl)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.colors, cl)
     }
 
     set color(v) {
@@ -160,7 +161,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
 
     get codeOptions() {
         return {
-            mode: this.$CodeBlock.mimeType('xml'),
+            mode: CodeBlocksGlobal.$CodeBlock.mimeType('xml'),
             theme: this.block.getThemeForBlock(this.codeBlock),
             lineNumbers: false,
             line: false,
@@ -200,7 +201,7 @@ export default class BlocklyCustomBlockEditor extends Vue {
 
     get staticCodeOptions() {
         return {
-            mode: this.$CodeBlock.mimeType('xml'),
+            mode: CodeBlocksGlobal.$CodeBlock.mimeType('xml'),
             theme: this.block.getThemeForBlock(this.prefixCodeBlock),
             lineNumbers: false,
             line: false,

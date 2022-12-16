@@ -1,5 +1,6 @@
+import { CodeBlocksGlobal } from '@/lib/global'
 import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -32,7 +33,7 @@ function runPythonWorker(
         return
     }
 
-    const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v101/pyWorker.js')
+    const worker = new Worker(CodeBlocksGlobal.$CodeBlock.baseurl + 'js/python/v101/pyWorker.js')
 
     // construct message for worker
     const pyInp = [] // not used jet
@@ -133,7 +134,7 @@ function runPythonWorker(
 }
 
 //ICompilerInstance
-@Component
+@Options({})
 export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
     readonly version = '101'
     readonly language = 'python'
@@ -183,13 +184,13 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.worker) {
-            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.worker.end(CodeBlocksGlobal.$l('CodeBlocks.UserCanceled'))
         }
     }
 }
 
 //ICompilerInstance
-@Component
+@Options({})
 export class PythonV101Compiler extends Vue implements ICompilerInstance {
     readonly version = '101'
     readonly language = 'python'
@@ -240,7 +241,7 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.worker) {
-            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.worker.end(CodeBlocksGlobal.$l('CodeBlocks.UserCanceled'))
         }
     }
 }

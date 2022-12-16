@@ -10,13 +10,13 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import Blockly from '@/plugins/blocklyEnv'
 
 import { blocklyHelper } from '@/lib/BlocklyHelper'
 import { IBlockDefinition } from '@/lib/IBlocklyHelper'
 
-import { uuid } from 'vue-uuid'
 import { blocklyTheme } from '@/lib/BlocklyStyle'
 
 /**
@@ -25,7 +25,7 @@ import { blocklyTheme } from '@/lib/BlocklyStyle'
  */
 const UNNAMED = 'unnamed'
 
-@Component
+@Options({})
 export default class BlockEditor extends Vue {
     @Prop({ required: true }) blockDefinition!: IBlockDefinition
     @Prop({ default: '100%' }) width!: string
@@ -122,7 +122,7 @@ export default class BlockEditor extends Vue {
 </script>
 
 <style lang="stylus">
-@import '../../styles/quasar.variables.styl'
+@import '../../styles/quasar.variables.legacy.styl'
 
 .blocklyBlockContainer
     .blocklySvg

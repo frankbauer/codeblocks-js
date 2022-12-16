@@ -1,3 +1,4 @@
+import { CodeBlocksGlobal } from '@/lib/global';
 /**
 
  * Copyright 2012 Google LLC
@@ -29,9 +30,9 @@ Blockly.Blocks['factory_base'] = {
     // Base of new block.
     init: function (this: any) {
         this.setColour(blocklyHelper.toHTMLColor(BlockPrimaryColors.Text))
-        this.appendDummyInput().appendField(Vue.$l('Blockly.Block.DesignBlockName'))
+        this.appendDummyInput().appendField(CodeBlocksGlobal.$l('Blockly.Block.DesignBlockName'))
         // this.appendDummyInput()
-        //     .appendField(Vue.$l('Blockly.Block.TypeName'))
+        //     .appendField(CodeBlocksGlobal.$l('Blockly.Block.TypeName'))
         //     .appendField(new Blockly.FieldTextInput('block_type'), 'NAME')
         this.appendStatementInput('INPUTS').setCheck('Input').appendField('inputs')
         let dropdown = new Blockly.FieldDropdown([

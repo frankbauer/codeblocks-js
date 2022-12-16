@@ -1,6 +1,5 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
-        
         <codemirror
             ref="codeBox"
             :value="code"
@@ -37,7 +36,8 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import ErrorTip from './ErrorTip.vue'
 import BaseBlock from './BaseBlock.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
@@ -77,9 +77,12 @@ import 'codemirror/addon/edit/closebrackets.js'
 
 //helper to create tooltips at runtime
 import CodeBlockButton from '@/components/CodeBlockButton.vue'
-const ErrorTipCtor = Vue.extend(ErrorTip)
+import { CodeBlocksGlobal } from '@/lib/global'
+import PlaygroundCanvas from './PlaygroundCanvas.vue'
+import { createApp } from 'vue'
+//const ErrorTipCtor = Vue.extend(ErrorTip)
 
-@Component({ components: { CodeBlockButton } })
+@Options({ components: { CodeBlockButton } })
 export default class CodeBlock extends BaseBlock {
     @Prop({ default: '' }) namePrefix!: string
     @Prop({ default: false }) emitWhenTypingInViewMode!: boolean
@@ -93,7 +96,7 @@ export default class CodeBlock extends BaseBlock {
     @Prop({ default: undefined }) tagSet!: IRandomizerSet
     @Prop({
         required: true,
-        validator: function (b:any) {
+        validator: function (b: any) {
             if (b === null || b === undefined || b.content === undefined) {
                 return false
             }
@@ -117,8 +120,8 @@ export default class CodeBlock extends BaseBlock {
         let allMarks = this.codemirror.getDoc().getAllMarks()
         allMarks.forEach((e) => {
             if (
-                e.className == Vue.$tagger.className.rnd ||
-                e.className == Vue.$tagger.className.templ
+                e.className == CodeBlocksGlobal.$tagger.className.rnd ||
+                e.className == CodeBlocksGlobal.$tagger.className.templ
             ) {
                 e.clear()
             }
@@ -128,8 +131,8 @@ export default class CodeBlock extends BaseBlock {
             allMarks = this.altcodemirror.getDoc().getAllMarks()
             allMarks.forEach((e) => {
                 if (
-                    e.className == Vue.$tagger.className.rnd ||
-                    e.className == Vue.$tagger.className.templ
+                    e.className == CodeBlocksGlobal.$tagger.className.rnd ||
+                    e.className == CodeBlocksGlobal.$tagger.className.templ
                 ) {
                     e.clear()
                 }
@@ -355,7 +358,7 @@ export default class CodeBlock extends BaseBlock {
         if (o.scopeUUID != this.block.scopeUUID) {
             return
         }
-        this.block.content = Vue.$tagger.replaceTemplateTagInString(
+        this.block.content = CodeBlocksGlobal.$tagger.replaceTemplateTagInString(
             this.block.content,
             o.name,
             o.newValue
@@ -376,9 +379,9 @@ export default class CodeBlock extends BaseBlock {
         this.codeNeedsTagUpdate = false
         //console.log('Updating Tags')
         this.clearTagMarkers()
-        Vue.$tagger.getMarkers(this.block.content).forEach((m) => {
+        CodeBlocksGlobal.$tagger.getMarkers(this.block.content).forEach((m) => {
             this.codemirror.getDoc().markText(m.start, m.end, {
-                className: Vue.$tagger.className[m.type],
+                className: CodeBlocksGlobal.$tagger.className[m.type],
                 inclusiveLeft: true,
                 inclusiveRight: true,
                 title: m.name,
@@ -387,13 +390,13 @@ export default class CodeBlock extends BaseBlock {
             })
         })
         this.$nextTick(() => {
-            Vue.$tagger.hookClick(this.codeBox.$el, this.block.scopeUUID)
+            CodeBlocksGlobal.$tagger.hookClick(this.codeBox.$el, this.block.scopeUUID)
         })
 
         if (this.altcodemirror) {
-            Vue.$tagger.getMarkers(this.block.alternativeContent).forEach((m) => {
+            CodeBlocksGlobal.$tagger.getMarkers(this.block.alternativeContent).forEach((m) => {
                 this.altcodemirror.getDoc().markText(m.start, m.end, {
-                    className: Vue.$tagger.className[m.type],
+                    className: CodeBlocksGlobal.$tagger.className[m.type],
                     inclusiveLeft: true,
                     inclusiveRight: true,
                     title: m.name,
@@ -404,7 +407,7 @@ export default class CodeBlock extends BaseBlock {
 
             this.$nextTick(() => {
                 if (this.altBox !== undefined) {
-                    Vue.$tagger.hookClick(this.altBox.$el, this.block.scopeUUID)
+                    CodeBlocksGlobal.$tagger.hookClick(this.altBox.$el, this.block.scopeUUID)
                 }
             })
         }
@@ -444,12 +447,12 @@ export default class CodeBlock extends BaseBlock {
                         .getDoc()
                         .setGutterMarker(error.start.line - first, 'diagnostics', element)
 
-                    element.$component = new ErrorTipCtor({
+                    element.$component = createApp(PlaygroundCanvas, {
                         propsData: {
                             errors: [],
                             severity: error.severity,
                         },
-                    }).$mount(element)
+                    }).mount(element)
 
                     element = element.$component
                 }
@@ -631,12 +634,12 @@ export default class CodeBlock extends BaseBlock {
             })
         }
 
-        Vue.$tagger.$on('replace-template-tag', this.replaceTemplateTags)
+        CodeBlocksGlobal.$tagger.$on('replace-template-tag', this.replaceTemplateTags)
         this.codeNeedsTagUpdate = true
         this.updateTagDisplay()
     }
     beforeDestroy() {
-        Vue.$tagger.$off('replace-template-tag', this.replaceTemplateTags)
+        CodeBlocksGlobal.$tagger.$off('replace-template-tag', this.replaceTemplateTags)
     }
 }
 </script>

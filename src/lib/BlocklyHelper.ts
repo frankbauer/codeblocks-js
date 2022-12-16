@@ -1,3 +1,4 @@
+import { CodeBlocksGlobal } from '@/lib/global';
 import Vue from 'vue'
 import '../styles/blockly.styl' 
 
@@ -57,7 +58,7 @@ export const ColorHues: IListItemData[] = [
 
 export const PredefinedBlockTypes: IListItemData[] = Object.keys(KnownBlocklyTypes).map((key) => {
     const ret: IListItemData = {
-        label: Vue.$l(`Blockly.BlockTypeNames.${key}`),
+        label: CodeBlocksGlobal.$l(`Blockly.BlockTypeNames.${key}`),
         value: KnownBlocklyTypes[key],
     }
     return ret
@@ -73,7 +74,7 @@ export const ColorSelectionWithNone: IListItemData[] = [
 export const PredefinedArgumentTypes: IListItemData[] = Object.keys(BlockArgumentTypes).map(
     (key) => {
         const ret: IListItemData = {
-            label: Vue.$l(`Blockly.ArgumentTypeNames.${key}`),
+            label: CodeBlocksGlobal.$l(`Blockly.ArgumentTypeNames.${key}`),
             value: key,
         }
         return ret
@@ -162,7 +163,7 @@ export const categoryStyles = {
 export class BlocklyHelper {
     
     public toArgumentDescription(a: BlockArgumentTypes) {
-        const n = Vue.$l(`Blockly.ArgumentTypeNames.${a}`)
+        const n = CodeBlocksGlobal.$l(`Blockly.ArgumentTypeNames.${a}`)
         return n ? `${n} (${a})` : a
     }
     private serializeToolboxItem(i: IBlocklyToolboxItem): string {
@@ -249,7 +250,7 @@ export class BlocklyHelper {
     }
 
     public itemForValue(items: IListItemData[], value: string): IListItemData {
-        return Vue.$CodeBlock.itemForValue(items, value)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(items, value)
     }
 
     public toColorCode(color: string): string | undefined {

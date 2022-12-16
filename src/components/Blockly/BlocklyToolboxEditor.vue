@@ -61,7 +61,8 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import Blockly from '@/plugins/blocklyEnv'
 
 import BlocklyToolboxCategoryEditor from '@/components/Blockly/BlocklyToolboxCategoryEditor.vue'
@@ -69,9 +70,9 @@ import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IBlocklyToolboxCategory } from '@/lib/IBlocklyHelper'
 
-import { uuid } from 'vue-uuid'
+import { uuid } from 'vue3-uuid'
 
-@Component({ components: { BlocklyToolboxCategoryEditor } })
+@Options({ components: { BlocklyToolboxCategoryEditor } })
 export default class BlocklyToolboxEditor extends Vue {
     @Prop({ required: true }) block!: BlockData
 

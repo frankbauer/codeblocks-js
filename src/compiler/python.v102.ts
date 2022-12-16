@@ -1,5 +1,6 @@
+import { CodeBlocksGlobal } from '@/lib/global'
 import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -24,13 +25,15 @@ function getWorker(setReady: (boolean) => void) {
     setReady(false)
     if (runningWorker !== undefined) {
         console.d('FORCE STOPPING ON RERUN')
-        runningWorker.end(Vue.$l('CodeBlocks.UserCanceled'))
+        runningWorker.end(CodeBlocksGlobal.$l('CodeBlocks.UserCanceled'))
         runningWorker = undefined
     }
 
     runningWorker = spareWorker
     console.i('Starting Spare Pyodide Server')
-    spareWorker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v102/pyWorker.js') as REPLWorker
+    spareWorker = new Worker(
+        CodeBlocksGlobal.$CodeBlock.baseurl + 'js/python/v102/pyWorker.js'
+    ) as REPLWorker
     spareWorker.onmessage = function (msg: any) {
         if (msg.data.command == 'finished-init') {
             setReady(true)
@@ -250,7 +253,7 @@ function runPythonWorker(
 }
 
 //ICompilerInstance
-@Component
+@Options({})
 export class PythonV102Compiler extends Vue implements ICompilerInstance, IReplInstance {
     readonly version = '102'
     readonly language = 'python'
@@ -294,7 +297,7 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance, IReplI
     stop() {
         console.d('FORCE STOPPING')
         if (this.worker) {
-            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.worker.end(CodeBlocksGlobal.$l('CodeBlocks.UserCanceled'))
         }
     }
 

@@ -84,7 +84,7 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
 import {
     IBlocklyToolboxCategory,
     IBlocklyToolboxItem,
@@ -94,9 +94,11 @@ import { blocklyHelper, ColorSelectionWithNone } from '@/lib/BlocklyHelper'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 import BlocklyToolboxItemEditor from '@/components/Blockly/BlocklyToolboxItemEditor.vue'
 
-import { uuid } from 'vue-uuid'
+import { uuid } from 'vue3-uuid'
+import { CodeBlocksGlobal } from '@/lib/global'
+import { Vue, Options } from 'vue-class-component'
 
-@Component({ components: { BlocklyToolboxItemEditor } })
+@Options({ components: { BlocklyToolboxItemEditor } })
 export default class BlocklyToolboxCategoryEditor extends Vue {
     @Prop() category!: IBlocklyToolboxCategory
     @Prop() customBlocks!: IBlockDefinition[]
@@ -107,7 +109,7 @@ export default class BlocklyToolboxCategoryEditor extends Vue {
             cl = ''
         }
 
-        return Vue.$CodeBlock.itemForValue(this.colors, cl)
+        return CodeBlocksGlobal.$CodeBlock.itemForValue(this.colors, cl)
     }
 
     set color(v) {

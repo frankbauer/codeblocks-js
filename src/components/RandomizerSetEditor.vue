@@ -14,10 +14,11 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 
-@Component
+@Options({})
 export default class RandomizerSetEditor extends Vue {
     @Prop({ required: true }) options!: any
     @Prop({ required: true }) tagSet!: IRandomizerSet

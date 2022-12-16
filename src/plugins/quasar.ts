@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { App } from 'vue'
 
 import '../styles/quasar.styl'
 import '@quasar/extras/material-icons/material-icons.css'
@@ -17,23 +17,26 @@ import '@quasar/extras/animate/zoomInUp.css'
 import { Dialog, Quasar } from 'quasar'
 
 const lang = document.getElementsByTagName('html')[0].getAttribute('lang')
-import langDe from 'quasar/dist/lang/de.umd.min.js'
-import langEn from 'quasar/dist/lang/en-gb.umd.min.js'
+// import langDe from 'quasar/dist/lang/de.umd.min.js'
+// import langEn from 'quasar/dist/lang/en-gb.umd.min.js'
 
-Vue.use(Quasar, {
-    config: {},
-    components: {
-        /* not needed if importStrategy is not 'manual' */
-    },
-    directives: {
-        /* not needed if importStrategy is not 'manual' */
-    },
-    plugins: {
-        Dialog,
-    },
-    animations: ['fadeIn', 'fadeOut'],
-    lang: lang == 'de' ? langDe : langEn,
-})
-Quasar.lang.set(lang == 'de' ? langDe : langEn)
+//Quasar.lang.set(lang == 'de' ? langDe : langEn)
 
 import 'reflect-metadata'
+
+export default function install(app: App) {
+    app.use(Quasar, {
+        config: {},
+        components: {
+            /* not needed if importStrategy is not 'manual' */
+        },
+        directives: {
+            /* not needed if importStrategy is not 'manual' */
+        },
+        plugins: {
+            Dialog,
+        },
+        animations: ['fadeIn', 'fadeOut'],
+        //lang: lang == 'de' ? langDe : langEn,
+    })
+}

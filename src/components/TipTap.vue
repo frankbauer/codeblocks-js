@@ -25,9 +25,11 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import { ITagReplaceAction } from '../plugins/tagger'
-@Component
+import { CodeBlocksGlobal } from '@/lib/global'
+@Options({})
 export default class TipTap extends Vue {
     @Prop({ default: '' }) value!: string
     @Prop({ default: '' }) name!: string
@@ -52,20 +54,22 @@ export default class TipTap extends Vue {
         if (o.scopeUUID != this.scopeUUID) {
             return
         }
-        this.updatedContent(Vue.$tagger.replaceTemplateTagInString(this.text, o.name, o.newValue))
+        this.updatedContent(
+            CodeBlocksGlobal.$tagger.replaceTemplateTagInString(this.text, o.name, o.newValue)
+        )
     }
 
     mounted() {
         const eb: any = this.$refs.editBox
         //we need this for StudON to make sure tinyMCE is not taking over :D
-        eb.$el.querySelectorAll('textarea[name]').forEach(el => {
+        eb.$el.querySelectorAll('textarea[name]').forEach((el) => {
             el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
         })
-        Vue.$tagger.$on('replace-template-tag', this.replaceTemplateTags)
+        CodeBlocksGlobal.$tagger.$on('replace-template-tag', this.replaceTemplateTags)
     }
 
     beforeDestroy() {
-        Vue.$tagger.$off('replace-template-tag', this.replaceTemplateTags)
+        CodeBlocksGlobal.$tagger.$off('replace-template-tag', this.replaceTemplateTags)
     }
 }
 </script>

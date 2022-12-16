@@ -6,22 +6,24 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import {Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import '@/lib/jquery.terminal.js'
 import $ from 'jquery'
 import { PythonV102Compiler } from '@/compiler/python.v102'
 import { ICompilerID } from '@/lib/ICompilerRegistry'
 import { IMainBlock } from '@/lib/codeBlocksManager'
+import BlockEvent from '@/lib/events'
 
 function sleep(s) {
     return new Promise((resolve) => setTimeout(resolve, s))
 }
 
-@Component
+@Options({})
 export default class Terminal extends Vue {
     @Prop({ default: '250px' }) height!: string
     @Prop({ required: true }) blockInfo!: IMainBlock
-    @Prop({ required: true }) eventHub!: Vue
+    @Prop({ required: true }) eventHub!: BlockEvent
 
     private term: any
     get compiler(): ICompilerID {

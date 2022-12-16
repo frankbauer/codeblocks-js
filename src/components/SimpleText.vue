@@ -16,10 +16,12 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import TipTap from './TipTap.vue'
 import BaseBlock from './BaseBlock.vue'
-@Component({ components: { TipTap } })
+
+@Options({ components: { TipTap } })
 export default class SimpleText extends BaseBlock {
     @Prop() language!: string
     @Prop({ default: '' }) value!: string

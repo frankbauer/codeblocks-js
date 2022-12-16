@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -154,7 +154,7 @@ function runJavaScriptWorker(
 }
 
 //ICompilerInstance
-@Component
+@Options({})
 export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
     readonly version = '100'
     readonly language = 'javascript'

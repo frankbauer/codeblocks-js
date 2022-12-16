@@ -1,12 +1,18 @@
+import { CodeBlocksGlobal } from '@/lib/global'
 import { ScriptBlock } from './scriptBlock'
 import { IScriptOutputObject, IPlaygroundObject, ILegacyPlaygroundObject } from './IScriptBlock'
 import i18n from '../plugins/i18n'
 import 'reflect-metadata'
-import { Vue, Component, Watch } from 'vue-property-decorator'
+import { Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 
 import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
-import { uuid } from 'vue-uuid'
+import UUID, { uuid } from 'vue3-uuid'
+import TAGGER from '@/plugins/taggerPlugin'
+import HIGHLIGHTER from '@/plugins/highlight'
+import QUASAR from '@/plugins/quasar'
+import CM from '@/plugins/codemirror'
 
 import compilerRegistry, { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
 import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
@@ -32,6 +38,7 @@ import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
 import dataInstaller from '@/lib/BlockloadManagers/DataManager'
 import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
 import { trim } from 'jquery'
+import { createApp } from 'vue'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -98,7 +105,7 @@ export interface IBlockBookmarkPayload {
     uuid: string
     block: BlockData | null
 }
-@Component
+@Options({})
 export class BlockData extends Vue implements IBlockData {
     appSettings!: IAppSettings
     hasCode!: boolean
@@ -136,7 +143,7 @@ export class BlockData extends Vue implements IBlockData {
 
     actualContent() {
         if (this.appSettings.randomizer.active) {
-            return Vue.$tagger.replaceRandomTagsInString(
+            return CodeBlocksGlobal.$tagger.replaceRandomTagsInString(
                 this.content,
                 this.appSettings.randomizer.sets[this.appSettings.randomizer.previewIndex]
             )
@@ -573,10 +580,9 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         const self = this
-        new Vue({
-            i18n,
+        const app = createApp({
             render: function (h) {
-                @Component({
+                @Options({
                     data: function () {
                         return data
                     },
@@ -715,7 +721,15 @@ class InternalCodeBlocksManager {
                 }
                 return h(data.editMode ? AppEditor : App, context)
             },
-        }).$mount(this.element)
+        })
+            .use(i18n)
+            .use(UUID)
+            .use(TAGGER)
+            .use(HIGHLIGHTER)
+            .use(CM)
+            .use(QUASAR)
+
+        app.mount(this.element)
     }
 }
 
@@ -743,9 +757,9 @@ export const CodeBlocksManager = {
                 scope = el
             }
 
-            Vue.$hljs.$vue.processElements(scope)
+            CodeBlocksGlobal.$hljs.$vue.processElements(scope)
             if (cbm.data.editMode) {
-                Vue.$tagger.processElements(scope)
+                CodeBlocksGlobal.$tagger.processElements(scope)
                 cbm.data.scopeSelector = `[uuid=${scope.getAttribute('uuid')}]`
                 cbm.data.scopeUUID = scope.getAttribute('uuid')
                     ? scope.getAttribute('uuid')!

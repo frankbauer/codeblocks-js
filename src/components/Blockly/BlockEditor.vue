@@ -152,7 +152,8 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import { Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import Blockly from '@/plugins/blocklyEnv'
 import { blocklyHelper } from '@/lib/BlocklyHelper'
 import { IBlockDefinition, BlockPrimaryColors } from '@/lib/IBlocklyHelper'
@@ -183,7 +184,7 @@ const STARTER_BLOCK_XML_TEXT =
  */
 const UNNAMED = 'unnamed'
 
-@Component
+@Options({})
 export default class BlockEditor extends Vue {
     @Prop({ required: true }) blockDefinition!: IBlockDefinition
 

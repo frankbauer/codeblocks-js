@@ -62,15 +62,17 @@ import codemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 
 //helper to reset the canvas area if needed
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import {Prop, Watch } from 'vue-property-decorator'
+import { Vue, Options } from 'vue-class-component'
 import PlaygroundCanvas from '@/components/PlaygroundCanvas.vue'
 import BaseBlock from '@/components/BaseBlock.vue'
-const PlaygroundCanvasCtor = Vue.extend(PlaygroundCanvas)
 
 import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
+import { CodeBlocksGlobal } from '@/lib/global'
+import BlockEvent from '@/lib/events'
 
 export interface ICodePlaygroundOptions {
     mode: string
@@ -85,7 +87,7 @@ export interface ICodePlaygroundOptions {
     gutters: string[]
 }
 
-@Component({
+@Options({
     components: { PlaygroundCanvas, CodeBlock },
 })
 export default class CodePlayground extends BaseBlock {
@@ -104,7 +106,7 @@ export default class CodePlayground extends BaseBlock {
     @Prop({ default: false }) editMode!: boolean
     @Prop({ default: 'auto' }) visibleLines!: 'auto' | string
     @Prop({ default: 'base16-dark' }) theme!: string
-    @Prop({ required: true }) eventHub!: Vue
+    @Prop({ required: true }) eventHub!: BlockEvent
     @Prop() tagSet?: IRandomizerSet
 
     get originalMode(): boolean {
@@ -117,7 +119,7 @@ export default class CodePlayground extends BaseBlock {
     get options(): ICodePlaygroundOptions {
         return {
             // codemirror options
-            mode: this.$CodeBlock.mimeType('javascript'),
+            mode: CodeBlocksGlobal.$CodeBlock.mimeType('javascript'),
             theme: this.theme,
             lineNumbers: true,
             line: true,
@@ -182,7 +184,7 @@ export default class CodePlayground extends BaseBlock {
         this.block.codeExpanded = val
 
         if (this.block.codeExpanded != CodeExpansionType.TINY) {
-            this.$CodeBlock.refreshAllCodeMirrors()
+            CodeBlocksGlobal.$CodeBlock.refreshAllCodeMirrors()
         }
     }
     updateErrors(): boolean {
@@ -197,7 +199,7 @@ export default class CodePlayground extends BaseBlock {
                 start: { line: e.line, column: e.column },
                 end: { line: e.line, column: e.column + 1 },
                 message: e.msg,
-                severity: Vue.$SEVERITY_ERROR,
+                severity: CodeBlocksGlobal.$SEVERITY_ERROR,
             }
             if (e.line === undefined) {
                 err.start = { line: 1, column: -1 }
@@ -343,7 +345,7 @@ export default class CodePlayground extends BaseBlock {
 
                         this.$q
                             .dialog({
-                                title: this.$l('CodePlayground.InvalidJson'),
+                                title: CodeBlocksGlobal.$l('CodePlayground.InvalidJson'),
                                 message:
                                     '<span class="text-caption jsonErrTitle">' +
                                     this.$t('CodePlayground.Output') +
@@ -424,7 +426,7 @@ export default class CodePlayground extends BaseBlock {
     visibility: hidden
 </style>
 <style lang="stylus">
-@import '../styles/quasar.variables.styl'
+@import '../styles/quasar.variables.legacy.styl'
 .jsonErrObj, .jsonErr
     margin-left: 16px
     font-weight: bold
