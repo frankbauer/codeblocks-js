@@ -65,7 +65,7 @@ import 'codemirror/lib/codemirror.css'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import PlaygroundCanvas from '@/components/PlaygroundCanvas.vue'
 import BaseBlock from '@/components/BaseBlock.vue'
-const PlaygroundCanvasCtor = Vue.extend(PlaygroundCanvas)
+//const PlaygroundCanvasCtor = Vue.extend(PlaygroundCanvas)
 
 import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '@/lib/codeBlocksManager'
@@ -92,7 +92,7 @@ export default class CodePlayground extends BaseBlock {
     @Prop({ required: true }) finalOutputObject!: IScriptOutputObject
     @Prop({
         required: true,
-        validator: function (b:any) {
+        validator: function (b: any) {
             if (!b.obj) {
                 return false
             }
@@ -129,6 +129,7 @@ export default class CodePlayground extends BaseBlock {
             gutters: ['diagnostics', 'CodeMirror-linenumbers'],
         }
     }
+
     get visibleLinesNow(): 'auto' | string {
         if (this.block.codeExpanded == CodeExpansionType.TINY) {
             return '2.4'
@@ -137,10 +138,12 @@ export default class CodePlayground extends BaseBlock {
         }
         return 'auto'
     }
+
     created() {
         this.eventHub.$on('before-run', this.resetBeforeRun)
         this.eventHub.$on('render-diagnostics', this.updateErrors)
     }
+
     mounted() {
         const hasErrors = this.block && this.block.obj && this.block.obj.err.length > 0
         if (hasErrors) {
@@ -148,11 +151,13 @@ export default class CodePlayground extends BaseBlock {
         }
         this.eventHub.$on('output-updated', this.onFinalOutputObject)
     }
+
     beforeDestroy() {
         this.eventHub.$off('before-run', this.resetBeforeRun)
         this.eventHub.$off('render-diagnostics', this.updateErrors)
         this.eventHub.$off('output-updated', this.onFinalOutputObject)
     }
+
     isPreparingRun: boolean = false
     lastRun: Date = new Date()
     runCount: number = 0
@@ -163,21 +168,27 @@ export default class CodePlayground extends BaseBlock {
     get isExpandedLarge(): boolean {
         return this.block.codeExpanded == CodeExpansionType.LARGE
     }
+
     get isExpandedTiny(): boolean {
         return this.block.codeExpanded == CodeExpansionType.TINY
     }
+
     get isExpandedAuto(): boolean {
         return this.block.codeExpanded == CodeExpansionType.AUTO
     }
+
     setExpandedLarge(): void {
         this.setExpanded(CodeExpansionType.LARGE)
     }
+
     setExpandedTiny(): void {
         this.setExpanded(CodeExpansionType.TINY)
     }
+
     setExpandedAuto(): void {
         this.setExpanded(CodeExpansionType.AUTO)
     }
+
     setExpanded(val: CodeExpansionType): void {
         this.block.codeExpanded = val
 
@@ -185,6 +196,7 @@ export default class CodePlayground extends BaseBlock {
             this.$CodeBlock.refreshAllCodeMirrors()
         }
     }
+
     updateErrors(): boolean {
         this.block.errors = []
         if (this.block.obj === null) {
@@ -216,6 +228,7 @@ export default class CodePlayground extends BaseBlock {
             return false
         }
     }
+
     resetBeforeRun(): void {
         const rebuildCode = this.editMode && (this.needsCodeRebuild || this.tagSet !== undefined)
         let reInitCode = rebuildCode
@@ -302,9 +315,11 @@ export default class CodePlayground extends BaseBlock {
             }
         }
     }
+
     emitRun() {
         this.$emit('run', this.block)
     }
+
     onCanvasChange(can) {
         this.canvas = can
         if (this.editMode) {
@@ -312,11 +327,13 @@ export default class CodePlayground extends BaseBlock {
         }
         //console.log("Changed Canvas", can, $(can).css('background-color'));
     }
+
     onCodeChange(newCode: string): void {
         if (this.editMode) {
             this.needsCodeRebuild = true
         }
     }
+
     onDidInit(): void {
         this.updateErrors()
     }
@@ -416,6 +433,7 @@ export default class CodePlayground extends BaseBlock {
 <style lang="sass" scoped>
 .playgroundedit
     border-radius: 5px
+
 .hiddenBlock
     display: none !important
 
@@ -428,15 +446,18 @@ export default class CodePlayground extends BaseBlock {
 .jsonErrObj, .jsonErr
     margin-left: 16px
     font-weight: bold
+
 .jsonErrObj
     padding-left: 4px
     padding-right: 4px
     font-family: monospace
     margin-bottom: 20px
-    background-color:$amber-2
+    background-color: $amber-2
+
 .jsonErr
     font-weight: bold
     color: $deep-orange-14
+
 .jsonErrTitle
     padding-left: 8px
     text-transform: uppercase

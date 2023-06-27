@@ -1,6 +1,8 @@
 import { IBlockData } from './ICodeBlocks'
 import { ICompileAndRunArguments } from './ICompilerRegistry'
 
+export type Runner = () => {}
+
 export interface IParsedError {
     line: number
     column: number
@@ -12,15 +14,20 @@ export interface IResourceInfo {
     type: 'json' | 'image' | 'text' | 'blob' | 'buffer'
     name?: string
 }
+
 export interface ILegacyPlaygroundObject {
     init(canvasElement: JQuery<HTMLElement>): void
+
     reset?(canvasElement: JQuery<HTMLElement>): void
+
     update(
         output: string | object | undefined,
         canvasElement: JQuery<HTMLElement>
     ): string | undefined
+
     onParseError?(initialOutput: string, parseError: string): void
 }
+
 export interface IPlaygroundObject {
     init(
         canvasElement: JQuery<HTMLElement>,
@@ -28,24 +35,34 @@ export interface IPlaygroundObject {
         scope: JQuery<HTMLElement>,
         runner: () => void
     ): void
+
     reset?(canvasElement: JQuery<HTMLElement>): void
+
     update(
         txt: string,
         json: object | undefined,
         canvasElement: JQuery<HTMLElement>,
         outputElement: JQuery<HTMLElement>
     ): string | undefined
+
     onParseError?(initialOutput: string, parseError: string): void
+
     onMessage?(cmd: string, data: any): void
+
     beforeStart?(): void
+
     whenFinished?(args: string[] | object, resultData?: object | any[]): void
+
     addArgumentsTo?(args: object | string[]): void
+
     getResources?(): IResourceInfo[]
+
     setupDOM?(
         canvasElement: JQuery<HTMLElement>,
         outputElement: JQuery<HTMLElement> | undefined,
         scope: JQuery<HTMLElement>
     ): void
+
     RESOURCES: any[]
     DATA: any[]
 }
@@ -67,25 +84,39 @@ export interface IScriptOutputObject {
 
 export interface IScriptBlock {
     err: IParsedError[]
+
     requestsOriginalVersion(): void
+
     invalidate(): void
+
     rebuild(code?: string): void
+
     pushError(e: any): void
 
     setupDOM(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void
+
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void
+
     reset(canvasElement: JQuery<HTMLElement>): void
+
     update(
         outputObject: IScriptOutputObject,
         canvasElement: JQuery<HTMLElement>
     ): string | undefined
+
     addArgumentsTo(args: object | string[]): void
+
     onParseError(initialOutput: string, parseError: string): boolean
 
     runConfig: null | ICompileAndRunArguments
+
     didReceiveMessage(cmd: string, data: any)
+
     beforeStart()
+
     whenFinished(args: string[] | object, resultData: object | any[])
+
     resetResources()
+
     resetBlockData(blocks: IBlockData[] | undefined)
 }
