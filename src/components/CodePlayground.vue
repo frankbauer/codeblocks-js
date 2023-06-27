@@ -71,6 +71,24 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
+import {
+    useBasicBlockMounting,
+    useBasicBlockProps,
+    useEditableBlockProps,
+} from '@/composables/basicBlock'
+import {
+    computed,
+    ComputedRef,
+    defineComponent,
+    getCurrentInstance,
+    onBeforeMount,
+    onBeforeUnmount,
+    onMounted,
+    PropType,
+    nextTick,
+    Ref,
+    ref,
+} from 'vue'
 
 export interface ICodePlaygroundOptions {
     mode: string
@@ -85,349 +103,386 @@ export interface ICodePlaygroundOptions {
     gutters: string[]
 }
 
-@Component({
+const { editableBlockProps } = useEditableBlockProps()
+export default defineComponent({
+    name: 'CodePlayground',
     components: { PlaygroundCanvas, CodeBlock },
-})
-export default class CodePlayground extends BaseBlock {
-    @Prop({ required: true }) finalOutputObject!: IScriptOutputObject
-    @Prop({
-        required: true,
-        validator: function (b: any) {
-            if (!b.obj) {
+    props: {
+        muteReadyState: {
+            type: Boolean,
+            default: false,
+        },
+        block: {
+            type: Object as PropType<BlockData>,
+            required: true,
+        },
+        editMode: {
+            type: Boolean,
+            default: false,
+        },
+        visibleLines: {
+            type: [Number, String] as PropType<number | 'auto'>,
+            default: 'auto',
+        },
+        theme: {
+            type: String,
+            default: 'base16-dark',
+        },
+        finalOutputObject: {
+            type: Object as PropType<IScriptOutputObject>,
+            required: true,
+        },
+        eventHub: {
+            type: Object as PropType<Vue>,
+            required: true,
+        },
+        tagSet: {
+            type: Object as PropType<IRandomizerSet>,
+            required: false,
+        },
+    },
+    setup(props, context) {
+        const instance = getCurrentInstance()
+        const globalCodeBlock = instance?.proxy?.$root?.$CodeBlock
+
+        const lastRun: Ref<Date> = ref(new Date())
+        const runCount: Ref<number> = ref(0)
+        const canvas: Ref<HTMLElement | undefined> = ref(undefined)
+        const needsCodeRebuild: boolean = false
+        const initAndRebuildErrors: Ref<any[]> = ref([])
+
+        const originalMode: ComputedRef<Boolean> = computed(() => {
+            if (props.block.obj === null) {
                 return false
             }
-            return true
-        },
-    })
-    block!: BlockData
-
-    @Prop({ default: false }) editMode!: boolean
-    @Prop({ default: 'auto' }) visibleLines!: 'auto' | string
-    @Prop({ default: 'base16-dark' }) theme!: string
-    @Prop({ required: true }) eventHub!: Vue
-    @Prop() tagSet?: IRandomizerSet
-
-    get originalMode(): boolean {
-        if (this.block.obj === null) {
-            return false
-        }
-        return this.block.obj.requestsOriginalVersion()
-    }
-
-    get options(): ICodePlaygroundOptions {
-        return {
-            // codemirror options
-            mode: this.$CodeBlock.mimeType('javascript'),
-            theme: this.theme,
-            lineNumbers: true,
-            line: true,
-            tabSize: 4,
-            indentUnit: 4,
-            autoCloseBrackets: true,
-            readOnly: !this.editMode,
-            firstLineNumber: 1,
-            gutters: ['diagnostics', 'CodeMirror-linenumbers'],
-        }
-    }
-
-    get visibleLinesNow(): 'auto' | string {
-        if (this.block.codeExpanded == CodeExpansionType.TINY) {
-            return '2.4'
-        } else if (this.block.codeExpanded == CodeExpansionType.LARGE) {
-            return '33.4'
-        }
-        return 'auto'
-    }
-
-    created() {
-        this.eventHub.$on('before-run', this.resetBeforeRun)
-        this.eventHub.$on('render-diagnostics', this.updateErrors)
-    }
-
-    mounted() {
-        const hasErrors = this.block && this.block.obj && this.block.obj.err.length > 0
-        if (hasErrors) {
-            this.updateErrors()
-        }
-        this.eventHub.$on('output-updated', this.onFinalOutputObject)
-    }
-
-    beforeDestroy() {
-        this.eventHub.$off('before-run', this.resetBeforeRun)
-        this.eventHub.$off('render-diagnostics', this.updateErrors)
-        this.eventHub.$off('output-updated', this.onFinalOutputObject)
-    }
-
-    isPreparingRun: boolean = false
-    lastRun: Date = new Date()
-    runCount: number = 0
-    canvas: HTMLElement | undefined = undefined
-    needsCodeRebuild: boolean = false
-    initAndRebuildErrors: any[] = []
-
-    get isExpandedLarge(): boolean {
-        return this.block.codeExpanded == CodeExpansionType.LARGE
-    }
-
-    get isExpandedTiny(): boolean {
-        return this.block.codeExpanded == CodeExpansionType.TINY
-    }
-
-    get isExpandedAuto(): boolean {
-        return this.block.codeExpanded == CodeExpansionType.AUTO
-    }
-
-    setExpandedLarge(): void {
-        this.setExpanded(CodeExpansionType.LARGE)
-    }
-
-    setExpandedTiny(): void {
-        this.setExpanded(CodeExpansionType.TINY)
-    }
-
-    setExpandedAuto(): void {
-        this.setExpanded(CodeExpansionType.AUTO)
-    }
-
-    setExpanded(val: CodeExpansionType): void {
-        this.block.codeExpanded = val
-
-        if (this.block.codeExpanded != CodeExpansionType.TINY) {
-            this.$CodeBlock.refreshAllCodeMirrors()
-        }
-    }
-
-    updateErrors(): boolean {
-        this.block.errors = []
-        if (this.block.obj === null) {
-            return false
-        }
-
-        this.block.obj.err = this.block.obj.err.concat(this.initAndRebuildErrors)
-        this.block.obj.err.forEach((e) => {
-            let err = {
-                start: { line: e.line, column: e.column },
-                end: { line: e.line, column: e.column + 1 },
-                message: e.msg,
-                severity: Vue.$SEVERITY_ERROR,
-            }
-            if (e.line === undefined) {
-                err.start = { line: 1, column: -1 }
-                err.end = { line: 1, column: -1 }
-            } else if (e.column === undefined) {
-                err.start = { line: e.line, column: -1 }
-                err.end = { line: e.line, column: -1 }
-            }
-            this.block.errors.push(err)
+            return props.block.obj.requestsOriginalVersion()
         })
 
-        if (this.block.obj.err.length > 0 && this.editMode) {
-            this.needsCodeRebuild = true
-            return true
-        } else {
-            return false
-        }
-    }
-
-    resetBeforeRun(): void {
-        const rebuildCode = this.editMode && (this.needsCodeRebuild || this.tagSet !== undefined)
-        let reInitCode = rebuildCode
-        let onNextTick = false
-        if (this.block && this.block.obj) {
-            if (this.block.shouldAutoreset || rebuildCode) {
-                if (this.canvas !== undefined) {
-                    console.log(
-                        'Will Re-Initialize',
-                        this.canvas,
-                        $(this.canvas).css('background-color')
-                    )
-                } else {
-                    console.log('Will Re-Initialize', 'Without Canvas')
+        const options: ComputedRef<ICodePlaygroundOptions> = computed(
+            (): ICodePlaygroundOptions => {
+                return {
+                    // codemirror options
+                    mode: globalCodeBlock?.mimeType('javascript') ?? 'javascript',
+                    theme: props.theme,
+                    lineNumbers: true,
+                    line: true,
+                    tabSize: 4,
+                    indentUnit: 4,
+                    autoCloseBrackets: true,
+                    readOnly: !props.editMode,
+                    firstLineNumber: 1,
+                    gutters: ['diagnostics', 'CodeMirror-linenumbers'],
                 }
-                this.lastRun = new Date()
-                this.runCount++
-                reInitCode = true
-                onNextTick = true
+            }
+        )
+
+        const visibleLinesNow: ComputedRef<number | 'auto'> = computed(() => {
+            if (props.block.codeExpanded == CodeExpansionType.TINY) {
+                return 2.4
+            } else if (props.block.codeExpanded == CodeExpansionType.LARGE) {
+                return 33.4
+            }
+            return 'auto'
+        })
+
+        const isExpandedLarge: ComputedRef<Boolean> = computed(() => {
+            return props.block.codeExpanded == CodeExpansionType.LARGE
+        })
+
+        const isExpandedTiny: ComputedRef<Boolean> = computed(() => {
+            return props.block.codeExpanded == CodeExpansionType.TINY
+        })
+
+        const isExpandedAuto: ComputedRef<Boolean> = computed(() => {
+            return props.block.codeExpanded == CodeExpansionType.AUTO
+        })
+
+        function setExpanded(val: CodeExpansionType): void {
+            props.block.codeExpanded = val
+
+            if (props.block.codeExpanded != CodeExpansionType.TINY) {
+                globalCodeBlock?.refreshAllCodeMirrors()
+            }
+        }
+
+        function setExpandedLarge(): void {
+            setExpanded(CodeExpansionType.LARGE)
+        }
+
+        function setExpandedTiny(): void {
+            setExpanded(CodeExpansionType.TINY)
+        }
+
+        function setExpandedAuto(): void {
+            setExpanded(CodeExpansionType.AUTO)
+        }
+
+        function updateErrors(): boolean {
+            props.block.errors = []
+            if (props.block.obj === null) {
+                return false
+            }
+
+            props.block.obj.err = props.block.obj.err.concat(initAndRebuildErrors.value)
+            props.block.obj.err.forEach((e) => {
+                let err = {
+                    start: { line: e.line, column: e.column },
+                    end: { line: e.line, column: e.column + 1 },
+                    message: e.msg,
+                    severity: Vue.$SEVERITY_ERROR,
+                }
+                if (e.line === undefined) {
+                    err.start = { line: 1, column: -1 }
+                    err.end = { line: 1, column: -1 }
+                } else if (e.column === undefined) {
+                    err.start = { line: e.line, column: -1 }
+                    err.end = { line: e.line, column: -1 }
+                }
+                props.block.errors.push(err)
+            })
+
+            if (props.block.obj.err.length > 0 && props.editMode) {
+                needsCodeRebuild = true
+                return true
             } else {
-                const self = this
-                this.$nextTick(() => {
-                    //console.log("Will Reset", this.canvas, $(this.canvas).css('background-color'));
-                    if (self.block.obj !== null && self.canvas !== undefined) {
-                        self.block.obj.reset($(self.canvas))
-                    }
-                    self.updateErrors()
-                })
+                return false
             }
         }
 
-        if (rebuildCode) {
-            this.initAndRebuildErrors = []
-
-            if (this.block.obj != null) {
-                this.block.obj.rebuild(this.block.actualContent())
-                if (this.updateErrors()) {
-                    this.initAndRebuildErrors = this.block.obj.err
-                    this.block.obj.invalidate()
-                    return
-                }
-            }
-
-            reInitCode = true
-        }
-
-        if (reInitCode) {
-            this.initAndRebuildErrors = []
-            let doInit = () => {
-                console.i('!!! DO INIT !!!')
-                if (this.block.obj !== null) {
-                    const canvas: any = $(this.canvas as HTMLElement)
-                    const scope: any = this.block.scope
-                    if (this.block.shouldReloadResources) {
-                        this.block.obj.resetResources()
+        function resetBeforeRun(): void {
+            const rebuildCode = props.editMode && (needsCodeRebuild || props.tagSet !== undefined)
+            let reInitCode = rebuildCode
+            let onNextTick = false
+            if (props.block && props.block.obj) {
+                if (props.block.shouldAutoreset || rebuildCode) {
+                    if (canvas.value !== undefined) {
+                        console.log(
+                            'Will Re-Initialize',
+                            canvas.value,
+                            $(canvas).css('background-color')
+                        )
+                    } else {
+                        console.log('Will Re-Initialize', 'Without Canvas')
                     }
-
-                    this.block.obj.resetBlockData(this.block.appSettings.blocks)
-                    this.block.obj.setupDOM(
-                        canvas as JQuery<HTMLElement>,
-                        scope as JQuery<HTMLElement>
-                    )
-                    this.block.obj.init(
-                        canvas as JQuery<HTMLElement>,
-                        scope as JQuery<HTMLElement>,
-                        this.emitRun
-                    )
-                    if (this.updateErrors()) {
-                        this.initAndRebuildErrors = this.block.obj.err
-                        this.block.obj.invalidate()
-                        return false
-                    }
-                    return true
+                    lastRun.value = new Date()
+                    runCount.value++
+                    reInitCode = true
+                    onNextTick = true
                 } else {
-                    return false
-                }
-            }
-            if (onNextTick) {
-                this.$nextTick(doInit)
-            } else {
-                if (!doInit()) {
-                    return
-                }
-            }
-        }
-    }
-
-    emitRun() {
-        this.$emit('run', this.block)
-    }
-
-    onCanvasChange(can) {
-        this.canvas = can
-        if (this.editMode) {
-            this.updateErrors()
-        }
-        //console.log("Changed Canvas", can, $(can).css('background-color'));
-    }
-
-    onCodeChange(newCode: string): void {
-        if (this.editMode) {
-            this.needsCodeRebuild = true
-        }
-    }
-
-    onDidInit(): void {
-        this.updateErrors()
-    }
-
-    //we emit an event to the global event hub
-    //@Watch('finalOutputObject')
-    onFinalOutputObject(val) {
-        const initialOutput = val.output
-
-        console.d('onFinalOutputObject', val, this.block.obj)
-        if (this.block.obj !== null) {
-            this.block.obj.err = []
-            try {
-                if (val.parseError != null) {
-                    if (
-                        !this.block.obj.onParseError(initialOutput, val.parseError) &&
-                        this.editMode
-                    ) {
-                        let jStr = initialOutput
-                        if (val.parseError.parsedString !== undefined) {
-                            jStr = val.parseError.parsedString
+                    nextTick(() => {
+                        //console.log("Will Reset", this.canvas, $(this.canvas).css('background-color'));
+                        if (props.block.obj !== null && canvas.value !== undefined) {
+                            props.block.obj.reset($(canvas.value))
                         }
-                        jStr = jStr.replace(/</g, '&lt;')
+                        updateErrors()
+                    })
+                }
+            }
 
-                        this.$q
-                            .dialog({
-                                title: this.$l('CodePlayground.InvalidJson'),
-                                message:
-                                    '<span class="text-caption jsonErrTitle">' +
-                                    this.$t('CodePlayground.Output') +
-                                    '</span><div class="jsonErrObj">' +
-                                    jStr +
-                                    '</div>\n<span class="text-caption jsonErrTitle">' +
-                                    this.$t('CodePlayground.Message') +
-                                    '</span><div class="jsonErr">' +
-                                    val.parseError +
-                                    '</div>',
-                                html: true,
-                            })
-                            .onOk(() => {
-                                // console.log('OK')
-                            })
-                            .onCancel(() => {
-                                // console.log('Cancel')
-                            })
-                            .onDismiss(() => {
-                                // console.log('I am triggered on both OK and Cancel')
-                            })
-                    }
-                    if (this.updateErrors()) {
+            if (rebuildCode) {
+                initAndRebuildErrors.value = []
+
+                if (props.block.obj != null) {
+                    props.block.obj.rebuild(props.block.actualContent())
+                    if (updateErrors()) {
+                        initAndRebuildErrors.value = props.block.obj.err
+                        props.block.obj.invalidate()
                         return
                     }
                 }
 
-                const self = this
-                this.$nextTick(() => {
-                    console.d('Ticked', self.block.obj, self.canvas)
-                    if (self.block.obj !== null && self.canvas !== undefined) {
-                        let result = self.block.obj.update(val, $(self.canvas))
-                        if (self.updateErrors()) {
-                            return
-                        }
-
-                        //construct a split output object
-                        if (result === undefined && val.processedOutput.type != 'text') {
-                            if (!self.originalMode) {
-                                result = val.processedOutput.text
-                            }
-                        }
-
-                        if (self.originalMode) {
-                            if (typeof result !== 'string') {
-                                result = ''
-                            }
-                        }
-
-                        if (result !== undefined) {
-                            self.$emit('changeOutput', result)
-                        }
-                    }
-                })
-            } catch (e) {
-                console.error(e)
+                reInitCode = true
             }
-            if (this.block.obj.err.length > 0) {
-                if (this.editMode) {
-                    this.updateErrors()
+
+            if (reInitCode) {
+                initAndRebuildErrors.value = []
+                let doInit = () => {
+                    console.i('!!! DO INIT !!!')
+                    if (props.block.obj !== null) {
+                        const jCanvas: any = $(canvas.value as HTMLElement)
+                        const scope: any = props.block.scope
+                        if (props.block.shouldReloadResources) {
+                            props.block.obj.resetResources()
+                        }
+
+                        props.block.obj.resetBlockData(props.block.appSettings.blocks)
+                        props.block.obj.setupDOM(
+                            jCanvas as JQuery<HTMLElement>,
+                            scope as JQuery<HTMLElement>
+                        )
+                        props.block.obj.init(
+                            jCanvas as JQuery<HTMLElement>,
+                            scope as JQuery<HTMLElement>,
+                            emitRun
+                        )
+                        if (updateErrors()) {
+                            initAndRebuildErrors.value = props.block.obj.err
+                            props.block.obj.invalidate()
+                            return false
+                        }
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+                if (onNextTick) {
+                    nextTick(doInit)
                 } else {
-                    console.error(this.block.obj.err)
+                    if (!doInit()) {
+                        return
+                    }
                 }
             }
         }
-    }
-}
+
+        function onFinalOutputObject(val) {
+            const initialOutput = val.output
+
+            console.d('onFinalOutputObject', val, props.block.obj)
+            if (props.block.obj !== null) {
+                props.block.obj.err = []
+                try {
+                    if (val.parseError != null) {
+                        if (
+                            !props.block.obj.onParseError(initialOutput, val.parseError) &&
+                            props.editMode
+                        ) {
+                            let jStr = initialOutput
+                            if (val.parseError.parsedString !== undefined) {
+                                jStr = val.parseError.parsedString
+                            }
+                            jStr = jStr.replace(/</g, '&lt;')
+
+                            this.$q
+                                .dialog({
+                                    title: this.$l('CodePlayground.InvalidJson'),
+                                    message:
+                                        '<span class="text-caption jsonErrTitle">' +
+                                        this.$t('CodePlayground.Output') +
+                                        '</span><div class="jsonErrObj">' +
+                                        jStr +
+                                        '</div>\n<span class="text-caption jsonErrTitle">' +
+                                        this.$t('CodePlayground.Message') +
+                                        '</span><div class="jsonErr">' +
+                                        val.parseError +
+                                        '</div>',
+                                    html: true,
+                                })
+                                .onOk(() => {
+                                    // console.log('OK')
+                                })
+                                .onCancel(() => {
+                                    // console.log('Cancel')
+                                })
+                                .onDismiss(() => {
+                                    // console.log('I am triggered on both OK and Cancel')
+                                })
+                        }
+                        if (updateErrors()) {
+                            return
+                        }
+                    }
+
+                    nextTick(() => {
+                        console.d('Ticked', props.block.obj, canvas.value)
+                        if (props.block.obj !== null && canvas.value !== undefined) {
+                            let result = props.block.obj.update(val, $(canvas.value))
+                            if (updateErrors()) {
+                                return
+                            }
+
+                            //construct a split output object
+                            if (result === undefined && val.processedOutput.type != 'text') {
+                                if (!originalMode.value) {
+                                    result = val.processedOutput.text
+                                }
+                            }
+
+                            if (originalMode.value) {
+                                if (typeof result !== 'string') {
+                                    result = ''
+                                }
+                            }
+
+                            if (result !== undefined) {
+                                context.emit('changeOutput', result)
+                            }
+                        }
+                    })
+                } catch (e) {
+                    console.error(e)
+                }
+                if (props.block.obj.err.length > 0) {
+                    if (props.editMode) {
+                        updateErrors()
+                    } else {
+                        console.error(props.block.obj.err)
+                    }
+                }
+            }
+        }
+
+        function emitRun() {
+            context.emit('run', props.block)
+        }
+
+        function onCanvasChange(can) {
+            canvas.value = can
+            if (props.editMode) {
+                updateErrors()
+            }
+            //console.log("Changed Canvas", can, $(can).css('background-color'));
+        }
+
+        function onCodeChange(newCode: string): void {
+            if (props.editMode) {
+                needsCodeRebuild = true
+            }
+        }
+
+        function onDidInit(): void {
+            updateErrors()
+        }
+
+        const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
+            true,
+            props,
+            context
+        )
+
+        onBeforeMount(() => {
+            props.eventHub.$on('before-run', resetBeforeRun)
+            props.eventHub.$on('render-diagnostics', updateErrors)
+        })
+
+        onMounted(() => {
+            const hasErrors = props.block && props.block.obj && props.block.obj.err.length > 0
+            if (hasErrors) {
+                updateErrors()
+            }
+            props.eventHub.$on('output-updated', onFinalOutputObject)
+        })
+
+        onBeforeUnmount(() => {
+            props.eventHub.$off('before-run', resetBeforeRun)
+            props.eventHub.$off('render-diagnostics', updateErrors)
+            props.eventHub.$off('output-updated', onFinalOutputObject)
+        })
+
+        return {
+            originalMode,
+            options,
+            visibleLinesNow,
+            isExpandedLarge,
+            setExpandedLarge,
+            isExpandedTiny,
+            setExpandedTiny,
+            isExpandedAuto,
+            setExpandedAuto,
+            runCount,
+        }
+    },
+})
 </script>
 
 <style lang="sass" scoped>
