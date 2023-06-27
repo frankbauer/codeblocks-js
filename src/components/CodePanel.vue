@@ -26,8 +26,7 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '../lib/codeBlocksManager'
 import {
@@ -42,101 +41,140 @@ interface IBlockDataExtended extends IBlockData {
     actualContent: string
     actualAltContent: string
 }
-@Component({ components: { CodeBlock } })
-export default class CodePanel extends Vue {
-    @Prop({ default: false }) editMode!: boolean
-    @Prop({ default: 'auto' }) visibleLines!: number | 'auto'
-    @Prop({ required: true }) block!: BlockData | null
-    @Prop({ default: 400 }) panelWidth!: number
 
-    get saveBlock(): IBlockData {
-        if (
-            this.block !== null &&
-            this.block !== undefined &&
-            this.block.content !== null &&
-            this.block.content !== undefined
-        ) {
-            return this.block
-        }
-        const ret: IBlockDataExtended = {
-            hasCode: false,
-            type: KnownBlockTypes.BLOCKSTATIC,
-            content: '',
-            alternativeContent: '',
-            noContent: true,
-            id: -1,
-            uuid: '',
-            parentID: -2,
-            expanded: true,
-            codeExpanded: CodeExpansionType.AUTO,
-            obj: null,
-            version: '',
-            readyCount: 0,
-            errors: [],
-            visibleLines: 'auto',
-            hasAlternativeContent: false,
-            shouldAutoreset: false,
-            shouldReloadResources: false,
-            generateTemplate: true,
-            firstLine: 1,
-            actualContent: '',
-            actualAltContent: '',
-            width: '100%',
-            height: '200px',
-            align: 'center',
-            readonly: true,
-            static: true,
-            hidden: false,
-            themeForCodeBlock: '',
-            lineCountHint: -0,
-            name: '',
-            getThemeForBlock: (bl: ICodeBlockDataState) => {
-                return ''
-            },
-            blockly: {
-                _blockErrors: [],
-                useOverride: false,
-                toolbox: {
-                    categories: [],
-                },
-                showControls: false,
-                toolboxOverride: '',
-                blocks: [],
-            },
-        }
-        return ret
-    }
-
-    get visibleLinesNow() {
-        if (this.visibleLines === 'auto') {
-            return 'auto'
-        }
-        if (this.visibleLines <= 2) {
-            return 2
-        }
-        return this.visibleLines
-    }
-    onCodeChange() {}
-
-    get width() {
-        if (this.expanded) {
-            return 2 * this.panelWidth
-        }
-        return this.panelWidth
-    }
-
-    expanded: boolean = false
-    onExpandClick() {
-        this.expanded = !this.expanded
-    }
-
-    themeForBlock(bl: BlockData | null): string {
-        if (bl === null || bl === undefined) {
+const emptyBlockBuilder = (): IBlockDataExtended => {
+    return {
+        hasCode: false,
+        type: KnownBlockTypes.BLOCKSTATIC,
+        content: '',
+        alternativeContent: '',
+        noContent: true,
+        id: -1,
+        uuid: '',
+        parentID: -2,
+        expanded: true,
+        codeExpanded: CodeExpansionType.AUTO,
+        obj: null,
+        version: '',
+        readyCount: 0,
+        errors: [],
+        visibleLines: 'auto',
+        hasAlternativeContent: false,
+        shouldAutoreset: false,
+        shouldReloadResources: false,
+        generateTemplate: true,
+        firstLine: 1,
+        actualContent: '',
+        actualAltContent: '',
+        width: '100%',
+        height: '200px',
+        align: 'center',
+        readonly: true,
+        static: true,
+        hidden: false,
+        themeForCodeBlock: '',
+        lineCountHint: -0,
+        name: '',
+        getThemeForBlock: (bl: ICodeBlockDataState) => {
             return ''
-        }
-        return bl.themeForCodeBlock
+        },
+        blockly: {
+            _blockErrors: [],
+            useOverride: false,
+            toolbox: {
+                categories: [],
+            },
+            showControls: false,
+            toolboxOverride: '',
+            blocks: [],
+        },
     }
 }
+
+export default defineComponent({
+    name: 'CodePanel',
+    components: { CodeBlock },
+    props: {
+        editMode: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
+        panelWidth: {
+            type: Number,
+            required: false,
+            default: 400,
+        },
+        block: {
+            type: null as unknown as PropType<BlockData | null>,
+            default: null,
+            required: true,
+        },
+        visibleLines: {
+            type: [Number, String] as PropType<number | 'auto'>,
+            default: 'auto',
+        },
+    },
+    setup(props, context) {
+        //Attributes
+        const expanded: Ref<boolean> = ref(false)
+
+        //Computed
+        const saveBlock: ComputedRef<IBlockData> = computed(() => {
+            if (
+                props.block !== null &&
+                props.block !== undefined &&
+                props.block.content !== null &&
+                props.block.content !== undefined
+            ) {
+                return props.block
+            }
+            const ret = emptyBlockBuilder()
+            return ret
+        })
+
+        const visibleLinesNow: ComputedRef<number | 'auto'> = computed(() => {
+            if (props.visibleLines === 'auto') {
+                return 'auto'
+            }
+            if (props.visibleLines <= 2) {
+                return 2
+            }
+            return props.visibleLines
+        })
+
+        const width = computed(() => {
+            if (expanded.value) {
+                return 2 * props.panelWidth
+            }
+            return props.panelWidth
+        })
+
+        //Methods
+        function onCodeChange(): void {}
+
+        function onExpandClick() {
+            expanded.value = !expanded.value
+        }
+
+        function themeForBlock(bl: BlockData | null): string {
+            if (bl === null || bl === undefined) {
+                return ''
+            }
+            return bl.themeForCodeBlock
+        }
+
+        return {
+            expanded,
+            saveBlock,
+            visibleLinesNow,
+            width,
+            onCodeChange,
+            onExpandClick,
+            themeForBlock,
+        }
+    },
+})
 </script>
 
 <style lang="sass" scoped>
@@ -146,6 +184,7 @@ div.blocksEditorPanelContainer
     top: 16px
     z-index: 10000
     transition: width 0.3s
+
 div.blocksEditorPanelLeft
     padding: 24px 0px 8px 40px
     border-top-left-radius: 5px
@@ -153,7 +192,8 @@ div.blocksEditorPanelLeft
     position: sticky
     display: block
     background-color: rgba(255, 255, 255, 0.8)
-    box-shadow: 2px 3px 10px rgba(0,0,0,0.3)
+    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.3)
+
 .expander
     position: absolute
     left: 0px
