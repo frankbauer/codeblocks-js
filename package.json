@@ -3,11 +3,11 @@
     "version": "0.2.14",
     "private": true,
     "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
+        "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+        "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
         "dev-phaser": "tsc -p ./tsconfig-phaser.json -w",
         "build-phaser": "tsc -p ./tsconfig-phaser.json",
-        "build-lib": "vue-cli-service build --entry ./src/main.ts --target lib",
+        "build-lib": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --entry ./src/main.ts --target lib",
         "build-ilias": "node ilias-builder.js",
         "build-examples": "node examples-builder.js"
     },
@@ -50,7 +50,7 @@
         "stylus": "^0.55.0",
         "stylus-loader": "^3",
         "typescript": "^4.4.3",
-        "vue": "^2.6.14",
+        "vue": "^2.7.14",
         "vue-cli-plugin-codemirror": "0.0.6",
         "vue-cli-plugin-i18n": "^2.3.1",
         "vue-cli-plugin-quasar": "~3.0.2",
