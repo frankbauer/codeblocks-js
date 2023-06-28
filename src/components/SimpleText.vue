@@ -15,58 +15,87 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import TipTap from './TipTap.vue'
-import BaseBlock from './BaseBlock.vue'
-@Component({ components: { TipTap } })
-export default class SimpleText extends BaseBlock {
-    @Prop() language!: string
-    @Prop({ default: '' }) value!: string
-    @Prop({ default: '' }) name!: string
-    @Prop({ default: '' }) scopeUUID!: string
-    @Prop({ default: false }) editMode!: boolean
-    @Prop({ default: '' }) previewValue!: string
+import { defineComponent, PropType } from 'vue'
+import { useBasicBlockMounting } from '@/composables/basicBlock'
+import { BlockData } from '@/lib/codeBlocksManager'
 
-    textUpdateTimer: number | null = null
-    textUpdateStartTime: number = 0
-    updatedContentDefered(newVal: string) {
-        if (!this.editMode) {
-            this.updatedContent(newVal)
-            return
+export default defineComponent({
+    name: 'SimpleText',
+    components: { TipTap },
+    props: {
+        value: { type: String, default: '' },
+        name: { type: String, default: '' },
+        scopeUUID: { type: String, default: '' },
+        previewValue: { type: String, default: '' },
+        muteReadyState: {
+            type: Boolean,
+            default: false,
+        },
+        block: {
+            type: Object as PropType<BlockData>,
+            required: true,
+        },
+        editMode: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    setup(props, context) {
+        const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
+            true,
+            props,
+            context
+        )
+
+        let textUpdateTimer: number | null = null
+        let textUpdateStartTime: number = 0
+
+        function updatedContentDefered(newVal: string) {
+            if (!props.editMode) {
+                updatedContent(newVal)
+                return
+            }
+
+            const now = new Date().getTime()
+
+            //clear an existing update timeout
+            if (textUpdateTimer !== null) {
+                clearTimeout(textUpdateTimer)
+                textUpdateTimer = null
+            } else {
+                textUpdateStartTime = now
+            }
+
+            const doIt = () => {
+                textUpdateTimer = null
+                updatedContent(newVal)
+            }
+
+            //did we wait for a maximum time? run
+            if (now - textUpdateStartTime > process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
+                doIt()
+                return
+            }
+            textUpdateTimer = setTimeout(() => {
+                doIt()
+            }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
         }
 
-        const now = new Date().getTime()
-
-        //clear an existing update timeout
-        if (this.textUpdateTimer !== null) {
-            clearTimeout(this.textUpdateTimer)
-            this.textUpdateTimer = null
-        } else {
-            this.textUpdateStartTime = now
+        function updatedContent(v: string) {
+            //console.log('Updating')
+            //this.value = v
+            context.emit('input', v)
         }
 
-        const doIt = () => {
-            this.textUpdateTimer = null
-            this.updatedContent(newVal)
+        return {
+            whenBlockIsReady,
+            whenBlockIsDestroyed,
+            updatedContent,
+            updatedContentDefered,
         }
-
-        //did we wait for a maximum time? run
-        if (now - this.textUpdateStartTime > process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
-            doIt()
-            return
-        }
-        this.textUpdateTimer = setTimeout(() => {
-            doIt()
-        }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
-    }
-
-    updatedContent(v: string) {
-        //console.log('Updating')
-        //this.value = v
-        this.$emit('input', v)
-    }
-}
+    },
+})
 </script>
 
 <style lang="sass" scoped></style>
