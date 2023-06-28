@@ -28,6 +28,7 @@ export default defineComponent({
         name: { type: String, default: '' },
         scopeUUID: { type: String, default: '' },
         previewValue: { type: String, default: '' },
+        language: { type: String, default: 'javascript' },
         muteReadyState: {
             type: Boolean,
             default: false,

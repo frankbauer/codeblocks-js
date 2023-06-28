@@ -64,10 +64,10 @@ export default defineComponent({
         })
 
         onMounted(() => {
-            const eb: any = editBox
+            const eb: any = editBox.value
             console.log('Found Box', eb)
             //we need this for StudON to make sure tinyMCE is not taking over :D
-            eb.value.$el.querySelectorAll('textarea[name]').forEach((el) => {
+            eb.$el.querySelectorAll('textarea[name]').forEach((el) => {
                 el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
             })
             Vue.$tagger.$on('replace-template-tag', replaceTemplateTags)
@@ -78,6 +78,7 @@ export default defineComponent({
         })
 
         return {
+            editBox,
             text,
         }
     },
