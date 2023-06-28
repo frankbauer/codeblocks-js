@@ -3,8 +3,8 @@
         <q-card>
             <q-card-section class="text-overline"
                 >{{ $t('RandomizerSettings.Caption') }}
-                <q-toggle v-model="options.randomizer.active"
-            /></q-card-section>
+                <q-toggle v-model="options.randomizer.active" />
+            </q-card-section>
 
             <q-slide-transition>
                 <q-card-section class="q-ml-md" v-show="options.randomizer.active">
@@ -154,124 +154,166 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import RandomizerSetEditor from '@/components/RandomizerSetEditor.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
+import { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
 
-@Component({ components: { RandomizerSetEditor } })
-export default class RandomizerSettings extends Vue {
-    _newTagName: string = ''
+export default defineComponent({
+    name: 'RandomizerSettings',
+    components: { RandomizerSetEditor },
+    props: {
+        options: {
+            type: Object as PropType<ICodeBlockSettingsOptions>,
+            required: true,
+        },
+    },
+    setup(props, context) {
+        const instance = getCurrentInstance()
+        const uuid = instance?.proxy?.$root?.$uuid
+        const q = instance?.proxy?.$root?.$q
 
-    @Prop({ required: true }) options!: ICodeBlockSettingsOptions
+        let _newTagName: string = ''
 
-    get tagClass(): string {
-        return Vue.$tagger.className.rnd + ' tag-mark-start tag-mark-end tag-mark-shadow'
-    }
+        const tagClass: ComputedRef<String> = computed(() => {
+            return Vue.$tagger.className.rnd + ' tag-mark-start tag-mark-end tag-mark-shadow'
+        })
 
-    isVisible(nr: number): boolean {
-        return nr == this.options.randomizer.previewIndex
-    }
-    setVisible(nr: number): void {
-        this.options.randomizer.previewIndex = nr
-    }
-    isValidTag(tag: string): boolean {
-        return this.options.randomizer.knownTags.find(t => t == tag) !== undefined
-    }
-    isCompleteSet(s: IRandomizerSet): boolean {
-        if (s.values.filter(v => this.options.randomizer.knownTags.indexOf(v.tag) < 0).length > 0) {
-            return false
+        function isVisible(nr: number): boolean {
+            return nr == props.options.randomizer.previewIndex
         }
-        if (
-            this.options.randomizer.knownTags.filter(
-                t => s.values.find(v => v.tag == t) === undefined
-            ).length > 0
-        ) {
-            return false
+
+        function setVisible(nr: number): void {
+            props.options.randomizer.previewIndex = nr
         }
-        return true
-    }
-    getFullSet(s: IRandomizerSet): IRandomizerSet {
-        return s
-    }
-    removeSet(nr: number): void {
-        this.options.randomizer.sets.splice(nr, 1)
-    }
-    addSet(): void {
-        this.options.randomizer.sets.push({ uuid: this.$uuid.v4(), values: [] })
-    }
-    removeTag(nr: number): void {
-        this.options.randomizer.knownTags.splice(nr, 1)
-    }
-    addTag(): void {
-        this.$q
-            .dialog({
+
+        function isValidTag(tag: string): boolean {
+            return props.options.randomizer.knownTags.find((t) => t == tag) !== undefined
+        }
+
+        function isCompleteSet(s: IRandomizerSet): boolean {
+            if (
+                s.values.filter((v) => props.options.randomizer.knownTags.indexOf(v.tag) < 0)
+                    .length > 0
+            ) {
+                return false
+            }
+            if (
+                props.options.randomizer.knownTags.filter(
+                    (t) => s.values.find((v) => v.tag == t) === undefined
+                ).length > 0
+            ) {
+                return false
+            }
+            return true
+        }
+
+        function getFullSet(s: IRandomizerSet): IRandomizerSet {
+            return s
+        }
+
+        function removeSet(nr: number): void {
+            props.options.randomizer.sets.splice(nr, 1)
+        }
+
+        function addSet(): void {
+            props.options.randomizer.sets.push({ uuid: uuid.v4(), values: [] })
+        }
+
+        function removeTag(nr: number): void {
+            props.options.randomizer.knownTags.splice(nr, 1)
+        }
+
+        function addTag(): void {
+            q?.dialog({
                 title: 'Create Tag',
                 message: 'This will generate a new randomizer-Tag with the below name.',
                 html: true,
                 persistent: true,
                 prompt: {
                     model: 'tag_name',
-                    type: 'text'
+                    type: 'text',
                 },
                 ok: {
-                    push: true
+                    push: true,
                 },
                 cancel: {
                     flat: true,
-                    color: 'gray'
-                }
+                    color: 'gray',
+                },
             })
-            .onOk(data => {
-                data = data.replace(/\W/g, '_')
-                //have this name
-                if (this.options.randomizer.knownTags.filter(t => t == data).length > 0) {
-                    let ct = 1
-                    const odata = data
-                    do {
-                        data = odata + '_' + ct
-                        ct++
-                    } while (this.options.randomizer.knownTags.filter(t => t == data).length > 0)
-                }
-                this.options.randomizer.knownTags.push(data)
-            })
-            .onCancel(() => {})
-            .onDismiss(() => {
-                //self.highlighted = false;
-            })
-    }
-}
+                .onOk((data) => {
+                    data = data.replace(/\W/g, '_')
+                    //have this name
+                    if (props.options.randomizer.knownTags.filter((t) => t == data).length > 0) {
+                        let ct = 1
+                        const odata = data
+                        do {
+                            data = odata + '_' + ct
+                            ct++
+                        } while (
+                            props.options.randomizer.knownTags.filter((t) => t == data).length > 0
+                        )
+                    }
+                    props.options.randomizer.knownTags.push(data)
+                })
+                .onCancel(() => {})
+                .onDismiss(() => {
+                    //self.highlighted = false;
+                })
+        }
+
+        return {
+            tagClass,
+            isVisible,
+            setVisible,
+            isValidTag,
+            isCompleteSet,
+            getFullSet,
+            removeSet,
+            addSet,
+            removeTag,
+            addTag,
+        }
+    },
+})
 </script>
 
 <style lang="stylus" scoped>
 @import '../styles/quasar.variables.styl'
 .tagItem
-    width:auto
-    padding-bottom:1px
-    min-height:24px
+    width: auto
+    padding-bottom: 1px
+    min-height: 24px
+
     .tagInfo
-        padding-left:4px
+        padding-left: 4px
+
         .tagName
             font-weight: bold
+
         .tagString
             margin-top: -4px
-            color:$blue-grey-4
-            font-size:75%
+            color: $blue-grey-4
+            font-size: 75%
+
     .tagAction
-        padding-top:2px
-        color:$blue-grey-8
-        min-width:36px
+        padding-top: 2px
+        color: $blue-grey-8
+        min-width: 36px
+
 .setList
     .tagItem
 
         .tagInfo
-            padding-right:4px
+            padding-right: 4px
+
             .tagName
                 font-weight: inherit
-                font-size:75%
+                font-size: 75%
+
             .tagString
                 font-weight: bold
-                color:black
-                font-size:inherit
+                color: black
+                font-size: inherit
 </style>
