@@ -31,8 +31,8 @@ import PlaygroundCanvas from '@/components/PlaygroundCanvas.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
-    name: 'CodePlayground',
-    components: { PlaygroundCanvas, CodeBlock },
+    name: 'TipTap',
+    components: {},
     props: {
         value: { type: String, default: '' },
         name: { type: String, default: '' },
