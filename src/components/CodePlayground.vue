@@ -259,11 +259,7 @@ export default defineComponent({
             if (props.block && props.block.obj) {
                 if (props.block.shouldAutoreset || rebuildCode) {
                     if (canvas.value !== undefined) {
-                        console.log(
-                            'Will Re-Initialize',
-                            canvas.value,
-                            $(canvas).css('background-color')
-                        )
+                        console.log('Will Re-Initialize', canvas.value, $(canvas))
                     } else {
                         console.log('Will Re-Initialize', 'Without Canvas')
                     }
@@ -484,6 +480,14 @@ export default defineComponent({
             isExpandedAuto,
             setExpandedAuto,
             runCount,
+            emitRun,
+            onCanvasChange,
+            onDidInit,
+            onCodeChange,
+            whenBlockIsReady,
+            whenBlockIsDestroyed,
+            onFinalOutputObject,
+            resetBeforeRun,
         }
     },
 })
