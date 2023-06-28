@@ -16,31 +16,51 @@
 import 'reflect-metadata'
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
+import { computed, ComputedRef, defineComponent, PropType } from 'vue'
+import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 
-@Component
-export default class RandomizerSetEditor extends Vue {
-    @Prop({ required: true }) options!: any
-    @Prop({ required: true }) tagSet!: IRandomizerSet
-    @Prop({ required: true }) nr!: number
-
-    get tags(): string[] {
-        return this.tagSet.values.map((v) => v.tag)
-    }
-
-    onShow(o) {
-        this.tagSet.values = this.tagSet.values.filter(
-            (v) => this.options.randomizer.knownTags.indexOf(v.tag) >= 0
-        )
-        this.options.randomizer.knownTags.forEach((t) => {
-            if (this.tagSet.values.find((v) => v.tag == t) === undefined) {
-                this.tagSet.values.push({
-                    tag: t,
-                    value: '',
-                })
-            }
+export default defineComponent({
+    name: 'RandomizerSetEditor',
+    components: {},
+    props: {
+        options: {
+            type: Object as PropType<ICodeBlockSettingsOptions>,
+            required: true,
+        },
+        tagSet: {
+            type: Object as PropType<IRandomizerSet>,
+            required: true,
+        },
+        nr: {
+            type: Number,
+            required: true,
+        },
+    },
+    setup(props, context) {
+        const tags: ComputedRef<string[]> = computed(() => {
+            return props.tagSet.values.map((v) => v.tag)
         })
-    }
-}
+
+        function onShow(o) {
+            props.tagSet.values = props.tagSet.values.filter(
+                (v) => props.options.randomizer.knownTags.indexOf(v.tag) >= 0
+            )
+            props.options.randomizer.knownTags.forEach((t) => {
+                if (props.tagSet.values.find((v) => v.tag == t) === undefined) {
+                    props.tagSet.values.push({
+                        tag: t,
+                        value: '',
+                    })
+                }
+            })
+        }
+
+        return {
+            tags,
+            onShow,
+        }
+    },
+})
 </script>
 
 <style></style>

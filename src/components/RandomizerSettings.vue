@@ -157,7 +157,7 @@
 import RandomizerSetEditor from '@/components/RandomizerSetEditor.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
-import { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
+import Vue, { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
 
 export default defineComponent({
     name: 'RandomizerSettings',
