@@ -144,11 +144,14 @@ export default defineComponent({
     setup(props, context) {
         const instance = getCurrentInstance()
         const globalCodeBlock = instance?.proxy?.$root?.$CodeBlock
+        const q = instance?.proxy?.$root?.$q
+        const t = instance?.proxy?.$root?.$t
+        const l = instance?.proxy?.$root?.$l
 
         const lastRun: Ref<Date> = ref(new Date())
         const runCount: Ref<number> = ref(0)
         const canvas: Ref<HTMLElement | undefined> = ref(undefined)
-        const needsCodeRebuild: boolean = false
+        let needsCodeRebuild: boolean = false
         const initAndRebuildErrors: Ref<any[]> = ref([])
 
         const originalMode: ComputedRef<Boolean> = computed(() => {
@@ -353,30 +356,31 @@ export default defineComponent({
                             }
                             jStr = jStr.replace(/</g, '&lt;')
 
-                            this.$q
-                                .dialog({
-                                    title: this.$l('CodePlayground.InvalidJson'),
+                            if (q !== undefined && l !== undefined && t != undefined) {
+                                q.dialog({
+                                    title: l('CodePlayground.InvalidJson'),
                                     message:
                                         '<span class="text-caption jsonErrTitle">' +
-                                        this.$t('CodePlayground.Output') +
+                                        t('CodePlayground.Output') +
                                         '</span><div class="jsonErrObj">' +
                                         jStr +
                                         '</div>\n<span class="text-caption jsonErrTitle">' +
-                                        this.$t('CodePlayground.Message') +
+                                        t('CodePlayground.Message') +
                                         '</span><div class="jsonErr">' +
                                         val.parseError +
                                         '</div>',
                                     html: true,
                                 })
-                                .onOk(() => {
-                                    // console.log('OK')
-                                })
-                                .onCancel(() => {
-                                    // console.log('Cancel')
-                                })
-                                .onDismiss(() => {
-                                    // console.log('I am triggered on both OK and Cancel')
-                                })
+                                    .onOk(() => {
+                                        // console.log('OK')
+                                    })
+                                    .onCancel(() => {
+                                        // console.log('Cancel')
+                                    })
+                                    .onDismiss(() => {
+                                        // console.log('I am triggered on both OK and Cancel')
+                                    })
+                            }
                         }
                         if (updateErrors()) {
                             return
