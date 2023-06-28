@@ -1,9 +1,7 @@
-import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import Vue from 'vue'
 import {
     ICompilerHashMap,
     IDomLibraray,
-    ICompilerID,
     ICompilerInfo,
     IListItemData,
     ICompilerInstance,
@@ -13,8 +11,7 @@ import {
 } from './ICompilerRegistry'
 
 //prepare Compiler Registry
-@Component
-export class CompilerRegistry extends Vue implements ICompilerRegistry {
+export class CompilerRegistry implements ICompilerRegistry {
     compilers: ICompilerHashMap = {}
     libraries: IDomLibraray[] = []
     loadedURIs: string[] = []
@@ -130,6 +127,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
 
         return uris
     }
+
     loadLibraries(domLibraries: string[], whenLoaded: () => void): void {
         const libs = this.urisForDOMLibs(domLibraries)
         const dlibs = this.getLibObjects(domLibraries)
@@ -148,6 +146,7 @@ export class CompilerRegistry extends Vue implements ICompilerRegistry {
             }.bind(this)
         )
     }
+
     private loadURIsIter(libs: string[], whenLoaded: () => void): void {
         console.log(libs)
         let loadCount = 0
@@ -230,15 +229,19 @@ export const compilerRegistry = new CompilerRegistry()
 
 //load all available compilers
 import { JavaCompilers } from '../compiler/java'
+
 compilerRegistry.register(JavaCompilers)
 
 import { JavascriptCompilers } from '../compiler/javascript'
+
 compilerRegistry.register(JavascriptCompilers)
 
 import { PythonCompilers } from '../compiler/python'
+
 compilerRegistry.register(PythonCompilers)
 
 import { GLSLCompilers } from '../compiler/glsl'
+
 compilerRegistry.register(GLSLCompilers)
 
 compilerRegistry.registerDOMLib(

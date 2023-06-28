@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -154,8 +152,7 @@ function runJavaScriptWorker(
 }
 
 //ICompilerInstance
-@Component
-export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
+export class JavascriptV100Compiler implements ICompilerInstance {
     readonly version = '100'
     readonly language = 'javascript'
     readonly canRun = true
@@ -167,10 +164,11 @@ export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
     readonly allowsREPL = false
     readonly experimental = false
     readonly deprecated = true
-    isReady = true
-    isRunning = false
+    readonly isReady = true
+    readonly isRunning = false
 
     preload() {}
+
     compileAndRun(
         questionID: string,
         code: string,
@@ -199,5 +197,6 @@ export class JavascriptV100Compiler extends Vue implements ICompilerInstance {
         )
     }
 }
+
 export const javascriptCompiler_V100 = new JavascriptV100Compiler()
 export default javascriptCompiler_V100

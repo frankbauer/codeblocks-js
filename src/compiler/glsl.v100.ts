@@ -1,9 +1,6 @@
-import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
-    ICompilerRegistry,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
 } from '@/lib/ICompilerRegistry'
@@ -36,8 +33,7 @@ function runGLSLWorker(
     finishCallback(true, outputData)
 }
 
-@Component
-export class GLSLV100Compiler extends Vue implements ICompilerInstance {
+export class GLSLV100Compiler implements ICompilerInstance {
     readonly version = '100'
     readonly language = 'glsl'
     readonly canRun = true
@@ -49,10 +45,11 @@ export class GLSLV100Compiler extends Vue implements ICompilerInstance {
     readonly allowsREPL = false
     readonly deprecated = false
     readonly experimental = false
-    isReady = true
-    isRunning = false
+    readonly isReady = true
+    readonly isRunning = false
 
     preload() {}
+
     compileAndRun(
         questionID: string,
         code: string,
@@ -81,4 +78,5 @@ export class GLSLV100Compiler extends Vue implements ICompilerInstance {
         )
     }
 }
+
 export const v100 = new GLSLV100Compiler()

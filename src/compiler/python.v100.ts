@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -7,6 +5,7 @@ import {
     finishedCallbackSignatur,
     ICompileAndRunArguments,
 } from '@/lib/ICompilerRegistry'
+import { globalState } from '@/lib/globalState'
 
 function runPythonWorker(
     questionID: string,
@@ -29,7 +28,7 @@ function runPythonWorker(
         return
     }
 
-    const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v100/pyWorker.js')
+    const worker = new Worker(globalState.codeBlocks.baseurl + 'js/python/v100/pyWorker.js')
 
     // construct message for worker
     const pyInp = [] // not used jet
@@ -110,8 +109,7 @@ function runPythonWorker(
 }
 
 //ICompilerInstance
-@Component
-export class PythonV100Compiler extends Vue implements ICompilerInstance {
+export class PythonV100Compiler implements ICompilerInstance {
     readonly version = '100'
     readonly language = 'python'
     readonly canRun = true
@@ -123,8 +121,8 @@ export class PythonV100Compiler extends Vue implements ICompilerInstance {
     readonly allowsREPL = false
     readonly experimental = false
     readonly deprecated = true
-    isReady = true
-    isRunning = false
+    readonly isReady = true
+    readonly isRunning = false
 
     preload() {}
 
@@ -156,5 +154,6 @@ export class PythonV100Compiler extends Vue implements ICompilerInstance {
         )
     }
 }
+
 export const pythonCompiler_V100 = new PythonV100Compiler()
 export default pythonCompiler_V100

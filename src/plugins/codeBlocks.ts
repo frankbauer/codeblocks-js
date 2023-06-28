@@ -47,9 +47,11 @@ export class GlobalState implements IGlobalState {
         const options = loadSettings(document)
         this.baseurl = options.baseurl
     }
+
     format_info(text: string): string {
         return '<span style="color:green">' + text + '</span>'
     }
+
     format_error(text: string): string {
         return '<span style="color:red">' + text + '</span>'
     }
@@ -137,6 +139,7 @@ export class GlobalState implements IGlobalState {
             text: outputObject,
         }
     }
+
     mimeType(language: string): string {
         const o = mimeTypesForLanguage[language]
         if (o === undefined) {
@@ -144,6 +147,7 @@ export class GlobalState implements IGlobalState {
         }
         return o.mime
     }
+
     knownLanguages(): IListItemData[] {
         return Object.keys(mimeTypesForLanguage)
             .map((k) => {
@@ -151,9 +155,11 @@ export class GlobalState implements IGlobalState {
             })
             .sort((a, b) => (a.value < b.value ? -1 : 1))
     }
+
     refreshAllCodeMirrorsSync(): void {
         document.querySelectorAll('.CodeMirror').forEach((e: any) => e.CodeMirror.refresh())
     }
+
     refreshAllCodeMirrors(): void {
         setTimeout(() => {
             this.refreshAllCodeMirrorsSync()
@@ -162,6 +168,7 @@ export class GlobalState implements IGlobalState {
             this.refreshAllCodeMirrorsSync()
         }, 500)
     }
+
     public itemForValue(items: IListItemData[], value: string): IListItemData {
         const ret = items.find((i) => i.value == value)
         if (ret === undefined) {
@@ -173,8 +180,5 @@ export class GlobalState implements IGlobalState {
         return ret
     }
 }
-export const globalState = new GlobalState()
-Vue.prototype.$CodeBlock = globalState
-Vue.$CodeBlock = globalState
 
 Vue.$GlobalEventHub = new Vue()

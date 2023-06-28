@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
 import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 
 //load all versions
@@ -7,8 +5,7 @@ import v001 from './doppio.v001'
 import v100 from './teavm.v100'
 import v101 from './teavm.v101'
 
-@Component
-export class JavaCompilerInfo extends Vue implements ICompilerInfo {
+export class JavaCompilerInfo implements ICompilerInfo {
     type = 'java'
     displayName = 'Java'
 

@@ -1,13 +1,6 @@
-import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
-import {
-    ICompilerInstance,
-    ICompilerErrorDescription,
-    ICompilerRegistry,
-    ErrorSeverity,
-    finishedCallbackSignatur,
-    ICompileAndRunArguments,
-} from '@/lib/ICompilerRegistry'
+import { ICompilerInstance, ErrorSeverity, ICompileAndRunArguments } from '@/lib/ICompilerRegistry'
+import { globalState } from '@/lib/globalState'
+import Vue, { reactive } from 'vue'
 
 declare global {
     interface Worker {
@@ -15,11 +8,10 @@ declare global {
     }
 }
 
-const teaVMRunOverhead = 30000
+const teaVMRunOverhead = 40000
 
 //ICompilerInstance
-@Component
-export class JavaV101Compiler extends Vue implements ICompilerInstance {
+export class JavaV101Compiler implements ICompilerInstance {
     readonly version = '101'
     readonly language = 'java'
     readonly canRun = true
@@ -32,7 +24,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
     readonly experimental = true
     readonly deprecated = false
     didPreload: boolean = false
-    teaworker: Worker | undefined = undefined
+    private teaworker: Worker | undefined = undefined
     isReady = false
     isRunning = false
 
@@ -41,25 +33,25 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
             return
         }
         this.didPreload = true
-        this.$compilerState.setAllRunButtons(false)
+        globalState.compilerState.setAllRunButtons(false)
 
         console.log(`[Preloading TeaVM ${this.version} for Java]`)
         this.isRunning = true
         this.createTeaWorker(() => {
             this.isRunning = false
-            this.$compilerState.hideGlobalState()
-            this.$compilerState.setAllRunButtons(true)
+            globalState.compilerState.hideGlobalState()
+            globalState.compilerState.setAllRunButtons(true)
             //console.log('setAllRun', true)
         })
     }
 
     private createTeaWorker(whenReady: () => void): boolean {
         if (this.teaworker === undefined) {
-            this.$compilerState.setAllRunButtons(false)
-            this.$compilerState.displayGlobalState('Initializing Runtime')
+            globalState.compilerState.setAllRunButtons(false)
+            globalState.compilerState.displayGlobalState('Initializing Runtime')
             try {
                 this.teaworker = new Worker(
-                    `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/worker.js`
+                    `${globalState.codeBlocks.baseurl}js/teavm/v${this.version}/worker.js`
                 )
             } catch (e) {
                 //this should throw in the offline environment, thus we look for the worker at a different
@@ -82,8 +74,8 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                         //console.log("loopback to initial caller");
                         whenReady()
                     } else {
-                        this.$compilerState.setAllRunButtons(true)
-                        this.$compilerState.hideGlobalState()
+                        globalState.compilerState.setAllRunButtons(true)
+                        globalState.compilerState.hideGlobalState()
                     }
                 } else if (e.data.id == 'prep' && e.data.command == 'compilation-complete') {
                     /* We could finish initialization here if there appear to be races when compiling multiple sources at once */
@@ -106,6 +98,7 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
     sessionCompileListener: ((e: any) => void) | undefined = undefined
     sessionID: string = '-1'
     sessionWorker: any = undefined
+
     compileAndRun(
         questionID: string,
         code: string,
@@ -200,19 +193,19 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
             if (e.data.id == '' + questionID) {
                 if (e.data.command == 'phase') {
                     if (e.data.phase == 'DEPENDENCY_ANALYSIS') {
-                        this.$compilerState.displayGlobalState(
+                        globalState.compilerState.displayGlobalState(
                             'Compiling & Analyzing <b>' + mainClass + '.java</b>'
                         )
                     } else if (e.data.phase == 'LINKING') {
-                        this.$compilerState.displayGlobalState(
+                        globalState.compilerState.displayGlobalState(
                             'Linking <b>' + mainClass + '.java</b>'
                         )
                     } else if (e.data.phase == 'OPTIMIZATION') {
-                        this.$compilerState.displayGlobalState(
+                        globalState.compilerState.displayGlobalState(
                             'Optimizing <b>' + mainClass + '.java</b>'
                         )
                     } else if (e.data.phase == 'RENDERING') {
-                        this.$compilerState.displayGlobalState(
+                        globalState.compilerState.displayGlobalState(
                             'Creating <b>' + mainClass + '.class</b>'
                         )
                     }
@@ -288,9 +281,11 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
                         finishedExecutionCB(false, undefined, options.args)
                         this.isRunning = false
                     } else {
-                        this.$compilerState.displayGlobalState('Executing <b>' + mainClass + '</b>')
+                        globalState.compilerState.displayGlobalState(
+                            'Executing <b>' + mainClass + '</b>'
+                        )
                         const workerrun = new Worker(
-                            `${this.$CodeBlock.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
+                            `${globalState.codeBlocks.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
                         )
                         this.sessionWorker = workerrun
 
@@ -415,8 +410,8 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
             this.teaworker.addEventListener('message', myListener)
         }
         //console.log(code);
-        this.$compilerState.setAllRunButtons(false)
-        this.$compilerState.displayGlobalState(
+        globalState.compilerState.setAllRunButtons(false)
+        globalState.compilerState.displayGlobalState(
             'Starting Compiler for <b>' + mainClass + '.java</b>'
         )
 
@@ -476,5 +471,5 @@ export class JavaV101Compiler extends Vue implements ICompilerInstance {
     }
 }
 
-export const javaCompiler_V101 = new JavaV101Compiler()
+export const javaCompiler_V101 = reactive(new JavaV101Compiler())
 export default javaCompiler_V101

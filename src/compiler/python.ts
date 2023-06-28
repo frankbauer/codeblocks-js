@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
 import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 
 //load all versions
@@ -7,8 +5,7 @@ import v100 from './python.v100'
 import v101 from './python.v101'
 import v102 from './python.v102'
 
-@Component
-export class PythonCompilerInfo extends Vue implements ICompilerInfo {
+export class PythonCompilerInfo implements ICompilerInfo {
     type = 'python'
     displayName = 'Python 2.7'
 
@@ -19,8 +16,7 @@ export class PythonCompilerInfo extends Vue implements ICompilerInfo {
     default = v101.legacyPython
 }
 
-@Component
-export class Python3CompilerInfo extends Vue implements ICompilerInfo {
+export class Python3CompilerInfo implements ICompilerInfo {
     type = 'python3'
     displayName = 'Python 3'
 

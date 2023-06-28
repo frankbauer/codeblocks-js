@@ -1,5 +1,3 @@
-import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
 import {
     ICompilerInstance,
     ICompilerErrorDescription,
@@ -7,6 +5,8 @@ import {
     finishedCallbackSignatur,
     ICompileAndRunArguments,
 } from '@/lib/ICompilerRegistry'
+import { globalState } from '@/lib/globalState'
+import Vue from 'vue'
 
 function runPythonWorker(
     questionID: string,
@@ -32,7 +32,7 @@ function runPythonWorker(
         return
     }
 
-    const worker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v101/pyWorker.js')
+    const worker = new Worker(globalState.codeBlocks.baseurl + 'js/python/v101/pyWorker.js')
 
     // construct message for worker
     const pyInp = [] // not used jet
@@ -133,8 +133,7 @@ function runPythonWorker(
 }
 
 //ICompilerInstance
-@Component
-export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
+export class PythonV101LegacyCompiler implements ICompilerInstance {
     readonly version = '101'
     readonly language = 'python'
     readonly canRun = true
@@ -146,11 +145,13 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
     readonly allowsREPL = false
     readonly experimental = false
     readonly deprecated = false
-    isReady = true
-    isRunning = false
+    readonly isReady = true
+    readonly isRunning = false
 
     preload() {}
+
     private worker: Worker | undefined = undefined
+
     compileAndRun(
         questionID: string,
         code: string,
@@ -189,8 +190,7 @@ export class PythonV101LegacyCompiler extends Vue implements ICompilerInstance {
 }
 
 //ICompilerInstance
-@Component
-export class PythonV101Compiler extends Vue implements ICompilerInstance {
+export class PythonV101Compiler implements ICompilerInstance {
     readonly version = '101'
     readonly language = 'python'
     readonly canRun = true
@@ -208,6 +208,7 @@ export class PythonV101Compiler extends Vue implements ICompilerInstance {
     preload() {}
 
     private worker: Worker | undefined = undefined
+
     compileAndRun(
         questionID: string,
         code: string,

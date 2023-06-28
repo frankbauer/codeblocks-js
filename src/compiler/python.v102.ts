@@ -1,13 +1,10 @@
-import 'reflect-metadata'
-import { Vue, Component } from 'vue-property-decorator'
 import {
     ICompilerInstance,
-    ICompilerErrorDescription,
     ErrorSeverity,
-    finishedCallbackSignatur,
     ICompileAndRunArguments,
     IReplInstance,
 } from '@/lib/ICompilerRegistry'
+import Vue, { reactive } from 'vue'
 
 interface REPLWorker extends Worker {
     interpreter: any
@@ -250,8 +247,8 @@ function runPythonWorker(
 }
 
 //ICompilerInstance
-@Component
-export class PythonV102Compiler extends Vue implements ICompilerInstance, IReplInstance {
+
+export class PythonV102Compiler implements ICompilerInstance, IReplInstance {
     readonly version = '102'
     readonly language = 'python'
     readonly canRun = true
@@ -264,7 +261,7 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance, IReplI
     readonly experimental = true
     readonly deprecated = false
     isReady = false
-    isRunning = false
+    readonly isRunning = false
 
     preload() {
         getWorker(this.setReady.bind(this)) //this will initialize our first worker
@@ -276,6 +273,7 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance, IReplI
     }
 
     private worker: REPLWorker | undefined = undefined
+
     compileAndRun(
         questionID: string,
         code: string,
@@ -341,7 +339,7 @@ export class PythonV102Compiler extends Vue implements ICompilerInstance, IReplI
     }
 }
 
-export const pythonCompiler_V102 = new PythonV102Compiler()
+export const pythonCompiler_V102 = reactive(new PythonV102Compiler())
 
 export default {
     python3: pythonCompiler_V102,
