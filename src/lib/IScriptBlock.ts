@@ -1,7 +1,7 @@
 import { IBlockData } from './ICodeBlocks'
 import { ICompileAndRunArguments } from './ICompilerRegistry'
 
-export type Runner = () => {}
+export type Runner = () => void
 
 export interface IParsedError {
     line: number
