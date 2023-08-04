@@ -2,9 +2,9 @@
     <div class="row q-pa-none q-mb-md">
         <div class="col-xs-12 col-sm-12 col-md-6">
             <q-card class="q-mb-sm q-mr-sm-none q-mr-md-sm">
-                <q-card-section class="text-overline">{{
-                    $t('CodeBlocksSettings.Language')
-                }}</q-card-section>
+                <q-card-section class="text-overline"
+                    >{{ $t('CodeBlocksSettings.Language') }}
+                </q-card-section>
                 <q-card-section class="q-ml-md">
                     <div class="row">
                         <div class="col-12">
@@ -176,7 +176,8 @@
                                 v-model="persistentArguments"
                                 :disabled="!canPersistentArguments"
                                 :label="$t('CodeBlocksSettings.PersistentArguments')"
-                            /><q-btn
+                            />
+                            <q-btn
                                 flat
                                 round
                                 color="primary"
@@ -190,7 +191,8 @@
                                 v-model="messagePassing"
                                 :disabled="!allowsMessagePassing"
                                 :label="$t('CodeBlocksSettings.MessagePassing')"
-                            /><q-btn
+                            />
+                            <q-btn
                                 flat
                                 round
                                 color="primary"
@@ -204,7 +206,8 @@
                                 v-model="keepAlive"
                                 :disabled="!allowsMessagePassing || !messagePassing"
                                 :label="$t('CodeBlocksSettings.KeepAlive')"
-                            /><q-btn
+                            />
+                            <q-btn
                                 flat
                                 round
                                 color="primary"
@@ -221,9 +224,9 @@
         <div class="col-xs-12 col-sm-12 col-md-6">
             <q-slide-transition>
                 <q-card class="q-mb-sm q-mr-none" v-if="runCode">
-                    <q-card-section class="text-overline">{{
-                        $t('CodeBlocksSettings.Output')
-                    }}</q-card-section>
+                    <q-card-section class="text-overline"
+                        >{{ $t('CodeBlocksSettings.Output') }}
+                    </q-card-section>
                     <q-card-section class="q-ml-md">
                         <div class="row">
                             <div class="col-xs-12 col-md-6 col-12 q-pr-md-sm">
@@ -246,9 +249,9 @@
                 </q-card>
             </q-slide-transition>
             <q-card class="q-mr-none">
-                <q-card-section class="text-overline">{{
-                    $t('CodeBlocksSettings.Themes')
-                }}</q-card-section>
+                <q-card-section class="text-overline"
+                    >{{ $t('CodeBlocksSettings.Themes') }}
+                </q-card-section>
                 <q-card-section class="q-ml-md">
                     <div class="row" dense>
                         <div class="col-xs-12 col-md-6 q-pr-md-sm">
@@ -271,9 +274,9 @@
 
             <q-slide-transition>
                 <q-card class="q-mr-sm-none q-mt-sm">
-                    <q-card-section class="text-overline">{{
-                        $t('CodeBlocksSettings.Libraries')
-                    }}</q-card-section>
+                    <q-card-section class="text-overline"
+                        >{{ $t('CodeBlocksSettings.Libraries') }}
+                    </q-card-section>
                     <q-card-section class="q-ml-md">
                         <div class="row q-my-none q-py-none" dense>
                             <div class="col-xs-12 col-sm-12 q-my-none q-py-none">
@@ -321,10 +324,12 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
 import RandomizerSettings from '@/components/RandomizerSettings.vue'
 import { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
 import { CodeOutputTypes, IRandomizerSettings } from '@/lib/ICodeBlocks'
+import Vue, { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
+import compilerRegistry from '@/lib/CompilerRegistry'
+import { globalState } from '@/lib/globalState'
 
 export interface ICodeBlockSettingsOptions {
     language: string
@@ -345,371 +350,493 @@ export interface ICodeBlockSettingsOptions {
     keepAlive: boolean
 }
 
-@Component({ components: { RandomizerSettings } })
-export default class CodeBlocksSettings extends Vue {
-    get themes(): IListItemData[] {
-        return [
-            { label: 'Solarized', value: 'solarized light' },
-            { label: 'Solarized (dark)', value: 'solarized dark' },
-            { label: 'Base16 (dark)', value: 'base16-dark' },
-            { label: 'Base16 (light)', value: 'base16-light' },
-            { label: 'Duotone (dark)', value: 'duotone-dark' },
-            { label: 'Duotone (light)', value: 'duotone-light' },
-            { label: 'XQ (dark)', value: 'xq-dark' },
-            { label: 'XQ (light)', value: 'xq-light' },
-            { label: 'Blackboard', value: 'blackboard' },
-            { label: 'neo', value: 'neo' },
-            { label: 'mbo', value: 'mbo' },
-            { label: 'mdn like', value: 'mdn-like' },
-        ]
-    }
-
-    get outputParsers(): IListItemData[] {
-        return [
-            { label: this.$l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
-            { label: this.$l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
-            { label: this.$l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
-            { label: this.$l('CodeBlocksSettings.PData'), value: CodeOutputTypes.DATA },
-            { label: this.$l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
-        ]
-    }
-    @Prop({ required: true }) options!: ICodeBlockSettingsOptions
-
-    validNumber(v: any): boolean | string {
-        if (isNaN(v)) {
-            return 'Must be a valid Number.'
-        }
-        return true
-    }
-
-    get serializedOptions(): string {
-        const o: any = {
-            ...this.options,
-        }
-        o.randomizer = {
-            ...this.options.randomizer,
-        }
-        o.randomizer.sets = this.options.randomizer.sets.map((s) => {
-            let values = {}
-            s.values.forEach((v) => (values[v.tag] = v.value))
-            return values
+export default defineComponent({
+    name: 'CodeBlocksSettings',
+    components: { RandomizerSettings },
+    props: {
+        options: {
+            type: Object as PropType<ICodeBlockSettingsOptions>,
+            required: true,
+        },
+    },
+    setup(props, context) {
+        const instance = getCurrentInstance()
+        const q = instance?.proxy?.$root?.$q
+        const t = instance?.proxy?.$root?.$t
+        const l = instance?.proxy?.$root?.$l
+        //Computed
+        const themes: ComputedRef<IListItemData[]> = computed(() => {
+            return [
+                { label: 'Solarized', value: 'solarized light' },
+                { label: 'Solarized (dark)', value: 'solarized dark' },
+                { label: 'Base16 (dark)', value: 'base16-dark' },
+                { label: 'Base16 (light)', value: 'base16-light' },
+                { label: 'Duotone (dark)', value: 'duotone-dark' },
+                { label: 'Duotone (light)', value: 'duotone-light' },
+                { label: 'XQ (dark)', value: 'xq-dark' },
+                { label: 'XQ (light)', value: 'xq-light' },
+                { label: 'Blackboard', value: 'blackboard' },
+                { label: 'neo', value: 'neo' },
+                { label: 'mbo', value: 'mbo' },
+                { label: 'mdn like', value: 'mdn-like' },
+            ]
         })
-        return JSON.stringify(o)
-    }
-    set serializedOptions(v: string) {}
 
-    get domLibraries(): IListItemData[] {
-        return this.$compilerRegistry.domLibraries
-    }
-    get compiledLanguages(): IListItemData[] {
-        if (this.options.runCode === false) {
-            return this.languages
-        }
-        return this.$compilerRegistry.languages
-    }
-    get workerLibraries(): IListItemData[] {
-        const c = this.$compilerRegistry.getCompiler({
-            languageType: this.compilerLanguage,
-            version: this.compilerVersion,
+        const outputParsers: ComputedRef<IListItemData[]> = computed(() => {
+            return [
+                { label: l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
+                { label: l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
+                { label: l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
+                { label: l('CodeBlocksSettings.PData'), value: CodeOutputTypes.DATA },
+                { label: l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
+            ]
         })
-        if (c === undefined || c.libraries === undefined) {
-            return []
-        }
-        return c.libraries.map((l) => {
-            return { label: l.displayName, value: l.key }
-        })
-    }
-    get languages(): IListItemData[] {
-        return this.$CodeBlock.knownLanguages()
-    }
-    get compilerVersions(): string[] {
-        return this.$compilerRegistry.versionsForLanguage(this.compilerLanguage)
-    }
 
-    isExperimentalVersion(language: string, version: string): boolean {
-        const c = this.$compilerRegistry.getCompiler({
-            languageType: language,
-            version: version,
+        const serializedOptions = computed({
+            get: () => {
+                const o: any = {
+                    ...props.options,
+                }
+                o.randomizer = {
+                    ...props.options.randomizer,
+                }
+                o.randomizer.sets = props.options.randomizer.sets.map((s) => {
+                    let values = {}
+                    s.values.forEach((v) => (values[v.tag] = v.value))
+                    return values
+                })
+                return JSON.stringify(o)
+            },
+            set: (v) => {},
         })
-        if (c === undefined) {
+
+        const compilerLanguage: ComputedRef<string> = computed(() => {
+            if (props.options.runCode === false) {
+                return props.options.language
+            }
+            return props.options.compiler.languageType
+        })
+
+        const compilerVersion = computed({
+            get: () => {
+                return props.options.compiler.version
+            },
+            set: (v) => {
+                context.emit('compiler-version-change', v)
+            },
+        })
+
+        const domLibraries: ComputedRef<IListItemData[]> = computed(() => {
+            return compilerRegistry.domLibraries
+        })
+
+        const workerLibraries: ComputedRef<IListItemData[]> = computed(() => {
+            const c = compilerRegistry.getCompiler({
+                languageType: compilerLanguage.value,
+                version: compilerVersion.value,
+            })
+            if (c === undefined || c.libraries === undefined) {
+                return []
+            }
+            return c.libraries.map((l) => {
+                return { label: l.displayName, value: l.key }
+            })
+        })
+
+        const languages: ComputedRef<IListItemData[]> = computed(() => {
+            return globalState.codeBlocks.knownLanguages()
+        })
+
+        const compiledLanguages: ComputedRef<IListItemData[]> = computed(() => {
+            if (props.options.runCode === false) {
+                return languages.value
+            }
+            return compilerRegistry.languages
+        })
+
+        const compilerVersions: ComputedRef<string[]> = computed(() => {
+            return compilerRegistry.versionsForLanguage(compilerLanguage.value)
+        })
+
+        const compiler: ComputedRef<ICompilerID> = computed(() => {
+            return props.options.compiler
+        })
+
+        const runCode = computed({
+            get: () => {
+                return props.options.runCode
+            },
+            set: (v) => {
+                context.emit('run-state-change', v)
+            },
+        })
+
+        const isExperimental: ComputedRef<boolean> = computed(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            if (cmp) {
+                return cmp.experimental
+            }
             return false
-        }
-        return c.experimental
-    }
-
-    isDeprecatedVersion(language: string, version: string): boolean {
-        const c = this.$compilerRegistry.getCompiler({
-            languageType: language,
-            version: version,
         })
-        if (c === undefined) {
+
+        const isDeprecated: ComputedRef<boolean> = computed(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            if (cmp) {
+                return cmp.deprecated
+            }
             return false
-        }
-        return c.deprecated
-    }
-
-    get isExperimental(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp) {
-            return cmp.experimental
-        }
-        return false
-    }
-
-    get isDeprecated(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp) {
-            return cmp.deprecated
-        }
-        return false
-    }
-
-    get languageHasCompiler(): boolean {
-        if (this.runCode) {
-            return true
-        }
-        const c = this.$compilerRegistry.getCompiler({ languageType: this.compilerLanguage })
-        return c !== undefined
-    }
-    get compilerLanguage(): string {
-        if (this.options.runCode === false) {
-            return this.options.language
-        }
-        return this.options.compiler.languageType
-    }
-    get compilerLanguageObj(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.compiledLanguages, this.compilerLanguage)
-    }
-    set compilerLanguageObj(v: IListItemData) {
-        if (this.options.runCode === false) {
-            this.$emit('language-change', v.value)
-        }
-        this.$emit('compiler-change', v.value)
-    }
-
-    get compilerVersion(): string {
-        return this.options.compiler.version
-    }
-    set compilerVersion(v: string) {
-        this.$emit('compiler-version-change', v)
-    }
-
-    get runCode(): boolean {
-        return this.options.runCode
-    }
-    set runCode(v: boolean) {
-        this.$emit('run-state-change', v)
-    }
-
-    get maxRuntime(): number {
-        return this.options.executionTimeout
-    }
-    set maxRuntime(v: number) {
-        this.$emit('timeout-change', v)
-    }
-
-    get maxCharacters(): number {
-        return this.options.maxCharacters
-    }
-    set maxCharacters(v: number) {
-        this.$emit('character-limit-change', v)
-    }
-
-    get domLibrary(): IListItemData[] {
-        return this.options.domLibs
-            .map((d) => this.domLibraries.find((k) => k.value == d))
-            .filter((v) => v !== undefined) as IListItemData[]
-    }
-    set domLibrary(v: IListItemData[]) {
-        this.$emit(
-            'dom-libs-change',
-            v.map((vv) => vv.value)
-        )
-    }
-
-    get workerLibrary(): IListItemData[] {
-        return this.options.workerLibs
-            .map((d) => this.workerLibraries.find((k) => k.value == d))
-            .filter((v) => v !== undefined) as IListItemData[]
-    }
-    set workerLibrary(v: IListItemData[]) {
-        this.$emit(
-            'worker-libs-change',
-            v.map((vv) => vv.value)
-        )
-    }
-
-    get solutionTheme(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.themes, this.options.solutionTheme)
-    }
-    set solutionTheme(v: IListItemData) {
-        this.$emit('theme-change', {
-            solution: v.value,
-            code: this.options.codeTheme,
         })
-    }
 
-    get codeTheme(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.themes, this.options.codeTheme)
-    }
-    set codeTheme(v: IListItemData) {
-        this.$emit('theme-change', {
-            solution: this.options.solutionTheme,
-            code: v.value,
+        const languageHasCompiler: ComputedRef<boolean> = computed(() => {
+            if (runCode.value) {
+                return true
+            }
+            const c = compilerRegistry.getCompiler({ languageType: compilerLanguage.value })
+            return c !== undefined
         })
-    }
 
-    get outputParser(): IListItemData {
-        return Vue.$CodeBlock.itemForValue(this.outputParsers, this.options.outputParser)
-    }
-    set outputParser(v: IListItemData) {
-        this.$emit('output-parser-change', v.value)
-    }
+        const compilerLanguageObj = computed({
+            get: () => {
+                return Vue.$CodeBlock.itemForValue(compiledLanguages.value, compilerLanguage.value)
+            },
+            set: (v: IListItemData) => {
+                if (props.options.runCode === false) {
+                    context.emit('language-change', v.value)
+                }
+                context.emit('compiler-change', v.value)
+            },
+        })
 
-    get continuousCompile(): boolean {
-        return this.options.continuousCompilation
-    }
-    set continuousCompile(v: boolean) {
-        this.$emit('continuous-compile-change', v)
-    }
-    get compiler(): ICompilerID {
-        return this.options.compiler
-    }
-    get canContinousCompile(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        console.d(
-            'Continuous Compile - ',
-            'can',
-            cmp,
-            cmp ? cmp.allowsContinousCompilation : false,
-            cmp ? cmp.canRun : false
-        )
-        if (cmp) {
-            console.d('Continuous Compile - ', 'can', cmp.allowsContinousCompilation && cmp.canRun)
-            return cmp.allowsContinousCompilation && cmp.canRun
-        }
-        return false
-    }
+        const maxRuntime = computed({
+            get: () => {
+                return props.options.executionTimeout
+            },
 
-    get allowsMessagePassing(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp) {
-            console.d('Message Passing - ', 'can', cmp.allowsContinousCompilation && cmp.canRun)
-            return cmp.allowsMessagePassing && cmp.canRun
-        }
-        return false
-    }
+            set: (v: number) => {
+                context.emit('timeout-change', v)
+            },
+        })
 
-    get messagePassing(): boolean {
-        return this.options.messagePassing
-    }
-    set messagePassing(v: boolean) {
-        this.$emit('message-passing-change', v)
-    }
+        const maxCharacters = computed({
+            get: () => {
+                return props.options.maxCharacters
+            },
 
-    get keepAlive(): boolean {
-        return this.options.keepAlive
-    }
-    set keepAlive(v: boolean) {
-        this.$emit('keep-alive-change', v)
-    }
+            set: (v: number) => {
+                context.emit('character-limit-change', v)
+            },
+        })
 
-    get showMaxRuntime(): boolean {
-        return this.runCode && !(this.keepAlive && this.messagePassing)
-    }
+        const domLibrary = computed({
+            get: () => {
+                return props.options.domLibs
+                    .map((d) => domLibraries.value.find((k) => k.value == d))
+                    .filter((v) => v !== undefined) as IListItemData[]
+            },
 
-    get allowsREPL(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp) {
-            console.d('REPL - ', 'can', cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun)
-            return cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
-        }
-        return false
-    }
+            set: (v: IListItemData[]) => {
+                context.emit(
+                    'dom-libs-change',
+                    v.map((vv) => vv.value)
+                )
+            },
+        })
 
-    get persistentArguments(): boolean {
-        return this.options.persistentArguments
-    }
-    set persistentArguments(v: boolean) {
-        this.$emit('persistent-arguments-change', v)
-    }
-    get canPersistentArguments(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp) {
+        const workerLibrary = computed({
+            get: () => {
+                return props.options.workerLibs
+                    .map((d) => workerLibraries.value.find((k) => k.value == d))
+                    .filter((v) => v !== undefined) as IListItemData[]
+            },
+
+            set: (v: IListItemData[]) => {
+                context.emit(
+                    'worker-libs-change',
+                    v.map((vv) => vv.value)
+                )
+            },
+        })
+
+        const solutionTheme = computed({
+            get: () => {
+                return Vue.$CodeBlock.itemForValue(themes.value, props.options.solutionTheme)
+            },
+
+            set: (v: IListItemData) => {
+                context.emit('theme-change', {
+                    solution: v.value,
+                    code: props.options.codeTheme,
+                })
+            },
+        })
+
+        const codeTheme = computed({
+            get: () => {
+                return Vue.$CodeBlock.itemForValue(themes.value, props.options.codeTheme)
+            },
+
+            set: (v: IListItemData) => {
+                context.emit('theme-change', {
+                    solution: props.options.solutionTheme,
+                    code: v.value,
+                })
+            },
+        })
+
+        const outputParser = computed({
+            get: () => {
+                return Vue.$CodeBlock.itemForValue(outputParsers.value, props.options.outputParser)
+            },
+
+            set: (v: IListItemData) => {
+                context.emit('output-parser-change', v.value)
+            },
+        })
+
+        const canContinousCompile: ComputedRef<boolean> = computed(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
             console.d(
-                'Persistent Arguments - ',
+                'Continuous Compile - ',
                 'can',
-                cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
+                cmp,
+                cmp ? cmp.allowsContinousCompilation : false,
+                cmp ? cmp.canRun : false
             )
-            return cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
-        }
-        return false
-    }
+            if (cmp) {
+                console.d(
+                    'Continuous Compile - ',
+                    'can',
+                    cmp.allowsContinousCompilation && cmp.canRun
+                )
+                return cmp.allowsContinousCompilation && cmp.canRun
+            }
+            return false
+        })
 
-    get accepstArguments(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp) {
-            return cmp.acceptsJSONArgument
-        }
-        return false
-    }
-    showArgsInfoDialog(): void {
-        this.showInfoDialog(
-            'CodeBlocksSettings.AllowArgumentsCaption',
-            this.compiler.languageType == 'java'
-                ? 'CodeBlocksSettings.AllowArgumentsHintJava'
-                : 'CodeBlocksSettings.AllowArgumentsHint'
-        )
-    }
-    showPersistentArgsInfoDialog(): void {
-        this.showInfoDialog(
-            'CodeBlocksSettings.UsePersistentArgumentsCaption',
-            this.compiler.languageType == 'java'
-                ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava'
-                : 'CodeBlocksSettings.UsePersistentArgumentsHint'
-        )
-    }
-    showMessagesInfoDialog(): void {
-        this.showInfoDialog(
-            'CodeBlocksSettings.AllowMessagePassingCaption',
-            this.compiler.languageType == 'java'
-                ? 'CodeBlocksSettings.AllowMessagePassingHintJava'
-                : 'CodeBlocksSettings.AllowMessagePassingHint'
-        )
-    }
-    showAliveInfoDialog(): void {
-        this.showInfoDialog(
-            'CodeBlocksSettings.KeepAliveCaption',
-            this.compiler.languageType == 'java'
-                ? 'CodeBlocksSettings.KeepAliveHintJava'
-                : 'CodeBlocksSettings.KeepAliveHint'
-        )
-    }
+        const continuousCompile = computed({
+            get: () => {
+                return props.options.continuousCompilation
+            },
 
-    showInfoDialog(title, message): void {
-        this.$q
-            .dialog({
-                title: this.$l(title),
-                message: this.$l(message),
+            set: (v: boolean) => {
+                context.emit('continuous-compile-change', v)
+            },
+        })
+
+        const allowsMessagePassing: ComputedRef<boolean> = computed(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            if (cmp) {
+                console.d('Message Passing - ', 'can', cmp.allowsContinousCompilation && cmp.canRun)
+                return cmp.allowsMessagePassing && cmp.canRun
+            }
+            return false
+        })
+
+        const messagePassing = computed({
+            get: () => {
+                return props.options.messagePassing
+            },
+
+            set: (v: boolean) => {
+                context.emit('message-passing-change', v)
+            },
+        })
+
+        const keepAlive = computed({
+            get: () => {
+                return props.options.keepAlive
+            },
+
+            set: (v: boolean) => {
+                context.emit('keep-alive-change', v)
+            },
+        })
+
+        const showMaxRuntime: ComputedRef<boolean> = computed(() => {
+            return runCode.value && !(keepAlive.value && messagePassing.value)
+        })
+
+        const allowsREPL: ComputedRef<boolean> = computed(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            if (cmp) {
+                console.d(
+                    'REPL - ',
+                    'can',
+                    cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
+                )
+                return cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
+            }
+            return false
+        })
+
+        const persistentArguments = computed({
+            get: () => {
+                return props.options.persistentArguments
+            },
+
+            set: (v: boolean) => {
+                context.emit('persistent-arguments-change', v)
+            },
+        })
+
+        const canPersistentArguments: ComputedRef<boolean> = computed(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            if (cmp) {
+                console.d(
+                    'Persistent Arguments - ',
+                    'can',
+                    cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
+                )
+                return cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
+            }
+            return false
+        })
+
+        const accepstArguments: ComputedRef<boolean> = computed(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            if (cmp) {
+                return cmp.acceptsJSONArgument
+            }
+            return false
+        })
+
+        //local Methods
+        function showInfoDialog(title, message): void {
+            if (l === undefined) {
+                return
+            }
+            q?.dialog({
+                title: l(title),
+                message: l(message),
                 html: true,
                 style: 'width:75%',
             })
-            .onOk(() => {
-                // console.log('OK')
+                .onOk(() => {
+                    // console.log('OK')
+                })
+                .onCancel(() => {
+                    // console.log('Cancel')
+                })
+                .onDismiss(() => {
+                    // console.log('I am triggered on both OK and Cancel')
+                })
+        }
+
+        //exposed methods
+        function showArgsInfoDialog(): void {
+            showInfoDialog(
+                'CodeBlocksSettings.AllowArgumentsCaption',
+                compiler.value.languageType == 'java'
+                    ? 'CodeBlocksSettings.AllowArgumentsHintJava'
+                    : 'CodeBlocksSettings.AllowArgumentsHint'
+            )
+        }
+
+        function showPersistentArgsInfoDialog(): void {
+            showInfoDialog(
+                'CodeBlocksSettings.UsePersistentArgumentsCaption',
+                compiler.value.languageType == 'java'
+                    ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava'
+                    : 'CodeBlocksSettings.UsePersistentArgumentsHint'
+            )
+        }
+
+        function showMessagesInfoDialog(): void {
+            showInfoDialog(
+                'CodeBlocksSettings.AllowMessagePassingCaption',
+                compiler.value.languageType == 'java'
+                    ? 'CodeBlocksSettings.AllowMessagePassingHintJava'
+                    : 'CodeBlocksSettings.AllowMessagePassingHint'
+            )
+        }
+
+        function showAliveInfoDialog(): void {
+            showInfoDialog(
+                'CodeBlocksSettings.KeepAliveCaption',
+                compiler.value.languageType == 'java'
+                    ? 'CodeBlocksSettings.KeepAliveHintJava'
+                    : 'CodeBlocksSettings.KeepAliveHint'
+            )
+        }
+
+        function isExperimentalVersion(language: string, version: string): boolean {
+            const c = compilerRegistry.getCompiler({
+                languageType: language,
+                version: version,
             })
-            .onCancel(() => {
-                // console.log('Cancel')
+            if (c === undefined) {
+                return false
+            }
+            return c.experimental
+        }
+
+        function isDeprecatedVersion(language: string, version: string): boolean {
+            const c = compilerRegistry.getCompiler({
+                languageType: language,
+                version: version,
             })
-            .onDismiss(() => {
-                // console.log('I am triggered on both OK and Cancel')
-            })
-    }
-}
+            if (c === undefined) {
+                return false
+            }
+            return c.deprecated
+        }
+
+        function validNumber(v: any): boolean | string {
+            if (isNaN(v)) {
+                return 'Must be a valid Number.'
+            }
+            return true
+        }
+
+        return {
+            themes,
+            outputParsers,
+            serializedOptions,
+            compilerLanguage,
+            compilerVersion,
+            domLibraries,
+            workerLibraries,
+            languages,
+            compiledLanguages,
+            compilerVersions,
+            compiler,
+            runCode,
+            isExperimental,
+            isDeprecated,
+            languageHasCompiler,
+            compilerLanguageObj,
+            maxRuntime,
+            maxCharacters,
+            domLibrary,
+            workerLibrary,
+            solutionTheme,
+            codeTheme,
+            outputParser,
+            canContinousCompile,
+            continuousCompile,
+            allowsMessagePassing,
+            messagePassing,
+            keepAlive,
+            showMaxRuntime,
+            allowsREPL,
+            persistentArguments,
+            canPersistentArguments,
+            accepstArguments,
+            showArgsInfoDialog,
+            showPersistentArgsInfoDialog,
+            showMessagesInfoDialog,
+            showAliveInfoDialog,
+            isExperimentalVersion,
+            isDeprecatedVersion,
+            validNumber,
+        }
+    },
+})
 </script>
 
 <style lang="sass" scoped>
 textarea.blocksettings
-    display : none !important
-    width : 1px
-    height : 1px
+    display: none !important
+    width: 1px
+    height: 1px
 </style>

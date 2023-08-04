@@ -89,6 +89,7 @@ import {
     Ref,
     ref,
 } from 'vue'
+import { globalState } from '@/lib/globalState'
 
 export interface ICodePlaygroundOptions {
     mode: string
@@ -143,7 +144,7 @@ export default defineComponent({
     },
     setup(props, context) {
         const instance = getCurrentInstance()
-        const globalCodeBlock = instance?.proxy?.$root?.$CodeBlock
+        const globalCodeBlock = globalState.codeBlocks
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
         const l = instance?.proxy?.$root?.$l
