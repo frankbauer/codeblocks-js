@@ -6,140 +6,163 @@
 
 <script lang="ts">
 import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import Vue from 'vue'
 import '@/lib/jquery.terminal.js'
 import $ from 'jquery'
 import { PythonV102Compiler } from '@/compiler/python.v102'
-import { ICompilerID } from '@/lib/ICompilerRegistry'
+import { ICompilerID, IListItemData } from '@/lib/ICompilerRegistry'
 import { IMainBlock } from '@/lib/codeBlocksManager'
+import { computed, ComputedRef, defineComponent, onBeforeUnmount, onMounted, PropType } from 'vue'
+import compilerRegistry from '@/lib/CompilerRegistry'
 
 function sleep(s) {
     return new Promise((resolve) => setTimeout(resolve, s))
 }
 
-@Component
-export default class Terminal extends Vue {
-    @Prop({ default: '250px' }) height!: string
-    @Prop({ required: true }) blockInfo!: IMainBlock
-    @Prop({ required: true }) eventHub!: Vue
+export default defineComponent({
+    // eslint-disable-next-line vue/multi-word-component-names
+    name: 'Terminal',
+    components: {},
+    props: {
+        height: { type: String, default: '250px' },
+        blockInfo: {
+            type: Object as PropType<IMainBlock>,
+            required: true,
+        },
+        eventHub: {
+            type: Object as PropType<Vue>,
+            required: true,
+        },
+    },
 
-    private term: any
-    get compiler(): ICompilerID {
-        return this.blockInfo.compiler
-    }
+    setup(props, context) {
+        let term: any = undefined
 
-    get welcomeMessage(): string {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        let language = ''
-        if (cmp !== undefined) {
-            language = cmp.language
-        }
-        return `{*_*} Interactive ${language} Shell\n------------------------------`
-    }
+        const compiler: ComputedRef<ICompilerID> = computed(() => {
+            return props.blockInfo.compiler
+        })
 
-    emitRun() {
-        if (this.term !== undefined) {
-            this.clear()
-        }
-        this.$emit('run')
-    }
+        const welcomeMessage: ComputedRef<string> = computed(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            let language = ''
+            if (cmp !== undefined) {
+                language = cmp.language
+            }
+            return `{*_*} Interactive ${language} Shell\n------------------------------`
+        })
 
-    emitStop() {
-        this.$emit('stop')
-    }
-
-    clear() {
-        if (this.term !== undefined) {
-            this.term.clear()
-            this.term.echo(this.welcomeMessage)
-        }
-    }
-
-    mounted() {
-        const self = this
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler) as PythonV102Compiler
-        let ps1 = cmp.language === 'python' ? 'py> ' : '>>> ',
-            ps2 = '... '
-
-        async function lock() {
-            let resolve
-            let ready = self.term.ready
-            self.term.ready = new Promise((res) => (resolve = res))
-            await ready
-            return resolve
+        function emitRun() {
+            if (term !== undefined) {
+                clear()
+            }
+            context.emit('run')
         }
 
-        async function interpreter(command) {
-            let unlock = await lock()
-            try {
-                self.term.pause()
+        function emitStop() {
+            context.emit('stop')
+        }
 
-                for (const c of command.split('\n')) {
-                    try {
-                        if (c === '.stop') {
-                            self.emitStop()
-                            return
-                        }
-                        if (c === '.restart') {
-                            self.emitStop()
-                            self.clear()
-                            await sleep(1000)
-                            self.emitRun()
-                            return
-                        }
-                        if (c === '.clear') {
-                            self.term.clear()
-                            return
-                        }
-                        self.term.set_prompt(ps2)
-                        await cmp.interpreter(
-                            c,
-                            (incomplete) => {
-                                self.term.set_prompt(incomplete ? ps2 : ps1)
-                            },
-                            (msg) => {
-                                self.term.echo(msg, { newline: false })
-                            },
-                            (err) => {
-                                self.term.error(err)
-                            }
-                        )
-                    } catch (e) {
-                        self.term.error(e)
-                    }
-                }
-            } finally {
-                self.term.resume()
-                await sleep(10)
-                unlock()
+        function clear() {
+            if (term !== undefined) {
+                term.clear()
+                term.echo(welcomeMessage.value)
             }
         }
 
-        const el: any = $('#terminal', '.vue-terminal-wrapper')
-        self.term = el.terminal(interpreter, {
-            greetings: self.welcomeMessage,
-            name: 'codeblocks_repl',
-            height: this.height,
-            prompt: ps1,
+        onMounted(() => {
+            const self = this
+            const cmp = compilerRegistry.getCompiler(compiler.value) as PythonV102Compiler
+            let ps1 = cmp.language === 'python' ? 'py> ' : '>>> ',
+                ps2 = '... '
+
+            async function lock() {
+                let resolve
+                let ready = term.ready
+                term.ready = new Promise((res) => (resolve = res))
+                await ready
+                return resolve
+            }
+
+            async function interpreter(command) {
+                let unlock = await lock()
+                try {
+                    term.pause()
+
+                    for (const c of command.split('\n')) {
+                        try {
+                            if (c === '.stop') {
+                                emitStop()
+                                return
+                            }
+                            if (c === '.restart') {
+                                emitStop()
+                                clear()
+                                await sleep(1000)
+                                emitRun()
+                                return
+                            }
+                            if (c === '.clear') {
+                                term.clear()
+                                return
+                            }
+                            term.set_prompt(ps2)
+                            await cmp.interpreter(
+                                c,
+                                (incomplete) => {
+                                    term.set_prompt(incomplete ? ps2 : ps1)
+                                },
+                                (msg) => {
+                                    term.echo(msg, { newline: false })
+                                },
+                                (err) => {
+                                    term.error(err)
+                                }
+                            )
+                        } catch (e) {
+                            term.error(e)
+                        }
+                    }
+                } finally {
+                    term.resume()
+                    await sleep(10)
+                    unlock()
+                }
+            }
+
+            const el: any = $('#terminal', '.vue-terminal-wrapper')
+            term = el.terminal(interpreter, {
+                greetings: welcomeMessage.value,
+                name: 'codeblocks_repl',
+                height: props.height,
+                prompt: ps1,
+            })
+
+            term.ready = Promise.resolve()
+
+            if (props.eventHub) {
+                props.eventHub.$on('console-log', (msg) => term.echo(msg))
+                props.eventHub.$on('console-err', (msg) => term.error(msg))
+                props.eventHub.$on('clicked-run', () => clear())
+            }
         })
 
-        self.term.ready = Promise.resolve()
+        onBeforeUnmount(() => {
+            if (props.eventHub) {
+                props.eventHub.$off('console-log')
+                props.eventHub.$off('console-err')
+                props.eventHub.$off('clicked-run')
+            }
+        })
 
-        if (this.eventHub) {
-            this.eventHub.$on('console-log', (msg) => self.term.echo(msg))
-            this.eventHub.$on('console-err', (msg) => self.term.error(msg))
-            this.eventHub.$on('clicked-run', () => self.clear())
+        return {
+            compiler,
+            welcomeMessage,
+            emitRun,
+            emitStop,
+            clear,
         }
-    }
-
-    beforeDestroy() {
-        if (this.eventHub) {
-            this.eventHub.$off('console-log')
-            this.eventHub.$off('console-err')
-            this.eventHub.$off('clicked-run')
-        }
-    }
-}
+    },
+})
 </script>
 
 <style lang="css">
@@ -147,9 +170,11 @@ export default class Terminal extends Vue {
     --size: 1.5;
     border-radius: 0px 0px 4px 4px;
 }
+
 .visually-hidden {
     display: none;
 }
+
 /*!
  *       __ _____                     ________                              __
  *      / // _  /__ __ _____ ___ __ _/__  ___/__ ___ ______ __ __  __ ___  / /
@@ -172,6 +197,7 @@ export default class Terminal extends Vue {
 .terminal .terminal-output .format {
     display: inline-block;
 }
+
 .cmd,
 .terminal h1,
 .terminal h2,
@@ -182,6 +208,7 @@ export default class Terminal extends Vue {
 .terminal pre {
     margin: 0;
 }
+
 .cmd .cmd-clipboard {
     all: unset;
     background: transparent !important;
@@ -201,6 +228,7 @@ export default class Terminal extends Vue {
     width: 16px !important;
     z-index: 1000 !important;
 }
+
 .cmd .cursor + span:empty,
 .cmd div.cmd-end-line span[data-text]:last-child,
 .cmd div.cmd-end-line span[data-text]:last-child span,
@@ -214,42 +242,52 @@ export default class Terminal extends Vue {
     -ms-user-select: none;
     user-select: none;
 }
+
 .terminal audio,
 .terminal canvas,
 .terminal img,
 .terminal object {
     cursor: default;
 }
+
 .terminal {
     line-height: normal;
     overflow-y: auto;
     position: relative;
 }
+
 terminal.terminal-temp {
     visibility: hidden;
 }
+
 .terminal {
     contain: content;
 }
+
 body.terminal {
     height: 100%;
     min-height: 100vh;
 }
+
 html {
     height: 100%;
 }
+
 body.full-screen-terminal,
 body.terminal {
     height: 100%;
     margin: 0;
 }
+
 body.full-screen-terminal .terminal {
     height: 100%;
 }
+
 .terminal > div.terminal-fill {
     height: 100%;
     min-height: 100%;
 }
+
 .terminal > .terminal-font .terminal-resizer,
 .terminal > .terminal-resizer {
     all: unset;
@@ -266,20 +304,24 @@ body.full-screen-terminal .terminal {
     width: 100% !important;
     z-index: -1 !important;
 }
+
 .cmd {
     padding: 0;
     position: relative;
     width: 100%;
     z-index: 300;
 }
+
 .terminal .cmd {
     --background: transparent;
 }
+
 .terminal a[tabindex='1000'],
 .terminal a[tabindex='1000']:active,
 .terminal a[tabindex='1000']:focus {
     outline: none;
 }
+
 .cmd.cmd.cmd .cmd-inverted,
 .cmd.cmd.cmd .inverted,
 .terminal .inverted,
@@ -287,19 +329,23 @@ body.full-screen-terminal .terminal {
     background-color: #aaa !important;
     color: #444 !important;
 }
+
 .cmd a[href],
 .terminal .terminal-output > :not(.raw) a[href] {
     color: #0f60ff;
     color: var(--link-color, #0f60ff);
     cursor: pointer;
 }
+
 .cmd a[href]:not(.terminal-inverted),
 .terminal .terminal-output > :not(.raw) a[href]:not(.terminal-inverted) {
     --color: var(--link-color, #0f60ff);
 }
+
 .terminal .terminal-output > :not(.raw) a[href].terminal-inverted {
     background: var(--color, #ccc);
 }
+
 .cmd a[href]:hover,
 .terminal .terminal-output > :not(.raw) a[href]:hover {
     background-color: #0f60ff;
@@ -308,6 +354,7 @@ body.full-screen-terminal .terminal {
     color: var(--background, #444) !important;
     text-decoration: none;
 }
+
 .cmd a[href] span,
 .terminal .terminal-output > :not(.raw) a[href] span {
     --color: var(--link-color, #0f60ff);
@@ -315,6 +362,7 @@ body.full-screen-terminal .terminal {
     color: var(--link-color, #0f60ff) !important;
     text-decoration: underline;
 }
+
 .cmd a[href]:hover span,
 .terminal .terminal-output > :not(.raw) a[href]:hover span {
     background-color: #0f60ff !important;
@@ -323,11 +371,13 @@ body.full-screen-terminal .terminal {
     color: var(--background, #444) !important;
     text-decoration: none;
 }
+
 .cmd .cmd-cursor,
 .cmd .cmd-cursor-line > span,
 .cmd .cmd-cursor-line img {
     display: inline-block;
 }
+
 .cmd .cmd-cursor.cmd-blink .fa,
 .cmd .cmd-cursor.cmd-blink .far,
 .cmd .cmd-cursor.cmd-blink .fas,
@@ -339,35 +389,43 @@ body.full-screen-terminal .terminal {
     -ms-animation: terminal-blink 1s linear infinite;
     animation: terminal-blink 1s linear infinite;
 }
+
 .bar.cmd .cmd-inverted,
 .bar.terminal .inverted {
     box-shadow: -2px 0 0 -1px #aaa;
     box-shadow: -2px 0 0 -1px var(--original-color, #aaa);
 }
+
 .cmd .cmd-prompt,
 .terminal,
 .terminal .terminal-output > div > div {
     display: block;
     height: auto;
 }
+
 .terminal .terminal-output > div:not(.raw) div {
     white-space: nowrap;
 }
+
 .cmd .cmd-prompt > span {
     float: left;
 }
+
 .cmd .cmd-prompt ~ div span[style*='width'],
 .terminal-output span[style*='width'] {
     display: inline-block;
     line-height: 1;
 }
+
 .terminal-ouput span[style*='width'] {
     min-height: 14px;
     min-height: calc(var(--size, 1) * 14px);
 }
+
 .cmd .cmd-prompt span[style*='width'] {
     margin-top: 2px;
 }
+
 .cmd,
 .cmd span:not(.fas):not(.far):not(.fa),
 .terminal,
@@ -376,29 +434,36 @@ body.full-screen-terminal .terminal {
 .terminal-output > :not(.raw) span:not(.fas):not(.far):not(.fa) {
     font-family: monospace;
 }
+
 .cmd,
 .terminal {
     font-size: 12px;
 }
+
 .terminal-output div div:before {
     content: '\0200B';
     display: block;
     float: left;
     width: 0;
 }
+
 .cmd span[data-text]:not(.cmd-inverted):not(.token):not(.emoji),
 .terminal,
 terminal-output
     > div:not(.raw)
     div
-    > span:not(.token):not(.inverted):not(.terminal-inverted):not(.cmd-inverted):not(.terminal-error):not(.emoji) {
+    > span:not(.token):not(.inverted):not(.terminal-inverted):not(.cmd-inverted):not(
+        .terminal-error
+    ):not(.emoji) {
     background-color: #444;
     color: #aaa;
 }
+
 .cmd .cmd-prompt span,
 .cmd span.cmd-prompt {
     background-color: transparent !important;
 }
+
 .cmd .emoji,
 .terminal-output .emoji {
     background-repeat: no-repeat;
@@ -407,6 +472,7 @@ terminal-output
     height: 12px;
     position: relative;
 }
+
 .cmd .far span,
 .cmd .fa span,
 .cmd .fas span,
@@ -418,6 +484,7 @@ terminal-output
     color: transparent !important;
     position: absolute;
 }
+
 .cmd .emoji,
 .cmd .emoji span,
 .terminal-output .emoji,
@@ -425,35 +492,44 @@ terminal-output
     display: inline-block;
     width: 2ch;
 }
+
 .cmd,
 .terminal {
     box-sizing: border-box;
 }
+
 .cmd .cmd-cursor span:not(.token):not(.inverted) {
     background-color: inherit;
     color: inherit;
 }
+
 .cmd .emoji.emoji.emoji.emoji,
 .cmd .emoji.emoji.emoji.emoji span {
     background-color: transparent;
     color: transparent;
 }
+
 .cmd .cmd-cursor * {
     background-color: transparent;
 }
+
 .cmd div {
     clear: both;
 }
+
 .cmd .cmd-prompt + div {
     clear: right;
 }
+
 terminal .terminal-output > div {
     margin-top: -1px;
 }
+
 .terminal-output > div.raw > div * {
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
+
 .terminal .terminal-font {
     float: left;
     font-size: inherit;
@@ -463,41 +539,52 @@ terminal .terminal-output > div {
     position: absolute;
     top: -100%;
 }
+
 .cmd > span:not(.cmd-prompt) {
     float: left;
 }
+
 .cmd .cmd-prompt span.cmd-line {
     display: block;
     float: none;
 }
+
 .terminal table {
     border-collapse: collapse;
 }
+
 .terminal td {
     border: 1px solid #aaa;
 }
+
 .cmd span[data-text]:not(.emoji):not(.fa):not(.fas):not(.far) span {
     background-color: inherit;
     color: inherit;
 }
+
 .cmd [role='presentation'].cmd-cursor-line {
     position: relative;
     z-index: 100;
 }
+
 .cmd .cmd-prompt {
     float: left;
     position: relative;
     z-index: 200;
 }
+
 .cmd [role='presentation']:not(.cmd-cursor-line) {
     overflow: hidden;
 }
+
 .cmd {
     --original-color: var(--color, #aaa);
 }
+
 .cmd a[href] {
     --original-color: var(--link-color, #0f60ff);
 }
+
 @-webkit-keyframes terminal-blink {
     0%,
     50% {
@@ -513,6 +600,7 @@ terminal .terminal-output > div {
         color: var(--original-background, var(--original-color, #aaa));
     }
 }
+
 @-moz-keyframes terminal-blink {
     0%,
     50% {
@@ -528,6 +616,7 @@ terminal .terminal-output > div {
         color: var(--original-background, var(--original-color, #aaa));
     }
 }
+
 @keyframes terminal-blink {
     0%,
     50% {
@@ -543,6 +632,7 @@ terminal .terminal-output > div {
         color: var(--original-background, var(--original-color, #aaa));
     }
 }
+
 @-webkit-keyframes terminal-glow {
     0%,
     50% {
@@ -562,6 +652,7 @@ terminal .terminal-output > div {
         color: inherit;
     }
 }
+
 @-moz-keyframes terminal-glow {
     0%,
     50% {
@@ -581,6 +672,7 @@ terminal .terminal-output > div {
         color: inherit;
     }
 }
+
 @keyframes terminal-glow {
     0%,
     50% {
@@ -598,6 +690,7 @@ terminal .terminal-output > div {
         color: inherit;
     }
 }
+
 @-webkit-keyframes terminal-bar {
     0%,
     50% {
@@ -609,6 +702,7 @@ terminal .terminal-output > div {
         box-shadow: none;
     }
 }
+
 @-moz-keyframes terminal-bar {
     0%,
     50% {
@@ -620,6 +714,7 @@ terminal .terminal-output > div {
         box-shadow: none;
     }
 }
+
 @keyframes terminal-bar {
     0%,
     50% {
@@ -631,6 +726,7 @@ terminal .terminal-output > div {
         box-shadow: none;
     }
 }
+
 @-webkit-keyframes terminal-underline {
     0%,
     50% {
@@ -642,6 +738,7 @@ terminal .terminal-output > div {
         box-shadow: none;
     }
 }
+
 @-moz-keyframes terminal-underline {
     0%,
     50% {
@@ -653,6 +750,7 @@ terminal .terminal-output > div {
         box-shadow: none;
     }
 }
+
 @keyframes terminal-underline {
     0%,
     50% {
@@ -664,6 +762,7 @@ terminal .terminal-output > div {
         box-shadow: none;
     }
 }
+
 .underline-animation .cmd .cmd-cursor.cmd-blink .fa,
 .underline-animation .cmd .cmd-cursor.cmd-blink .far,
 .underline-animation .cmd .cmd-cursor.cmd-blink .fas,
@@ -679,6 +778,7 @@ terminal .terminal-output > div {
     -ms-animation-name: terminal-underline;
     animation-name: terminal-underline;
 }
+
 .glow-animation .cmd .cmd-cursor.cmd-blink .fa,
 .glow-animation .cmd .cmd-cursor.cmd-blink .far,
 .glow-animation .cmd .cmd-cursor.cmd-blink .fas,
@@ -694,6 +794,7 @@ terminal .terminal-output > div {
     -ms-animation-name: terminal-glow;
     animation-name: terminal-glow;
 }
+
 .bar-animation .cmd .cmd-cursor.cmd-blink .fa,
 .bar-animation .cmd .cmd-cursor.cmd-blink .far,
 .bar-animation .cmd .cmd-cursor.cmd-blink .fas,
@@ -709,10 +810,12 @@ terminal .terminal-output > div {
     -ms-animation-name: terminal-bar;
     animation-name: terminal-bar;
 }
+
 @supports (-ms-ime-align: auto) {
     .cmd .cmd-clipboard {
         margin-left: -9999px;
     }
+
     @keyframes terminal-blink {
         0%,
         50% {
@@ -750,13 +853,16 @@ terminal .terminal-output > div {
         }
     }
 }
+
 @media (-ms-high-contrast: active), (-ms-high-contrast: none) {
     .cmd .cmd-clipboard {
         margin-left: -9999px;
     }
+
     .underline-animation .cursor.blink span span {
         margin-top: 1px;
     }
+
     @-ms-keyframes terminal-blink {
         0%,
         50% {
@@ -770,6 +876,7 @@ terminal .terminal-output > div {
         }
     }
 }
+
 .cmd span[data-text]::-moz-selection,
 .cmd span[data-text]:not(.far):not(.fa):not(.fas) span::-moz-selection,
 .terminal .terminal-output .raw div::-moz-selection,
@@ -789,6 +896,7 @@ terminal .terminal-output > div {
     background-color: #aaa;
     color: #444;
 }
+
 .cmd span[data-text]:not(.far):not(.fa):not(.fas) span::selection,
 .terminal .terminal-output .raw div::selection,
 .terminal .terminal-output::selection,
@@ -807,6 +915,7 @@ terminal .terminal-output > div {
     background-color: hsla(0, 0%, 66.7%, 0.99);
     color: #444;
 }
+
 .cmd .emoji::-moz-selection,
 .cmd .emoji span::-moz-selection,
 .cmd textarea::-moz-selection,
@@ -815,6 +924,7 @@ terminal .terminal-output > div {
     background-color: transparent !important;
     color: transparent !important;
 }
+
 .cmd .emoji::selection,
 .cmd .emoji span::selection,
 .cmd textarea::selection,
@@ -823,11 +933,13 @@ terminal .terminal-output > div {
     background-color: transparent !important;
     color: transparent !important;
 }
+
 .terminal .terminal-output > :not(.raw) .terminal-error,
 .terminal .terminal-output > :not(.raw) .terminal-error * {
     color: red;
     color: var(--error-color, red);
 }
+
 .tilda {
     left: 0;
     position: fixed;
@@ -835,17 +947,21 @@ terminal .terminal-output > div {
     width: 100%;
     z-index: 1100;
 }
+
 .ui-dialog-content .terminal {
     box-sizing: border-box;
     height: 100%;
     width: 100%;
 }
+
 .ui-dialog .ui-dialog-content.dterm {
     padding: 0;
 }
+
 .clear {
     clear: both;
 }
+
 .terminal .terminal-fill {
     border: none;
     box-sizing: border-box;
@@ -858,25 +974,31 @@ terminal .terminal-output > div {
     top: -100%;
     width: 100%;
 }
+
 .cmd-editable,
 .terminal,
 .terminal .terminal-fill {
     padding: 10px;
 }
+
 .cmd-editable {
     padding-top: 0;
 }
+
 .terminal {
     padding-bottom: 0;
 }
+
 .terminal .cmd {
     margin-bottom: 10px;
     position: relative;
 }
+
 .terminal .partial,
 .terminal .partial > div {
     display: inline-block;
 }
+
 @supports (--css: variables) {
     .cmd,
     .cmd div,
@@ -886,14 +1008,18 @@ terminal .terminal-output > div {
     .terminal-output > :not(.raw) div,
     .terminal-output
         > :not(.raw)
-        span[data-text]:not(.token):not(.inverted):not(.terminal-inverted):not(.cmd-inverted):not(.terminal-error):not(.emoji) {
+        span[data-text]:not(.token):not(.inverted):not(.terminal-inverted):not(.cmd-inverted):not(
+            .terminal-error
+        ):not(.emoji) {
         background-color: var(--background, #444);
         color: var(--color, #aaa);
     }
+
     .terminal span[style*='--length'] {
         display: inline-block;
         width: calc(var(--length, 1) * var(--char-width, 7.23438) * 1px);
     }
+
     .cmd,
     .cmd div,
     .cmd span,
@@ -903,23 +1029,28 @@ terminal .terminal-output > div {
     .terminal-output > :not(.raw) span {
         font-size: calc(var(--size, 1) * 12px);
     }
+
     .cmd .emoji,
     .terminal-output .emoji {
         height: calc(var(--size, 1) * 12px);
     }
+
     .cmd .clipboard {
         top: calc(var(--size, 1) * 14 * var(--cursor-line, 0) * 1px);
     }
+
     .cmd.cmd.cmd .cmd-inverted,
     .cmd.cmd.cmd .inverted,
     .terminal .inverted {
         background-color: var(--color, #aaa) !important;
         color: var(--background, #444) !important;
     }
+
     .cmd .cmd-cursor.cmd-blink {
         background-color: var(--background, #444);
         color: var(--color, #aaa);
     }
+
     .cmd .cmd-cursor.cmd-blink .emoji,
     .cmd .cmd-cursor.cmd-blink .fa,
     .cmd .cmd-cursor.cmd-blink .far,
@@ -932,10 +1063,12 @@ terminal .terminal-output > div {
         -ms-animation: var(--animation, terminal-blink) 1s infinite linear;
         animation: var(--animation, terminal-blink) 1s infinite linear;
     }
+
     .cmd .cmd-cursor.cmd-blink .emoji span {
         background: transparent;
         color: transparent;
     }
+
     .cmd span[data-text]:not(.far):not(.fa):not(.fas):not(.emoji) span::-moz-selection,
     .terminal .terminal-output .raw div::-moz-selection,
     .terminal .terminal-output::-moz-selection,
@@ -957,13 +1090,16 @@ terminal .terminal-output > div {
         background-color: var(--color, #aaa);
         color: var(--background, #444);
     }
+
     .terminal .terminal-output div div a::-moz-selection {
         background-color: var(--link-color, rgba(15, 96, 255, 0.99)) !important;
         color: var(--background, #444) !important;
     }
+
     .terminal .terminal-output div div a:hover::-moz-selection {
         background-color: var(--link-color, rgba(2, 50, 144, 0.99)) !important;
     }
+
     .cmd span[data-text]:not(.far):not(.fa):not(.fas):not(.emoji) span::selection,
     .terminal .terminal-output .raw div::selection,
     .terminal .terminal-output::selection,
@@ -985,14 +1121,17 @@ terminal .terminal-output > div {
         background-color: var(--color, hsla(0, 0%, 66.7%, 0.99)) !important;
         color: var(--background, #444) !important;
     }
+
     .terminal .terminal-output div div a::selection {
         background-color: var(--link-color, rgba(15, 96, 255, 0.99)) !important;
         color: var(--background, #444) !important;
     }
+
     .terminal .terminal-output div div a:hover::selection {
         background-color: var(--link-color, rgba(2, 50, 144, 0.99)) !important;
     }
 }
+
 @supports (-ms-ime-align: auto) {
     .cmd span[data-text]::selection,
     .terminal .terminal-output div div::selection,
@@ -1009,6 +1148,7 @@ terminal .terminal-output > div {
         color: #444;
     }
 }
+
 .cmd .style .token.string,
 .cmd .token.entity,
 .cmd .token.operator,
@@ -1025,6 +1165,7 @@ terminal .terminal-output > div {
 .terminal .token.variable {
     background-color: inherit;
 }
+
 .cmd .cursor-wrapper ul {
     float: left;
     left: 0;
@@ -1034,44 +1175,56 @@ terminal .terminal-output > div {
     position: absolute;
     top: 14px;
 }
+
 .cmd .cursor-wrapper li {
     cursor: pointer;
     white-space: nowrap;
 }
+
 .cmd .cursor-wrapper li:hover {
     background: #aaa;
     color: #444;
 }
+
 .cursor-wrapper {
     position: relative;
 }
+
 .terminal-output div[style*='100%;'] {
     overflow: hidden;
 }
+
 .terminal-output img {
     display: block;
 }
+
 .cmd img {
     border: 1px solid transparent;
     height: 14px;
     height: calc(var(--size, 1) * 14px);
 }
+
 .cmd-cursor img {
     border-color: #ccc;
     border-color: var(--color, #ccc);
 }
+
 .terminal-output svg.terminal-broken-image {
     height: calc(var(--size, 1) * 14px);
 }
+
 .terminal-output svg.terminal-broken-image use {
     fill: var(--color, #ccc);
 }
+
 .terminal-error {
     --color: var(--error-color);
 }
+
 .terminal-glow {
     --animation: terminal-glow;
 }
+
 .terminal-glow .cmd-prompt > span,
 .terminal-glow .terminal-output > div a[href],
 .terminal-glow .terminal-output > div span,
@@ -1081,12 +1234,14 @@ terminal .terminal-output > div {
     text-shadow: 1px 1px 5px #ccc;
     text-shadow: 1px 1px 5px var(--color, #ccc);
 }
+
 .terminal-scroll-marker {
     height: 1px;
     margin-top: -1px;
     position: relative;
     z-index: 100;
 }
+
 .terminal-scroll-marker div {
     bottom: 0;
     left: 0;
@@ -1094,21 +1249,26 @@ terminal .terminal-output > div {
     right: 0;
     z-index: 200;
 }
+
 .terminal-less {
     overscroll-behavior-y: contain;
     touch-action: none;
 }
+
 .terminal-mobile.terminal-less .terminal-wrapper {
     pointer-events: none;
 }
+
 .cmd-editable,
 .terminal-mobile.terminal-less .terminal-output a {
     pointer-events: visible;
 }
+
 .cmd-editable:before {
     content: attr(data-cmd-prompt);
     display: inline-block;
 }
+
 .cmd-editable {
     background: transparent;
     bottom: 0;
@@ -1122,37 +1282,45 @@ terminal .terminal-output > div {
     top: calc(var(--terminal-y, var(--cmd-y, 0)) + var(--terminal-scroll, 0) * 1px);
     z-index: 500;
 }
+
 .terminal::-webkit-scrollbar {
     background: var(--background, #444);
     height: 6px;
     width: 6px;
 }
+
 .terminal::-webkit-scrollbar-thumb,
 .terminal::-webkit-scrollbar-thumb:hover {
     background: var(--color, #aaa);
 }
+
 .terminal {
     scrollbar-color: #aaa #444;
     scrollbar-color: var(--color, #aaa) var(--background, #444);
     scrollbar-width: thin;
 }
+
 .cmd .token {
     --original-color: var(--color);
 }
+
 .cmd .terminal-blink,
 .terminal .terminal-blink {
     animation: terminal-ansi-blink 1s steps(2, start) infinite;
     -webkit-animation: terminal-ansi-blink 1s steps(2, start) infinite;
 }
+
 @keyframes terminal-ansi-blink {
     to {
         color: var(--background);
     }
 }
+
 @-webkit-keyframes terminal-ansi-blink {
     to {
         color: var(--background);
     }
 }
+
 /*# sourceMappingURL=jquery.terminal.min.css.map */
 </style>
