@@ -383,6 +383,9 @@ export default defineComponent({
         })
 
         const outputParsers: ComputedRef<IListItemData[]> = computed(() => {
+            if (l == undefined) {
+                return []
+            }
             return [
                 { label: l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
                 { label: l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
