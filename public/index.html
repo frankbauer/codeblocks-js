@@ -28,13 +28,17 @@
                 continue.</strong>
         </noscript>
         
-        <div codeblockseditor data-compiler="javascript" data-compiler-version="101" data-run-code="true"
+        <div codeblockseditor data-compiler="java" data-compiler-version="101" data-run-code="true"
             data-max-characters="10000" data-execution-timeout="5000" data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]' >
             <loading>
                 <div></div>
                 <div></div>
             </loading>
-            <block data-hidden="true">console.log("Hello2")</block>
+            <block data-hidden="true">public class App {
+    public static void main(String[] args){
+            System.out.println("Hello World");
+    }
+}</block>
             <Data data-name="HELLO">{"hello":42}</Data>
             <script as="data" type="application/json" data-name="WORLD">{"world":1}</script>
             <script as="playground" type="application/javascript" data-generate-template="true" data-should-autoreset="true" data-version="102">exports = {
