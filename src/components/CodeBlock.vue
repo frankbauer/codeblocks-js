@@ -97,7 +97,7 @@ export default class CodeBlock extends BaseBlock {
     @Prop({ default: undefined }) tagSet!: IRandomizerSet
     @Prop({
         required: true,
-        validator: function (b) {
+        validator: function (b: any) {
             if (b === null || b.content === undefined) {
                 return false
             }

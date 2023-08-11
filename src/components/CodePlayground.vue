@@ -89,7 +89,7 @@ export default class CodePlayground extends BaseBlock {
     @Prop({ required: true }) finalOutputObject!: IScriptOutputObject
     @Prop({
         required: true,
-        validator: function (b) {
+        validator: function (b: any) {
             if (!b.obj) {
                 return false
             }
