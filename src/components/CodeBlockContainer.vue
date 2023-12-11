@@ -331,7 +331,6 @@ import { defineComponent, toRefs, ref, computed, PropType, getCurrentInstance, n
 import { IListItemData } from '@/lib/ICompilerRegistry'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
-import { blocklyLoader } from '@/lib/BlockloadManagers/BlocklyManager'
 import { IOnChangeOrder, IOnReloadResourcesInfo } from './CodeBlocks.vue'
 import { globalState } from '@/lib/globalState'
 
@@ -378,10 +377,6 @@ export default defineComponent({
                 {
                     label: l('CodeBlockContainer.Block'),
                     value: KnownBlockTypes.BLOCK,
-                },
-                {
-                    label: l('CodeBlockContainer.Blockly'),
-                    value: KnownBlockTypes.BLOCKLY,
                 },
                 {
                     label: l('CodeBlockContainer.REPL'),
@@ -471,11 +466,7 @@ export default defineComponent({
             set(v: string) {},
         })
         const hasExtendedSettings = computed((): boolean => {
-            return (
-                type.value == KnownBlockTypes.PLAYGROUND ||
-                type.value == KnownBlockTypes.BLOCK ||
-                type.value == KnownBlockTypes.BLOCKLY
-            )
+            return type.value == KnownBlockTypes.PLAYGROUND || type.value == KnownBlockTypes.BLOCK
         })
         const isVersionedPlayground = computed((): boolean => {
             return type.value == KnownBlockTypes.PLAYGROUND
@@ -487,7 +478,7 @@ export default defineComponent({
             return type.value == KnownBlockTypes.BLOCK
         })
         const canDefinePlacement = computed(() => {
-            return type.value == KnownBlockTypes.PLAYGROUND || type.value == KnownBlockTypes.BLOCKLY
+            return type.value == KnownBlockTypes.PLAYGROUND
         })
         const shouldAutoReset = computed({
             get(): boolean {
@@ -632,12 +623,6 @@ export default defineComponent({
                         block.value.content =
                             '{\n    init: function(canvasElement, outputElement, scope, runner) {\n\n    },\n    addArgumentsTo(args) {},\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
                     }
-                } else if (
-                    ret.type == KnownBlockTypes.BLOCKLY &&
-                    block.value.blockly.toolbox.categories.length === 0 &&
-                    editMode.value
-                ) {
-                    block.value.blockly.toolbox = blocklyLoader.defaultToolbox
                 }
                 ctx.emit('type-change', ret)
             },
@@ -781,9 +766,7 @@ export default defineComponent({
                                 k != 'hasCode' &&
                                 k != 'isLast' &&
                                 k != 'readyCount' &&
-                                k != 'noContent' &&
-                                (block.value.type === KnownBlockTypes.BLOCKLY ||
-                                    k != 'blockly'))) &&
+                                k != 'noContent')) &&
                         k != 'uuid' &&
                         k != 'scopeUUID' &&
                         k != 'scopeSelector'

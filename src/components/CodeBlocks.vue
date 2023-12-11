@@ -40,7 +40,7 @@
             @change-order="onChangeOrder"
         >
             <CodeBlock
-                v-if="block.hasCode && block.type != 'BLOCKLY'"
+                v-if="block.hasCode"
                 :block="block"
                 :theme="themeForBlock(block)"
                 :mode="mimeType"
@@ -78,18 +78,6 @@
                 :tagSet="activeTagSet"
                 :language="language"
                 @ready="blockBecameReady"
-            />
-            <Blockly
-                v-else-if="block.type == 'BLOCKLY'"
-                :block="block"
-                :mode="mimeType"
-                :theme="themeForBlock(block)"
-                :editMode="editMode"
-                :readonly="readonly"
-                :tagSet="activeTagSet"
-                :emitWhenTypingInViewMode="continuousCompile"
-                :blockInfo="blockInfo"
-                @code-changed-in-view-mode="onViewCodeChange"
             />
             <CodeREPL
                 v-if="block.type == 'REPL'"
@@ -260,8 +248,6 @@ function formatOutput(result) {
         })
         .join('\n')
 }
-
-const Blockly = () => import('@/components/Blockly/Blockly.vue')
 
 export interface IOnTypeChangeInfo {
     type: KnownBlockTypes
@@ -860,8 +846,6 @@ export default defineComponent({
         CodeBlock,
         CodePlayground,
         SimpleText,
-        Blockly,
-        CodePanel,
         CodeREPL,
         DataBlock,
     },

@@ -78,16 +78,6 @@ const emptyBlockBuilder = (): IBlockDataExtended => {
         getThemeForBlock: (bl: ICodeBlockDataState) => {
             return ''
         },
-        blockly: {
-            _blockErrors: [],
-            useOverride: false,
-            toolbox: {
-                categories: [],
-            },
-            showControls: false,
-            toolboxOverride: '',
-            blocks: [],
-        },
     }
 }
 

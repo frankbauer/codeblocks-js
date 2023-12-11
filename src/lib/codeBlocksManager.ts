@@ -19,7 +19,6 @@ import {
     IRandomizerSetTag,
     ICodeBlockDataState,
     IBlockDataBase,
-    IBlockDataBlockly,
     IBlockloadManager,
     IBlockElementData,
     CodeExpansionType,
@@ -27,7 +26,6 @@ import {
 
 //get loaders
 import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
-import blocklyInstaller from '@/lib/BlockloadManagers/BlocklyManager'
 import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
 import dataInstaller from '@/lib/BlockloadManagers/DataManager'
 import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
@@ -35,7 +33,6 @@ import { trim } from 'jquery'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
-blocklyInstaller(loaders)
 playgroundInstaller(loaders)
 REPLInstaller(loaders)
 dataInstaller(loaders)
@@ -125,7 +122,6 @@ export class BlockData extends Vue implements IBlockData {
     width!: string
     height!: string
     align!: string
-    blockly!: IBlockDataBlockly
     lineCountHint!: number
     name!: string
     _oac?: () => string //used by Blockly to re-place the actualContent-Method while keeping the old implementation around
@@ -494,16 +490,6 @@ class InternalCodeBlocksManager {
                 obj: null,
                 name: `v${data.blocks.length}`,
                 lineCountHint: -1,
-                blockly: {
-                    showControls: false,
-                    useOverride: false,
-                    toolbox: {
-                        categories: [],
-                    },
-                    toolboxOverride: '',
-                    blocks: [],
-                    _blockErrors: [],
-                },
                 errors: [],
                 readonly: isTrue(inBlock.readonly),
                 static: isTrue(inBlock.static),
@@ -706,16 +692,6 @@ class InternalCodeBlocksManager {
                             shouldAutoreset: false,
                             shouldReloadResources: false,
                             generateTemplate: true,
-                            blockly: {
-                                showControls: false,
-                                useOverride: false,
-                                toolboxOverride: '',
-                                toolbox: {
-                                    categories: [],
-                                },
-                                blocks: [],
-                                _blockErrors: [],
-                            },
                             lineCountHint: -1,
                         }
                         data.blocks.push(self.constructBlock(data, block))

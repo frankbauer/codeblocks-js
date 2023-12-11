@@ -20,11 +20,9 @@ import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
-import CodePanel from '@/components/CodePanel.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
 import DataBlock from '@/components/DataBlock.vue'
 
-const Blockly = () => import('@/components/Blockly/Blockly.vue')
 export default defineComponent({
     name: 'CodeBlocksEditor',
     extends: CodeBlocks,
@@ -34,8 +32,6 @@ export default defineComponent({
         CodeBlock,
         CodePlayground,
         SimpleText,
-        Blockly,
-        CodePanel,
         CodeREPL,
         DataBlock,
     },

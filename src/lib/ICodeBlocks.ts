@@ -1,6 +1,5 @@
 import { ICompilerID, IListItemData } from './ICompilerRegistry'
 import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
-import { IBlockDefinition, IBlocklyToolbox } from './IBlocklyHelper'
 
 export enum KnownBlockTypes {
     PLAYGROUND = 'PLAYGROUND',
@@ -8,7 +7,6 @@ export enum KnownBlockTypes {
     BLOCKHIDDEN = 'BLOCK-hidden',
     BLOCKSTATIC = 'BLOCK-static',
     BLOCK = 'BLOCK',
-    BLOCKLY = 'BLOCKLY',
     REPL = 'REPL',
     DATA = 'DATA',
 }
@@ -46,6 +44,7 @@ export interface IRandomizerSetTag {
     tag: string
     value: string
 }
+
 export interface IRandomizerSettings {
     active: boolean
     previewIndex: number
@@ -91,20 +90,12 @@ export interface IBlockElementData {
     name?: string
 }
 
-export interface IBlockDataBlockly {
-    toolbox: IBlocklyToolbox
-    blocks: IBlockDefinition[]
-    _blockErrors: IBlockError[]
-    useOverride: boolean
-    toolboxOverride: string
-    showControls: boolean
-}
-
 export interface ICodeBlockDataState {
     readonly: boolean
     static: boolean
     hidden: boolean
 }
+
 export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataState, IBlockDataData {
     hasCode: boolean
     type: KnownBlockTypes
@@ -127,21 +118,23 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
     shouldAutoreset: boolean
     shouldReloadResources: boolean
     generateTemplate: boolean
-    blockly: IBlockDataBlockly
     lineCountHint: number
     as?: KnownBlockTypes
 }
 
 export interface IBlockData extends IBlockDataBase {
     getThemeForBlock(bl: ICodeBlockDataState): string
+
     readonly themeForCodeBlock: string
 }
 
 export interface IGlobalSettings {
     baseurl: string
 }
+
 export interface IGlobalState extends IGlobalSettings {
     format_info(text: string): string
+
     format_error(text: string): string
 
     /**
@@ -159,10 +152,13 @@ export interface IGlobalState extends IGlobalSettings {
         magicString?: string,
         resultData?: object | any[]
     ): IProcessedScriptOutput
+
     mimeType(language: string): string
+
     knownLanguages(): IListItemData[]
 
     refreshAllCodeMirrors(): void
+
     refreshAllCodeMirrorsSync(): void
 
     itemForValue(items: IListItemData[], value: string): IListItemData
