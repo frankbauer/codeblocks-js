@@ -1,6 +1,5 @@
 <script lang="ts">
-import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import { defineComponent, computed, PropType, toRefs } from 'vue'
 import CodeBlocks, {
     IOnTypeChangeInfo,
     IOnVisibleLinesChangeInfo,
@@ -11,173 +10,345 @@ import CodeBlocks, {
     IOnGenerateTemplateInfo,
     IOnChangeOrder,
     IOnReloadResourcesInfo,
+    codeBlockSetup,
 } from '@/components/CodeBlocks.vue'
 import { KnownBlockTypes, CodeOutputTypes } from '@/lib/ICodeBlocks'
+import { IMainBlock } from '@/lib/codeBlocksManager'
+import compilerRegistry from '@/lib/CompilerRegistry'
+import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
+import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
+import CodePlayground from '@/components/CodePlayground.vue'
+import SimpleText from '@/components/SimpleText.vue'
+import CodePanel from '@/components/CodePanel.vue'
+import CodeREPL from '@/components/CodeREPL.vue'
+import DataBlock from '@/components/DataBlock.vue'
 
-var mixin = {
-    created: function () {
-        console.log(1)
+const Blockly = () => import('@/components/Blockly/Blockly.vue')
+export default defineComponent({
+    name: 'CodeBlocksEditor',
+    extends: CodeBlocks,
+    components: {
+        CodeBlockContainer,
+        CodeBlocksSettings,
+        CodeBlock,
+        CodePlayground,
+        SimpleText,
+        Blockly,
+        CodePanel,
+        CodeREPL,
+        DataBlock,
     },
-}
-@Component
-export default class CodeBlocksEditor extends CodeBlocks {
-    get editMode(): boolean {
-        return true
-    }
-
-    onTypeChange(nfo: IOnTypeChangeInfo): void {
-        let bl = this.blockById(nfo.id)
-        if (bl === undefined) {
-            return
-        }
-
-        bl.type = nfo.type
-        bl.hidden = nfo.hidden
-        bl.static = nfo.static
-        bl.hasCode = nfo.hasCode
-    }
-
-    onVisibleLinesChange(nfo: IOnVisibleLinesChangeInfo): void {
-        let bl = this.blockById(nfo.id)
-        if (bl === undefined) {
-            return
-        }
-
-        if (nfo.visibleLines != 'auto' && isNaN(nfo.visibleLines)) {
-            bl.visibleLines = 'auto'
-        } else {
-            bl.visibleLines = nfo.visibleLines
-        }
-    }
-    onPlacementChange(nfo: IOnPlacementChangeInfo): void {
-        let bl = this.blockById(nfo.id)
-        if (bl === undefined) {
-            return
-        }
-
-        bl.width = nfo.width
-        bl.height = nfo.height
-        bl.align = nfo.align
-    }
-    onCompilerChange(v: string): void {
-        const c = this.$compilerRegistry.getCompiler({ languageType: v })
-        if (c !== undefined) {
-            console.log('Selected Compiler', c, v, this.blockInfo.compiler)
-            this.blockInfo.compiler.languageType = v
-            this.blockInfo.compiler.version = c.version
-            this.blockInfo.language = c.language
-
-            console.log('PRELOADING')
-            c.preload()
-        }
-    }
-    onCompilerVersionChange(v: string): void {
-        console.log('Selected Version', v, this.blockInfo.compiler.languageType)
-        const c = this.$compilerRegistry.getCompiler({
-            languageType: this.blockInfo.compiler.languageType,
-            version: v,
+    props: { blockInfo: { required: true, type: Object as PropType<IMainBlock> } },
+    setup(props, ctx) {
+        const { blockInfo } = toRefs(props)
+        const editMode = computed((): boolean => {
+            return true
         })
-        this.blockInfo.compiler.version = v
+        const {
+            didInitialize,
+            outputHTML,
+            output,
+            sansoutput,
+            didClip,
+            _finalOutputObject,
+            eventHub,
+            didRunOnce,
+            bookmarkedBlock,
+            triggerRecompileWhenFinished,
+            continuousCodeUpdateTimer,
+            continuousCompile,
+            finalOutputObject,
+            options,
+            blocks,
+            language,
+            blockid,
+            executionTimeout,
+            maxCharacters,
+            compiler,
+            runCode,
+            domLibraries,
+            workerLibraries,
+            solutionTheme,
+            codeTheme,
+            readonly,
+            outputParser,
+            hasOutput,
+            mimeType,
+            isReady,
+            canRun,
+            randomizerActive,
+            activeTagSet,
+            completeSource,
+            showGlobalMessages,
+            playgrounds,
+            dataBlocks,
+            outputElement,
+            addonClass,
+            backgroundColorClass,
+            hasREPL,
+            canStop,
+            hasBookmark,
+            panelBlock,
+            blockBecameReady,
+            tagSet,
+            themeForBlock,
+            blockById,
+            onPlaygroundChangedOutput,
+            resetOutput,
+            log,
+            logError,
+            logInfo,
+            processDiagnostics,
+            clearDiagnostics,
+            loadLibraries,
+            finishedExecution,
+            stop,
+            run,
+            onkey,
+            onBookmarkBlock,
+            onViewCodeChange,
+            onRunFinished,
+            onRunFromPlayground,
+        } = codeBlockSetup(blockInfo, editMode)
 
-        if (c !== undefined) {
-            this.blockInfo.language = c.language
-
-            console.log('PRELOADING')
-            c.preload()
+        const onTypeChange = (nfo: IOnTypeChangeInfo): void => {
+            let bl = blockById(nfo.id)
+            if (bl === undefined) {
+                return
+            }
+            bl.type = nfo.type
+            bl.hidden = nfo.hidden
+            bl.static = nfo.static
+            bl.hasCode = nfo.hasCode
         }
-    }
-    onRunStateChange(v: boolean): void {
-        this.blockInfo.runCode = v
-    }
-    onContinousCompileStateChange(v: boolean): void {
-        this.blockInfo.continuousCompilation = v
-    }
-    onMessagePassingChange(v: boolean): void {
-        this.blockInfo.messagePassing = v
-    }
-    onKeepAliveChange(v: boolean): void {
-        this.blockInfo.keepAlive = v
-    }
-    onPersistentArgumentsChange(v: boolean): void {
-        if (v === false) {
-            this.blockInfo.clearDefaultArgs()
+        const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {
+            let bl = blockById(nfo.id)
+            if (bl === undefined) {
+                return
+            }
+            if (nfo.visibleLines != 'auto' && isNaN(nfo.visibleLines)) {
+                bl.visibleLines = 'auto'
+            } else {
+                bl.visibleLines = nfo.visibleLines
+            }
         }
-        this.blockInfo.persistentArguments = v
-    }
-    onLanguageChange(v: string): void {
-        this.blockInfo.language = v
-    }
-    onCharacterLimitChange(v: number): void {
-        this.blockInfo.maxCharacters = v
-    }
-    onTimeoutChange(v: number): void {
-        this.blockInfo.executionTimeout = v
-    }
-    onWorkerLibChange(v: string[]): void {
-        this.blockInfo.workerLibs = v
-    }
-    onDomLibChange(v: string[]): void {
-        this.blockInfo.domLibs = v
-    }
-    onScriptVersionChange(nfo: IOnScriptVersionChangeInfo): void {
-        let bl = this.blockById(nfo.id)
-        if (bl === undefined) {
-            return
+        const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {
+            let bl = blockById(nfo.id)
+            if (bl === undefined) {
+                return
+            }
+            bl.width = nfo.width
+            bl.height = nfo.height
+            bl.align = nfo.align
         }
-        bl.version = nfo.version
-        if (bl.obj) {
-            bl.obj.version = nfo.version
+        const onCompilerChange = (v: string): void => {
+            const c = compilerRegistry.getCompiler({ languageType: v })
+            if (c !== undefined) {
+                console.log('Selected Compiler', c, v, blockInfo.value.compiler)
+                blockInfo.value.compiler.languageType = v
+                blockInfo.value.compiler.version = c.version
+                blockInfo.value.language = c.language
+                console.log('PRELOADING')
+                c.preload()
+            }
         }
-    }
-    onSetAutoReset(nfo: IOnSetAutoResetInfo): void {
-        let bl = this.blockById(nfo.id)
-        if (bl === undefined) {
-            return
+        const onCompilerVersionChange = (v: string): void => {
+            console.log('Selected Version', v, blockInfo.value.compiler.languageType)
+            const c = compilerRegistry.getCompiler({
+                languageType: blockInfo.value.compiler.languageType,
+                version: v,
+            })
+            blockInfo.value.compiler.version = v
+            if (c !== undefined) {
+                blockInfo.value.language = c.language
+                console.log('PRELOADING')
+                c.preload()
+            }
         }
-        bl.shouldAutoreset = nfo.shouldAutoreset
-    }
-
-    onReloadResources(nfo: IOnReloadResourcesInfo): void {
-        let bl = this.blockById(nfo.id)
-        if (bl === undefined) {
-            return
+        const onRunStateChange = (v: boolean): void => {
+            blockInfo.value.runCode = v
         }
-        bl.shouldReloadResources = nfo.shouldReloadResources
-    }
-
-    onSetGenerateTemplate(nfo: IOnGenerateTemplateInfo): void {
-        let bl = this.blockById(nfo.id)
-        if (bl === undefined) {
-            return
+        const onContinousCompileStateChange = (v: boolean): void => {
+            blockInfo.value.continuousCompilation = v
         }
-        bl.generateTemplate = nfo.generateTemplate
-    }
-
-    onThemeChange(nfo: IOnThemeChangeInfo): void {
-        this.blockInfo.solutionTheme = nfo.solution
-        this.blockInfo.codeTheme = nfo.code
-    }
-    moveUp(idx: number): void {
-        this.blockInfo.moveUp(idx)
-    }
-    moveDown(idx: number): void {
-        this.blockInfo.moveDown(idx)
-    }
-    onChangeOrder(nfo: IOnChangeOrder): void {
-        let bl = this.blockById(nfo.id)
-        if (bl === undefined) {
-            return
+        const onMessagePassingChange = (v: boolean): void => {
+            blockInfo.value.messagePassing = v
         }
-        this.blockInfo.changeOrder(nfo.id, nfo.newID)
-    }
-    addNewBlock(): void {
-        this.blockInfo.addNewBlock()
-    }
-    removeBlock(idx: number): void {
-        this.blockInfo.removeBlock(idx)
-    }
-    onOutputParserChange(v: CodeOutputTypes): void {
-        this.blockInfo.outputParser = v
-    }
-}
+        const onKeepAliveChange = (v: boolean): void => {
+            blockInfo.value.keepAlive = v
+        }
+        const onPersistentArgumentsChange = (v: boolean): void => {
+            if (v === false) {
+                blockInfo.value.clearDefaultArgs()
+            }
+            blockInfo.value.persistentArguments = v
+        }
+        const onLanguageChange = (v: string): void => {
+            blockInfo.value.language = v
+        }
+        const onCharacterLimitChange = (v: number): void => {
+            blockInfo.value.maxCharacters = v
+        }
+        const onTimeoutChange = (v: number): void => {
+            blockInfo.value.executionTimeout = v
+        }
+        const onWorkerLibChange = (v: string[]): void => {
+            blockInfo.value.workerLibs = v
+        }
+        const onDomLibChange = (v: string[]): void => {
+            blockInfo.value.domLibs = v
+        }
+        const onScriptVersionChange = (nfo: IOnScriptVersionChangeInfo): void => {
+            let bl = blockById(nfo.id)
+            if (bl === undefined) {
+                return
+            }
+            bl.version = nfo.version
+            if (bl.obj) {
+                bl.obj.version = nfo.version
+            }
+        }
+        const onSetAutoReset = (nfo: IOnSetAutoResetInfo): void => {
+            let bl = blockById(nfo.id)
+            if (bl === undefined) {
+                return
+            }
+            bl.shouldAutoreset = nfo.shouldAutoreset
+        }
+        const onReloadResources = (nfo: IOnReloadResourcesInfo): void => {
+            let bl = blockById(nfo.id)
+            if (bl === undefined) {
+                return
+            }
+            bl.shouldReloadResources = nfo.shouldReloadResources
+        }
+        const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {
+            let bl = blockById(nfo.id)
+            if (bl === undefined) {
+                return
+            }
+            bl.generateTemplate = nfo.generateTemplate
+        }
+        const onThemeChange = (nfo: IOnThemeChangeInfo): void => {
+            blockInfo.value.solutionTheme = nfo.solution
+            blockInfo.value.codeTheme = nfo.code
+        }
+        const moveUp = (idx: number): void => {
+            blockInfo.value.moveUp(idx)
+        }
+        const moveDown = (idx: number): void => {
+            blockInfo.value.moveDown(idx)
+        }
+        const onChangeOrder = (nfo: IOnChangeOrder): void => {
+            let bl = blockById(nfo.id)
+            if (bl === undefined) {
+                return
+            }
+            blockInfo.value.changeOrder(nfo.id, nfo.newID)
+        }
+        const addNewBlock = (): void => {
+            blockInfo.value.addNewBlock()
+        }
+        const removeBlock = (idx: number): void => {
+            blockInfo.value.removeBlock(idx)
+        }
+        const onOutputParserChange = (v: CodeOutputTypes): void => {
+            blockInfo.value.outputParser = v
+        }
+        return {
+            didInitialize,
+            outputHTML,
+            output,
+            sansoutput,
+            didClip,
+            _finalOutputObject,
+            eventHub,
+            didRunOnce,
+            bookmarkedBlock,
+            triggerRecompileWhenFinished,
+            continuousCodeUpdateTimer,
+            continuousCompile,
+            finalOutputObject,
+            options,
+            blocks,
+            language,
+            blockid,
+            executionTimeout,
+            maxCharacters,
+            compiler,
+            runCode,
+            domLibraries,
+            workerLibraries,
+            solutionTheme,
+            codeTheme,
+            readonly,
+            outputParser,
+            editMode,
+            hasOutput,
+            mimeType,
+            isReady,
+            canRun,
+            randomizerActive,
+            activeTagSet,
+            completeSource,
+            showGlobalMessages,
+            playgrounds,
+            dataBlocks,
+            outputElement,
+            addonClass,
+            backgroundColorClass,
+            hasREPL,
+            canStop,
+            hasBookmark,
+            panelBlock,
+            blockBecameReady,
+            tagSet,
+            themeForBlock,
+            blockById,
+            onPlaygroundChangedOutput,
+            resetOutput,
+            log,
+            logError,
+            logInfo,
+            processDiagnostics,
+            clearDiagnostics,
+            loadLibraries,
+            finishedExecution,
+            stop,
+            run,
+            onkey,
+            onBookmarkBlock,
+            onViewCodeChange,
+            onRunFinished,
+            onRunFromPlayground,
+            onTypeChange,
+            onVisibleLinesChange,
+            onPlacementChange,
+            onScriptVersionChange,
+            onSetAutoReset,
+            onReloadResources,
+            onSetGenerateTemplate,
+            onCompilerChange,
+            onCompilerVersionChange,
+            onRunStateChange,
+            onContinousCompileStateChange,
+            onMessagePassingChange,
+            onKeepAliveChange,
+            onPersistentArgumentsChange,
+            onLanguageChange,
+            onCharacterLimitChange,
+            onTimeoutChange,
+            onWorkerLibChange,
+            onDomLibChange,
+            onThemeChange,
+            onOutputParserChange,
+            moveUp,
+            moveDown,
+            onChangeOrder,
+            removeBlock,
+            addNewBlock,
+        }
+    },
+})
 </script>

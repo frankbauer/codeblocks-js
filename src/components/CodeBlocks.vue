@@ -126,8 +126,9 @@
         <div class="row justify-end" v-if="editMode">
             <div>
                 <q-btn @click="addNewBlock" push color="green"
-                    >{{ $t('CodeBlocks.AddBlock') }} <q-icon name="library_add" class="q-ml-sm"
-                /></q-btn>
+                    >{{ $t('CodeBlocks.AddBlock') }}
+                    <q-icon name="library_add" class="q-ml-sm" />
+                </q-btn>
             </div>
         </div>
 
@@ -193,23 +194,32 @@
             <q-slide-transition>
                 <pre
                     :id="`${blockInfo.id}Output`"
-                    ref="output"
+                    ref="outputElement"
                     class="output"
                     v-if="hasOutput"
-                ><div id="out" v-html="outputHTML"></div></pre>
+                ><div id='out' v-html='outputHTML'></div></pre>
             </q-slide-transition>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import Vue, {
+    defineComponent,
+    toRefs,
+    ref,
+    computed,
+    onMounted,
+    onBeforeUnmount,
+    PropType,
+    Ref,
+    nextTick,
+    ComputedRef,
+} from 'vue'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import CodePanel from '@/components/CodePanel.vue'
-//import Blockly from '@/components/Blockly/Blockly.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
 import SimpleText from '@/components/SimpleText.vue'
@@ -227,16 +237,16 @@ import {
     KnownBlockTypes,
     IBlockDataPlayground,
 } from '@/lib/ICodeBlocks'
+import compilerRegistry from '@/lib/CompilerRegistry'
+import { globalState } from '@/lib/globalState'
 
 function formatOutput(result) {
     const regex =
         /^@(bold|italic|em)?(red|green|blue|cyan|magenta|yellow|orange|gray|#[\da-f]{6}|#[\da-f]{8}):(.*)/gim
-
     return result
         .split('\n')
         .map((line, nr) => {
             let m
-
             if ((m = regex.exec(result)) !== null) {
                 let style = ''
                 if (m[2] === 'gray') {
@@ -244,7 +254,6 @@ function formatOutput(result) {
                 } else if (m[2] !== undefined) {
                     style = `style="color:${m[2]}"`
                 }
-
                 if (m[1] === 'bold') {
                     line = `<b ${style}>${m[3]}</b>`
                 } else if (m[1] === 'italic' || m[1] === 'em') {
@@ -253,13 +262,13 @@ function formatOutput(result) {
                     line = `<span ${style}>${m[3]}</span>`
                 }
             }
-
             return line
         })
         .join('\n')
 }
 
 const Blockly = () => import('@/components/Blockly/Blockly.vue')
+
 export interface IOnTypeChangeInfo {
     type: KnownBlockTypes
     hidden: boolean
@@ -307,7 +316,566 @@ export interface IOnChangeOrder {
     newID: number
 }
 
-@Component({
+export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef<boolean>) {
+    const didInitialize = ref<boolean>(false)
+    const outputHTML = ref<string>('')
+    const output = ref<string>('')
+    const sansoutput = ref<string>('')
+    const didClip = ref<boolean>(false)
+    const eventHub = ref<Vue>(new Vue())
+    const _finalOutputObject = ref<IScriptOutputObject | null>(null)
+    const didRunOnce = ref<boolean>(false)
+    let bookmarkedBlock = ref<BlockData | null>(null)
+    const triggerRecompileWhenFinished = ref<boolean>(false)
+    const continuousCodeUpdateTimer = ref<number | null>(null)
+    const continuousCompile = computed((): boolean => {
+        if (editMode.value) {
+            return false
+        }
+        const cmp = compilerRegistry.getCompiler(compiler.value)
+        if (cmp) {
+            return cmp.allowsContinousCompilation
+        }
+        return false
+    })
+    const finalOutputObject = computed((): IScriptOutputObject => {
+        if (_finalOutputObject.value === null || _finalOutputObject.value === undefined) {
+            return {
+                initialOutput: '',
+                output: '',
+                processedOutput: {
+                    type: 'text',
+                    text: '',
+                    json: undefined,
+                },
+                sansoutput: '',
+                outputElement: $(outputElement.value as any) as any,
+            }
+        }
+        return _finalOutputObject.value
+    })
+    const options = computed((): ICodeBlockSettingsOptions => {
+        return {
+            language: language.value,
+            compiler: compiler.value,
+            executionTimeout: executionTimeout.value,
+            maxCharacters: maxCharacters.value,
+            runCode: runCode.value,
+            domLibs: domLibraries.value,
+            workerLibs: workerLibraries.value,
+            id: blockInfo.value.id,
+            codeTheme: codeTheme.value,
+            solutionTheme: solutionTheme.value,
+            outputParser: outputParser.value,
+            randomizer: blockInfo.value.randomizer,
+            continuousCompilation: blockInfo.value.continuousCompilation,
+            persistentArguments: blockInfo.value.persistentArguments,
+            messagePassing: blockInfo.value.messagePassing,
+            keepAlive: blockInfo.value.keepAlive,
+        }
+    })
+    const blocks = computed((): BlockData[] => {
+        return blockInfo.value.blocks
+    })
+    const language = computed((): string => {
+        return blockInfo.value.language
+    })
+    const blockid = computed((): number => {
+        return blockInfo.value.id
+    })
+    const executionTimeout = computed((): number => {
+        return blockInfo.value.executionTimeout
+    })
+    const maxCharacters = computed((): number => {
+        return blockInfo.value.maxCharacters
+    })
+    const compiler = computed((): ICompilerID => {
+        return blockInfo.value.compiler
+    })
+    const runCode = computed((): boolean => {
+        return blockInfo.value.runCode
+    })
+    const domLibraries = computed((): string[] => {
+        return blockInfo.value.domLibs
+    })
+    const workerLibraries = computed((): string[] => {
+        return blockInfo.value.workerLibs
+    })
+    const solutionTheme = computed((): string => {
+        return blockInfo.value.solutionTheme
+    })
+    const codeTheme = computed((): string => {
+        return blockInfo.value.codeTheme
+    })
+    const readonly = computed((): boolean => {
+        return blockInfo.value.readonly
+    })
+    const outputParser = computed((): CodeOutputTypes => {
+        return blockInfo.value.outputParser
+    })
+    const hasOutput = computed((): boolean => {
+        return outputHTML.value !== undefined && outputHTML.value != ''
+    })
+    const mimeType = computed((): string => {
+        return globalState.codeBlocks.mimeType(language.value)
+    })
+    const isReady = computed((): boolean => {
+        let cmp = compilerRegistry.getCompiler(compiler.value)
+        if (!cmp) {
+            return false
+        }
+        return (
+            didInitialize.value &&
+            cmp.isReady &&
+            !cmp.isRunning &&
+            !globalState.compilerState.runButtonForceHide
+        )
+    })
+    const canRun = computed((): boolean => {
+        let cmp = compilerRegistry.getCompiler(compiler.value)
+        if (!cmp) {
+            return false
+        }
+        return cmp.canRun && runCode.value
+    })
+    const randomizerActive = computed((): boolean => {
+        return blockInfo.value.randomizer.active
+    })
+    const activeTagSet = computed((): IRandomizerSet | undefined => {
+        if (!randomizerActive.value) {
+            return undefined
+        }
+        return tagSet(blockInfo.value.randomizer.previewIndex)
+    })
+    const completeSource = computed((): string => {
+        return blocks.value
+            .filter((b) => b.hasCode)
+            .map((b) => b.actualContent())
+            .reduce((p, c) => {
+                return p + '\n' + c
+            }, '')
+    })
+    const showGlobalMessages = computed((): boolean => {
+        return !globalState.compilerState.globalStateHidden
+    })
+    const playgrounds = computed((): BlockData[] => {
+        return blocks.value.filter((b) => b.type == 'PLAYGROUND')
+    })
+    const dataBlocks = computed((): BlockData[] => {
+        return blocks.value.filter((b) => b.type == 'DATA')
+    })
+    const outputElement: Ref<HTMLElement | null> = ref(null)
+    const addonClass = computed((): string => {
+        let cl = ''
+        if (editMode.value) {
+            cl += 'editmode '
+        }
+        if (readonly.value) {
+            cl += 'block-readonly '
+        }
+        return cl
+    })
+    const backgroundColorClass = computed((): string => {
+        return editMode.value ? 'blue-grey darken-4' : ''
+    })
+    const hasREPL = computed((): boolean => {
+        return blocks.value.filter((bl) => bl.type === KnownBlockTypes.REPL).length > 0
+    })
+    const canStop = computed((): boolean => {
+        return !isReady.value && didRunOnce.value
+    })
+    const hasBookmark = computed((): boolean => {
+        return bookmarkedBlock.value !== null && editMode.value
+    })
+    const panelBlock = bookmarkedBlock
+    const blockBecameReady = (): void => {
+        let readyCount = blockInfo.value.blocks.map((b) => b.readyCount).reduce((p, c) => p + c, 0)
+        if (readyCount == blockInfo.value.blocks.length) {
+            nextTick(() => {
+                eventHub.value.$emit('all-mounted', {})
+            })
+        }
+        console.d('Ready', readyCount, blockInfo.value.blocks.length)
+    }
+    const tagSet = (nr: number): IRandomizerSet => {
+        return blockInfo.value.randomizer.sets[nr]
+    }
+    const themeForBlock = (bl: BlockData): string => {
+        return bl.themeForCodeBlock
+    }
+    const blockById = (id: number): BlockData | undefined => {
+        return blocks.value.find((block) => block.id == id)
+    }
+
+    const onPlaygroundChangedOutput = (newOutput: string | undefined): void => {
+        if (newOutput === undefined) {
+            return
+        }
+        if (output.value != newOutput) {
+            output = ref(newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;'))
+            if (maxCharacters.value > 0 && output.value.length > maxCharacters.value) {
+                outputHTML.value = formatOutput(output.value.substr(0, maxCharacters.value))
+                outputHTML.value += globalState.codeBlocks.format_info(
+                    'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
+                )
+            } else {
+                outputHTML.value = formatOutput(output.value)
+            }
+            outputHTML.value += sansoutput.value
+        }
+    }
+    const resetOutput = (): void => {
+        output.value = ''
+        sansoutput.value = ''
+        didClip.value = false
+        outputHTML.value = ''
+    }
+    const log = (text: string): void => {
+        output.value += text
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+        if (!didClip.value) {
+            let formatedText
+            if (maxCharacters.value > 0 && output.value.length > maxCharacters.value) {
+                formatedText = globalState.codeBlocks.format_info(
+                    'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
+                )
+                didClip.value = true
+            } else {
+                formatedText = formatOutput(text)
+            }
+            outputHTML.value += formatedText
+            eventHub.value.$emit('console-log', formatedText)
+        }
+    }
+    const logError = (text: string): void => {
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+        eventHub.value.$emit('console-err', text)
+        text = globalState.codeBlocks.format_error(text)
+        sansoutput.value += text
+        outputHTML.value += text
+    }
+    const logInfo = (text: string): void => {
+        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+        eventHub.value.$emit('console-nfo', text)
+        text = globalState.codeBlocks.format_info(text)
+        sansoutput.value += text
+        outputHTML.value += text
+    }
+    const processDiagnostics = (error: ICompilerErrorDescription) => {
+        const line = error.start.line
+        blocks.value.forEach((block) => {
+            if (!block.hasCode) {
+                return
+            }
+            const first = block.firstLine
+            const last = block.nextLine - 1
+            if (error.start.line >= first && error.start.line <= last) {
+                block.errors.push(error)
+            }
+        })
+    }
+    const clearDiagnostics = (): void => {
+        blocks.value.forEach((block) => (block.errors = []))
+        eventHub.value.$emit('render-diagnostics', {})
+    }
+    const loadLibraries = (whenLoaded: () => void): void => {
+        compilerRegistry.loadLibraries(domLibraries.value, whenLoaded)
+    }
+    const finishedExecution = (
+        output: string,
+        infoErrorOutput: string,
+        resultData?: object | any[]
+    ): void => {
+        let parseError: any = undefined
+        let processed: IProcessedScriptOutput = {
+            type: 'text',
+            json: undefined,
+            text: output,
+        }
+        if (output !== undefined && playgrounds.value.length > 0) {
+            try {
+                processed = globalState.codeBlocks.processMixedOutput(
+                    output,
+                    outputParser.value,
+                    undefined,
+                    resultData
+                )
+            } catch (e) {
+                parseError = e
+            }
+        }
+        _finalOutputObject.value = {
+            initialOutput: output,
+            output: output,
+            processedOutput: processed,
+            sansoutput: sansoutput.value,
+            parseError: parseError,
+            outputElement: $(outputElement) as any,
+        }
+        eventHub.value.$emit('output-updated', _finalOutputObject.value)
+        onRunFinished()
+    }
+    const stop = (): void => {
+        const cmp = compilerRegistry.getCompiler(compiler.value)
+        if (cmp === undefined || cmp.stop === undefined) {
+            return
+        }
+        cmp.stop()
+    }
+    const run = (): boolean => {
+        const cmp = compilerRegistry.getCompiler(compiler.value)
+        if (cmp === undefined) {
+            return false
+        }
+        globalState.compilerState.setAllRunButtons(false)
+        resetOutput()
+        eventHub.value.$emit('clicked-run')
+        clearDiagnostics()
+        loadLibraries(() => {
+            eventHub.value.$emit('before-run', {})
+            console.d('compileAndRun')
+            didRunOnce.value = true
+            nextTick(() => {
+                nextTick(() => {
+                    let _args: object | string[] = {}
+                    if (cmp.acceptsJSONArgument) {
+                        _args = blockInfo.value.initArgsForLanguage()
+                        blocks.value.forEach((bl) => {
+                            if (bl.obj) {
+                                console.i('!!! ADD ARGUMENTS TO !!!')
+                                bl.obj.addArgumentsTo(_args)
+                            }
+                        })
+                    }
+                    const runOptions: ICompileAndRunArguments = {
+                        max_ms: executionTimeout.value,
+                        log_callback: log,
+                        info_callback: logInfo,
+                        err_callback: logError,
+                        compileFailedCallback: processDiagnostics,
+                        finishedExecutionCB: (
+                            success = true,
+                            overrideOutput = undefined,
+                            returnState = undefined
+                        ) => {
+                            console.i('returnState:', returnState, _args)
+                            if (!success) {
+                                globalState.compilerState.hideGlobalState()
+                                globalState.compilerState.setAllRunButtons(true)
+                                return undefined
+                            }
+                            let res = finishedExecution(
+                                overrideOutput ? overrideOutput.value : output.value,
+                                sansoutput.value,
+                                runOptions.resultData
+                            )
+                            if (returnState !== undefined) {
+                                if (blockInfo.value.persistentArguments) {
+                                    console.i('Store Default State', returnState)
+                                    blockInfo.value.storeDefaultArgs(returnState)
+                                } else {
+                                    blockInfo.value.clearDefaultArgs()
+                                }
+                            }
+                            globalState.compilerState.hideGlobalState()
+                            globalState.compilerState.setAllRunButtons(true)
+                            return res
+                        },
+                        args: _args,
+                        didReceiveMessage: (cmd, data) => {
+                            console.i('MESSAGE - Received', cmd)
+                            blocks.value.forEach((bl) => {
+                                if (bl.obj) {
+                                    bl.obj.didReceiveMessage(cmd, data)
+                                }
+                            })
+                        },
+                        postMessageFunction: null,
+                        dequeuePostponedMessages: () => {},
+                        allowMessagePassing:
+                            cmp.allowsMessagePassing && options.value.messagePassing,
+                        keepAlive:
+                            cmp.allowsMessagePassing &&
+                            options.value.messagePassing &&
+                            options.value.keepAlive,
+                        withREPL:
+                            cmp.allowsMessagePassing &&
+                            options.value.messagePassing &&
+                            options.value.keepAlive &&
+                            hasREPL.value,
+                        beforeStartHandler: () => {
+                            blocks.value.forEach((bl) => {
+                                console.d('MESSAGE - Before Start')
+                                if (bl.obj) {
+                                    bl.obj.beforeStart()
+                                }
+                            })
+                        },
+                        whenFinishedHandler: (args: object | string[]) => {
+                            blocks.value.forEach((bl) => {
+                                console.d('MESSAGE - When Finished')
+                                if (bl.obj) {
+                                    bl.obj.whenFinished(args, runOptions.resultData)
+                                }
+                            })
+                        },
+                        resultData: undefined,
+                    }
+                    if (runOptions.keepAlive) {
+                        blocks.value.forEach((bl) => {
+                            if (bl.obj) {
+                                bl.obj.runConfig = runOptions
+                            }
+                        })
+                    }
+                    cmp.compileAndRun('' + blockid.value, completeSource.value, self, runOptions)
+                })
+            })
+        })
+        return true
+    }
+    const onkey = (event) => {
+        if (
+            editMode.value &&
+            (event.ctrlKey || event.metaKey) &&
+            (event.key === 'w' || event.key === 'j')
+        ) {
+            run()
+            event.preventDefault()
+            return false
+        }
+    }
+    const onBookmarkBlock = (data: IBlockBookmarkPayload) => {
+        console.i('Bookmark', data)
+        if (blockInfo.value.uuid == data.uuid) {
+            bookmarkedBlock = ref(data.block)
+        }
+    }
+    const onViewCodeChange = (forceRun: boolean = false) => {
+        if (!forceRun && !blockInfo.value.continuousCompilation) {
+            return
+        }
+        if (continuousCodeUpdateTimer.value !== null) {
+            clearTimeout(continuousCodeUpdateTimer.value)
+            continuousCodeUpdateTimer.value = null
+        }
+        continuousCodeUpdateTimer.value = setTimeout(() => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            console.d('Continuous Compile - ', cmp)
+            if (cmp && cmp.allowsContinousCompilation) {
+                if (!cmp.isRunning && cmp.isReady) {
+                    console.d('Continuous Compile - ', 'RUN')
+                    run()
+                } else {
+                    console.d('Continuous Compile - ', 'DEFER')
+                    triggerRecompileWhenFinished.value = true
+                }
+            }
+        }, process.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT)
+    }
+    const onRunFinished = () => {
+        didRunOnce.value = false
+        if (triggerRecompileWhenFinished.value) {
+            console.d('Continuous Compile - ', 'RE-RUN')
+            triggerRecompileWhenFinished.value = false
+            onViewCodeChange()
+        }
+    }
+    const onRunFromPlayground = () => {
+        const cmp = compilerRegistry.getCompiler(compiler.value)
+        if (cmp && cmp.canRun && !editMode.value && cmp.allowsContinousCompilation) {
+            onViewCodeChange(true)
+        }
+    }
+    onMounted(() => {
+        let cmp = compilerRegistry.getCompiler(compiler.value)
+        if (cmp) {
+            cmp.preload()
+        }
+
+        loadLibraries(() => {
+            eventHub.value.$emit('initialized-libraries', {})
+        })
+        didInitialize.value = true
+        if (editMode.value) {
+            window.addEventListener('keydown', onkey, false)
+        }
+        Vue.$GlobalEventHub.$on('bookmark-block', onBookmarkBlock)
+    })
+    onBeforeUnmount(() => {
+        window.removeEventListener('keydown', onkey)
+        Vue.$GlobalEventHub.$off('bookmark-block')
+    })
+    return {
+        didInitialize,
+        outputHTML,
+        output,
+        sansoutput,
+        didClip,
+        _finalOutputObject,
+        eventHub,
+        didRunOnce,
+        bookmarkedBlock,
+        triggerRecompileWhenFinished,
+        continuousCodeUpdateTimer,
+        continuousCompile,
+        finalOutputObject,
+        options,
+        blocks,
+        language,
+        blockid,
+        executionTimeout,
+        maxCharacters,
+        compiler,
+        runCode,
+        domLibraries,
+        workerLibraries,
+        solutionTheme,
+        codeTheme,
+        readonly,
+        outputParser,
+        hasOutput,
+        mimeType,
+        isReady,
+        canRun,
+        randomizerActive,
+        activeTagSet,
+        completeSource,
+        showGlobalMessages,
+        playgrounds,
+        dataBlocks,
+        outputElement,
+        addonClass,
+        backgroundColorClass,
+        hasREPL,
+        canStop,
+        hasBookmark,
+        panelBlock,
+        blockBecameReady,
+        tagSet,
+        themeForBlock,
+        blockById,
+        onPlaygroundChangedOutput,
+        resetOutput,
+        log,
+        logError,
+        logInfo,
+        processDiagnostics,
+        clearDiagnostics,
+        loadLibraries,
+        finishedExecution,
+        stop,
+        run,
+        onkey,
+        onBookmarkBlock,
+        onViewCodeChange,
+        onRunFinished,
+        onRunFromPlayground,
+    }
+}
+
+export default defineComponent({
+    name: 'CodeBlocks',
     components: {
         CodeBlockContainer,
         CodeBlocksSettings,
@@ -319,588 +887,207 @@ export interface IOnChangeOrder {
         CodeREPL,
         DataBlock,
     },
-})
-export default class CodeBlocks extends Vue {
-    didInitialize: boolean = false
-    outputHTML: string = ''
-    output: string = ''
-    sansoutput: string = ''
-    didClip: boolean = false
-    _finalOutputObject: IScriptOutputObject | null = null
-    eventHub: Vue = new Vue()
-
-    get continuousCompile(): boolean {
-        if (this.editMode) {
+    props: {
+        blockInfo: { required: true, type: Object as PropType<IMainBlock> },
+    },
+    setup(props, ctx) {
+        const { blockInfo } = toRefs(props)
+        const editMode = computed((): boolean => {
             return false
-        }
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp) {
-            return cmp.allowsContinousCompilation
-        }
-        return false
-    }
-
-    get finalOutputObject(): IScriptOutputObject {
-        if (this._finalOutputObject === null || this._finalOutputObject === undefined) {
-            return {
-                initialOutput: '',
-                output: '',
-                processedOutput: {
-                    type: 'text',
-                    text: '',
-                    json: undefined,
-                },
-                sansoutput: '',
-                outputElement: $(this.outputElement) as any,
-            }
-        }
-        return this._finalOutputObject
-    }
-    @Prop({ required: true }) blockInfo!: IMainBlock
-    get options(): ICodeBlockSettingsOptions {
+        })
+        const {
+            didInitialize,
+            outputHTML,
+            output,
+            sansoutput,
+            didClip,
+            _finalOutputObject,
+            eventHub,
+            didRunOnce,
+            bookmarkedBlock,
+            triggerRecompileWhenFinished,
+            continuousCodeUpdateTimer,
+            continuousCompile,
+            finalOutputObject,
+            options,
+            blocks,
+            language,
+            blockid,
+            executionTimeout,
+            maxCharacters,
+            compiler,
+            runCode,
+            domLibraries,
+            workerLibraries,
+            solutionTheme,
+            codeTheme,
+            readonly,
+            outputParser,
+            hasOutput,
+            mimeType,
+            isReady,
+            canRun,
+            randomizerActive,
+            activeTagSet,
+            completeSource,
+            showGlobalMessages,
+            playgrounds,
+            dataBlocks,
+            outputElement,
+            addonClass,
+            backgroundColorClass,
+            hasREPL,
+            canStop,
+            hasBookmark,
+            panelBlock,
+            blockBecameReady,
+            tagSet,
+            themeForBlock,
+            blockById,
+            onPlaygroundChangedOutput,
+            resetOutput,
+            log,
+            logError,
+            logInfo,
+            processDiagnostics,
+            clearDiagnostics,
+            loadLibraries,
+            finishedExecution,
+            stop,
+            run,
+            onkey,
+            onBookmarkBlock,
+            onViewCodeChange,
+            onRunFinished,
+            onRunFromPlayground,
+        } = codeBlockSetup(blockInfo, editMode)
+        const onTypeChange = (nfo: IOnTypeChangeInfo): void => {}
+        const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {}
+        const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {}
+        const onScriptVersionChange = (nfo: IOnScriptVersionChangeInfo): void => {}
+        const onSetAutoReset = (nfo: IOnSetAutoResetInfo): void => {}
+        const onReloadResources = (nfo: IOnReloadResourcesInfo): void => {}
+        const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {}
+        const onCompilerChange = (v: string): void => {}
+        const onCompilerVersionChange = (v: string): void => {}
+        const onRunStateChange = (v: boolean): void => {}
+        const onContinousCompileStateChange = (v: boolean): void => {}
+        const onMessagePassingChange = (v: boolean): void => {}
+        const onKeepAliveChange = (v: boolean): void => {}
+        const onPersistentArgumentsChange = (v: boolean): void => {}
+        const onLanguageChange = (v: string): void => {}
+        const onCharacterLimitChange = (v: number): void => {}
+        const onTimeoutChange = (v: number): void => {}
+        const onWorkerLibChange = (v: string[]): void => {}
+        const onDomLibChange = (v: string[]): void => {}
+        const onThemeChange = (nfo: IOnThemeChangeInfo): void => {}
+        const onOutputParserChange = (v: CodeOutputTypes): void => {}
+        const moveUp = (idx: number): void => {}
+        const moveDown = (idx: number): void => {}
+        const onChangeOrder = (nfo: IOnChangeOrder): void => {}
+        const removeBlock = (idx: number): void => {}
+        const addNewBlock = (): void => {}
         return {
-            language: this.language,
-            compiler: this.compiler,
-            executionTimeout: this.executionTimeout,
-            maxCharacters: this.maxCharacters,
-            runCode: this.runCode,
-            domLibs: this.domLibraries,
-            workerLibs: this.workerLibraries,
-            id: this.blockInfo.id,
-            codeTheme: this.codeTheme,
-            solutionTheme: this.solutionTheme,
-            outputParser: this.outputParser,
-            randomizer: this.blockInfo.randomizer,
-            continuousCompilation: this.blockInfo.continuousCompilation,
-            persistentArguments: this.blockInfo.persistentArguments,
-            messagePassing: this.blockInfo.messagePassing,
-            keepAlive: this.blockInfo.keepAlive,
+            didInitialize,
+            outputHTML,
+            output,
+            sansoutput,
+            didClip,
+            _finalOutputObject,
+            eventHub,
+            didRunOnce,
+            bookmarkedBlock,
+            triggerRecompileWhenFinished,
+            continuousCodeUpdateTimer,
+            continuousCompile,
+            finalOutputObject,
+            options,
+            blocks,
+            language,
+            blockid,
+            executionTimeout,
+            maxCharacters,
+            compiler,
+            runCode,
+            domLibraries,
+            workerLibraries,
+            solutionTheme,
+            codeTheme,
+            readonly,
+            outputParser,
+            editMode,
+            hasOutput,
+            mimeType,
+            isReady,
+            canRun,
+            randomizerActive,
+            activeTagSet,
+            completeSource,
+            showGlobalMessages,
+            playgrounds,
+            dataBlocks,
+            outputElement,
+            addonClass,
+            backgroundColorClass,
+            hasREPL,
+            canStop,
+            hasBookmark,
+            panelBlock,
+            blockBecameReady,
+            tagSet,
+            themeForBlock,
+            blockById,
+            onPlaygroundChangedOutput,
+            resetOutput,
+            log,
+            logError,
+            logInfo,
+            processDiagnostics,
+            clearDiagnostics,
+            loadLibraries,
+            finishedExecution,
+            stop,
+            run,
+            onkey,
+            onBookmarkBlock,
+            onViewCodeChange,
+            onRunFinished,
+            onRunFromPlayground,
+            onTypeChange,
+            onVisibleLinesChange,
+            onPlacementChange,
+            onScriptVersionChange,
+            onSetAutoReset,
+            onReloadResources,
+            onSetGenerateTemplate,
+            onCompilerChange,
+            onCompilerVersionChange,
+            onRunStateChange,
+            onContinousCompileStateChange,
+            onMessagePassingChange,
+            onKeepAliveChange,
+            onPersistentArgumentsChange,
+            onLanguageChange,
+            onCharacterLimitChange,
+            onTimeoutChange,
+            onWorkerLibChange,
+            onDomLibChange,
+            onThemeChange,
+            onOutputParserChange,
+            moveUp,
+            moveDown,
+            onChangeOrder,
+            removeBlock,
+            addNewBlock,
         }
-    }
-    get blocks(): BlockData[] {
-        return this.blockInfo.blocks
-    }
-    get language(): string {
-        return this.blockInfo.language
-    }
-    get blockid(): number {
-        return this.blockInfo.id
-    }
-    get executionTimeout(): number {
-        return this.blockInfo.executionTimeout
-    }
-    get maxCharacters(): number {
-        return this.blockInfo.maxCharacters
-    }
-    get compiler(): ICompilerID {
-        return this.blockInfo.compiler
-    }
-    get runCode(): boolean {
-        return this.blockInfo.runCode
-    }
-    get domLibraries(): string[] {
-        return this.blockInfo.domLibs
-    }
-    get workerLibraries(): string[] {
-        return this.blockInfo.workerLibs
-    }
-    get solutionTheme(): string {
-        return this.blockInfo.solutionTheme
-    }
-    get codeTheme(): string {
-        return this.blockInfo.codeTheme
-    }
-    get readonly(): boolean {
-        return this.blockInfo.readonly
-    }
-    get outputParser(): CodeOutputTypes {
-        return this.blockInfo.outputParser
-    }
-
-    get editMode(): boolean {
-        return false
-    }
-    get hasOutput(): boolean {
-        return this.outputHTML !== undefined && this.outputHTML != ''
-    }
-    get mimeType(): string {
-        return this.$CodeBlock.mimeType(this.language)
-    }
-    get isReady(): boolean {
-        let cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (!cmp) {
-            return false
-        }
-
-        return (
-            this.didInitialize &&
-            cmp.isReady &&
-            !cmp.isRunning &&
-            !this.$compilerState.runButtonForceHide
-        )
-    }
-    get canRun(): boolean {
-        let cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (!cmp) {
-            return false
-        }
-        return cmp.canRun && this.runCode
-    }
-    get randomizerActive(): boolean {
-        return this.blockInfo.randomizer.active
-    }
-    get activeTagSet(): IRandomizerSet | undefined {
-        if (!this.randomizerActive) {
-            return undefined
-        }
-        return this.tagSet(this.blockInfo.randomizer.previewIndex)
-    }
-    get completeSource(): string {
-        return this.blocks
-            .filter((b) => b.hasCode)
-            .map((b) => b.actualContent())
-            .reduce((p, c) => {
-                return p + '\n' + c
-            }, '')
-    }
-    get showGlobalMessages(): boolean {
-        return !this.$compilerState.globalStateHidden
-    }
-    get playgrounds(): BlockData[] {
-        return this.blocks.filter((b) => b.type == 'PLAYGROUND')
-    }
-    get dataBlocks(): BlockData[] {
-        return this.blocks.filter((b) => b.type == 'DATA')
-    }
-    get outputElement(): HTMLElement {
-        return this.$refs.output as HTMLElement
-    }
-    get addonClass(): string {
-        let cl = ''
-        if (this.editMode) {
-            cl += 'editmode '
-        }
-        if (this.readonly) {
-            cl += 'block-readonly '
-        }
-        return cl
-    }
-    get backgroundColorClass(): string {
-        return this.editMode ? 'blue-grey darken-4' : ''
-    }
-
-    blockBecameReady(): void {
-        let readyCount = this.blockInfo.blocks.map((b) => b.readyCount).reduce((p, c) => p + c, 0)
-        if (readyCount == this.blockInfo.blocks.length) {
-            this.$nextTick(() => {
-                this.eventHub.$emit('all-mounted', {})
-            })
-        }
-        console.d('Ready', readyCount, this.blockInfo.blocks.length)
-    }
-
-    tagSet(nr: number): IRandomizerSet {
-        return this.blockInfo.randomizer.sets[nr]
-    }
-
-    themeForBlock(bl: BlockData): string {
-        return bl.themeForCodeBlock
-    }
-    public blockById(id: number): BlockData | undefined {
-        return this.blocks.find((block) => block.id == id)
-    }
-    onTypeChange(nfo: IOnTypeChangeInfo): void {}
-    onVisibleLinesChange(nfo: IOnVisibleLinesChangeInfo): void {}
-    onPlacementChange(nfo: IOnPlacementChangeInfo): void {}
-    onScriptVersionChange(nfo: IOnScriptVersionChangeInfo): void {}
-    onSetAutoReset(nfo: IOnSetAutoResetInfo): void {}
-    onReloadResources(nfo: IOnReloadResourcesInfo): void {}
-    onSetGenerateTemplate(nfo: IOnGenerateTemplateInfo): void {}
-    onCompilerChange(v: string): void {}
-    onCompilerVersionChange(v: string): void {}
-    onRunStateChange(v: boolean): void {}
-    onContinousCompileStateChange(v: boolean): void {}
-    onMessagePassingChange(v: boolean): void {}
-    onKeepAliveChange(v: boolean): void {}
-    onPersistentArgumentsChange(v: boolean): void {}
-    onLanguageChange(v: string): void {}
-    onCharacterLimitChange(v: number): void {}
-    onTimeoutChange(v: number): void {}
-    onWorkerLibChange(v: string[]): void {}
-    onDomLibChange(v: string[]): void {}
-    onThemeChange(nfo: IOnThemeChangeInfo): void {}
-    onOutputParserChange(v: CodeOutputTypes): void {}
-    moveUp(idx: number): void {}
-    moveDown(idx: number): void {}
-    onChangeOrder(nfo: IOnChangeOrder): void {}
-    removeBlock(idx: number): void {}
-    addNewBlock(): void {}
-    onPlaygroundChangedOutput(newOutput: string | undefined): void {
-        if (newOutput === undefined) {
-            return
-        }
-        if (this.output != newOutput) {
-            this.output = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
-            if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
-                this.outputHTML = formatOutput(this.output.substr(0, this.maxCharacters))
-                this.outputHTML += this.$CodeBlock.format_info(
-                    'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
-                )
-            } else {
-                this.outputHTML = formatOutput(this.output)
-            }
-            this.outputHTML += this.sansoutput
-        }
-    }
-
-    resetOutput(): void {
-        this.output = ''
-        this.sansoutput = ''
-        this.didClip = false
-        this.outputHTML = ''
-    }
-
-    log(text: string): void {
-        //console.log("log", text);
-        this.output += text
-        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
-        if (!this.didClip) {
-            let formatedText
-            if (this.maxCharacters > 0 && this.output.length > this.maxCharacters) {
-                formatedText = this.$CodeBlock.format_info(
-                    'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
-                )
-                this.didClip = true
-            } else {
-                formatedText = formatOutput(text)
-            }
-
-            this.outputHTML += formatedText
-            this.eventHub.$emit('console-log', formatedText)
-        }
-    }
-
-    logError(text: string): void {
-        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
-        this.eventHub.$emit('console-err', text)
-        text = this.$CodeBlock.format_error(text)
-        //console.log("err", text);
-        this.sansoutput += text
-        this.outputHTML += text
-    }
-
-    logInfo(text: string): void {
-        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
-        this.eventHub.$emit('console-nfo', text)
-        text = this.$CodeBlock.format_info(text)
-        //console.log("nfo", text);
-        this.sansoutput += text
-        this.outputHTML += text
-    }
-
-    processDiagnostics(error: ICompilerErrorDescription) {
-        const line = error.start.line
-        this.blocks.forEach((block) => {
-            if (!block.hasCode) {
-                return
-            }
-
-            const first = block.firstLine
-            const last = block.nextLine - 1
-
-            if (error.start.line >= first && error.start.line <= last) {
-                block.errors.push(error)
-            }
-        })
-    }
-
-    clearDiagnostics(): void {
-        this.blocks.forEach((block) => (block.errors = []))
-        this.eventHub.$emit('render-diagnostics', {})
-    }
-
-    loadLibraries(whenLoaded: () => void): void {
-        this.$compilerRegistry.loadLibraries(this.domLibraries, whenLoaded)
-    }
-
-    /**
-     * Call when the program finished executing and pass the output string. We will send the output to all embeded canvas elements
-     * @param {*} output
-     * @param {*} infoErrorOutput output generated by info or error messages
-     */
-    finishedExecution(output: string, infoErrorOutput: string, resultData?: object | any[]): void {
-        let parseError: any = undefined
-        let processed: IProcessedScriptOutput = { type: 'text', json: undefined, text: output }
-
-        if (output !== undefined && this.playgrounds.length > 0) {
-            try {
-                processed = this.$CodeBlock.processMixedOutput(
-                    output,
-                    this.outputParser,
-                    undefined,
-                    resultData
-                )
-            } catch (e) {
-                parseError = e
-            }
-        }
-
-        this._finalOutputObject = {
-            initialOutput: output,
-            output: output,
-            processedOutput: processed,
-            sansoutput: this.sansoutput,
-            parseError: parseError,
-            //outputElement: $(this.outputElement) as JQuery<HTMLElement> //This line soes not work here, looks like the update did not yet happen?
-            outputElement: $(this.$refs.output as any) as any,
-        }
-        this.eventHub.$emit('output-updated', this._finalOutputObject)
-
-        this.onRunFinished()
-    }
-
-    get hasREPL(): boolean {
-        return this.blocks.filter((bl) => bl.type === KnownBlockTypes.REPL).length > 0
-    }
-
-    get canStop(): boolean {
-        return !this.isReady && this.didRunOnce
-    }
-    stop(): void {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp === undefined || cmp.stop === undefined) {
-            return
-        }
-        cmp.stop()
-    }
-
-    didRunOnce: boolean = false
-    run(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp === undefined) {
-            return false
-        }
-
-        this.$compilerState.setAllRunButtons(false)
-
-        this.resetOutput()
-        this.eventHub.$emit('clicked-run')
-        this.clearDiagnostics()
-        const self = this
-
-        this.loadLibraries(() => {
-            self.eventHub.$emit('before-run', {})
-            console.d('compileAndRun')
-            self.didRunOnce = true
-
-            self.$nextTick(() => {
-                self.$nextTick(() => {
-                    let _args: object | string[] = {}
-                    if (cmp.acceptsJSONArgument) {
-                        _args = this.blockInfo.initArgsForLanguage()
-                        this.blocks.forEach((bl) => {
-                            if (bl.obj) {
-                                console.i('!!! ADD ARGUMENTS TO !!!')
-                                bl.obj.addArgumentsTo(_args)
-                            }
-                        })
-                    }
-
-                    const runOptions: ICompileAndRunArguments = {
-                        max_ms: self.executionTimeout,
-                        log_callback: self.log.bind(this),
-                        info_callback: self.logInfo.bind(this),
-                        err_callback: self.logError.bind(this),
-                        compileFailedCallback: self.processDiagnostics.bind(this),
-                        finishedExecutionCB: (
-                            success = true,
-                            overrideOutput = undefined,
-                            returnState = undefined
-                        ) => {
-                            console.i('returnState:', returnState, _args)
-                            if (!success) {
-                                self.$compilerState.hideGlobalState()
-                                self.$compilerState.setAllRunButtons(true)
-                                return undefined
-                            }
-                            let res = self.finishedExecution(
-                                overrideOutput ? overrideOutput : self.output,
-                                self.sansoutput,
-                                runOptions.resultData
-                            )
-
-                            if (returnState !== undefined) {
-                                if (this.blockInfo.persistentArguments) {
-                                    console.i('Store Default State', returnState)
-                                    this.blockInfo.storeDefaultArgs(returnState)
-                                } else {
-                                    this.blockInfo.clearDefaultArgs()
-                                }
-                            }
-                            self.$compilerState.hideGlobalState()
-                            self.$compilerState.setAllRunButtons(true)
-                            return res
-                        },
-                        args: _args,
-                        didReceiveMessage: (cmd, data) => {
-                            console.i('MESSAGE - Received', cmd)
-                            this.blocks.forEach((bl) => {
-                                if (bl.obj) {
-                                    bl.obj.didReceiveMessage(cmd, data)
-                                }
-                            })
-                        },
-                        postMessageFunction: null,
-                        dequeuePostponedMessages: () => {},
-                        allowMessagePassing:
-                            cmp.allowsMessagePassing && self.options.messagePassing,
-                        keepAlive:
-                            cmp.allowsMessagePassing &&
-                            self.options.messagePassing &&
-                            self.options.keepAlive,
-                        withREPL:
-                            cmp.allowsMessagePassing &&
-                            self.options.messagePassing &&
-                            self.options.keepAlive &&
-                            this.hasREPL,
-                        beforeStartHandler: () => {
-                            this.blocks.forEach((bl) => {
-                                console.d('MESSAGE - Before Start')
-                                if (bl.obj) {
-                                    bl.obj.beforeStart()
-                                }
-                            })
-                        },
-                        whenFinishedHandler: (args: object | string[]) => {
-                            this.blocks.forEach((bl) => {
-                                console.d('MESSAGE - When Finished')
-                                if (bl.obj) {
-                                    bl.obj.whenFinished(args, runOptions.resultData)
-                                }
-                            })
-                        },
-                        resultData: undefined,
-                    }
-
-                    if (runOptions.keepAlive) {
-                        this.blocks.forEach((bl) => {
-                            if (bl.obj) {
-                                bl.obj.runConfig = runOptions
-                            }
-                        })
-                    }
-
-                    cmp.compileAndRun('' + self.blockid, self.completeSource, self, runOptions)
-                })
-            })
-        })
-
-        return true
-    }
-    onkey(event) {
-        if (
-            this.editMode &&
-            (event.ctrlKey || event.metaKey) &&
-            (event.key === 'w' || event.key === 'j')
-        ) {
-            this.run()
-            event.preventDefault()
-            return false
-        }
-    }
-
-    mounted() {
-        let cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp) {
-            cmp.preload()
-        }
-        const self = this
-        this.loadLibraries(() => {
-            self.eventHub.$emit('initialized-libraries', {})
-        })
-        this.didInitialize = true
-
-        if (this.editMode) {
-            window.addEventListener('keydown', this.onkey, false)
-        }
-
-        Vue.$GlobalEventHub.$on('bookmark-block', this.onBookmarkBlock)
-    }
-    beforeDestroy() {
-        window.removeEventListener('keydown', this.onkey)
-        Vue.$GlobalEventHub.$off('bookmark-block')
-    }
-
-    bookmarkedBlock: BlockData | null = null
-
-    get hasBookmark(): boolean {
-        return this.bookmarkedBlock !== null && this.editMode
-    }
-
-    get panelBlock(): BlockData | null {
-        return this.bookmarkedBlock
-    }
-    onBookmarkBlock(data: IBlockBookmarkPayload) {
-        console.i('Bookmark', data)
-        if (this.blockInfo.uuid == data.uuid) {
-            this.bookmarkedBlock = data.block
-        }
-    }
-
-    triggerRecompileWhenFinished: boolean = false
-    onViewCodeChange(forceRun: boolean = false) {
-        if (!forceRun && !this.blockInfo.continuousCompilation) {
-            return
-        }
-
-        if (this.continuousCodeUpdateTimer !== null) {
-            clearTimeout(this.continuousCodeUpdateTimer)
-            this.continuousCodeUpdateTimer = null
-        }
-        this.continuousCodeUpdateTimer = setTimeout(() => {
-            const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-            console.d('Continuous Compile - ', cmp)
-            if (cmp && cmp.allowsContinousCompilation) {
-                if (!cmp.isRunning && cmp.isReady) {
-                    console.d('Continuous Compile - ', 'RUN')
-                    this.run()
-                } else {
-                    console.d('Continuous Compile - ', 'DEFER')
-                    this.triggerRecompileWhenFinished = true
-                }
-            }
-        }, process.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT)
-    }
-
-    onRunFinished() {
-        this.didRunOnce = false
-        if (this.triggerRecompileWhenFinished) {
-            console.d('Continuous Compile - ', 'RE-RUN')
-            this.triggerRecompileWhenFinished = false
-            this.onViewCodeChange()
-        }
-    }
-
-    continuousCodeUpdateTimer: number | null = null
-    onRunFromPlayground() {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (
-            cmp &&
-            cmp.canRun &&
-            !this.editMode &&
-            cmp.allowsContinousCompilation // &&
-            // this.blockInfo.continuousCompilation
-        ) {
-            this.onViewCodeChange(true)
-        }
-    }
-}
+    },
+})
 </script>
 
 <style lang="sass">
 
 div.codeblocks.editmode
-    box-shadow: 3px 3px 6px rgba(0,0,0,0.1)
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1)
     border-radius: 5px
     background-repeat: repeat
     background-image: linear-gradient(45deg, #ffffff 25%, #ebf2f5 25%, #ebf2f5 50%, #ffffff 50%, #ffffff 75%, #ebf2f5 75%, #ebf2f5 100%)
@@ -910,22 +1097,28 @@ div.codeblocks
     height: fit-content
     margin: 4px
     padding: 8px
+
     .block
         padding: 0px
         margin: 0px
+
 div.runner
     margin: 8px 0px !important
+
     .runnerState
         margin: 0px !important
         padding: 0px !important
+
         button
-            margin: 0px!important
+            margin: 0px !important
+
         .globalState
             margin-left: 10px
             color: gray
             padding-left: 4px
             padding-right: 4px
             vertical-align: middle
+
     .output
         display: block
         font-family: monospace
