@@ -1,7 +1,7 @@
 <template>
     <div>
         <PlaygroundCanvas
-            ref="playgroundContainer"
+            ref="canvas"
             :output="finalOutputObject.initialOutput"
             :obj="block.obj"
             :key="runCount"
@@ -69,11 +69,7 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
-import {
-    useBasicBlockMounting,
-    useBasicBlockProps,
-    useEditableBlockProps,
-} from '@/composables/basicBlock'
+import { useBasicBlockMounting, useEditableBlockProps } from '@/composables/basicBlock'
 import {
     computed,
     ComputedRef,

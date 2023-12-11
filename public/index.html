@@ -41,14 +41,14 @@
 }</block>
             <Data data-name="HELLO">{"hello":42}</Data>
             <script as="data" type="application/json" data-name="WORLD">{"world":1}</script>
-            <script as="playground" type="application/javascript" data-generate-template="true" data-should-autoreset="true" data-version="102">exports = {
+            <script as="playground" type="application/playground" data-generate-template="true" data-should-autoreset="true" data-version="102">module.exports = {
                 getResources(){
                     return [
                             {name:"CUBE", uri:"http://localhost:8080/js/three.js/r140/quadCube.json", type:"json"}                            
                         ]
                 },
                 setupDOM(canvasElement, outputElement, scope, runner) {
-                    canvasElement.hide()
+                    canvasElement.show()
                     console.log("FROM SETUP", this.DATA)
                 },
                 init(canvasElement, outputElement, scope, runner) {
