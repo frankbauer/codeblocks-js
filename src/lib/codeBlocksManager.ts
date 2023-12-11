@@ -94,10 +94,6 @@ interface IAppElementData {
     codeTheme?: string
 }
 
-export interface IBlockBookmarkPayload {
-    uuid: string
-    block: BlockData | null
-}
 @Component
 export class BlockData extends Vue implements IBlockData {
     appSettings!: IAppSettings
@@ -144,6 +140,7 @@ export class BlockData extends Vue implements IBlockData {
 
         return this.content
     }
+
     recreateScriptObject() {
         if (this.type === KnownBlockTypes.PLAYGROUND) {
             console.i('recreateScriptObject - Playground')
@@ -161,6 +158,7 @@ export class BlockData extends Vue implements IBlockData {
             console.i('Block Rebuild', this.obj, this.uuid)
         }
     }
+
     created() {
         this.recreateScriptObject()
     }
@@ -184,6 +182,7 @@ export class BlockData extends Vue implements IBlockData {
     get isLast(): boolean {
         return this.id == this.appSettings.blocks.length - 1
     }
+
     get firstLine(): number {
         if (this.id === 0) {
             return 1
@@ -213,6 +212,7 @@ export class BlockData extends Vue implements IBlockData {
         }
         return this.firstLine + this.lineCount
     }
+
     get domLibs(): string[] {
         return this.appSettings.domLibs
     }
@@ -238,14 +238,21 @@ export class BlockData extends Vue implements IBlockData {
 
 export interface IMainBlock extends IAppSettings {
     swap(id1: number, id2: number): void
+
     moveUp(id: number): void
+
     moveDown(id: number): void
+
     changeOrder(id: number, newID: number): void
+
     removeBlock(idx: number): void
+
     addNewBlock(): void
 
     initArgsForLanguage(): object | string[]
+
     storeDefaultArgs(args: object | string[]): void
+
     clearDefaultArgs(): void
 }
 
@@ -278,6 +285,7 @@ class InternalCodeBlocksManager {
     readonly element: HTMLElement
     readonly data: IAppSettings
     readonly shadowRoot: ShadowRoot | undefined = undefined
+
     constructor(el: HTMLElement) {
         if (useShadowDOM) {
             const content = el.outerHTML
@@ -620,9 +628,11 @@ class InternalCodeBlocksManager {
                     }
 
                     defaultArgs!: object | string[] | undefined
+
                     storeDefaultArgs(args: object | string[]) {
                         this.defaultArgs = args
                     }
+
                     clearDefaultArgs() {
                         this.defaultArgs = undefined
                     }
@@ -635,18 +645,21 @@ class InternalCodeBlocksManager {
                         this.blocks[id1].id = id1
                         this.blocks[id2].id = id2
                     }
+
                     moveUp(id: number) {
                         if (id <= 0) {
                             return
                         }
                         this.swap(id - 1, id)
                     }
+
                     moveDown(id: number) {
                         if (id >= this.blocks.length - 1) {
                             return
                         }
                         this.swap(id, id + 1)
                     }
+
                     changeOrder(id: number, newID: number): void {
                         //this.swap(id, newID)
                         const a = this.blocks[id]
@@ -655,12 +668,14 @@ class InternalCodeBlocksManager {
 
                         this.blocks.forEach((v, i) => (v.id = i))
                     }
+
                     removeBlock(idx: number) {
                         data.blocks.splice(idx, 1)
                         for (let i = idx; i < data.blocks.length; i++) {
                             data.blocks[i].id = i
                         }
                     }
+
                     addNewBlock() {
                         const block: IBlockDataBase = {
                             noContent: false,
@@ -706,6 +721,7 @@ class InternalCodeBlocksManager {
                         data.blocks.push(self.constructBlock(data, block))
                     }
                 }
+
                 const context = {
                     props: {
                         language: data.language,

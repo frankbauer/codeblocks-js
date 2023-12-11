@@ -1,6 +1,5 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
-        
         <codemirror
             ref="codeBox"
             :value="code"
@@ -76,10 +75,9 @@ import '@/lib/glsl/glsl'
 import 'codemirror/addon/edit/closebrackets.js'
 
 //helper to create tooltips at runtime
-import CodeBlockButton from '@/components/CodeBlockButton.vue'
 const ErrorTipCtor = Vue.extend(ErrorTip)
 
-@Component({ components: { CodeBlockButton } })
+@Component({ components: {} })
 export default class CodeBlock extends BaseBlock {
     @Prop({ default: '' }) namePrefix!: string
     @Prop({ default: false }) emitWhenTypingInViewMode!: boolean
@@ -93,7 +91,7 @@ export default class CodeBlock extends BaseBlock {
     @Prop({ default: undefined }) tagSet!: IRandomizerSet
     @Prop({
         required: true,
-        validator: function (b:any) {
+        validator: function (b: any) {
             if (b === null || b === undefined || b.content === undefined) {
                 return false
             }
@@ -136,6 +134,7 @@ export default class CodeBlock extends BaseBlock {
             })
         }
     }
+
     clearErrorDisplay() {
         if (this.codemirror === undefined) {
             return
@@ -150,6 +149,7 @@ export default class CodeBlock extends BaseBlock {
 
         this.codemirror.getDoc().clearGutter('diagnostics')
     }
+
     onCodeReady(editor) {
         //we need this for StudON to make sure tinyMCE is not taking over :D
         if (
@@ -176,6 +176,7 @@ export default class CodeBlock extends BaseBlock {
 
         this.whenBlockIsReady()
     }
+
     onAltCodeReady(editor) {
         console.d('READY')
         //we need this for StudON to make sure tinyMCE is not taking over :D
@@ -196,11 +197,14 @@ export default class CodeBlock extends BaseBlock {
             this.updateHeight()
         })
     }
+
     onCodeFocus(editor) {}
+
     onAltCodeFocus(editor) {}
 
     codeUpdateTimer: number | null = null
     codeUpdateStartTime: number = 0
+
     onCodeChangeDefered(newCode) {
         if (!this.editMode) {
             this.onCodeChange(newCode)
@@ -233,6 +237,7 @@ export default class CodeBlock extends BaseBlock {
     }
 
     continuousCodeUpdateTimer: number | null = null
+
     onCodeChange(newCode) {
         //update line numbers manually (changing in options takes too long)
         this.block.lineCountHint = this.codemirror.doc.size
@@ -263,6 +268,7 @@ export default class CodeBlock extends BaseBlock {
     }
 
     codeNeedsTagUpdate: boolean = true
+
     didAddText(t: string): void {
         //console.log('    ', t)
         if (
@@ -275,6 +281,7 @@ export default class CodeBlock extends BaseBlock {
             this.codeNeedsTagUpdate = true
         }
     }
+
     onCodeKeyHandle(e) {
         //console.log('IR', e, arguments)
         if (arguments.length > 1 && arguments[1] !== undefined) {
@@ -294,6 +301,7 @@ export default class CodeBlock extends BaseBlock {
 
     altCodeUpdateTimer: number | null = null
     altCodeUpdateStartTime: number = 0
+
     onAltCodeChangeDefered(newCode) {
         const now = new Date().getTime()
 
@@ -319,6 +327,7 @@ export default class CodeBlock extends BaseBlock {
             doIt()
         }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
     }
+
     onAltCodeChange(newCode) {
         if (this.altBox !== undefined) {
             const tb = this.altBox.$el.querySelector('textarea[name]') as HTMLTextAreaElement
@@ -328,6 +337,7 @@ export default class CodeBlock extends BaseBlock {
         this.block.alternativeContent = newCode
         this.updateTagDisplay()
     }
+
     updateHeight() {
         if (this.visibleLines === 'auto' || this.block.static) {
             if (this.codemirror) {
@@ -348,6 +358,7 @@ export default class CodeBlock extends BaseBlock {
             }
         }
     }
+
     replaceTemplateTags(o: ITagReplaceAction) {
         if (!this.editMode) {
             return
@@ -361,6 +372,7 @@ export default class CodeBlock extends BaseBlock {
             o.newValue
         )
     }
+
     updateTagDisplay() {
         if (
             !this.editMode ||
@@ -409,6 +421,7 @@ export default class CodeBlock extends BaseBlock {
             })
         }
     }
+
     updateDiagnosticDisplay() {
         const val = this.errors
         if (val !== undefined) {
@@ -479,12 +492,15 @@ export default class CodeBlock extends BaseBlock {
     get hasAlternativeContent() {
         return this.block.hasAlternativeContent && this.typeName == 'block'
     }
+
     get errors(): ICompilerErrorDescription[] {
         return this.block.errors
     }
+
     get randomizerActive() {
         return this.tagSet !== undefined
     }
+
     get boxClass() {
         let cl = ''
         if (this.block.hidden && !this.editMode) {
@@ -498,6 +514,7 @@ export default class CodeBlock extends BaseBlock {
         }
         return cl
     }
+
     get iliasTypeNr() {
         const t = this.typeName
         if (t == 'text') {
@@ -526,6 +543,7 @@ export default class CodeBlock extends BaseBlock {
         }
         return -1
     }
+
     get typeName() {
         let s = this.block.type.toLowerCase()
         if (this.block.hidden) {
@@ -536,18 +554,21 @@ export default class CodeBlock extends BaseBlock {
         }
         return s
     }
+
     get altCode() {
         if (this.block.alternativeContent === null) {
             return ''
         }
         return this.block.alternativeContent
     }
+
     get code() {
         if (!this.editMode) {
             return this.block.actualContent()
         }
         return this.block.content
     }
+
     get options() {
         return {
             // codemirror options
@@ -565,24 +586,29 @@ export default class CodeBlock extends BaseBlock {
             gutters: ['diagnostics', 'CodeMirror-linenumbers'],
         }
     }
+
     get altOptions() {
         return this.options
         // let o = { ...this.options }
         // o.firstLineNumber = 1
         // return o
     }
+
     get codemirror(): any | undefined {
         return (this.codeBox as any).codemirror
     }
+
     get altcodemirror(): any | undefined {
         if (this.altBox === undefined) {
             return undefined
         }
         return (this.altBox as any).codemirror
     }
+
     get readyWhenMounted() {
         return false
     }
+
     @Watch('block.firstLine')
     onFirstLineChanged(val) {
         if (this.codemirror) {
@@ -592,10 +618,12 @@ export default class CodeBlock extends BaseBlock {
             }
         }
     }
+
     @Watch('visibleLines')
     onVisibleLinesChanged(val) {
         this.updateHeight()
     }
+
     @Watch('errors')
     onErrorsChanged(val) {
         this.updateDiagnosticDisplay()
@@ -605,6 +633,7 @@ export default class CodeBlock extends BaseBlock {
         console.d('ReadyWhenMounted in CodeBlock', this.readyWhenMounted)
         //this.$options.readyWhenMounted = false;
     }
+
     mounted() {
         this.updateHeight()
 
@@ -635,6 +664,7 @@ export default class CodeBlock extends BaseBlock {
         this.codeNeedsTagUpdate = true
         this.updateTagDisplay()
     }
+
     beforeDestroy() {
         Vue.$tagger.$off('replace-template-tag', this.replaceTemplateTags)
     }
@@ -643,6 +673,7 @@ export default class CodeBlock extends BaseBlock {
 <style scoped lang="sass">
 .hiddenBox
     display: none !important
+
 .staticBox
     opacity: 0.8
     filter: grayscale(20%)

@@ -4,12 +4,6 @@
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"
     >
-        <CodePanel
-            v-show="hasBookmark && editMode"
-            :editMode="editMode"
-            visibleLines="auto"
-            :block="panelBlock"
-        />
         <CodeBlocksSettings
             v-if="editMode"
             :options="options"
@@ -224,7 +218,7 @@ import CodePlayground from '@/components/CodePlayground.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import DataBlock from '@/components/DataBlock.vue'
-import { BlockData, IMainBlock, IBlockBookmarkPayload } from '@/lib/codeBlocksManager'
+import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import { IScriptOutputObject, IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import {
     ICompilerID,
@@ -319,13 +313,12 @@ export interface IOnChangeOrder {
 export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef<boolean>) {
     const didInitialize = ref<boolean>(false)
     const outputHTML = ref<string>('')
-    const output = ref<string>('')
+    let output = ref<string>('')
     const sansoutput = ref<string>('')
     const didClip = ref<boolean>(false)
     const eventHub = ref<Vue>(new Vue())
     const _finalOutputObject = ref<IScriptOutputObject | null>(null)
     const didRunOnce = ref<boolean>(false)
-    let bookmarkedBlock = ref<BlockData | null>(null)
     const triggerRecompileWhenFinished = ref<boolean>(false)
     const continuousCodeUpdateTimer = ref<number | null>(null)
     const continuousCompile = computed((): boolean => {
@@ -484,10 +477,6 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
     const canStop = computed((): boolean => {
         return !isReady.value && didRunOnce.value
     })
-    const hasBookmark = computed((): boolean => {
-        return bookmarkedBlock.value !== null && editMode.value
-    })
-    const panelBlock = bookmarkedBlock
     const blockBecameReady = (): void => {
         let readyCount = blockInfo.value.blocks.map((b) => b.readyCount).reduce((p, c) => p + c, 0)
         if (readyCount == blockInfo.value.blocks.length) {
@@ -745,12 +734,7 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
             return false
         }
     }
-    const onBookmarkBlock = (data: IBlockBookmarkPayload) => {
-        console.i('Bookmark', data)
-        if (blockInfo.value.uuid == data.uuid) {
-            bookmarkedBlock = ref(data.block)
-        }
-    }
+
     const onViewCodeChange = (forceRun: boolean = false) => {
         if (!forceRun && !blockInfo.value.continuousCompilation) {
             return
@@ -800,11 +784,9 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
         if (editMode.value) {
             window.addEventListener('keydown', onkey, false)
         }
-        Vue.$GlobalEventHub.$on('bookmark-block', onBookmarkBlock)
     })
     onBeforeUnmount(() => {
         window.removeEventListener('keydown', onkey)
-        Vue.$GlobalEventHub.$off('bookmark-block')
     })
     return {
         didInitialize,
@@ -815,7 +797,6 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
         _finalOutputObject,
         eventHub,
         didRunOnce,
-        bookmarkedBlock,
         triggerRecompileWhenFinished,
         continuousCodeUpdateTimer,
         continuousCompile,
@@ -849,8 +830,6 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
         backgroundColorClass,
         hasREPL,
         canStop,
-        hasBookmark,
-        panelBlock,
         blockBecameReady,
         tagSet,
         themeForBlock,
@@ -867,7 +846,6 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
         stop,
         run,
         onkey,
-        onBookmarkBlock,
         onViewCodeChange,
         onRunFinished,
         onRunFromPlayground,
@@ -904,7 +882,6 @@ export default defineComponent({
             _finalOutputObject,
             eventHub,
             didRunOnce,
-            bookmarkedBlock,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,
             continuousCompile,
@@ -938,8 +915,6 @@ export default defineComponent({
             backgroundColorClass,
             hasREPL,
             canStop,
-            hasBookmark,
-            panelBlock,
             blockBecameReady,
             tagSet,
             themeForBlock,
@@ -956,7 +931,6 @@ export default defineComponent({
             stop,
             run,
             onkey,
-            onBookmarkBlock,
             onViewCodeChange,
             onRunFinished,
             onRunFromPlayground,
@@ -996,7 +970,6 @@ export default defineComponent({
             _finalOutputObject,
             eventHub,
             didRunOnce,
-            bookmarkedBlock,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,
             continuousCompile,
@@ -1031,8 +1004,6 @@ export default defineComponent({
             backgroundColorClass,
             hasREPL,
             canStop,
-            hasBookmark,
-            panelBlock,
             blockBecameReady,
             tagSet,
             themeForBlock,
@@ -1049,7 +1020,6 @@ export default defineComponent({
             stop,
             run,
             onkey,
-            onBookmarkBlock,
             onViewCodeChange,
             onRunFinished,
             onRunFromPlayground,
