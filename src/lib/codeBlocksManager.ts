@@ -1,8 +1,6 @@
 import { ScriptBlock } from './scriptBlock'
-import { IScriptOutputObject, IPlaygroundObject, ILegacyPlaygroundObject } from './IScriptBlock'
 import i18n from '../plugins/i18n'
-import 'reflect-metadata'
-import { Vue, Component, Watch } from 'vue-property-decorator'
+import Vue from 'vue'
 
 import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
@@ -22,6 +20,7 @@ import {
     IBlockloadManager,
     IBlockElementData,
     CodeExpansionType,
+    IBlockDataWithSettings,
 } from './ICodeBlocks'
 
 //get loaders
@@ -30,6 +29,7 @@ import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
 import dataInstaller from '@/lib/BlockloadManagers/DataManager'
 import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
 import { trim } from 'jquery'
+import { reactive, ref, UnwrapRef } from 'vue'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -45,7 +45,7 @@ export interface IAppSettings {
     editMode: boolean
     readonly: boolean
     randomizer: IRandomizerSettings
-    blocks: BlockData[]
+    blocks: UnwrapRef<BlockData[]>
     compiler: ICompilerID
     language: string
     runCode: boolean
@@ -91,40 +91,76 @@ interface IAppElementData {
     codeTheme?: string
 }
 
-@Component
-export class BlockData extends Vue implements IBlockData {
-    appSettings!: IAppSettings
-    hasCode!: boolean
-    type!: KnownBlockTypes
-    content!: string
-    alternativeContent!: string | null
-    noContent!: boolean
-    id!: number
-    uuid!: string
-    parentID!: number
-    expanded!: boolean
-    codeExpanded!: CodeExpansionType
-    obj!: ScriptBlock | null
-    dataObj!: any | null
-    readonly!: boolean
-    static!: boolean
-    hidden!: boolean
-    version!: string
-    readyCount!: number
-    errors!: ICompilerErrorDescription[]
+export class BlockData implements IBlockData {
+    appSettings: IAppSettings
+    hasCode: boolean
+    _type: KnownBlockTypes
+    content: string
+    alternativeContent: string | null
+    noContent: boolean
+    id: number
+    uuid: string
+    parentID: number
+    expanded: boolean
+    codeExpanded: CodeExpansionType
+    readonly: boolean
+    static: boolean
+    hidden: boolean
+    version: string
+    readyCount: number
+    errors: ICompilerErrorDescription[]
     scopeUUID?: string
     scopeSelector!: string
-    visibleLines!: number | 'auto'
-    hasAlternativeContent!: boolean
-    shouldAutoreset!: boolean
-    shouldReloadResources!: boolean
-    generateTemplate!: boolean
-    width!: string
-    height!: string
-    align!: string
-    lineCountHint!: number
-    name!: string
+    visibleLines: number | 'auto'
+    hasAlternativeContent: boolean
+    shouldAutoreset: boolean
+    shouldReloadResources: boolean
+    generateTemplate: boolean
+    width: string
+    height: string
+    align: string
+    lineCountHint: number
+    name: string
     _oac?: () => string //used by Blockly to re-place the actualContent-Method while keeping the old implementation around
+
+    obj: ScriptBlock | null
+    dataObj: any | null
+
+    constructor(data: { data: () => IBlockDataWithSettings }) {
+        const d = data.data()
+
+        this.obj = null
+        this.dataObj = null
+
+        this.appSettings = d.appSettings
+        this.hasCode = d.hasCode
+        this._type = d.type
+        this.content = d.content
+        this.alternativeContent = d.alternativeContent
+        this.noContent = d.noContent
+        this.id = d.id
+        this.uuid = d.uuid
+        this.parentID = d.parentID
+        this.expanded = d.expanded
+        this.codeExpanded = d.codeExpanded
+        this.readonly = d.readonly
+        this.static = d.static
+        this.hidden = d.hidden
+        this.version = d.version
+        this.readyCount = d.readyCount
+        this.errors = d.errors
+        this.scopeUUID = d.scopeUUID
+        this.visibleLines = d.visibleLines
+        this.hasAlternativeContent = d.hasAlternativeContent
+        this.shouldAutoreset = d.shouldAutoreset
+        this.shouldReloadResources = d.shouldReloadResources
+        this.generateTemplate = d.generateTemplate
+        this.width = d.width
+        this.height = d.height
+        this.align = d.align
+        this.lineCountHint = d.lineCountHint
+        this.name = d.name
+    }
 
     actualContent() {
         if (this.appSettings.randomizer.active) {
@@ -218,7 +254,17 @@ export class BlockData extends Vue implements IBlockData {
         return this.version
     }
 
-    @Watch('type')
+    get type(): KnownBlockTypes {
+        return this._type
+    }
+
+    set type(newType: KnownBlockTypes) {
+        const oldType = this._type
+        this._type = newType
+        this.onTypeChanged(newType, oldType)
+    }
+
+    //@Watch('type')
     onTypeChanged(newType: KnownBlockTypes, oldType: KnownBlockTypes) {
         if (newType != oldType) {
             this.recreateScriptObject()
@@ -342,7 +388,7 @@ class InternalCodeBlocksManager {
             },
             domLibs: [],
             workerLibs: [],
-            blocks: [],
+            blocks: reactive([]),
             outputParser: CodeOutputTypes.AUTO,
             readonly: false,
             solutionTheme: 'solarized light',
@@ -570,34 +616,54 @@ class InternalCodeBlocksManager {
         new Vue({
             i18n,
             render: function (h) {
-                @Component({
-                    data: function () {
-                        return data
-                    },
-                })
-                class MainBlock extends Vue implements IMainBlock {
-                    id!: number
-                    uuid!: string
-                    editMode!: boolean
-                    readonly!: boolean
-                    randomizer!: IRandomizerSettings
-                    blocks!: BlockData[]
-                    compiler!: ICompilerID
-                    language!: string
-                    runCode!: boolean
-                    domLibs!: string[]
-                    workerLibs!: string[]
-                    outputParser!: CodeOutputTypes
-                    solutionTheme!: string
-                    codeTheme!: string
-                    executionTimeout!: number
-                    maxCharacters!: number
+                class MainBlock implements IMainBlock {
+                    id: number
+                    uuid: string
+                    editMode: boolean
+                    readonly: boolean
+                    randomizer: IRandomizerSettings
+                    blocks: UnwrapRef<BlockData[]>
+                    compiler: ICompilerID
+                    language: string
+                    runCode: boolean
+                    domLibs: string[]
+                    workerLibs: string[]
+                    outputParser: CodeOutputTypes
+                    solutionTheme: string
+                    codeTheme: string
+                    executionTimeout: number
+                    maxCharacters: number
                     scopeUUID?: string
                     scopeSelector?: string
-                    continuousCompilation!: boolean
-                    messagePassing!: boolean
-                    keepAlive!: boolean
-                    persistentArguments!: boolean
+                    continuousCompilation: boolean
+                    messagePassing: boolean
+                    keepAlive: boolean
+                    persistentArguments: boolean
+
+                    constructor() {
+                        this.id = data.id
+                        this.uuid = data.uuid
+                        this.editMode = data.editMode
+                        this.readonly = data.readonly
+                        this.randomizer = data.randomizer
+                        this.blocks = data.blocks
+                        this.compiler = data.compiler
+                        this.language = data.language
+                        this.runCode = data.runCode
+                        this.domLibs = data.domLibs
+                        this.workerLibs = data.workerLibs
+                        this.outputParser = data.outputParser
+                        this.solutionTheme = data.solutionTheme
+                        this.codeTheme = data.codeTheme
+                        this.executionTimeout = data.executionTimeout
+                        this.maxCharacters = data.maxCharacters
+                        this.scopeUUID = data.scopeUUID
+                        this.scopeSelector = data.scopeSelector
+                        this.continuousCompilation = data.continuousCompilation
+                        this.messagePassing = data.messagePassing
+                        this.keepAlive = data.keepAlive
+                        this.persistentArguments = data.persistentArguments
+                    }
 
                     initArgsForLanguage() {
                         console.d('Constructing args for', this.language, this.defaultArgs)
@@ -700,9 +766,9 @@ class InternalCodeBlocksManager {
 
                 const context = {
                     props: {
-                        language: data.language,
-                        id: data.id,
-                        blocks: new MainBlock(),
+                        language: ref(data.language),
+                        id: ref(data.id),
+                        blocks: ref(new MainBlock()),
                     },
                 }
                 return h(data.editMode ? AppEditor : App, context)

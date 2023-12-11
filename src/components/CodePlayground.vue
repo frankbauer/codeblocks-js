@@ -57,12 +57,11 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
 import codemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 
 //helper to reset the canvas area if needed
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
+import Vue from 'vue'
 import PlaygroundCanvas from '@/components/PlaygroundCanvas.vue'
 //const PlaygroundCanvasCtor = Vue.extend(PlaygroundCanvas)
 

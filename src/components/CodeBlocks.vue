@@ -197,6 +197,7 @@ import Vue, {
     Ref,
     nextTick,
     ComputedRef,
+    UnwrapRef,
 } from 'vue'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
@@ -352,9 +353,11 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
             keepAlive: blockInfo.value.keepAlive,
         }
     })
-    const blocks = computed((): BlockData[] => {
+    const blocks = computed(() => {
         return blockInfo.value.blocks
     })
+
+    // const blocks = blockInfo.value.blocks
     const language = computed((): string => {
         return blockInfo.value.language
     })
@@ -436,10 +439,10 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
     const showGlobalMessages = computed((): boolean => {
         return !globalState.compilerState.globalStateHidden
     })
-    const playgrounds = computed((): BlockData[] => {
+    const playgrounds = computed(() => {
         return blocks.value.filter((b) => b.type == 'PLAYGROUND')
     })
-    const dataBlocks = computed((): BlockData[] => {
+    const dataBlocks = computed(() => {
         return blocks.value.filter((b) => b.type == 'DATA')
     })
     const outputElement: Ref<HTMLElement | null> = ref(null)
@@ -477,7 +480,7 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
     const themeForBlock = (bl: BlockData): string => {
         return bl.themeForCodeBlock
     }
-    const blockById = (id: number): BlockData | undefined => {
+    const blockById = (id: number): UnwrapRef<BlockData> | undefined => {
         return blocks.value.find((block) => block.id == id)
     }
 

@@ -5,7 +5,6 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
 import Vue from 'vue'
 import '@/lib/jquery.terminal.js'
 import $ from 'jquery'

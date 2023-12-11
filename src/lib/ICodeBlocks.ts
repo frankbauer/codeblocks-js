@@ -1,5 +1,6 @@
 import { ICompilerID, IListItemData } from './ICompilerRegistry'
 import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
+import { IAppSettings } from '@/lib/codeBlocksManager'
 
 export enum KnownBlockTypes {
     PLAYGROUND = 'PLAYGROUND',
@@ -94,6 +95,10 @@ export interface ICodeBlockDataState {
     readonly: boolean
     static: boolean
     hidden: boolean
+}
+
+export interface IBlockDataWithSettings extends IBlockDataBase {
+    appSettings: IAppSettings
 }
 
 export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataState, IBlockDataData {

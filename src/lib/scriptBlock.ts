@@ -1,16 +1,15 @@
-import 'reflect-metadata'
-import { Vue, Component, Prop } from 'vue-property-decorator'
+import Vue from 'vue'
 import {
     IParsedError,
     ILegacyPlaygroundObject,
     IPlaygroundObject,
-    IProcessedScriptOutput,
     IScriptOutputObject,
     IScriptBlock,
 } from '@/lib/IScriptBlock'
 import { ICompileAndRunArguments } from './ICompilerRegistry'
 import compilerRegistry from './CompilerRegistry'
 import { IBlockData } from './ICodeBlocks'
+
 interface ICodeTemplate {
     prefix: string
     postfix: string
@@ -158,6 +157,7 @@ export class ScriptBlock implements IScriptBlock {
     private fkt: Function | undefined = undefined
     private obj: IPlaygroundObject | ILegacyPlaygroundObject | undefined = undefined
     private didInit: boolean = false
+
     constructor(script: string, public version: string) {
         //this.rebuild(script)
         this.didInit = false
@@ -248,6 +248,7 @@ export class ScriptBlock implements IScriptBlock {
     get runConfig(): null | ICompileAndRunArguments {
         return this._runConfig
     }
+
     set runConfig(cfg: null | ICompileAndRunArguments) {
         if (this._runConfig) {
             this._runConfig.dequeuePostponedMessages = function () {}
@@ -265,7 +266,9 @@ export class ScriptBlock implements IScriptBlock {
             }
         }
     }
+
     queuedMessages: any[] = []
+
     doPostMessageToWorker(cmd: string, data: any) {
         if (data === undefined) {
             data = {}
@@ -284,7 +287,9 @@ export class ScriptBlock implements IScriptBlock {
             this.queuedMessages.push({ c: cmd, d: data })
         }
     }
+
     queuedIncomingMessages: any[] = []
+
     didReceiveMessage(cmd: string, data: any) {
         this.lazyInit()
         if (this.obj && !this.requestsOriginalVersion()) {
@@ -301,6 +306,7 @@ export class ScriptBlock implements IScriptBlock {
             this.queuedIncomingMessages.push({ c: cmd, d: data })
         }
     }
+
     dequeueIncoming() {
         console.i('MESSAGE - Dequeue Incoming')
         const msg = [...this.queuedIncomingMessages]
@@ -331,6 +337,7 @@ export class ScriptBlock implements IScriptBlock {
     }
 
     DATA: any[] = []
+
     resetBlockData(blocks: IBlockData[] | undefined) {
         this.DATA = []
         if (blocks !== undefined) {
@@ -341,6 +348,7 @@ export class ScriptBlock implements IScriptBlock {
     addBlockDataFromBlocks(blocks: IBlockData[]): void {
         blocks.filter((b) => b.type == 'DATA').forEach((b) => this.addBlockDataFromBlock(b))
     }
+
     addBlockDataFromBlock(block: IBlockData): void {
         this.addBlockData(block.name, block.content)
     }
@@ -353,10 +361,13 @@ export class ScriptBlock implements IScriptBlock {
             console.error(`Unable to parse JSON from '${name}'`, e)
         }
     }
+
     RESOURCES: any[] | undefined = undefined
+
     resetResources() {
         this.RESOURCES = undefined
     }
+
     setupDOM(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void {
         const self = this
         this.queuedMessages = []
@@ -388,6 +399,7 @@ export class ScriptBlock implements IScriptBlock {
             this.pushError(e)
         }
     }
+
     init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void {
         const self = this
         this.queuedMessages = []

@@ -23,7 +23,6 @@ console.i = function (...lines) {
 }
 
 import Vue from 'vue'
-import 'reflect-metadata'
 import './plugins/uuid'
 import './plugins/quasar'
 import './plugins/codemirror'

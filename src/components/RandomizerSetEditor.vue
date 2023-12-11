@@ -13,8 +13,6 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { computed, ComputedRef, defineComponent, PropType } from 'vue'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'

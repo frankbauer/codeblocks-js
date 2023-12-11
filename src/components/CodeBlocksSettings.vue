@@ -323,7 +323,6 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
 import RandomizerSettings from '@/components/RandomizerSettings.vue'
 import { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
 import { CodeOutputTypes, IRandomizerSettings } from '@/lib/ICodeBlocks'

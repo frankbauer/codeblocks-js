@@ -35,5 +35,3 @@ Vue.use(Quasar, {
     lang: lang == 'de' ? langDe : langEn,
 })
 Quasar.lang.set(lang == 'de' ? langDe : langEn)
-
-import 'reflect-metadata'

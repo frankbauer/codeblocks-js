@@ -24,11 +24,8 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeUnmount, onMounted, ref, Ref } from 'vue'
+import Vue, { computed, defineComponent, onBeforeUnmount, onMounted, ref, Ref } from 'vue'
 import { ITagReplaceAction } from '@/plugins/tagger'
-import { Vue } from 'vue-property-decorator'
-import PlaygroundCanvas from '@/components/PlaygroundCanvas.vue'
-import CodeBlock from '@/components/CodeBlock.vue'
 
 export default defineComponent({
     name: 'TipTap',
