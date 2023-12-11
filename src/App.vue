@@ -1,5 +1,5 @@
 <template>
-    <q-layout view="hHh lpR fFf" style="min-height:0">
+    <q-layout view="hHh lpR fFf" style="min-height: 0">
         <q-page-container>
             <CodeBlocks :blockInfo="blocks" />
         </q-page-container>
@@ -7,25 +7,24 @@
 </template>
 
 <script>
+import { defineComponent, toRefs } from 'vue'
 import CodeBlocks from './components/CodeBlocks'
-import Vue from 'vue'
 
-export default {
+export default defineComponent({
     name: 'App',
-
     props: ['blocks'],
-
     components: {
-        CodeBlocks
+        CodeBlocks,
     },
-
-    data: () => ({}),
-    computed: {}
-}
+    setup(props, ctx) {
+        const { blocks } = toRefs(props)
+        return {}
+    },
+})
 </script>
 
 <style lang="sass">
 #app
-  margin-bottom: 16px
-  background-color: rgba(1,1,1,0)
+    margin-bottom: 16px
+    background-color: rgba(1, 1, 1, 0)
 </style>

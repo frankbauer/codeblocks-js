@@ -20,7 +20,7 @@ const legacyCodeTemplate: ICodeTemplate = {
     postfix: '}.o}.call({})',
 }
 const v101CodeTemplate: ICodeTemplate = {
-    prefix: '"use strict"; return function(){ return {o:',
+    prefix: '"use strict"; return function(){ const module={}; return {o:',
     postfix: '}.o}.call({})',
 }
 const v102CodeTemplate: ICodeTemplate = {
@@ -100,6 +100,9 @@ function compileCode(src: string) {
         // }
         sandbox.requestAnimationFrame = (callback) => {
             oldRequestAnimationFrame(callback)
+        }
+        sandbox.module = {
+            exports: undefined,
         }
         sandbox.jQuery = sandbox.$
         sandbox.console = console
@@ -192,7 +195,7 @@ export class ScriptBlock implements IScriptBlock {
                 //evaluating would fail if the code does not start in the first line
 
                 //we also return a function to make and call (.call({})) it with a clean object
-                //to ensure that 'this' is will allways be in a defined state inside the users code
+                //to ensure that 'this' will always be in a defined state inside the users code
                 if (this.requestsOriginalVersion()) {
                     this.fkt = new Function(
                         legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix

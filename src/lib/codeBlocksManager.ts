@@ -617,6 +617,7 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         const self = this
+        //Vue.createApp({}).use(i18n).mount(this.element)
         new Vue({
             i18n,
             render: function (h) {
