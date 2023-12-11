@@ -94,105 +94,148 @@
 </template>
 
 <script lang="ts">
-import 'reflect-metadata'
-
-//helper to reset the canvas area if needed
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
-import BaseBlock from '@/components/BaseBlock.vue'
+import Vue, {
+    defineComponent,
+    toRefs,
+    computed,
+    onMounted,
+    onBeforeUnmount,
+    PropType,
+    Ref,
+    ref,
+} from 'vue'
 import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import { ICompilerID, ICompilerInstance } from '@/lib/ICompilerRegistry'
 import Terminal from '@/components/Terminal.vue'
+import { getCurrentInstance } from 'vue'
+import { useBasicBlockMounting } from '@/composables/basicBlock'
+import { globalState } from '@/lib/globalState'
+import compilerRegistry from '@/lib/CompilerRegistry'
 
-@Component({ components: { Terminal } })
-export default class CodeREPL extends BaseBlock {
-    @Prop({ required: true }) eventHub!: Vue
-    @Prop({ required: true }) blockInfo!: IMainBlock
-    @Prop({ required: true }) isReady!: boolean
-    @Prop({ required: true }) canStop!: boolean
-    @Prop({ required: true }) showGlobalMessages!: boolean
-    @Prop({ required: true }) globalStateMessage!: string
+export default defineComponent({
+    name: 'CodeREPL',
+    components: { Terminal },
+    props: {
+        eventHub: { required: true, type: Object as PropType<Vue> },
+        blockInfo: { required: true, type: Object as PropType<IMainBlock> },
+        isReady: { required: true, type: Boolean },
+        canStop: { required: true, type: Boolean },
+        showGlobalMessages: { required: true, type: Boolean },
+        globalStateMessage: { required: true, type: String },
+        muteReadyState: {
+            type: Boolean,
+            default: false,
+        },
+        block: {
+            type: Object as PropType<BlockData>,
+            required: true,
+        },
+        editMode: {
+            type: Boolean,
+            default: false,
+        },
+        visibleLines: {
+            type: [Number, String] as PropType<number | 'auto'>,
+            default: 'auto',
+        },
+        theme: {
+            type: String,
+            default: 'base16-dark',
+        },
+    },
+    setup(props, ctx) {
+        const instance = getCurrentInstance()
+        const q = instance?.proxy?.$root?.$q
+        const t = instance?.proxy?.$root?.$t
+        const l = instance?.proxy?.$root?.$l
 
-    get hasContent(): boolean {
-        return false
-    }
-
-    get isRunning(): boolean {
-        return this.canStop
-    }
-
-    get canStartREPL(): boolean {
-        return this.blockInfo.runCode && this.blockInfo.messagePassing && this.blockInfo.keepAlive
-    }
-
-    get allowsREPL(): boolean {
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        if (cmp === undefined) {
+        const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(true, props, ctx)
+        const { eventHub, blockInfo, isReady, canStop, showGlobalMessages, globalStateMessage } =
+            toRefs(props)
+        const hasContent = computed((): boolean => {
             return false
+        })
+        const isRunning = computed((): boolean => {
+            return canStop.value
+        })
+        const canStartREPL = computed((): boolean => {
+            return (
+                blockInfo.value.runCode &&
+                blockInfo.value.messagePassing &&
+                blockInfo.value.keepAlive
+            )
+        })
+        const allowsREPL = computed((): boolean => {
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            if (cmp === undefined) {
+                return false
+            }
+            return cmp.allowsREPL
+        })
+        const compiler = computed((): ICompilerID => {
+            return blockInfo.value.compiler
+        })
+        const typeName = computed(() => {
+            let s = props.block.type.toLowerCase()
+            if (props.block.hidden) {
+                s += '-hidden'
+            }
+            if (props.block.static) {
+                s += '-static'
+            }
+            return s
+        })
+        const readyWhenMounted = computed(() => {
+            return false
+        })
+        const terminal: Ref<HTMLElement | null> = ref(null)
+        const emitRun = () => {
+            ctx.emit('run', props.block)
         }
-        return cmp.allowsREPL
-    }
-
-    get compiler(): ICompilerID {
-        return this.blockInfo.compiler
-    }
-
-    get typeName() {
-        let s = this.block.type.toLowerCase()
-        if (this.block.hidden) {
-            s += '-hidden'
+        const emitStop = () => {
+            ctx.emit('stop', props.block)
         }
-        if (this.block.static) {
-            s += '-static'
+        const waitReady = (cmp: ICompilerInstance | undefined) => {
+            if (cmp === undefined || cmp.isReady) {
+                whenBlockIsReady()
+            } else {
+                setTimeout(waitReady.bind(this, cmp), 500)
+            }
         }
-        return s
-    }
-
-    get readyWhenMounted() {
-        return false
-    }
-
-    get terminal(): Vue {
-        return this.$refs.terminal as Vue
-    }
-
-    emitRun() {
-        this.$emit('run', this.block)
-    }
-
-    emitStop() {
-        this.$emit('stop', this.block)
-    }
-
-    mounted() {
-        if (this.eventHub) {
-            this.eventHub.$on('all-mounted', this.whenMounted)
-        } else {
-            this.whenMounted()
+        const whenMounted = (): void => {
+            emitRun()
         }
-
-        const cmp = this.$compilerRegistry.getCompiler(this.compiler)
-        this.waitReady(cmp)
-    }
-
-    beforeDestroy() {
-        if (this.eventHub) {
-            this.eventHub.$off('all-mounted')
+        onMounted(() => {
+            if (eventHub.value) {
+                eventHub.value.$on('all-mounted', whenMounted)
+            } else {
+                whenMounted()
+            }
+            const cmp = compilerRegistry.getCompiler(compiler.value)
+            waitReady(cmp)
+        })
+        onBeforeUnmount(() => {
+            if (eventHub.value) {
+                eventHub.value.$off('all-mounted')
+            }
+            whenBlockIsDestroyed()
+        })
+        return {
+            hasContent,
+            isRunning,
+            canStartREPL,
+            allowsREPL,
+            compiler,
+            typeName,
+            readyWhenMounted,
+            terminal,
+            emitRun,
+            emitStop,
+            waitReady,
+            whenMounted,
         }
-        this.whenBlockIsDestroyed()
-    }
-
-    waitReady(cmp: ICompilerInstance | undefined) {
-        if (cmp === undefined || cmp.isReady) {
-            this.whenBlockIsReady()
-        } else {
-            setTimeout(this.waitReady.bind(this, cmp), 500)
-        }
-    }
-
-    whenMounted(): void {
-        this.emitRun()
-    }
-}
+    },
+})
 </script>
 
 <style></style>
