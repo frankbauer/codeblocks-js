@@ -1,7 +1,7 @@
 <template>
     <q-layout view="hHh lpR fFf" style="min-height: 0">
         <q-page-container>
-            <CodeBlocksEditor :blockInfo="blocks" />
+            <CodeBlocksEditor :blockInfo="blocks" :event-hub="eventHub" />
         </q-page-container>
     </q-layout>
 </template>
@@ -9,6 +9,7 @@
 <script>
 import { defineComponent, toRefs } from 'vue'
 import CodeBlocksEditor from './components/CodeBlocksEditor'
+import { createGlobalEvent } from '@/composables/globalEvents'
 
 export default defineComponent({
     name: 'AppEditor',
@@ -17,8 +18,8 @@ export default defineComponent({
         CodeBlocksEditor,
     },
     setup(props, ctx) {
-        const { blocks } = toRefs(props)
-        return {}
+        const { eventHub } = createGlobalEvent()
+        return { eventHub }
     },
 })
 </script>

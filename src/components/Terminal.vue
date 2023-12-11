@@ -13,6 +13,7 @@ import { ICompilerID, IListItemData } from '@/lib/ICompilerRegistry'
 import { IMainBlock } from '@/lib/codeBlocksManager'
 import { computed, ComputedRef, defineComponent, onBeforeUnmount, onMounted, PropType } from 'vue'
 import compilerRegistry from '@/lib/CompilerRegistry'
+import { EventHubType } from '@/composables/globalEvents'
 
 function sleep(s) {
     return new Promise((resolve) => setTimeout(resolve, s))
@@ -29,7 +30,7 @@ export default defineComponent({
             required: true,
         },
         eventHub: {
-            type: Object as PropType<Vue>,
+            type: Object as PropType<EventHubType>,
             required: true,
         },
     },
@@ -139,17 +140,17 @@ export default defineComponent({
             term.ready = Promise.resolve()
 
             if (props.eventHub) {
-                props.eventHub.$on('console-log', (msg) => term.echo(msg))
-                props.eventHub.$on('console-err', (msg) => term.error(msg))
-                props.eventHub.$on('clicked-run', () => clear())
+                props.eventHub.on('console-log', (msg) => term.echo(msg))
+                props.eventHub.on('console-err', (msg) => term.error(msg))
+                props.eventHub.on('clicked-run', () => clear())
             }
         })
 
         onBeforeUnmount(() => {
             if (props.eventHub) {
-                props.eventHub.$off('console-log')
-                props.eventHub.$off('console-err')
-                props.eventHub.$off('clicked-run')
+                props.eventHub.off('console-log')
+                props.eventHub.off('console-err')
+                props.eventHub.off('clicked-run')
             }
         })
 

@@ -159,6 +159,7 @@ import 'codemirror/theme/mdn-like.css'
 import 'codemirror/mode/javascript/javascript.js'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
+import { EventHubType } from '@/composables/globalEvents'
 
 export default defineComponent({
     name: 'DataBlock',
@@ -172,7 +173,7 @@ export default defineComponent({
         block: { required: true, type: Object as PropType<BlockData> },
         editMode: { default: false, type: Boolean },
         theme: { default: 'base16-dark', type: String },
-        eventHub: { required: true, type: Object as PropType<Vue> },
+        eventHub: { required: true, type: Object as PropType<EventHubType> },
         tagSet: { type: Object as PropType<IRandomizerSet> },
     },
     setup(props, ctx) {
@@ -459,8 +460,8 @@ export default defineComponent({
             block.value.content = JSON.stringify(json, undefined, 2)
         }
         ;(() => {
-            eventHub.value.$on('before-run', resetBeforeRun)
-            eventHub.value.$on('render-diagnostics', updateErrors)
+            eventHub.value.on('before-run', resetBeforeRun)
+            eventHub.value.on('render-diagnostics', updateErrors)
         })()
         onMounted(() => {
             const hasErrors = block.value && block.value.obj && block.value.obj.err.length > 0
@@ -470,8 +471,8 @@ export default defineComponent({
             updateHeight()
         })
         onBeforeUnmount(() => {
-            eventHub.value.$off('before-run', resetBeforeRun)
-            eventHub.value.$off('render-diagnostics', updateErrors)
+            eventHub.value.off('before-run', resetBeforeRun)
+            eventHub.value.off('render-diagnostics', updateErrors)
         })
         return {
             needsCodeRebuild,

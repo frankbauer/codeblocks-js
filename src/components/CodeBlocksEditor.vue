@@ -22,6 +22,7 @@ import CodePlayground from '@/components/CodePlayground.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
 import DataBlock from '@/components/DataBlock.vue'
+import { EventHubType } from '@/composables/globalEvents'
 
 export default defineComponent({
     name: 'CodeBlocksEditor',
@@ -35,7 +36,10 @@ export default defineComponent({
         CodeREPL,
         DataBlock,
     },
-    props: { blockInfo: { required: true, type: Object as PropType<IMainBlock> } },
+    props: {
+        blockInfo: { required: true, type: Object as PropType<IMainBlock> },
+        eventHub: { required: true, type: Object as PropType<EventHubType> },
+    },
     setup(props, ctx) {
         const { blockInfo } = toRefs(props)
         const editMode = computed((): boolean => {
@@ -48,7 +52,6 @@ export default defineComponent({
             sansoutput,
             didClip,
             _finalOutputObject,
-            eventHub,
             didRunOnce,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,
@@ -102,7 +105,7 @@ export default defineComponent({
             onViewCodeChange,
             onRunFinished,
             onRunFromPlayground,
-        } = codeBlockSetup(blockInfo, editMode)
+        } = codeBlockSetup(blockInfo, editMode, props.eventHub)
 
         const onTypeChange = (nfo: IOnTypeChangeInfo): void => {
             let bl = blockById(nfo.id)
@@ -255,7 +258,6 @@ export default defineComponent({
             sansoutput,
             didClip,
             _finalOutputObject,
-            eventHub,
             didRunOnce,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,

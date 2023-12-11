@@ -111,12 +111,13 @@ import { getCurrentInstance } from 'vue'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
 import compilerRegistry from '@/lib/CompilerRegistry'
+import { EventHubType } from '@/composables/globalEvents'
 
 export default defineComponent({
     name: 'CodeREPL',
     components: { Terminal },
     props: {
-        eventHub: { required: true, type: Object as PropType<Vue> },
+        eventHub: { required: true, type: Object as PropType<EventHubType> },
         blockInfo: { required: true, type: Object as PropType<IMainBlock> },
         isReady: { required: true, type: Boolean },
         canStop: { required: true, type: Boolean },
@@ -208,7 +209,7 @@ export default defineComponent({
         }
         onMounted(() => {
             if (eventHub.value) {
-                eventHub.value.$on('all-mounted', whenMounted)
+                eventHub.value.on('all-mounted', whenMounted)
             } else {
                 whenMounted()
             }
@@ -217,7 +218,7 @@ export default defineComponent({
         })
         onBeforeUnmount(() => {
             if (eventHub.value) {
-                eventHub.value.$off('all-mounted')
+                eventHub.value.off('all-mounted')
             }
             whenBlockIsDestroyed()
         })

@@ -28,6 +28,7 @@ import Vue, {
     Ref,
     ref,
 } from 'vue'
+import { EventHubType } from '@/composables/globalEvents'
 
 export default defineComponent({
     name: 'PlaygroundCanvas',
@@ -43,7 +44,7 @@ export default defineComponent({
             required: true,
         },
         eventHub: {
-            type: Object as PropType<Vue>,
+            type: Object as PropType<EventHubType>,
             required: true,
         },
         tagSet: {
@@ -89,7 +90,7 @@ export default defineComponent({
 
         onMounted(() => {
             if (props.eventHub) {
-                props.eventHub.$on('all-mounted', whenMounted)
+                props.eventHub.on('all-mounted', whenMounted)
             } else {
                 whenMounted()
             }
@@ -99,7 +100,7 @@ export default defineComponent({
 
         onBeforeUnmount(() => {
             if (props.eventHub) {
-                props.eventHub.$off('all-mounted')
+                props.eventHub.off('all-mounted')
             }
         })
 

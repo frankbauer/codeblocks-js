@@ -221,6 +221,7 @@ import {
 } from '@/lib/ICodeBlocks'
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { globalState } from '@/lib/globalState'
+import { EventHubType } from '@/composables/globalEvents'
 
 function formatOutput(result) {
     const regex =
@@ -296,13 +297,16 @@ export interface IOnChangeOrder {
     newID: number
 }
 
-export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef<boolean>) {
+export function codeBlockSetup(
+    blockInfo: Ref<IMainBlock>,
+    editMode: ComputedRef<boolean>,
+    eventHub: EventHubType
+) {
     const didInitialize = ref<boolean>(false)
     const outputHTML = ref<string>('')
     let output = ref<string>('')
     const sansoutput = ref<string>('')
     const didClip = ref<boolean>(false)
-    const eventHub = ref<Vue>(new Vue())
     const _finalOutputObject = ref<IScriptOutputObject | null>(null)
     const didRunOnce = ref<boolean>(false)
     const triggerRecompileWhenFinished = ref<boolean>(false)
@@ -469,7 +473,7 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
         let readyCount = blockInfo.value.blocks.map((b) => b.readyCount).reduce((p, c) => p + c, 0)
         if (readyCount == blockInfo.value.blocks.length) {
             nextTick(() => {
-                eventHub.value.$emit('all-mounted', {})
+                eventHub.emit('all-mounted', {})
             })
         }
         console.d('Ready', readyCount, blockInfo.value.blocks.length)
@@ -521,19 +525,19 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
                 formatedText = formatOutput(text)
             }
             outputHTML.value += formatedText
-            eventHub.value.$emit('console-log', formatedText)
+            eventHub.emit('console-log', formatedText)
         }
     }
     const logError = (text: string): void => {
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
-        eventHub.value.$emit('console-err', text)
+        eventHub.emit('console-err', text)
         text = globalState.codeBlocks.format_error(text)
         sansoutput.value += text
         outputHTML.value += text
     }
     const logInfo = (text: string): void => {
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
-        eventHub.value.$emit('console-nfo', text)
+        eventHub.emit('console-nfo', text)
         text = globalState.codeBlocks.format_info(text)
         sansoutput.value += text
         outputHTML.value += text
@@ -553,7 +557,7 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
     }
     const clearDiagnostics = (): void => {
         blocks.value.forEach((block) => (block.errors = []))
-        eventHub.value.$emit('render-diagnostics', {})
+        eventHub.emit('render-diagnostics', {})
     }
     const loadLibraries = (whenLoaded: () => void): void => {
         compilerRegistry.loadLibraries(domLibraries.value, whenLoaded)
@@ -589,7 +593,7 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
             parseError: parseError,
             outputElement: $(outputElement) as any,
         }
-        eventHub.value.$emit('output-updated', _finalOutputObject.value)
+        eventHub.emit('output-updated', _finalOutputObject.value)
         onRunFinished()
     }
     const stop = (): void => {
@@ -606,10 +610,10 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
         }
         globalState.compilerState.setAllRunButtons(false)
         resetOutput()
-        eventHub.value.$emit('clicked-run')
+        eventHub.emit('clicked-run')
         clearDiagnostics()
         loadLibraries(() => {
-            eventHub.value.$emit('before-run', {})
+            eventHub.emit('before-run', {})
             console.d('compileAndRun')
             didRunOnce.value = true
             nextTick(() => {
@@ -766,7 +770,7 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
         }
 
         loadLibraries(() => {
-            eventHub.value.$emit('initialized-libraries', {})
+            eventHub.emit('initialized-libraries', {})
         })
         didInitialize.value = true
         if (editMode.value) {
@@ -783,7 +787,6 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
         sansoutput,
         didClip,
         _finalOutputObject,
-        eventHub,
         didRunOnce,
         triggerRecompileWhenFinished,
         continuousCodeUpdateTimer,
@@ -853,6 +856,7 @@ export default defineComponent({
     },
     props: {
         blockInfo: { required: true, type: Object as PropType<IMainBlock> },
+        eventHub: { required: true, type: Object as PropType<EventHubType> },
     },
     setup(props, ctx) {
         const { blockInfo } = toRefs(props)
@@ -866,7 +870,6 @@ export default defineComponent({
             sansoutput,
             didClip,
             _finalOutputObject,
-            eventHub,
             didRunOnce,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,
@@ -920,7 +923,7 @@ export default defineComponent({
             onViewCodeChange,
             onRunFinished,
             onRunFromPlayground,
-        } = codeBlockSetup(blockInfo, editMode)
+        } = codeBlockSetup(blockInfo, editMode, props.eventHub)
         const onTypeChange = (nfo: IOnTypeChangeInfo): void => {}
         const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {}
         const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {}
@@ -954,7 +957,6 @@ export default defineComponent({
             sansoutput,
             didClip,
             _finalOutputObject,
-            eventHub,
             didRunOnce,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,

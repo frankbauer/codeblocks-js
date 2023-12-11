@@ -84,6 +84,7 @@ import {
     ref,
 } from 'vue'
 import { globalState } from '@/lib/globalState'
+import { EventHubType } from '@/composables/globalEvents'
 
 export interface ICodePlaygroundOptions {
     mode: string
@@ -128,7 +129,7 @@ export default defineComponent({
             required: true,
         },
         eventHub: {
-            type: Object as PropType<Vue>,
+            type: Object as PropType<EventHubType>,
             required: true,
         },
         tagSet: {
@@ -447,8 +448,8 @@ export default defineComponent({
         )
 
         onBeforeMount(() => {
-            props.eventHub.$on('before-run', resetBeforeRun)
-            props.eventHub.$on('render-diagnostics', updateErrors)
+            props.eventHub.on('before-run', resetBeforeRun)
+            props.eventHub.on('render-diagnostics', updateErrors)
         })
 
         onMounted(() => {
@@ -456,13 +457,13 @@ export default defineComponent({
             if (hasErrors) {
                 updateErrors()
             }
-            props.eventHub.$on('output-updated', onFinalOutputObject)
+            props.eventHub.on('output-updated', onFinalOutputObject)
         })
 
         onBeforeUnmount(() => {
-            props.eventHub.$off('before-run', resetBeforeRun)
-            props.eventHub.$off('render-diagnostics', updateErrors)
-            props.eventHub.$off('output-updated', onFinalOutputObject)
+            props.eventHub.off('before-run', resetBeforeRun)
+            props.eventHub.off('render-diagnostics', updateErrors)
+            props.eventHub.off('output-updated', onFinalOutputObject)
         })
 
         return {

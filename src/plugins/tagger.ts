@@ -22,8 +22,11 @@ export interface ITagMarkers {
 
 import mitt from 'mitt'
 
+type TaggerEvents = {
+    'replace-template-tag': ITagReplaceAction
+}
 export default class Tagger {
-    private readonly emitter = mitt()
+    private readonly emitter = mitt<TaggerEvents>()
     public readonly className = {
         rnd: 'random-tag-placeholder',
         templ: 'template-tag-placeholder',
