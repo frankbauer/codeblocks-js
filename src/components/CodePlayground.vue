@@ -64,7 +64,6 @@ import 'codemirror/lib/codemirror.css'
 //helper to reset the canvas area if needed
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import PlaygroundCanvas from '@/components/PlaygroundCanvas.vue'
-import BaseBlock from '@/components/BaseBlock.vue'
 //const PlaygroundCanvasCtor = Vue.extend(PlaygroundCanvas)
 
 import CodeBlock from '@/components/CodeBlock.vue'
