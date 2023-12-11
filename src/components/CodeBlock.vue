@@ -52,7 +52,7 @@ import ErrorTip from './ErrorTip.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { BlockData } from '@/lib/codeBlocksManager'
-import { ITagReplaceAction } from '@/plugins/tagger'
+import { ITagReplaceAction, tagger } from '@/plugins/tagger'
 import codemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/solarized.css'
@@ -250,10 +250,7 @@ export default defineComponent({
             }
             let allMarks = codemirror.value.getDoc().getAllMarks()
             allMarks.forEach((e) => {
-                if (
-                    e.className == Vue.$tagger.className.rnd ||
-                    e.className == Vue.$tagger.className.templ
-                ) {
+                if (e.className == tagger.className.rnd || e.className == tagger.className.templ) {
                     e.clear()
                 }
             })
@@ -261,8 +258,8 @@ export default defineComponent({
                 allMarks = altcodemirror.value.getDoc().getAllMarks()
                 allMarks.forEach((e) => {
                     if (
-                        e.className == Vue.$tagger.className.rnd ||
-                        e.className == Vue.$tagger.className.templ
+                        e.className == tagger.className.rnd ||
+                        e.className == tagger.className.templ
                     ) {
                         e.clear()
                     }
@@ -375,25 +372,27 @@ export default defineComponent({
         const didAddText = (t: string): void => {
             if (
                 t.indexOf('!') >= 0 ||
+                t.indexOf(':') >= 0 ||
                 t.indexOf('+') >= 0 ||
                 t.indexOf('{') >= 0 ||
-                t.indexOf('{') >= 0 ||
+                t.indexOf('}') >= 0 ||
                 t.indexOf('\n') >= 0
             ) {
+                console.log("TAGGER: '" + t + "' needs update")
                 codeNeedsTagUpdate.value = true
             }
         }
-        const onCodeKeyHandle = (e) => {
-            if (arguments.length > 1 && arguments[1] !== undefined) {
-                if (arguments[1].text !== undefined) {
-                    arguments[1].text.forEach((t) => {
+        const onCodeKeyHandle = (e, kEvent?: any) => {
+            if (kEvent !== undefined) {
+                if (kEvent.text !== undefined) {
+                    kEvent.text.forEach((t) => {
                         didAddText(t)
                     })
-                } else if (arguments[1].key !== undefined) {
-                    if (arguments[1].keyCode == 13) {
+                } else if (kEvent.key !== undefined) {
+                    if (kEvent.keyCode === 13) {
                         didAddText('\n')
                     } else {
-                        didAddText(arguments[1].key)
+                        didAddText(kEvent.key)
                     }
                 }
             }
@@ -458,7 +457,7 @@ export default defineComponent({
             if (o.scopeUUID != block.value.scopeUUID) {
                 return
             }
-            block.value.content = Vue.$tagger.replaceTemplateTagInString(
+            block.value.content = tagger.replaceTemplateTagInString(
                 block.value.content,
                 o.name,
                 o.newValue
@@ -477,9 +476,9 @@ export default defineComponent({
             }
             codeNeedsTagUpdate.value = false
             clearTagMarkers()
-            Vue.$tagger.getMarkers(block.value.content).forEach((m) => {
+            tagger.getMarkers(block.value.content).forEach((m) => {
                 codemirror.value.getDoc().markText(m.start, m.end, {
-                    className: Vue.$tagger.className[m.type],
+                    className: tagger.className[m.type],
                     inclusiveLeft: true,
                     inclusiveRight: true,
                     title: m.name,
@@ -488,12 +487,12 @@ export default defineComponent({
                 })
             })
             nextTick(() => {
-                Vue.$tagger.hookClick((codeBox.value as any).$el, block.value.scopeUUID)
+                tagger.hookClick((codeBox.value as any).$el, block.value.scopeUUID)
             })
             if (altcodemirror.value) {
-                Vue.$tagger.getMarkers(block.value.alternativeContent).forEach((m) => {
+                tagger.getMarkers(block.value.alternativeContent).forEach((m) => {
                     altcodemirror.value.getDoc().markText(m.start, m.end, {
-                        className: Vue.$tagger.className[m.type],
+                        className: tagger.className[m.type],
                         inclusiveLeft: true,
                         inclusiveRight: true,
                         title: m.name,
@@ -503,7 +502,7 @@ export default defineComponent({
                 })
                 nextTick(() => {
                     if (altBox.value !== undefined && altBox.value !== null) {
-                        Vue.$tagger.hookClick((altBox.value as any).$el, block.value.scopeUUID)
+                        tagger.hookClick((altBox.value as any).$el, block.value.scopeUUID)
                     }
                 })
             }
@@ -600,12 +599,12 @@ export default defineComponent({
                     },
                 })
             }
-            Vue.$tagger.$on('replace-template-tag', replaceTemplateTags)
+            tagger.onReplaceTemplateTag(replaceTemplateTags)
             codeNeedsTagUpdate.value = true
             updateTagDisplay()
         })
         onBeforeUnmount(() => {
-            Vue.$tagger.$off('replace-template-tag', replaceTemplateTags)
+            tagger.offReplaceTemplateTag(replaceTemplateTags)
         })
         return {
             codeUpdateTimer,
