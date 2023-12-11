@@ -160,6 +160,8 @@ export class BlockData implements IBlockData {
         this.align = d.align
         this.lineCountHint = d.lineCountHint
         this.name = d.name
+
+        this.created()
     }
 
     actualContent() {
@@ -188,6 +190,8 @@ export class BlockData implements IBlockData {
                 content: '',
             }
             console.i('Block Rebuild', this.obj, this.uuid)
+        } else {
+            console.i('recreateScriptObject - UNKNOWN')
         }
     }
 

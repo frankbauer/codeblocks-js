@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue, { computed, defineComponent, onBeforeUnmount, onMounted, ref, Ref } from 'vue'
-import { ITagReplaceAction } from '@/plugins/tagger'
+import { ITagReplaceAction, tagger } from '@/plugins/tagger'
 
 export default defineComponent({
     name: 'TipTap',
@@ -67,11 +67,11 @@ export default defineComponent({
             eb.$el.querySelectorAll('textarea[name]').forEach((el) => {
                 el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
             })
-            Vue.$tagger.$on('replace-template-tag', replaceTemplateTags)
+            tagger.onReplaceTemplateTag(replaceTemplateTags)
         })
 
         onBeforeUnmount(() => {
-            Vue.$tagger.$off('replace-template-tag', replaceTemplateTags)
+            tagger.offReplaceTemplateTag(replaceTemplateTags)
         })
 
         return {
