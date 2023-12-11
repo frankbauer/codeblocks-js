@@ -36,7 +36,8 @@
     "tests/**/*.ts",
     "tests/**/*.tsx",
     "node_modules/@types/jquery/misc.d.ts",
-    "node_modules/@types/jquery/JQuery.d.ts"
+    "node_modules/@types/jquery/JQuery.d.ts",
+    "node_modules/@types/jquery/misc.d.ts"
   ],
   "exclude": [
     "node_modules"
