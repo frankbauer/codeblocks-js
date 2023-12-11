@@ -7,9 +7,7 @@
                 :style="`width:${block.width};height:${block.height}`"
                 :data-question="block.parentID"
                 :data-nr="block.id"
-            >
-                {{ output }}
-            </div>
+            ></div>
         </div>
     </div>
 </template>
