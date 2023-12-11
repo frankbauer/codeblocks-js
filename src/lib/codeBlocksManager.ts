@@ -215,11 +215,29 @@ export class BlockData implements IBlockData {
         return this.appSettings.solutionTheme
     }
 
+    get isSourceCode(): boolean {
+        return (
+            this.type === KnownBlockTypes.BLOCK ||
+            this.type === KnownBlockTypes.BLOCKSTATIC ||
+            this.type === KnownBlockTypes.BLOCKHIDDEN
+        )
+    }
+
     get isLast(): boolean {
         return this.id == this.appSettings.blocks.length - 1
     }
 
     get firstLine(): number {
+        if (!this.isSourceCode) {
+            return 1
+        }
+        if (this.id === 0) {
+            return 1
+        }
+        return this.appSettings.blocks[this.id - 1].nextLine
+    }
+
+    get firstLineRaw(): number {
         if (this.id === 0) {
             return 1
         }
@@ -243,10 +261,10 @@ export class BlockData implements IBlockData {
     }
 
     get nextLine(): number {
-        if (!this.hasCode) {
-            return this.firstLine
+        if (!this.hasCode || !this.isSourceCode) {
+            return this.firstLineRaw
         }
-        return this.firstLine + this.lineCount
+        return this.firstLineRaw + this.lineCount
     }
 
     get domLibs(): string[] {

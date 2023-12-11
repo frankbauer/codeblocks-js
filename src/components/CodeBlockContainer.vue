@@ -621,7 +621,7 @@ export default defineComponent({
                             '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
                     } else {
                         block.value.content =
-                            '{\n    init: function(canvasElement, outputElement, scope, runner) {\n\n    },\n    addArgumentsTo(args) {},\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
+                            'module.exports = {\n    init: function(canvasElement, outputElement, scope, runner) {\n\n    },\n    addArgumentsTo(args) {},\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
                     }
                 }
                 ctx.emit('type-change', ret)
