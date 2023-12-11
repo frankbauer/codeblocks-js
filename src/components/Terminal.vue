@@ -33,7 +33,7 @@ export default defineComponent({
             required: true,
         },
     },
-
+    emits: ['run', 'stop'],
     setup(props, context) {
         let term: any = undefined
 

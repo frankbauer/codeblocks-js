@@ -340,6 +340,19 @@ export default defineComponent({
         block: { required: true, type: Object as PropType<BlockData> },
         editMode: { default: false, type: Boolean },
     },
+    emits: [
+        'change-order',
+        'move-up',
+        'move-down',
+        'remove-block',
+        'type-change',
+        'visible-lines-change',
+        'placement-change',
+        'auto-reset-change',
+        'reload-resources-change',
+        'generate-template-change',
+        'script-version-change',
+    ],
     setup(props, ctx) {
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q

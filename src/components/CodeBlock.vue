@@ -109,6 +109,7 @@ export default defineComponent({
             required: true,
         },
     },
+    emits: ['code-changed-in-edit-mode', 'code-changed-in-view-mode', 'build'],
     setup(props, ctx) {
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q

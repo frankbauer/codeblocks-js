@@ -136,6 +136,7 @@ export default defineComponent({
             required: false,
         },
     },
+    emits: ['changeOutput', 'run'],
     setup(props, context) {
         const instance = getCurrentInstance()
         const globalCodeBlock = globalState.codeBlocks

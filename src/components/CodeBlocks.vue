@@ -477,7 +477,7 @@ export function codeBlockSetup(blockInfo: Ref<IMainBlock>, editMode: ComputedRef
     const tagSet = (nr: number): IRandomizerSet => {
         return blockInfo.value.randomizer.sets[nr]
     }
-    const themeForBlock = (bl: BlockData): string => {
+    const themeForBlock = (bl: UnwrapRef<BlockData>): string => {
         return bl.themeForCodeBlock
     }
     const blockById = (id: number): UnwrapRef<BlockData> | undefined => {

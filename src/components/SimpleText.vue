@@ -42,6 +42,7 @@ export default defineComponent({
             default: false,
         },
     },
+    emits: ['input'],
     setup(props, context) {
         const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
             true,

@@ -358,6 +358,22 @@ export default defineComponent({
             required: true,
         },
     },
+    emits: [
+        'language-change',
+        'compiler-change',
+        'timeout-change',
+        'character-limit-change',
+        'run-state-change',
+        'dom-libs-change',
+        'worker-libs-change',
+        'theme-change',
+        'output-parser-change',
+        'continuous-compile-change',
+        'persistent-arguments-change',
+        'message-passing-change',
+        'keep-alive-change',
+        'compiler-version-change',
+    ],
     setup(props, context) {
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q

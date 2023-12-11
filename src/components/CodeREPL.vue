@@ -143,6 +143,7 @@ export default defineComponent({
             default: 'base16-dark',
         },
     },
+    emits: ['run', 'stop'],
     setup(props, ctx) {
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q
