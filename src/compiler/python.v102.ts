@@ -5,6 +5,8 @@ import {
     IReplInstance,
 } from '@/lib/ICompilerRegistry'
 import Vue, { reactive } from 'vue'
+import { l } from '@/plugins/i18n'
+import { globalState } from '@/lib/globalState'
 
 interface REPLWorker extends Worker {
     interpreter: any
@@ -21,13 +23,15 @@ function getWorker(setReady: (boolean) => void) {
     setReady(false)
     if (runningWorker !== undefined) {
         console.d('FORCE STOPPING ON RERUN')
-        runningWorker.end(Vue.$l('CodeBlocks.UserCanceled'))
+        runningWorker.end(l('CodeBlocks.UserCanceled'))
         runningWorker = undefined
     }
 
     runningWorker = spareWorker
     console.i('Starting Spare Pyodide Server')
-    spareWorker = new Worker(Vue.$CodeBlock.baseurl + 'js/python/v102/pyWorker.js') as REPLWorker
+    spareWorker = new Worker(
+        globalState.codeBlocks.baseurl + 'js/python/v102/pyWorker.js'
+    ) as REPLWorker
     spareWorker.onmessage = function (msg: any) {
         if (msg.data.command == 'finished-init') {
             setReady(true)
@@ -292,7 +296,7 @@ export class PythonV102Compiler implements ICompilerInstance, IReplInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.worker) {
-            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.worker.end(l('CodeBlocks.UserCanceled'))
         }
     }
 

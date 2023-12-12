@@ -1,3 +1,5 @@
+import { tagger } from '@/plugins/tagger'
+
 String.prototype.replaceAllPoly = function (search: string, replacement: string): string {
     const target = this
     return target.replace(new RegExp(search, 'g'), replacement)
@@ -22,7 +24,6 @@ console.i = function (...lines) {
     //}
 }
 
-import Vue from 'vue'
 import './plugins/uuid'
 import './plugins/quasar'
 import './plugins/codemirror'
@@ -34,8 +35,8 @@ import './plugins/tagger'
 //import './plugins/blocklyEnv'
 //remove "noImplicitAny": false from tsconfig when this file goes ts
 import { CodeBlocksManager } from './lib/codeBlocksManager'
+import { highlight } from '@/plugins/highlight'
 
-Vue.config.productionTip = false
 CodeBlocksManager.find(document).mount()
 
 window.codeblocks = {
@@ -43,8 +44,8 @@ window.codeblocks = {
 }
 
 window.mountInElement = function (element: any): void {
-    Vue.$hljs.$vue.processElements(element)
-    Vue.$tagger.processElements(element)
+    highlight.$vue.processElements(element)
+    tagger.processElements(element)
     CodeBlocksManager.find(element).mount()
 }
 

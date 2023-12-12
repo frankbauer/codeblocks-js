@@ -7,6 +7,7 @@ import {
 } from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import Vue from 'vue'
+import { l } from '@/plugins/i18n'
 
 function runPythonWorker(
     questionID: string,
@@ -184,7 +185,7 @@ export class PythonV101LegacyCompiler implements ICompilerInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.worker) {
-            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.worker.end(l('CodeBlocks.UserCanceled'))
         }
     }
 }
@@ -241,7 +242,7 @@ export class PythonV101Compiler implements ICompilerInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.worker) {
-            this.worker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.worker.end(l('CodeBlocks.UserCanceled'))
         }
     }
 }

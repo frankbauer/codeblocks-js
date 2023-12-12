@@ -149,7 +149,6 @@ export default defineComponent({
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
-        const l = instance?.proxy?.$root?.$l
 
         const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(true, props, ctx)
         const { eventHub, blockInfo, isReady, canStop, showGlobalMessages, globalStateMessage } =

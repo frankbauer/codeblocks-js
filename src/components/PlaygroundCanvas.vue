@@ -29,6 +29,7 @@ import Vue, {
     ref,
 } from 'vue'
 import { EventHubType } from '@/composables/globalEvents'
+import compilerRegistry from '@/lib/CompilerRegistry'
 
 export default defineComponent({
     name: 'PlaygroundCanvas',
@@ -58,7 +59,6 @@ export default defineComponent({
     },
     setup(props, context) {
         const instance = getCurrentInstance()
-        const compilerRegistry = instance?.proxy?.$root?.$compilerRegistry
         const innerPlaygroundContainer: Ref<HTMLElement | null> = ref(null)
 
         const canvas: ComputedRef<HTMLElement> = computed(() => {

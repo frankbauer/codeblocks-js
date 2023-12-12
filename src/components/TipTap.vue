@@ -52,7 +52,7 @@ export default defineComponent({
             if (o.scopeUUID != props.scopeUUID) {
                 return
             }
-            updatedContent(Vue.$tagger.replaceTemplateTagInString(text, o.name, o.newValue))
+            updatedContent(tagger.replaceTemplateTagInString(text.value, o.name, o.newValue))
         }
 
         const text = computed({

@@ -85,6 +85,7 @@ import {
 } from 'vue'
 import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
+import { l } from '@/plugins/i18n'
 
 export interface ICodePlaygroundOptions {
     mode: string
@@ -143,7 +144,6 @@ export default defineComponent({
         const globalCodeBlock = globalState.codeBlocks
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
-        const l = instance?.proxy?.$root?.$l
 
         const lastRun: Ref<Date> = ref(new Date())
         const runCount: Ref<number> = ref(0)
@@ -229,7 +229,7 @@ export default defineComponent({
                     start: { line: e.line, column: e.column },
                     end: { line: e.line, column: e.column + 1 },
                     message: e.msg,
-                    severity: Vue.$SEVERITY_ERROR,
+                    severity: globalState.SEVERITY_ERROR,
                 }
                 if (e.line === undefined) {
                     err.start = { line: 1, column: -1 }
@@ -349,7 +349,7 @@ export default defineComponent({
                             }
                             jStr = jStr.replace(/</g, '&lt;')
 
-                            if (q !== undefined && l !== undefined && t != undefined) {
+                            if (q !== undefined && t != undefined) {
                                 q.dialog({
                                     title: l('CodePlayground.InvalidJson'),
                                     message:

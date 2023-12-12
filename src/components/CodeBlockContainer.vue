@@ -333,6 +333,7 @@ import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IOnChangeOrder, IOnReloadResourcesInfo } from './CodeBlocks.vue'
 import { globalState } from '@/lib/globalState'
+import { l } from '@/plugins/i18n'
 
 export default defineComponent({
     name: 'CodeBlockContainer',
@@ -357,15 +358,11 @@ export default defineComponent({
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
-        const l = instance?.proxy?.$root?.$l
 
         const { block, editMode } = toRefs(props)
         const settingsMenu = ref<boolean>(false)
         let highlighted = ref<boolean>(false)
         const types = computed((): IListItemData[] => {
-            if (l == undefined) {
-                return []
-            }
             return [
                 {
                     label: l('CodeBlockContainer.Canvas'),

@@ -329,6 +329,7 @@ import { CodeOutputTypes, IRandomizerSettings } from '@/lib/ICodeBlocks'
 import Vue, { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { globalState } from '@/lib/globalState'
+import { l } from '@/plugins/i18n'
 
 export interface ICodeBlockSettingsOptions {
     language: string
@@ -378,7 +379,6 @@ export default defineComponent({
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
-        const l = instance?.proxy?.$root?.$l
         //Computed
         const themes: ComputedRef<IListItemData[]> = computed(() => {
             return [
@@ -398,9 +398,6 @@ export default defineComponent({
         })
 
         const outputParsers: ComputedRef<IListItemData[]> = computed(() => {
-            if (l == undefined) {
-                return []
-            }
             return [
                 { label: l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
                 { label: l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
@@ -515,7 +512,10 @@ export default defineComponent({
 
         const compilerLanguageObj = computed({
             get: () => {
-                return Vue.$CodeBlock.itemForValue(compiledLanguages.value, compilerLanguage.value)
+                return globalState.codeBlocks.itemForValue(
+                    compiledLanguages.value,
+                    compilerLanguage.value
+                )
             },
             set: (v: IListItemData) => {
                 if (props.options.runCode === false) {
@@ -577,7 +577,10 @@ export default defineComponent({
 
         const solutionTheme = computed({
             get: () => {
-                return Vue.$CodeBlock.itemForValue(themes.value, props.options.solutionTheme)
+                return globalState.codeBlocks.itemForValue(
+                    themes.value,
+                    props.options.solutionTheme
+                )
             },
 
             set: (v: IListItemData) => {
@@ -590,7 +593,7 @@ export default defineComponent({
 
         const codeTheme = computed({
             get: () => {
-                return Vue.$CodeBlock.itemForValue(themes.value, props.options.codeTheme)
+                return globalState.codeBlocks.itemForValue(themes.value, props.options.codeTheme)
             },
 
             set: (v: IListItemData) => {
@@ -603,7 +606,10 @@ export default defineComponent({
 
         const outputParser = computed({
             get: () => {
-                return Vue.$CodeBlock.itemForValue(outputParsers.value, props.options.outputParser)
+                return globalState.codeBlocks.itemForValue(
+                    outputParsers.value,
+                    props.options.outputParser
+                )
             },
 
             set: (v: IListItemData) => {

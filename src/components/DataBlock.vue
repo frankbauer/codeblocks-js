@@ -160,6 +160,7 @@ import 'codemirror/mode/javascript/javascript.js'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
+import { l } from '@/plugins/i18n'
 
 export default defineComponent({
     name: 'DataBlock',
@@ -180,7 +181,6 @@ export default defineComponent({
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
-        const l = instance?.proxy?.$root?.$l
 
         const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(true, props, ctx)
         const { namePrefix, finalOutputObject, block, editMode, theme, eventHub, tagSet } =
@@ -334,9 +334,6 @@ export default defineComponent({
             }
         }
         const showInfoDialog = (): void => {
-            if (l === undefined || q === undefined) {
-                return
-            }
             q?.dialog({
                 title: l('DataBlock.InfoCaption'),
                 message: l('DataBlock.Info').replace('{NAME}', name.value),

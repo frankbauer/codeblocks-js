@@ -28,7 +28,7 @@ const v102CodeTemplate: ICodeTemplate = {
     postfix: '}.o}.call({})}',
 }
 
-const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedError {
+export const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedError {
     console.error(e)
     let line: number | undefined = undefined
     let column: number | undefined = undefined
@@ -69,7 +69,6 @@ const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedError {
     }
     return { line: line!, column: column!, msg: e.message }
 }
-Vue.prototype.$jsErrorParser = jsErrorParser
 
 const sandboxProxies = new WeakMap()
 

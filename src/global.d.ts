@@ -1,6 +1,9 @@
+import { QVueGlobals } from 'quasar/dist/types/globals'
+
 export {}
 import { ICompilerRegistry, ICompilerState } from '@/lib/ICompilerRegistry'
 import { IGlobalState } from './lib/ICodeBlocks'
+
 declare global {
     const MathJax: any
 
@@ -11,37 +14,23 @@ declare global {
 
     interface Window {
         hljs: any
+
         mountInElement(element: any): void
+
         mountCodeBlocks(scope: HTMLElement | Document | undefined): void
+
         MathJax: any
+
         highlightAll(): void
+
         highlightElement(element: HTMLElement): void
+
         codeblocks: any
     }
 
     interface String {
         replaceAllPoly(search: string, replacement: string): string
-        replaceRec(pattern: string | RegExp, replacement: string): string
-    }
-}
 
-declare module 'vue/types/vue' {
-    interface VueConstructor {
-        $l: (key: string, values?: any[]) => string
-        $hljs: any
-        $tagger: any
-        $CodeBlock: any
-        $SEVERITY_ERROR: number
-        $SEVERITY_WARNING: number
-        $GlobalEventHub: Vue
-    }
-    interface Vue {
-        $l: (key: string, values?: any[]) => string
-        $CodeBlock: IGlobalState
-        $compilerState: ICompilerState
-        $compilerRegistry: ICompilerRegistry
-        SEVERITY_ERROR: number
-        SEVERITY_WARNING: number
-        $uuid: any
+        replaceRec(pattern: string | RegExp, replacement: string): string
     }
 }

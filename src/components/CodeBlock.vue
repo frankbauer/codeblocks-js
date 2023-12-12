@@ -77,6 +77,7 @@ import 'codemirror/mode/ruby/ruby.js'
 import '@/lib/glsl/glsl'
 import 'codemirror/addon/edit/closebrackets.js'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
+import { globalState } from '@/lib/globalState'
 
 const ErrorTipCtor = Vue.extend(ErrorTip)
 export default defineComponent({
@@ -114,7 +115,6 @@ export default defineComponent({
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
-        const l = instance?.proxy?.$root?.$l
 
         const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(true, props, ctx)
 
@@ -130,11 +130,11 @@ export default defineComponent({
             block,
         } = toRefs(props)
 
-        const codeUpdateTimer = ref<number | null>(null)
+        let codeUpdateTimer: any = null
         const codeUpdateStartTime = ref<number>(0)
-        const continuousCodeUpdateTimer = ref<number | null>(null)
+        let continuousCodeUpdateTimer: any = null
         const codeNeedsTagUpdate = ref<boolean>(true)
-        const altCodeUpdateTimer = ref<number | null>(null)
+        let altCodeUpdateTimer: any = null
         const altCodeUpdateStartTime = ref<number>(0)
 
         const codeBox: Ref<HTMLElement | null> = ref(null)
@@ -331,23 +331,23 @@ export default defineComponent({
                 return
             }
             const now = new Date().getTime()
-            if (codeUpdateTimer.value !== null) {
-                clearTimeout(codeUpdateTimer.value)
-                codeUpdateTimer.value = null
+            if (codeUpdateTimer !== null) {
+                clearTimeout(codeUpdateTimer)
+                codeUpdateTimer = null
             } else {
                 codeUpdateStartTime.value = now
             }
             const doIt = () => {
-                codeUpdateTimer.value = null
+                codeUpdateTimer = null
                 onCodeChange(newCode)
             }
-            if (now - codeUpdateStartTime.value > process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
+            if (now - codeUpdateStartTime.value > globalState.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
                 doIt()
                 return
             }
-            codeUpdateTimer.value = setTimeout(() => {
+            codeUpdateTimer = setTimeout(() => {
                 doIt()
-            }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
+            }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
         }
         const onCodeChange = (newCode) => {
             block.value.lineCountHint = codemirror.value.doc.size
@@ -361,13 +361,13 @@ export default defineComponent({
             if (editMode.value) {
                 ctx.emit('code-changed-in-edit-mode', undefined)
             } else if (emitWhenTypingInViewMode.value) {
-                if (continuousCodeUpdateTimer.value !== null) {
-                    clearTimeout(continuousCodeUpdateTimer.value)
-                    continuousCodeUpdateTimer.value = null
+                if (continuousCodeUpdateTimer !== null) {
+                    clearTimeout(continuousCodeUpdateTimer)
+                    continuousCodeUpdateTimer = null
                 }
-                continuousCodeUpdateTimer.value = setTimeout(() => {
+                continuousCodeUpdateTimer = setTimeout(() => {
                     ctx.emit('code-changed-in-view-mode', undefined)
-                }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
+                }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
             }
         }
         const didAddText = (t: string): void => {
@@ -410,13 +410,13 @@ export default defineComponent({
                 altCodeUpdateTimer.value = null
                 onAltCodeChange(newCode)
             }
-            if (now - altCodeUpdateStartTime.value > process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
+            if (now - altCodeUpdateStartTime.value > globalState.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
                 doIt()
                 return
             }
-            altCodeUpdateTimer.value = setTimeout(() => {
+            altCodeUpdateTimer = setTimeout(() => {
                 doIt()
-            }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
+            }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
         }
         const onAltCodeChange = (newCode) => {
             if (altBox.value !== undefined && altBox.value !== null) {

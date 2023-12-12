@@ -1,6 +1,7 @@
 import { globalState } from '@/lib/globalState'
 import Vue, { reactive } from 'vue'
 import { ICompilerInstance, ErrorSeverity, ICompileAndRunArguments } from '@/lib/ICompilerRegistry'
+import { l } from '@/plugins/i18n'
 
 declare global {
     interface Worker {
@@ -264,7 +265,7 @@ export class JavaV100Compiler implements ICompilerInstance {
                     this.teaworker = undefined
                 } else if (e.data.command == 'compilation-complete') {
                     booted = true
-                    let runTimeout: number | undefined = undefined
+                    let runTimeout: any | undefined = undefined
                     if (this.teaworker) {
                         this.teaworker.removeEventListener('message', myListener)
                         this.sessionCompileListener = undefined
@@ -401,7 +402,7 @@ export class JavaV100Compiler implements ICompilerInstance {
     stop() {
         console.d('FORCE STOPPING')
         if (this.sessionWorker) {
-            this.sessionWorker.end(Vue.$l('CodeBlocks.UserCanceled'))
+            this.sessionWorker.end(l('CodeBlocks.UserCanceled'))
         } else if (this.teaworker) {
             if (this.sessionCompileListener) {
                 // this.sessionCompileListener({
@@ -415,7 +416,7 @@ export class JavaV100Compiler implements ICompilerInstance {
                 this.teaworker.removeEventListener('message', this.sessionCompileListener)
                 this.sessionCompileListener = undefined
             }
-            this.teaworker.end(Vue.$l('CodeBlocks.UserCanceled'), false)
+            this.teaworker.end(l('CodeBlocks.UserCanceled'), false)
         }
     }
 }

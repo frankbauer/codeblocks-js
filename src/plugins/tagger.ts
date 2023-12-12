@@ -1,10 +1,9 @@
 import Vue from 'vue'
-import i18n from './i18n'
+import { l } from './i18n'
 //!!! make sure to also change the expression in ilias-builder.js !!!
 const randomAndTemplateTag = /\{(:|!)([\w]*)}/g
 import { uuid } from 'vue-uuid'
 import '../styles/tagger.styl'
-import { DirectiveBinding } from 'vue/types/options'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 
 export interface ITagReplaceAction {
@@ -151,12 +150,12 @@ export default class Tagger {
 
     clickFunction(name: string, tagEl: HTMLElement, scopeUUID: string | undefined): void {
         //console.log(i18n)
-        Vue.prototype.$q
+        Vue.$q
             .dialog({
-                title: i18n.t('Tagger.ConfirmRepl'),
-                message: i18n.t('Tagger.ConfirmReplMsg', {
-                    name: '<span class="template-tag-placeholder-noclick">' + name + '</span>',
-                }),
+                title: l('Tagger.ConfirmRepl'),
+                message: l('Tagger.ConfirmReplMsg', [
+                    '<span class="template-tag-placeholder-noclick">' + name + '</span>',
+                ]),
                 html: true,
                 persistent: true,
                 prompt: {
@@ -202,15 +201,14 @@ export default class Tagger {
 }
 
 export const tagger = new Tagger()
-Vue.$tagger = tagger
 
-Vue.directive('tagged', {
+export const taggedDirective = {
     //deep: true,
-    bind: function (el: HTMLElement, binding: DirectiveBinding) {
+    beforeMount: function (el: HTMLElement, binding: any, vnode: any) {
         tagger.processElement(el, binding.value)
     },
-    componentUpdated: function (el: HTMLElement, binding: DirectiveBinding) {
+    updated: function (el: HTMLElement, binding: any, vnode: any) {
         //console.log("DIRECTIVE - update", el, binding)
         tagger.processElement(el, binding.value)
     },
-})
+}

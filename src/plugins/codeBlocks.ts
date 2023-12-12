@@ -180,5 +180,3 @@ export class GlobalState implements IGlobalState {
         return ret
     }
 }
-
-Vue.$GlobalEventHub = new Vue()

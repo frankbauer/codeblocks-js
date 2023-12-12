@@ -87,7 +87,7 @@
                 :isReady="isReady"
                 :canStop="canStop"
                 :showGlobalMessages="showGlobalMessages"
-                :globalStateMessage="$compilerState.globalStateMessage"
+                :globalStateMessage="globalState.compilerState.globalStateMessage"
                 @ready="blockBecameReady"
                 @run="run"
                 @stop="stop"
@@ -169,7 +169,10 @@
                         style="align-self: center"
                         v-show="showGlobalMessages"
                     >
-                        <div id="message" v-html="$compilerState.globalStateMessage"></div>
+                        <div
+                            id="message"
+                            v-html="globalState.compilerState.globalStateMessage"
+                        ></div>
                     </div>
                 </transition>
             </div>
@@ -310,7 +313,7 @@ export function codeBlockSetup(
     const _finalOutputObject = ref<IScriptOutputObject | null>(null)
     const didRunOnce = ref<boolean>(false)
     const triggerRecompileWhenFinished = ref<boolean>(false)
-    const continuousCodeUpdateTimer = ref<number | null>(null)
+    let continuousCodeUpdateTimer: any = null
     const continuousCompile = computed((): boolean => {
         if (editMode.value) {
             return false
@@ -731,11 +734,11 @@ export function codeBlockSetup(
         if (!forceRun && !blockInfo.value.continuousCompilation) {
             return
         }
-        if (continuousCodeUpdateTimer.value !== null) {
-            clearTimeout(continuousCodeUpdateTimer.value)
-            continuousCodeUpdateTimer.value = null
+        if (continuousCodeUpdateTimer !== null) {
+            clearTimeout(continuousCodeUpdateTimer)
+            continuousCodeUpdateTimer = null
         }
-        continuousCodeUpdateTimer.value = setTimeout(() => {
+        continuousCodeUpdateTimer = setTimeout(() => {
             const cmp = compilerRegistry.getCompiler(compiler.value)
             console.d('Continuous Compile - ', cmp)
             if (cmp && cmp.allowsContinousCompilation) {
@@ -747,7 +750,7 @@ export function codeBlockSetup(
                     triggerRecompileWhenFinished.value = true
                 }
             }
-        }, process.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT)
+        }, globalState.VUE_APP_CONTINOUS_COMPILE_TIMEOUT)
     }
     const onRunFinished = () => {
         didRunOnce.value = false
@@ -1037,6 +1040,7 @@ export default defineComponent({
             onChangeOrder,
             removeBlock,
             addNewBlock,
+            globalState,
         }
     },
 })

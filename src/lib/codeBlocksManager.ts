@@ -4,7 +4,7 @@ import Vue from 'vue'
 
 import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
-import { uuid } from 'vue-uuid'
+import UUID, { uuid } from 'vue-uuid'
 
 import compilerRegistry, { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
 import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
@@ -30,14 +30,15 @@ import dataInstaller from '@/lib/BlockloadManagers/DataManager'
 import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
 import { trim } from 'jquery'
 import { reactive, ref, UnwrapRef } from 'vue'
+import { taggedDirective, tagger } from '@/plugins/tagger'
+import { highlight, highlightDirective } from '@/plugins/highlight'
+import { appUseQuasar } from '@/plugins/quasar'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
 playgroundInstaller(loaders)
 REPLInstaller(loaders)
 dataInstaller(loaders)
-
-Vue.prototype.$compilerRegistry = CompilerRegistry
 
 export interface IAppSettings {
     id: number
@@ -166,7 +167,7 @@ export class BlockData implements IBlockData {
 
     actualContent() {
         if (this.appSettings.randomizer.active) {
-            return Vue.$tagger.replaceRandomTagsInString(
+            return tagger.replaceRandomTagsInString(
                 this.content,
                 this.appSettings.randomizer.sets[this.appSettings.randomizer.previewIndex]
             )
@@ -635,7 +636,12 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         const self = this
-        //Vue.createApp({}).use(i18n).mount(this.element)
+        const app = Vue.createApp({})
+        app.use(i18n)
+        app.use(UUID)
+        app.directive('tagged', taggedDirective)
+        app.directive('highlight', highlightDirective)
+        appUseQuasar(app)
         new Vue({
             i18n,
             render: function (h) {
@@ -796,7 +802,8 @@ class InternalCodeBlocksManager {
                 }
                 return h(data.editMode ? AppEditor : App, context)
             },
-        }).$mount(this.element)
+        })
+        app.mount(this.element)
     }
 }
 
@@ -824,9 +831,9 @@ export const CodeBlocksManager = {
                 scope = el
             }
 
-            Vue.$hljs.$vue.processElements(scope)
+            highlight.$vue.processElements(scope)
             if (cbm.data.editMode) {
-                Vue.$tagger.processElements(scope)
+                tagger.processElements(scope as HTMLElement)
                 cbm.data.scopeSelector = `[uuid=${scope.getAttribute('uuid')}]`
                 cbm.data.scopeUUID = scope.getAttribute('uuid')
                     ? scope.getAttribute('uuid')!

@@ -45,7 +45,7 @@ function runJavaWorker(
     const className = match[1]
 
     const worker = new Worker(globalState.codeBlocks.baseurl + 'js/doppio/v001/javaWorker.js')
-    let timer: number | null = null
+    let timer: any | null = null
 
     worker.addEventListener(
         'message',

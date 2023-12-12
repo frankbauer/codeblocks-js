@@ -19,6 +19,7 @@ import TipTap from './TipTap.vue'
 import { defineComponent, PropType } from 'vue'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
 import { BlockData } from '@/lib/codeBlocksManager'
+import { globalState } from '@/lib/globalState'
 
 export default defineComponent({
     name: 'SimpleText',
@@ -50,8 +51,8 @@ export default defineComponent({
             context
         )
 
-        let textUpdateTimer: number | null = null
-        let textUpdateStartTime: number = 0
+        let textUpdateTimer: any | null = null
+        let textUpdateStartTime: any = 0
 
         function updatedContentDefered(newVal: string) {
             if (!props.editMode) {
@@ -75,13 +76,13 @@ export default defineComponent({
             }
 
             //did we wait for a maximum time? run
-            if (now - textUpdateStartTime > process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
+            if (now - textUpdateStartTime > globalState.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
                 doIt()
                 return
             }
             textUpdateTimer = setTimeout(() => {
                 doIt()
-            }, process.env.VUE_APP_CODE_BLOCK_TIMEOUT)
+            }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
         }
 
         function updatedContent(v: string) {
