@@ -18,7 +18,7 @@ import { Dialog, Quasar } from 'quasar'
 
 const lang = document.getElementsByTagName('html')[0].getAttribute('lang')
 import langDe from 'quasar/lang/de.js'
-import langEn from 'quasar/lang/en-gb.js'
+import langEn from 'quasar/lang/en-GB.js'
 
 Quasar.lang.set(lang == 'de' ? langDe : langEn)
 

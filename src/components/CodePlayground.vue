@@ -57,9 +57,6 @@
 </template>
 
 <script lang="ts">
-import codemirror from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
-
 //helper to reset the canvas area if needed
 import Vue from 'vue'
 import PlaygroundCanvas from '@/components/PlaygroundCanvas.vue'

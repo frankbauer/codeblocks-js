@@ -1,6 +1,5 @@
 @import './quasar.variables.styl'
-@import '~quasar-styl'
-
+//@import '~quasar-styl'
 
 
 text-block-color = $blue-grey
@@ -17,111 +16,124 @@ positionClasses = 'l' 'r' 't' 'b' 'x' 'y' 'a'
 typeClasses = 'p' 'm'
 
 subPositions(v)
-    return '-left' if v == 'l' 
-    return '-right' if v == 'r' 
-    return '-top' if v == 't' 
-    return '-bottom' if v == 'b'
-    return '-left' '-right' if v == 'x'
-    return '-top' '-bottom' if v == 'y'
-    return '-left' '-right' '-top' '-bottom' if v == 'a' 
-    return ''
+  return '-left' if v == 'l'
+  return '-right' if v == 'r'
+  return '-top' if v == 't'
+  return '-bottom' if v == 'b'
+  return '-left' '-right' if v == 'x'
+  return '-top' '-bottom' if v == 'y'
+  return '-left' '-right' '-top' '-bottom' if v == 'a'
+  return ''
 
 subType(v)
-    return 'margin' if v == 'm'
-    return 'padding'
+  return 'margin' if v == 'm'
+  return 'padding'
 
 sizeValues(s)
-    return $space-xs if s=='xs'
-    return $space-sm if s=='sm'
-    return $space-md if s=='md'
-    return $space-lg if s=='lg'
-    return $space-xl if s=='xl'
-    return $space-none
+  return $space-xs if s == 'xs'
+  return $space-sm if s == 'sm'
+  return $space-md if s == 'md'
+  return $space-lg if s == 'lg'
+  return $space-xl if s == 'xl'
+  return $space-none
 
 sizeValue(s, p)
-    sz = sizeValues(s)
-    return sz.x if p=='-left'
-    return sz.x if p=='-right' 
-    return sz.y
+  sz = sizeValues(s)
+  return sz.x if p == '-left'
+  return sz.x if p == '-right'
+  return sz.y
+
 body
-    -webkit-font-smoothing: unset
-    -moz-osx-font-smoothing: unset
-    font-smoothing: unset
+  -webkit-font-smoothing: unset
+  -moz-osx-font-smoothing: unset
+  font-smoothing: unset
 
-div.q-layout, .q-layout, .q-menu, .q-dialog, .q-tooltip 
-    font-family: Roboto, "Open Sans", Verdana, Arial, Helvetica, sans-serif
-    font-size: 14px
+div.q-layout, .q-layout, .q-menu, .q-dialog, .q-tooltip
+  font-family: Roboto, "Open Sans", Verdana, Arial, Helvetica, sans-serif
+  font-size: 14px
 
-.q-layout, .q-menu, .q-dialog, .q-tooltip   
-    .row 
-        margin-left: 0px
-        margin-right: 0px
-    .row::before 
-        display: block
-    for cols in 1..12
-        {'.col-' + cols}    
-            padding-left: 0px
-            padding-right: 0px
-        for size in breakPoints
-            {'.col-' + size + '-' + cols}
-                padding-left: 0px
-                padding-right: 0px
-    for posIn in positionClasses
+.q-layout, .q-menu, .q-dialog, .q-tooltip
+  .row
+    margin-left: 0px
+    margin-right: 0px
+
+  .row::before
+    display: block
+  for cols in 1..12
+    {'.col-' + cols}
+      padding-left: 0px
+      padding-right: 0px
+    for size in breakPoints
+      {'.col-' + size + '-' + cols}
+        padding-left: 0px
+        padding-right: 0px
+  for posIn in positionClasses
+    pos = subPositions(posIn)
+    for typeIn in typeClasses
+      type = subType(typeIn)
+      for size in sizeClasses
+        {'.q-' + typeIn+posIn + '-' + size}
+          for p in pos
+            {type+ p}: sizeValue(size, p)
+  for bp in breakPoints
+    @media (min-width: $sizes[bp])
+      for posIn in positionClasses
         pos = subPositions(posIn)
         for typeIn in typeClasses
-            type = subType(typeIn)
-            for size in sizeClasses
-                {'.q-' + typeIn+posIn + '-' + size}
-                    for p in pos
-                        {type+p}: sizeValue(size, p)
-    for bp in breakPoints     
-        @media (min-width: $sizes[bp])   
-            for posIn in positionClasses
-                pos = subPositions(posIn)
-                for typeIn in typeClasses
-                    type = subType(typeIn)
-                    for size in sizeClasses
-                        {'.q-' + typeIn+posIn + '-' + bp + '-' + size}
-                            for p in pos
-                                {type+p}: sizeValue(size, p)
-    .text-border
-        border-color : text-block-color !important
-    .playground-border
-        border-color : playground-block-color !important
-    .data-border
-        border-color : data-block-color !important
-    .block-border
-        border-color : block-color !important
-    .block-hidden-border
-        border-color : hidden-block-color !important
-    .block-static-border
-        border-color : static-block-color !important
-    .default-border
-        border-color : fallback-block-color !important
-    .text-overline
-        text-transform: uppercase    
-        font-size:14px
-    .text-body2
-        font-size:14px
-    .text-subtitle2
-        font-size:14px
+          type = subType(typeIn)
+          for size in sizeClasses
+            {'.q-' + typeIn+posIn + '-' + bp + '-' + size}
+              for p in pos
+                {type+ p}: sizeValue(size, p)
+
+  .text-border
+    border-color: text-block-color !important
+
+  .playground-border
+    border-color: playground-block-color !important
+
+  .data-border
+    border-color: data-block-color !important
+
+  .block-border
+    border-color: block-color !important
+
+  .block-hidden-border
+    border-color: hidden-block-color !important
+
+  .block-static-border
+    border-color: static-block-color !important
+
+  .default-border
+    border-color: fallback-block-color !important
+
+  .text-overline
+    text-transform: uppercase
+    font-size: 14px
+
+  .text-body2
+    font-size: 14px
+
+  .text-subtitle2
+    font-size: 14px
 
 .row.no-wrap.q-pt-none.q-pb-md > .text-overline
-    font-size:12px
-@import '~quasar-addon-styl'
+  font-size: 12px
+
+// @import '~quasar-addon-styl'
 
 h1
-    font-size: 140%
-    line-height: 140%
+  font-size: 140%
+  line-height: 140%
 
 h2
-    font-size: 130%
-    line-height: 130%
+  font-size: 130%
+  line-height: 130%
 
 h3
-    font-size: 120%
-    line-height: 120%
+  font-size: 120%
+  line-height: 120%
 
 h4
-    font-size: 115%
-    line-height: 115%
+  font-size: 115%
+  line-height: 115%

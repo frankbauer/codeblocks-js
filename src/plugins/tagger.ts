@@ -150,45 +150,45 @@ export default class Tagger {
 
     clickFunction(name: string, tagEl: HTMLElement, scopeUUID: string | undefined): void {
         //console.log(i18n)
-        Vue.$q
-            .dialog({
-                title: l('Tagger.ConfirmRepl'),
-                message: l('Tagger.ConfirmReplMsg', [
-                    '<span class="template-tag-placeholder-noclick">' + name + '</span>',
-                ]),
-                html: true,
-                persistent: true,
-                prompt: {
-                    model: '{!' + name + '}',
-                    type: 'text', // optional
-                },
-                ok: {
-                    push: true,
-                    color: 'negative',
-                    icon: 'warning',
-                },
-                cancel: {
-                    push: true,
-                    color: 'positive',
-                },
-            })
-            .onOk((data: string) => {
-                if (scopeUUID !== undefined) {
-                    //this.replaceTemplateTag($(tagEl).parents(".codeblocks").get(0), name, data)
-                    this.replaceTemplateTag($(`[uuid=${scopeUUID}]`).get(0), name, data)
-                    const eventData: ITagReplaceAction = {
-                        name: name,
-                        newValue: data,
-                        scopeUUID: scopeUUID,
-                    }
-                    this.emitter.emit('replace-template-tag', eventData)
-                }
-            })
-            .onCancel(() => {})
-            .onDismiss(() => {
-                const me = self as any
-                me.highlighted = false
-            })
+        // Vue.$q
+        //     .dialog({
+        //         title: l('Tagger.ConfirmRepl'),
+        //         message: l('Tagger.ConfirmReplMsg', [
+        //             '<span class="template-tag-placeholder-noclick">' + name + '</span>',
+        //         ]),
+        //         html: true,
+        //         persistent: true,
+        //         prompt: {
+        //             model: '{!' + name + '}',
+        //             type: 'text', // optional
+        //         },
+        //         ok: {
+        //             push: true,
+        //             color: 'negative',
+        //             icon: 'warning',
+        //         },
+        //         cancel: {
+        //             push: true,
+        //             color: 'positive',
+        //         },
+        //     })
+        //     .onOk((data: string) => {
+        //         if (scopeUUID !== undefined) {
+        //             //this.replaceTemplateTag($(tagEl).parents(".codeblocks").get(0), name, data)
+        //             this.replaceTemplateTag($(`[uuid=${scopeUUID}]`).get(0), name, data)
+        //             const eventData: ITagReplaceAction = {
+        //                 name: name,
+        //                 newValue: data,
+        //                 scopeUUID: scopeUUID,
+        //             }
+        //             this.emitter.emit('replace-template-tag', eventData)
+        //         }
+        //     })
+        //     .onCancel(() => {})
+        //     .onDismiss(() => {
+        //         const me = self as any
+        //         me.highlighted = false
+        //     })
     }
 
     onReplaceTemplateTag(handler: (ITagReplaceAction) => void) {

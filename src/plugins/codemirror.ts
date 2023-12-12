@@ -1,6 +1,8 @@
 import Vue from 'vue'
-import { install } from 'vue-codemirror'
-import 'codemirror/lib/codemirror.css'
+import VueCodemirror from 'vue-codemirror'
 
-install(Vue)
 //Vue.use(VueCodeMirror, {})
+
+export function appUseCodeMirror(app: Vue.App<Element>) {
+    app.use(VueCodemirror)
+}

@@ -33,6 +33,7 @@ import { reactive, ref, UnwrapRef } from 'vue'
 import { taggedDirective, tagger } from '@/plugins/tagger'
 import { highlight, highlightDirective } from '@/plugins/highlight'
 import { appUseQuasar } from '@/plugins/quasar'
+import { appUseCodeMirror } from '@/plugins/codemirror'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -636,14 +637,7 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         const self = this
-        const app = Vue.createApp({})
-        app.use(i18n)
-        app.use(UUID)
-        app.directive('tagged', taggedDirective)
-        app.directive('highlight', highlightDirective)
-        appUseQuasar(app)
-        new Vue({
-            i18n,
+        const app = Vue.createApp({
             render: function (h) {
                 class MainBlock implements IMainBlock {
                     id: number
@@ -803,6 +797,13 @@ class InternalCodeBlocksManager {
                 return h(data.editMode ? AppEditor : App, context)
             },
         })
+        app.use(i18n)
+        app.use(UUID)
+        app.directive('tagged', taggedDirective)
+        app.directive('highlight', highlightDirective)
+        appUseQuasar(app)
+        appUseCodeMirror(app)
+
         app.mount(this.element)
     }
 }
