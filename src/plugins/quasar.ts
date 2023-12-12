@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+import 'quasar/src/css/index.sass'
 import '../styles/quasar.styl'
 import '@quasar/extras/material-icons/material-icons.css'
 
