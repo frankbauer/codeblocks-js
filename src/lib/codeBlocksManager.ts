@@ -1,4 +1,4 @@
-import Vue, { reactive, ref, UnwrapRef, createApp, h } from 'vue'
+import { reactive, ref, UnwrapRef, createApp, h, resolveComponent, defineComponent } from 'vue'
 import { ScriptBlock } from './scriptBlock'
 import i18n from '../plugins/i18n'
 
@@ -33,6 +33,7 @@ import { taggedDirective, tagger } from '@/plugins/tagger'
 import { highlight, highlightDirective } from '@/plugins/highlight'
 import { appUseQuasar } from '@/plugins/quasar'
 import { appUseCodeMirror } from '@/plugins/codemirror'
+import MainBlock from '@/lib/MainBlock'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -636,167 +637,17 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         const self = this
-        const object = {
+        const object = defineComponent({
             render: function () {
-                class MainBlock implements IMainBlock {
-                    id: number
-                    uuid: string
-                    editMode: boolean
-                    readonly: boolean
-                    randomizer: IRandomizerSettings
-                    blocks: UnwrapRef<BlockData[]>
-                    compiler: ICompilerID
-                    language: string
-                    runCode: boolean
-                    domLibs: string[]
-                    workerLibs: string[]
-                    outputParser: CodeOutputTypes
-                    solutionTheme: string
-                    codeTheme: string
-                    executionTimeout: number
-                    maxCharacters: number
-                    scopeUUID?: string
-                    scopeSelector?: string
-                    continuousCompilation: boolean
-                    messagePassing: boolean
-                    keepAlive: boolean
-                    persistentArguments: boolean
-
-                    constructor() {
-                        this.id = data.id
-                        this.uuid = data.uuid
-                        this.editMode = data.editMode
-                        this.readonly = data.readonly
-                        this.randomizer = data.randomizer
-                        this.blocks = data.blocks
-                        this.compiler = data.compiler
-                        this.language = data.language
-                        this.runCode = data.runCode
-                        this.domLibs = data.domLibs
-                        this.workerLibs = data.workerLibs
-                        this.outputParser = data.outputParser
-                        this.solutionTheme = data.solutionTheme
-                        this.codeTheme = data.codeTheme
-                        this.executionTimeout = data.executionTimeout
-                        this.maxCharacters = data.maxCharacters
-                        this.scopeUUID = data.scopeUUID
-                        this.scopeSelector = data.scopeSelector
-                        this.continuousCompilation = data.continuousCompilation
-                        this.messagePassing = data.messagePassing
-                        this.keepAlive = data.keepAlive
-                        this.persistentArguments = data.persistentArguments
-                    }
-
-                    initArgsForLanguage() {
-                        console.d('Constructing args for', this.language, this.defaultArgs)
-
-                        if (this.defaultArgs === undefined) {
-                            if (this.language === 'java') {
-                                return []
-                            } else {
-                                return {}
-                            }
-                        } else {
-                            return this.defaultArgs
-                        }
-                    }
-
-                    defaultArgs!: object | string[] | undefined
-
-                    storeDefaultArgs(args: object | string[]) {
-                        this.defaultArgs = args
-                    }
-
-                    clearDefaultArgs() {
-                        this.defaultArgs = undefined
-                    }
-
-                    swap(id1: number, id2: number) {
-                        const a = this.blocks[id1]
-                        this.blocks[id1] = this.blocks[id2]
-                        this.blocks[id2] = a
-
-                        this.blocks[id1].id = id1
-                        this.blocks[id2].id = id2
-                    }
-
-                    moveUp(id: number) {
-                        if (id <= 0) {
-                            return
-                        }
-                        this.swap(id - 1, id)
-                    }
-
-                    moveDown(id: number) {
-                        if (id >= this.blocks.length - 1) {
-                            return
-                        }
-                        this.swap(id, id + 1)
-                    }
-
-                    changeOrder(id: number, newID: number): void {
-                        //this.swap(id, newID)
-                        const a = this.blocks[id]
-                        this.blocks.splice(id, 1)
-                        this.blocks.splice(newID, 0, a)
-
-                        this.blocks.forEach((v, i) => (v.id = i))
-                    }
-
-                    removeBlock(idx: number) {
-                        data.blocks.splice(idx, 1)
-                        for (let i = idx; i < data.blocks.length; i++) {
-                            data.blocks[i].id = i
-                        }
-                    }
-
-                    addNewBlock() {
-                        const block: IBlockDataBase = {
-                            noContent: false,
-                            alternativeContent: null,
-                            hasCode: true,
-                            type: KnownBlockTypes.BLOCK,
-                            content: '',
-                            id: data.blocks.length,
-                            uuid: uuid.v4(),
-                            name: `v${data.blocks.length}`,
-                            parentID: data.id,
-                            expanded: true,
-                            codeExpanded: CodeExpansionType.AUTO,
-                            width: '100%',
-                            height: '200px',
-                            align: 'center',
-                            obj: null,
-                            readonly: false,
-                            static: true,
-                            hidden: false,
-                            version: '101',
-                            readyCount: 0,
-                            errors: [],
-                            scopeUUID: data.scopeUUID,
-                            scopeSelector: data.scopeSelector,
-                            visibleLines: 10,
-                            hasAlternativeContent: false,
-                            shouldAutoreset: false,
-                            shouldReloadResources: false,
-                            generateTemplate: true,
-                            lineCountHint: -1,
-                        }
-                        data.blocks.push(self.constructBlock(data, block))
-                    }
-                }
-
                 const context = {
-                    props: {
-                        language: ref(data.language),
-                        id: ref(data.id),
-                        blocks: ref(new MainBlock()),
-                    },
+                    language: ref(data.language),
+                    id: ref(data.id),
+                    blocks: ref(new MainBlock(data)),
                 }
-                return h(data.editMode ? 'AppEditor' : 'App', context)
+                const component = data.editMode ? AppEditor : App
+                return h(component, context)
             },
-        }
-        console.log('Creating Vue App', Vue)
+        })
         const app = createApp(object)
         app.use(i18n)
         //app.use(UUID)

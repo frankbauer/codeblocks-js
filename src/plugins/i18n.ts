@@ -6,7 +6,7 @@ if (lang !== null) {
 }
 
 function loadLocaleMessages() {
-    //const locales = require.context('../locales', true, /[A-Za-z0-9-_,\s]+\.json$/i)
+    //const locales = require.context('@/locales', true, /[A-Za-z0-9-_,\s]+\.json$/i, 'sync')
     const messages = {
         en: {
             message: {
@@ -27,8 +27,8 @@ function loadLocaleMessages() {
 
 export const i18n = createI18n({
     legacy: false,
-    locale: lang || process.env.VUE_APP_I18N_LOCALE || 'en',
-    fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+    locale: lang || import.meta.env.VUE_APP_I18N_LOCALE || 'en',
+    fallbackLocale: import.meta.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
     messages: loadLocaleMessages(),
 })
 

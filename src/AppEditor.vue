@@ -18,6 +18,7 @@ export default defineComponent({
         CodeBlocksEditor,
     },
     setup(props, ctx) {
+        console.log('AppEditor setup', props, ctx)
         const { eventHub } = createGlobalEvent()
         return { eventHub }
     },

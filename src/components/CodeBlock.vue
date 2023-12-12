@@ -236,6 +236,7 @@ export default defineComponent({
         const codemirror = computed((): any | undefined => {
             return (codeBox.value as any).codemirror
         })
+
         const altcodemirror = computed((): any | undefined => {
             if (altBox.value === undefined) {
                 return undefined
@@ -350,6 +351,11 @@ export default defineComponent({
             }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
         }
         const onCodeChange = (newCode) => {
+            console.log('CODEMIRROR', codeBox.value.cmView, codemirror)
+            if (codemirror.value === null || codemirror.value === undefined) {
+                return
+            }
+
             block.value.lineCountHint = codemirror.value.doc.size
             codemirror.value.options.firstLineNumber = block.value.firstLine
             const tb = (codeBox.value as any).$el.querySelector(

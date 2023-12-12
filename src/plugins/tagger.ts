@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { l } from './i18n'
 //!!! make sure to also change the expression in ilias-builder.js !!!
 const randomAndTemplateTag = /\{(:|!)([\w]*)}/g

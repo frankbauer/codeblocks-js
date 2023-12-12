@@ -6,18 +6,30 @@ import '../styles/highlight.styl'
 
 hljs.configure({ useBR: false })
 
-hljs.registerLanguage('c', require('highlight.js/lib/languages/cpp'))
-hljs.registerLanguage('c++', require('highlight.js/lib/languages/cpp'))
-hljs.registerLanguage('c#', require('highlight.js/lib/languages/csharp'))
-hljs.registerLanguage('css', require('highlight.js/lib/languages/css'))
-hljs.registerLanguage('fortran', require('highlight.js/lib/languages/fortran'))
-hljs.registerLanguage('glsl', require('highlight.js/lib/languages/glsl'))
-hljs.registerLanguage('java', require('highlight.js/lib/languages/java'))
-hljs.registerLanguage('javascript', require('highlight.js/lib/languages/javascript'))
-hljs.registerLanguage('perl', require('highlight.js/lib/languages/perl'))
-hljs.registerLanguage('php', require('highlight.js/lib/languages/php'))
-hljs.registerLanguage('python', require('highlight.js/lib/languages/python'))
-hljs.registerLanguage('r', require('highlight.js/lib/languages/r'))
+import cpp from 'highlight.js/lib/languages/cpp'
+import csharp from 'highlight.js/lib/languages/csharp'
+import css from 'highlight.js/lib/languages/css'
+import fortran from 'highlight.js/lib/languages/fortran'
+import glsl from 'highlight.js/lib/languages/glsl'
+import java from 'highlight.js/lib/languages/java'
+import javascript from 'highlight.js/lib/languages/javascript'
+import perl from 'highlight.js/lib/languages/perl'
+import php from 'highlight.js/lib/languages/php'
+import python from 'highlight.js/lib/languages/python'
+import r from 'highlight.js/lib/languages/r'
+
+hljs.registerLanguage('c', cpp)
+hljs.registerLanguage('c++', cpp)
+hljs.registerLanguage('c#', csharp)
+hljs.registerLanguage('css', css)
+hljs.registerLanguage('fortran', fortran)
+hljs.registerLanguage('glsl', glsl)
+hljs.registerLanguage('java', java)
+hljs.registerLanguage('javascript', javascript)
+hljs.registerLanguage('perl', perl)
+hljs.registerLanguage('php', php)
+hljs.registerLanguage('python', python)
+hljs.registerLanguage('r', r)
 
 const reg_hl = /(\[hl\]|\[hl\s+language="?(.*?)"?\])(.*?)(\[\/hl\])/gm
 const reg_code = /(\[code\]|\[code\s+language="?(.*?)"?\])([\s\S]*?)(\[\/code\])/gm

@@ -40,17 +40,17 @@
                                 <div class="q-pa-md" v-if="canSetLineNumbers">
                                     <div class="row no-wrap q-pt-none q-pb-md">
                                         <div class="text-overline">
-                                            {{ $l('CodeBlockContainer.Display') }}
+                                            {{ l('CodeBlockContainer.Display') }}
                                         </div>
                                     </div>
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.Lines') }}
+                                                {{ l('CodeBlockContainer.Lines') }}
                                             </div>
                                             <div
                                                 class="text-caption text-blue-grey-4"
-                                                v-html="$l('CodeBlockContainer.Lines_detail')"
+                                                v-html="l('CodeBlockContainer.Lines_detail')"
                                             ></div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
@@ -68,10 +68,10 @@
                                     >
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.Prepopulate') }}
+                                                {{ l('CodeBlockContainer.Prepopulate') }}
                                             </div>
                                             <div class="text-caption text-blue-grey-4" lines="2">
-                                                {{ $l('CodeBlockContainer.Prepopulate_detail') }}
+                                                {{ l('CodeBlockContainer.Prepopulate_detail') }}
                                             </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
@@ -84,16 +84,16 @@
                                 <div class="q-pa-md" v-if="isVersionedPlayground">
                                     <div class="row no-wrap q-pt-none q-pb-md">
                                         <div class="text-overline">
-                                            {{ $l('CodeBlockContainer.Behaviour') }}
+                                            {{ l('CodeBlockContainer.Behaviour') }}
                                         </div>
                                     </div>
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.ScriptV') }}
+                                                {{ l('CodeBlockContainer.ScriptV') }}
                                             </div>
                                             <div class="text-caption text-blue-grey-4">
-                                                {{ $l('CodeBlockContainer.ScriptV_detail') }}
+                                                {{ l('CodeBlockContainer.ScriptV_detail') }}
                                             </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
@@ -107,10 +107,10 @@
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.AutoReset') }}
+                                                {{ l('CodeBlockContainer.AutoReset') }}
                                             </div>
                                             <div class="text-caption text-blue-grey-4">
-                                                {{ $l('CodeBlockContainer.AutoReset_detail') }}
+                                                {{ l('CodeBlockContainer.AutoReset_detail') }}
                                             </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
@@ -121,12 +121,10 @@
                                     <div class="row no-wrap q-pl-md" v-if="canLoadResources">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.ReloadResources') }}
+                                                {{ l('CodeBlockContainer.ReloadResources') }}
                                             </div>
                                             <div class="text-caption text-blue-grey-4">
-                                                {{
-                                                    $l('CodeBlockContainer.ReloadResources_detail')
-                                                }}
+                                                {{ l('CodeBlockContainer.ReloadResources_detail') }}
                                             </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
@@ -137,11 +135,11 @@
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.GenerateTemplate') }}
+                                                {{ l('CodeBlockContainer.GenerateTemplate') }}
                                             </div>
                                             <div class="text-caption text-blue-grey-4">
                                                 {{
-                                                    $l('CodeBlockContainer.GenerateTemplate_detail')
+                                                    l('CodeBlockContainer.GenerateTemplate_detail')
                                                 }}
                                             </div>
                                         </div>
@@ -158,16 +156,16 @@
                                 >
                                     <div class="row no-wrap q-pt-none q-pb-md">
                                         <div class="text-overline">
-                                            {{ $l('CodeBlockContainer.Positioning') }}
+                                            {{ l('CodeBlockContainer.Positioning') }}
                                         </div>
                                     </div>
                                     <div class="row no-wrap q-pl-md q-pb-md">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.Width') }}
+                                                {{ l('CodeBlockContainer.Width') }}
                                             </div>
                                             <div class="text-caption text-blue-grey-4">
-                                                {{ $l('CodeBlockContainer.Width_detail') }}
+                                                {{ l('CodeBlockContainer.Width_detail') }}
                                             </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
@@ -177,10 +175,10 @@
                                     <div class="row no-wrap q-pl-md q-pb-md">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.Height') }}
+                                                {{ l('CodeBlockContainer.Height') }}
                                             </div>
                                             <div class="text-caption text-blue-grey-4">
-                                                {{ $l('CodeBlockContainer.Height_detail') }}
+                                                {{ l('CodeBlockContainer.Height_detail') }}
                                             </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
@@ -190,10 +188,10 @@
                                     <div class="row no-wrap q-pl-md">
                                         <div class="col-7">
                                             <div class="text-subtitle2">
-                                                {{ $l('CodeBlockContainer.Alignment') }}
+                                                {{ l('CodeBlockContainer.Alignment') }}
                                             </div>
                                             <div class="text-caption text-blue-grey-4">
-                                                {{ $l('CodeBlockContainer.Alignment_detail') }}
+                                                {{ l('CodeBlockContainer.Alignment_detail') }}
                                             </div>
                                         </div>
                                         <div class="col-5 q-pl-sm">
@@ -236,7 +234,7 @@
                         ></q-btn>
                         <q-btn
                             @click="removeBlock"
-                            :label="$l('CodeBlockContainer.Delete')"
+                            :label="l('CodeBlockContainer.Delete')"
                             icon="warning"
                             push
                             dense
@@ -797,6 +795,7 @@ export default defineComponent({
             return obj
         }
         return {
+            l,
             settingsMenu,
             highlighted,
             types,

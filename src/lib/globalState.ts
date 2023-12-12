@@ -30,7 +30,10 @@ export const globalState = reactive({
     codeBlocks: appState,
     SEVERITY_ERROR: ErrorSeverity.Error,
     SEVERITY_WARNING: ErrorSeverity.Warning,
-    VUE_APP_CODE_BLOCK_MAX_TIMEOUT: valOr(process.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT, 800),
-    VUE_APP_CONTINOUS_COMPILE_TIMEOUT: valOr(process.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT, 800),
-    VUE_APP_CODE_BLOCK_TIMEOUT: valOr(process.env.VUE_APP_CODE_BLOCK_TIMEOUT, 150),
+    VUE_APP_CODE_BLOCK_MAX_TIMEOUT: valOr(import.meta.env.VUE_APP_CODE_BLOCK_MAX_TIMEOUT, 800),
+    VUE_APP_CONTINOUS_COMPILE_TIMEOUT: valOr(
+        import.meta.env.VUE_APP_CONTINOUS_COMPILE_TIMEOUT,
+        800
+    ),
+    VUE_APP_CODE_BLOCK_TIMEOUT: valOr(import.meta.env.VUE_APP_CODE_BLOCK_TIMEOUT, 150),
 })
