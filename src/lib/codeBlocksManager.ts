@@ -644,13 +644,8 @@ class InternalCodeBlocksManager {
             blocks: ref(new MainBlock(data)),
         }
         const component = data.editMode ? AppEditor : App
-        //const app = createApp(component, context)
-        const app = createApp({
-            render: () => h(AppEditor, context),
-        })
-        //const app = createApp({ template: `4` })
+        const app = createApp(component as any, context)
         app.use(i18n)
-        //app.use(UUID)
         app.directive('tagged', taggedDirective)
         app.directive('highlight', highlightDirective)
         appUseQuasar(app)
