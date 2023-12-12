@@ -79,7 +79,7 @@ import '@/lib/glsl/glsl'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
 
-const ErrorTipCtor = Vue.extend(ErrorTip)
+// const ErrorTipCtor = Vue.extend(ErrorTip)
 export default defineComponent({
     name: 'CodeBlock',
     components: {},
@@ -536,13 +536,13 @@ export default defineComponent({
                         codemirror.value
                             .getDoc()
                             .setGutterMarker(error.start.line - first, 'diagnostics', element)
-                        element.$component = new ErrorTipCtor({
-                            propsData: {
-                                errors: [],
-                                severity: error.severity,
-                            },
-                        }).$mount(element)
-                        element = element.$component
+                        // element.$component = new ErrorTipCtor({
+                        //     propsData: {
+                        //         errors: [],
+                        //         severity: error.severity,
+                        //     },
+                        // }).$mount(element)
+                        // element = element.$component
                     }
                     element.severity = Math.max(error.severity, element.severity)
                     if (element.errors.indexOf(error) == -1) {
