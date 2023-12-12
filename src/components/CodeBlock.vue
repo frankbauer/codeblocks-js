@@ -1,10 +1,11 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
-        <Codemirror
+        <codemirror
             ref="codeBox"
             :value="code"
             :options="options"
             :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"
+            :extensions="extensions"
             @ready="onCodeReady"
             @focus="onCodeFocus"
             @input="onCodeChangeDefered"
@@ -14,12 +15,11 @@
             :id="`teQ${block.parentID}B${block.id}`"
             :data-question="block.parentID"
             :events="['keyup']"
-        >
-        </Codemirror>
+        />
 
         <div v-show="hasAlternativeContent" v-if="editMode">
             <div class="q-mt-lg text-subtitle2 q-pb-xs">{{ $t('CodeBlock.Initial_Content') }}</div>
-            <Codemirror
+            <codemirror
                 ref="altBox"
                 :value="altCode"
                 :options="altOptions"
@@ -28,8 +28,7 @@
                 @focus="onAltCodeFocus"
                 @input="onAltCodeChangeDefered"
                 :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
-            >
-            </Codemirror>
+            />
         </div>
     </div>
 </template>
@@ -53,29 +52,29 @@ import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { ITagReplaceAction, tagger } from '@/plugins/tagger'
-import Codemirror from 'vue-codemirror'
-// import 'codemirror/lib/codemirror.css'
-// import 'codemirror/theme/solarized.css'
-// import 'codemirror/theme/base16-dark.css'
-// import 'codemirror/theme/base16-light.css'
-// import 'codemirror/theme/duotone-dark.css'
-// import 'codemirror/theme/duotone-light.css'
-// import 'codemirror/theme/xq-dark.css'
-// import 'codemirror/theme/xq-light.css'
-// import 'codemirror/theme/blackboard.css'
-// import 'codemirror/theme/midnight.css'
-// import 'codemirror/theme/neo.css'
-// import 'codemirror/theme/mbo.css'
-// import 'codemirror/theme/mdn-like.css'
-// import 'codemirror/mode/clike/clike.js'
-// import 'codemirror/mode/fortran/fortran.js'
-// import 'codemirror/mode/javascript/javascript.js'
-// import 'codemirror/mode/perl/perl.js'
-// import 'codemirror/mode/python/python.js'
-// import 'codemirror/mode/r/r.js'
-// import 'codemirror/mode/ruby/ruby.js'
-// import '@/lib/glsl/glsl'
-// import 'codemirror/addon/edit/closebrackets.js'
+import Codemirror from 'codemirror-editor-vue3'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/solarized.css'
+import 'codemirror/theme/base16-dark.css'
+import 'codemirror/theme/base16-light.css'
+import 'codemirror/theme/duotone-dark.css'
+import 'codemirror/theme/duotone-light.css'
+import 'codemirror/theme/xq-dark.css'
+import 'codemirror/theme/xq-light.css'
+import 'codemirror/theme/blackboard.css'
+import 'codemirror/theme/midnight.css'
+import 'codemirror/theme/neo.css'
+import 'codemirror/theme/mbo.css'
+import 'codemirror/theme/mdn-like.css'
+import 'codemirror/mode/clike/clike.js'
+import 'codemirror/mode/fortran/fortran.js'
+import 'codemirror/mode/javascript/javascript.js'
+import 'codemirror/mode/perl/perl.js'
+import 'codemirror/mode/python/python.js'
+import 'codemirror/mode/r/r.js'
+import 'codemirror/mode/ruby/ruby.js'
+import '@/lib/glsl/glsl'
+import 'codemirror/addon/edit/closebrackets.js'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
 
@@ -612,6 +611,7 @@ export default defineComponent({
         onBeforeUnmount(() => {
             tagger.offReplaceTemplateTag(replaceTemplateTags)
         })
+
         return {
             codeUpdateTimer,
             codeUpdateStartTime,

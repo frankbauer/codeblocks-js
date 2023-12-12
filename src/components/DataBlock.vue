@@ -121,7 +121,7 @@
                 :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
                 :id="`teQ${block.parentID}B${block.id}`"
                 :data-question="block.parentID"
-            ></codemirror>
+            />
         </q-slide-transition>
     </div>
 </template>
@@ -142,21 +142,21 @@ import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
-import codemirror from 'vue-codemirror'
-// import 'codemirror/lib/codemirror.css'
-// import 'codemirror/theme/solarized.css'
-// import 'codemirror/theme/base16-dark.css'
-// import 'codemirror/theme/base16-light.css'
-// import 'codemirror/theme/duotone-dark.css'
-// import 'codemirror/theme/duotone-light.css'
-// import 'codemirror/theme/xq-dark.css'
-// import 'codemirror/theme/xq-light.css'
-// import 'codemirror/theme/blackboard.css'
-// import 'codemirror/theme/midnight.css'
-// import 'codemirror/theme/neo.css'
-// import 'codemirror/theme/mbo.css'
-// import 'codemirror/theme/mdn-like.css'
-// import 'codemirror/mode/javascript/javascript.js'
+import Codemirror from 'codemirror-editor-vue3'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/solarized.css'
+import 'codemirror/theme/base16-dark.css'
+import 'codemirror/theme/base16-light.css'
+import 'codemirror/theme/duotone-dark.css'
+import 'codemirror/theme/duotone-light.css'
+import 'codemirror/theme/xq-dark.css'
+import 'codemirror/theme/xq-light.css'
+import 'codemirror/theme/blackboard.css'
+import 'codemirror/theme/midnight.css'
+import 'codemirror/theme/neo.css'
+import 'codemirror/theme/mbo.css'
+import 'codemirror/theme/mdn-like.css'
+import 'codemirror/mode/javascript/javascript.js'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
@@ -164,7 +164,7 @@ import { l } from '@/plugins/i18n'
 
 export default defineComponent({
     name: 'DataBlock',
-    components: { codemirror },
+    components: { Codemirror },
     props: {
         namePrefix: { default: '', type: String },
         finalOutputObject: {
