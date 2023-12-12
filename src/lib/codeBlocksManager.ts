@@ -1,6 +1,6 @@
+import Vue, { reactive, ref, UnwrapRef, createApp, h } from 'vue'
 import { ScriptBlock } from './scriptBlock'
 import i18n from '../plugins/i18n'
-import Vue from 'vue'
 
 import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
@@ -28,8 +28,7 @@ import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
 import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
 import dataInstaller from '@/lib/BlockloadManagers/DataManager'
 import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
-import { trim } from 'jquery'
-import { reactive, ref, UnwrapRef } from 'vue'
+
 import { taggedDirective, tagger } from '@/plugins/tagger'
 import { highlight, highlightDirective } from '@/plugins/highlight'
 import { appUseQuasar } from '@/plugins/quasar'
@@ -637,8 +636,8 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         const self = this
-        const app = Vue.createApp({
-            render: function (h) {
+        const object = {
+            render: function () {
                 class MainBlock implements IMainBlock {
                     id: number
                     uuid: string
@@ -794,11 +793,13 @@ class InternalCodeBlocksManager {
                         blocks: ref(new MainBlock()),
                     },
                 }
-                return h(data.editMode ? AppEditor : App, context)
+                return h(data.editMode ? 'AppEditor' : 'App', context)
             },
-        })
+        }
+        console.log('Creating Vue App', Vue)
+        const app = createApp(object)
         app.use(i18n)
-        app.use(UUID)
+        //app.use(UUID)
         app.directive('tagged', taggedDirective)
         app.directive('highlight', highlightDirective)
         appUseQuasar(app)

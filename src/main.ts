@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { tagger } from '@/plugins/tagger'
 
 String.prototype.replaceAllPoly = function (search: string, replacement: string): string {
@@ -37,6 +38,7 @@ import './plugins/tagger'
 import { CodeBlocksManager } from './lib/codeBlocksManager'
 import { highlight } from '@/plugins/highlight'
 
+console.log('main.ts', Vue)
 CodeBlocksManager.find(document).mount()
 
 window.codeblocks = {
