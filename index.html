@@ -5,7 +5,7 @@
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <meta name='viewport' content='width=device-width,initial-scale=1.0'>
-    <meta name='codeblocks-baseurl' content='<%= BASE_URL %>'>
+    <meta name='codeblocks-baseurl' content='/'>
     <link rel='icon' href='/favicon.ico'>
     <title>frontend</title>
     <link rel='stylesheet' href='/css/loader.css'>
@@ -13,12 +13,7 @@
     <link rel='stylesheet' href='/css/main.css'>
     <script src='/js/jquery.min.js' type='text/javascript'></script>
     <style>
-        codeblockseditor > *,
-        codeblocks > *,
-        [codeblockseditor] > *,
-        [codeblocks] > * {
-            display: none;
-        }
+        
     </style>
     <script type='module' src='/src/main.ts'></script>
 </head>
@@ -28,7 +23,6 @@
     <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to
         continue.</strong>
 </noscript>
-
 <div codeblockseditor data-compiler='java' data-compiler-version='101' data-run-code='true'
      data-max-characters='10000' data-execution-timeout='5000'
      data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]'>
@@ -50,7 +44,7 @@
             data-version='102'>module.exports = {
     getResources(){
         return [
-            {name:"CUBE", uri:"http://localhost:8080/js/three.js/r140/quadCube.json", type:"json"}
+            {name:"CUBE", uri:"http://localhost:5173/js/three.js/r140/quadCube.json", type:"json"}
         ]
     },
     setupDOM(canvasElement, outputElement, scope, runner) {

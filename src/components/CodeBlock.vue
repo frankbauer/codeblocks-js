@@ -1,6 +1,6 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
-        <codemirror
+        <Codemirror
             ref="codeBox"
             :value="code"
             :options="options"
@@ -15,11 +15,11 @@
             :data-question="block.parentID"
             :events="['keyup']"
         >
-        </codemirror>
+        </Codemirror>
 
         <div v-show="hasAlternativeContent" v-if="editMode">
             <div class="q-mt-lg text-subtitle2 q-pb-xs">{{ $t('CodeBlock.Initial_Content') }}</div>
-            <codemirror
+            <Codemirror
                 ref="altBox"
                 :value="altCode"
                 :options="altOptions"
@@ -29,7 +29,7 @@
                 @input="onAltCodeChangeDefered"
                 :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
             >
-            </codemirror>
+            </Codemirror>
         </div>
     </div>
 </template>
@@ -53,7 +53,7 @@ import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { ITagReplaceAction, tagger } from '@/plugins/tagger'
-import codemirror from 'vue-codemirror'
+import Codemirror from 'vue-codemirror'
 // import 'codemirror/lib/codemirror.css'
 // import 'codemirror/theme/solarized.css'
 // import 'codemirror/theme/base16-dark.css'
@@ -82,7 +82,7 @@ import { globalState } from '@/lib/globalState'
 // const ErrorTipCtor = Vue.extend(ErrorTip)
 export default defineComponent({
     name: 'CodeBlock',
-    components: {},
+    components: { Codemirror },
     props: {
         muteReadyState: {
             type: Boolean,
@@ -351,7 +351,6 @@ export default defineComponent({
             }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
         }
         const onCodeChange = (newCode) => {
-            console.log('CODEMIRROR', codeBox.value.cmView, codemirror)
             if (codemirror.value === null || codemirror.value === undefined) {
                 return
             }

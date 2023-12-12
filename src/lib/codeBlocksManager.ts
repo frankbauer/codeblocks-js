@@ -1,10 +1,11 @@
-import { reactive, ref, UnwrapRef, createApp, h, resolveComponent, defineComponent } from 'vue'
+import { reactive, ref, UnwrapRef, createApp, h } from 'vue'
 import { ScriptBlock } from './scriptBlock'
 import i18n from '../plugins/i18n'
 
 import App from '../App.vue'
 import AppEditor from '../AppEditor.vue'
-import UUID, { uuid } from 'vue-uuid'
+import CodeBlock from '../components/CodeBlock.vue'
+import { uuid } from 'vue-uuid'
 
 import compilerRegistry, { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
 import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
@@ -636,26 +637,24 @@ class InternalCodeBlocksManager {
 
     instantiateVue() {
         const data = this.data
-        const self = this
-        const object = defineComponent({
-            render: function () {
-                const context = {
-                    language: ref(data.language),
-                    id: ref(data.id),
-                    blocks: ref(new MainBlock(data)),
-                }
-                const component = data.editMode ? AppEditor : App
-                return h(component, context)
-            },
+
+        const context = {
+            language: ref(data.language),
+            id: ref(data.id),
+            blocks: ref(new MainBlock(data)),
+        }
+        const component = data.editMode ? AppEditor : App
+        //const app = createApp(component, context)
+        const app = createApp({
+            render: () => h(AppEditor, context),
         })
-        const app = createApp(object)
+        //const app = createApp({ template: `4` })
         app.use(i18n)
         //app.use(UUID)
         app.directive('tagged', taggedDirective)
         app.directive('highlight', highlightDirective)
         appUseQuasar(app)
         appUseCodeMirror(app)
-
         app.mount(this.element)
     }
 }

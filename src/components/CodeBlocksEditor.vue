@@ -51,7 +51,6 @@ export default defineComponent({
             output,
             sansoutput,
             didClip,
-            _finalOutputObject,
             didRunOnce,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,
@@ -105,6 +104,7 @@ export default defineComponent({
             onViewCodeChange,
             onRunFinished,
             onRunFromPlayground,
+            global,
         } = codeBlockSetup(blockInfo, editMode, props.eventHub)
 
         const onTypeChange = (nfo: IOnTypeChangeInfo): void => {
@@ -257,7 +257,6 @@ export default defineComponent({
             output,
             sansoutput,
             didClip,
-            _finalOutputObject,
             didRunOnce,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,
@@ -338,6 +337,7 @@ export default defineComponent({
             onChangeOrder,
             removeBlock,
             addNewBlock,
+            global,
         }
     },
 })

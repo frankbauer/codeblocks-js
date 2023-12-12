@@ -87,7 +87,7 @@
                 :isReady="isReady"
                 :canStop="canStop"
                 :showGlobalMessages="showGlobalMessages"
-                :globalStateMessage="globalState.compilerState.globalStateMessage"
+                :globalStateMessage="global.compilerState.globalStateMessage"
                 @ready="blockBecameReady"
                 @run="run"
                 @stop="stop"
@@ -169,10 +169,7 @@
                         style="align-self: center"
                         v-show="showGlobalMessages"
                     >
-                        <div
-                            id="message"
-                            v-html="globalState.compilerState.globalStateMessage"
-                        ></div>
+                        <div id="message" v-html="global.compilerState.globalStateMessage"></div>
                     </div>
                 </transition>
             </div>
@@ -314,6 +311,9 @@ export function codeBlockSetup(
     const didRunOnce = ref<boolean>(false)
     const triggerRecompileWhenFinished = ref<boolean>(false)
     let continuousCodeUpdateTimer: any = null
+    const global = computed(() => {
+        return globalState
+    })
     const continuousCompile = computed((): boolean => {
         if (editMode.value) {
             return false
@@ -789,7 +789,6 @@ export function codeBlockSetup(
         output,
         sansoutput,
         didClip,
-        _finalOutputObject,
         didRunOnce,
         triggerRecompileWhenFinished,
         continuousCodeUpdateTimer,
@@ -843,6 +842,7 @@ export function codeBlockSetup(
         onViewCodeChange,
         onRunFinished,
         onRunFromPlayground,
+        global,
     }
 }
 
@@ -872,7 +872,6 @@ export default defineComponent({
             output,
             sansoutput,
             didClip,
-            _finalOutputObject,
             didRunOnce,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,
@@ -926,6 +925,7 @@ export default defineComponent({
             onViewCodeChange,
             onRunFinished,
             onRunFromPlayground,
+            global,
         } = codeBlockSetup(blockInfo, editMode, props.eventHub)
         const onTypeChange = (nfo: IOnTypeChangeInfo): void => {}
         const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {}
@@ -953,13 +953,13 @@ export default defineComponent({
         const onChangeOrder = (nfo: IOnChangeOrder): void => {}
         const removeBlock = (idx: number): void => {}
         const addNewBlock = (): void => {}
+
         return {
             didInitialize,
             outputHTML,
             output,
             sansoutput,
             didClip,
-            _finalOutputObject,
             didRunOnce,
             triggerRecompileWhenFinished,
             continuousCodeUpdateTimer,
@@ -1040,7 +1040,7 @@ export default defineComponent({
             onChangeOrder,
             removeBlock,
             addNewBlock,
-            globalState,
+            global,
         }
     },
 })

@@ -142,8 +142,7 @@ import { BlockData } from '@/lib/codeBlocksManager'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
-
-import { javascript } from '@codemirror/lang-javascript'
+import codemirror from 'vue-codemirror'
 // import 'codemirror/lib/codemirror.css'
 // import 'codemirror/theme/solarized.css'
 // import 'codemirror/theme/base16-dark.css'
@@ -165,7 +164,7 @@ import { l } from '@/plugins/i18n'
 
 export default defineComponent({
     name: 'DataBlock',
-    components: {},
+    components: { codemirror },
     props: {
         namePrefix: { default: '', type: String },
         finalOutputObject: {

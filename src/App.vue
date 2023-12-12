@@ -1,5 +1,5 @@
 <template>
-    <q-layout view="hHh lpR fFf" style="min-height: 0">
+    <q-layout view="hHh lpR fFf" style="min-height: 0" class="codeblocks-app-page">
         <q-page-container>
             <CodeBlocks :blockInfo="blocks" :event-hub="eventHub" />
         </q-page-container>
@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import { defineComponent, toRefs } from 'vue'
-import CodeBlocks from './components/CodeBlocks'
-import { createGlobalEvent } from '@/composables/globalEvents'
+import { defineComponent } from 'vue'
+import CodeBlocks from './components/CodeBlocks.vue'
+import { createGlobalEvent } from '@/composables/globalEvents.ts'
 
 export default defineComponent({
     name: 'App',

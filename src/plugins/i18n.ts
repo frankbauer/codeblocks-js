@@ -1,4 +1,6 @@
 import VueI18n, { createI18n } from 'vue-i18n'
+import de from '@/locales/de.js'
+import en from '@/locales/en.js'
 
 let lang = document.getElementsByTagName('html')[0].getAttribute('lang')
 if (lang !== null) {
@@ -8,11 +10,8 @@ if (lang !== null) {
 function loadLocaleMessages() {
     //const locales = require.context('@/locales', true, /[A-Za-z0-9-_,\s]+\.json$/i, 'sync')
     const messages = {
-        en: {
-            message: {
-                hello: 'hello world',
-            },
-        },
+        en: en,
+        de: de,
     }
     // locales.keys().forEach((key) => {
     //     const matched = key.match(/([A-Za-z0-9-_]+)\./i)
