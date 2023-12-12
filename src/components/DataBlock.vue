@@ -115,6 +115,7 @@
                 :value="code"
                 :options="options"
                 :class="`accqstXmlInput noRTEditor codebox`"
+                :original-style="true"
                 @ready="onCodeReady"
                 @focus="onCodeFocus"
                 @input="onCodeChange"
