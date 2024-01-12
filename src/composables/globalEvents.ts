@@ -15,6 +15,7 @@ type EventHubEvents = {
 export type EventHubType = Emitter<EventHubEvents>
 
 export function createGlobalEvent() {
+    // local state, created per-component
     const eventHub: EventHubType = mitt<EventHubEvents>()
     return {
         eventHub,

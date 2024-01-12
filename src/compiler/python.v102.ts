@@ -30,7 +30,7 @@ function getWorker(setReady: (boolean) => void) {
     runningWorker = spareWorker
     console.i('Starting Spare Pyodide Server')
     spareWorker = new Worker(
-        globalState.codeBlocks.baseurl + 'js/python/v102/pyWorker.js'
+        globalState.appState.baseurl + 'js/python/v102/pyWorker.js'
     ) as REPLWorker
     spareWorker.onmessage = function (msg: any) {
         if (msg.data.command == 'finished-init') {

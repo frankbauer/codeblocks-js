@@ -246,7 +246,7 @@ import { globalState } from '@/lib/globalState'
 compilerRegistry.register(GLSLCompilers)
 
 compilerRegistry.registerDOMLib(
-    [globalState.codeBlocks.baseurl + 'js/chart.js/3.6.0/chart.min.js'],
+    [globalState.appState.baseurl + 'js/chart.js/3.6.0/chart.min.js'],
     'chart',
     '3.6.0',
     'Chart.JS',
@@ -258,11 +258,11 @@ compilerRegistry.registerDOMLib(
 )
 compilerRegistry.registerDOMLib(
     [
-        globalState.codeBlocks.baseurl + 'js/three.js/r0/three.min.js',
-        globalState.codeBlocks.baseurl + 'js/three.js/r0/controls/OrbitControls.js',
-        globalState.codeBlocks.baseurl + 'js/three.js/r0/controls/TrackballControls.js',
-        globalState.codeBlocks.baseurl + 'js/three.js/r0/Detector.js',
-        globalState.codeBlocks.baseurl + 'js/three.js/helper.r0.js',
+        globalState.appState.baseurl + 'js/three.js/r0/three.min.js',
+        globalState.appState.baseurl + 'js/three.js/r0/controls/OrbitControls.js',
+        globalState.appState.baseurl + 'js/three.js/r0/controls/TrackballControls.js',
+        globalState.appState.baseurl + 'js/three.js/r0/Detector.js',
+        globalState.appState.baseurl + 'js/three.js/helper.r0.js',
     ],
     '3js',
     'r0',
@@ -276,9 +276,9 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        globalState.codeBlocks.baseurl + 'js/three.js/r140/three.min.js',
-        globalState.codeBlocks.baseurl + 'js/three.js/r140/js/controls/OrbitControls.js',
-        globalState.codeBlocks.baseurl + 'js/three.js/r140/js/controls/TrackballControls.js',
+        globalState.appState.baseurl + 'js/three.js/r140/three.min.js',
+        globalState.appState.baseurl + 'js/three.js/r140/js/controls/OrbitControls.js',
+        globalState.appState.baseurl + 'js/three.js/r140/js/controls/TrackballControls.js',
     ],
     '3js',
     'r140',
@@ -291,7 +291,7 @@ compilerRegistry.registerDOMLib(
 )
 
 compilerRegistry.registerDOMLib(
-    [globalState.codeBlocks.baseurl + 'js/lil-gui/0.16/lil-gui.min.js'],
+    [globalState.appState.baseurl + 'js/lil-gui/0.16/lil-gui.min.js'],
     'lil-gui',
     '0.16',
     'lil GUI',
@@ -304,8 +304,8 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        globalState.codeBlocks.baseurl + 'js/phaser/3.54.0/phaser.min.js',
-        globalState.codeBlocks.baseurl + 'js/phaser/3.54.0/support.js',
+        globalState.appState.baseurl + 'js/phaser/3.54.0/phaser.min.js',
+        globalState.appState.baseurl + 'js/phaser/3.54.0/support.js',
     ],
     'phaser',
     '3.54',
@@ -320,8 +320,8 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        globalState.codeBlocks.baseurl + 'js/d3/5.16.0/d3.v5.min.js',
-        globalState.codeBlocks.baseurl + 'js/d3/5.3.8/helper.js',
+        globalState.appState.baseurl + 'js/d3/5.16.0/d3.v5.min.js',
+        globalState.appState.baseurl + 'js/d3/5.3.8/helper.js',
     ],
     'd3',
     '5.16.0',
@@ -334,8 +334,8 @@ compilerRegistry.registerDOMLib(
 )
 compilerRegistry.registerDOMLib(
     [
-        globalState.codeBlocks.baseurl + 'js/d3/5.3.8/d3.v5.min.js',
-        globalState.codeBlocks.baseurl + 'js/d3/5.3.8/helper.js',
+        globalState.appState.baseurl + 'js/d3/5.3.8/d3.v5.min.js',
+        globalState.appState.baseurl + 'js/d3/5.3.8/helper.js',
     ],
     'd3',
     '5.3.8',
@@ -348,7 +348,7 @@ compilerRegistry.registerDOMLib(
 )
 compilerRegistry.registerDOMLib(
     [
-        globalState.codeBlocks.baseurl + 'js/d3/6.7.0/d3.v6.min.js',
+        globalState.appState.baseurl + 'js/d3/6.7.0/d3.v6.min.js',
         //globalState.codeBlocks.baseurl + 'js/d3/6.2.0/helper.v6.js'
     ],
     'd3',
@@ -361,7 +361,7 @@ compilerRegistry.registerDOMLib(
     }
 )
 compilerRegistry.registerDOMLib(
-    [globalState.codeBlocks.baseurl + 'js/d3/7.1.1/d3.v7.min.js'],
+    [globalState.appState.baseurl + 'js/d3/7.1.1/d3.v7.min.js'],
     'd3',
     '7.1.1',
     'D3',
@@ -376,7 +376,7 @@ compilerRegistry.addUpdateMapping('d3', '5.13.4', '5.16.0')
 compilerRegistry.addUpdateMapping('d3', '6.2.0', '6.7.0')
 
 compilerRegistry.registerDOMLib(
-    [globalState.codeBlocks.baseurl + 'js/brain.js/2.0.0-alpha/brain-browser.min.js'],
+    [globalState.appState.baseurl + 'js/brain.js/2.0.0-alpha/brain-browser.min.js'],
     'brain',
     '2.0.0',
     'Brain.JS',
@@ -389,7 +389,7 @@ compilerRegistry.registerDOMLib(
 
 compilerRegistry.registerDOMLib(
     [
-        globalState.codeBlocks.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js',
+        globalState.appState.baseurl + 'js/tensorflow.js/2.0.0/tf.min.js',
         //globalState.codeBlocks.baseurl + 'js/tensorflow.js/2.0.0/tfjs-vis.umd.min.js',
     ],
     'tf',
@@ -404,7 +404,7 @@ compilerRegistry.registerDOMLib(
 )
 
 compilerRegistry.registerDOMLib(
-    [globalState.codeBlocks.baseurl + 'js/leaflet.js/1.9/leaflet.js'],
+    [globalState.appState.baseurl + 'js/leaflet.js/1.9/leaflet.js'],
     'leaflet',
     '1.9',
     'Leaflet',
@@ -416,7 +416,7 @@ compilerRegistry.registerDOMLib(
 )
 
 compilerRegistry.registerDOMLib(
-    [globalState.codeBlocks.baseurl + 'js/modelviewer.js/2.1.1/model-viewer-umd.min.js'],
+    [globalState.appState.baseurl + 'js/modelviewer.js/2.1.1/model-viewer-umd.min.js'],
     'modelviewer',
     '2.1.1',
     '&lt;model-viewer&gt;',

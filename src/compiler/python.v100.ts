@@ -28,7 +28,7 @@ function runPythonWorker(
         return
     }
 
-    const worker = new Worker(globalState.codeBlocks.baseurl + 'js/python/v100/pyWorker.js')
+    const worker = new Worker(globalState.appState.baseurl + 'js/python/v100/pyWorker.js')
 
     // construct message for worker
     const pyInp = [] // not used jet

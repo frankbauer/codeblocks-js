@@ -446,7 +446,7 @@ export default defineComponent({
         })
         const order = computed({
             get(): IListItemData {
-                return globalState.codeBlocks.itemForValue(positions.value, `${block.value.id}`)
+                return globalState.appState.itemForValue(positions.value, `${block.value.id}`)
             },
             set(val: IListItemData) {
                 const data: IOnChangeOrder = { id: block.value.id, newID: +val.value }
@@ -534,7 +534,7 @@ export default defineComponent({
         })
         const scriptVersionObj = computed({
             get(): IListItemData {
-                return globalState.codeBlocks.itemForValue(
+                return globalState.appState.itemForValue(
                     scriptVersions.value,
                     scriptVersion.value
                 )
@@ -607,7 +607,7 @@ export default defineComponent({
         })
         const typeObj = computed({
             get(): IListItemData {
-                return globalState.codeBlocks.itemForValue(types.value, type.value)
+                return globalState.appState.itemForValue(types.value, type.value)
             },
             set(val: IListItemData) {
                 const v = val.value
@@ -682,7 +682,7 @@ export default defineComponent({
         })
         const align = computed({
             get(): IListItemData {
-                return globalState.codeBlocks.itemForValue(alignments.value, block.value.align)
+                return globalState.appState.itemForValue(alignments.value, block.value.align)
             },
             set(v: IListItemData) {
                 ctx.emit('placement-change', {
@@ -700,7 +700,7 @@ export default defineComponent({
             return true
         }
         const toggleExpanded = (): void => {
-            globalState.codeBlocks.refreshAllCodeMirrors()
+            globalState.appState.refreshAllCodeMirrors()
             expanded.value = !expanded.value
         }
         const moveUp = (): void => {

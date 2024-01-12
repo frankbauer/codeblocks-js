@@ -52,7 +52,7 @@ export class JavaV101Compiler implements ICompilerInstance {
             globalState.compilerState.displayGlobalState('Initializing Runtime')
             try {
                 this.teaworker = new Worker(
-                    `${globalState.codeBlocks.baseurl}js/teavm/v${this.version}/worker.js`
+                    `${globalState.appState.baseurl}js/teavm/v${this.version}/worker.js`
                 )
             } catch (e) {
                 //this should throw in the offline environment, thus we look for the worker at a different
@@ -286,7 +286,7 @@ export class JavaV101Compiler implements ICompilerInstance {
                             'Executing <b>' + mainClass + '</b>'
                         )
                         const workerrun = new Worker(
-                            `${globalState.codeBlocks.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
+                            `${globalState.appState.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
                         )
                         this.sessionWorker = workerrun
 

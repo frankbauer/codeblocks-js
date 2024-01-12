@@ -44,7 +44,7 @@ function runJavaWorker(
 
     const className = match[1]
 
-    const worker = new Worker(globalState.codeBlocks.baseurl + 'js/doppio/v001/javaWorker.js')
+    const worker = new Worker(globalState.appState.baseurl + 'js/doppio/v001/javaWorker.js')
     let timer: any | null = null
 
     worker.addEventListener(
@@ -200,7 +200,7 @@ export class DoppioV001Compiler implements ICompilerInstance {
             JavaExec.initialize(function () {
                 console.log('Initializing Filesystem')
                 JavaExec.initFileSystems(
-                    globalState.codeBlocks.baseurl + 'js/doppio/v001/',
+                    globalState.appState.baseurl + 'js/doppio/v001/',
                     false,
                     function () {
                         //JavaExec.printDirContent('sys/vendor');
@@ -253,20 +253,20 @@ export class DoppioV001Compiler implements ICompilerInstance {
     triggerResourceLoad() {
         console.log('[Preparing Dependencies for Doppio]')
         const script = document.createElement('script')
-        script.src = globalState.codeBlocks.baseurl + 'js/doppio/v001/browserfs/browserfs.min.js'
+        script.src = globalState.appState.baseurl + 'js/doppio/v001/browserfs/browserfs.min.js'
         const self = this
         script.onload = function () {
             self.loadedlibs++
             console.log('[BrowserFS loaded]')
 
             const script = document.createElement('script')
-            script.src = globalState.codeBlocks.baseurl + 'js/doppio/v001/doppio/doppio.js'
+            script.src = globalState.appState.baseurl + 'js/doppio/v001/doppio/doppio.js'
             script.onload = function () {
                 self.loadedlibs++
                 console.log('[Doppio loaded]')
 
                 const script = document.createElement('script')
-                script.src = globalState.codeBlocks.baseurl + 'js/doppio/v001/JavaExec.js'
+                script.src = globalState.appState.baseurl + 'js/doppio/v001/JavaExec.js'
                 script.onload = function () {
                     self.loadedlibs++
                     console.log('[JavaExec loaded]')

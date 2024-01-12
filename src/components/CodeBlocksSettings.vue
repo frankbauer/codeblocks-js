@@ -459,7 +459,7 @@ export default defineComponent({
         })
 
         const languages: ComputedRef<IListItemData[]> = computed(() => {
-            return globalState.codeBlocks.knownLanguages()
+            return globalState.appState.knownLanguages()
         })
 
         const compiledLanguages: ComputedRef<IListItemData[]> = computed(() => {
@@ -512,7 +512,7 @@ export default defineComponent({
 
         const compilerLanguageObj = computed({
             get: () => {
-                return globalState.codeBlocks.itemForValue(
+                return globalState.appState.itemForValue(
                     compiledLanguages.value,
                     compilerLanguage.value
                 )
@@ -577,7 +577,7 @@ export default defineComponent({
 
         const solutionTheme = computed({
             get: () => {
-                return globalState.codeBlocks.itemForValue(
+                return globalState.appState.itemForValue(
                     themes.value,
                     props.options.solutionTheme
                 )
@@ -593,7 +593,7 @@ export default defineComponent({
 
         const codeTheme = computed({
             get: () => {
-                return globalState.codeBlocks.itemForValue(themes.value, props.options.codeTheme)
+                return globalState.appState.itemForValue(themes.value, props.options.codeTheme)
             },
 
             set: (v: IListItemData) => {
@@ -606,7 +606,7 @@ export default defineComponent({
 
         const outputParser = computed({
             get: () => {
-                return globalState.codeBlocks.itemForValue(
+                return globalState.appState.itemForValue(
                     outputParsers.value,
                     props.options.outputParser
                 )

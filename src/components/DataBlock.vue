@@ -208,7 +208,7 @@ export default defineComponent({
         })
         const options = computed((): ICodePlaygroundOptions => {
             return {
-                mode: globalState.codeBlocks.mimeType('javascript'),
+                mode: globalState.appState.mimeType('javascript'),
                 theme: theme.value,
                 lineNumbers: true,
                 line: true,
@@ -274,7 +274,7 @@ export default defineComponent({
         const setExpanded = (val: CodeExpansionType): void => {
             block.value.codeExpanded = val
             if (block.value.codeExpanded != CodeExpansionType.TINY) {
-                globalState.codeBlocks.refreshAllCodeMirrors()
+                globalState.appState.refreshAllCodeMirrors()
             }
             updateHeight()
         }

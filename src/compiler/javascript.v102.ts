@@ -44,7 +44,7 @@ function runJavaScriptWorker(
     //const lines = code.split('\n').length;
     const startTime = performance.now()
     let executionFinished = false
-    const worker = new Worker(globalState.codeBlocks.baseurl + 'js/javascript/v102/jsWorker.js')
+    const worker = new Worker(globalState.appState.baseurl + 'js/javascript/v102/jsWorker.js')
 
     worker.onmessage = function (msg: any) {
         console.d('jsrunner message', questionID, executionFinished, msg.data, msg.data.command)
@@ -233,7 +233,7 @@ export class JavascriptV102Compiler implements ICompilerInstance {
 
     registerLibs?(compilerRegistry: ICompilerRegistry): void {
         compilerRegistry.registerDOMLib(
-            [globalState.codeBlocks.baseurl + 'js/javascript/v101/d3DomProxyToHTML.js'],
+            [globalState.appState.baseurl + 'js/javascript/v101/d3DomProxyToHTML.js'],
             'd3proxy',
             '101',
             'D3 - Proxy',

@@ -39,7 +39,7 @@ function runJavaScriptWorker(
     //const lines = code.split('\n').length;
     const startTime = performance.now()
     let executionFinished = false
-    const worker = new Worker(globalState.codeBlocks.baseurl + 'js/javascript/v101/jsWorker.js')
+    const worker = new Worker(globalState.appState.baseurl + 'js/javascript/v101/jsWorker.js')
 
     worker.onmessage = function (msg) {
         //only accept messages, as long as the worker is not terminated
@@ -177,7 +177,7 @@ export class JavascriptV101Compiler implements ICompilerInstance {
 
     registerLibs?(compilerRegistry: ICompilerRegistry): void {
         compilerRegistry.registerDOMLib(
-            [globalState.codeBlocks.baseurl + 'js/javascript/v101/d3DomProxyToHTML.js'],
+            [globalState.appState.baseurl + 'js/javascript/v101/d3DomProxyToHTML.js'],
             'd3proxy',
             '101',
             'D3 - Proxy',

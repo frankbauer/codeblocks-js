@@ -138,7 +138,7 @@ export default defineComponent({
     emits: ['changeOutput', 'run'],
     setup(props, context) {
         const instance = getCurrentInstance()
-        const globalCodeBlock = globalState.codeBlocks
+        const globalCodeBlock = globalState.appState
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
 

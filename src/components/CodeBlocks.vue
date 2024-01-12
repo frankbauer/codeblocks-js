@@ -405,7 +405,7 @@ export function codeBlockSetup(
         return outputHTML.value !== undefined && outputHTML.value != ''
     })
     const mimeType = computed((): string => {
-        return globalState.codeBlocks.mimeType(language.value)
+        return globalState.appState.mimeType(language.value)
     })
     const isReady = computed((): boolean => {
         let cmp = compilerRegistry.getCompiler(compiler.value)
@@ -499,7 +499,7 @@ export function codeBlockSetup(
             output = ref(newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;'))
             if (maxCharacters.value > 0 && output.value.length > maxCharacters.value) {
                 outputHTML.value = formatOutput(output.value.substr(0, maxCharacters.value))
-                outputHTML.value += globalState.codeBlocks.format_info(
+                outputHTML.value += globalState.appState.format_info(
                     'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
                 )
             } else {
@@ -520,7 +520,7 @@ export function codeBlockSetup(
         if (!didClip.value) {
             let formatedText
             if (maxCharacters.value > 0 && output.value.length > maxCharacters.value) {
-                formatedText = globalState.codeBlocks.format_info(
+                formatedText = globalState.appState.format_info(
                     'Info: Output too long. Removed all following Characters. \n<b>...</b>\n\n'
                 )
                 didClip.value = true
@@ -534,14 +534,14 @@ export function codeBlockSetup(
     const logError = (text: string): void => {
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         eventHub.emit('console-err', text)
-        text = globalState.codeBlocks.format_error(text)
+        text = globalState.appState.format_error(text)
         sansoutput.value += text
         outputHTML.value += text
     }
     const logInfo = (text: string): void => {
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
         eventHub.emit('console-nfo', text)
-        text = globalState.codeBlocks.format_info(text)
+        text = globalState.appState.format_info(text)
         sansoutput.value += text
         outputHTML.value += text
     }
@@ -578,7 +578,7 @@ export function codeBlockSetup(
         }
         if (output !== undefined && playgrounds.value.length > 0) {
             try {
-                processed = globalState.codeBlocks.processMixedOutput(
+                processed = globalState.appState.processMixedOutput(
                     output,
                     outputParser.value,
                     undefined,
