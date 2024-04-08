@@ -68,7 +68,7 @@ export interface IAppSettings {
     shadowRoot?: ShadowRoot
 }
 
-interface IAppElementData {
+interface IInputElementData {
     randomizerActive?: string
     randomizerPreviewIndex?: string
     randomizerKnownTags?: string
@@ -129,9 +129,7 @@ export class BlockData implements IBlockData {
     obj: ScriptBlock | null
     dataObj: any | null
 
-    constructor(data: { data: () => IBlockDataWithSettings }) {
-        const d = data.data()
-
+    constructor(d: IBlockDataWithSettings) {
         this.obj = null
         this.dataObj = null
 
@@ -340,12 +338,8 @@ class InternalCodeBlocksManager {
         }
 
         return new BlockData({
-            data: () => {
-                return {
-                    ...bl,
-                    appSettings: data,
-                }
-            },
+            ...bl,
+            appSettings: data,
         })
     }
 
@@ -395,7 +389,7 @@ class InternalCodeBlocksManager {
             this.element = el
         }
         //console.log(this.element)
-        const inData = el.dataset as IAppElementData
+        const inData = el.dataset as IInputElementData
         const data: IAppSettings = {
             id: -1,
             editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor'),
