@@ -6,23 +6,25 @@
     </q-layout>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { toRefs } from 'vue'
 import CodeBlocksEditor from './components/CodeBlocksEditor.vue'
-import { createGlobalEvent } from '@/composables/globalEvents.ts'
+import { createGlobalEvent } from '@/composables/globalEvents'
+import { defineProps } from 'vue'
+import { IMainBlock } from '@/lib/codeBlocksManager'
 
-export default defineComponent({
-    name: 'AppEditor',
-    props: ['blocks'],
-    components: {
-        CodeBlocksEditor,
-    },
-    setup(props, ctx) {
-        console.log('AppEditor setup', props, ctx)
-        const { eventHub } = createGlobalEvent()
-        return { eventHub }
-    },
-})
+interface Props {
+    blocks: IMainBlock
+}
+
+// Define props
+const props = defineProps<Props>()
+const { blocks } = toRefs(props)
+
+// Use the composable for global events
+const { eventHub } = createGlobalEvent()
+
+console.log('AppEditor setup', props, blocks.value)
 </script>
 
 <style lang="sass">
