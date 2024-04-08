@@ -328,6 +328,96 @@ function isTrue(val: any): boolean {
 
 const useShadowDOM = false
 
+function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockDataBase | undefined {
+    const inBlock = bl.dataset as IBlockElementData
+    const as = bl.getAttribute('as')
+    if (as !== null) {
+        inBlock.as = as.trim().toUpperCase()
+    }
+
+    const block: IBlockDataBase = {
+        as: inBlock.as ? KnownBlockTypes[inBlock.as] : undefined,
+        hasCode: false,
+        version: '101',
+        type: bl.tagName as KnownBlockTypes,
+        content: bl.textContent ? bl.textContent : '',
+        alternativeContent: null,
+        hasAlternativeContent: false,
+        id: data.blocks.length,
+        uuid: uuid.v4(),
+        parentID: data.id,
+        width: '100%',
+        height: '200px',
+        align: 'center',
+        readyCount: 0,
+        obj: null,
+        name: `v${data.blocks.length}`,
+        lineCountHint: -1,
+        errors: [],
+        readonly: isTrue(inBlock.readonly),
+        static: isTrue(inBlock.static),
+        hidden: isTrue(inBlock.hidden),
+        visibleLines:
+            inBlock.visibleLines === undefined ||
+            inBlock.visibleLines?.trim().toLowerCase() == 'auto'
+                ? 'auto'
+                : Number(inBlock.visibleLines),
+        shouldAutoreset: isTrue(inBlock.shouldAutoreset),
+        shouldReloadResources: isTrue(inBlock.shouldReloadResources),
+        generateTemplate:
+            undefined || (inBlock.generateTemplate != 'false' && inBlock.generateTemplate != '0'),
+
+        expanded:
+            inBlock.expanded === undefined ||
+            (inBlock.expanded != 'false' && inBlock.expanded != '0'),
+        codeExpanded: CodeExpansionType.AUTO,
+        noContent: isTrue(inBlock.noContent),
+        scopeUUID: inBlock.scopeUUID,
+        scopeSelector: inBlock.scopeSelector,
+    }
+
+    if (inBlock.codeExpanded !== undefined) {
+        if (
+            inBlock.codeExpanded.toUpperCase() == 'TINY' ||
+            inBlock.codeExpanded == 'false' ||
+            inBlock.codeExpanded == '0'
+        ) {
+            block.codeExpanded = CodeExpansionType.TINY
+        } else if (inBlock.codeExpanded.toUpperCase() == 'LARGE' || inBlock.codeExpanded == '2') {
+            block.codeExpanded = CodeExpansionType.LARGE
+        }
+    }
+
+    if (!data.editMode && block.noContent) {
+        block.content = ''
+    }
+    if (inBlock.alternativeContent !== undefined && !block.static && !block.hidden) {
+        block.alternativeContent = inBlock.alternativeContent
+        block.hasAlternativeContent = true
+        if (!data.editMode && block.noContent) {
+            block.content = block.alternativeContent
+        }
+    } else {
+        block.hasAlternativeContent = false
+    }
+
+    if (block.type != 'TEXT') {
+        console.log('BL', block.type, block.as)
+        if (block.as) {
+            block.type = block.as
+        }
+        const loader = loaders[block.type]
+        console.d('LOADER', loader, loaders, block.type, block.as)
+        if (loader === undefined) {
+            console.i('Skipping', block.type, block.as)
+            return undefined
+        } else {
+            loader.loadFromDatablock(bl, inBlock, block, data.editMode)
+        }
+    }
+    return block
+}
+
 //this will handle the vue mounting on the dom
 class InternalCodeBlocksManager {
     constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
@@ -531,95 +621,9 @@ class InternalCodeBlocksManager {
             if (bl.parentElement != el) {
                 return
             }
-            const inBlock = bl.dataset as IBlockElementData
-            const as = bl.getAttribute('as')
-            if (as !== null) {
-                inBlock.as = as.trim().toUpperCase()
-            }
-
-            const block: IBlockDataBase = {
-                as: inBlock.as ? KnownBlockTypes[inBlock.as] : undefined,
-                hasCode: false,
-                version: '101',
-                type: bl.tagName as KnownBlockTypes,
-                content: bl.textContent ? bl.textContent : '',
-                alternativeContent: null,
-                hasAlternativeContent: false,
-                id: data.blocks.length,
-                uuid: uuid.v4(),
-                parentID: data.id,
-                width: '100%',
-                height: '200px',
-                align: 'center',
-                readyCount: 0,
-                obj: null,
-                name: `v${data.blocks.length}`,
-                lineCountHint: -1,
-                errors: [],
-                readonly: isTrue(inBlock.readonly),
-                static: isTrue(inBlock.static),
-                hidden: isTrue(inBlock.hidden),
-                visibleLines:
-                    inBlock.visibleLines === undefined ||
-                    inBlock.visibleLines?.trim().toLowerCase() == 'auto'
-                        ? 'auto'
-                        : Number(inBlock.visibleLines),
-                shouldAutoreset: isTrue(inBlock.shouldAutoreset),
-                shouldReloadResources: isTrue(inBlock.shouldReloadResources),
-                generateTemplate:
-                    undefined ||
-                    (inBlock.generateTemplate != 'false' && inBlock.generateTemplate != '0'),
-
-                expanded:
-                    inBlock.expanded === undefined ||
-                    (inBlock.expanded != 'false' && inBlock.expanded != '0'),
-                codeExpanded: CodeExpansionType.AUTO,
-                noContent: isTrue(inBlock.noContent),
-                scopeUUID: inBlock.scopeUUID,
-                scopeSelector: inBlock.scopeSelector,
-            }
-
-            if (inBlock.codeExpanded !== undefined) {
-                if (
-                    inBlock.codeExpanded.toUpperCase() == 'TINY' ||
-                    inBlock.codeExpanded == 'false' ||
-                    inBlock.codeExpanded == '0'
-                ) {
-                    block.codeExpanded = CodeExpansionType.TINY
-                } else if (
-                    inBlock.codeExpanded.toUpperCase() == 'LARGE' ||
-                    inBlock.codeExpanded == '2'
-                ) {
-                    block.codeExpanded = CodeExpansionType.LARGE
-                }
-            }
-
-            if (!data.editMode && block.noContent) {
-                block.content = ''
-            }
-            if (inBlock.alternativeContent !== undefined && !block.static && !block.hidden) {
-                block.alternativeContent = inBlock.alternativeContent
-                block.hasAlternativeContent = true
-                if (!data.editMode && block.noContent) {
-                    block.content = block.alternativeContent
-                }
-            } else {
-                block.hasAlternativeContent = false
-            }
-
-            if (block.type != 'TEXT') {
-                console.log('BL', block.type, block.as)
-                if (block.as) {
-                    block.type = block.as
-                }
-                const loader = loaders[block.type]
-                console.d('LOADER', loader, loaders, block.type, block.as)
-                if (loader === undefined) {
-                    console.i('Skipping', block.type, block.as)
-                    return
-                } else {
-                    loader.loadFromDatablock(bl, inBlock, block, data.editMode)
-                }
+            const block = parseInputBlockElement(bl, data)
+            if (block === undefined) {
+                return
             }
 
             data.blocks.push(this.constructBlock(data, block))
