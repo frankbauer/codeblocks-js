@@ -39,6 +39,14 @@ CodeBlocksManager.find(document).mount()
 
 window.codeblocks = {
     scale: 1.0,
+    mountInElement: function (element: any): void {
+        highlight.$vue.processElements(element)
+        tagger.processElements(element)
+        CodeBlocksManager.find(element).mount()
+    },
+    mountCodeBlocks: function (scope: HTMLElement | Document | undefined) {
+        return CodeBlocksManager.find(scope).mount()
+    },
 }
 
 window.mountInElement = function (element: any): void {

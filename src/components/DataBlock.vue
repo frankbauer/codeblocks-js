@@ -178,6 +178,7 @@ export default defineComponent({
         eventHub: { required: true, type: Object as PropType<EventHubType> },
         tagSet: { type: Object as PropType<IRandomizerSet> },
     },
+    emits: ['ready'],
     setup(props, ctx) {
         const instance = getCurrentInstance()
         const q = instance?.proxy?.$root?.$q

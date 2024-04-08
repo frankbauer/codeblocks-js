@@ -48,7 +48,7 @@ export interface IAppSettings {
     editMode: boolean
     readonly: boolean
     randomizer: IRandomizerSettings
-    blocks: UnwrapRef<BlockData[]>
+    blocks: BlockData[]
     compiler: ICompilerID
     language: string
     runCode: boolean

@@ -1,17 +1,6 @@
 <script lang="ts">
 import { defineComponent, computed, PropType, toRefs } from 'vue'
-import CodeBlocks, {
-    IOnTypeChangeInfo,
-    IOnVisibleLinesChangeInfo,
-    IOnPlacementChangeInfo,
-    IOnScriptVersionChangeInfo,
-    IOnSetAutoResetInfo,
-    IOnThemeChangeInfo,
-    IOnGenerateTemplateInfo,
-    IOnChangeOrder,
-    IOnReloadResourcesInfo,
-    codeBlockSetup,
-} from '@/components/CodeBlocks.vue'
+import CodeBlocks from '@/components/CodeBlocks.vue'
 import { KnownBlockTypes, CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { IMainBlock } from '@/lib/codeBlocksManager'
 import compilerRegistry from '@/lib/CompilerRegistry'
@@ -23,6 +12,18 @@ import SimpleText from '@/components/SimpleText.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
 import DataBlock from '@/components/DataBlock.vue'
 import { EventHubType } from '@/composables/globalEvents'
+import {
+    codeBlockSetup,
+    IOnChangeOrder,
+    IOnGenerateTemplateInfo,
+    IOnPlacementChangeInfo,
+    IOnReloadResourcesInfo,
+    IOnScriptVersionChangeInfo,
+    IOnSetAutoResetInfo,
+    IOnThemeChangeInfo,
+    IOnTypeChangeInfo,
+    IOnVisibleLinesChangeInfo,
+} from '@/composables/basicBlocks'
 
 export default defineComponent({
     name: 'CodeBlocksEditor',

@@ -135,7 +135,7 @@ export default defineComponent({
             required: false,
         },
     },
-    emits: ['changeOutput', 'run'],
+    emits: ['changeOutput', 'run', 'ready'],
     setup(props, context) {
         const instance = getCurrentInstance()
         const globalCodeBlock = globalState.appState
