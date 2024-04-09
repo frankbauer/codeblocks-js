@@ -1,4 +1,4 @@
-import { reactive, ref, UnwrapRef, createApp, h } from 'vue'
+import { reactive, ref, UnwrapRef, createApp, h, type Ref } from 'vue'
 import { ScriptBlock } from './scriptBlock'
 import i18n from '../plugins/i18n'
 
@@ -328,6 +328,144 @@ function isTrue(val: any): boolean {
 
 const useShadowDOM = false
 
+function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined): IAppSettings {
+    const inData = el.dataset as IInputElementData
+    const data: IAppSettings = {
+        id: -1,
+        editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor'),
+        runCode: false,
+        language: 'javascript',
+        compiler: {
+            languageType: 'javascript',
+            version: '101',
+        },
+        randomizer: {
+            active: false,
+            previewIndex: 0,
+            knownTags: [],
+            sets: [],
+        },
+        domLibs: [],
+        workerLibs: [],
+        blocks: [],
+        outputParser: CodeOutputTypes.AUTO,
+        readonly: false,
+        solutionTheme: 'solarized light',
+        codeTheme: 'xq-light',
+        uuid: 'is-set-below',
+        executionTimeout: 5000,
+        maxCharacters: 1000,
+        continuousCompilation: isTrue(inData.continuousCompilation),
+        messagePassing: isTrue(inData.messagePassing),
+        keepAlive: isTrue(inData.keepAlive),
+        persistentArguments: isTrue(inData.persistentArguments),
+        shadowRoot: shadowRoot,
+    }
+
+    if (inData.randomizerActive !== undefined) {
+        data.randomizer.active = isTrue(inData.randomizerActive)
+    }
+    if (inData.randomizerPreviewIndex !== undefined) {
+        data.randomizer.previewIndex = Number(inData.randomizerPreviewIndex)
+    }
+    if (inData.randomizerKnownTags !== undefined) {
+        data.randomizer.knownTags = JSON.parse(inData.randomizerKnownTags)
+    }
+    if (inData.randomizerSets !== undefined) {
+        data.randomizer.sets = JSON.parse(inData.randomizerSets).map((o: object, i: number) => {
+            const ret: IRandomizerSet = {
+                uuid: uuid.v4(),
+                values: [],
+            }
+            Object.keys(o).forEach((tag) => {
+                const item: IRandomizerSetTag = {
+                    tag: tag,
+                    value: o[tag],
+                }
+                ret.values.push(item)
+            })
+
+            return ret
+        })
+    }
+
+    if (inData.question !== undefined) {
+        data.id = Number(inData.question)
+    }
+
+    if (inData.compiler !== undefined) {
+        const cInfo: ICompilerID = {
+            languageType: inData.compiler,
+            version: inData.compilerVersion!,
+        }
+        data.compiler = cInfo
+
+        const c = CompilerRegistry.getCompiler(data.compiler)
+        if (c === undefined) {
+            data.runCode = false
+            data.language = data.compiler.languageType
+        } else {
+            data.runCode = isTrue(inData.runCode)
+            data.language = c.language
+            data.compiler.version = c.version
+        }
+    }
+
+    if (inData.domLibs !== undefined) {
+        data.domLibs = JSON.parse(inData.domLibs).map((l: string) => compilerRegistry.mapLibrary(l))
+    }
+
+    if (inData.readonly !== undefined) {
+        if (data.editMode) {
+            data.readonly = false
+        } else {
+            data.readonly = isTrue(inData.readonly)
+        }
+    }
+
+    if (inData.workerLibs !== undefined) {
+        data.workerLibs = JSON.parse(inData.workerLibs)
+    }
+
+    if (el.hasAttribute('uuid')) {
+        data.uuid = el.getAttribute('uuid')!
+    } else {
+        data.uuid = uuid.v4()
+        el.setAttribute('uuid', data.uuid)
+    }
+
+    //data.id = Number(data.id)
+
+    if (inData.executionTimeout !== undefined) {
+        data.executionTimeout = Number(inData.executionTimeout)
+    }
+
+    if (inData.maxCharacters !== undefined) {
+        data.maxCharacters = Number(inData.maxCharacters)
+    }
+
+    if (inData.scopeUUID !== undefined) {
+        data.scopeUUID = inData.scopeUUID
+    }
+    if (inData.scopeSelector !== undefined) {
+        data.scopeSelector = inData.scopeSelector
+    }
+
+    if (inData.outputParser !== undefined) {
+        data.outputParser = inData.outputParser
+    }
+
+    if (inData.solutionTheme !== undefined) {
+        data.solutionTheme = inData.solutionTheme
+    }
+
+    if (inData.codeTheme !== undefined) {
+        data.codeTheme = inData.codeTheme
+    }
+
+    return data
+}
+
 function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockDataBase | undefined {
     const inBlock = bl.dataset as IBlockElementData
     const as = bl.getAttribute('as')
@@ -479,158 +617,25 @@ class InternalCodeBlocksManager {
             this.element = el
         }
         //console.log(this.element)
-        const inData = el.dataset as IInputElementData
-        const data: IAppSettings = {
-            id: -1,
-            editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor'),
-            runCode: false,
-            language: 'javascript',
-            compiler: {
-                languageType: 'javascript',
-                version: '101',
-            },
-            randomizer: {
-                active: false,
-                previewIndex: 0,
-                knownTags: [],
-                sets: [],
-            },
-            domLibs: [],
-            workerLibs: [],
-            blocks: reactive([]),
-            outputParser: CodeOutputTypes.AUTO,
-            readonly: false,
-            solutionTheme: 'solarized light',
-            codeTheme: 'xq-light',
-            uuid: 'is-set-below',
-            executionTimeout: 5000,
-            maxCharacters: 1000,
-            continuousCompilation: isTrue(inData.continuousCompilation),
-            messagePassing: isTrue(inData.messagePassing),
-            keepAlive: isTrue(inData.keepAlive),
-            persistentArguments: isTrue(inData.persistentArguments),
-            shadowRoot: this.shadowRoot,
-        }
-
-        if (inData.randomizerActive !== undefined) {
-            data.randomizer.active = isTrue(inData.randomizerActive)
-        }
-        if (inData.randomizerPreviewIndex !== undefined) {
-            data.randomizer.previewIndex = Number(inData.randomizerPreviewIndex)
-        }
-        if (inData.randomizerKnownTags !== undefined) {
-            data.randomizer.knownTags = JSON.parse(inData.randomizerKnownTags)
-        }
-        if (inData.randomizerSets !== undefined) {
-            data.randomizer.sets = JSON.parse(inData.randomizerSets).map((o: object, i: number) => {
-                const ret: IRandomizerSet = {
-                    uuid: uuid.v4(),
-                    values: [],
-                }
-                Object.keys(o).forEach((tag) => {
-                    const item: IRandomizerSetTag = {
-                        tag: tag,
-                        value: o[tag],
-                    }
-                    ret.values.push(item)
-                })
-
-                return ret
-            })
-        }
-
-        if (inData.question !== undefined) {
-            data.id = Number(inData.question)
-        }
-
-        if (inData.compiler !== undefined) {
-            const cInfo: ICompilerID = {
-                languageType: inData.compiler,
-                version: inData.compilerVersion!,
-            }
-            data.compiler = cInfo
-
-            const c = CompilerRegistry.getCompiler(data.compiler)
-            if (c === undefined) {
-                data.runCode = false
-                data.language = data.compiler.languageType
-            } else {
-                data.runCode = isTrue(inData.runCode)
-                data.language = c.language
-                data.compiler.version = c.version
-            }
-        }
-
-        if (inData.domLibs !== undefined) {
-            data.domLibs = JSON.parse(inData.domLibs).map((l: string) =>
-                compilerRegistry.mapLibrary(l)
-            )
-        }
-
-        if (inData.readonly !== undefined) {
-            if (data.editMode) {
-                data.readonly = false
-            } else {
-                data.readonly = isTrue(inData.readonly)
-            }
-        }
-
-        if (inData.workerLibs !== undefined) {
-            data.workerLibs = JSON.parse(inData.workerLibs)
-        }
-
-        if (el.hasAttribute('uuid')) {
-            data.uuid = el.getAttribute('uuid')!
-        } else {
-            data.uuid = uuid.v4()
-            el.setAttribute('uuid', data.uuid)
-        }
-
-        //data.id = Number(data.id)
-
-        if (inData.executionTimeout !== undefined) {
-            data.executionTimeout = Number(inData.executionTimeout)
-        }
-
-        if (inData.maxCharacters !== undefined) {
-            data.maxCharacters = Number(inData.maxCharacters)
-        }
-
-        if (inData.scopeUUID !== undefined) {
-            data.scopeUUID = inData.scopeUUID
-        }
-        if (inData.scopeSelector !== undefined) {
-            data.scopeSelector = inData.scopeSelector
-        }
-
-        if (inData.outputParser !== undefined) {
-            data.outputParser = inData.outputParser
-        }
-
-        if (inData.solutionTheme !== undefined) {
-            data.solutionTheme = inData.solutionTheme
-        }
-
-        if (inData.codeTheme !== undefined) {
-            data.codeTheme = inData.codeTheme
-        }
-
-        el.querySelectorAll('*').forEach((blIn) => {
+        const data = parseInputElement(el, this.shadowRoot)
+        //el.querySelectorAll('*').forEach((blIn) => {
+        for (const blIn of el.children) {
             const bl = blIn as HTMLElement
             //only first level children
             if (bl.parentElement != el) {
-                return
+                continue
             }
             const block = parseInputBlockElement(bl, data)
             if (block === undefined) {
-                return
+                continue
             }
 
             data.blocks.push(this.constructBlock(data, block))
-        })
+        }
+
         this.data = data
 
-        console.d('DATA', data)
+        console.d('INPUT DATA', data)
     }
 
     instantiateVue() {
