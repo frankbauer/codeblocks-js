@@ -35,26 +35,26 @@ import './plugins/tagger'
 import { CodeBlocksManager } from './lib/codeBlocksManager'
 import { highlight } from '@/plugins/highlight'
 
-CodeBlocksManager.find(document).mount()
-
 window.codeblocks = {
     scale: 1.0,
-    mountInElement: function (element: any): void {
+    mountInElement: function (element: Document | HTMLElement): void {
         highlight.$vue.processElements(element)
         tagger.processElements(element)
         CodeBlocksManager.find(element).mount()
     },
-    mountCodeBlocks: function (scope: HTMLElement | Document | undefined) {
+    mountInScope: function (scope: HTMLElement | Document | undefined) {
         return CodeBlocksManager.find(scope).mount()
     },
 }
 
 window.mountInElement = function (element: any): void {
-    highlight.$vue.processElements(element)
-    tagger.processElements(element)
-    CodeBlocksManager.find(element).mount()
+    console.error('mountInElement is deprecated, please use codeblocks.mountInElement instead')
+    window.codeblocks.mountInElement(element)
 }
 
 window.mountCodeBlocks = function (scope: HTMLElement | Document | undefined) {
-    return CodeBlocksManager.find(scope).mount()
+    console.error('mountCodeBlocks is deprecated, please use codeblocks.mountInScope instead')
+    window.codeblocks.mountInScope(scope)
 }
+
+CodeBlocksManager.find(document).mount()

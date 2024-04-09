@@ -15,7 +15,7 @@ export default class MainBlock implements IMainBlock {
     editMode: boolean
     readonly: boolean
     randomizer: IRandomizerSettings
-    blocks: UnwrapRef<BlockData[]>
+    blocks: BlockData[]
     compiler: ICompilerID
     language: string
     runCode: boolean
@@ -115,9 +115,9 @@ export default class MainBlock implements IMainBlock {
     }
 
     removeBlock(idx: number) {
-        data.blocks.splice(idx, 1)
-        for (let i = idx; i < data.blocks.length; i++) {
-            data.blocks[i].id = i
+        this.blocks.splice(idx, 1)
+        for (let i = idx; i < this.blocks.length; i++) {
+            this.blocks[i].id = i
         }
     }
 

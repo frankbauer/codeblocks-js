@@ -11,14 +11,10 @@ import { toRefs } from 'vue'
 import CodeBlocksEditor from './components/CodeBlocksEditor.vue'
 import { createGlobalEvent } from '@/composables/globalEvents'
 import { defineProps } from 'vue'
-import { IMainBlock } from '@/lib/codeBlocksManager'
-
-interface Props {
-    blocks: IMainBlock
-}
+import { AppContext, IMainBlock } from '@/lib/codeBlocksManager'
 
 // Define props
-const props = defineProps<Props>()
+const props = defineProps<AppContext>()
 const { blocks } = toRefs(props)
 
 // Use the composable for global events

@@ -42,6 +42,14 @@ playgroundInstaller(loaders)
 REPLInstaller(loaders)
 dataInstaller(loaders)
 
+export interface AppContext {
+    blocks: IMainBlock
+}
+
+export type AppContextRef = {
+    [P in keyof AppContext]: Ref<UnwrapRef<AppContext[P]>>
+}
+
 export interface IAppSettings {
     id: number
     uuid: string
@@ -466,6 +474,19 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
     return data
 }
 
+function constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
+    if (bl.type === KnownBlockTypes.PLAYGROUND || bl.type === KnownBlockTypes.DATA) {
+        if (bl.content == '' || bl.content === undefined || bl.content === null) {
+            bl.content = '{}'
+        }
+    }
+
+    return new BlockData({
+        ...bl,
+        appSettings: data,
+    })
+}
+
 function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockDataBase | undefined {
     const inBlock = bl.dataset as IBlockElementData
     const as = bl.getAttribute('as')
@@ -558,22 +579,16 @@ function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockData
 
 //this will handle the vue mounting on the dom
 class InternalCodeBlocksManager {
-    constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
-        if (bl.type === KnownBlockTypes.PLAYGROUND || bl.type === KnownBlockTypes.DATA) {
-            if (bl.content == '' || bl.content === undefined || bl.content === null) {
-                bl.content = '{}'
-            }
-        }
-
-        return new BlockData({
-            ...bl,
-            appSettings: data,
-        })
-    }
-
     readonly element: HTMLElement
-    readonly data: IAppSettings
+    private _data: IAppSettings | undefined
     readonly shadowRoot: ShadowRoot | undefined = undefined
+
+    get data() {
+        if (this._data === undefined) {
+            throw new Error('Data was already consumed!')
+        }
+        return this._data
+    }
 
     constructor(el: HTMLElement) {
         if (useShadowDOM) {
@@ -625,26 +640,25 @@ class InternalCodeBlocksManager {
             if (bl.parentElement != el) {
                 continue
             }
+
             const block = parseInputBlockElement(bl, data)
             if (block === undefined) {
                 continue
             }
 
-            data.blocks.push(this.constructBlock(data, block))
+            data.blocks.push(constructBlock(data, block))
         }
 
-        this.data = data
+        this._data = data
 
         console.d('INPUT DATA', data)
     }
 
     instantiateVue() {
         const data = this.data
-
-        const context = {
-            language: ref(data.language),
-            id: ref(data.id),
-            blocks: ref(new MainBlock(data)),
+        this._data = undefined
+        const context: AppContextRef = {
+            blocks: ref<UnwrapRef<IMainBlock>>(new MainBlock(data)),
         }
         const component = data.editMode ? AppEditor : App
         const app = createApp(component as any, context)
