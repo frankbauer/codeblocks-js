@@ -476,7 +476,7 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
     return data
 }
 
-function constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
+export function constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
     if (bl.type === KnownBlockTypes.PLAYGROUND || bl.type === KnownBlockTypes.DATA) {
         if (bl.content == '' || bl.content === undefined || bl.content === null) {
             bl.content = '{}'

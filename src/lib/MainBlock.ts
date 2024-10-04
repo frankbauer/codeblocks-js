@@ -5,9 +5,9 @@ import {
     IRandomizerSettings,
     KnownBlockTypes,
 } from '@/lib/ICodeBlocks'
-import { UnwrapRef } from 'vue'
+import { uuid } from 'vue-uuid'
 import { ICompilerID } from '@/lib/ICompilerRegistry'
-import { BlockData, IAppSettings, IMainBlock } from '@/lib/codeBlocksManager'
+import { BlockData, constructBlock, IAppSettings, IMainBlock } from '@/lib/codeBlocksManager'
 
 export default class MainBlock implements IMainBlock {
     id: number
@@ -126,16 +126,16 @@ export default class MainBlock implements IMainBlock {
     }
 
     addNewBlock() {
-        const block: IBlockDataBase = {
+        const newBlockData: IBlockDataBase = {
             noContent: false,
             alternativeContent: null,
             hasCode: true,
             type: KnownBlockTypes.BLOCK,
             content: '',
-            id: data.blocks.length,
+            id: this.blocks.length,
             uuid: uuid.v4(),
-            name: `v${data.blocks.length}`,
-            parentID: data.id,
+            name: `v${this.blocks.length}`,
+            parentID: this.id,
             expanded: true,
             codeExpanded: CodeExpansionType.AUTO,
             width: '100%',
@@ -148,8 +148,8 @@ export default class MainBlock implements IMainBlock {
             version: '101',
             readyCount: 0,
             errors: [],
-            scopeUUID: data.scopeUUID,
-            scopeSelector: data.scopeSelector,
+            scopeUUID: this.scopeUUID,
+            scopeSelector: this.scopeSelector,
             visibleLines: 10,
             hasAlternativeContent: false,
             shouldAutoreset: false,
@@ -157,6 +157,6 @@ export default class MainBlock implements IMainBlock {
             generateTemplate: true,
             lineCountHint: -1,
         }
-        data.blocks.push(self.constructBlock(data, block))
+        this.blocks.push(constructBlock(this, newBlockData))
     }
 }

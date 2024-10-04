@@ -1,3 +1,6 @@
+import MainBlock from '@/lib/MainBlock'
+import { BlockData, IAppSettings } from '@/lib/codeBlocksManager'
+
 export type finishedCallbackSignatur = (
     success: boolean,
     overrideOutput?: any,
@@ -13,10 +16,12 @@ export enum ErrorSeverity {
     Error = 2,
     Warning = 1,
 }
+
 export interface IErrorPosition {
     line: number
     column: number
 }
+
 export interface ICompilerErrorDescription {
     start: IErrorPosition
     end: IErrorPosition
@@ -46,7 +51,9 @@ export interface IUpdateMappingMap {
 
 export interface ICompilerState {
     hideGlobalState(): void
+
     setAllRunButtons(what: boolean): void
+
     displayGlobalState(message: string | null): void
 
     readonly globalStateHidden: boolean
@@ -61,6 +68,7 @@ export interface ICompilerRegistry {
     register(compilers: ICompilerInfo[] | ICompilerInfo): void
 
     registerSingle(c: ICompilerInfo): void
+
     getCompiler(compilerInfo: ICompilerIDQuery): ICompilerInstance | undefined
 
     versionsForLanguage(languageType: string): string[] | ['none']
@@ -75,7 +83,9 @@ export interface ICompilerRegistry {
     ): void
 
     getLibObjects(domLibs: string[]): IDomLibraray[]
+
     urisForDOMLibs(domLibs: string[]): string[]
+
     loadLibraries(domLibraries: string[], whenLoaded: () => void): void
 }
 
@@ -91,7 +101,9 @@ export interface ICompileAndRunArguments {
     postMessageFunction: null | ((cmd: string, data: any) => void)
     dequeuePostponedMessages: () => void
     beforeStartHandler: () => void
+
     whenFinishedHandler(args: string[] | object): void
+
     allowMessagePassing: boolean
     keepAlive: boolean
     withREPL: boolean
@@ -106,6 +118,13 @@ export interface IReplInstance {
         onError: (msg) => void
     ): Promise<object>
 }
+
+export interface CallingCodeBlocks {
+    workerLibraries: string[]
+    $compilerRegistry: ICompilerRegistry
+    blocks: BlockData[]
+}
+
 export interface ICompilerInstance {
     readonly version: string
     readonly language: string
@@ -123,14 +142,17 @@ export interface ICompilerInstance {
     readonly libraries?: ICompilerLibraryInfo[]
 
     registerLibs?(compilerRegistry: ICompilerRegistry): void
+
     preload(): void
+
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments,
         runCreate?: boolean
     ): void
+
     stop?(): void
 }
 

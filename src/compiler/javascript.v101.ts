@@ -6,6 +6,7 @@ import {
     ErrorSeverity,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
+    CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import { l } from '@/plugins/i18n'
@@ -19,7 +20,7 @@ declare global {
 function runJavaScriptWorker(
     questionID: string,
     code: string,
-    callingCodeBlocks: any,
+    callingCodeBlocks: CallingCodeBlocks,
     max_ms: number,
     log_callback: (txt: string) => void,
     info_callback: (txt: string) => void,
@@ -192,7 +193,7 @@ export class JavascriptV101Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ): void {
         const {

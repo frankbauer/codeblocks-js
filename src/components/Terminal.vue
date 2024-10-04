@@ -1,13 +1,15 @@
 <template>
     <div class="vue-terminal-wrapper">
-        <div id="terminal" ref="terminal" class="basicterm"></div>
+        <div id="terminal" ref="terminalElement" class="basicterm"></div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import $ from 'jquery'
-import 'jquery.terminal'
+import jquery from 'jquery'
+import terminal from 'jquery.terminal'
 import 'jquery.terminal/css/jquery.terminal.css'
+
+const $ = terminal(jquery, this)
 
 import { PythonV102Compiler } from '@/compiler/python.v102'
 import { ICompilerID } from '@/lib/ICompilerRegistry'
@@ -65,7 +67,7 @@ function clear() {
     }
 }
 
-const terminal = ref<HTMLElement | null>(null)
+const terminalElement = ref<HTMLElement | null>(null)
 
 onMounted(() => {
     const self = this
@@ -127,12 +129,12 @@ onMounted(() => {
         }
     }
 
-    if (terminal.value === null) {
+    if (terminalElement.value === null) {
         console.error('Terminal element not found')
         return
     }
 
-    const el = $(terminal.value)
+    const el = $(terminalElement.value)
 
     if (el.terminal === undefined) {
         console.error('jQuery terminal plugin not found')

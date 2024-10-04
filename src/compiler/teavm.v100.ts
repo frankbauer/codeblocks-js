@@ -1,6 +1,11 @@
 import { globalState } from '@/lib/globalState'
 import Vue, { reactive } from 'vue'
-import { ICompilerInstance, ErrorSeverity, ICompileAndRunArguments } from '@/lib/ICompilerRegistry'
+import {
+    ICompilerInstance,
+    ErrorSeverity,
+    ICompileAndRunArguments,
+    CallingCodeBlocks,
+} from '@/lib/ICompilerRegistry'
 import { l } from '@/plugins/i18n'
 
 declare global {
@@ -103,7 +108,7 @@ export class JavaV100Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments,
         runCreate: boolean = true
     ): void {

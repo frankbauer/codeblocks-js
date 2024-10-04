@@ -1,5 +1,10 @@
 import { reactive } from 'vue'
-import { ErrorSeverity, ICompileAndRunArguments, ICompilerInstance } from '@/lib/ICompilerRegistry'
+import {
+    CallingCodeBlocks,
+    ErrorSeverity,
+    ICompileAndRunArguments,
+    ICompilerInstance,
+} from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
 
 /**
@@ -219,7 +224,7 @@ export class DoppioV001Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ) {
         const {

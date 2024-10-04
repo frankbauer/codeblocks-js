@@ -3,12 +3,13 @@ import {
     ICompilerErrorDescription,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
+    CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 
 function runGLSLWorker(
     questionID: string,
     prog: string,
-    callingCodeBlocks: any,
+    callingCodeBlocks: CallingCodeBlocks,
     maxRuntime: number,
     logCallback: (txt: string) => void,
     infoCallback: (txt: string) => void,
@@ -53,7 +54,7 @@ export class GLSLV100Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ): void {
         const {

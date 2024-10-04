@@ -4,6 +4,7 @@ import {
     ErrorSeverity,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
+    CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import Vue from 'vue'
@@ -12,7 +13,7 @@ import { l } from '@/plugins/i18n'
 function runPythonWorker(
     questionID: string,
     prog: string,
-    callingCodeBlocks: any,
+    callingCodeBlocks: CallingCodeBlocks,
     maxRuntime: number,
     logCallback: (txt: string) => void,
     infoCallback: (txt: string) => void,
@@ -156,7 +157,7 @@ export class PythonV101LegacyCompiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ): void {
         const {
@@ -213,7 +214,7 @@ export class PythonV101Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ): void {
         const {

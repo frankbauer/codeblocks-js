@@ -4,13 +4,14 @@ import {
     ErrorSeverity,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
+    CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 
 //function runJavaScriptWorker( code, log_callback, max_ms, questionID){
 function runJavaScriptWorker(
     questionID: string,
     code: string,
-    callingCodeBlocks: any,
+    callingCodeBlocks: CallingCodeBlocks,
     max_ms: number,
     log_callback: (txt: string) => void,
     info_callback: (txt: string) => void,
@@ -172,7 +173,7 @@ export class JavascriptV100Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ): void {
         const {

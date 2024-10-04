@@ -1,7 +1,13 @@
-import { ICompilerInstance, ErrorSeverity, ICompileAndRunArguments } from '@/lib/ICompilerRegistry'
+import {
+    ICompilerInstance,
+    ErrorSeverity,
+    ICompileAndRunArguments,
+    CallingCodeBlocks,
+} from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import Vue, { reactive } from 'vue'
 import { l } from '@/plugins/i18n'
+import { IAppSettings } from '@/lib/codeBlocksManager'
 
 declare global {
     interface Worker {
@@ -103,7 +109,7 @@ export class JavaV101Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments,
         runCreate: boolean = true
     ): void {

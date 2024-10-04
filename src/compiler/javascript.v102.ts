@@ -6,6 +6,7 @@ import {
     ErrorSeverity,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
+    CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import { l } from '@/plugins/i18n'
@@ -19,7 +20,7 @@ declare global {
 function runJavaScriptWorker(
     questionID: string,
     code: string,
-    callingCodeBlocks: any,
+    callingCodeBlocks: CallingCodeBlocks,
     options: ICompileAndRunArguments
 ): Worker | undefined {
     const {
@@ -164,6 +165,11 @@ function runJavaScriptWorker(
     }
 
     let willStartExecution = false
+    console.log(
+        'callingCodeBlocks.workerLibraries',
+        callingCodeBlocks,
+        callingCodeBlocks.workerLibraries
+    )
     callingCodeBlocks.workerLibraries.forEach((l) => {
         if (l === 'd3-101') {
             willStartExecution = true
@@ -248,7 +254,7 @@ export class JavascriptV102Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ): void {
         this.worker = runJavaScriptWorker(questionID, code, callingCodeBlocks, options)

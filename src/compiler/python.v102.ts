@@ -3,6 +3,7 @@ import {
     ErrorSeverity,
     ICompileAndRunArguments,
     IReplInstance,
+    CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 import Vue, { reactive } from 'vue'
 import { l } from '@/plugins/i18n'
@@ -48,7 +49,7 @@ function getWorker(setReady: (boolean) => void) {
 function runPythonWorker(
     questionID: string,
     code: string,
-    callingCodeBlocks: any,
+    callingCodeBlocks: CallingCodeBlocks,
     options: ICompileAndRunArguments,
     setReady: (boolean) => void
 ): REPLWorker | undefined {
@@ -224,6 +225,12 @@ function runPythonWorker(
     }
 
     let willStartExecution = false
+    console.log(
+        'callingCodeBlocks.workerLibraries',
+        callingCodeBlocks,
+        callingCodeBlocks.workerLibraries,
+        callingCodeBlocks.$compilerRegistry.loadLibraries
+    )
     callingCodeBlocks.workerLibraries.forEach((l) => {
         if (l === 'd3-101') {
             willStartExecution = true
@@ -281,7 +288,7 @@ export class PythonV102Compiler implements ICompilerInstance, IReplInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ): void {
         this.worker = runPythonWorker(

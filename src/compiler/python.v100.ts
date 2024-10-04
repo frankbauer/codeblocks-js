@@ -4,13 +4,14 @@ import {
     ErrorSeverity,
     finishedCallbackSignatur,
     ICompileAndRunArguments,
+    CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
 
 function runPythonWorker(
     questionID: string,
     prog: string,
-    callingCodeBlocks: any,
+    callingCodeBlocks: CallingCodeBlocks,
     maxRuntime: number,
     logCallback: (txt: string) => void,
     infoCallback: (txt: string) => void,
@@ -129,7 +130,7 @@ export class PythonV100Compiler implements ICompilerInstance {
     compileAndRun(
         questionID: string,
         code: string,
-        callingCodeBlocks: any,
+        callingCodeBlocks: CallingCodeBlocks,
         options: ICompileAndRunArguments
     ): void {
         const {

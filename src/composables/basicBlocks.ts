@@ -171,7 +171,7 @@ export function codeBlockSetup(
         }
     })
     const blocks = computed(() => {
-        return blockInfo.value.blocks
+        return blockInfo.value.blocks as BlockData[]
     })
 
     // const blocks = blockInfo.value.blocks
@@ -524,7 +524,16 @@ export function codeBlockSetup(
                             }
                         })
                     }
-                    cmp.compileAndRun('' + blockid.value, completeSource.value, self, runOptions)
+                    cmp.compileAndRun(
+                        '' + blockid.value,
+                        completeSource.value,
+                        {
+                            workerLibraries: workerLibraries.value,
+                            $compilerRegistry: compilerRegistry,
+                            blocks: blocks.value,
+                        },
+                        runOptions
+                    )
                 })
             })
         })
