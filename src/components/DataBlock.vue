@@ -110,7 +110,7 @@
             </div>
         </div>
         <q-slide-transition>
-            <codemirror
+            <Codemirror
                 ref="codeBox"
                 :value="code"
                 :options="options"
@@ -127,21 +127,9 @@
     </div>
 </template>
 
-<script lang="ts">
-import Vue, {
-    defineComponent,
-    toRefs,
-    ref,
-    computed,
-    onMounted,
-    onBeforeUnmount,
-    PropType,
-    getCurrentInstance,
-    Ref,
-} from 'vue'
-import { BlockData } from '@/lib/codeBlocksManager'
+<script lang="ts" setup>
+import { toRefs, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, Ref } from 'vue'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
-import { IScriptOutputObject } from '@/lib/IScriptBlock'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
 import Codemirror from 'codemirror-editor-vue3'
 import 'codemirror/lib/codemirror.css'
@@ -158,361 +146,324 @@ import 'codemirror/theme/neo.css'
 import 'codemirror/theme/mbo.css'
 import 'codemirror/theme/mdn-like.css'
 import 'codemirror/mode/javascript/javascript.js'
-import { useBasicBlockMounting } from '@/composables/basicBlock'
+import {
+    DEFAULT_EDITABLE_BLOCK_PROPS,
+    EditableBlockProps,
+    useBasicBlockMounting,
+} from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
 import { l } from '@/plugins/i18n'
+import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 
-export default defineComponent({
-    name: 'DataBlock',
-    components: { Codemirror },
-    props: {
-        namePrefix: { default: '', type: String },
-        finalOutputObject: {
-            required: true,
-            type: Object as PropType<IScriptOutputObject>,
-        },
-        block: { required: true, type: Object as PropType<BlockData> },
-        editMode: { default: false, type: Boolean },
-        theme: { default: 'base16-dark', type: String },
-        eventHub: { required: true, type: Object as PropType<EventHubType> },
-        tagSet: { type: Object as PropType<IRandomizerSet> },
+interface Props extends EditableBlockProps {
+    namePrefix?: string
+    eventHub: EventHubType
+    tagSet?: IRandomizerSet | undefined
+    finalOutputObject: IScriptOutputObject
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    ...DEFAULT_EDITABLE_BLOCK_PROPS,
+    tagSet: undefined,
+    namePrefix: '',
+})
+
+const emit = defineEmits(['ready'])
+
+const instance = getCurrentInstance()
+const q = instance?.proxy?.$root?.$q
+const t = instance?.proxy?.$root?.$t
+
+const blockStorage: BlockStorageType = useBlockStorage(props.appID)
+const block = blockStorage.getBlock(props.blockID)
+const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
+    true,
+    props,
+    blockStorage,
+    (block) => emit('ready', block)
+)
+
+const { namePrefix, finalOutputObject, editMode, theme, eventHub, tagSet } = toRefs(props)
+const needsCodeRebuild = ref<boolean>(false)
+const error = ref<string>('')
+
+const imageFileUploader: Ref<HTMLElement | null> = ref(null)
+const plainFileUploader: Ref<HTMLElement | null> = ref(null)
+const jsonFileUploader: Ref<HTMLElement | null> = ref(null)
+const codeBox: Ref<HTMLElement | null> = ref(null)
+
+const codemirror = computed((): any | undefined => {
+    if (codeBox.value === undefined || codeBox.value === null) {
+        return undefined
+    }
+    return (codeBox.value as any).codemirror
+})
+const originalMode = computed((): boolean => {
+    if (block.value.obj === null) {
+        return false
+    }
+    return block.value.obj.requestsOriginalVersion()
+})
+const options = computed((): ICodePlaygroundOptions => {
+    return {
+        mode: globalState.appState.mimeType('javascript'),
+        theme: theme.value,
+        lineNumbers: true,
+        line: true,
+        tabSize: 4,
+        indentUnit: 4,
+        autoCloseBrackets: true,
+        readOnly: !editMode.value,
+        firstLineNumber: 1,
+        gutters: ['diagnostics', 'CodeMirror-linenumbers'],
+    }
+})
+const code = computed(() => {
+    if (!editMode.value) {
+        return block.value.actualContent()
+    }
+    return block.value.content
+})
+const name = computed({
+    get(): string {
+        return block.value.name
     },
-    emits: ['ready'],
-    setup(props, ctx) {
-        const instance = getCurrentInstance()
-        const q = instance?.proxy?.$root?.$q
-        const t = instance?.proxy?.$root?.$t
-
-        const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(true, props, ctx)
-        const { namePrefix, finalOutputObject, block, editMode, theme, eventHub, tagSet } =
-            toRefs(props)
-        const needsCodeRebuild = ref<boolean>(false)
-        const error = ref<string>('')
-
-        const imageFileUploader: Ref<HTMLElement | null> = ref(null)
-        const plainFileUploader: Ref<HTMLElement | null> = ref(null)
-        const jsonFileUploader: Ref<HTMLElement | null> = ref(null)
-        const codeBox: Ref<HTMLElement | null> = ref(null)
-
-        const codemirror = computed((): any | undefined => {
-            if (codeBox.value === undefined || codeBox.value === null) {
-                return undefined
-            }
-            return (codeBox.value as any).codemirror
-        })
-        const originalMode = computed((): boolean => {
-            if (block.value.obj === null) {
-                return false
-            }
-            return block.value.obj.requestsOriginalVersion()
-        })
-        const options = computed((): ICodePlaygroundOptions => {
-            return {
-                mode: globalState.appState.mimeType('javascript'),
-                theme: theme.value,
-                lineNumbers: true,
-                line: true,
-                tabSize: 4,
-                indentUnit: 4,
-                autoCloseBrackets: true,
-                readOnly: !editMode.value,
-                firstLineNumber: 1,
-                gutters: ['diagnostics', 'CodeMirror-linenumbers'],
-            }
-        })
-        const code = computed(() => {
-            if (!editMode.value) {
-                return block.value.actualContent()
-            }
-            return block.value.content
-        })
-        const name = computed({
-            get(): string {
-                return block.value.name
-            },
-            set(newName: string) {
-                block.value.name = newName
-            },
-        })
-        const visibleLines = computed((): 'auto' | string => {
-            if (block.value.codeExpanded == CodeExpansionType.TINY) {
-                return '2.4'
-            } else if (block.value.codeExpanded == CodeExpansionType.LARGE) {
-                return '33.4'
-            }
-            return 'auto'
-        })
-        const isExpandedLarge = computed((): boolean => {
-            return block.value.codeExpanded == CodeExpansionType.LARGE
-        })
-        const isExpandedTiny = computed((): boolean => {
-            return block.value.codeExpanded == CodeExpansionType.TINY
-        })
-        const isExpandedAuto = computed((): boolean => {
-            return block.value.codeExpanded == CodeExpansionType.AUTO
-        })
-        const hasError = computed((): boolean => {
-            return error.value !== ''
-        })
-        const images = computed({
-            get(): any {
-                return []
-            },
-            set(val: any) {
-                console.log('IMAGES:' + val)
-            },
-        })
-        const setExpandedLarge = (): void => {
-            setExpanded(CodeExpansionType.LARGE)
-        }
-        const setExpandedTiny = (): void => {
-            setExpanded(CodeExpansionType.TINY)
-        }
-        const setExpandedAuto = (): void => {
-            setExpanded(CodeExpansionType.AUTO)
-        }
-        const setExpanded = (val: CodeExpansionType): void => {
-            block.value.codeExpanded = val
-            if (block.value.codeExpanded != CodeExpansionType.TINY) {
-                globalState.appState.refreshAllCodeMirrors()
-            }
-            updateHeight()
-        }
-        const updateErrors = (): boolean => {
-            return false
-        }
-        const resetBeforeRun = (): void => {}
-        const onCodeChange = (newCode) => {
-            if (codeBox.value === null) {
-                return
-            }
-            const tb = (codeBox.value as any).$el.querySelector(
-                'textarea[name]'
-            ) as HTMLTextAreaElement
-            tb.value = newCode
-            block.value.content = newCode
-            if (editMode.value) {
-                needsCodeRebuild.value = true
-            }
-        }
-        const onCodeFocus = (editor) => {}
-        const onDidInit = (): void => {
-            updateErrors()
-        }
-        const onCodeReady = (editor) => {
-            if (
-                codemirror.value &&
-                codemirror.value.display &&
-                codemirror.value.display.input &&
-                codemirror.value.display.input.textarea
-            ) {
-                codemirror.value.display.input.textarea.className = 'noRTEditor'
-            }
-            (codeBox.value as any)!.$el.querySelectorAll('textarea[name]').forEach((el) => {
-                el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
-                el.id = codeBox.value!.id
-                $(el).text(block.value.content)
-                el.setAttribute('data-question', `${block.value.parentID}`)
-                if (editMode.value) {
-                    el.setAttribute('is-editmode', `${editMode.value}`)
-                }
-            })
-            onCodeChange(block.value.content)
-            whenBlockIsReady()
-        }
-        const updateHeight = () => {
-            if (visibleLines.value === 'auto') {
-                if (codemirror.value) {
-                    codemirror.value.setSize('height', 'auto')
-                }
-            } else {
-                if (codemirror.value) {
-                    codemirror.value.setSize(
-                        null,
-                        Math.round(20 * Math.max(1, +visibleLines.value)) + 9
-                    )
-                }
-            }
-        }
-        const showInfoDialog = (): void => {
-            q?.dialog({
-                title: l('DataBlock.InfoCaption'),
-                message: l('DataBlock.Info').replace('{NAME}', name.value),
-                html: true,
-                style: 'width:75%',
-            })
-                .onOk(() => {})
-                .onCancel(() => {})
-                .onDismiss(() => {})
-        }
-        const onUpload = (
-            uploader: any,
-            validateFileType: (type: string) => boolean,
-            processor: (fl: File, fr: FileReader) => void,
-            action: (name: string, content: string | ArrayBuffer | null) => void
-        ): void => {
-            if (uploader.files === undefined || uploader.files.length < 1) {
-                return
-            }
-            const files = uploader.files
-            for (let i = 0; i < files.length; i++) {
-                const fl = files[i]
-                let type: string = fl.type
-                if (fl.type == '') {
-                    const ext = fl.name.split('.').pop()
-                    const knownTextExtensions = ['obj', 'mat', 'vsh', 'fsh', 'ply']
-                    if (knownTextExtensions.indexOf(ext) === 0) {
-                        type = 'text/' + ext
-                    }
-                    console.log(ext, type)
-                }
-                if (!validateFileType(type)) {
-                    error.value = `Uploads of type '${type}' are not allowed.`
-                    console.error(error.value)
-                    break
-                }
-                if (fl.size > 500 * 1025) {
-                    error.value = `Maximum allowed upload size are 500kB.`
-                    console.error(error.value)
-                    break
-                }
-                const fr = new FileReader()
-                fr.onload = () => {
-                    action(fl.name, fr.result)
-                }
-                fr.onerror = (e) => {
-                    console.error(fr.error)
-                    error.value =
-                        fr.error === undefined || fr.error === null ? '' : fr.error.message
-                }
-                processor(fl, fr)
-            }
-            uploader.value = ''
-        }
-        const openImage = (): void => {
-            if (imageFileUploader.value !== null) {
-                imageFileUploader.value.click()
-            }
-        }
-        const openPlain = (): void => {
-            if (plainFileUploader.value !== null) {
-                plainFileUploader.value.click()
-            }
-        }
-        const openJson = (): void => {
-            if (jsonFileUploader.value !== null) {
-                jsonFileUploader.value.click()
-            }
-        }
-        const onUploadImage = (event): void => {
-            onUpload(
-                imageFileUploader,
-                (type) => type.startsWith('image/'),
-                (fl, fr) => fr.readAsDataURL(fl),
-                (fileName, content) => addImageURL(fileName, content)
-            )
-        }
-        const onUploadPlain = (event): void => {
-            onUpload(
-                plainFileUploader,
-                (type) => type.startsWith('text/'),
-                (fl, fr) => fr.readAsText(fl),
-                (fileName, content) => loadPlain(fileName, content)
-            )
-        }
-        const onUploadJson = (event): void => {
-            onUpload(
-                jsonFileUploader,
-                (type) => type.trim() === 'application/json' || type.trim() === 'text/json',
-                (fl, fr) => fr.readAsText(fl),
-                (fileName, content) => loadJson(fileName, content)
-            )
-        }
-        const loadJson = (fileName, txt) => {
-            block.value.content = txt
-        }
-        const loadPlain = (fileName, txt) => {
-            addToContent(fileName, txt)
-        }
-        const addImageURL = (fileName, img) => {
-            addToContent(fileName, img)
-        }
-        const addToContent = (fileName: string, data: string) => {
-            let json = {}
-            try {
-                json = JSON.parse(block.value.content)
-            } catch (e) {
-                console.error(e)
-            }
-            let i = -1
-            let name
-            do {
-                i++
-                if (i == 0) {
-                    name = fileName
-                } else {
-                    name = `${fileName}_${i}`
-                }
-            } while (json[name] !== undefined)
-            json[name] = data
-            block.value.content = JSON.stringify(json, undefined, 2)
-        }
-        ;(() => {
-            eventHub.value.on('before-run', resetBeforeRun)
-            eventHub.value.on('render-diagnostics', updateErrors)
-        })()
-        onMounted(() => {
-            const hasErrors = block.value && block.value.obj && block.value.obj.err.length > 0
-            if (hasErrors) {
-                updateErrors()
-            }
-            updateHeight()
-        })
-        onBeforeUnmount(() => {
-            eventHub.value.off('before-run', resetBeforeRun)
-            eventHub.value.off('render-diagnostics', updateErrors)
-        })
-        return {
-            needsCodeRebuild,
-            error,
-            codeBox,
-            codemirror,
-            originalMode,
-            options,
-            code,
-            name,
-            visibleLines,
-            isExpandedLarge,
-            isExpandedTiny,
-            isExpandedAuto,
-            hasError,
-            images,
-            setExpandedLarge,
-            setExpandedTiny,
-            setExpandedAuto,
-            setExpanded,
-            updateErrors,
-            resetBeforeRun,
-            onCodeChange,
-            onCodeFocus,
-            onDidInit,
-            onCodeReady,
-            updateHeight,
-            showInfoDialog,
-            onUpload,
-            openImage,
-            openPlain,
-            openJson,
-            onUploadImage,
-            onUploadPlain,
-            onUploadJson,
-            loadJson,
-            loadPlain,
-            addImageURL,
-            addToContent,
-        }
+    set(newName: string) {
+        block.value.name = newName
     },
+})
+const visibleLines = computed((): 'auto' | string => {
+    if (block.value.codeExpanded == CodeExpansionType.TINY) {
+        return '2.4'
+    } else if (block.value.codeExpanded == CodeExpansionType.LARGE) {
+        return '33.4'
+    }
+    return 'auto'
+})
+const isExpandedLarge = computed((): boolean => {
+    return block.value.codeExpanded == CodeExpansionType.LARGE
+})
+const isExpandedTiny = computed((): boolean => {
+    return block.value.codeExpanded == CodeExpansionType.TINY
+})
+const isExpandedAuto = computed((): boolean => {
+    return block.value.codeExpanded == CodeExpansionType.AUTO
+})
+const hasError = computed((): boolean => {
+    return error.value !== ''
+})
+const images = computed({
+    get(): any {
+        return []
+    },
+    set(val: any) {
+        console.log('IMAGES:' + val)
+    },
+})
+const setExpandedLarge = (): void => {
+    setExpanded(CodeExpansionType.LARGE)
+}
+const setExpandedTiny = (): void => {
+    setExpanded(CodeExpansionType.TINY)
+}
+const setExpandedAuto = (): void => {
+    setExpanded(CodeExpansionType.AUTO)
+}
+const setExpanded = (val: CodeExpansionType): void => {
+    block.value.codeExpanded = val
+    if (block.value.codeExpanded != CodeExpansionType.TINY) {
+        globalState.appState.refreshAllCodeMirrors()
+    }
+    updateHeight()
+}
+const updateErrors = (): boolean => {
+    return false
+}
+const resetBeforeRun = (): void => {}
+const onCodeChange = (newCode) => {
+    if (codeBox.value === null) {
+        return
+    }
+    const tb = (codeBox.value as any).$el.querySelector('textarea[name]') as HTMLTextAreaElement
+    tb.value = newCode
+    block.value.content = newCode
+    if (editMode.value) {
+        needsCodeRebuild.value = true
+    }
+}
+const onCodeFocus = (editor) => {}
+const onDidInit = (): void => {
+    updateErrors()
+}
+const onCodeReady = (editor) => {
+    if (
+        codemirror.value &&
+        codemirror.value.display &&
+        codemirror.value.display.input &&
+        codemirror.value.display.input.textarea
+    ) {
+        codemirror.value.display.input.textarea.className = 'noRTEditor'
+    }
+    (codeBox.value as any)!.$el.querySelectorAll('textarea[name]').forEach((el) => {
+        el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
+        el.id = codeBox.value!.id
+        $(el).text(block.value.content)
+        el.setAttribute('data-question', `${block.value.parentID}`)
+        if (editMode.value) {
+            el.setAttribute('is-editmode', `${editMode.value}`)
+        }
+    })
+    onCodeChange(block.value.content)
+    whenBlockIsReady()
+}
+const updateHeight = () => {
+    if (visibleLines.value === 'auto') {
+        if (codemirror.value) {
+            codemirror.value.setSize('height', 'auto')
+        }
+    } else {
+        if (codemirror.value) {
+            codemirror.value.setSize(null, Math.round(20 * Math.max(1, +visibleLines.value)) + 9)
+        }
+    }
+}
+const showInfoDialog = (): void => {
+    q?.dialog({
+        title: l('DataBlock.InfoCaption'),
+        message: l('DataBlock.Info').replace('{NAME}', name.value),
+        html: true,
+        style: 'width:75%',
+    })
+        .onOk(() => {})
+        .onCancel(() => {})
+        .onDismiss(() => {})
+}
+const onUpload = (
+    uploader: any,
+    validateFileType: (type: string) => boolean,
+    processor: (fl: File, fr: FileReader) => void,
+    action: (name: string, content: string | ArrayBuffer | null) => void
+): void => {
+    if (uploader.files === undefined || uploader.files.length < 1) {
+        return
+    }
+    const files = uploader.files
+    for (let i = 0; i < files.length; i++) {
+        const fl = files[i]
+        let type: string = fl.type
+        if (fl.type == '') {
+            const ext = fl.name.split('.').pop()
+            const knownTextExtensions = ['obj', 'mat', 'vsh', 'fsh', 'ply']
+            if (knownTextExtensions.indexOf(ext) === 0) {
+                type = 'text/' + ext
+            }
+            console.log(ext, type)
+        }
+        if (!validateFileType(type)) {
+            error.value = `Uploads of type '${type}' are not allowed.`
+            console.error(error.value)
+            break
+        }
+        if (fl.size > 500 * 1025) {
+            error.value = `Maximum allowed upload size are 500kB.`
+            console.error(error.value)
+            break
+        }
+        const fr = new FileReader()
+        fr.onload = () => {
+            action(fl.name, fr.result)
+        }
+        fr.onerror = (e) => {
+            console.error(fr.error)
+            error.value = fr.error === undefined || fr.error === null ? '' : fr.error.message
+        }
+        processor(fl, fr)
+    }
+    uploader.value = ''
+}
+const openImage = (): void => {
+    if (imageFileUploader.value !== null) {
+        imageFileUploader.value.click()
+    }
+}
+const openPlain = (): void => {
+    if (plainFileUploader.value !== null) {
+        plainFileUploader.value.click()
+    }
+}
+const openJson = (): void => {
+    if (jsonFileUploader.value !== null) {
+        jsonFileUploader.value.click()
+    }
+}
+const onUploadImage = (event): void => {
+    onUpload(
+        imageFileUploader,
+        (type) => type.startsWith('image/'),
+        (fl, fr) => fr.readAsDataURL(fl),
+        (fileName, content) => addImageURL(fileName, content)
+    )
+}
+const onUploadPlain = (event): void => {
+    onUpload(
+        plainFileUploader,
+        (type) => type.startsWith('text/'),
+        (fl, fr) => fr.readAsText(fl),
+        (fileName, content) => loadPlain(fileName, content)
+    )
+}
+const onUploadJson = (event): void => {
+    onUpload(
+        jsonFileUploader,
+        (type) => type.trim() === 'application/json' || type.trim() === 'text/json',
+        (fl, fr) => fr.readAsText(fl),
+        (fileName, content) => loadJson(fileName, content)
+    )
+}
+const loadJson = (fileName, txt) => {
+    block.value.content = txt
+}
+const loadPlain = (fileName, txt) => {
+    addToContent(fileName, txt)
+}
+const addImageURL = (fileName, img) => {
+    addToContent(fileName, img)
+}
+const addToContent = (fileName: string, data: string) => {
+    let json = {}
+    try {
+        json = JSON.parse(block.value.content)
+    } catch (e) {
+        console.error(e)
+    }
+    let i = -1
+    let name
+    do {
+        i++
+        if (i == 0) {
+            name = fileName
+        } else {
+            name = `${fileName}_${i}`
+        }
+    } while (json[name] !== undefined)
+    json[name] = data
+    block.value.content = JSON.stringify(json, undefined, 2)
+}
+;(() => {
+    eventHub.value.on('before-run', resetBeforeRun)
+    eventHub.value.on('render-diagnostics', updateErrors)
+})()
+onMounted(() => {
+    const hasErrors = block.value && block.value.obj && block.value.obj.err.length > 0
+    if (hasErrors) {
+        updateErrors()
+    }
+    updateHeight()
+})
+onBeforeUnmount(() => {
+    eventHub.value.off('before-run', resetBeforeRun)
+    eventHub.value.off('render-diagnostics', updateErrors)
 })
 </script>
 
@@ -556,7 +507,6 @@ export default defineComponent({
     visibility: hidden
 </style>
 <style lang="stylus">
-@import '../styles/quasar.variables.styl'
 .jsonErrObj, .jsonErr
     margin-left: 16px
     font-weight: bold

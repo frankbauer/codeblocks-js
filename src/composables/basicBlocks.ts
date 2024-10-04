@@ -25,7 +25,12 @@ import {
     ICompilerID,
 } from '@/lib/ICompilerRegistry'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
-import { BlockStorage } from '@/storage/blockStorage'
+import { BlockStorageType } from '@/storage/blockStorage'
+
+export interface CodeBlocksProperties {
+    eventHub: EventHubType
+    appID: number
+}
 
 export interface IOnTypeChangeInfo {
     type: KnownBlockTypes
@@ -102,7 +107,7 @@ function formatOutput(result) {
 }
 
 export function codeBlockSetup(
-    blockStorage: BlockStorage,
+    blockStorage: BlockStorageType,
     editMode: ComputedRef<boolean>,
     eventHub: EventHubType
 ) {

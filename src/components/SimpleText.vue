@@ -14,91 +14,89 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import TipTap from './TipTap.vue'
-import { defineComponent, PropType } from 'vue'
-import { useBasicBlockMounting } from '@/composables/basicBlock'
-import { BlockData } from '@/lib/codeBlocksManager'
+import { computed } from 'vue'
+import {
+    DEFAULT_EDITABLE_BLOCK_PROPS,
+    EditableBlockProps,
+    useBasicBlockMounting,
+} from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
+import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 
-export default defineComponent({
-    name: 'SimpleText',
-    components: { TipTap },
-    props: {
-        value: { type: String, default: '' },
-        name: { type: String, default: '' },
-        scopeUUID: { type: String, default: '' },
-        previewValue: { type: String, default: '' },
-        language: { type: String, default: 'javascript' },
-        muteReadyState: {
-            type: Boolean,
-            default: false,
-        },
-        block: {
-            type: Object as PropType<BlockData>,
-            required: true,
-        },
-        editMode: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    emits: ['input', 'ready'],
-    setup(props, context) {
-        const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
-            true,
-            props,
-            context
-        )
+interface Props extends EditableBlockProps {
+    name?: string
+    scopeUUID?: string
+    language?: string
+}
 
-        let textUpdateTimer: any | null = null
-        let textUpdateStartTime: any = 0
+const props = withDefaults(defineProps<Props>(), {
+    ...DEFAULT_EDITABLE_BLOCK_PROPS,
+    name: '',
+    scopeUUID: '',
+    language: 'javascript',
+})
 
-        function updatedContentDefered(newVal: string) {
-            if (!props.editMode) {
-                updatedContent(newVal)
-                return
-            }
-
-            const now = new Date().getTime()
-
-            //clear an existing update timeout
-            if (textUpdateTimer !== null) {
-                clearTimeout(textUpdateTimer)
-                textUpdateTimer = null
-            } else {
-                textUpdateStartTime = now
-            }
-
-            const doIt = () => {
-                textUpdateTimer = null
-                updatedContent(newVal)
-            }
-
-            //did we wait for a maximum time? run
-            if (now - textUpdateStartTime > globalState.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
-                doIt()
-                return
-            }
-            textUpdateTimer = setTimeout(() => {
-                doIt()
-            }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
-        }
-
-        function updatedContent(v: string) {
-            //console.log('Updating')
-            //this.value = v
-            context.emit('input', v)
-        }
-
-        return {
-            whenBlockIsReady,
-            whenBlockIsDestroyed,
-            updatedContent,
-            updatedContentDefered,
-        }
+const emit = defineEmits(['ready'])
+const blockStorage: BlockStorageType = useBlockStorage(props.appID)
+const block = blockStorage.getBlock(props.blockID)
+const value = computed({
+    get: () => block.value.content,
+    set: (v: string) => {
+        block.value.content = v
     },
 })
+const previewValue = computed(() => {
+    return block.value.actualContent()
+})
+const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
+    true,
+    props,
+    blockStorage,
+    (block) => emit('ready', block)
+)
+let textUpdateTimer: any | null = null
+let textUpdateStartTime: any = 0
+
+function updatedContentDefered(newVal: InputEvent) {
+    if (!props.editMode) {
+        updatedContent(newVal)
+        return
+    }
+
+    const now = new Date().getTime()
+
+    //clear an existing update timeout
+    if (textUpdateTimer !== null) {
+        clearTimeout(textUpdateTimer)
+        textUpdateTimer = null
+    } else {
+        textUpdateStartTime = now
+    }
+
+    const doIt = () => {
+        textUpdateTimer = null
+        updatedContent(newVal)
+    }
+
+    //did we wait for a maximum time? run
+    if (now - textUpdateStartTime > globalState.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
+        doIt()
+        return
+    }
+    textUpdateTimer = setTimeout(() => {
+        doIt()
+    }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
+}
+
+function updatedContent(v: InputEvent) {
+    if (v.target === undefined || v.target === null) {
+        return
+    }
+    //this.value = v
+    block.value.content = v.target.value
+}
 </script>
 
 <style lang="sass" scoped></style>

@@ -1,17 +1,5 @@
-<script lang="ts">
-import Vue, {
-    defineComponent,
-    toRefs,
-    ref,
-    computed,
-    onMounted,
-    onBeforeUnmount,
-    PropType,
-    Ref,
-    nextTick,
-    ComputedRef,
-    UnwrapRef,
-} from 'vue'
+<script lang="ts" setup>
+import { toRefs, computed } from 'vue'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
@@ -19,11 +7,10 @@ import CodePlayground from '@/components/CodePlayground.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import DataBlock from '@/components/DataBlock.vue'
-import { IMainBlock } from '@/lib/codeBlocksManager'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
-import { EventHubType } from '@/composables/globalEvents'
 import {
     codeBlockSetup,
+    CodeBlocksProperties,
     IOnChangeOrder,
     IOnGenerateTemplateInfo,
     IOnPlacementChangeInfo,
@@ -34,210 +21,102 @@ import {
     IOnTypeChangeInfo,
     IOnVisibleLinesChangeInfo,
 } from '@/composables/basicBlocks'
-import { BlockStorage, useBlockStorage } from '@/storage/blockStorage'
+import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 
-export default defineComponent({
-    name: 'CodeBlocks',
-    components: {
-        CodeBlockContainer,
-        CodeBlocksSettings,
-        CodeBlock,
-        CodePlayground,
-        SimpleText,
-        CodeREPL,
-        DataBlock,
-    },
-    props: {
-        eventHub: { required: true, type: Object as PropType<EventHubType> },
-        appID: { required: true, type: Number },
-    },
-    setup(props, ctx) {
-        const { appID } = toRefs(props)
-        const blockStorage: BlockStorage = useBlockStorage(appID.value)
-        const blockInfo = blockStorage.appInfo
-        const editMode = computed((): boolean => {
-            return false
-        })
-        const {
-            didInitialize,
-            outputHTML,
-            output,
-            sansoutput,
-            didClip,
-            didRunOnce,
-            triggerRecompileWhenFinished,
-            continuousCodeUpdateTimer,
-            continuousCompile,
-            finalOutputObject,
-            options,
-            blocks,
-            language,
-            blockid,
-            executionTimeout,
-            maxCharacters,
-            compiler,
-            runCode,
-            domLibraries,
-            workerLibraries,
-            solutionTheme,
-            codeTheme,
-            readonly,
-            outputParser,
-            hasOutput,
-            mimeType,
-            isReady,
-            canRun,
-            randomizerActive,
-            activeTagSet,
-            completeSource,
-            showGlobalMessages,
-            playgrounds,
-            dataBlocks,
-            outputElement,
-            addonClass,
-            backgroundColorClass,
-            hasREPL,
-            canStop,
-            blockBecameReady,
-            tagSet,
-            themeForBlock,
-            blockById,
-            onPlaygroundChangedOutput,
-            resetOutput,
-            log,
-            logError,
-            logInfo,
-            processDiagnostics,
-            clearDiagnostics,
-            loadLibraries,
-            finishedExecution,
-            stop,
-            run,
-            onkey,
-            onViewCodeChange,
-            onRunFinished,
-            onRunFromPlayground,
-            global,
-        } = codeBlockSetup(blockStorage, editMode, props.eventHub)
-        const onTypeChange = (nfo: IOnTypeChangeInfo): void => {}
-        const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {}
-        const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {}
-        const onScriptVersionChange = (nfo: IOnScriptVersionChangeInfo): void => {}
-        const onSetAutoReset = (nfo: IOnSetAutoResetInfo): void => {}
-        const onReloadResources = (nfo: IOnReloadResourcesInfo): void => {}
-        const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {}
-        const onCompilerChange = (v: string): void => {}
-        const onCompilerVersionChange = (v: string): void => {}
-        const onRunStateChange = (v: boolean): void => {}
-        const onContinousCompileStateChange = (v: boolean): void => {}
-        const onMessagePassingChange = (v: boolean): void => {}
-        const onKeepAliveChange = (v: boolean): void => {}
-        const onPersistentArgumentsChange = (v: boolean): void => {}
-        const onLanguageChange = (v: string): void => {}
-        const onCharacterLimitChange = (v: number): void => {}
-        const onTimeoutChange = (v: number): void => {}
-        const onWorkerLibChange = (v: string[]): void => {}
-        const onDomLibChange = (v: string[]): void => {}
-        const onThemeChange = (nfo: IOnThemeChangeInfo): void => {}
-        const onOutputParserChange = (v: CodeOutputTypes): void => {}
-        const moveUp = (idx: number): void => {}
-        const moveDown = (idx: number): void => {}
-        const onChangeOrder = (nfo: IOnChangeOrder): void => {}
-        const removeBlock = (idx: number): void => {}
-        const addNewBlock = (): void => {}
-
-        return {
-            didInitialize,
-            outputHTML,
-            output,
-            sansoutput,
-            didClip,
-            didRunOnce,
-            triggerRecompileWhenFinished,
-            continuousCodeUpdateTimer,
-            continuousCompile,
-            finalOutputObject,
-            options,
-            blocks,
-            language,
-            blockid,
-            executionTimeout,
-            maxCharacters,
-            compiler,
-            runCode,
-            domLibraries,
-            workerLibraries,
-            solutionTheme,
-            codeTheme,
-            readonly,
-            outputParser,
-            editMode,
-            hasOutput,
-            mimeType,
-            isReady,
-            canRun,
-            randomizerActive,
-            activeTagSet,
-            completeSource,
-            showGlobalMessages,
-            playgrounds,
-            dataBlocks,
-            outputElement,
-            addonClass,
-            backgroundColorClass,
-            hasREPL,
-            canStop,
-            blockBecameReady,
-            tagSet,
-            themeForBlock,
-            blockById,
-            onPlaygroundChangedOutput,
-            resetOutput,
-            log,
-            logError,
-            logInfo,
-            processDiagnostics,
-            clearDiagnostics,
-            loadLibraries,
-            finishedExecution,
-            stop,
-            run,
-            onkey,
-            onViewCodeChange,
-            onRunFinished,
-            onRunFromPlayground,
-            onTypeChange,
-            onVisibleLinesChange,
-            onPlacementChange,
-            onScriptVersionChange,
-            onSetAutoReset,
-            onReloadResources,
-            onSetGenerateTemplate,
-            onCompilerChange,
-            onCompilerVersionChange,
-            onRunStateChange,
-            onContinousCompileStateChange,
-            onMessagePassingChange,
-            onKeepAliveChange,
-            onPersistentArgumentsChange,
-            onLanguageChange,
-            onCharacterLimitChange,
-            onTimeoutChange,
-            onWorkerLibChange,
-            onDomLibChange,
-            onThemeChange,
-            onOutputParserChange,
-            moveUp,
-            moveDown,
-            onChangeOrder,
-            removeBlock,
-            addNewBlock,
-            global,
-            blockStorage,
-            blockInfo,
-        }
-    },
+const props = defineProps<CodeBlocksProperties>()
+const { appID } = toRefs(props)
+const blockStorage: BlockStorageType = useBlockStorage(appID.value)
+const blockInfo = blockStorage.appInfo
+const editMode = computed((): boolean => {
+    return false
 })
+const {
+    didInitialize,
+    outputHTML,
+    output,
+    sansoutput,
+    didClip,
+    didRunOnce,
+    triggerRecompileWhenFinished,
+    continuousCodeUpdateTimer,
+    continuousCompile,
+    finalOutputObject,
+    options,
+    blocks,
+    language,
+    blockid,
+    executionTimeout,
+    maxCharacters,
+    compiler,
+    runCode,
+    domLibraries,
+    workerLibraries,
+    solutionTheme,
+    codeTheme,
+    readonly,
+    outputParser,
+    hasOutput,
+    mimeType,
+    isReady,
+    canRun,
+    randomizerActive,
+    activeTagSet,
+    completeSource,
+    showGlobalMessages,
+    playgrounds,
+    dataBlocks,
+    outputElement,
+    addonClass,
+    backgroundColorClass,
+    hasREPL,
+    canStop,
+    blockBecameReady,
+    tagSet,
+    themeForBlock,
+    blockById,
+    onPlaygroundChangedOutput,
+    resetOutput,
+    log,
+    logError,
+    logInfo,
+    processDiagnostics,
+    clearDiagnostics,
+    loadLibraries,
+    finishedExecution,
+    stop,
+    run,
+    onkey,
+    onViewCodeChange,
+    onRunFinished,
+    onRunFromPlayground,
+    global,
+} = codeBlockSetup(blockStorage, editMode, props.eventHub)
+const onTypeChange = (nfo: IOnTypeChangeInfo): void => {}
+const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {}
+const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {}
+const onScriptVersionChange = (nfo: IOnScriptVersionChangeInfo): void => {}
+const onSetAutoReset = (nfo: IOnSetAutoResetInfo): void => {}
+const onReloadResources = (nfo: IOnReloadResourcesInfo): void => {}
+const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {}
+const onCompilerChange = (v: string): void => {}
+const onCompilerVersionChange = (v: string): void => {}
+const onRunStateChange = (v: boolean): void => {}
+const onContinousCompileStateChange = (v: boolean): void => {}
+const onMessagePassingChange = (v: boolean): void => {}
+const onKeepAliveChange = (v: boolean): void => {}
+const onPersistentArgumentsChange = (v: boolean): void => {}
+const onLanguageChange = (v: string): void => {}
+const onCharacterLimitChange = (v: number): void => {}
+const onTimeoutChange = (v: number): void => {}
+const onWorkerLibChange = (v: string[]): void => {}
+const onDomLibChange = (v: string[]): void => {}
+const onThemeChange = (nfo: IOnThemeChangeInfo): void => {}
+const onOutputParserChange = (v: CodeOutputTypes): void => {}
+const moveUp = (idx: number): void => {}
+const moveDown = (idx: number): void => {}
+const onChangeOrder = (nfo: IOnChangeOrder): void => {}
+const removeBlock = (idx: number): void => {}
+const addNewBlock = (): void => {}
 </script>
 
 <template>
@@ -267,7 +146,8 @@ export default defineComponent({
             @output-parser-change="onOutputParserChange"
         />
         <CodeBlockContainer
-            :block="block"
+            :appID="appID"
+            :blockID="block.uuid"
             :editMode="editMode"
             v-for="block in blocks"
             :key="block.id"
@@ -290,7 +170,6 @@ export default defineComponent({
                 v-if="block.hasCode"
                 :appID="appID"
                 :blockID="block.uuid"
-                :block="block"
                 :theme="themeForBlock(block)"
                 :mode="mimeType"
                 :visibleLines="block.visibleLines"
@@ -306,7 +185,6 @@ export default defineComponent({
                 v-else-if="block.type == 'PLAYGROUND'"
                 :appID="appID"
                 :blockID="block.uuid"
-                :block="block"
                 :editMode="editMode"
                 :finalOutputObject="finalOutputObject"
                 :theme="themeForBlock(block)"
@@ -319,11 +197,8 @@ export default defineComponent({
 
             <SimpleText
                 v-else-if="block.type == 'TEXT'"
-                v-model="block.content"
                 :appID="appID"
                 :blockID="block.uuid"
-                :block="block"
-                :previewValue="block.actualContent()"
                 :editMode="editMode"
                 :name="`block[${block.parentID}][${block.id}]`"
                 :scopeUUID="block.scopeUUID"
@@ -351,7 +226,6 @@ export default defineComponent({
                 v-else-if="block.type == 'DATA'"
                 :appID="appID"
                 :blockID="block.uuid"
-                :block="block"
                 :editMode="editMode"
                 :finalOutputObject="finalOutputObject"
                 :theme="themeForBlock(block)"

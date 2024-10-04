@@ -562,19 +562,22 @@ function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockData
         block.hasAlternativeContent = false
     }
 
-    if (block.type != 'TEXT') {
-        console.log('BL', block.type, block.as)
-        if (block.as) {
-            block.type = block.as
-        }
+    console.log('BL', block.type, block.as)
+    if (block.as) {
+        block.type = block.as
+    }
+
+    if (block.type !== 'TEXT') {
         const loader = loaders[block.type]
-        console.d('LOADER', loader, loaders, block.type, block.as)
+        console.d('LOADER', loader, loaders, block.type)
         if (loader === undefined) {
             console.i('Skipping', block.type, block.as)
             return undefined
         } else {
             loader.loadFromDatablock(bl, inBlock, block, data.editMode)
         }
+    } else {
+        console.d('LOADER TEXT', block)
     }
     return block
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-import { InstallCodemirro } from 'codemirror-editor-vue3'
+import { InstallCodeMirror } from 'codemirror-editor-vue3'
 
 export function appUseCodeMirror(app: Vue.App<Element>) {
-    app.use(InstallCodemirro as any, {})
+    app.use(InstallCodeMirror as any, {})
 }

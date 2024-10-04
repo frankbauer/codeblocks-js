@@ -1,22 +1,31 @@
 import { onBeforeUnmount, onMounted, onUnmounted, PropType } from 'vue'
 import { BlockData } from '@/lib/codeBlocksManager'
+import { BlockStorageType } from '@/storage/blockStorage'
 
-export interface BasicBlockProps {
-    muteReadyState: boolean
-    block: BlockData
+interface OptionalBasicBlockProps {
+    muteReadyState?: boolean
 }
 
-export const DEFAULT_BASIC_BLOCK_PROPS = {
+export interface BasicBlockProps extends OptionalBasicBlockProps {
+    appID: number
+    blockID: string
+}
+
+export const DEFAULT_BASIC_BLOCK_PROPS: OptionalBasicBlockProps = {
     muteReadyState: false,
 }
 
-export interface EditableBlockProps extends BasicBlockProps {
-    editMode: boolean
-    visibleLines: number | 'auto'
-    theme: string
+export type VisibleLinesType = number | 'auto'
+
+interface OptionalEditableBlockProps extends OptionalBasicBlockProps {
+    editMode?: boolean
+    visibleLines?: VisibleLinesType
+    theme?: string
 }
 
-export const DEFAULT_EDITABLE_BLOCK_PROPS = {
+export interface EditableBlockProps extends BasicBlockProps, OptionalEditableBlockProps {}
+
+export const DEFAULT_EDITABLE_BLOCK_PROPS: OptionalEditableBlockProps = {
     muteReadyState: false,
     editMode: false,
     visibleLines: 'auto',
@@ -69,13 +78,21 @@ export const useEditableBlockProps = () => {
     }
 }
 
-export function useBasicBlockMounting(readyWhenMounted: boolean, props, context) {
+export function useBasicBlockMounting(
+    readyWhenMounted: boolean,
+    props,
+    blockStorage: BlockStorageType,
+    onReady: (block: BlockData) => void
+) {
     function whenBlockIsReady() {
         if (props.muteReadyState) {
             return
         }
-        props.block.readyCount++
-        context.emit('ready', props.block)
+        const block = blockStorage.getBlock(props.blockID)
+        if (block.value !== undefined) {
+            block.value.readyCount++
+            onReady(block.value as BlockData)
+        }
     }
 
     function whenBlockIsDestroyed() {

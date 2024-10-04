@@ -281,7 +281,7 @@ export default defineComponent({
 </script>
 
 <style lang="stylus" scoped>
-@import '../styles/quasar.variables.styl'
+//@import '../styles/quasar.variables.styl'
 .tagItem
     width: auto
     padding-bottom: 1px
