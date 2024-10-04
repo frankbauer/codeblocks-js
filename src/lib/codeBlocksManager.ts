@@ -35,6 +35,7 @@ import { highlight, highlightDirective } from '@/plugins/highlight'
 import { appUseQuasar } from '@/plugins/quasar'
 import { appUseCodeMirror } from '@/plugins/codemirror'
 import MainBlock from '@/lib/MainBlock'
+import { storeBlock } from '@/storage/blockStorage'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -43,12 +44,13 @@ REPLInstaller(loaders)
 dataInstaller(loaders)
 
 export interface AppContext {
-    blocks: IMainBlock
+    appID: number
 }
 
 export type AppContextRef = {
     [P in keyof AppContext]: Ref<UnwrapRef<AppContext[P]>>
 }
+let runningAppNumber = 10000
 
 export interface IAppSettings {
     id: number
@@ -339,7 +341,7 @@ const useShadowDOM = false
 function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined): IAppSettings {
     const inData = el.dataset as IInputElementData
     const data: IAppSettings = {
-        id: -1,
+        id: runningAppNumber++,
         editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor'),
         runCode: false,
         language: 'javascript',
@@ -657,8 +659,10 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         this._data = undefined
+        console.log('LOADED BLOCK DATA: ', data)
+        const storeageInfo = storeBlock(data)
         const context: AppContextRef = {
-            blocks: ref<UnwrapRef<IMainBlock>>(new MainBlock(data)),
+            appID: ref(storeageInfo.appID),
         }
         const component = data.editMode ? AppEditor : App
         const app = createApp(component as any, context)

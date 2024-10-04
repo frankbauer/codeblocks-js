@@ -78,6 +78,7 @@ import '@/lib/glsl/glsl'
 import 'codemirror/addon/edit/closebrackets.js'
 import { useBasicBlockMounting } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
+import { useBlockStorage } from '@/storage/blockStorage'
 
 // const ErrorTipCtor = Vue.extend(ErrorTip)
 export default defineComponent({
@@ -87,6 +88,10 @@ export default defineComponent({
         muteReadyState: {
             type: Boolean,
             default: false,
+        },
+        block: {
+            type: Object as PropType<BlockData>,
+            required: true,
         },
         editMode: {
             type: Boolean,
@@ -105,8 +110,12 @@ export default defineComponent({
         readonly: { default: false, type: Boolean },
         mode: { default: 'text/javascript', type: String },
         tagSet: { default: undefined, type: Object as PropType<IRandomizerSet> },
-        block: {
-            type: Object as PropType<BlockData>,
+        appID: {
+            type: Number,
+            required: true,
+        },
+        blockID: {
+            type: String,
             required: true,
         },
     },
@@ -116,6 +125,8 @@ export default defineComponent({
         const q = instance?.proxy?.$root?.$q
         const t = instance?.proxy?.$root?.$t
 
+        const blockStorage = useBlockStorage(props.appID)
+        const block = blockStorage.getBlock(props.blockID)
         const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(true, props, ctx)
 
         const {
@@ -127,7 +138,6 @@ export default defineComponent({
             theme,
             mode,
             tagSet,
-            block,
         } = toRefs(props)
 
         let codeUpdateTimer: any = null
@@ -654,6 +664,7 @@ export default defineComponent({
             onFirstLineChanged,
             onVisibleLinesChanged,
             onErrorsChanged,
+            block,
         }
     },
 })

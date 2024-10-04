@@ -44,6 +44,8 @@
         <q-slide-transition>
             <CodeBlock
                 v-if="editMode"
+                :appID="appID"
+                :blockID="blockID"
                 :block="block"
                 :theme="options.theme"
                 :mode="options.mode"
@@ -133,6 +135,14 @@ export default defineComponent({
         tagSet: {
             type: Object as PropType<IRandomizerSet>,
             required: false,
+        },
+        appID: {
+            type: Number,
+            required: true,
+        },
+        blockID: {
+            type: String,
+            required: true,
         },
     },
     emits: ['changeOutput', 'run', 'ready'],

@@ -56,6 +56,10 @@ export default class MainBlock implements IMainBlock {
         this.messagePassing = data.messagePassing
         this.keepAlive = data.keepAlive
         this.persistentArguments = data.persistentArguments
+
+        this.blocks.forEach((v, i) => {
+            this.blocks[i].appSettings = this
+        })
     }
 
     initArgsForLanguage() {

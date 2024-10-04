@@ -24,6 +24,7 @@ import {
     IOnTypeChangeInfo,
     IOnVisibleLinesChangeInfo,
 } from '@/composables/basicBlocks'
+import { BlockStorage, useBlockStorage } from '@/storage/blockStorage'
 
 export default defineComponent({
     name: 'CodeBlocksEditor',
@@ -38,11 +39,13 @@ export default defineComponent({
         DataBlock,
     },
     props: {
-        blockInfo: { required: true, type: Object as PropType<IMainBlock> },
         eventHub: { required: true, type: Object as PropType<EventHubType> },
+        appID: { required: true, type: Number },
     },
     setup(props, ctx) {
-        const { blockInfo } = toRefs(props)
+        const { appID } = toRefs(props)
+        const blockStorage: BlockStorage = useBlockStorage(appID.value)
+        const blockInfo = blockStorage.appInfo
         const editMode = computed((): boolean => {
             return true
         })
@@ -106,7 +109,7 @@ export default defineComponent({
             onRunFinished,
             onRunFromPlayground,
             global,
-        } = codeBlockSetup(blockInfo, editMode, props.eventHub)
+        } = codeBlockSetup(blockStorage, editMode, props.eventHub)
 
         const onTypeChange = (nfo: IOnTypeChangeInfo): void => {
             let bl = blockById(nfo.id)
@@ -227,6 +230,7 @@ export default defineComponent({
             bl.generateTemplate = nfo.generateTemplate
         }
         const onThemeChange = (nfo: IOnThemeChangeInfo): void => {
+            console.log('TC', nfo)
             blockInfo.value.solutionTheme = nfo.solution
             blockInfo.value.codeTheme = nfo.code
         }
@@ -339,6 +343,8 @@ export default defineComponent({
             removeBlock,
             addNewBlock,
             global,
+            blockStorage,
+            blockInfo,
         }
     },
 })

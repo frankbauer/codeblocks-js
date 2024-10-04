@@ -34,6 +34,7 @@ import {
     IOnTypeChangeInfo,
     IOnVisibleLinesChangeInfo,
 } from '@/composables/basicBlocks'
+import { BlockStorage, useBlockStorage } from '@/storage/blockStorage'
 
 export default defineComponent({
     name: 'CodeBlocks',
@@ -47,11 +48,13 @@ export default defineComponent({
         DataBlock,
     },
     props: {
-        blockInfo: { required: true, type: Object as PropType<IMainBlock> },
         eventHub: { required: true, type: Object as PropType<EventHubType> },
+        appID: { required: true, type: Number },
     },
     setup(props, ctx) {
-        const { blockInfo } = toRefs(props)
+        const { appID } = toRefs(props)
+        const blockStorage: BlockStorage = useBlockStorage(appID.value)
+        const blockInfo = blockStorage.appInfo
         const editMode = computed((): boolean => {
             return false
         })
@@ -115,7 +118,7 @@ export default defineComponent({
             onRunFinished,
             onRunFromPlayground,
             global,
-        } = codeBlockSetup(blockInfo, editMode, props.eventHub)
+        } = codeBlockSetup(blockStorage, editMode, props.eventHub)
         const onTypeChange = (nfo: IOnTypeChangeInfo): void => {}
         const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {}
         const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {}
@@ -230,6 +233,8 @@ export default defineComponent({
             removeBlock,
             addNewBlock,
             global,
+            blockStorage,
+            blockInfo,
         }
     },
 })
@@ -241,9 +246,11 @@ export default defineComponent({
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"
     >
+        <p>THEME: {{ blockStorage.appInfo.value.codeTheme }}</p>
         <CodeBlocksSettings
             v-if="editMode"
             :options="options"
+            :appID="appID"
             @compiler-change="onCompilerChange"
             @compiler-version-change="onCompilerVersionChange"
             @run-state-change="onRunStateChange"
@@ -276,8 +283,13 @@ export default defineComponent({
             @generate-template-change="onSetGenerateTemplate"
             @change-order="onChangeOrder"
         >
+            <h1>Theme: {{ themeForBlock(block) }}</h1>
+
+            <div>{{ block.themeForCodeBlock }}</div>
             <CodeBlock
                 v-if="block.hasCode"
+                :appID="appID"
+                :blockID="block.uuid"
                 :block="block"
                 :theme="themeForBlock(block)"
                 :mode="mimeType"
@@ -290,9 +302,10 @@ export default defineComponent({
                 @build="run"
                 @code-changed-in-view-mode="onViewCodeChange"
             />
-
             <CodePlayground
                 v-else-if="block.type == 'PLAYGROUND'"
+                :appID="appID"
+                :blockID="block.uuid"
                 :block="block"
                 :editMode="editMode"
                 :finalOutputObject="finalOutputObject"
@@ -307,6 +320,8 @@ export default defineComponent({
             <SimpleText
                 v-else-if="block.type == 'TEXT'"
                 v-model="block.content"
+                :appID="appID"
+                :blockID="block.uuid"
                 :block="block"
                 :previewValue="block.actualContent()"
                 :editMode="editMode"
@@ -318,6 +333,8 @@ export default defineComponent({
             />
             <CodeREPL
                 v-if="block.type == 'REPL'"
+                :appID="appID"
+                :blockID="block.uuid"
                 :block="block"
                 :eventHub="eventHub"
                 :blockInfo="blockInfo"
@@ -332,6 +349,8 @@ export default defineComponent({
 
             <DataBlock
                 v-else-if="block.type == 'DATA'"
+                :appID="appID"
+                :blockID="block.uuid"
                 :block="block"
                 :editMode="editMode"
                 :finalOutputObject="finalOutputObject"

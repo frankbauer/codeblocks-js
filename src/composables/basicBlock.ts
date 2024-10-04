@@ -1,6 +1,28 @@
 import { onBeforeUnmount, onMounted, onUnmounted, PropType } from 'vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 
+export interface BasicBlockProps {
+    muteReadyState: boolean
+    block: BlockData
+}
+
+export const DEFAULT_BASIC_BLOCK_PROPS = {
+    muteReadyState: false,
+}
+
+export interface EditableBlockProps extends BasicBlockProps {
+    editMode: boolean
+    visibleLines: number | 'auto'
+    theme: string
+}
+
+export const DEFAULT_EDITABLE_BLOCK_PROPS = {
+    muteReadyState: false,
+    editMode: false,
+    visibleLines: 'auto',
+    theme: 'base16-dark',
+}
+
 export const useBasicBlockProps = () => {
     const basicBlockProps = {
         muteReadyState: {

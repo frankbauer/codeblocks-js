@@ -1,7 +1,7 @@
 <template>
     <q-layout view="hHh lpR fFf" style="min-height: 0" class="codeblocks-app-page">
         <q-page-container>
-            <CodeBlocksEditor :blockInfo="blocks" :event-hub="eventHub" />
+            <CodeBlocksEditor :event-hub="eventHub" :appID="appID" />
         </q-page-container>
     </q-layout>
 </template>
@@ -12,10 +12,13 @@ import CodeBlocksEditor from './components/CodeBlocksEditor.vue'
 import { createGlobalEvent } from '@/composables/globalEvents'
 import { defineProps } from 'vue'
 import { AppContext, IMainBlock } from '@/lib/codeBlocksManager'
+import { useBlockStorage } from '@/storage/blockStorage'
 
 // Define props
 const props = defineProps<AppContext>()
-const { blocks } = toRefs(props)
+const { appID } = toRefs(props)
+const blockStorage = useBlockStorage(appID.value)
+const blocks = blockStorage.appInfo
 
 // Use the composable for global events
 const { eventHub } = createGlobalEvent()

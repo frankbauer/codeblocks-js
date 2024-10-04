@@ -25,6 +25,7 @@ import {
     ICompilerID,
 } from '@/lib/ICompilerRegistry'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
+import { BlockStorage } from '@/storage/blockStorage'
 
 export interface IOnTypeChangeInfo {
     type: KnownBlockTypes
@@ -101,10 +102,11 @@ function formatOutput(result) {
 }
 
 export function codeBlockSetup(
-    blockInfo: Ref<IMainBlock>,
+    blockStorage: BlockStorage,
     editMode: ComputedRef<boolean>,
     eventHub: EventHubType
 ) {
+    const blockInfo = blockStorage.appInfo
     const didInitialize = ref<boolean>(false)
     const outputHTML = ref<string>('')
     let output = ref<string>('')
