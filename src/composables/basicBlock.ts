@@ -84,11 +84,13 @@ export function useBasicBlockMounting(
     blockStorage: BlockStorageType,
     onReady: (block: BlockData) => void
 ) {
+    const block = blockStorage.getBlock(props.blockID)
+
     function whenBlockIsReady() {
         if (props.muteReadyState) {
             return
         }
-        const block = blockStorage.getBlock(props.blockID)
+
         if (block.value !== undefined) {
             block.value.readyCount++
             onReady(block.value as BlockData)
@@ -99,7 +101,7 @@ export function useBasicBlockMounting(
         if (props.muteReadyState) {
             return
         }
-        props.block.readyCount--
+        block.value.readyCount--
     }
 
     onMounted(() => {
