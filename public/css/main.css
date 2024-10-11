@@ -5,6 +5,7 @@
 codeblocks > playground {
     display: none;
 }
+
 codeblocks > block[data-hidden] {
     display: none;
 }
@@ -31,13 +32,14 @@ codeblocks > text {
 .gutter-error {
     font-size: 16px !important;
     padding-top: 0px !important;
-    margin-top: -3px !important;
+    margin-top: -5px !important;
     padding-left: 1px !important;
 }
 
 .gutter-error {
     color: #b71c1c !important;
 }
+
 .gutter-warning {
     color: #f9a825 !important;
 }

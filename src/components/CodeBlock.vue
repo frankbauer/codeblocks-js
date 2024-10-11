@@ -30,6 +30,7 @@
             :read-only="editorReadOnly"
             :errors="block.errors"
             :model-value="code"
+            :max-lines="totalLines"
             @update:modelValue="onCodeChangeDefered"
             @focus="onCodeFocus"
             @ready="onCodeReady"
@@ -173,6 +174,9 @@ const {
     tagSet,
 } = toRefs(props)
 
+const totalLines = computed(() => {
+    return blockStorage.appInfo.value.totalLines()
+})
 let codeUpdateTimer: any = null
 const codeUpdateStartTime = ref<number>(0)
 let continuousCodeUpdateTimer: any = null

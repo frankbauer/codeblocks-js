@@ -159,4 +159,8 @@ export default class MainBlock implements IMainBlock {
         }
         this.blocks.push(constructBlock(this, newBlockData))
     }
+
+    totalLines(): number {
+        return this.blocks.reduce((acc, v) => acc + v.lineCount, 0)
+    }
 }

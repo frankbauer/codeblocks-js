@@ -1,15 +1,16 @@
 <template>
     <div class="code-editor">
+        {{ theme }}
         <textarea
             style="display: none"
             readonly
             v-model="code"
             :name="name"
             :data-question="dataQuestion"
-            :class="`accqstXmlInput noRTEditor`"
+            class="accqstXmlInput noRTEditor"
         ></textarea>
         <div
-            class="accqstXmlInput noRTEditor"
+            :class="mainClass"
             :name="name"
             :data-question="dataQuestion"
             ref="editorElement"
@@ -36,12 +37,13 @@ import {
     Compartment,
     EditorState,
     type Extension,
+    RangeSet,
+    RangeSetBuilder,
     StateEffect,
     StateField,
     type Transaction,
 } from '@codemirror/state'
 import { GutterMarker } from '@codemirror/gutter'
-import { RangeSetBuilder } from '@codemirror/rangeset'
 import {
     Decoration,
     DecorationSet,
@@ -80,6 +82,7 @@ interface Props {
     firstLine?: number
     readOnly?: boolean
     errors?: ICompilerErrorDescription[]
+    maxLines?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -89,18 +92,30 @@ const props = withDefaults(defineProps<Props>(), {
     firstLine: 1,
     readOnly: false,
     errors: () => [],
+    maxLines: 1,
 })
-const { name, dataQuestion, theme, language, firstLine, readOnly, errors } = toRefs(props)
+const { name, dataQuestion, theme, language, firstLine, readOnly, errors, maxLines } = toRefs(props)
 
 const code = defineModel<string>()
 const editorElement = ref<HTMLElement | null>(null)
 const editorView = shallowRef<EditorView | null>(new EditorView())
 
+const mainClass = computed(() => {
+    return {
+        accqstXmlInput: true,
+        noRTEditor: true,
+        over10: maxLines.value >= 10,
+        over100: maxLines.value >= 100,
+        over1000: maxLines.value >= 1000,
+        over10000: maxLines.value >= 10000,
+    }
+})
+
 const editorTheme = computed(() => {
     switch (theme.value) {
-        case 'solarized-dark':
+        case 'solarized dark':
             return solarizedDarkTheme
-        case 'solarized-light':
+        case 'solarized light':
             return solarizedLightTheme
         case 'xq-dark':
             return basicDarkTheme
@@ -156,7 +171,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         languageCompartment.of(editorLanguage.value),
         lineNumbersCompartment.of(
             lineNumbers({
-                formatNumber: (n, state) => `${n + (firstLine.value - 1)}`,
+                formatNumber: (n, state) => lineNr(n),
             })
         ),
     ] as Extension[]
@@ -200,6 +215,10 @@ onMounted(() => {
     })
 })
 
+function lineNr(a: number): string {
+    return `${+a + firstLine.value - 1}`
+}
+
 watch(firstLine, (newValue) => {
     if (editorView.value === null) {
         return
@@ -208,7 +227,7 @@ watch(firstLine, (newValue) => {
     editorView.value.dispatch({
         effects: lineNumbersCompartment.reconfigure(
             lineNumbers({
-                formatNumber: (n, state) => `${n + (newValue - 1)}`,
+                formatNumber: (n, state) => lineNr(n),
             })
         ),
     })
@@ -424,7 +443,6 @@ class ErrorMarker extends GutterMarker {
     }
 }
 
-const errorMarker = new ErrorMarker()
 // Custom gutter for errors
 const errorGutter = gutter({
     class: 'error-gutter',
@@ -434,10 +452,10 @@ const errorGutter = gutter({
         errors.value.forEach((e) => {
             const lineNumber = e.start.line - firstLine.value + 1
             const line = view.state.doc.line(lineNumber)
-            builder.add(line.from, line.from, new ErrorMarker(e.severity, e.message)) // Add a marker for the line
+            builder.add(line.from, line.from, new ErrorMarker(e.severity, e.message))
         })
 
-        return builder.finish()
+        return builder.finish() as RangeSet<GutterMarker>
     },
 })
 
@@ -456,10 +474,30 @@ watch(
 defineExpose({
     view: editorView,
     lineCount,
+    lineNr,
 })
 </script>
 <style lang="sass">
 .code-editor
+    .cm-lineNumbers
+        min-width: 25px
+
+    .over10
+        .cm-lineNumbers
+            min-width: 34px
+
+    .over100
+        .cm-lineNumbers
+            min-width: 42px
+
+    .over1000
+        .cm-lineNumbers
+            min-width: 51px
+
+    .over10000
+        .cm-lineNumbers
+            min-width: 60px
+
     .cm-tooltip
         background-color: rgba(255, 255, 255, 0.2) !important
         backdrop-filter: blur(4px) saturate(50%) brightness(130%) !important
@@ -478,12 +516,12 @@ defineExpose({
             font-family: "Source Code Pro", monospace
             background-color: rgba(0, 0, 0, 0)
 
-            &.werror-tooltip
+            &.error-tooltip
                 color: #f82c2c !important
                 font-weight: 700
                 border-color: #e51e56
 
-            &.error-tooltip
+            &.warning-tooltip
                 color: #422f05 !important
                 font-weight: 400
                 border-color: #e5a91e
