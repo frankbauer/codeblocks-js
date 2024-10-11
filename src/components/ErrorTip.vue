@@ -19,47 +19,39 @@
     </q-icon>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { QIcon, QTooltip } from 'quasar'
 import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
-import { computed, ComputedRef, defineComponent, PropType } from 'vue'
+import { computed, ComputedRef, toRefs } from 'vue'
 
-export default defineComponent({
-    name: 'ErrorTip',
-    components: {},
-    props: {
-        errors: { type: Array as PropType<ICompilerErrorDescription[]>, required: true },
-        severity: { type: Number as PropType<ErrorSeverity>, required: true },
-    },
-    setup(props, context) {
-        function classForSeverity(s: ErrorSeverity): string {
-            if (s == ErrorSeverity.Error) {
-                return 'gutter-error'
-            }
-            return 'gutter-warning'
-        }
+interface Props {
+    errors: ICompilerErrorDescription[]
+    severity: ErrorSeverity
+}
 
-        function iconForSeverity(s: ErrorSeverity): string {
-            if (s == ErrorSeverity.Error) {
-                return 'report'
-            }
-            return 'warning'
-        }
+const props = defineProps<Props>()
+const { errors, severity } = toRefs(props)
 
-        const severityClass: ComputedRef<string> = computed(() => {
-            return classForSeverity(props.severity)
-        })
+function classForSeverity(s: ErrorSeverity): string {
+    if (s == ErrorSeverity.Error) {
+        return 'gutter-error'
+    }
+    return 'gutter-warning'
+}
 
-        const severityIcon: ComputedRef<string> = computed(() => {
-            return iconForSeverity(props.severity)
-        })
+function iconForSeverity(s: ErrorSeverity): string {
+    if (s == ErrorSeverity.Error) {
+        return 'report'
+    }
+    return 'warning'
+}
 
-        return {
-            classForSeverity,
-            iconForSeverity,
-            severityClass,
-            severityIcon,
-        }
-    },
+const severityClass: ComputedRef<string> = computed(() => {
+    return classForSeverity(severity.value)
+})
+
+const severityIcon: ComputedRef<string> = computed(() => {
+    return iconForSeverity(severity.value)
 })
 </script>
 

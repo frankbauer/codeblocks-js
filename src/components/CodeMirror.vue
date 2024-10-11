@@ -18,7 +18,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, nextTick, onMounted, ref, shallowRef, toRefs, watch } from 'vue'
+import ErrorTip from '@/components/ErrorTip.vue'
+import { QIcon, QTooltip, Quasar } from 'quasar'
+import {
+    computed,
+    ComputedRef,
+    createApp,
+    nextTick,
+    onMounted,
+    ref,
+    shallowRef,
+    toRefs,
+    watch,
+} from 'vue'
 import { EditorView, minimalSetup } from 'codemirror'
 import {
     Compartment,
@@ -29,7 +41,15 @@ import {
     type Transaction,
 } from '@codemirror/state'
 import { GutterMarker } from '@codemirror/gutter'
-import { Decoration, DecorationSet, hoverTooltip, lineNumbers, ViewUpdate } from '@codemirror/view'
+import { RangeSetBuilder } from '@codemirror/rangeset'
+import {
+    Decoration,
+    DecorationSet,
+    gutter,
+    hoverTooltip,
+    lineNumbers,
+    ViewUpdate,
+} from '@codemirror/view'
 import { indentUnit } from '@codemirror/language'
 import { cpp } from '@codemirror/lang-cpp'
 import { css } from '@codemirror/lang-css'
@@ -134,11 +154,6 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         indentUnit.of(' '),
         themeCompartment.of(editorTheme.value),
         languageCompartment.of(editorLanguage.value),
-        //EditorView.decorations.compute([EditorState.doc], underlineErrors),
-        // gutter({
-        //     class: 'cm-line-errors',
-        //     markers: errorMarkers,
-        // }),
         lineNumbersCompartment.of(
             lineNumbers({
                 formatNumber: (n, state) => `${n + (firstLine.value - 1)}`,
@@ -372,7 +387,9 @@ function underlineErrors() {
     })
 
     if (!editorView.value!.state.field(underlineField, false)) {
-        effects.push(StateEffect.appendConfig.of([underlineField, hoverTooltipExtension]))
+        effects.push(
+            StateEffect.appendConfig.of([underlineField, hoverTooltipExtension, errorGutter])
+        )
     }
 
     // Add the clearUnderlines effect to remove existing underlines
@@ -385,21 +402,44 @@ function underlineErrors() {
 
 // Custom gutter marker for error symbols
 class ErrorMarker extends GutterMarker {
+    constructor(private severity: ErrorSeverity, private msg: string) {
+        super()
+    }
+
     toDOM() {
+        const isWarning = this.severity === ErrorSeverity.Warning
         const marker = document.createElement('span')
-        marker.textContent = '⚠️' // You can change this symbol to anything
-        marker.title = 'Compiler Error'
+        const app = createApp(ErrorTip, {
+            errors: [
+                {
+                    severity: this.severity,
+                    message: this.msg,
+                },
+            ],
+            severity: this.severity,
+        })
+        app.use(Quasar, { components: { QIcon, QTooltip } })
+        app.mount(marker)
         return marker
     }
 }
 
-function errorMarkers() {
-    const markers = new Map()
-    errors.value.forEach((error) => {
-        markers.set(error.line - 1, new ErrorMarker())
-    })
-    return markers
-}
+const errorMarker = new ErrorMarker()
+// Custom gutter for errors
+const errorGutter = gutter({
+    class: 'error-gutter',
+    markers: (view: EditorView) => {
+        let builder = new RangeSetBuilder<GutterMarker>()
+
+        errors.value.forEach((e) => {
+            const lineNumber = e.start.line - firstLine.value + 1
+            const line = view.state.doc.line(lineNumber)
+            builder.add(line.from, line.from, new ErrorMarker(e.severity, e.message)) // Add a marker for the line
+        })
+
+        return builder.finish()
+    },
+})
 
 watch(
     errors,
