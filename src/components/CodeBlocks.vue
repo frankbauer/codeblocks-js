@@ -125,7 +125,6 @@ const addNewBlock = (): void => {}
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"
     >
-        <p>THEME: {{ blockStorage.appInfo.value.codeTheme }}</p>
         <CodeBlocksSettings
             v-if="editMode"
             :options="options"
@@ -163,9 +162,6 @@ const addNewBlock = (): void => {}
             @generate-template-change="onSetGenerateTemplate"
             @change-order="onChangeOrder"
         >
-            <h1>Theme: {{ themeForBlock(block) }}</h1>
-
-            <div>{{ block.themeForCodeBlock }}</div>
             <CodeBlock
                 v-if="block.hasCode"
                 :appID="appID"
