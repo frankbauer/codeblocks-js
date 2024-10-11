@@ -1,35 +1,90 @@
 <template>
     <div :class="`codeblock block-${typeName}`">
-        <Codemirror
-            ref="codeBox"
-            :value="code"
-            :options="options"
-            :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"
-            @ready="onCodeReady"
-            @focus="onCodeFocus"
-            @input="onCodeChangeDefered"
-            @input-read="onCodeKeyHandle"
-            @keyup="onCodeKeyHandle"
-            :original-style="true"
+        <textarea
+            ref="codeBoxRaw"
+            style="display: none"
+            readonly
+            v-model="block.content"
             :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
             :id="`teQ${block.parentID}B${block.id}`"
             :data-question="block.parentID"
-            :events="['keyup']"
+            :data-blocktype="iliasTypeNr"
+            :is-editmode="editMode"
+            :class="`accqstXmlInput noRTEditor`"
+        ></textarea>
+        <code-mirror
+            ref="codeBox"
+            :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"
+            :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
+            :id="`teQ${block.parentID}B${block.id}`"
+            :data-question="block.parentID"
+            :editorConfig="editorConfig"
+            :extensions="editorExtensions"
+            :readonly="editorReadOnly"
+            :tab="true"
+            :tab-size="4"
+            :allow-multiple-selections="true"
+            :theme="block.themeForCodeBlock"
+            :language="mode"
+            :first-line="block.firstLine"
+            :read-only="editorReadOnly"
+            :errors="block.errors"
+            :model-value="code"
+            @update:modelValue="onCodeChangeDefered"
+            @focus="onCodeFocus"
+            @ready="onCodeReady"
         />
+        <!--        <Codemirror-->
+        <!--            ref="codeBox"-->
+        <!--            :value="code"-->
+        <!--            :options="options"-->
+        <!--            :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"-->
+        <!--            @ready="onCodeReady"-->
+        <!--            @focus="onCodeFocus"-->
+        <!--            @input="onCodeChangeDefered"-->
+        <!--            @input-read="onCodeKeyHandle"-->
+        <!--            @keyup="onCodeKeyHandle"-->
+        <!--            :original-style="true"-->
+        <!--            :name="`${namePrefix}block[${block.parentID}][${block.id}]`"-->
+        <!--            :id="`teQ${block.parentID}B${block.id}`"-->
+        <!--            :data-question="block.parentID"-->
+        <!--            :events="['keyup']"-->
+        <!--        />-->
 
         <div v-show="hasAlternativeContent" v-if="editMode">
             <div class="q-mt-lg text-subtitle2 q-pb-xs">{{ $t('CodeBlock.Initial_Content') }}</div>
-            <Codemirror
-                ref="altBox"
-                :value="altCode"
-                :options="altOptions"
-                :class="`accqstXmlInput noRTEditor ${boxClass}`"
-                :original-style="true"
-                @ready="onAltCodeReady"
-                @focus="onAltCodeFocus"
-                @input="onAltCodeChangeDefered"
+            <textarea
+                ref="altBoxRaw"
+                style="display: none"
+                readonly
+                v-model="block.altCode"
                 :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
+                :class="`accqstXmlInput noRTEditor`"
+            ></textarea>
+            <code-mirror
+                ref="altBox"
+                :class="`accqstXmlInput noRTEditor ${boxClass}`"
+                :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
+                :model-value="altCode"
+                :editorConfig="editorConfigAlt"
+                :extensions="editorExtensionsAlt"
+                :readonly="editorReadOnly"
+                :tab="false"
+                :tab-size="4"
+                :allow-multiple-selections="true"
+                @update:modelValue="onAltCodeChangeDefered"
             />
+            <!--            <Codemirror-->
+            <!--                ref="altBox"-->
+            <!--                :value="altCode"-->
+            <!--                :options="altOptions"-->
+            <!--                :class="`accqstXmlInput noRTEditor ${boxClass}`"-->
+            <!--                :original-style="true"-->
+            <!--                @ready="onAltCodeReady"-->
+            <!--                @focus="onAltCodeFocus"-->
+            <!--                @input="onAltCodeChangeDefered"-->
+            <!--                :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"-->
+            <!--            />-->
         </div>
     </div>
 </template>
@@ -51,29 +106,17 @@ import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { ITagReplaceAction, tagger } from '@/plugins/tagger'
-import Codemirror from 'codemirror-editor-vue3'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/solarized.css'
-import 'codemirror/theme/base16-dark.css'
-import 'codemirror/theme/base16-light.css'
-import 'codemirror/theme/duotone-dark.css'
-import 'codemirror/theme/duotone-light.css'
-import 'codemirror/theme/xq-dark.css'
-import 'codemirror/theme/xq-light.css'
-import 'codemirror/theme/blackboard.css'
-import 'codemirror/theme/midnight.css'
-import 'codemirror/theme/neo.css'
-import 'codemirror/theme/mbo.css'
-import 'codemirror/theme/mdn-like.css'
-import 'codemirror/mode/clike/clike.js'
-import 'codemirror/mode/fortran/fortran.js'
-import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/mode/perl/perl.js'
-import 'codemirror/mode/python/python.js'
-import 'codemirror/mode/r/r.js'
-import 'codemirror/mode/ruby/ruby.js'
-import '@/lib/glsl/glsl'
-import 'codemirror/addon/edit/closebrackets.js'
+import CodeMirror from '@/components/CodeMirror.vue'
+import { LanguageSupport } from '@codemirror/language'
+import { lineNumbers } from '@codemirror/view'
+import { cpp } from '@codemirror/lang-cpp'
+import { css } from '@codemirror/lang-css'
+import { html } from '@codemirror/lang-html'
+import { java } from '@codemirror/lang-java'
+import { javascript } from '@codemirror/lang-javascript'
+import { json } from '@codemirror/lang-json'
+import { python } from '@codemirror/lang-python'
+
 import {
     DEFAULT_EDITABLE_BLOCK_PROPS,
     EditableBlockProps,
@@ -206,12 +249,18 @@ const altCode = computed(() => {
     }
     return block.value.alternativeContent
 })
-const code = computed(() => {
-    if (!editMode.value) {
-        return block.value.actualContent()
-    }
-    return block.value.content
+const code = computed({
+    get: () => {
+        if (!editMode.value) {
+            return block.value.actualContent()
+        }
+        return block.value.content
+    },
+    set: (newCode) => {
+        block.value.content = newCode
+    },
 })
+
 const options = computed(() => {
     return {
         mode: mode.value,
@@ -227,6 +276,47 @@ const options = computed(() => {
         gutters: ['diagnostics', 'CodeMirror-linenumbers'],
     }
 })
+const editorLanguage = computed(() => {
+    switch (mode.value) {
+        case 'text/css':
+            return css
+        case 'text/html':
+            return html
+        case 'text/javascript':
+            return javascript
+        case 'text/json':
+            return json
+        case 'text/python':
+            return python
+        case 'text/x-java':
+            return java
+        case 'text/java':
+            return java
+        case 'text/cpp':
+            return cpp
+        default:
+            return undefined
+    }
+})
+const editorReadOnly = computed(() => {
+    return (
+        !editMode.value &&
+        (block.value.readonly || block.value.static || block.value.hidden || readonly.value)
+    )
+})
+const editorConfig = computed(() => ({}))
+
+const editorExtensions = computed(() => {
+    return [
+        editorLanguage.value,
+        lineNumbers({
+            formatNumber: (n, state) => `${n + (block.value.firstLine - 1)}`,
+        }),
+    ]
+})
+
+const editorConfigAlt = computed(() => editorConfig.value)
+const editorExtensionsAlt = computed(() => editorExtensions.value)
 const altOptions = computed(() => {
     return options.value
 })
@@ -348,14 +438,11 @@ const onCodeChangeDefered = (newCode) => {
     }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
 }
 const onCodeChange = (newCode) => {
-    if (codemirror.value === null || codemirror.value === undefined) {
+    if (codeBox.value === null || codeBox.value === undefined) {
         return
     }
 
-    block.value.lineCountHint = codemirror.value.doc.size
-    codemirror.value.options.firstLineNumber = block.value.firstLine
-    const tb = (codeBox.value as any).$el.querySelector('textarea[name]') as HTMLTextAreaElement
-    tb.value = newCode
+    block.value.lineCountHint = codeBox.value.lineCount()
     block.value.content = newCode
     updateTagDisplay()
     if (editMode.value) {

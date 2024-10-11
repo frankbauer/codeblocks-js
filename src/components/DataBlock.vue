@@ -131,21 +131,7 @@
 import { toRefs, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, Ref } from 'vue'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
-import Codemirror from 'codemirror-editor-vue3'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/solarized.css'
-import 'codemirror/theme/base16-dark.css'
-import 'codemirror/theme/base16-light.css'
-import 'codemirror/theme/duotone-dark.css'
-import 'codemirror/theme/duotone-light.css'
-import 'codemirror/theme/xq-dark.css'
-import 'codemirror/theme/xq-light.css'
-import 'codemirror/theme/blackboard.css'
-import 'codemirror/theme/midnight.css'
-import 'codemirror/theme/neo.css'
-import 'codemirror/theme/mbo.css'
-import 'codemirror/theme/mdn-like.css'
-import 'codemirror/mode/javascript/javascript.js'
+
 import {
     DEFAULT_EDITABLE_BLOCK_PROPS,
     EditableBlockProps,
