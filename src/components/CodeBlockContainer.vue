@@ -334,6 +334,7 @@ import { globalState } from '@/lib/globalState'
 import { l } from '@/plugins/i18n'
 import { BasicBlockProps, DEFAULT_BASIC_BLOCK_PROPS } from '@/composables/basicBlock'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
+import { useQuasar } from 'quasar'
 
 interface Props extends BasicBlockProps {
     editMode?: boolean
@@ -358,7 +359,7 @@ const emit = defineEmits([
 ])
 
 const instance = getCurrentInstance()
-const q = instance?.proxy?.$root?.$q
+const q = useQuasar()
 const t = instance?.proxy?.$root?.$t
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)

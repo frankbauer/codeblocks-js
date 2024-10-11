@@ -330,6 +330,7 @@ import Vue, { computed, ComputedRef, defineComponent, getCurrentInstance, PropTy
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import { l } from '@/plugins/i18n'
+import { useQuasar } from 'quasar'
 
 export interface ICodeBlockSettingsOptions {
     language: string
@@ -377,7 +378,7 @@ export default defineComponent({
     ],
     setup(props, context) {
         const instance = getCurrentInstance()
-        const q = instance?.proxy?.$root?.$q
+        const q = useQuasar()
         const t = instance?.proxy?.$root?.$t
         //Computed
         const themes: ComputedRef<IListItemData[]> = computed(() => {
@@ -577,10 +578,7 @@ export default defineComponent({
 
         const solutionTheme = computed({
             get: () => {
-                return globalState.appState.itemForValue(
-                    themes.value,
-                    props.options.solutionTheme
-                )
+                return globalState.appState.itemForValue(themes.value, props.options.solutionTheme)
             },
 
             set: (v: IListItemData) => {

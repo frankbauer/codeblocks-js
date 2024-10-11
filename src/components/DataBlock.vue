@@ -155,6 +155,7 @@ import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
+import { useQuasar } from 'quasar'
 
 interface Props extends EditableBlockProps {
     namePrefix?: string
@@ -172,7 +173,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['ready'])
 
 const instance = getCurrentInstance()
-const q = instance?.proxy?.$root?.$q
+const q = useQuasar()
 const t = instance?.proxy?.$root?.$t
 
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)

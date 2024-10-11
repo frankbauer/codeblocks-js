@@ -526,7 +526,8 @@ function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockData
         shouldAutoreset: isTrue(inBlock.shouldAutoreset),
         shouldReloadResources: isTrue(inBlock.shouldReloadResources),
         generateTemplate:
-            undefined || (inBlock.generateTemplate != 'false' && inBlock.generateTemplate != '0'),
+            inBlock.generateTemplate === undefined ||
+            (inBlock.generateTemplate != 'false' && inBlock.generateTemplate != '0'),
 
         expanded:
             inBlock.expanded === undefined ||
@@ -664,8 +665,8 @@ class InternalCodeBlocksManager {
         this._data = undefined
         console.log('LOADED BLOCK DATA: ', data)
         const storeageInfo = storeBlock(data)
-        const context: AppContextRef = {
-            appID: ref(storeageInfo.appID),
+        const context = {
+            appID: storeageInfo.appID,
         }
         const component = data.editMode ? AppEditor : App
         const app = createApp(component as any, context)

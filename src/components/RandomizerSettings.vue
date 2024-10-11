@@ -160,6 +160,7 @@ import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import Vue, { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { tagger } from '@/plugins/tagger'
 import { uuid } from 'vue-uuid'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
     name: 'RandomizerSettings',
@@ -172,7 +173,7 @@ export default defineComponent({
     },
     setup(props, context) {
         const instance = getCurrentInstance()
-        const q = instance?.proxy?.$root?.$q
+        const q = useQuasar()
 
         let _newTagName: string = ''
 

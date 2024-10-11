@@ -84,6 +84,7 @@ import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
+import { useQuasar } from 'quasar'
 
 export interface ICodePlaygroundOptions {
     mode: string
@@ -113,7 +114,7 @@ const emit = defineEmits(['changeOutput', 'run', 'ready'])
 
 const instance = getCurrentInstance()
 const globalCodeBlock = globalState.appState
-const q = instance?.proxy?.$root?.$q
+const q = useQuasar()
 const t = instance?.proxy?.$root?.$t
 
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)

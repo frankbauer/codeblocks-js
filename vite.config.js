@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
+import { Quasar, Dialog } from 'quasar'
 
 const path = require('path')
 
@@ -14,6 +15,9 @@ export default defineConfig({
         // https://github.com/quasarframework/quasar/blob/dev/vite-plugin/index.d.ts
         quasar({
             //sassVariables: 'src/styles/quasar-variables.sass',
+            plugins: {
+                Dialog,
+            },
         }),
     ],
     resolve: {
