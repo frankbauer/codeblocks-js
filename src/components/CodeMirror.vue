@@ -33,6 +33,9 @@ import {
     watch,
 } from 'vue'
 import { EditorView, minimalSetup } from 'codemirror'
+import { keymap } from '@codemirror/view'
+import { indentWithTab } from '@codemirror/commands'
+import { EditorSelection } from '@codemirror/state'
 import {
     Compartment,
     EditorState,
@@ -166,7 +169,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         readOnlyCompartment.of(EditorState.readOnly.of(readOnly.value)),
         EditorView.editable.of(true),
         EditorState.tabSize.of(4),
-        indentUnit.of(' '),
+        indentUnit.of('    '),
         themeCompartment.of(editorTheme.value),
         languageCompartment.of(editorLanguage.value),
         lineNumbersCompartment.of(
@@ -174,6 +177,53 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                 formatNumber: (n, state) => lineNr(n),
             })
         ),
+        EditorView.domEventHandlers({
+            keydown: (event: KeyboardEvent, view: EditorView) => {
+                if (event.key === 'Tab') {
+                    event.preventDefault()
+                    if (event.shiftKey) {
+                        // Handle Shift+Tab for unindent
+                        return view.dispatch(
+                            view.state.changeByRange((range) => {
+                                let lines = view.state.doc.lineAt(range.from).number
+                                let endLine = view.state.doc.lineAt(range.to).number
+                                let changes: { from: number; to: number; insert: string }[] = []
+                                for (let pos = lines; pos <= endLine; pos++) {
+                                    let line = view.state.doc.line(pos)
+                                    let text = view.state.doc
+                                        .slice(line.from, line.from + 4)
+                                        .toString()
+                                    if (text.startsWith(' '.repeat(4))) {
+                                        changes.push({
+                                            from: line.from,
+                                            to: line.from + 4,
+                                            insert: '',
+                                        })
+                                    }
+                                }
+                                return {
+                                    changes,
+                                    range: EditorSelection.range(range.from, range.to),
+                                }
+                            })
+                        )
+                    } else {
+                        // Handle Tab for indent
+                        return view.dispatch(
+                            view.state.changeByRange((range) => {
+                                return {
+                                    changes: [{ from: range.from, insert: '    ' }],
+                                    range: EditorSelection.range(range.from + 4, range.to + 4),
+                                }
+                            })
+                        )
+                    }
+                    return true
+                }
+                return false
+            },
+        }),
+        keymap.of([indentWithTab]),
     ] as Extension[]
 })
 
