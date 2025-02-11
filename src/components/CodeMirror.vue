@@ -1,6 +1,5 @@
 <template>
     <div class="code-editor">
-        {{ theme }}
         <textarea
             style="display: none"
             readonly

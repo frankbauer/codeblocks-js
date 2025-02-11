@@ -22,6 +22,7 @@ import {
     IOnVisibleLinesChangeInfo,
 } from '@/composables/basicBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
+import '@quasar/extras/material-icons/material-icons.css'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)

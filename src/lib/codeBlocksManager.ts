@@ -663,7 +663,7 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         this._data = undefined
-        console.log('LOADED BLOCK DATA: ', data)
+        console.log('LOADED BLOCK DATA: ', data, this.element)
         const storeageInfo = storeBlock(data)
         const context = {
             appID: storeageInfo.appID,

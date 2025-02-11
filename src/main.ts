@@ -38,6 +38,7 @@ import { highlight } from '@/plugins/highlight'
 window.codeblocks = {
     scale: 1.0,
     mountInElement: function (element: Document | HTMLElement): void {
+        console.log('mounting in element', element)
         highlight.$vue.processElements(element)
         tagger.processElements(element)
         CodeBlocksManager.find(element).mount()

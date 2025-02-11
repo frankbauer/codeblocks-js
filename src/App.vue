@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { toRefs } from 'vue'
-import CodeBlocksEditor from './components/CodeBlocksEditor.vue'
+import CodeBlocks from './components/CodeBlocks.vue'
 import { createGlobalEvent } from '@/composables/globalEvents'
 import { defineProps } from 'vue'
 import { AppContext, IMainBlock } from '@/lib/codeBlocksManager'

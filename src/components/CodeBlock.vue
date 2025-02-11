@@ -1,3 +1,4 @@
+`
 <template>
     <div :class="`codeblock block-${typeName}`">
         <textarea
@@ -10,49 +11,28 @@
             :data-question="block.parentID"
             :data-blocktype="iliasTypeNr"
             :is-editmode="editMode"
-            :class="`accqstXmlInput noRTEditor`"
-        ></textarea>
+            class="accqstXmlInput noRTEditor"
+        />
+
         <code-mirror
             ref="codeBox"
+            v-model="code"
             :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"
             :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
             :id="`teQ${block.parentID}B${block.id}`"
             :data-question="block.parentID"
-            :editorConfig="editorConfig"
-            :extensions="editorExtensions"
-            :readonly="editorReadOnly"
-            :tab="true"
-            :tab-size="4"
-            :allow-multiple-selections="true"
             :theme="block.themeForCodeBlock"
             :language="mode"
             :first-line="block.firstLine"
             :read-only="editorReadOnly"
             :errors="block.errors"
-            :model-value="code"
             :max-lines="totalLines"
-            @update:modelValue="onCodeChangeDefered"
+            @update:model-value="onCodeChangeDefered"
             @focus="onCodeFocus"
             @ready="onCodeReady"
         />
-        <!--        <Codemirror-->
-        <!--            ref="codeBox"-->
-        <!--            :value="code"-->
-        <!--            :options="options"-->
-        <!--            :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"-->
-        <!--            @ready="onCodeReady"-->
-        <!--            @focus="onCodeFocus"-->
-        <!--            @input="onCodeChangeDefered"-->
-        <!--            @input-read="onCodeKeyHandle"-->
-        <!--            @keyup="onCodeKeyHandle"-->
-        <!--            :original-style="true"-->
-        <!--            :name="`${namePrefix}block[${block.parentID}][${block.id}]`"-->
-        <!--            :id="`teQ${block.parentID}B${block.id}`"-->
-        <!--            :data-question="block.parentID"-->
-        <!--            :events="['keyup']"-->
-        <!--        />-->
 
-        <div v-show="hasAlternativeContent" v-if="editMode">
+        <div v-if="editMode && hasAlternativeContent">
             <div class="q-mt-lg text-subtitle2 q-pb-xs">{{ $t('CodeBlock.Initial_Content') }}</div>
             <textarea
                 ref="altBoxRaw"
@@ -60,37 +40,24 @@
                 readonly
                 v-model="block.altCode"
                 :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
-                :class="`accqstXmlInput noRTEditor`"
-            ></textarea>
+                class="accqstXmlInput noRTEditor"
+            />
             <code-mirror
                 ref="altBox"
+                v-model="altCode"
                 :class="`accqstXmlInput noRTEditor ${boxClass}`"
                 :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
-                :model-value="altCode"
-                :editorConfig="editorConfigAlt"
-                :extensions="editorExtensionsAlt"
-                :readonly="editorReadOnly"
-                :tab="false"
-                :tab-size="4"
-                :allow-multiple-selections="true"
-                @update:modelValue="onAltCodeChangeDefered"
+                :theme="block.themeForCodeBlock"
+                :language="mode"
+                :read-only="editorReadOnly"
+                @update:model-value="onAltCodeChangeDefered"
+                @ready="onAltCodeReady"
             />
-            <!--            <Codemirror-->
-            <!--                ref="altBox"-->
-            <!--                :value="altCode"-->
-            <!--                :options="altOptions"-->
-            <!--                :class="`accqstXmlInput noRTEditor ${boxClass}`"-->
-            <!--                :original-style="true"-->
-            <!--                @ready="onAltCodeReady"-->
-            <!--                @focus="onAltCodeFocus"-->
-            <!--                @input="onAltCodeChangeDefered"-->
-            <!--                :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"-->
-            <!--            />-->
         </div>
     </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import {
     toRefs,
     ref,
@@ -99,33 +66,24 @@ import {
     onMounted,
     onBeforeUnmount,
     getCurrentInstance,
-    Ref,
     nextTick,
+    type Ref,
 } from 'vue'
-import ErrorTip from './ErrorTip.vue'
-import { IRandomizerSet } from '@/lib/ICodeBlocks'
-import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
-import { BlockData } from '@/lib/codeBlocksManager'
-import { ITagReplaceAction, tagger } from '@/plugins/tagger'
 import CodeMirror from '@/components/CodeMirror.vue'
-import { LanguageSupport } from '@codemirror/language'
-import { lineNumbers } from '@codemirror/view'
-import { cpp } from '@codemirror/lang-cpp'
-import { css } from '@codemirror/lang-css'
-import { html } from '@codemirror/lang-html'
-import { java } from '@codemirror/lang-java'
-import { javascript } from '@codemirror/lang-javascript'
-import { json } from '@codemirror/lang-json'
-import { python } from '@codemirror/lang-python'
-
+import type { EditorView } from '@codemirror/view'
+import type { IRandomizerSet } from '@/lib/ICodeBlocks'
+import type { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
+import type { BlockData } from '@/lib/codeBlocksManager'
+import { tagger, type ITagReplaceAction } from '@/plugins/tagger'
 import {
     DEFAULT_EDITABLE_BLOCK_PROPS,
-    EditableBlockProps,
+    type EditableBlockProps,
     useBasicBlockMounting,
 } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
-import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
+import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 
+// Props definition
 interface Props extends EditableBlockProps {
     namePrefix?: string
     emitWhenTypingInViewMode?: boolean
@@ -143,17 +101,19 @@ const props = withDefaults(defineProps<Props>(), {
     tagSet: undefined,
 })
 
-const emit = defineEmits([
-    'code-changed-in-edit-mode',
-    'code-changed-in-view-mode',
-    'build',
-    'ready',
-])
+// Emits
+const emit = defineEmits<{
+    (e: 'code-changed-in-edit-mode'): void
+    (e: 'code-changed-in-view-mode'): void
+    (e: 'build'): void
+    (e: 'ready', block: BlockData): void
+}>()
 
+// Vue instance
 const instance = getCurrentInstance()
-const q = instance?.proxy?.$root?.$q
 const t = instance?.proxy?.$root?.$t
 
+// Block storage and mounting
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)
 const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
@@ -163,528 +123,310 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
     (block) => emit('ready', block)
 )
 
-const {
-    namePrefix,
-    emitWhenTypingInViewMode,
-    readonly,
-    editMode,
-    visibleLines,
-    theme,
-    mode,
-    tagSet,
-} = toRefs(props)
+// Destructure props
+const { namePrefix, emitWhenTypingInViewMode, readonly, editMode, visibleLines, mode, tagSet } =
+    toRefs(props)
 
-const totalLines = computed(() => {
-    return blockStorage.appInfo.value.totalLines()
-})
-let codeUpdateTimer: any = null
+// Refs
+const codeBox = ref<InstanceType<typeof CodeMirror> | null>(null)
+const altBox = ref<InstanceType<typeof CodeMirror> | null>(null)
+const codeBoxRaw = ref<HTMLTextAreaElement | null>(null)
+const altBoxRaw = ref<HTMLTextAreaElement | null>(null)
+
+// Update timers
+let codeUpdateTimer: ReturnType<typeof setTimeout> | null = null
+let altCodeUpdateTimer: ReturnType<typeof setTimeout> | null = null
+let continuousCodeUpdateTimer: ReturnType<typeof setTimeout> | null = null
 const codeUpdateStartTime = ref<number>(0)
-let continuousCodeUpdateTimer: any = null
-const codeNeedsTagUpdate = ref<boolean>(true)
-let altCodeUpdateTimer: any = null
 const altCodeUpdateStartTime = ref<number>(0)
+const codeNeedsTagUpdate = ref<boolean>(true)
 
-const codeBox: Ref<HTMLElement | null> = ref(null)
-const altBox: Ref<HTMLElement | null> = ref(null)
+// Computed properties
+const totalLines = computed(() => blockStorage.appInfo.value.totalLines())
 
-const hasAlternativeContent = computed(() => {
-    return block.value.hasAlternativeContent && typeName.value == 'block'
-})
-const errors = computed((): ICompilerErrorDescription[] => {
-    return block.value.errors
-})
-const randomizerActive = computed(() => {
-    return tagSet.value !== undefined
-})
+const hasAlternativeContent = computed(
+    () => block.value.hasAlternativeContent && typeName.value === 'block'
+)
+
 const boxClass = computed(() => {
-    let cl = ''
+    const classes = []
     if (block.value.hidden && !editMode.value) {
-        cl += 'hiddenBox '
+        classes.push('hiddenBox')
     }
     if (block.value.readonly || readonly.value) {
-        cl += 'readonlyBox '
+        classes.push('readonlyBox')
     }
     if (block.value.static) {
-        cl += 'staticBox '
+        classes.push('staticBox')
     }
-    return cl
-})
-const iliasTypeNr = computed(() => {
-    const t = typeName.value
-    if (t == 'text') {
-        return 0
-    }
-    if (t == 'block-static') {
-        return 1
-    }
-    if (t == 'block') {
-        return 2
-    }
-    if (t == 'block-hidden') {
-        return 3
-    }
-    if (t == 'playground') {
-        return 4
-    }
-    if (t == 'blockly') {
-        return 5
-    }
-    if (t == 'repl') {
-        return 6
-    }
-    if (t == 'data') {
-        return 7
-    }
-    return -1
-})
-const typeName = computed(() => {
-    let s = block.value.type.toLowerCase()
-    if (block.value.hidden) {
-        s += '-hidden'
-    }
-    if (block.value.static) {
-        s += '-static'
-    }
-    return s
-})
-const altCode = computed(() => {
-    if (block.value.alternativeContent === null) {
-        return ''
-    }
-    return block.value.alternativeContent
-})
-const code = computed({
-    get: () => {
-        if (!editMode.value) {
-            return block.value.actualContent()
-        }
-        return block.value.content
-    },
-    set: (newCode) => {
-        block.value.content = newCode
-    },
+    return classes.join(' ')
 })
 
-const options = computed(() => {
-    return {
-        mode: mode.value,
-        theme: theme.value,
-        lineNumbers: true,
-        line: true,
-        tabSize: 4,
-        indentUnit: 4,
-        autoCloseBrackets: true,
-        readOnly:
-            !editMode.value &&
-            (block.value.readonly || block.value.static || block.value.hidden || readonly.value),
-        gutters: ['diagnostics', 'CodeMirror-linenumbers'],
+const typeName = computed(() => {
+    let type = block.value.type.toLowerCase()
+    if (block.value.hidden) {
+        type += '-hidden'
     }
-})
-const editorLanguage = computed(() => {
-    switch (mode.value) {
-        case 'text/css':
-            return css
-        case 'text/html':
-            return html
-        case 'text/javascript':
-            return javascript
-        case 'text/json':
-            return json
-        case 'text/python':
-            return python
-        case 'text/x-java':
-            return java
-        case 'text/java':
-            return java
-        case 'text/cpp':
-            return cpp
-        default:
-            return undefined
+    if (block.value.static) {
+        type += '-static'
     }
+    return type
 })
-const editorReadOnly = computed(() => {
-    return (
+
+const iliasTypeNr = computed(() => {
+    const types = {
+        text: 0,
+        'block-static': 1,
+        block: 2,
+        'block-hidden': 3,
+        playground: 4,
+        blockly: 5,
+        repl: 6,
+        data: 7,
+    }
+    return types[typeName.value] ?? -1
+})
+
+const editorReadOnly = computed(
+    () =>
         !editMode.value &&
         (block.value.readonly || block.value.static || block.value.hidden || readonly.value)
-    )
-})
-const editorConfig = computed(() => ({}))
+)
 
-const editorExtensions = computed(() => {
-    return [
-        editorLanguage.value,
-        lineNumbers({
-            formatNumber: (n, state) => `${n + (block.value.firstLine - 1)}`,
-        }),
-    ]
+const code = computed({
+    get: () => (editMode.value ? block.value.content : block.value.actualContent()),
+    set: (newCode) => (block.value.content = newCode),
 })
 
-const editorConfigAlt = computed(() => editorConfig.value)
-const editorExtensionsAlt = computed(() => editorExtensions.value)
-const altOptions = computed(() => {
-    return options.value
-})
-const codemirror = computed((): any | undefined => {
-    if (codeBox.value === null || codeBox.value === undefined) {
-        return undefined
-    }
-    return (codeBox.value as any).codemirror
-})
+const altCode = computed(() => block.value.alternativeContent ?? '')
 
-const altcodemirror = computed((): any | undefined => {
-    if (altBox.value === undefined) {
-        return undefined
-    }
-    return (altBox.value as any).codemirror
-})
-const readyWhenMounted = computed(() => {
-    return false
-})
-const clearTagMarkers = () => {
-    if (codemirror.value === undefined) {
+// Methods
+function updateTagDisplay() {
+    if (
+        !editMode.value ||
+        !block.value?.appSettings?.randomizer?.active ||
+        !codeNeedsTagUpdate.value
+    ) {
         return
     }
-    let allMarks = codemirror.value.getDoc().getAllMarks()
-    allMarks.forEach((e) => {
-        if (e.className == tagger.className.rnd || e.className == tagger.className.templ) {
-            e.clear()
-        }
-    })
-    if (altcodemirror.value) {
-        allMarks = altcodemirror.value.getDoc().getAllMarks()
-        allMarks.forEach((e) => {
-            if (e.className == tagger.className.rnd || e.className == tagger.className.templ) {
-                e.clear()
+
+    codeNeedsTagUpdate.value = false
+
+    if (codeBox.value?.view) {
+        const markers = tagger.getMarkers(block.value.content)
+        codeBox.value.view.dispatch({
+            effects: markers.map((m) => ({
+                from: m.start,
+                to: m.end,
+                className: tagger.className[m.type],
+                title: m.name,
+            })),
+        })
+
+        nextTick(() => {
+            if (codeBox.value?.view) {
+                tagger.hookClick(codeBox.value.view.dom, block.value.scopeUUID)
+            }
+        })
+    }
+
+    if (altBox.value?.view) {
+        const markers = tagger.getMarkers(block.value.alternativeContent ?? '')
+        altBox.value.view.dispatch({
+            effects: markers.map((m) => ({
+                from: m.start,
+                to: m.end,
+                className: tagger.className[m.type],
+                title: m.name,
+            })),
+        })
+
+        nextTick(() => {
+            if (altBox.value?.view) {
+                tagger.hookClick(altBox.value.view.dom, block.value.scopeUUID)
             }
         })
     }
 }
-const clearErrorDisplay = () => {
-    if (codemirror.value === undefined) {
-        return
-    }
-    let allMarks = codemirror.value.getDoc().getAllMarks()
-    allMarks.forEach((e) => {
-        if (e.className == 'red-wave') {
-            e.clear()
-        }
-    })
-    codemirror.value.getDoc().clearGutter('diagnostics')
-}
-const onCodeReady = (editor) => {
-    if (
-        codemirror.value &&
-        codemirror.value.display &&
-        codemirror.value.display.input &&
-        codemirror.value.display.input.textarea
-    ) {
-        codemirror.value.display.input.textarea.className = 'noRTEditor'
-    }
-    const h = codeBox.value as any
-    h!.$el.querySelectorAll('textarea[name]').forEach((el) => {
-        el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
-        el.id = (codeBox.value as any)!.$el.id
-        $(el).text(block.value.content)
-        el.setAttribute('data-question', `${block.value.parentID}`)
-        el.setAttribute('data-blocktype', `${iliasTypeNr.value}`)
-        if (editMode.value) {
-            el.setAttribute('is-editmode', `${editMode.value}`)
-        }
-    })
-    updateDiagnosticDisplay()
-    onCodeChange(block.value.content)
-    whenBlockIsReady()
-}
-const onAltCodeReady = (editor) => {
-    console.d('READY')
-    if (
-        altcodemirror.value &&
-        altcodemirror.value.display &&
-        altcodemirror.value.display.input &&
-        altcodemirror.value.display.input.textarea
-    ) {
-        altcodemirror.value.display.input.textarea.className = 'noRTEditor'
-    }
-    const a = altBox.value as any
-    a!.$el.querySelectorAll('textarea[name]').forEach((el) => {
-        el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
-    })
-    nextTick(() => {
-        onAltCodeChange(block.value.alternativeContent)
-        updateTagDisplay()
-        updateHeight()
-    })
-}
-const onCodeFocus = (editor) => {}
-const onAltCodeFocus = (editor) => {}
-const onCodeChangeDefered = (newCode) => {
+
+function onCodeChangeDefered(newCode: string) {
     if (!editMode.value) {
         onCodeChange(newCode)
         return
     }
-    const now = new Date().getTime()
-    if (codeUpdateTimer !== null) {
+
+    const now = Date.now()
+
+    if (codeUpdateTimer) {
         clearTimeout(codeUpdateTimer)
-        codeUpdateTimer = null
     } else {
         codeUpdateStartTime.value = now
     }
-    const doIt = () => {
-        codeUpdateTimer = null
-        onCodeChange(newCode)
-    }
+
     if (now - codeUpdateStartTime.value > globalState.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
-        doIt()
+        onCodeChange(newCode)
         return
     }
+
     codeUpdateTimer = setTimeout(() => {
-        doIt()
+        codeUpdateTimer = null
+        onCodeChange(newCode)
     }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
 }
-const onCodeChange = (newCode) => {
-    if (codeBox.value === null || codeBox.value === undefined) {
+
+function onCodeChange(newCode: string) {
+    if (!codeBox.value) {
         return
     }
 
     block.value.lineCountHint = codeBox.value.lineCount()
     block.value.content = newCode
     updateTagDisplay()
+
     if (editMode.value) {
-        emit('code-changed-in-edit-mode', undefined)
+        emit('code-changed-in-edit-mode')
     } else if (emitWhenTypingInViewMode.value) {
-        if (continuousCodeUpdateTimer !== null) {
+        if (continuousCodeUpdateTimer) {
             clearTimeout(continuousCodeUpdateTimer)
-            continuousCodeUpdateTimer = null
         }
         continuousCodeUpdateTimer = setTimeout(() => {
-            emit('code-changed-in-view-mode', undefined)
+            emit('code-changed-in-view-mode')
         }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
     }
 }
-const didAddText = (t: string): void => {
-    if (
-        t.indexOf('!') >= 0 ||
-        t.indexOf(':') >= 0 ||
-        t.indexOf('+') >= 0 ||
-        t.indexOf('{') >= 0 ||
-        t.indexOf('}') >= 0 ||
-        t.indexOf('\n') >= 0
-    ) {
-        console.log("TAGGER: '" + t + "' needs update")
-        codeNeedsTagUpdate.value = true
-    }
-}
-const onCodeKeyHandle = (e, kEvent?: any) => {
-    if (kEvent !== undefined) {
-        if (kEvent.text !== undefined) {
-            kEvent.text.forEach((t) => {
-                didAddText(t)
-            })
-        } else if (kEvent.key !== undefined) {
-            if (kEvent.keyCode === 13) {
-                didAddText('\n')
-            } else {
-                didAddText(kEvent.key)
-            }
-        }
-    }
-}
-const onAltCodeChangeDefered = (newCode) => {
-    const now = new Date().getTime()
-    if (altCodeUpdateTimer.value !== null) {
-        clearTimeout(altCodeUpdateTimer.value)
-        altCodeUpdateTimer.value = null
+
+function onAltCodeChangeDefered(newCode: string) {
+    const now = Date.now()
+
+    if (altCodeUpdateTimer) {
+        clearTimeout(altCodeUpdateTimer)
     } else {
         altCodeUpdateStartTime.value = now
     }
-    const doIt = () => {
-        altCodeUpdateTimer.value = null
-        onAltCodeChange(newCode)
-    }
+
     if (now - altCodeUpdateStartTime.value > globalState.VUE_APP_CODE_BLOCK_MAX_TIMEOUT) {
-        doIt()
+        onAltCodeChange(newCode)
         return
     }
+
     altCodeUpdateTimer = setTimeout(() => {
-        doIt()
+        altCodeUpdateTimer = null
+        onAltCodeChange(newCode)
     }, globalState.VUE_APP_CODE_BLOCK_TIMEOUT)
 }
-const onAltCodeChange = (newCode) => {
-    if (altBox.value !== undefined && altBox.value !== null) {
-        const tb = (altBox.value as any).$el.querySelector('textarea[name]') as HTMLTextAreaElement
-        tb.value = newCode
+
+function onAltCodeChange(newCode: string) {
+    if (altBoxRaw.value) {
+        altBoxRaw.value.value = newCode
     }
     block.value.alternativeContent = newCode
     updateTagDisplay()
 }
-const updateHeight = () => {
-    if (visibleLines.value === 'auto' || block.value.static) {
-        if (codemirror.value) {
-            codemirror.value.setSize('height', 'auto')
-        }
-        if (altcodemirror.value) {
-            altcodemirror.value.setSize('height', 'auto')
-        }
-    } else {
-        if (codemirror.value) {
-            codemirror.value.setSize(null, Math.round(20 * Math.max(1, visibleLines.value)) + 9)
-        }
-        if (altcodemirror.value) {
-            altcodemirror.value.setSize(null, Math.round(20 * Math.max(1, visibleLines.value)) + 9)
-        }
-    }
-}
-const replaceTemplateTags = (o: ITagReplaceAction) => {
-    if (!editMode.value) {
+
+function onCodeReady({ view, container }: { view: EditorView; container: HTMLElement }) {
+    if (!container) {
         return
     }
-    if (o.scopeUUID != block.value.scopeUUID) {
-        return
-    }
-    block.value.content = tagger.replaceTemplateTagInString(block.value.content, o.name, o.newValue)
-}
-const updateTagDisplay = () => {
-    if (
-        !editMode.value ||
-        block.value === undefined ||
-        block.value.appSettings === undefined ||
-        block.value.appSettings.randomizer === undefined ||
-        !block.value.appSettings.randomizer.active ||
-        !codeNeedsTagUpdate.value
-    ) {
-        return
-    }
-    codeNeedsTagUpdate.value = false
-    clearTagMarkers()
-    tagger.getMarkers(block.value.content).forEach((m) => {
-        codemirror.value.getDoc().markText(m.start, m.end, {
-            className: tagger.className[m.type],
-            inclusiveLeft: true,
-            inclusiveRight: true,
-            title: m.name,
-            startStyle: 'tag-mark-start',
-            endStyle: 'tag-mark-end',
-        })
+
+    const textareas = container.querySelectorAll('textarea[name]')
+    textareas.forEach((el) => {
+        el.className = 'accqstXmlInput noRTEditor'
+        el.id = container.id
+        el.value = block.value.content
+        el.setAttribute('data-question', `${block.value.parentID}`)
+        el.setAttribute('data-blocktype', `${iliasTypeNr.value}`)
+        if (editMode.value) {
+            el.setAttribute('is-editmode', `${editMode.value}`)
+        }
     })
+
+    onCodeChange(block.value.content)
+    whenBlockIsReady()
+}
+
+function onAltCodeReady() {
     nextTick(() => {
-        tagger.hookClick((codeBox.value as any).$el, block.value.scopeUUID)
+        onAltCodeChange(block.value.alternativeContent ?? '')
+        updateTagDisplay()
     })
-    if (altcodemirror.value) {
-        tagger.getMarkers(block.value.alternativeContent).forEach((m) => {
-            altcodemirror.value.getDoc().markText(m.start, m.end, {
-                className: tagger.className[m.type],
-                inclusiveLeft: true,
-                inclusiveRight: true,
-                title: m.name,
-                startStyle: 'tag-mark-start',
-                endStyle: 'tag-mark-end',
-            })
-        })
-        nextTick(() => {
-            if (altBox.value !== undefined && altBox.value !== null) {
-                tagger.hookClick((altBox.value as any).$el, block.value.scopeUUID)
-            }
-        })
-    }
-}
-const updateDiagnosticDisplay = () => {
-    const val = errors.value
-    if (val !== undefined) {
-        clearErrorDisplay()
-        const first = block.value.firstLine
-        val.forEach((error) => {
-            if (error.start.column >= 0) {
-                codemirror.value.getDoc().markText(
-                    { line: error.start.line - first, ch: error.start.column },
-                    { line: error.end.line - first, ch: error.end.column },
-                    {
-                        className: 'red-wave',
-                        inclusiveLeft: true,
-                        inclusiveRight: true,
-                        title: error.message,
-                    }
-                )
-            }
-            let info = codemirror.value.getDoc().lineInfo(error.start.line - first)
-            let element =
-                info && info.gutterMarkers ? info.gutterMarkers['diagnostics'].$component : null
-            if (element == null) {
-                element = document.createElement('span')
-                codemirror.value
-                    .getDoc()
-                    .setGutterMarker(error.start.line - first, 'diagnostics', element)
-                // element.$component = new ErrorTipCtor({
-                //     propsData: {
-                //         errors: [],
-                //         severity: error.severity,
-                //     },
-                // }).$mount(element)
-                // element = element.$component
-            }
-            element.severity = Math.max(error.severity, element.severity)
-            if (element.errors.indexOf(error) == -1) {
-                element.errors.push(error)
-            }
-        })
-    } else {
-        clearErrorDisplay()
-    }
-}
-const onFirstLineChanged = (val) => {
-    if (codemirror.value) {
-        if (codemirror.value.options.firstLineNumber != block.value.firstLine) {
-            codemirror.value.options.firstLineNumber = block.value.firstLine
-            codemirror.value.refresh()
-        }
-    }
-}
-const onVisibleLinesChanged = (val) => {
-    updateHeight()
-}
-const onErrorsChanged = (val) => {
-    updateDiagnosticDisplay()
 }
 
-const firstLine = computed(() => {
-    return block.value.firstLine
-})
+function onCodeFocus() {
+    // Handle focus if needed
+}
 
-watch(firstLine, onFirstLineChanged)
-watch(visibleLines, onVisibleLinesChanged)
-watch(errors, onErrorsChanged)
-;(() => {
-    console.d('ReadyWhenMounted in CodeBlock', readyWhenMounted.value)
-})()
+function replaceTemplateTags(action: ITagReplaceAction) {
+    if (!editMode.value || action.scopeUUID !== block.value.scopeUUID) {
+        return
+    }
+
+    block.value.content = tagger.replaceTemplateTagInString(
+        block.value.content,
+        action.name,
+        action.newValue
+    )
+}
+
+// Lifecycle hooks
 onMounted(() => {
-    updateHeight()
-    if (editMode.value && codemirror.value) {
-        console.d('Attach')
-        const buildIt = () => {
-            console.log('EMIT')
-            emit('build')
-        }
-        codemirror.value.addKeyMap({
-            'Cmd-B': function (cMirror) {
-                buildIt()
-            },
-            'Ctrl-B': function (cMirror) {
-                buildIt()
-            },
-        })
-        codemirror.value.addKeyMap({
-            Tab: function (cMirror) {
-                cMirror.execCommand('insertSoftTab')
-            },
-        })
+    if (editMode.value && codeBox.value?.view) {
+        const buildHandler = () => emit('build')
+
+        // Add keybindings for build command
+        // codeBox.value.view.dispatch({
+        //     effects: [
+        //         { key: 'Cmd-B', run: buildHandler },
+        //         { key: 'Ctrl-B', run: buildHandler },
+        //     ],
+        // })
     }
+
     tagger.onReplaceTemplateTag(replaceTemplateTags)
     codeNeedsTagUpdate.value = true
     updateTagDisplay()
 })
+
 onBeforeUnmount(() => {
     tagger.offReplaceTemplateTag(replaceTemplateTags)
+
+    if (codeUpdateTimer) {
+        clearTimeout(codeUpdateTimer)
+    }
+    if (altCodeUpdateTimer) {
+        clearTimeout(altCodeUpdateTimer)
+    }
+    if (continuousCodeUpdateTimer) {
+        clearTimeout(continuousCodeUpdateTimer)
+    }
+})
+
+// Watch
+watch(
+    () => visibleLines.value,
+    () => {
+        if (!codeBox.value?.view) {
+            return
+        }
+
+        const height =
+            visibleLines.value === 'auto' || block.value.static
+                ? 'auto'
+                : `${Math.round(20 * Math.max(1, visibleLines.value)) + 9}px`
+
+        codeBox.value.view.dom.style.height = height
+        if (altBox.value?.view) {
+            altBox.value.view.dom.style.height = height
+        }
+    }
+)
+
+// Expose
+defineExpose({
+    view: computed(() => codeBox.value?.view),
+    lineCount: () => codeBox.value?.lineCount() ?? 0,
 })
 </script>
+
 <style scoped lang="sass">
 .hiddenBox
     display: none !important
@@ -692,4 +434,8 @@ onBeforeUnmount(() => {
 .staticBox
     opacity: 0.8
     filter: grayscale(20%)
+
+.codeblock
+    width: 100%
 </style>
+`
