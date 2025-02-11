@@ -419,7 +419,7 @@ compilerRegistry.registerDOMLib(
     [globalState.appState.baseurl + 'js/modelviewer.js/2.1.1/model-viewer-umd.min.js'],
     'modelviewer',
     '2.1.1',
-    '&lt;model-viewer&gt;',
+    'model-viewer',
     false,
     8000,
     (sandbox) => {}
