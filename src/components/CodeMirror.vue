@@ -1,6 +1,5 @@
 <template>
     <div class="code-editor">
-        {{ baseIndent }}
         <textarea
             style="display: none"
             readonly
@@ -39,6 +38,7 @@ import {
     indentNodeProp,
 } from '@codemirror/language'
 import {
+    ChangeSpec,
     Compartment,
     EditorSelection,
     EditorState,
@@ -47,6 +47,7 @@ import {
     StateEffect,
     StateField,
     type Transaction,
+    type Line,
 } from '@codemirror/state'
 import {
     Decoration,
@@ -86,6 +87,7 @@ import { basicLightTheme } from 'cm6-theme-basic-light'
 import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
 import { solarizedLightTheme } from 'cm6-theme-solarized-light'
 import { getSimpleIndentation } from '@/plugins/CMCodeIndentation'
+import { CodeSplitSegment } from '@/composables/useCodeEditor'
 
 // Add proper interface for error ranges
 interface ErrorRange {
@@ -108,6 +110,7 @@ interface Props {
     maxLines?: number
     tagSet?: IRandomizerSet | undefined
     baseIndent?: number
+    codeSplitSegment?: CodeSplitSegment
 }
 
 // Fix emit types to match expected usage
@@ -117,7 +120,6 @@ const emit = defineEmits<{
     update: [ViewUpdate]
     change: [EditorState]
     ready: [{ view: EditorView; state: EditorState; container: HTMLElement }]
-    indentationChange: [number]
 }>()
 
 const props = withDefaults(defineProps<Props>(), {
@@ -130,6 +132,7 @@ const props = withDefaults(defineProps<Props>(), {
     maxLines: 1,
     tagSet: undefined,
     baseIndent: 0,
+    codeSplitSegment: undefined,
 })
 const {
     name,
@@ -142,6 +145,7 @@ const {
     maxLines,
     tagSet,
     baseIndent,
+    codeSplitSegment,
 } = toRefs(props)
 
 // Replace code.value with proper v-model handling
@@ -203,18 +207,99 @@ const tagMarkField = createTagMarkField(tagSet)
 const tagTooltip = createTagTooltip(tagMarkField, tagSet)
 
 const getBaseIndent = (): number => {
-    return baseIndent.value
+    return 0 //baseIndent.value
+}
+
+const getIndentationInSource = (docString: string, pos: number): number => {
+    if (codeSplitSegment.value === undefined) {
+        return 0
+    }
+
+    const newCode =
+        codeSplitSegment.value.before +
+        (docString === '' ? '' : docString + '\n') +
+        codeSplitSegment.value.after
+
+    const newState = EditorState.create({
+        doc: newCode,
+        extensions: [
+            EditorState.tabSize.of(4),
+            indentUnit.of('    '),
+            languageCompartment.of(editorLanguage.value),
+        ],
+    })
+
+    const newPos = pos + codeSplitSegment.value.offset + 1
+    const defaultIndent = getSimpleIndentation(newState, newPos, getBaseIndent) ?? getBaseIndent()
+    console.log(
+        'DEBUG indent (segment)',
+        defaultIndent,
+        newState.doc.lineAt(newPos).text,
+        newPos,
+        codeSplitSegment.value
+    )
+    return defaultIndent
 }
 
 const getIndentationAt = (context: IndentContext, pos: number): number => {
+    if (codeSplitSegment.value) {
+        return getIndentationInSource(context.state.doc.toString(), pos)
+    }
     const defaultIndent = getSimpleIndentation(context, pos, getBaseIndent) ?? getBaseIndent()
-    console.log('DEBUG indent', defaultIndent, context.state.doc.lineAt(pos))
+    //console.log('DEBUG indent', defaultIndent, context.state.doc.lineAt(pos))
     return defaultIndent
+}
+
+function reformatCode(view: EditorView) {
+    // Get all lines
+    const changes: ChangeSpec = []
+    const doc = view.state.doc
+
+    //get all lines form the document
+    // Start with first line
+    const lines: Line[] = []
+    for (let pos = 0; pos <= doc.length; ) {
+        const line = doc.lineAt(pos)
+        if (line === undefined || line.to <= pos) {
+            break
+        }
+        lines.push(line)
+        pos = line.to + 1
+    }
+
+    // Iterate through each line
+    let before = ''
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i]
+        const after = lines
+            .filter((l) => l.from > line.from)
+            .map((l) => l.text + '\n')
+            .join('')
+        const newCode = before + line.text + '\n' + after
+        before += line.text + '\n'
+
+        const currentIndent = /^[\t ]*/.exec(line.text)![0].length
+        const indent = getIndentationInSource(newCode, line.from)
+
+        if (currentIndent !== indent) {
+            changes.push({
+                from: line.from,
+                to: line.from + currentIndent,
+                insert: ' '.repeat(indent),
+            })
+        }
+    }
+
+    // Apply all changes in one transaction
+    if (changes.length > 0) {
+        view.dispatch({ changes })
+    }
 }
 
 const createIndentService = (): Extension => {
     return indentationCompartment.of(
         indentService.of((context, pos) => {
+            //console.log('DEBUG indent service -- from main')
             return getIndentationAt(context, pos)
         })
     )
@@ -231,13 +316,6 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                 emit('update', update)
                 // Handle tag updates when document changes
                 markTags(update.view, tagSet)
-
-                // Add this block to check indentation after changes
-                const doc = update.state.doc
-                const lastPos = doc.length
-                const context = new IndentContext(update.state)
-
-                emit('indentationChange', getIndentationAt(context, lastPos))
             }
         }),
         EditorState.allowMultipleSelections.of(true),
@@ -254,8 +332,21 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         ),
         EditorView.domEventHandlers({
             keydown: (event: KeyboardEvent, view: EditorView) => {
+                if (event.key === 'ƒ') {
+                    if (event.altKey) {
+                        event.preventDefault()
+                        reformatCode(view)
+                        return false
+                    }
+                }
+
                 if (event.key === 'Tab') {
                     event.preventDefault()
+                    if (event.shiftKey && event.altKey) {
+                        // Handle Shift+Alt+Tab for reindenting the text
+                        reformatCode(view)
+                        return false
+                    }
                     if (event.shiftKey) {
                         // Handle Shift+Tab for unindent
                         return view.dispatch(
@@ -365,10 +456,6 @@ onMounted(() => {
 
         // Initialize tag marks
         markTags(editorView.value, tagSet)
-
-        // Calculate and emit initial indentation
-        const context = new IndentContext(editorView.value.state)
-        emit('indentationChange', getIndentationAt(context, editorView.value.state.doc.length))
 
         emit('ready', {
             view: editorView.value,
@@ -608,16 +695,6 @@ watch(
     },
     { deep: true }
 )
-
-// Add this watch handler
-watch(baseIndent, () => {
-    if (!editorView.value) {
-        return
-    }
-
-    const context = new IndentContext(editorView.value.state)
-    emit('indentationChange', getIndentationAt(context, editorView.value.state.doc.length))
-})
 
 defineExpose({
     view: editorView,

@@ -16,16 +16,14 @@ import {
     IOnScriptVersionChangeInfo,
     IOnSetAutoResetInfo,
     IOnThemeChangeInfo,
-    IOnTypeChangeInfo,
-    IOnVisibleLinesChangeInfo,
 } from '@/composables/basicBlocks'
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 import '@quasar/extras/material-icons/material-icons.css'
-import { toRefs } from 'vue'
+import { computed, ref, toRefs } from 'vue'
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
-import { ref } from 'vue'
+import { CodeSplit } from '@/composables/useCodeEditor'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
@@ -65,33 +63,52 @@ const {
     global,
 } = codeBlockSetup(blockStorage, editMode, props.eventHub)
 
+const codeSplit = computed<CodeSplit>(() => {
+    const codeSplit: CodeSplit = {
+        parts: [],
+        partIndex: new Map<string, number>(),
+    }
+    for (let b of blocks.value) {
+        if (b.hasCode) {
+            const code: string = editMode ? b.content : b.actualContent()
+            codeSplit.parts.push(code)
+            codeSplit.partIndex.set(b.uuid, codeSplit.parts.length - 1)
+        }
+    }
+    return codeSplit
+})
+
 // Replace the existing event handlers with the composable
 const { onTypeChange, onVisibleLinesChange } = useCodeBlockEvents(blockById, editMode)
 
 const blockIndentations = ref<Record<string, number>>({})
 
 const onIndentationChange = (blockId: string, level: number) => {
-  blockIndentations.value[blockId] = level
+    blockIndentations.value[blockId] = level
 }
 
 const getBaseIndentForBlock = (currentBlock: any): number => {
-  const currentIndex = blocks.value.findIndex(b => b.uuid === currentBlock.uuid)
-  if (currentIndex <= 0) return 0
-  
-  for (let i = currentIndex - 1; i >= 0; i--) {
-    const previousBlock = blocks.value[i]
-    if (previousBlock.hasCode) {
-      return blockIndentations.value[previousBlock.uuid] || 0
+    const currentIndex = blocks.value.findIndex((b) => b.uuid === currentBlock.uuid)
+    if (currentIndex <= 0) {
+        return 0
     }
-  }
-  
-  return 0
+
+    for (let i = currentIndex - 1; i >= 0; i--) {
+        const previousBlock = blocks.value[i]
+        if (previousBlock.hasCode) {
+            return blockIndentations.value[previousBlock.uuid] || 0
+        }
+    }
+
+    return 0
 }
 
 const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {
     if (editMode) {
         let bl = blockById(nfo.id)
-        if (bl === undefined) return
+        if (bl === undefined) {
+            return
+        }
         bl.width = nfo.width
         bl.height = nfo.height
         bl.align = nfo.align
@@ -114,7 +131,9 @@ const onScriptVersionChange = (nfo: IOnScriptVersionChangeInfo): void => {
 const onSetAutoReset = (nfo: IOnSetAutoResetInfo): void => {
     if (editMode) {
         let bl = blockById(nfo.id)
-        if (bl === undefined) return        
+        if (bl === undefined) {
+            return
+        }
         bl.shouldAutoreset = nfo.shouldAutoreset
     }
 }
@@ -122,7 +141,9 @@ const onSetAutoReset = (nfo: IOnSetAutoResetInfo): void => {
 const onReloadResources = (nfo: IOnReloadResourcesInfo): void => {
     if (editMode) {
         let bl = blockById(nfo.id)
-        if (bl === undefined) return        
+        if (bl === undefined) {
+            return
+        }
         bl.shouldReloadResources = nfo.shouldReloadResources
     }
 }
@@ -130,7 +151,9 @@ const onReloadResources = (nfo: IOnReloadResourcesInfo): void => {
 const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {
     if (editMode) {
         let bl = blockById(nfo.id)
-        if (bl === undefined) return
+        if (bl === undefined) {
+            return
+        }
         bl.generateTemplate = nfo.generateTemplate
     }
 }
@@ -257,7 +280,9 @@ const moveDown = (idx: number): void => {
 const onChangeOrder = (nfo: IOnChangeOrder): void => {
     if (editMode) {
         let bl = blockById(nfo.id)
-        if (bl === undefined) return
+        if (bl === undefined) {
+            return
+        }
         blockInfo.value.changeOrder(nfo.id, nfo.newID)
     }
 }
@@ -330,6 +355,7 @@ const addNewBlock = (): void => {
                 :tagSet="activeTagSet"
                 :base-indent="getBaseIndentForBlock(block)"
                 :emitWhenTypingInViewMode="continuousCompile"
+                :code-split="codeSplit"
                 @ready="blockBecameReady"
                 @build="run"
                 @code-changed-in-view-mode="onViewCodeChange"
@@ -417,9 +443,9 @@ const addNewBlock = (): void => {
                     style="border-radius: 0px"
                     :data-question="blockInfo.id"
                 >
-                    {{ $t('CodeBlocks.run') }}<span v-if="editMode" class="q-ml-xs">[{{$t('CodeBlocks.run_key')}}]</span>
+                    {{ $t('CodeBlocks.run')
+                    }}<span v-if="editMode" class="q-ml-xs">[{{ $t('CodeBlocks.run_key') }}]</span>
                     <q-icon right dark name="play_arrow"></q-icon>
-                    
                 </q-btn>
                 <div class="animated fadeIn"></div>
                 <transition

@@ -13,7 +13,6 @@
             :is-editmode="editMode"
             class="accqstXmlInput noRTEditor"
         />
-
         <code-mirror
             ref="codeBox"
             v-model="code"
@@ -28,11 +27,10 @@
             :errors="block.errors"
             :max-lines="totalLines"
             :tag-set="editMode ? tagSet : undefined"
-            :base-indent="baseIndent"
+            :code-split-segment="codeSplitSegment"
             @update:model-value="onCodeChangeDefered"
             @focus="onCodeFocus"
             @ready="onCodeReady"
-            @indentation-change="(level: number) => emit('indentation-change', level)"
         />
 
         <div v-if="editMode && hasAlternativeContent">
@@ -53,7 +51,7 @@
                 :theme="block.themeForCodeBlock"
                 :language="mode"
                 :read-only="editorReadOnly"
-                :base-indent="baseIndent"
+                :code-split-segment="codeSplitSegment"
                 @update:model-value="onAltCodeChangeDefered"
                 @ready="onAltCodeReady"
             />
@@ -85,7 +83,7 @@ import {
     toRefs,
     watch,
 } from 'vue'
-import { useCodeEditor } from '@/composables/useCodeEditor'
+import { CodeSplit, CodeSplitSegment, useCodeEditor } from '@/composables/useCodeEditor'
 
 // Props definition
 interface Props extends EditableBlockProps {
@@ -93,8 +91,9 @@ interface Props extends EditableBlockProps {
     emitWhenTypingInViewMode?: boolean
     readonly?: boolean
     mode?: string
-    tagSet?: IRandomizerSet | undefined
+    tagSet?: IRandomizerSet
     baseIndent?: number
+    codeSplit?: CodeSplit
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -105,6 +104,7 @@ const props = withDefaults(defineProps<Props>(), {
     mode: 'text/javascript',
     tagSet: undefined,
     baseIndent: 0,
+    codeSplit: undefined,
 })
 
 // Emits
@@ -113,7 +113,6 @@ const emit = defineEmits<{
     (e: 'code-changed-in-view-mode'): void
     (e: 'build'): void
     (e: 'ready', block: BlockData): void
-    (e: 'indentation-change', level: number): void
 }>()
 
 // Vue instance
@@ -140,6 +139,7 @@ const {
     mode,
     tagSet,
     baseIndent,
+    codeSplit,
 } = toRefs(props)
 
 // Refs
@@ -157,6 +157,29 @@ const altCodeUpdateStartTime = ref<number>(0)
 let codeNeedsTagUpdate = ref<boolean>(true)
 
 // Computed properties
+const codeSplitSegment = computed<CodeSplitSegment | undefined>(() => {
+    if (
+        codeSplit.value === undefined ||
+        !codeSplit.value.partIndex ||
+        block.value === undefined ||
+        !block.value.uuid
+    ) {
+        return undefined
+    }
+
+    const index = codeSplit.value.partIndex.get(block.value.uuid)
+    if (index === undefined || index < 0 || index >= codeSplit.value.parts.length) {
+        return undefined
+    }
+    let before = codeSplit.value.parts.slice(0, index).join('\n')
+    if (before !== '') {
+        before += '\n'
+    }
+    const after = codeSplit.value.parts.slice(index + 1).join('\n')
+
+    return { before, after, offset: before.length }
+})
+
 const totalLines = computed(() => blockStorage.appInfo.value.totalLines())
 
 const hasAlternativeContent = computed(

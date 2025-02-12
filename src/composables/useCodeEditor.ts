@@ -2,6 +2,17 @@ import { ref, computed, type Ref } from 'vue'
 import type { BlockData } from '@/lib/codeBlocksManager'
 import type { IRandomizerSet } from '@/lib/ICodeBlocks'
 
+export interface CodeSplitSegment {
+    before: string
+    after: string
+    offset: number
+}
+
+export interface CodeSplit {
+    parts: string[]
+    partIndex: Map<string, number>
+}
+
 export function useCodeEditor(
     block: Ref<BlockData>,
     editMode: Ref<boolean>,
@@ -37,4 +48,4 @@ export function useCodeEditor(
         editorReadOnly,
         code,
     }
-} 
+}
