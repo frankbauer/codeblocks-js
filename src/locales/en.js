@@ -51,6 +51,7 @@ export default {
     CodeBlocks: {
         run_hint:
             'Press <code>Ctrl</code>+<code>W</code> or <code>Ctrl</code>+<code>J</code> when in a code box to run code.',
+        run_key: 'Ctrl+J',
         run: 'Run',
         start: 'Start',
         stop: 'Stop',

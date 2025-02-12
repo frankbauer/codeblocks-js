@@ -411,11 +411,9 @@ const addNewBlock = (): void => {
                     style="border-radius: 0px"
                     :data-question="blockInfo.id"
                 >
-                    {{ $t('CodeBlocks.run') }}
+                    {{ $t('CodeBlocks.run') }}<span v-if="editMode" class="q-ml-xs">[{{$t('CodeBlocks.run_key')}}]</span>
                     <q-icon right dark name="play_arrow"></q-icon>
-                    <q-tooltip :delay="200" v-if="editMode">
-                        <span v-html="$t('CodeBlocks.run_hint')"></span>
-                    </q-tooltip>
+                    
                 </q-btn>
                 <div class="animated fadeIn"></div>
                 <transition
