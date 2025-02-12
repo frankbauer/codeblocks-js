@@ -83,7 +83,7 @@ import {
     onMounted,
     ref,
     toRefs,
-    watch
+    watch,
 } from 'vue'
 import { useCodeEditor } from '@/composables/useCodeEditor'
 
@@ -131,8 +131,16 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
 )
 
 // Destructure props
-const { namePrefix, emitWhenTypingInViewMode, readonly, editMode, visibleLines, mode, tagSet, baseIndent } =
-    toRefs(props)
+const {
+    namePrefix,
+    emitWhenTypingInViewMode,
+    readonly,
+    editMode,
+    visibleLines,
+    mode,
+    tagSet,
+    baseIndent,
+} = toRefs(props)
 
 // Refs
 const codeBox = ref<InstanceType<typeof CodeMirror> | null>(null)
@@ -186,14 +194,13 @@ const altCode = computed({
     get: () => block.value.alternativeContent ?? '',
     set: (newCode) => {
         block.value.alternativeContent = newCode
-    }
+    },
 })
 
 // Methods
 function posToOffset(view: EditorView, pos: { line: number; ch: number }): number {
     return view.state.doc.line(pos.line + 1).from + pos.ch
 }
-
 
 function onCodeChangeDefered(newCode: string) {
     if (!editMode.value) {
@@ -327,7 +334,7 @@ onMounted(() => {
     }
 
     tagger.onReplaceTemplateTag(replaceTemplateTags)
-    codeNeedsTagUpdate = true
+    codeNeedsTagUpdate.value = true
 })
 
 onBeforeUnmount(() => {

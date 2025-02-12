@@ -29,19 +29,34 @@ import { java } from '@codemirror/lang-java'
 import { javascript } from '@codemirror/lang-javascript'
 import { json } from '@codemirror/lang-json'
 import { python } from '@codemirror/lang-python'
-import { indentUnit, syntaxHighlighting, indentService, syntaxTree,  IndentContext, TreeIndentContext, indentNodeProp } from '@codemirror/language'
 import {
-    Compartment, EditorSelection, EditorState,
-    type Extension, RangeSetBuilder,
+    indentUnit,
+    syntaxHighlighting,
+    indentService,
+    syntaxTree,
+    IndentContext,
+    TreeIndentContext,
+    indentNodeProp,
+} from '@codemirror/language'
+import {
+    Compartment,
+    EditorSelection,
+    EditorState,
+    type Extension,
+    RangeSetBuilder,
     StateEffect,
     StateField,
-    type Transaction
+    type Transaction,
 } from '@codemirror/state'
 import {
     Decoration,
     DecorationSet,
-    gutter, GutterMarker, hoverTooltip, keymap, lineNumbers,
-    ViewUpdate
+    gutter,
+    GutterMarker,
+    hoverTooltip,
+    keymap,
+    lineNumbers,
+    ViewUpdate,
 } from '@codemirror/view'
 import { EditorView, minimalSetup } from 'codemirror'
 import { QIcon, QTooltip, Quasar } from 'quasar'
@@ -64,13 +79,12 @@ import {
     createTagHighlightStyle,
     createTagMarkField,
     createTagTooltip,
-    markTags
+    markTags,
 } from '@/plugins/tagHighlighter'
 import { basicDarkTheme } from 'cm6-theme-basic-dark'
 import { basicLightTheme } from 'cm6-theme-basic-light'
 import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
 import { solarizedLightTheme } from 'cm6-theme-solarized-light'
-import { NodeProp, SyntaxNode } from '@lezer/common'
 import { getSimpleIndentation } from '@/plugins/CMCodeIndentation'
 
 // Add proper interface for error ranges
@@ -99,11 +113,11 @@ interface Props {
 // Fix emit types to match expected usage
 const emit = defineEmits<{
     'update:modelValue': [string]
-    'focus': [boolean]
-    'update': [ViewUpdate]
-    'change': [EditorState]
-    'ready': [{ view: EditorView; state: EditorState; container: HTMLElement }]
-    'indentationChange': [number]
+    focus: [boolean]
+    update: [ViewUpdate]
+    change: [EditorState]
+    ready: [{ view: EditorView; state: EditorState; container: HTMLElement }]
+    indentationChange: [number]
 }>()
 
 const props = withDefaults(defineProps<Props>(), {
@@ -117,7 +131,18 @@ const props = withDefaults(defineProps<Props>(), {
     tagSet: undefined,
     baseIndent: 0,
 })
-const { name, dataQuestion, theme, language, firstLine, readOnly, errors, maxLines, tagSet, baseIndent } = toRefs(props)
+const {
+    name,
+    dataQuestion,
+    theme,
+    language,
+    firstLine,
+    readOnly,
+    errors,
+    maxLines,
+    tagSet,
+    baseIndent,
+} = toRefs(props)
 
 // Replace code.value with proper v-model handling
 const code = defineModel<string>('modelValue')
@@ -184,13 +209,15 @@ const getBaseIndent = (): number => {
 const getIndentationAt = (context: IndentContext, pos: number): number => {
     const defaultIndent = getSimpleIndentation(context, pos, getBaseIndent) ?? getBaseIndent()
     console.log('DEBUG indent', defaultIndent, context.state.doc.lineAt(pos))
-    return defaultIndent   
+    return defaultIndent
 }
 
 const createIndentService = (): Extension => {
-    return indentationCompartment.of(indentService.of((context, pos) => {
-        return getIndentationAt(context, pos)        
-    }))
+    return indentationCompartment.of(
+        indentService.of((context, pos) => {
+            return getIndentationAt(context, pos)
+        })
+    )
 }
 
 const extensions: ComputedRef<Extension[]> = computed(() => {
@@ -204,13 +231,13 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                 emit('update', update)
                 // Handle tag updates when document changes
                 markTags(update.view, tagSet)
-                
+
                 // Add this block to check indentation after changes
                 const doc = update.state.doc
                 const lastPos = doc.length
                 const context = new IndentContext(update.state)
 
-                emit('indentationChange',  getIndentationAt(context, lastPos))
+                emit('indentationChange', getIndentationAt(context, lastPos))
             }
         }),
         EditorState.allowMultipleSelections.of(true),
@@ -274,7 +301,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         keymap.of([indentWithTab]),
         syntaxHighlighting(createTagHighlightStyle()),
         autocompletion({
-            override: [createTagCompletions(tagSet)]
+            override: [createTagCompletions(tagSet)],
         }),
         tagMarkField,
         tagTooltip,
@@ -288,10 +315,13 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                     create() {
                         const dom = document.createElement('div')
                         dom.textContent = error.message
-                        dom.className = 'code-tooltip ' + 
-                            (error.severity === ErrorSeverity.Warning ? 'warning-tooltip' : 'error-tooltip')
+                        dom.className =
+                            'code-tooltip ' +
+                            (error.severity === ErrorSeverity.Warning
+                                ? 'warning-tooltip'
+                                : 'error-tooltip')
                         return { dom }
-                    }
+                    },
                 }
             }
             return null
@@ -332,7 +362,7 @@ onMounted(() => {
 
         // Initialize error underlining
         underlineErrors()
-        
+
         // Initialize tag marks
         markTags(editorView.value, tagSet)
 
@@ -444,7 +474,7 @@ const addUnderline = StateEffect.define<{
         to: change.mapPos(to),
         severity,
         message,
-        decoration
+        decoration,
     }),
 })
 
@@ -462,7 +492,8 @@ const underlineField = StateField.define<DecorationSet>({
             if (e.is(clearUnderlines)) {
                 underlines = Decoration.none
             } else if (e.is(addUnderline)) {
-                const decoration = e.value.decoration || underlineMarkError(e.value.severity, e.value.message)
+                const decoration =
+                    e.value.decoration || underlineMarkError(e.value.severity, e.value.message)
                 underlines = underlines.update({
                     add: [decoration.range(e.value.from, e.value.to)],
                 })
@@ -509,9 +540,9 @@ const errorRanges = computed(() => {
 function underlineErrors() {
     let effects: StateEffect<unknown>[] = [
         clearUnderlines.of(null),
-        ...errorRanges.value.map((e) => addUnderline.of(e))
+        ...errorRanges.value.map((e) => addUnderline.of(e)),
     ]
-    
+
     editorView.value!.dispatch({ effects })
     return true
 }
@@ -567,17 +598,25 @@ watch(
     { immediate: true, deep: true }
 )
 
-watch(tagSet, () => {
-    if (!editorView.value) return
-    markTags(editorView.value, tagSet)
-}, { deep: true })
+watch(
+    tagSet,
+    () => {
+        if (!editorView.value) {
+            return
+        }
+        markTags(editorView.value, tagSet)
+    },
+    { deep: true }
+)
 
 // Add this watch handler
 watch(baseIndent, () => {
-    if (!editorView.value) return
-    
+    if (!editorView.value) {
+        return
+    }
+
     const context = new IndentContext(editorView.value.state)
-    emit('indentationChange', getIndentationAt(context,  editorView.value.state.doc.length))
+    emit('indentationChange', getIndentationAt(context, editorView.value.state.doc.length))
 })
 
 defineExpose({
@@ -635,23 +674,23 @@ defineExpose({
                 font-weight: 400
                 border-color: #e5a91e
 
-    .cm-tooltip.cm-tooltip-autocomplete 
+    .cm-tooltip.cm-tooltip-autocomplete
         background-color: rgba(255, 255, 255, 0.95)
         border: 1px solid #ddd
         border-radius: 4px
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15)
-        
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15)
+
         > ul
             font-family: "Source Code Pro", monospace
             padding: 4px 0
-            
+
             > li
                 padding: 4px 8px
-                
+
                 &[aria-selected]
                     background-color: #0366d6
                     color: white
-                
+
                 .cm-completionDetail
                     color: #666
                     font-size: 0.9em
