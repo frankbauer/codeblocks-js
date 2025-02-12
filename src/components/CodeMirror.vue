@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import ErrorTip from '@/components/ErrorTip.vue'
-import { autocompletion } from '@codemirror/autocomplete'
 import { indentWithTab } from '@codemirror/commands'
 import { cpp } from '@codemirror/lang-cpp'
 import { css } from '@codemirror/lang-css'
@@ -28,6 +27,8 @@ import { java } from '@codemirror/lang-java'
 import { javascript } from '@codemirror/lang-javascript'
 import { json } from '@codemirror/lang-json'
 import { python } from '@codemirror/lang-python'
+import { CompletionContext, CompletionResult } from '@codemirror/autocomplete'
+import { autocompletion, completionKeymap } from '@codemirror/autocomplete'
 import {
     indentUnit,
     syntaxHighlighting,
@@ -67,6 +68,7 @@ import {
     createApp,
     nextTick,
     onMounted,
+    Ref,
     ref,
     shallowRef,
     toRefs,
@@ -88,6 +90,7 @@ import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
 import { solarizedLightTheme } from 'cm6-theme-solarized-light'
 import { getSimpleIndentation } from '@/plugins/CMCodeIndentation'
 import { CodeSplitSegment } from '@/composables/useCodeEditor'
+import { createJavaCompletions } from '@/plugins/javaCompletions'
 
 // Add proper interface for error ranges
 interface ErrorRange {
@@ -198,6 +201,7 @@ const editorLanguage = computed(() => {
     }
 })
 const languageCompartment = new Compartment()
+const languageAutoCompleteCompartment = new Compartment()
 const themeCompartment = new Compartment()
 const readOnlyCompartment = new Compartment()
 const lineNumbersCompartment = new Compartment()
@@ -229,15 +233,15 @@ const getIndentationInSource = (docString: string, pos: number): number => {
         ],
     })
 
-    const newPos = pos + codeSplitSegment.value.offset + 1
+    const newPos = pos + codeSplitSegment.value.offset
     const defaultIndent = getSimpleIndentation(newState, newPos, getBaseIndent) ?? getBaseIndent()
-    console.log(
-        'DEBUG indent (segment)',
-        defaultIndent,
-        newState.doc.lineAt(newPos).text,
-        newPos,
-        codeSplitSegment.value
-    )
+    // console.log(
+    //     'DEBUG indent (segment)',
+    //     defaultIndent,
+    //     newState.doc.lineAt(newPos).text,
+    //     newPos,
+    //     codeSplitSegment.value
+    // )
     return defaultIndent
 }
 
@@ -303,6 +307,19 @@ const createIndentService = (): Extension => {
             return getIndentationAt(context, pos)
         })
     )
+}
+
+function combinedCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
+    const tagCompletions = createTagCompletions(tagSet)
+    if (language.value === 'text/java' || language.value === 'text/x-java') {
+        return (context: CompletionContext): CompletionResult | null => {
+            const res = tagCompletions(context)
+            if (res === null) {
+                return createJavaCompletions(context)
+            }
+            return res
+        }
+    }
 }
 
 const extensions: ComputedRef<Extension[]> = computed(() => {
@@ -391,9 +408,17 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         }),
         keymap.of([indentWithTab]),
         syntaxHighlighting(createTagHighlightStyle()),
+        languageAutoCompleteCompartment.of(
+            editorLanguage.value.language.data.of({
+                autocomplete: combinedCompletions(tagSet),
+            })
+        ),
         autocompletion({
-            override: [createTagCompletions(tagSet)],
+            //   override: [createTagCompletions(tagSet)],
+            defaultKeymap: true,
+            activateOnTyping: true,
         }),
+        keymap.of([...completionKeymap]),
         tagMarkField,
         tagTooltip,
         underlineField,
@@ -490,6 +515,13 @@ watch(editorLanguage, (newValue) => {
 
     editorView.value.dispatch({
         effects: languageCompartment.reconfigure(newValue),
+    })
+    editorView.value.dispatch({
+        effects: languageAutoCompleteCompartment.reconfigure(
+            newValue.language.data.of({
+                autocomplete: combinedCompletions(tagSet),
+            })
+        ),
     })
 })
 
