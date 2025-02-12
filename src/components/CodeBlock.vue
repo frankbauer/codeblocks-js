@@ -210,59 +210,6 @@ function posToOffset(view: EditorView, pos: { line: number; ch: number }): numbe
     return view.state.doc.line(pos.line + 1).from + pos.ch
 }
 
-function updateTagDisplay() {
-    if (
-        !editMode.value ||
-        !block.value?.appSettings?.randomizer?.active ||
-        !codeNeedsTagUpdate.value
-    ) {
-        return
-    }
-
-    codeNeedsTagUpdate.value = false
-
-    if (codeBox.value?.view) {
-        const markers = tagger.getMarkers(block.value.content)
-        const markerEffects = markers.map(m => 
-            StateEffect.define<{
-                from: number;
-                to: number;
-                className: string;
-                title: string;
-            }>().of({
-                from: posToOffset(codeBox.value!.view!, m.start),
-                to: posToOffset(codeBox.value!.view!, m.end),
-                className: tagger.className[m.type],
-                title: m.name
-            })
-        )
-        
-        codeBox.value.view.dispatch({
-            effects: markerEffects
-        })        
-    }
-
-    if (altBox.value?.view) {
-        const markers = tagger.getMarkers(block.value.alternativeContent ?? '')
-        const markerEffects = markers.map(m => 
-            StateEffect.define<{
-                from: number;
-                to: number;
-                className: string;
-                title: string;
-            }>().of({
-                from: posToOffset(altBox.value!.view!, m.start),
-                to: posToOffset(altBox.value!.view!, m.end),
-                className: tagger.className[m.type],
-                title: m.name
-            })
-        )
-
-        altBox.value.view.dispatch({
-            effects: markerEffects
-        })
-    }
-}
 
 function onCodeChangeDefered(newCode: string) {
     if (!editMode.value) {
@@ -296,7 +243,6 @@ function onCodeChange(newCode: string) {
 
     block.value.lineCountHint = codeBox.value.lineCount()
     block.value.content = newCode
-    updateTagDisplay()
 
     if (editMode.value) {
         emit('code-changed-in-edit-mode')
@@ -335,7 +281,6 @@ function onAltCodeChange(newCode: string) {
         altBoxRaw.value.value = newCode
     }
     block.value.alternativeContent = newCode
-    updateTagDisplay()
 }
 
 function onCodeReady({ view, container }: { view: EditorView; container: HTMLElement }) {
@@ -364,7 +309,6 @@ function onCodeReady({ view, container }: { view: EditorView; container: HTMLEle
 function onAltCodeReady() {
     nextTick(() => {
         onAltCodeChange(block.value.alternativeContent ?? '')
-        updateTagDisplay()
     })
 }
 
@@ -400,7 +344,6 @@ onMounted(() => {
 
     tagger.onReplaceTemplateTag(replaceTemplateTags)
     codeNeedsTagUpdate.value = true
-    updateTagDisplay()
 })
 
 onBeforeUnmount(() => {
