@@ -28,9 +28,11 @@
             :errors="block.errors"
             :max-lines="totalLines"
             :tag-set="editMode ? tagSet : undefined"
+            :base-indent="baseIndent"
             @update:model-value="onCodeChangeDefered"
             @focus="onCodeFocus"
             @ready="onCodeReady"
+            @indentation-change="(level) => emit('indentationChange', level)"
         />
 
         <div v-if="editMode && hasAlternativeContent">
@@ -51,6 +53,7 @@
                 :theme="block.themeForCodeBlock"
                 :language="mode"
                 :read-only="editorReadOnly"
+                :base-indent="baseIndent"
                 @update:model-value="onAltCodeChangeDefered"
                 @ready="onAltCodeReady"
             />
@@ -91,6 +94,7 @@ interface Props extends EditableBlockProps {
     readonly?: boolean
     mode?: string
     tagSet?: IRandomizerSet | undefined
+    baseIndent?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -100,6 +104,7 @@ const props = withDefaults(defineProps<Props>(), {
     readonly: false,
     mode: 'text/javascript',
     tagSet: undefined,
+    baseIndent: 0,
 })
 
 // Emits
@@ -108,6 +113,7 @@ const emit = defineEmits<{
     (e: 'code-changed-in-view-mode'): void
     (e: 'build'): void
     (e: 'ready', block: BlockData): void
+    (e: 'indentationChange', level: number): void
 }>()
 
 // Vue instance
@@ -125,7 +131,7 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
 )
 
 // Destructure props
-const { namePrefix, emitWhenTypingInViewMode, readonly, editMode, visibleLines, mode, tagSet } =
+const { namePrefix, emitWhenTypingInViewMode, readonly, editMode, visibleLines, mode, tagSet, baseIndent } =
     toRefs(props)
 
 // Refs

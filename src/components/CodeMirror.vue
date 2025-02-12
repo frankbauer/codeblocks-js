@@ -103,6 +103,7 @@ const emit = defineEmits<{
     'update': [ViewUpdate]
     'change': [EditorState]
     'ready': [{ view: EditorView; state: EditorState; container: HTMLElement }]
+    'indentationChange': [number]
 }>()
 
 const props = withDefaults(defineProps<Props>(), {
@@ -197,6 +198,14 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                 emit('update', update)
                 // Handle tag updates when document changes
                 markTags(update.view, tagSet)
+                
+                // Add this block to check indentation after changes
+                const doc = update.state.doc
+                const lastPos = doc.length
+                const context = new IndentContext(update.state)
+                const indentLevel = getSimpleIndentation(context, lastPos, () => baseIndent.value)
+                console.log("indentationChange", indentLevel)
+                emit('indentationChange', indentLevel)
             }
         }),
         EditorState.allowMultipleSelections.of(true),
