@@ -1,7 +1,6 @@
 import { AppContext, BlockData, IAppSettings } from '@/lib/codeBlocksManager'
 import MainBlock from '@/lib/MainBlock'
 import { computed, ComputedRef, Ref, ref, UnwrapNestedRefs, UnwrapRef } from 'vue'
-import { codeBlockSetup } from '@/composables/basicBlocks'
 
 const storage: Ref<UnwrapNestedRefs<MainBlock>>[] = []
 
