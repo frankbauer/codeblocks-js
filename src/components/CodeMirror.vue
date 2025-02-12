@@ -177,13 +177,19 @@ const indentationCompartment = new Compartment()
 const tagMarkField = createTagMarkField(tagSet)
 const tagTooltip = createTagTooltip(tagMarkField, tagSet)
 
+const getBaseIndent = (): number => {
+    return baseIndent.value
+}
 
+const getIndentationAt = (context: IndentContext, pos: number): number => {
+    const defaultIndent = getSimpleIndentation(context, pos, getBaseIndent) ?? getBaseIndent()
+    console.log('DEBUG indent', defaultIndent, context.state.doc.lineAt(pos))
+    return defaultIndent   
+}
 
-const createIndentService = (baseIndent: number, topIndent: ()=>number): Extension => {
+const createIndentService = (): Extension => {
     return indentationCompartment.of(indentService.of((context, pos) => {
-        const defaultIndent = getSimpleIndentation(context, pos, topIndent)
-        console.log('defaultIndent', defaultIndent, context.state.doc.lineAt(pos))
-        return defaultIndent        
+        return getIndentationAt(context, pos)        
     }))
 }
 
@@ -203,9 +209,8 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                 const doc = update.state.doc
                 const lastPos = doc.length
                 const context = new IndentContext(update.state)
-                const indentLevel = getSimpleIndentation(context, lastPos, () => baseIndent.value)
-                console.log("indentationChange", indentLevel)
-                emit('indentationChange', indentLevel)
+
+                emit('indentationChange',  getIndentationAt(context, lastPos))
             }
         }),
         EditorState.allowMultipleSelections.of(true),
@@ -292,7 +297,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
             return null
         }),
         errorGutter,
-        createIndentService(baseIndent.value, ()=>baseIndent.value),
+        createIndentService(),
     ] as Extension[]
 })
 
@@ -330,6 +335,10 @@ onMounted(() => {
         
         // Initialize tag marks
         markTags(editorView.value, tagSet)
+
+        // Calculate and emit initial indentation
+        const context = new IndentContext(editorView.value.state)
+        emit('indentationChange', getIndentationAt(context, editorView.value.state.doc.length))
 
         emit('ready', {
             view: editorView.value,
@@ -563,14 +572,12 @@ watch(tagSet, () => {
     markTags(editorView.value, tagSet)
 }, { deep: true })
 
-watch(baseIndent, (newValue) => {
-    if (editorView.value === null) return
+// Add this watch handler
+watch(baseIndent, () => {
+    if (!editorView.value) return
     
-    editorView.value.dispatch({
-        effects: indentationCompartment.reconfigure(
-            createIndentService(newValue, ()=>newValue)
-        )
-    })
+    const context = new IndentContext(editorView.value.state)
+    emit('indentationChange', getIndentationAt(context,  editorView.value.state.doc.length))
 })
 
 defineExpose({

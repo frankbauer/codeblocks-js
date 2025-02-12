@@ -32,7 +32,7 @@
             @update:model-value="onCodeChangeDefered"
             @focus="onCodeFocus"
             @ready="onCodeReady"
-            @indentation-change="(level) => emit('indentationChange', level)"
+            @indentation-change="(level: number) => emit('indentation-change', level)"
         />
 
         <div v-if="editMode && hasAlternativeContent">
@@ -113,7 +113,7 @@ const emit = defineEmits<{
     (e: 'code-changed-in-view-mode'): void
     (e: 'build'): void
     (e: 'ready', block: BlockData): void
-    (e: 'indentationChange', level: number): void
+    (e: 'indentation-change', level: number): void
 }>()
 
 // Vue instance
@@ -146,7 +146,7 @@ let altCodeUpdateTimer: ReturnType<typeof setTimeout> | null = null
 let continuousCodeUpdateTimer: ReturnType<typeof setTimeout> | null = null
 const codeUpdateStartTime = ref<number>(0)
 const altCodeUpdateStartTime = ref<number>(0)
-const codeNeedsTagUpdate = ref<boolean>(true)
+let codeNeedsTagUpdate = ref<boolean>(true)
 
 // Computed properties
 const totalLines = computed(() => blockStorage.appInfo.value.totalLines())
@@ -327,7 +327,7 @@ onMounted(() => {
     }
 
     tagger.onReplaceTemplateTag(replaceTemplateTags)
-    codeNeedsTagUpdate.value = true
+    codeNeedsTagUpdate = true
 })
 
 onBeforeUnmount(() => {
