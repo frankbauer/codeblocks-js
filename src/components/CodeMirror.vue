@@ -45,7 +45,7 @@ import {
     StateField,
     type Transaction,
 } from '@codemirror/state'
-import { GutterMarker } from '@codemirror/gutter'
+import { GutterMarker } from '@codemirror/view'
 import {
     Decoration,
     DecorationSet,
@@ -378,7 +378,7 @@ const underlineField = StateField.define<DecorationSet>({
             } else if (e.is(addUnderline)) {
                 underlines = underlines.update({
                     add: [
-                        underlineMarkError(e.value.type, e.value.message).range(
+                        underlineMarkError(e.value.severity, e.value.message).range(
                             e.value.from,
                             e.value.to
                         ),
@@ -475,7 +475,6 @@ class ErrorMarker extends GutterMarker {
     }
 
     toDOM() {
-        const isWarning = this.severity === ErrorSeverity.Warning
         const marker = document.createElement('span')
         const app = createApp(ErrorTip, {
             errors: [
@@ -504,7 +503,7 @@ const errorGutter = gutter({
             builder.add(line.from, line.from, new ErrorMarker(e.severity, e.message))
         })
 
-        return builder.finish() as RangeSet<GutterMarker>
+        return builder.finish()
     },
 })
 
