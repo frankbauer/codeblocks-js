@@ -36,9 +36,9 @@
             <div class="q-mt-lg text-subtitle2 q-pb-xs">{{ $t('CodeBlock.Initial_Content') }}</div>
             <textarea
                 ref="altBoxRaw"
-                style="display: none"
+                style="display: block"
                 readonly
-                v-model="block.altCode"
+                v-model="block.alternativeContent"
                 :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
                 class="accqstXmlInput noRTEditor"
             />
@@ -58,30 +58,29 @@
 </template>
 
 <script setup lang="ts">
-import {
-    toRefs,
-    ref,
-    computed,
-    watch,
-    onMounted,
-    onBeforeUnmount,
-    getCurrentInstance,
-    nextTick,
-    type Ref,
-} from 'vue'
 import CodeMirror from '@/components/CodeMirror.vue'
-import type { EditorView } from '@codemirror/view'
-import type { IRandomizerSet } from '@/lib/ICodeBlocks'
-import type { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
-import type { BlockData } from '@/lib/codeBlocksManager'
-import { tagger, type ITagReplaceAction } from '@/plugins/tagger'
 import {
     DEFAULT_EDITABLE_BLOCK_PROPS,
     type EditableBlockProps,
     useBasicBlockMounting,
 } from '@/composables/basicBlock'
+import type { IRandomizerSet } from '@/lib/ICodeBlocks'
+import type { BlockData } from '@/lib/codeBlocksManager'
 import { globalState } from '@/lib/globalState'
+import { type ITagReplaceAction, tagger } from '@/plugins/tagger'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
+import { StateEffect } from '@codemirror/state'
+import type { EditorView } from '@codemirror/view'
+import {
+    computed,
+    getCurrentInstance,
+    nextTick,
+    onBeforeUnmount,
+    onMounted,
+    ref,
+    toRefs,
+    watch
+} from 'vue'
 
 // Props definition
 interface Props extends EditableBlockProps {
@@ -149,7 +148,7 @@ const hasAlternativeContent = computed(
 )
 
 const boxClass = computed(() => {
-    const classes = []
+    const classes: string[] = []
     if (block.value.hidden && !editMode.value) {
         classes.push('hiddenBox')
     }
@@ -198,9 +197,18 @@ const code = computed({
     set: (newCode) => (block.value.content = newCode),
 })
 
-const altCode = computed(() => block.value.alternativeContent ?? '')
+const altCode = computed({
+    get: () => block.value.alternativeContent ?? '',
+    set: (newCode) => {
+        block.value.alternativeContent = newCode
+    }
+})
 
 // Methods
+function posToOffset(view: EditorView, pos: { line: number; ch: number }): number {
+    return view.state.doc.line(pos.line + 1).from + pos.ch
+}
+
 function updateTagDisplay() {
     if (
         !editMode.value ||
@@ -214,13 +222,22 @@ function updateTagDisplay() {
 
     if (codeBox.value?.view) {
         const markers = tagger.getMarkers(block.value.content)
-        codeBox.value.view.dispatch({
-            effects: markers.map((m) => ({
-                from: m.start,
-                to: m.end,
+        const markerEffects = markers.map(m => 
+            StateEffect.define<{
+                from: number;
+                to: number;
+                className: string;
+                title: string;
+            }>().of({
+                from: posToOffset(codeBox.value!.view!, m.start),
+                to: posToOffset(codeBox.value!.view!, m.end),
                 className: tagger.className[m.type],
-                title: m.name,
-            })),
+                title: m.name
+            })
+        )
+        
+        codeBox.value.view.dispatch({
+            effects: markerEffects
         })
 
         nextTick(() => {
@@ -232,13 +249,22 @@ function updateTagDisplay() {
 
     if (altBox.value?.view) {
         const markers = tagger.getMarkers(block.value.alternativeContent ?? '')
-        altBox.value.view.dispatch({
-            effects: markers.map((m) => ({
-                from: m.start,
-                to: m.end,
+        const markerEffects = markers.map(m => 
+            StateEffect.define<{
+                from: number;
+                to: number;
+                className: string;
+                title: string;
+            }>().of({
+                from: posToOffset(altBox.value!.view!, m.start),
+                to: posToOffset(altBox.value!.view!, m.end),
                 className: tagger.className[m.type],
-                title: m.name,
-            })),
+                title: m.name
+            })
+        )
+
+        altBox.value.view.dispatch({
+            effects: markerEffects
         })
 
         nextTick(() => {
@@ -330,13 +356,15 @@ function onCodeReady({ view, container }: { view: EditorView; container: HTMLEle
 
     const textareas = container.querySelectorAll('textarea[name]')
     textareas.forEach((el) => {
-        el.className = 'accqstXmlInput noRTEditor'
-        el.id = container.id
-        el.value = block.value.content
-        el.setAttribute('data-question', `${block.value.parentID}`)
-        el.setAttribute('data-blocktype', `${iliasTypeNr.value}`)
-        if (editMode.value) {
-            el.setAttribute('is-editmode', `${editMode.value}`)
+        if (el instanceof HTMLTextAreaElement) {
+            el.className = 'accqstXmlInput noRTEditor'
+            el.id = container.id
+            el.value = block.value.content
+            el.setAttribute('data-question', `${block.value.parentID}`)
+            el.setAttribute('data-blocktype', `${iliasTypeNr.value}`)
+            if (editMode.value) {
+                el.setAttribute('is-editmode', `${editMode.value}`)
+            }
         }
     })
 
