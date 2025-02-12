@@ -1,14 +1,11 @@
 <script lang="ts" setup>
-import { toRefs, computed } from 'vue'
-import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
-import CodeBlocksSettings, { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
+import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
-import SimpleText from '@/components/SimpleText.vue'
 import DataBlock from '@/components/DataBlock.vue'
-import compilerRegistry from '@/lib/CompilerRegistry'
-import { CodeOutputTypes } from '@/lib/ICodeBlocks'
+import SimpleText from '@/components/SimpleText.vue'
 import {
     codeBlockSetup,
     CodeBlocksProperties,
@@ -22,8 +19,11 @@ import {
     IOnTypeChangeInfo,
     IOnVisibleLinesChangeInfo,
 } from '@/composables/basicBlocks'
+import compilerRegistry from '@/lib/CompilerRegistry'
+import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 import '@quasar/extras/material-icons/material-icons.css'
+import { toRefs } from 'vue'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
