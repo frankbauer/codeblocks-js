@@ -105,17 +105,18 @@ export function markTags(view: EditorView, tagSet: Ref<IRandomizerSet | undefine
     const text = view.state.doc.toString()
     const matches = Array.from(text.matchAll(randomAndTemplateTag))
     
-    if (matches.length>1) {
-        const effects = [
-            clearTagMarks.of(null),
-            ...matches.map(match => 
-                addTagMark.of({
-                    from: match.index!,
-                    to: match.index! + match[0].length,
-                    tag: match[2]
-                })
-            )
-        ]
+    const effects = [
+        clearTagMarks.of(null),
+        ...matches.map(match => 
+            addTagMark.of({
+                from: match.index!,
+                to: match.index! + match[0].length,
+                tag: match[2]
+            })
+        )
+    ]
+    
+    if (effects.length > 1) {
         view.dispatch({ effects })
     }
 }
