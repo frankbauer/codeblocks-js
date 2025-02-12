@@ -34,6 +34,7 @@ const {
     outputHTML,
     output,
     sansoutput,
+    hasOutput,
     continuousCompile,
     finalOutputObject,
     options,
