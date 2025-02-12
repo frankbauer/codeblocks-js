@@ -1,5 +1,6 @@
 <template>
     <div class="code-editor">
+        {{ baseIndent }}
         <textarea
             style="display: none"
             readonly
@@ -28,7 +29,7 @@ import { java } from '@codemirror/lang-java'
 import { javascript } from '@codemirror/lang-javascript'
 import { json } from '@codemirror/lang-json'
 import { python } from '@codemirror/lang-python'
-import { indentUnit, syntaxHighlighting } from '@codemirror/language'
+import { indentUnit, syntaxHighlighting, indentService, syntaxTree,  IndentContext, TreeIndentContext, indentNodeProp } from '@codemirror/language'
 import {
     Compartment, EditorSelection, EditorState,
     type Extension, RangeSetBuilder,
@@ -69,6 +70,8 @@ import { basicDarkTheme } from 'cm6-theme-basic-dark'
 import { basicLightTheme } from 'cm6-theme-basic-light'
 import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
 import { solarizedLightTheme } from 'cm6-theme-solarized-light'
+import { NodeProp, SyntaxNode } from '@lezer/common'
+import { getSimpleIndentation } from '@/plugins/CMCodeIndentation'
 
 // Add proper interface for error ranges
 interface ErrorRange {
@@ -90,6 +93,7 @@ interface Props {
     errors?: ICompilerErrorDescription[]
     maxLines?: number
     tagSet?: IRandomizerSet | undefined
+    baseIndent?: number
 }
 
 // Fix emit types to match expected usage
@@ -109,9 +113,10 @@ const props = withDefaults(defineProps<Props>(), {
     readOnly: false,
     errors: () => [],
     maxLines: 1,
-    tagSet: undefined,  
+    tagSet: undefined,
+    baseIndent: 0,
 })
-const { name, dataQuestion, theme, language, firstLine, readOnly, errors, maxLines, tagSet } = toRefs(props)
+const { name, dataQuestion, theme, language, firstLine, readOnly, errors, maxLines, tagSet, baseIndent } = toRefs(props)
 
 // Replace code.value with proper v-model handling
 const code = defineModel<string>('modelValue')
@@ -166,9 +171,20 @@ const languageCompartment = new Compartment()
 const themeCompartment = new Compartment()
 const readOnlyCompartment = new Compartment()
 const lineNumbersCompartment = new Compartment()
+const indentationCompartment = new Compartment()
 
 const tagMarkField = createTagMarkField(tagSet)
 const tagTooltip = createTagTooltip(tagMarkField, tagSet)
+
+
+
+const createIndentService = (baseIndent: number, topIndent: ()=>number): Extension => {
+    return indentationCompartment.of(indentService.of((context, pos) => {
+        const defaultIndent = getSimpleIndentation(context, pos, topIndent)
+        console.log('defaultIndent', defaultIndent, context.state.doc.lineAt(pos))
+        return defaultIndent        
+    }))
+}
 
 const extensions: ComputedRef<Extension[]> = computed(() => {
     return [
@@ -267,6 +283,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
             return null
         }),
         errorGutter,
+        createIndentService(baseIndent.value, ()=>baseIndent.value),
     ] as Extension[]
 })
 
@@ -536,6 +553,16 @@ watch(tagSet, () => {
     if (!editorView.value) return
     markTags(editorView.value, tagSet)
 }, { deep: true })
+
+watch(baseIndent, (newValue) => {
+    if (editorView.value === null) return
+    
+    editorView.value.dispatch({
+        effects: indentationCompartment.reconfigure(
+            createIndentService(newValue, ()=>newValue)
+        )
+    })
+})
 
 defineExpose({
     view: editorView,
