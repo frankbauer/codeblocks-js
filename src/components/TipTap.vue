@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { computed, defineComponent, onBeforeUnmount, onMounted, ref, Ref } from 'vue'
+import { computed, defineComponent, onBeforeUnmount, onMounted, ref, Ref } from 'vue'
 import { ITagReplaceAction, tagger } from '@/plugins/tagger'
 
 export default defineComponent({

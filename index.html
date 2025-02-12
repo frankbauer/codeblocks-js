@@ -25,15 +25,20 @@
 </noscript>
 <div codeblockseditor data-compiler='java' data-compiler-version='101' data-run-code='true'
      data-max-characters='10000' data-execution-timeout='5000'
-     data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]'>
+     data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]'
+     data-randomizer-active='true'
+     data-randomizer-known-tags='["test", "check"]'
+     data-randomizer-sets='[{"test": "test", "check": "check"}]'
+     data-randomizer-preview-index='0'
+     >
     <loading>
         <div></div>
         <div></div>
     </loading>
     <pre as='BLOCK' data-hidden='true'>public class App {
     public static void main(String[] args){</pre>
-    <pre as='BLOCK'>        Syste.out.println("Hello World");
-        System.out.println("or anyone else");</pre>
+    <pre as='BLOCK'>        Syste.out.println("Hello World {:test}");
+        System.out.println("or anyone else {:checked}");</pre>
     <pre as='BLOCK' data-static='true'>    }
 }</pre>
 </div>

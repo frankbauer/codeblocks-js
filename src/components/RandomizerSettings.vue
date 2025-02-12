@@ -158,9 +158,9 @@ import RandomizerSetEditor from '@/components/RandomizerSetEditor.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import Vue, { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
-import { tagger } from '@/plugins/tagger'
 import { uuid } from 'vue-uuid'
 import { useQuasar } from 'quasar'
+import { TAG_CLASS_NAMES } from '@/plugins/tagHighlighter'
 
 export default defineComponent({
     name: 'RandomizerSettings',
@@ -178,7 +178,7 @@ export default defineComponent({
         let _newTagName: string = ''
 
         const tagClass: ComputedRef<String> = computed(() => {
-            return tagger.className.rnd + ' tag-mark-start tag-mark-end tag-mark-shadow'
+            return TAG_CLASS_NAMES.rnd + ' tag-mark-start tag-mark-end tag-mark-shadow'
         })
 
         function isVisible(nr: number): boolean {

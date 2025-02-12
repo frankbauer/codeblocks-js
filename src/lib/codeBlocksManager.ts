@@ -176,6 +176,7 @@ export class BlockData implements IBlockData {
     }
 
     actualContent() {
+        console.log('this.appSettings.randomizer.active', this.appSettings.randomizer.active)
         if (this.appSettings.randomizer.active) {
             return tagger.replaceRandomTagsInString(
                 this.content,

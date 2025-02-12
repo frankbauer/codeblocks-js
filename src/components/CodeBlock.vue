@@ -27,6 +27,7 @@
             :read-only="editorReadOnly"
             :errors="block.errors"
             :max-lines="totalLines"
+            :tag-set="editMode ? tagSet : undefined"
             @update:model-value="onCodeChangeDefered"
             @focus="onCodeFocus"
             @ready="onCodeReady"
@@ -238,13 +239,7 @@ function updateTagDisplay() {
         
         codeBox.value.view.dispatch({
             effects: markerEffects
-        })
-
-        nextTick(() => {
-            if (codeBox.value?.view) {
-                tagger.hookClick(codeBox.value.view.dom, block.value.scopeUUID)
-            }
-        })
+        })        
     }
 
     if (altBox.value?.view) {
@@ -265,12 +260,6 @@ function updateTagDisplay() {
 
         altBox.value.view.dispatch({
             effects: markerEffects
-        })
-
-        nextTick(() => {
-            if (altBox.value?.view) {
-                tagger.hookClick(altBox.value.view.dom, block.value.scopeUUID)
-            }
         })
     }
 }

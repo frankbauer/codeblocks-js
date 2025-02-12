@@ -19,6 +19,30 @@
 
 <script setup lang="ts">
 import ErrorTip from '@/components/ErrorTip.vue'
+import { autocompletion } from '@codemirror/autocomplete'
+import { indentWithTab } from '@codemirror/commands'
+import { cpp } from '@codemirror/lang-cpp'
+import { css } from '@codemirror/lang-css'
+import { html } from '@codemirror/lang-html'
+import { java } from '@codemirror/lang-java'
+import { javascript } from '@codemirror/lang-javascript'
+import { json } from '@codemirror/lang-json'
+import { python } from '@codemirror/lang-python'
+import { indentUnit, syntaxHighlighting } from '@codemirror/language'
+import {
+    Compartment, EditorSelection, EditorState,
+    type Extension, RangeSetBuilder,
+    StateEffect,
+    StateField,
+    type Transaction
+} from '@codemirror/state'
+import {
+    Decoration,
+    DecorationSet,
+    gutter, GutterMarker, hoverTooltip, keymap, lineNumbers,
+    ViewUpdate
+} from '@codemirror/view'
+import { EditorView, minimalSetup } from 'codemirror'
 import { QIcon, QTooltip, Quasar } from 'quasar'
 import {
     computed,
@@ -31,43 +55,20 @@ import {
     toRefs,
     watch,
 } from 'vue'
-import { EditorView, minimalSetup } from 'codemirror'
-import { keymap } from '@codemirror/view'
-import { indentWithTab } from '@codemirror/commands'
-import { EditorSelection } from '@codemirror/state'
-import {
-    Compartment,
-    EditorState,
-    type Extension,
-    RangeSet,
-    RangeSetBuilder,
-    StateEffect,
-    StateField,
-    type Transaction,
-} from '@codemirror/state'
-import { GutterMarker } from '@codemirror/view'
-import {
-    Decoration,
-    DecorationSet,
-    gutter,
-    hoverTooltip,
-    lineNumbers,
-    ViewUpdate,
-} from '@codemirror/view'
-import { indentUnit } from '@codemirror/language'
-import { cpp } from '@codemirror/lang-cpp'
-import { css } from '@codemirror/lang-css'
-import { html } from '@codemirror/lang-html'
-import { java } from '@codemirror/lang-java'
-import { javascript } from '@codemirror/lang-javascript'
-import { json } from '@codemirror/lang-json'
-import { python } from '@codemirror/lang-python'
 
-import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
-import { basicLightTheme } from 'cm6-theme-basic-light'
-import { solarizedLightTheme } from 'cm6-theme-solarized-light'
-import { basicDarkTheme } from 'cm6-theme-basic-dark'
+import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
+import {
+    createTagCompletions,
+    createTagHighlightStyle,
+    createTagMarkField,
+    createTagTooltip,
+    markTags
+} from '@/plugins/tagHighlighter'
+import { basicDarkTheme } from 'cm6-theme-basic-dark'
+import { basicLightTheme } from 'cm6-theme-basic-light'
+import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
+import { solarizedLightTheme } from 'cm6-theme-solarized-light'
 
 const emit = defineEmits<{
     (e: 'focus', value: boolean): void
@@ -85,6 +86,7 @@ interface Props {
     readOnly?: boolean
     errors?: ICompilerErrorDescription[]
     maxLines?: number
+    tagSet?: IRandomizerSet | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -95,8 +97,9 @@ const props = withDefaults(defineProps<Props>(), {
     readOnly: false,
     errors: () => [],
     maxLines: 1,
+    tagSet: undefined,  
 })
-const { name, dataQuestion, theme, language, firstLine, readOnly, errors, maxLines } = toRefs(props)
+const { name, dataQuestion, theme, language, firstLine, readOnly, errors, maxLines, tagSet } = toRefs(props)
 
 const code = defineModel<string>()
 const editorElement = ref<HTMLElement | null>(null)
@@ -151,18 +154,21 @@ const themeCompartment = new Compartment()
 const readOnlyCompartment = new Compartment()
 const lineNumbersCompartment = new Compartment()
 
+const tagMarkField = createTagMarkField(tagSet)
+const tagTooltip = createTagTooltip(tagMarkField, tagSet)
+
 const extensions: ComputedRef<Extension[]> = computed(() => {
     return [
         minimalSetup,
-        // ViewUpdate event listener
+        // Combined update listener for focus, updates and tags
         EditorView.updateListener.of((update: ViewUpdate): void => {
+            // Handle focus and update events
             emit('focus', editorView.value?.hasFocus ?? false)
-
-            if (update.changes.empty || !update.docChanged) {
-                return
+            if (!update.changes.empty && update.docChanged) {
+                emit('update', update)
+                // Handle tag updates when document changes
+                markTags(update.view, tagSet)
             }
-
-            emit('update', update)
         }),
         EditorState.allowMultipleSelections.of(true),
         readOnlyCompartment.of(EditorState.readOnly.of(readOnly.value)),
@@ -223,6 +229,31 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
             },
         }),
         keymap.of([indentWithTab]),
+        syntaxHighlighting(createTagHighlightStyle()),
+        autocompletion({
+            override: [createTagCompletions(tagSet)]
+        }),
+        tagMarkField,
+        tagTooltip,
+        underlineField,
+        hoverTooltip((view, pos) => {
+            const error = errorRanges.value.find((e) => pos >= e.from && pos <= e.to)
+            if (error) {
+                return {
+                    pos,
+                    above: true,
+                    create() {
+                        const dom = document.createElement('div')
+                        dom.textContent = error.message
+                        dom.className = 'code-tooltip ' + 
+                            (error.severity === ErrorSeverity.Warning ? 'warning-tooltip' : 'error-tooltip')
+                        return { dom }
+                    }
+                }
+            }
+            return null
+        }),
+        errorGutter,
     ] as Extension[]
 })
 
@@ -255,7 +286,12 @@ onMounted(() => {
             return
         }
 
+        // Initialize error underlining
         underlineErrors()
+        
+        // Initialize tag marks
+        markTags(editorView.value, tagSet)
+
         emit('ready', {
             view: editorView.value,
             state: editorView.value.state,
@@ -353,12 +389,14 @@ const addUnderline = StateEffect.define<{
     to: number
     severity: ErrorSeverity
     message: string
+    decoration?: Decoration
 }>({
-    map: ({ from, to, severity, message }, change) => ({
+    map: ({ from, to, severity, message, decoration }, change) => ({
         from: change.mapPos(from),
         to: change.mapPos(to),
-        severity: severity,
-        message: message,
+        severity,
+        message,
+        decoration
     }),
 })
 
@@ -376,13 +414,9 @@ const underlineField = StateField.define<DecorationSet>({
             if (e.is(clearUnderlines)) {
                 underlines = Decoration.none
             } else if (e.is(addUnderline)) {
+                const decoration = e.value.decoration || underlineMarkError(e.value.severity, e.value.message)
                 underlines = underlines.update({
-                    add: [
-                        underlineMarkError(e.value.severity, e.value.message).range(
-                            e.value.from,
-                            e.value.to
-                        ),
-                    ],
+                    add: [decoration.range(e.value.from, e.value.to)],
                 })
             }
         }
@@ -424,46 +458,12 @@ const errorRanges = computed(() => {
         .filter((e) => e !== undefined)
 })
 
-// Hover tooltip for errors
-const hoverTooltipExtension = hoverTooltip((view, pos) => {
-    // Find the error at the hover position
-    const error = errorRanges.value.find((e) => {
-        return pos >= e.from && pos <= e.to
-    })
-
-    if (error) {
-        // Create a tooltip for the found error
-        return {
-            pos,
-            above: true,
-            create: () => {
-                let dom = document.createElement('div')
-                dom.textContent = error.message
-                dom.className =
-                    'code-tooltip ' +
-                    (error.severity === ErrorSeverity.Warning ? 'warning-tooltip' : 'error-tooltip')
-                return { dom }
-            },
-        }
-    }
-    return null
-})
-
 function underlineErrors() {
-    let effects: StateEffect<unknown>[] = errorRanges.value.map((e) => {
-        return addUnderline.of(e)
-    })
-
-    if (!editorView.value!.state.field(underlineField, false)) {
-        effects.push(
-            StateEffect.appendConfig.of([underlineField, hoverTooltipExtension, errorGutter])
-        )
-    }
-
-    // Add the clearUnderlines effect to remove existing underlines
-    effects.unshift(clearUnderlines.of(null))
-
-    console.log('Adding effects', effects)
+    let effects: StateEffect<unknown>[] = [
+        clearUnderlines.of(null),
+        ...errorRanges.value.map((e) => addUnderline.of(e))
+    ]
+    
     editorView.value!.dispatch({ effects })
     return true
 }
@@ -519,6 +519,11 @@ watch(
     { immediate: true, deep: true }
 )
 
+watch(tagSet, () => {
+    if (!editorView.value) return
+    markTags(editorView.value, tagSet)
+}, { deep: true })
+
 defineExpose({
     view: editorView,
     lineCount,
@@ -573,4 +578,26 @@ defineExpose({
                 color: #422f05 !important
                 font-weight: 400
                 border-color: #e5a91e
+
+    .cm-tooltip.cm-tooltip-autocomplete 
+        background-color: rgba(255, 255, 255, 0.95)
+        border: 1px solid #ddd
+        border-radius: 4px
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15)
+        
+        > ul
+            font-family: "Source Code Pro", monospace
+            padding: 4px 0
+            
+            > li
+                padding: 4px 8px
+                
+                &[aria-selected]
+                    background-color: #0366d6
+                    color: white
+                
+                .cm-completionDetail
+                    color: #666
+                    font-size: 0.9em
+                    margin-left: 8px
 </style>
