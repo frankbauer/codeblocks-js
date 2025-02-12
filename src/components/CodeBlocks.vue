@@ -24,6 +24,7 @@ import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 import '@quasar/extras/material-icons/material-icons.css'
 import { toRefs } from 'vue'
+import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
@@ -63,27 +64,8 @@ const {
     global,
 } = codeBlockSetup(blockStorage, editMode, props.eventHub)
 
-// Use handlers conditionally based on edit mode
-const onTypeChange = (nfo: IOnTypeChangeInfo): void => {
-    if (!editMode) return
-    let bl = blockById(nfo.id)
-    if (bl === undefined) return
-    bl.type = nfo.type
-    bl.hidden = nfo.hidden
-    bl.static = nfo.static
-    bl.hasCode = nfo.hasCode
-}
-
-const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {
-    if (!editMode) return
-    let bl = blockById(nfo.id)
-    if (bl === undefined) return
-    if (nfo.visibleLines != 'auto' && isNaN(nfo.visibleLines)) {
-        bl.visibleLines = 'auto'
-    } else {
-        bl.visibleLines = nfo.visibleLines
-    }
-}
+// Replace the existing event handlers with the composable
+const { onTypeChange, onVisibleLinesChange } = useCodeBlockEvents(blockById, editMode)
 
 const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {
     if (editMode) {

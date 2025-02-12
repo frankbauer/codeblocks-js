@@ -119,9 +119,9 @@ export default class Tagger {
     }
 
     replaceRandomTagsInString(str: string, tagSet: IRandomizerSet): string {
-        console.log('replaceRandomTagsInString', str, tagSet)
+        //console.log('replaceRandomTagsInString', str, tagSet)
         return str.replace(randomAndTemplateTag, (m0, m1, m2) => {
-            console.log('replaceRandomTagsInString', m0, m1, m2 )
+            //console.log('replaceRandomTagsInString', m0, m1, m2 )
             if (m1 == ':') {
                 const tag = tagSet.values.find((t) => t.tag == m2)
                 if (tag !== undefined) {

@@ -12,7 +12,10 @@ export function storeBlock(data: IAppSettings) {
 export type BlockStorageType = ReturnType<typeof useBlockStorage>
 
 export const useBlockStorage = (appID: number) => {
-    const appInfo = computed(() => storage[appID].value)
+    const appInfo = computed(() => {
+        console.log('appInfo', appID,storage[appID].value)
+        return storage[appID].value
+    })
 
     const blockIDs = computed(() => appInfo.value.blocks.map((v) => v.uuid))
 

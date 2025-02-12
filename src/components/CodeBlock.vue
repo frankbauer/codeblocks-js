@@ -82,6 +82,7 @@ import {
     toRefs,
     watch
 } from 'vue'
+import { useCodeEditor } from '@/composables/useCodeEditor'
 
 // Props definition
 interface Props extends EditableBlockProps {
@@ -148,19 +149,7 @@ const hasAlternativeContent = computed(
     () => block.value.hasAlternativeContent && typeName.value === 'block'
 )
 
-const boxClass = computed(() => {
-    const classes: string[] = []
-    if (block.value.hidden && !editMode.value) {
-        classes.push('hiddenBox')
-    }
-    if (block.value.readonly || readonly.value) {
-        classes.push('readonlyBox')
-    }
-    if (block.value.static) {
-        classes.push('staticBox')
-    }
-    return classes.join(' ')
-})
+const { boxClass, editorReadOnly, code } = useCodeEditor(block, editMode, readonly)
 
 const typeName = computed(() => {
     let type = block.value.type.toLowerCase()
@@ -185,17 +174,6 @@ const iliasTypeNr = computed(() => {
         data: 7,
     }
     return types[typeName.value] ?? -1
-})
-
-const editorReadOnly = computed(
-    () =>
-        !editMode.value &&
-        (block.value.readonly || block.value.static || block.value.hidden || readonly.value)
-)
-
-const code = computed({
-    get: () => (editMode.value ? block.value.content : block.value.actualContent()),
-    set: (newCode) => (block.value.content = newCode),
 })
 
 const altCode = computed({

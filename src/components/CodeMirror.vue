@@ -70,14 +70,17 @@ import { basicLightTheme } from 'cm6-theme-basic-light'
 import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
 import { solarizedLightTheme } from 'cm6-theme-solarized-light'
 
-const emit = defineEmits<{
-    (e: 'focus', value: boolean): void
-    (e: 'update', value: ViewUpdate): void
-    (e: 'change', value: EditorState): void
-    (e: 'ready', value: { view: EditorView; state: EditorState; container: HTMLElement }): void
-}>()
+// Add proper interface for error ranges
+interface ErrorRange {
+    from: number
+    to: number
+    severity: ErrorSeverity
+    message: string
+}
 
+// Add proper typing for the props
 interface Props {
+    modelValue?: string // Add this to properly type v-model
     name: string
     dataQuestion?: string | number
     theme?: string
@@ -88,6 +91,15 @@ interface Props {
     maxLines?: number
     tagSet?: IRandomizerSet | undefined
 }
+
+// Fix emit types to match expected usage
+const emit = defineEmits<{
+    'update:modelValue': [string]
+    'focus': [boolean]
+    'update': [ViewUpdate]
+    'change': [EditorState]
+    'ready': [{ view: EditorView; state: EditorState; container: HTMLElement }]
+}>()
 
 const props = withDefaults(defineProps<Props>(), {
     dataQuestion: '',
@@ -101,7 +113,8 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const { name, dataQuestion, theme, language, firstLine, readOnly, errors, maxLines, tagSet } = toRefs(props)
 
-const code = defineModel<string>()
+// Replace code.value with proper v-model handling
+const code = defineModel<string>('modelValue')
 const editorElement = ref<HTMLElement | null>(null)
 const editorView = shallowRef<EditorView | null>(new EditorView())
 
