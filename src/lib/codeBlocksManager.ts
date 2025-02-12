@@ -663,13 +663,14 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         this._data = undefined
-        console.log('LOADED BLOCK DATA: ', data, this.element)
+        
+        // No need to check attribute again - data.editMode is already set correctly
         const storeageInfo = storeBlock(data)
         const context = {
-            appID: storeageInfo.appID,
+            appID: storeageInfo.appID
         }
-        const component = data.editMode ? AppEditor : App
-        const app = createApp(component as any, context)
+        
+        const app = createApp(App, context)
         app.use(i18n)
         app.directive('tagged', taggedDirective)
         app.directive('highlight', highlightDirective)

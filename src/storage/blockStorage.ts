@@ -5,11 +5,9 @@ import { codeBlockSetup } from '@/composables/basicBlocks'
 
 const storage: Ref<UnwrapNestedRefs<MainBlock>>[] = []
 
-export function storeBlock(block: IAppSettings): AppContext {
-    storage.push(ref(new MainBlock(block)))
-    return {
-        appID: storage.length - 1,
-    }
+export function storeBlock(data: IAppSettings) {
+    storage.push(ref(new MainBlock(data)))
+    return { appID:storage.length - 1 }
 }
 
 export type BlockStorageType = ReturnType<typeof useBlockStorage>

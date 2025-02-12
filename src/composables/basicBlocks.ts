@@ -108,7 +108,7 @@ function formatOutput(result) {
 
 export function codeBlockSetup(
     blockStorage: BlockStorageType,
-    editMode: ComputedRef<boolean>,
+    editMode: boolean,
     eventHub: EventHubType
 ) {
     const blockInfo = blockStorage.appInfo
@@ -125,7 +125,7 @@ export function codeBlockSetup(
         return globalState
     })
     const continuousCompile = computed((): boolean => {
-        if (editMode.value) {
+        if (editMode) {
             return false
         }
         const cmp = compilerRegistry.getCompiler(compiler.value)
@@ -265,7 +265,7 @@ export function codeBlockSetup(
     const outputElement: Ref<HTMLElement | null> = ref(null)
     const addonClass = computed((): string => {
         let cl = ''
-        if (editMode.value) {
+        if (editMode) {
             cl += 'editmode '
         }
         if (readonly.value) {
@@ -274,7 +274,7 @@ export function codeBlockSetup(
         return cl
     })
     const backgroundColorClass = computed((): string => {
-        return editMode.value ? 'blue-grey darken-4' : ''
+        return editMode ? 'blue-grey darken-4' : ''
     })
     const hasREPL = computed((): boolean => {
         return blocks.value.filter((bl) => bl.type === KnownBlockTypes.REPL).length > 0
@@ -541,7 +541,7 @@ export function codeBlockSetup(
     }
     const onkey = (event) => {
         if (
-            editMode.value &&
+            editMode &&
             (event.ctrlKey || event.metaKey) &&
             (event.key === 'w' || event.key === 'j')
         ) {
@@ -583,7 +583,7 @@ export function codeBlockSetup(
     }
     const onRunFromPlayground = () => {
         const cmp = compilerRegistry.getCompiler(compiler.value)
-        if (cmp && cmp.canRun && !editMode.value && cmp.allowsContinousCompilation) {
+        if (cmp && cmp.canRun && !editMode && cmp.allowsContinousCompilation) {
             onViewCodeChange(true)
         }
     }
@@ -597,7 +597,7 @@ export function codeBlockSetup(
             eventHub.emit('initialized-libraries', {})
         })
         didInitialize.value = true
-        if (editMode.value) {
+        if (editMode) {
             window.addEventListener('keydown', onkey, false)
         }
     })

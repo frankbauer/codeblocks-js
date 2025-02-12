@@ -7,6 +7,7 @@ import CodePlayground from '@/components/CodePlayground.vue'
 import CodeREPL from '@/components/CodeREPL.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import DataBlock from '@/components/DataBlock.vue'
+import compilerRegistry from '@/lib/CompilerRegistry'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import {
     codeBlockSetup,
@@ -28,9 +29,7 @@ const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
 const blockStorage: BlockStorageType = useBlockStorage(appID.value)
 const blockInfo = blockStorage.appInfo
-const editMode = computed((): boolean => {
-    return false
-})
+const editMode = blockStorage.appInfo.value.editMode
 const {
     didInitialize,
     outputHTML,
@@ -92,32 +91,214 @@ const {
     onRunFromPlayground,
     global,
 } = codeBlockSetup(blockStorage, editMode, props.eventHub)
-const onTypeChange = (nfo: IOnTypeChangeInfo): void => {}
-const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {}
-const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {}
-const onScriptVersionChange = (nfo: IOnScriptVersionChangeInfo): void => {}
-const onSetAutoReset = (nfo: IOnSetAutoResetInfo): void => {}
-const onReloadResources = (nfo: IOnReloadResourcesInfo): void => {}
-const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {}
-const onCompilerChange = (v: string): void => {}
-const onCompilerVersionChange = (v: string): void => {}
-const onRunStateChange = (v: boolean): void => {}
-const onContinousCompileStateChange = (v: boolean): void => {}
-const onMessagePassingChange = (v: boolean): void => {}
-const onKeepAliveChange = (v: boolean): void => {}
-const onPersistentArgumentsChange = (v: boolean): void => {}
-const onLanguageChange = (v: string): void => {}
-const onCharacterLimitChange = (v: number): void => {}
-const onTimeoutChange = (v: number): void => {}
-const onWorkerLibChange = (v: string[]): void => {}
-const onDomLibChange = (v: string[]): void => {}
-const onThemeChange = (nfo: IOnThemeChangeInfo): void => {}
-const onOutputParserChange = (v: CodeOutputTypes): void => {}
-const moveUp = (idx: number): void => {}
-const moveDown = (idx: number): void => {}
-const onChangeOrder = (nfo: IOnChangeOrder): void => {}
-const removeBlock = (idx: number): void => {}
-const addNewBlock = (): void => {}
+
+// Use handlers conditionally based on edit mode
+const onTypeChange = (nfo: IOnTypeChangeInfo): void => {
+    if (!editMode) return
+    let bl = blockById(nfo.id)
+    if (bl === undefined) return
+    bl.type = nfo.type
+    bl.hidden = nfo.hidden
+    bl.static = nfo.static
+    bl.hasCode = nfo.hasCode
+}
+
+const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {
+    if (!editMode) return
+    let bl = blockById(nfo.id)
+    if (bl === undefined) return
+    if (nfo.visibleLines != 'auto' && isNaN(nfo.visibleLines)) {
+        bl.visibleLines = 'auto'
+    } else {
+        bl.visibleLines = nfo.visibleLines
+    }
+}
+
+const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {
+    if (editMode) {
+        let bl = blockById(nfo.id)
+        if (bl === undefined) return
+        bl.width = nfo.width
+        bl.height = nfo.height
+        bl.align = nfo.align
+    }
+}
+
+const onScriptVersionChange = (nfo: IOnScriptVersionChangeInfo): void => {
+    if (editMode) {
+        let bl = blockById(nfo.id)
+        if (bl === undefined) {
+            return
+        }
+        bl.version = nfo.version
+        if (bl.obj) {
+            bl.obj.version = nfo.version
+        }
+    }
+}
+
+const onSetAutoReset = (nfo: IOnSetAutoResetInfo): void => {
+    if (editMode) {
+        let bl = blockById(nfo.id)
+        if (bl === undefined) return        
+        bl.shouldAutoreset = nfo.shouldAutoreset
+    }
+}
+
+const onReloadResources = (nfo: IOnReloadResourcesInfo): void => {
+    if (editMode) {
+        let bl = blockById(nfo.id)
+        if (bl === undefined) return        
+        bl.shouldReloadResources = nfo.shouldReloadResources
+    }
+}
+
+const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {
+    if (editMode) {
+        let bl = blockById(nfo.id)
+        if (bl === undefined) return
+        bl.generateTemplate = nfo.generateTemplate
+    }
+}
+
+const onCompilerChange = (v: string): void => {
+    if (editMode) {
+        const c = compilerRegistry.getCompiler({ languageType: v })
+        if (c !== undefined) {
+            console.log('Selected Compiler', c, v, blockInfo.value.compiler)
+            blockInfo.value.compiler.languageType = v
+            blockInfo.value.compiler.version = c.version
+            blockInfo.value.language = c.language
+            console.log('PRELOADING')
+            c.preload()
+        }
+    }
+}
+
+const onCompilerVersionChange = (v: string): void => {
+    if (editMode) {
+        console.log('Selected Version', v, blockInfo.value.compiler.languageType)
+        const c = compilerRegistry.getCompiler({
+            languageType: blockInfo.value.compiler.languageType,
+            version: v,
+        })
+        blockInfo.value.compiler.version = v
+        if (c !== undefined) {
+            blockInfo.value.language = c.language
+            console.log('PRELOADING')
+            c.preload()
+        }
+    }
+}
+
+const onRunStateChange = (v: boolean): void => {
+    if (editMode) {
+        blockInfo.value.runCode = v
+    }
+}
+
+const onContinousCompileStateChange = (v: boolean): void => {
+    if (editMode) {
+        blockInfo.value.continuousCompilation = v
+    }
+}
+
+const onMessagePassingChange = (v: boolean): void => {
+    if (editMode) {
+        blockInfo.value.messagePassing = v
+    }
+}
+
+const onKeepAliveChange = (v: boolean): void => {
+    if (editMode) {
+        blockInfo.value.keepAlive = v
+    }
+}
+
+const onPersistentArgumentsChange = (v: boolean): void => {
+    if (editMode) {
+        if (v === false) {
+            blockInfo.value.clearDefaultArgs()
+        }
+        blockInfo.value.persistentArguments = v
+    }
+}
+
+const onLanguageChange = (v: string): void => {
+    if (editMode) {
+        blockInfo.value.language = v
+    }
+}
+
+const onCharacterLimitChange = (v: number): void => {
+    if (editMode) {
+        blockInfo.value.maxCharacters = v
+    }
+}
+
+const onTimeoutChange = (v: number): void => {
+    if (editMode) {
+        blockInfo.value.executionTimeout = v
+    }
+}
+
+const onWorkerLibChange = (v: string[]): void => {
+    if (editMode) {
+        blockInfo.value.workerLibs = v
+    }
+}
+
+const onDomLibChange = (v: string[]): void => {
+    if (editMode) {
+        blockInfo.value.domLibs = v
+    }
+}
+
+const onThemeChange = (nfo: IOnThemeChangeInfo): void => {
+    if (editMode) {
+        console.log('TC', nfo)
+        blockInfo.value.solutionTheme = nfo.solution
+        blockInfo.value.codeTheme = nfo.code
+    }
+}
+
+const onOutputParserChange = (v: CodeOutputTypes): void => {
+    if (editMode) {
+        blockInfo.value.outputParser = v
+    }
+}
+
+const moveUp = (idx: number): void => {
+    if (editMode) {
+        blockInfo.value.moveUp(idx)
+    }
+}
+
+const moveDown = (idx: number): void => {
+    if (editMode) {
+        blockInfo.value.moveDown(idx)
+    }
+}
+
+const onChangeOrder = (nfo: IOnChangeOrder): void => {
+    if (editMode) {
+        let bl = blockById(nfo.id)
+        if (bl === undefined) return
+        blockInfo.value.changeOrder(nfo.id, nfo.newID)
+    }
+}
+
+const removeBlock = (idx: number): void => {
+    if (editMode) {
+        blockInfo.value.removeBlock(idx)
+    }
+}
+
+const addNewBlock = (): void => {
+    if (editMode) {
+        blockInfo.value.addNewBlock()
+    }
+}
 </script>
 
 <template>
