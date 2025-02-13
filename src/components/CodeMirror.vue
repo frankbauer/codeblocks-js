@@ -98,6 +98,7 @@ interface ErrorRange {
     to: number
     severity: ErrorSeverity
     message: string
+    decoration?: Decoration
 }
 
 // Add proper typing for the props
@@ -581,20 +582,15 @@ watch(
 const lineCount = (): number => editorView.value?.state.doc.lines ?? 0
 
 // Create underline decoration based on errors
-const addUnderline = StateEffect.define<{
-    from: number
-    to: number
-    severity: ErrorSeverity
-    message: string
-    decoration?: Decoration
-}>({
-    map: ({ from, to, severity, message, decoration }, change) => ({
-        from: change.mapPos(from),
-        to: change.mapPos(to),
-        severity,
-        message,
-        decoration,
-    }),
+const addUnderline = StateEffect.define<ErrorRange>({
+    map: ({ from, to, severity, message, decoration }, change) =>
+        validateRange({
+            from: change.mapPos(from),
+            to: change.mapPos(to),
+            severity,
+            message,
+            decoration,
+        }),
 })
 
 // Define a StateEffect for clearing all underlines
@@ -629,9 +625,42 @@ const underlineMarkError = (severity: ErrorSeverity, msg: string) =>
         attributes: {},
     })
 
+function clamp(n: number) {
+    return Math.max(0, Math.min(n, editorView.value!.state.doc.length - 1))
+}
+
+function validateRange(range: ErrorRange): ErrorRange {
+    range.from = clamp(range.from)
+    range.to = clamp(range.to)
+    if (range.from === range.to) {
+        range.to = clamp(range.to + 1)
+    }
+    if (range.from === range.to) {
+        range.from = clamp(range.from - 1)
+    }
+    if (range.from > range.to) {
+        return {
+            from: range.to,
+            to: range.from,
+            severity: range.severity,
+            message: range.message,
+            decoration: range.decoration,
+        }
+    }
+    return range
+}
+
 const errorRanges = computed(() => {
     return errors.value
         .map((e) => {
+            if (firstLine.value === 0) {
+                return validateRange({
+                    from: editorView.value!.state.doc.length - 2,
+                    to: editorView.value!.state.doc.length - 1,
+                    severity: e.severity,
+                    message: e.message,
+                })
+            }
             const sLine = e.start.line - firstLine.value + 1
             const startLine = editorView.value!.state.doc.line(sLine)
             if (startLine) {
@@ -640,15 +669,20 @@ const errorRanges = computed(() => {
                 if (eLine >= sLine && eLine <= lineCount()) {
                     const endLine = editorView.value!.state.doc.line(eLine)
                     if (endLine) {
-                        return {
-                            from,
+                        return validateRange({
+                            from: from,
                             to: endLine.from + e.end.column,
                             severity: e.severity,
                             message: e.message,
-                        }
+                        })
                     }
                 } else {
-                    return { from, to: from + 1, severity: e.severity, message: e.message }
+                    return validateRange({
+                        from: from,
+                        to: from + 1,
+                        severity: e.severity,
+                        message: e.message,
+                    })
                 }
             }
             return undefined

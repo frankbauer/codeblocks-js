@@ -119,12 +119,12 @@ function runJavaScriptWorker(
 
     worker.onerror = function (e) {
         compileFailedCallback({
-            start: { line: e.lineno - 3, column: e.colno - 1 },
-            end: { line: e.lineno - 3, column: e.colno },
+            start: { line: Math.max(1, e.lineno - 2), column: e.colno - 1 },
+            end: { line: Math.max(1, e.lineno - 2), column: e.colno },
             message: e.message,
             severity: ErrorSeverity.Error,
         })
-        worker.end('Line ' + (e.lineno - 3) + ': ' + e.message)
+        worker.end('Line ' + Math.max(1, e.lineno - 2) + ': ' + e.message)
     }
 
     worker.end = function (msg) {

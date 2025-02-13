@@ -243,11 +243,11 @@ export class JavaV100Compiler implements ICompilerInstance {
                         compileFailedCallback({
                             message: e.data.message,
                             start: {
-                                line: e.data.startLineNumber,
+                                line: e.data.startLineNumber + 1,
                                 column: e.data.startColumn,
                             },
                             end: {
-                                line: e.data.endLineNumber,
+                                line: e.data.endLineNumber + 1,
                                 column: e.data.endColumn,
                             },
                             severity:

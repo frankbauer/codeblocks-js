@@ -218,14 +218,15 @@ export class JavaV101Compiler implements ICompilerInstance {
                     }
                 } else if (e.data.command == 'diagnostic') {
                     if (compileFailedCallback) {
+                        console.d('compileFailedCallback', e.data)
                         compileFailedCallback({
                             message: e.data.text,
                             start: {
-                                line: e.data.lineNumber,
+                                line: e.data.lineNumber + 1,
                                 column: 0,
                             },
                             end: {
-                                line: e.data.lineNumber,
+                                line: e.data.lineNumber + 1,
                                 column: 0,
                             },
                             severity:
@@ -246,11 +247,11 @@ export class JavaV101Compiler implements ICompilerInstance {
                         compileFailedCallback({
                             message: e.data.message,
                             start: {
-                                line: e.data.startLineNumber,
+                                line: e.data.startLineNumber + 1,
                                 column: e.data.startColumn,
                             },
                             end: {
-                                line: e.data.endLineNumber,
+                                line: e.data.endLineNumber + 1,
                                 column: e.data.endColumn,
                             },
                             severity:

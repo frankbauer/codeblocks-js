@@ -32,9 +32,9 @@ export const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedEr
     let line: number | undefined = undefined
     let column: number | undefined = undefined
     if (e.line) {
-        line = e.line
+        line = Math.max(1, e.line - 1)
     } else if (e.lineNumber) {
-        line = e.lineNumber
+        line = Math.max(1, e.lineNumber - 1)
     }
 
     if (e.column) {
@@ -49,8 +49,8 @@ export const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedEr
             const regex = /<anonymous>:(\d+):(\d+)/gm
             let m: RegExpExecArray | null = null
             if ((m = regex.exec(lines[1])) !== null) {
-                line = Number(m[1]) - 1
-                column = Number(m[2]) - 1
+                line = Math.max(1, Number(m[1]) - 2)
+                column = Math.max(1, Number(m[2]) - 2)
             }
         }
     }

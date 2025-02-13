@@ -248,10 +248,8 @@ export function codeBlockSetup(
     const completeSource = computed((): string => {
         return blocks.value
             .filter((b) => b.hasCode)
-            .map((b) => b.actualContent())
-            .reduce((p, c) => {
-                return p + '\n' + c
-            }, '')
+            .map((b) => b.actualContent() + '\n')
+            .join('')
     })
     const showGlobalMessages = computed((): boolean => {
         return !globalState.compilerState.globalStateHidden
