@@ -66,8 +66,6 @@ function runJavaScriptWorker(
     const postfixCode = ['\n', '})(input.data[1])]);', '   close();', '};']
     code = prefixCode.join('') + code + postfixCode.join('')
 
-    //TODO:: creating a WebWorker from an URL is throwing a SecurityError in  IE 11  ...
-    //          is there any workaround?
     const worker = new Worker(URL.createObjectURL(new Blob([code], { type: 'text/javascript' })))
     let executionFinished = false
     worker.end = function (msg) {
