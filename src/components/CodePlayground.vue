@@ -403,7 +403,7 @@ function emitRun() {
 }
 
 function onCanvasChange(can) {
-    canvas.value = can
+    canvas.value = can.value
     if (props.editMode) {
         updateErrors()
     }
