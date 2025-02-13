@@ -32,7 +32,7 @@ export const i18n = createI18n({
 })
 
 export default i18n
-export const l = (key: string, values?: any[]): string => {
+export const l = (key: string, values?: any): string => {
     const res = values === undefined ? i18n.global.t(key) : i18n.global.t(key, values)
     return res.toString()
 }
