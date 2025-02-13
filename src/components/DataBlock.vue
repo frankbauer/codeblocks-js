@@ -110,25 +110,35 @@
             </div>
         </div>
         <q-slide-transition>
-            <Codemirror
+            <code-mirror
                 ref="codeBox"
-                :value="code"
-                :options="options"
+                v-model="code"
                 :class="`accqstXmlInput noRTEditor codebox`"
-                :original-style="true"
-                @ready="onCodeReady"
-                @focus="onCodeFocus"
-                @input="onCodeChange"
                 :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
                 :id="`teQ${block.parentID}B${block.id}`"
                 :data-question="block.parentID"
+                theme="xq-dark"
+                language="text/json"
+                @update:model-value="onCodeChange"
+                @ready="onCodeReady"
+                @focus="onCodeFocus"
             />
         </q-slide-transition>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { toRefs, ref, computed, onMounted, onBeforeUnmount, getCurrentInstance, Ref } from 'vue'
+import CodeMirror from '@/components/CodeMirror.vue'
+import {
+    toRefs,
+    ref,
+    computed,
+    onMounted,
+    onBeforeUnmount,
+    getCurrentInstance,
+    Ref,
+    watch,
+} from 'vue'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
 
@@ -142,6 +152,8 @@ import { EventHubType } from '@/composables/globalEvents'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 import { useQuasar } from 'quasar'
+import { IScriptOutputObject } from '@/lib/IScriptBlock'
+import { useCodeEditor } from '@/composables/useCodeEditor'
 
 interface Props extends EditableBlockProps {
     namePrefix?: string
@@ -162,6 +174,7 @@ const instance = getCurrentInstance()
 const q = useQuasar()
 const t = instance?.proxy?.$root?.$t
 
+// Block storage and mounting
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)
 const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
@@ -174,11 +187,12 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
 const { namePrefix, finalOutputObject, editMode, theme, eventHub, tagSet } = toRefs(props)
 const needsCodeRebuild = ref<boolean>(false)
 const error = ref<string>('')
+const readonyl = computed(() => !editMode.value)
 
 const imageFileUploader: Ref<HTMLElement | null> = ref(null)
 const plainFileUploader: Ref<HTMLElement | null> = ref(null)
 const jsonFileUploader: Ref<HTMLElement | null> = ref(null)
-const codeBox: Ref<HTMLElement | null> = ref(null)
+const codeBox = ref<InstanceType<typeof CodeMirror> | null>(null)
 
 const codemirror = computed((): any | undefined => {
     if (codeBox.value === undefined || codeBox.value === null) {
@@ -192,26 +206,24 @@ const originalMode = computed((): boolean => {
     }
     return block.value.obj.requestsOriginalVersion()
 })
+
+const { editorReadOnly, code } = useCodeEditor(block, editMode, readonyl)
+
 const options = computed((): ICodePlaygroundOptions => {
     return {
-        mode: globalState.appState.mimeType('javascript'),
+        mode: globalState.appState.mimeType('json'),
         theme: theme.value,
         lineNumbers: true,
         line: true,
         tabSize: 4,
         indentUnit: 4,
         autoCloseBrackets: true,
-        readOnly: !editMode.value,
+        readOnly: editorReadOnly.value,
         firstLineNumber: 1,
         gutters: ['diagnostics', 'CodeMirror-linenumbers'],
     }
 })
-const code = computed(() => {
-    if (!editMode.value) {
-        return block.value.actualContent()
-    }
-    return block.value.content
-})
+
 const name = computed({
     get(): string {
         return block.value.name
@@ -220,11 +232,17 @@ const name = computed({
         block.value.name = newName
     },
 })
-const visibleLines = computed((): 'auto' | string => {
-    if (block.value.codeExpanded == CodeExpansionType.TINY) {
-        return '2.4'
-    } else if (block.value.codeExpanded == CodeExpansionType.LARGE) {
-        return '33.4'
+
+//watch for changes in codeExpanded
+watch(
+    () => block.value.codeExpanded,
+    () => updateHeight()
+)
+const visibleLines = computed((): 'auto' | number => {
+    if (isExpandedTiny.value) {
+        return 3
+    } else if (isExpandedLarge.value) {
+        return 33.4
     }
     return 'auto'
 })
@@ -305,20 +323,21 @@ const onCodeReady = (editor) => {
     whenBlockIsReady()
 }
 const updateHeight = () => {
-    if (visibleLines.value === 'auto') {
-        if (codemirror.value) {
-            codemirror.value.setSize('height', 'auto')
-        }
-    } else {
-        if (codemirror.value) {
-            codemirror.value.setSize(null, Math.round(20 * Math.max(1, +visibleLines.value)) + 9)
-        }
+    if (!codeBox.value?.view) {
+        return
     }
+
+    const height =
+        visibleLines.value === 'auto' || block.value.static
+            ? 'auto'
+            : `${Math.round(20 * Math.max(1, visibleLines.value)) + 9}px`
+
+    codeBox.value.view.dom.style.height = height
 }
 const showInfoDialog = (): void => {
     q?.dialog({
         title: l('DataBlock.InfoCaption'),
-        message: l('DataBlock.Info').replace('{NAME}', name.value),
+        message: l('DataBlock.Info', { NAME: name.value }),
         html: true,
         style: 'width:75%',
     })
