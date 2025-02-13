@@ -17,6 +17,9 @@ export const TAG_CLASS_NAMES = {
 }
 
 export function createTagCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
+    if (tagSet.value === undefined) {
+        return undefined
+    }
     return (context: CompletionContext): CompletionResult | null => {
         const word = context.matchBefore(tagCompletionTrigger)
         if (!word || (word.from == word.to && !context.explicit)) {
