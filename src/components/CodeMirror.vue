@@ -312,14 +312,18 @@ const createIndentService = (): Extension => {
 
 function combinedCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
     const tagCompletions = createTagCompletions(tagSet)
-    if (language.value === 'text/java' || language.value === 'text/x-java') {
-        return (context: CompletionContext): CompletionResult | null => {
-            const res = tagCompletions(context)
-            if (res === null) {
+
+    return (context: CompletionContext): CompletionResult | null => {
+        let res: CompletionResult | null = null
+        if (tagCompletions) {
+            res = tagCompletions(context)
+        }
+        if (res === null) {
+            if (language.value === 'text/java' || language.value === 'text/x-java') {
                 return createJavaCompletions(context)
             }
-            return res
         }
+        return res
     }
 }
 
@@ -415,8 +419,6 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
             })
         ),
         autocompletion({
-            //   override: [createTagCompletions(tagSet)],
-            defaultKeymap: true,
             activateOnTyping: true,
         }),
         keymap.of([...completionKeymap]),
