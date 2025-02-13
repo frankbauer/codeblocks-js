@@ -255,6 +255,10 @@ function onCodeChange(newCode: string) {
         return
     }
 
+    if (codeBoxRaw.value) {
+        codeBoxRaw.value.value = newCode
+    }
+
     block.value.lineCountHint = codeBox.value.lineCount()
     block.value.content = newCode
 
