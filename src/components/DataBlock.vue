@@ -117,7 +117,7 @@
                 :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
                 :id="`teQ${block.parentID}B${block.id}`"
                 :data-question="block.parentID"
-                theme="xq-dark"
+                :theme="block.themeForCodeBlock"
                 language="text/json"
                 @update:model-value="onCodeChange"
                 @ready="onCodeReady"

@@ -27,28 +27,24 @@ import { java } from '@codemirror/lang-java'
 import { javascript } from '@codemirror/lang-javascript'
 import { json } from '@codemirror/lang-json'
 import { python } from '@codemirror/lang-python'
-import { CompletionContext, CompletionResult } from '@codemirror/autocomplete'
-import { autocompletion, completionKeymap } from '@codemirror/autocomplete'
 import {
-    indentUnit,
-    syntaxHighlighting,
-    indentService,
-    syntaxTree,
-    IndentContext,
-    TreeIndentContext,
-    indentNodeProp,
-} from '@codemirror/language'
+    autocompletion,
+    CompletionContext,
+    completionKeymap,
+    CompletionResult,
+} from '@codemirror/autocomplete'
+import { IndentContext, indentService, indentUnit } from '@codemirror/language'
 import {
     ChangeSpec,
     Compartment,
     EditorSelection,
     EditorState,
     type Extension,
+    type Line,
     RangeSetBuilder,
     StateEffect,
     StateField,
     type Transaction,
-    type Line,
 } from '@codemirror/state'
 import {
     Decoration,
@@ -79,7 +75,6 @@ import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import {
     createTagCompletions,
-    createTagHighlightStyle,
     createTagMarkField,
     createTagTooltip,
     markTags,
@@ -88,9 +83,12 @@ import { basicDarkTheme } from 'cm6-theme-basic-dark'
 import { basicLightTheme } from 'cm6-theme-basic-light'
 import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
 import { solarizedLightTheme } from 'cm6-theme-solarized-light'
-import { getSimpleIndentation } from '@/plugins/CMCodeIndentation'
+import { getSimpleIndentation } from '@/plugins/codemirror/codeIndentation'
 import { CodeSplitSegment } from '@/composables/useCodeEditor'
 import { createJavaCompletions } from '@/plugins/javaCompletions'
+import { createHighlightStyle } from '@/plugins/codemirror/highlightStyles'
+import { getUITheme, UITheme, UIThemeType } from '@/lib/uiTheme'
+import { DEFAULT_EDITOR_THEME, EditorTheme, EditorThemes } from '@/plugins/codemirror/editorThemes'
 
 // Add proper interface for error ranges
 interface ErrorRange {
@@ -106,7 +104,7 @@ interface Props {
     modelValue?: string // Add this to properly type v-model
     name: string
     dataQuestion?: string | number
-    theme?: string
+    theme?: EditorTheme
     language?: string
     firstLine?: number
     readOnly?: boolean
@@ -128,7 +126,7 @@ const emit = defineEmits<{
 
 const props = withDefaults(defineProps<Props>(), {
     dataQuestion: '',
-    theme: 'xq-light',
+    theme: () => DEFAULT_EDITOR_THEME,
     language: 'text/javascript',
     firstLine: 1,
     readOnly: false,
@@ -168,17 +166,8 @@ const mainClass = computed(() => {
     }
 })
 
-const editorTheme = computed(() => {
-    switch (theme.value) {
-        case 'solarized dark':
-            return solarizedDarkTheme
-        case 'solarized light':
-            return solarizedLightTheme
-        case 'xq-dark':
-            return basicDarkTheme
-        default:
-            return basicLightTheme
-    }
+const editorTheme = computed<EditorTheme>(() => {
+    return theme.value
 })
 
 const editorLanguage = computed(() => {
@@ -201,9 +190,11 @@ const editorLanguage = computed(() => {
             return javascript()
     }
 })
+
 const languageCompartment = new Compartment()
 const languageAutoCompleteCompartment = new Compartment()
 const themeCompartment = new Compartment()
+const highlighterCompartment = new Compartment()
 const readOnlyCompartment = new Compartment()
 const lineNumbersCompartment = new Compartment()
 const indentationCompartment = new Compartment()
@@ -257,7 +248,7 @@ const getIndentationAt = (context: IndentContext, pos: number): number => {
 
 function reformatCode(view: EditorView) {
     // Get all lines
-    const changes: ChangeSpec = []
+    let changes: ChangeSpec = []
     const doc = view.state.doc
 
     //get all lines form the document
@@ -345,7 +336,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         EditorView.editable.of(true),
         EditorState.tabSize.of(4),
         indentUnit.of('    '),
-        themeCompartment.of(editorTheme.value),
+        themeCompartment.of(editorTheme.value.editorTheme),
         languageCompartment.of(editorLanguage.value),
         lineNumbersCompartment.of(
             lineNumbers({
@@ -406,13 +397,12 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                             })
                         )
                     }
-                    return true
                 }
                 return false
             },
         }),
         keymap.of([indentWithTab]),
-        syntaxHighlighting(createTagHighlightStyle()),
+        highlighterCompartment.of(editorTheme.value.highlightStyle),
         languageAutoCompleteCompartment.of(
             editorLanguage.value.language.data.of({
                 autocomplete: combinedCompletions(tagSet),
@@ -534,7 +524,10 @@ watch(editorTheme, (newValue) => {
     }
 
     editorView.value.dispatch({
-        effects: themeCompartment.reconfigure(newValue),
+        effects: [
+            themeCompartment.reconfigure(newValue.editorTheme),
+            highlighterCompartment.reconfigure(newValue.highlightStyle),
+        ],
     })
 })
 

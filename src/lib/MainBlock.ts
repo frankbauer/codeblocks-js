@@ -8,6 +8,7 @@ import {
 import { uuid } from 'vue-uuid'
 import { ICompilerID } from '@/lib/ICompilerRegistry'
 import { BlockData, constructBlock, IAppSettings, IMainBlock } from '@/lib/codeBlocksManager'
+import { UITheme, UIThemeType } from '@/lib/uiTheme'
 
 export default class MainBlock implements IMainBlock {
     id: number
@@ -22,8 +23,7 @@ export default class MainBlock implements IMainBlock {
     domLibs: string[]
     workerLibs: string[]
     outputParser: CodeOutputTypes
-    solutionTheme: string
-    codeTheme: string
+    uiTheme: UIThemeType
     executionTimeout: number
     maxCharacters: number
     scopeUUID?: string
@@ -46,8 +46,7 @@ export default class MainBlock implements IMainBlock {
         this.domLibs = data.domLibs
         this.workerLibs = data.workerLibs
         this.outputParser = data.outputParser
-        this.solutionTheme = data.solutionTheme
-        this.codeTheme = data.codeTheme
+        this.uiTheme = data.uiTheme
         this.executionTimeout = data.executionTimeout
         this.maxCharacters = data.maxCharacters
         this.scopeUUID = data.scopeUUID

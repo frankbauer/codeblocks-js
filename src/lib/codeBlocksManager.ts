@@ -1,10 +1,8 @@
-import { reactive, ref, UnwrapRef, createApp, h, type Ref } from 'vue'
+import { UnwrapRef, createApp, h, type Ref } from 'vue'
 import { ScriptBlock } from './scriptBlock'
 import i18n from '../plugins/i18n'
 
 import App from '../App.vue'
-import AppEditor from '../AppEditor.vue'
-import CodeBlock from '../components/CodeBlock.vue'
 import { uuid } from 'vue-uuid'
 
 import compilerRegistry, { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
@@ -34,8 +32,9 @@ import { taggedDirective, tagger } from '@/plugins/tagger'
 import { highlight, highlightDirective } from '@/plugins/highlight'
 import { appUseQuasar } from '@/plugins/quasar'
 import { appUseCodeMirror } from '@/plugins/codemirror'
-import MainBlock from '@/lib/MainBlock'
 import { storeBlock } from '@/storage/blockStorage'
+import { UIThemeType, getUITheme } from '@/lib/uiTheme'
+import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -65,8 +64,7 @@ export interface IAppSettings {
     domLibs: string[]
     workerLibs: string[]
     outputParser: CodeOutputTypes
-    solutionTheme: string
-    codeTheme: string
+    uiTheme: UIThemeType
     executionTimeout: number
     maxCharacters: number
     scopeUUID?: string
@@ -78,7 +76,12 @@ export interface IAppSettings {
     shadowRoot?: ShadowRoot
 }
 
-interface IInputElementData {
+interface IInputElementDataDeprecated {
+    solutionTheme?: string //Deprecated
+    codeTheme?: string //Deprecated
+}
+
+interface IInputElementData extends IInputElementDataDeprecated {
     randomizerActive?: string
     randomizerPreviewIndex?: string
     randomizerKnownTags?: string
@@ -100,8 +103,7 @@ interface IInputElementData {
     keepAlive?: string
     persistentArguments?: string
     outputParser?: CodeOutputTypes
-    solutionTheme?: string
-    codeTheme?: string
+    uiTheme?: string
 }
 
 export class BlockData implements IBlockData {
@@ -211,20 +213,21 @@ export class BlockData implements IBlockData {
         this.recreateScriptObject()
     }
 
-    getThemeForBlock(bl: ICodeBlockDataState): string {
-        if (bl.static || bl.readonly || bl.hidden || this.type === KnownBlockTypes.DATA) {
-            return this.appSettings.codeTheme
+    getThemeForBlock(bl: ICodeBlockDataState): EditorTheme {
+        const theme = getUITheme(this.appSettings.uiTheme)
+        if (bl.hasCode) {
+            if (bl.static || bl.readonly || bl.hidden) {
+                return theme.codeBlock
+            }
+
+            return theme.solutionBlock
         }
 
-        return this.appSettings.solutionTheme
+        return theme.otherBlocks
     }
 
-    get themeForCodeBlock(): string {
-        if (this.static || this.readonly || this.hidden || this.type === KnownBlockTypes.DATA) {
-            return this.appSettings.codeTheme
-        }
-
-        return this.appSettings.solutionTheme
+    get themeForCodeBlock(): EditorTheme {
+        return this.getThemeForBlock(this)
     }
 
     get isSourceCode(): boolean {
@@ -361,8 +364,7 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
         blocks: [],
         outputParser: CodeOutputTypes.AUTO,
         readonly: false,
-        solutionTheme: 'solarized light',
-        codeTheme: 'xq-light',
+        uiTheme: 'light',
         uuid: 'is-set-below',
         executionTimeout: 5000,
         maxCharacters: 1000,
@@ -467,11 +469,44 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
     }
 
     if (inData.solutionTheme !== undefined) {
-        data.solutionTheme = inData.solutionTheme
+        console.error('SolutionTheme is deprecated, us uiTheme instead')
     }
 
     if (inData.codeTheme !== undefined) {
-        data.codeTheme = inData.codeTheme
+        console.error('CodeTheme is deprecated, us uiTheme instead')
+    }
+
+    if (inData.uiTheme !== undefined) {
+        data.uiTheme = inData.uiTheme as UIThemeType
+    } else {
+        let oldTheme: string | undefined = undefined
+        if (inData.solutionTheme !== undefined) {
+            oldTheme = inData.solutionTheme
+        } else if (inData.codeTheme !== undefined) {
+            oldTheme = inData.codeTheme
+        }
+
+        if (oldTheme !== undefined) {
+            if (
+                oldTheme === 'solarized light' ||
+                oldTheme === 'base16-light' ||
+                oldTheme === 'duotone-light' ||
+                oldTheme === 'xq-light' ||
+                oldTheme === 'neo' ||
+                oldTheme === 'mbo' ||
+                oldTheme === 'mdn-like'
+            ) {
+                data.uiTheme = 'light'
+            } else if (
+                oldTheme === 'solarized dark' ||
+                oldTheme === 'base16-dark' ||
+                oldTheme === 'duotone-dark' ||
+                oldTheme === 'xq-dark' ||
+                oldTheme === 'blackboard'
+            ) {
+                data.uiTheme = 'dark'
+            }
+        }
     }
 
     return data
@@ -664,13 +699,13 @@ class InternalCodeBlocksManager {
     instantiateVue() {
         const data = this.data
         this._data = undefined
-        
+
         // No need to check attribute again - data.editMode is already set correctly
         const storeageInfo = storeBlock(data)
         const context = {
-            appID: storeageInfo.appID
+            appID: storeageInfo.appID,
         }
-        
+
         const app = createApp(App, context)
         app.use(i18n)
         app.directive('tagged', taggedDirective)

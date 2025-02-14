@@ -254,17 +254,10 @@
                 </q-card-section>
                 <q-card-section class="q-ml-md">
                     <div class="row" dense>
-                        <div class="col-xs-12 col-md-6 q-pr-md-sm">
-                            <q-select
-                                :options="themes"
-                                v-model="codeTheme"
-                                :label="$t('CodeBlocksSettings.TGeneral')"
-                            />
-                        </div>
                         <div class="col-xs-12 col-md-6">
                             <q-select
                                 :options="themes"
-                                v-model="solutionTheme"
+                                v-model="uiTheme"
                                 :label="$t('CodeBlocksSettings.TSolution')"
                             />
                         </div>
@@ -331,6 +324,7 @@ import compilerRegistry from '@/lib/CompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import { l } from '@/plugins/i18n'
 import { useQuasar } from 'quasar'
+import { UIThemeType, UIThemeTypes, getUITheme } from '@/lib/uiTheme'
 
 export interface ICodeBlockSettingsOptions {
     language: string
@@ -341,8 +335,7 @@ export interface ICodeBlockSettingsOptions {
     domLibs: string[]
     workerLibs: string[]
     id: number
-    codeTheme: string
-    solutionTheme: string
+    uiTheme: UIThemeType
     outputParser: CodeOutputTypes
     randomizer: IRandomizerSettings
     continuousCompilation: boolean
@@ -382,20 +375,9 @@ export default defineComponent({
         const t = instance?.proxy?.$root?.$t
         //Computed
         const themes: ComputedRef<IListItemData[]> = computed(() => {
-            return [
-                { label: 'Solarized', value: 'solarized light' },
-                { label: 'Solarized (dark)', value: 'solarized dark' },
-                { label: 'Base16 (dark)', value: 'base16-dark' },
-                { label: 'Base16 (light)', value: 'base16-light' },
-                { label: 'Duotone (dark)', value: 'duotone-dark' },
-                { label: 'Duotone (light)', value: 'duotone-light' },
-                { label: 'XQ (dark)', value: 'xq-dark' },
-                { label: 'XQ (light)', value: 'xq-light' },
-                { label: 'Blackboard', value: 'blackboard' },
-                { label: 'neo', value: 'neo' },
-                { label: 'mbo', value: 'mbo' },
-                { label: 'mdn like', value: 'mdn-like' },
-            ]
+            return UIThemeTypes.map((k) => {
+                return { value: k, label: getUITheme(k).name }
+            })
         })
 
         const outputParsers: ComputedRef<IListItemData[]> = computed(() => {
@@ -576,28 +558,14 @@ export default defineComponent({
             },
         })
 
-        const solutionTheme = computed({
+        const uiTheme = computed({
             get: () => {
-                return globalState.appState.itemForValue(themes.value, props.options.solutionTheme)
+                return globalState.appState.itemForValue(themes.value, props.options.uiTheme)
             },
 
             set: (v: IListItemData) => {
                 context.emit('theme-change', {
-                    solution: v.value,
-                    code: props.options.codeTheme,
-                })
-            },
-        })
-
-        const codeTheme = computed({
-            get: () => {
-                return globalState.appState.itemForValue(themes.value, props.options.codeTheme)
-            },
-
-            set: (v: IListItemData) => {
-                context.emit('theme-change', {
-                    solution: props.options.solutionTheme,
-                    code: v.value,
+                    ui: v.value,
                 })
             },
         })
@@ -831,8 +799,7 @@ export default defineComponent({
             maxCharacters,
             domLibrary,
             workerLibrary,
-            solutionTheme,
-            codeTheme,
+            uiTheme,
             outputParser,
             canContinousCompile,
             continuousCompile,

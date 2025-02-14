@@ -1,6 +1,7 @@
 import { ICompilerID, IListItemData } from './ICompilerRegistry'
 import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import { IAppSettings } from '@/lib/codeBlocksManager'
+import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 
 export enum KnownBlockTypes {
     PLAYGROUND = 'PLAYGROUND',
@@ -95,6 +96,7 @@ export interface ICodeBlockDataState {
     readonly: boolean
     static: boolean
     hidden: boolean
+    hasCode: boolean
 }
 
 export interface IBlockDataWithSettings extends IBlockDataBase {
@@ -102,7 +104,6 @@ export interface IBlockDataWithSettings extends IBlockDataBase {
 }
 
 export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataState, IBlockDataData {
-    hasCode: boolean
     type: KnownBlockTypes
     content: string
     alternativeContent: string | null
@@ -128,9 +129,9 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
 }
 
 export interface IBlockData extends IBlockDataBase {
-    getThemeForBlock(bl: ICodeBlockDataState): string
+    getThemeForBlock(bl: ICodeBlockDataState): EditorTheme
 
-    readonly themeForCodeBlock: string
+    readonly themeForCodeBlock: EditorTheme
 }
 
 export interface IGlobalSettings {

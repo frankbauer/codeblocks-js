@@ -254,8 +254,7 @@ const onDomLibChange = (v: string[]): void => {
 const onThemeChange = (nfo: IOnThemeChangeInfo): void => {
     if (editMode) {
         console.log('TC', nfo)
-        blockInfo.value.solutionTheme = nfo.solution
-        blockInfo.value.codeTheme = nfo.code
+        blockInfo.value.uiTheme = nfo.ui
     }
 }
 

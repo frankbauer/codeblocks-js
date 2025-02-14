@@ -1,6 +1,7 @@
 import { onBeforeUnmount, onMounted, onUnmounted, PropType } from 'vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { BlockStorageType } from '@/storage/blockStorage'
+import { DEFAULT_EDITOR_THEME, EditorTheme, EditorThemes } from '@/plugins/codemirror/editorThemes'
 
 interface OptionalBasicBlockProps {
     muteReadyState?: boolean
@@ -20,7 +21,7 @@ export type VisibleLinesType = number | 'auto'
 interface OptionalEditableBlockProps extends OptionalBasicBlockProps {
     editMode?: boolean
     visibleLines?: VisibleLinesType
-    theme?: string
+    theme?: EditorTheme
 }
 
 export interface EditableBlockProps extends BasicBlockProps, OptionalEditableBlockProps {}
@@ -29,7 +30,7 @@ export const DEFAULT_EDITABLE_BLOCK_PROPS: OptionalEditableBlockProps = {
     muteReadyState: false,
     editMode: false,
     visibleLines: 'auto',
-    theme: 'base16-dark',
+    theme: DEFAULT_EDITOR_THEME,
 }
 
 export const useBasicBlockProps = () => {

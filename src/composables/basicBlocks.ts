@@ -4,17 +4,8 @@ import {
     IRandomizerSet,
     KnownBlockTypes,
 } from '@/lib/ICodeBlocks'
-import {
-    computed,
-    ComputedRef,
-    nextTick,
-    onBeforeUnmount,
-    onMounted,
-    ref,
-    Ref,
-    UnwrapRef,
-} from 'vue'
-import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, Ref, UnwrapRef } from 'vue'
+import { BlockData } from '@/lib/codeBlocksManager'
 import { EventHubType } from '@/composables/globalEvents'
 import { IProcessedScriptOutput, IScriptOutputObject } from '@/lib/IScriptBlock'
 import { globalState } from '@/lib/globalState'
@@ -26,6 +17,8 @@ import {
 } from '@/lib/ICompilerRegistry'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
 import { BlockStorageType } from '@/storage/blockStorage'
+import { UIThemeType } from '@/lib/uiTheme'
+import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 
 export interface CodeBlocksProperties {
     eventHub: EventHubType
@@ -70,8 +63,7 @@ export interface IOnGenerateTemplateInfo {
 }
 
 export interface IOnThemeChangeInfo {
-    solution: string
-    code: string
+    ui: UIThemeType
 }
 
 export interface IOnChangeOrder {
@@ -160,8 +152,7 @@ export function codeBlockSetup(
             domLibs: domLibraries.value,
             workerLibs: workerLibraries.value,
             id: blockInfo.value.id,
-            codeTheme: codeTheme.value,
-            solutionTheme: solutionTheme.value,
+            uiTheme: uiTheme.value,
             outputParser: outputParser.value,
             randomizer: blockInfo.value.randomizer,
             continuousCompilation: blockInfo.value.continuousCompilation,
@@ -199,11 +190,8 @@ export function codeBlockSetup(
     const workerLibraries = computed((): string[] => {
         return blockInfo.value.workerLibs
     })
-    const solutionTheme = computed((): string => {
-        return blockInfo.value.solutionTheme
-    })
-    const codeTheme = computed((): string => {
-        return blockInfo.value.codeTheme
+    const uiTheme = computed((): UIThemeType => {
+        return blockInfo.value.uiTheme
     })
     const readonly = computed((): boolean => {
         return blockInfo.value.readonly
@@ -294,7 +282,7 @@ export function codeBlockSetup(
     const tagSet = (nr: number): IRandomizerSet => {
         return blockInfo.value.randomizer.sets[nr]
     }
-    const themeForBlock = (bl: UnwrapRef<BlockData>): string => {
+    const themeForBlock = (bl: UnwrapRef<BlockData>): EditorTheme => {
         return bl.themeForCodeBlock
     }
     const blockById = (id: number): UnwrapRef<BlockData> | undefined => {
@@ -623,8 +611,7 @@ export function codeBlockSetup(
         runCode,
         domLibraries,
         workerLibraries,
-        solutionTheme,
-        codeTheme,
+        uiTheme,
         readonly,
         outputParser,
         hasOutput,
