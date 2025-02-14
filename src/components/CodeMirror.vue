@@ -643,6 +643,8 @@ defineExpose({
     .system-code-box-dark
         border: 2px solid $yellow-8
 
+    .cm-focused
+        outline: none !important
 
     .cm-lineNumbers
         min-width: 25px
