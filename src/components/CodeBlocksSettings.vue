@@ -27,7 +27,7 @@
                               )})`
                     "
                 >
-                    <q-card class="q-mb-sm q-mr-sm-none q-mr-md-sm">
+                    <q-card class="q-ml-md">
                         <q-card-section class="q-ml-md">
                             <div class="row">
                                 <div class="col-12">
@@ -270,7 +270,7 @@
                     :label="$t('CodeBlocksSettings.Output')"
                     :caption="`max. ${maxCharacters}, ${outputParser.label}`"
                 >
-                    <q-card class="q-mb-sm q-mr-none">
+                    <q-card class="q-ml-md">
                         <q-card-section class="q-ml-md">
                             <div class="row">
                                 <div class="col-xs-12 col-md-6 col-12 q-pr-md-sm">
@@ -311,10 +311,7 @@
                         'CodeBlocksSettings.WorkLibs'
                     )}: ${workerLibrary.length}`"
                 >
-                    <q-card class="q-mr-sm-none q-mt-sm">
-                        <q-card-section class="text-overline"
-                            >{{ $t('CodeBlocksSettings.Libraries') }}
-                        </q-card-section>
+                    <q-card class="q-ml-md">
                         <q-card-section class="q-ml-md">
                             <div class="row q-my-none q-py-none" dense>
                                 <div class="col-xs-12 col-sm-12 q-my-none q-py-none">
@@ -356,19 +353,19 @@
                             : $t('RandomizerSettings.Inactive')
                     "
                 >
-                    <div :class="`col-xs-${options.randomizer.active ? '12' : '12'} q-mt-sm`">
+                    <div class="q-ml-md">
                         <RandomizerSettings :options="options" />
-                    </div>
-                    <div class="col-xs-12">
-                        <textarea
-                            :name="`block_settings[${this.options.id}]`"
-                            class="blocksettings"
-                            v-model="serializedOptions"
-                        ></textarea>
                     </div>
                 </q-expansion-item>
             </q-list>
         </q-expansion-item>
+        <div class="col-xs-12">
+            <textarea
+                :name="`block_settings[${this.options.id}]`"
+                class="blocksettings"
+                v-model="serializedOptions"
+            ></textarea>
+        </div>
     </q-list>
 </template>
 
