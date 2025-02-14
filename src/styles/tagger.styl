@@ -5,7 +5,7 @@
   padding-bottom 0px
   padding-top 0px
 
-span.random-tag-placeholder, span.random-tag-placeholder > span
+span.random-tag-placeholder, span.random-tag-placeholder > span, span.random-tag-placeholder > span > span
   color $blue-grey-1!important
 
 span.random-tag-placeholder
@@ -13,7 +13,7 @@ span.random-tag-placeholder
   border-radius 4px
   padding 1px 1px
 
-span.random-tag-placeholder.tag-not-found, span.random-tag-placeholder.tag-not-found > span
+span.random-tag-placeholder.tag-not-found, span.random-tag-placeholder.tag-not-found > span, span.random-tag-placeholder.tag-not-found > span > span
   color $red-2!important
 
 span.random-tag-placeholder.tag-not-found
@@ -21,3 +21,9 @@ span.random-tag-placeholder.tag-not-found
   color $red-2!important
   font-weight bold
   box-shadow none
+
+
+div.tagItem
+  border 1px solid $blue-8
+  border-radius 3px
+  box-shadow 1px 1px 3px rgba(0, 0, 0, 0.2)
