@@ -1,318 +1,375 @@
 <template>
-    <div class="row q-pa-none q-mb-md">
-        <div class="col-xs-12 col-sm-12 col-md-6">
-            <q-card class="q-mb-sm q-mr-sm-none q-mr-md-sm">
-                <q-card-section class="text-overline"
-                    >{{ $t('CodeBlocksSettings.Language') }}
-                </q-card-section>
-                <q-card-section class="q-ml-md">
-                    <div class="row">
-                        <div class="col-12">
-                            <q-toggle
-                                v-model="runCode"
-                                :disabled="!languageHasCompiler"
-                                :label="$t('CodeBlocksSettings.AllowExec')"
-                            />
-                        </div>
-                        <div class="col-12">
-                            <q-toggle
-                                v-model="continuousCompile"
-                                :disabled="!canContinousCompile"
-                                :label="$t('CodeBlocksSettings.ContinousCompile')"
-                            />
-                        </div>
-
-                        <div
-                            :class="`col-xs-12 col-sm-${runCode ? 6 : 12} col-md-${
-                                runCode ? 8 : 12
-                            } ${runCode ? 'q-pr-md-sm' : ''}`"
-                        >
-                            <q-select
-                                :options="compiledLanguages"
-                                v-model="compilerLanguageObj"
-                                :label="$t('CodeBlocksSettings.Language')"
-                            />
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6" v-if="runCode">
-                            <q-select
-                                :options="compilerVersions"
-                                v-model="compilerVersion"
-                                stack-label
-                                :label="$t('CodeBlocksSettings.CVersion')"
-                            >
-                                <template v-slot:selected>
-                                    {{ compilerVersion }}
-                                    <q-avatar
-                                        rounded
-                                        size="xs"
-                                        color="yellow"
-                                        text-color="brown-10"
-                                        icon="hourglass_disabled"
-                                        v-if="isDeprecated"
-                                        class="q-ml-xs"
+    <q-list bordered class="q-pa-none q-mb-md bg-white">
+        <q-expansion-item
+            expand-separator
+            icon="settings"
+            :label="$t('CodeBlocksSettings.Settings')"
+            :caption="`${
+                runCode
+                    ? `${compilerLanguageObj.label} v${compilerVersion}`
+                    : `${compilerLanguageObj.label} (${$t('CodeBlocksSettings.NoExecution')})`
+            }${options.randomizer.active ? `,  ${$t('RandomizerSettings.Caption')}` : ''}, ${
+                outputParser.label
+            }, ${$t('CodeBlocksSettings.DomLibs')}: ${domLibrary.length}, ${$t(
+                'CodeBlocksSettings.WorkLibs'
+            )}: ${workerLibrary.length}`"
+        >
+            <q-list class="q-ml-md">
+                <q-expansion-item
+                    expand-separator
+                    icon="play_circle_outline"
+                    :label="$t('CodeBlocksSettings.Language')"
+                    :caption="
+                        runCode
+                            ? `${compilerLanguageObj.label} v${compilerVersion}`
+                            : `${compilerLanguageObj.label} (${$t(
+                                  'CodeBlocksSettings.NoExecution'
+                              )})`
+                    "
+                >
+                    <q-card class="q-mb-sm q-mr-sm-none q-mr-md-sm">
+                        <q-card-section class="q-ml-md">
+                            <div class="row">
+                                <div class="col-12">
+                                    <q-toggle
+                                        v-model="runCode"
+                                        :disabled="!languageHasCompiler"
+                                        :label="$t('CodeBlocksSettings.AllowExec')"
                                     />
-                                    <q-avatar
+                                </div>
+                                <div class="col-12">
+                                    <q-toggle
+                                        v-model="continuousCompile"
+                                        :disabled="!canContinousCompile"
+                                        :label="$t('CodeBlocksSettings.ContinousCompile')"
+                                    />
+                                </div>
+
+                                <div
+                                    :class="`col-xs-12 col-sm-${runCode ? 6 : 12} col-md-${
+                                        runCode ? 8 : 12
+                                    } ${runCode ? 'q-pr-md-sm' : ''}`"
+                                >
+                                    <q-select
+                                        :options="compiledLanguages"
+                                        v-model="compilerLanguageObj"
+                                        :label="$t('CodeBlocksSettings.Language')"
+                                    />
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6" v-if="runCode">
+                                    <q-select
+                                        :options="compilerVersions"
+                                        v-model="compilerVersion"
+                                        stack-label
+                                        :label="$t('CodeBlocksSettings.CVersion')"
+                                    >
+                                        <template v-slot:selected>
+                                            {{ compilerVersion }}
+                                            <q-avatar
+                                                rounded
+                                                size="xs"
+                                                color="yellow"
+                                                text-color="brown-10"
+                                                icon="hourglass_disabled"
+                                                v-if="isDeprecated"
+                                                class="q-ml-xs"
+                                            />
+                                            <q-avatar
+                                                rounded
+                                                size="xs"
+                                                color="orange"
+                                                text-color="white"
+                                                icon="whatshot"
+                                                v-if="isExperimental"
+                                                class="q-ml-xs"
+                                            />
+                                        </template>
+                                        <template v-slot:option="scope">
+                                            <q-item
+                                                v-bind="scope.itemProps"
+                                                v-on="scope.itemEvents"
+                                            >
+                                                <q-item-section>
+                                                    <q-item-label>
+                                                        {{ scope.opt }}
+
+                                                        <q-avatar
+                                                            rounded
+                                                            size="xs"
+                                                            color="yellow"
+                                                            text-color="brown-10"
+                                                            icon="hourglass_disabled"
+                                                            v-if="
+                                                                isDeprecatedVersion(
+                                                                    compilerLanguage,
+                                                                    scope.opt
+                                                                )
+                                                            "
+                                                            class="q-ml-xs"
+                                                        />
+                                                        <q-avatar
+                                                            rounded
+                                                            size="xs"
+                                                            color="orange"
+                                                            text-color="white"
+                                                            icon="whatshot"
+                                                            v-if="
+                                                                isExperimentalVersion(
+                                                                    compilerLanguage,
+                                                                    scope.opt
+                                                                )
+                                                            "
+                                                            class="q-ml-xs"
+                                                        />
+                                                    </q-item-label>
+                                                </q-item-section>
+                                            </q-item>
+                                        </template>
+                                    </q-select>
+                                </div>
+                                <q-slide-transition>
+                                    <q-banner
                                         rounded
-                                        size="xs"
-                                        color="orange"
-                                        text-color="white"
-                                        icon="whatshot"
+                                        dense
+                                        class="bg-orange text-white col-12 q-mt-xs q-mb-md"
                                         v-if="isExperimental"
-                                        class="q-ml-xs"
+                                    >
+                                        <q-item>
+                                            <q-item-section avatar>
+                                                <q-icon
+                                                    name="whatshot"
+                                                    style="font-size: 3em"
+                                                ></q-icon>
+                                            </q-item-section>
+                                            <q-item-section>
+                                                <q-item-label overline>
+                                                    {{
+                                                        $t(
+                                                            'CodeBlocksSettings.ExperimentalCompiler'
+                                                        )
+                                                    }}
+                                                </q-item-label>
+                                                <q-item-label>
+                                                    {{
+                                                        $t(
+                                                            'CodeBlocksSettings.ExperimentalCompilerDesc'
+                                                        )
+                                                    }}
+                                                </q-item-label>
+                                            </q-item-section>
+                                        </q-item>
+                                    </q-banner>
+                                </q-slide-transition>
+                                <q-slide-transition>
+                                    <q-banner
+                                        rounded
+                                        dense
+                                        class="bg-yellow-12 text-black col-12 q-mt-xs q-mb-md"
+                                        v-if="isDeprecated"
+                                    >
+                                        <q-item>
+                                            <q-item-section avatar>
+                                                <q-icon
+                                                    name="hourglass_disabled"
+                                                    style="font-size: 3em"
+                                                ></q-icon>
+                                            </q-item-section>
+                                            <q-item-section>
+                                                <q-item-label overline>
+                                                    {{
+                                                        $t('CodeBlocksSettings.DeprecatedCompiler')
+                                                    }}
+                                                </q-item-label>
+                                                <q-item-label>
+                                                    {{
+                                                        $t(
+                                                            'CodeBlocksSettings.DeprecatedCompilerDesc'
+                                                        )
+                                                    }}
+                                                </q-item-label>
+                                            </q-item-section>
+                                        </q-item>
+                                    </q-banner>
+                                </q-slide-transition>
+                                <div class="col-12" v-if="showMaxRuntime">
+                                    <q-input
+                                        v-model="maxRuntime"
+                                        :rules="[validNumber]"
+                                        :label="$t('CodeBlocksSettings.RunTime')"
+                                        maxlength="6"
                                     />
-                                </template>
-                                <template v-slot:option="scope">
-                                    <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
-                                        <q-item-section>
-                                            <q-item-label>
-                                                {{ scope.opt }}
+                                </div>
+                                <div
+                                    class="col-12 text-body2"
+                                    v-if="runCode && (accepstArguments || allowsMessagePassing)"
+                                >
+                                    {{ $t('CodeBlocksSettings.AllowArguments') }}
+                                    <q-btn
+                                        flat
+                                        round
+                                        color="primary"
+                                        icon="info"
+                                        size="xs"
+                                        @click="showArgsInfoDialog"
+                                    ></q-btn>
+                                </div>
 
-                                                <q-avatar
-                                                    rounded
-                                                    size="xs"
-                                                    color="yellow"
-                                                    text-color="brown-10"
-                                                    icon="hourglass_disabled"
-                                                    v-if="
-                                                        isDeprecatedVersion(
-                                                            compilerLanguage,
-                                                            scope.opt
-                                                        )
-                                                    "
-                                                    class="q-ml-xs"
-                                                />
-                                                <q-avatar
-                                                    rounded
-                                                    size="xs"
-                                                    color="orange"
-                                                    text-color="white"
-                                                    icon="whatshot"
-                                                    v-if="
-                                                        isExperimentalVersion(
-                                                            compilerLanguage,
-                                                            scope.opt
-                                                        )
-                                                    "
-                                                    class="q-ml-xs"
-                                                />
-                                            </q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                </template>
-                            </q-select>
-                        </div>
-                        <q-slide-transition>
-                            <q-banner
-                                rounded
-                                dense
-                                class="bg-orange text-white col-12 q-mt-xs q-mb-md"
-                                v-if="isExperimental"
-                            >
-                                <q-item>
-                                    <q-item-section avatar>
-                                        <q-icon name="whatshot" style="font-size: 3em"></q-icon>
-                                    </q-item-section>
-                                    <q-item-section>
-                                        <q-item-label overline>
-                                            {{ $t('CodeBlocksSettings.ExperimentalCompiler') }}
-                                        </q-item-label>
-                                        <q-item-label>
-                                            {{ $t('CodeBlocksSettings.ExperimentalCompilerDesc') }}
-                                        </q-item-label>
-                                    </q-item-section>
-                                </q-item>
-                            </q-banner>
-                        </q-slide-transition>
-                        <q-slide-transition>
-                            <q-banner
-                                rounded
-                                dense
-                                class="bg-yellow-12 text-black col-12 q-mt-xs q-mb-md"
-                                v-if="isDeprecated"
-                            >
-                                <q-item>
-                                    <q-item-section avatar>
-                                        <q-icon
-                                            name="hourglass_disabled"
-                                            style="font-size: 3em"
-                                        ></q-icon>
-                                    </q-item-section>
-                                    <q-item-section>
-                                        <q-item-label overline>
-                                            {{ $t('CodeBlocksSettings.DeprecatedCompiler') }}
-                                        </q-item-label>
-                                        <q-item-label>
-                                            {{ $t('CodeBlocksSettings.DeprecatedCompilerDesc') }}
-                                        </q-item-label>
-                                    </q-item-section>
-                                </q-item>
-                            </q-banner>
-                        </q-slide-transition>
-                        <div class="col-12" v-if="showMaxRuntime">
-                            <q-input
-                                v-model="maxRuntime"
-                                :rules="[validNumber]"
-                                :label="$t('CodeBlocksSettings.RunTime')"
-                                maxlength="6"
-                            />
-                        </div>
-                        <div
-                            class="col-12 text-body2"
-                            v-if="runCode && (accepstArguments || allowsMessagePassing)"
-                        >
-                            {{ $t('CodeBlocksSettings.AllowArguments') }}
-                            <q-btn
-                                flat
-                                round
-                                color="primary"
-                                icon="info"
-                                size="xs"
-                                @click="showArgsInfoDialog"
-                            ></q-btn>
-                        </div>
-
-                        <div class="col-12" v-if="runCode && accepstArguments">
-                            <q-toggle
-                                v-model="persistentArguments"
-                                :disabled="!canPersistentArguments"
-                                :label="$t('CodeBlocksSettings.PersistentArguments')"
-                            />
-                            <q-btn
-                                flat
-                                round
-                                color="primary"
-                                icon="info"
-                                size="xs"
-                                @click="showPersistentArgsInfoDialog"
-                            ></q-btn>
-                        </div>
-                        <div class="col-12" v-if="runCode && allowsMessagePassing">
-                            <q-toggle
-                                v-model="messagePassing"
-                                :disabled="!allowsMessagePassing"
-                                :label="$t('CodeBlocksSettings.MessagePassing')"
-                            />
-                            <q-btn
-                                flat
-                                round
-                                color="primary"
-                                icon="info"
-                                size="xs"
-                                @click="showMessagesInfoDialog"
-                            ></q-btn>
-                        </div>
-                        <div class="col-12 q-pl-lg" v-if="runCode && allowsMessagePassing">
-                            <q-toggle
-                                v-model="keepAlive"
-                                :disabled="!allowsMessagePassing || !messagePassing"
-                                :label="$t('CodeBlocksSettings.KeepAlive')"
-                            />
-                            <q-btn
-                                flat
-                                round
-                                color="primary"
-                                icon="info"
-                                size="xs"
-                                @click="showAliveInfoDialog"
-                            ></q-btn>
-                        </div>
+                                <div class="col-12" v-if="runCode && accepstArguments">
+                                    <q-toggle
+                                        v-model="persistentArguments"
+                                        :disabled="!canPersistentArguments"
+                                        :label="$t('CodeBlocksSettings.PersistentArguments')"
+                                    />
+                                    <q-btn
+                                        flat
+                                        round
+                                        color="primary"
+                                        icon="info"
+                                        size="xs"
+                                        @click="showPersistentArgsInfoDialog"
+                                    ></q-btn>
+                                </div>
+                                <div class="col-12" v-if="runCode && allowsMessagePassing">
+                                    <q-toggle
+                                        v-model="messagePassing"
+                                        :disabled="!allowsMessagePassing"
+                                        :label="$t('CodeBlocksSettings.MessagePassing')"
+                                    />
+                                    <q-btn
+                                        flat
+                                        round
+                                        color="primary"
+                                        icon="info"
+                                        size="xs"
+                                        @click="showMessagesInfoDialog"
+                                    ></q-btn>
+                                </div>
+                                <div class="col-12 q-pl-lg" v-if="runCode && allowsMessagePassing">
+                                    <q-toggle
+                                        v-model="keepAlive"
+                                        :disabled="!allowsMessagePassing || !messagePassing"
+                                        :label="$t('CodeBlocksSettings.KeepAlive')"
+                                    />
+                                    <q-btn
+                                        flat
+                                        round
+                                        color="primary"
+                                        icon="info"
+                                        size="xs"
+                                        @click="showAliveInfoDialog"
+                                    ></q-btn>
+                                </div>
+                            </div>
+                        </q-card-section>
+                    </q-card>
+                </q-expansion-item>
+                <q-expansion-item
+                    v-if="runCode"
+                    expand-separator
+                    icon="text_snippet_outline"
+                    :label="$t('CodeBlocksSettings.Output')"
+                    :caption="`max. ${maxCharacters}, ${outputParser.label}`"
+                >
+                    <q-card class="q-mb-sm q-mr-none">
+                        <q-card-section class="q-ml-md">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6 col-12 q-pr-md-sm">
+                                    <q-input
+                                        v-model="maxCharacters"
+                                        :rules="[validNumber]"
+                                        :label="$t('CodeBlocksSettings.MaxCharacters')"
+                                        maxlength="6"
+                                    />
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <q-select
+                                        :options="outputParsers"
+                                        v-model="outputParser"
+                                        :label="$t('CodeBlocksSettings.Parser')"
+                                    />
+                                </div>
+                            </div>
+                        </q-card-section>
+                        <q-card-section class="q-ml-md">
+                            <div class="row" dense>
+                                <div class="col-xs-12 col-md-6">
+                                    <q-select
+                                        :options="themes"
+                                        v-model="uiTheme"
+                                        :label="$t('CodeBlocksSettings.TSolution')"
+                                    />
+                                </div>
+                            </div>
+                        </q-card-section>
+                    </q-card>
+                </q-expansion-item>
+                <q-expansion-item
+                    expand-separator
+                    icon="extension"
+                    :label="$t('CodeBlocksSettings.Libraries')"
+                    :caption="`${$t('CodeBlocksSettings.DomLibs')}: ${domLibrary.length}, ${$t(
+                        'CodeBlocksSettings.WorkLibs'
+                    )}: ${workerLibrary.length}`"
+                >
+                    <q-card class="q-mr-sm-none q-mt-sm">
+                        <q-card-section class="text-overline"
+                            >{{ $t('CodeBlocksSettings.Libraries') }}
+                        </q-card-section>
+                        <q-card-section class="q-ml-md">
+                            <div class="row q-my-none q-py-none" dense>
+                                <div class="col-xs-12 col-sm-12 q-my-none q-py-none">
+                                    <q-select
+                                        :options="domLibraries"
+                                        v-model="domLibrary"
+                                        multiple
+                                        use-chips
+                                        stack-label
+                                        deletable-chips
+                                        :label="$t('CodeBlocksSettings.DomLibs')"
+                                    />
+                                </div>
+                                <div
+                                    class="col-xs-12 col-sm-12 q-my-none q-py-none"
+                                    v-if="runCode && workerLibraries.length > 0"
+                                >
+                                    <q-select
+                                        :options="workerLibraries"
+                                        v-model="workerLibrary"
+                                        multiple
+                                        use-chips
+                                        stack-label
+                                        deletable-chips
+                                        :label="$t('CodeBlocksSettings.WorkLibs')"
+                                    />
+                                </div>
+                            </div>
+                        </q-card-section>
+                    </q-card>
+                </q-expansion-item>
+                <q-expansion-item
+                    expand-separator
+                    icon="multiple_stop"
+                    :label="$t('RandomizerSettings.Caption')"
+                    :caption="
+                        options.randomizer.active
+                            ? $t('RandomizerSettings.Active')
+                            : $t('RandomizerSettings.Inactive')
+                    "
+                >
+                    <div :class="`col-xs-${options.randomizer.active ? '12' : '12'} q-mt-sm`">
+                        <RandomizerSettings :options="options" />
                     </div>
-                </q-card-section>
-            </q-card>
-        </div>
-
-        <div class="col-xs-12 col-sm-12 col-md-6">
-            <q-slide-transition>
-                <q-card class="q-mb-sm q-mr-none" v-if="runCode">
-                    <q-card-section class="text-overline"
-                        >{{ $t('CodeBlocksSettings.Output') }}
-                    </q-card-section>
-                    <q-card-section class="q-ml-md">
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6 col-12 q-pr-md-sm">
-                                <q-input
-                                    v-model="maxCharacters"
-                                    :rules="[validNumber]"
-                                    :label="$t('CodeBlocksSettings.MaxCharacters')"
-                                    maxlength="6"
-                                />
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <q-select
-                                    :options="outputParsers"
-                                    v-model="outputParser"
-                                    :label="$t('CodeBlocksSettings.Parser')"
-                                />
-                            </div>
-                        </div>
-                    </q-card-section>
-                </q-card>
-            </q-slide-transition>
-            <q-card class="q-mr-none">
-                <q-card-section class="text-overline"
-                    >{{ $t('CodeBlocksSettings.Themes') }}
-                </q-card-section>
-                <q-card-section class="q-ml-md">
-                    <div class="row" dense>
-                        <div class="col-xs-12 col-md-6">
-                            <q-select
-                                :options="themes"
-                                v-model="uiTheme"
-                                :label="$t('CodeBlocksSettings.TSolution')"
-                            />
-                        </div>
+                    <div class="col-xs-12">
+                        <textarea
+                            :name="`block_settings[${this.options.id}]`"
+                            class="blocksettings"
+                            v-model="serializedOptions"
+                        ></textarea>
                     </div>
-                </q-card-section>
-            </q-card>
-
-            <q-slide-transition>
-                <q-card class="q-mr-sm-none q-mt-sm">
-                    <q-card-section class="text-overline"
-                        >{{ $t('CodeBlocksSettings.Libraries') }}
-                    </q-card-section>
-                    <q-card-section class="q-ml-md">
-                        <div class="row q-my-none q-py-none" dense>
-                            <div class="col-xs-12 col-sm-12 q-my-none q-py-none">
-                                <q-select
-                                    :options="domLibraries"
-                                    v-model="domLibrary"
-                                    multiple
-                                    use-chips
-                                    stack-label
-                                    deletable-chips
-                                    :label="$t('CodeBlocksSettings.DomLibs')"
-                                />
-                            </div>
-                            <div
-                                class="col-xs-12 col-sm-12 q-my-none q-py-none"
-                                v-if="runCode && workerLibraries.length > 0"
-                            >
-                                <q-select
-                                    :options="workerLibraries"
-                                    v-model="workerLibrary"
-                                    multiple
-                                    use-chips
-                                    stack-label
-                                    deletable-chips
-                                    :label="$t('CodeBlocksSettings.WorkLibs')"
-                                />
-                            </div>
-                        </div>
-                    </q-card-section>
-                </q-card>
-            </q-slide-transition>
-        </div>
-        <div :class="`col-xs-${options.randomizer.active ? '12' : '12'} q-mt-sm`">
-            <RandomizerSettings :options="options" />
-        </div>
-        <div class="col-xs-12">
-            <textarea
-                :name="`block_settings[${this.options.id}]`"
-                class="blocksettings"
-                v-model="serializedOptions"
-            ></textarea>
-        </div>
-    </div>
+                </q-expansion-item>
+            </q-list>
+        </q-expansion-item>
+    </q-list>
 </template>
 
 <script lang="ts">

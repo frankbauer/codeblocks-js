@@ -59,6 +59,8 @@ export default {
         UserCanceled: 'Vom Benutzer Abgebrochen',
     },
     CodeBlocksSettings: {
+        NoExecution: 'Keine Ausführung',
+        Settings: 'Einstellungen',
         Language: 'Sprache',
         AllowExec: 'Ausführung zulassen',
         CVersion: 'Version',
@@ -133,6 +135,8 @@ export default {
         Caption: 'Würfler',
         Available: 'Definierte Platzhalter',
         Sets: 'Zusammenstellungen',
+        Active: 'Aktiv',
+        Inactive: 'Inaktiv',
     },
     Blockly: {
         CodePreviewLabel: 'Code-Vorschau',

@@ -59,6 +59,8 @@ export default {
         UserCanceled: 'Stopped By User',
     },
     CodeBlocksSettings: {
+        NoExecution: 'Code Execution is disabled',
+        Settings: 'Settings',
         Language: 'Language',
         AllowExec: 'Allow Code Execution',
         CVersion: 'Version',
@@ -133,6 +135,8 @@ export default {
         Caption: 'Randomizer',
         Available: 'Available Tags',
         Sets: 'Defined Sets',
+        Active: 'Active',
+        Inactive: 'Inactive',
     },
     Blockly: {
         CodePreviewLabel: 'Code Preview',

@@ -1,155 +1,145 @@
 <template>
     <div>
-        <q-card>
-            <q-card-section class="text-overline"
-                >{{ $t('RandomizerSettings.Caption') }}
-                <q-toggle v-model="options.randomizer.active" />
-            </q-card-section>
+        <q-card-section class="text-overline"
+            >{{ $t('RandomizerSettings.Active') }}
+            <q-toggle v-model="options.randomizer.active" />
+        </q-card-section>
 
-            <q-slide-transition>
-                <q-card-section class="q-ml-md" v-show="options.randomizer.active">
-                    <div class="tagList">
-                        <div class="text-subtitle2">
-                            {{ $t('RandomizerSettings.Available') }}
-                            <q-btn
-                                color="primary"
-                                class="gt-xs"
-                                size="12px"
-                                flat
-                                dense
-                                round
-                                icon="add"
-                                @click="addTag"
-                            />
-                        </div>
-                        <div class="row q-mb-sm">
-                            <div
-                                :class="`tagItem q-ml-sm ${tagClass}`"
-                                v-for="(tag, i) in options.randomizer.knownTags"
-                                v-bind:key="tag"
-                            >
-                                <div class="row no-wrap">
-                                    <div class="tagInfo col-shrink">
-                                        <div class="tagName">{{ tag }}</div>
-                                        <div class="tagString">{:{{ tag }}}</div>
-                                    </div>
-                                    <div class="tagAction col-4 q-pl-sm text-right">
-                                        <q-btn
-                                            class="gt-xs"
-                                            size="12px"
-                                            flat
-                                            dense
-                                            round
-                                            icon="delete"
-                                            @click="removeTag(i)"
-                                        />
-                                    </div>
+        <q-slide-transition>
+            <q-card-section class="q-ml-md" v-show="options.randomizer.active">
+                <div class="tagList">
+                    <div class="text-subtitle2">
+                        {{ $t('RandomizerSettings.Available') }}
+                        <q-btn
+                            color="primary"
+                            class="gt-xs"
+                            size="12px"
+                            flat
+                            dense
+                            round
+                            icon="add"
+                            @click="addTag"
+                        />
+                    </div>
+                    <div class="row q-mb-sm">
+                        <div
+                            :class="`tagItem q-ml-sm ${tagClass}`"
+                            v-for="(tag, i) in options.randomizer.knownTags"
+                            v-bind:key="tag"
+                        >
+                            <div class="row no-wrap">
+                                <div class="tagInfo col-shrink">
+                                    <div class="tagName">{{ tag }}</div>
+                                    <div class="tagString">{:{{ tag }}}</div>
+                                </div>
+                                <div class="tagAction col-4 q-pl-sm text-right">
+                                    <q-btn
+                                        class="gt-xs"
+                                        size="12px"
+                                        flat
+                                        dense
+                                        round
+                                        icon="delete"
+                                        @click="removeTag(i)"
+                                    />
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="tagList q-mt-lg">
-                        <div class="text-subtitle2">
-                            {{ $t('RandomizerSettings.Sets') }}
-                            <q-btn
-                                color="primary"
-                                class="gt-xs"
-                                size="12px"
-                                flat
-                                dense
-                                round
-                                icon="add"
-                                @click="addSet"
-                            />
-                        </div>
+                <div class="tagList q-mt-lg">
+                    <div class="text-subtitle2">
+                        {{ $t('RandomizerSettings.Sets') }}
+                        <q-btn
+                            color="primary"
+                            class="gt-xs"
+                            size="12px"
+                            flat
+                            dense
+                            round
+                            icon="add"
+                            @click="addSet"
+                        />
+                    </div>
 
-                        <q-list class="setList">
-                            <q-item v-for="(s, i) in options.randomizer.sets" v-bind:key="s.uuid">
-                                <q-item-section avatar>
-                                    <q-avatar
-                                        color="primary"
-                                        text-color="white"
-                                        :disabled="!isVisible(i)"
-                                    >
-                                        {{ i }}
-                                    </q-avatar>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>{{ s.title }}</q-item-label>
-                                    <q-item-label caption lines="2">
-                                        <div class="row q-mb-sm">
-                                            <div
-                                                :class="`tagItem q-ml-sm ${tagClass}`"
-                                                v-for="tag in s.values"
-                                                v-bind:key="tag.name"
-                                            >
-                                                <div class="row no-wrap">
-                                                    <div class="tagInfo col-shrink">
-                                                        <div class="tagName">{{ tag.tag }}</div>
-                                                        <div class="tagString">{{ tag.value }}</div>
-                                                    </div>
+                    <q-list class="setList">
+                        <q-item v-for="(s, i) in options.randomizer.sets" v-bind:key="s.uuid">
+                            <q-item-section avatar>
+                                <q-avatar
+                                    color="primary"
+                                    text-color="white"
+                                    :disabled="!isVisible(i)"
+                                >
+                                    {{ i }}
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>{{ s.title }}</q-item-label>
+                                <q-item-label caption lines="2">
+                                    <div class="row q-mb-sm">
+                                        <div
+                                            :class="`tagItem q-ml-sm ${tagClass}`"
+                                            v-for="tag in s.values"
+                                            v-bind:key="tag.name"
+                                        >
+                                            <div class="row no-wrap">
+                                                <div class="tagInfo col-shrink">
+                                                    <div class="tagName">{{ tag.tag }}</div>
+                                                    <div class="tagString">{{ tag.value }}</div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </q-item-label>
-                                </q-item-section>
-
-                                <q-item-section side top>
-                                    <div class="text-grey-8 q-gutter-xs">
-                                        <q-icon
-                                            :name="isCompleteSet(s) ? 'check' : 'warning'"
-                                            :color="isCompleteSet(s) ? 'positive' : 'negative'"
-                                            size="24px"
-                                            class="q-mr-lg"
-                                        />
-
-                                        <q-btn
-                                            class="gt-xs"
-                                            size="12px"
-                                            flat
-                                            dense
-                                            round
-                                            :icon="isVisible(i) ? 'visibility' : 'visibility_off'"
-                                            @click="setVisible(i)"
-                                        >
-                                            <q-tooltip :delay="200" :offset="[0, 10]">
-                                                Use this set when running code in preview or
-                                                editMode.
-                                            </q-tooltip>
-                                        </q-btn>
-
-                                        <q-btn
-                                            class="gt-xs"
-                                            size="12px"
-                                            flat
-                                            dense
-                                            round
-                                            icon="edit"
-                                        >
-                                            <RandomizerSetEditor
-                                                :options="options"
-                                                :tagSet="getFullSet(s)"
-                                                :nr="i"
-                                            />
-                                        </q-btn>
-                                        <q-btn
-                                            class="gt-xs"
-                                            size="12px"
-                                            flat
-                                            dense
-                                            round
-                                            icon="delete"
-                                            @click="removeSet(i)"
-                                        />
                                     </div>
-                                </q-item-section>
-                            </q-item>
-                        </q-list>
-                    </div>
-                </q-card-section>
-            </q-slide-transition>
-        </q-card>
+                                </q-item-label>
+                            </q-item-section>
+
+                            <q-item-section side top>
+                                <div class="text-grey-8 q-gutter-xs">
+                                    <q-icon
+                                        :name="isCompleteSet(s) ? 'check' : 'warning'"
+                                        :color="isCompleteSet(s) ? 'positive' : 'negative'"
+                                        size="24px"
+                                        class="q-mr-lg"
+                                    />
+
+                                    <q-btn
+                                        class="gt-xs"
+                                        size="12px"
+                                        flat
+                                        dense
+                                        round
+                                        :icon="isVisible(i) ? 'visibility' : 'visibility_off'"
+                                        @click="setVisible(i)"
+                                    >
+                                        <q-tooltip :delay="200" :offset="[0, 10]">
+                                            Use this set when running code in preview or editMode.
+                                        </q-tooltip>
+                                    </q-btn>
+
+                                    <q-btn class="gt-xs" size="12px" flat dense round icon="edit">
+                                        <RandomizerSetEditor
+                                            :options="options"
+                                            :tagSet="getFullSet(s)"
+                                            :nr="i"
+                                        />
+                                    </q-btn>
+                                    <q-btn
+                                        class="gt-xs"
+                                        size="12px"
+                                        flat
+                                        dense
+                                        round
+                                        icon="delete"
+                                        @click="removeSet(i)"
+                                    />
+                                </div>
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                </div>
+            </q-card-section>
+        </q-slide-transition>
     </div>
 </template>
 
@@ -157,7 +147,7 @@
 import RandomizerSetEditor from '@/components/RandomizerSetEditor.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
-import Vue, { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
+import { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
 import { uuid } from 'vue-uuid'
 import { useQuasar } from 'quasar'
 import { TAG_CLASS_NAMES } from '@/plugins/tagHighlighter'
