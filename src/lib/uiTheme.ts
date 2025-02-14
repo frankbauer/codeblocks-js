@@ -13,13 +13,13 @@ const UIThemeData: { [key in UIThemeType]: UITheme } = {
         name: 'Light',
         solutionBlock: EditorThemes['solarized-light'],
         codeBlock: EditorThemes['basic-light'],
-        otherBlocks: EditorThemes['solarized-light'],
+        otherBlocks: EditorThemes['bordered-light'],
     },
     dark: {
         name: 'Dark',
         solutionBlock: EditorThemes['solarized-dark'],
         codeBlock: EditorThemes['basic-dark'],
-        otherBlocks: EditorThemes['solarized-dark'],
+        otherBlocks: EditorThemes['bordered-light'],
     },
 }
 

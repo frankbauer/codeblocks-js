@@ -150,6 +150,7 @@ const editorView = shallowRef<EditorView | null>(new EditorView())
 
 const mainClass = computed(() => {
     return {
+        ...editorTheme.value.cssClasses,
         accqstXmlInput: true,
         noRTEditor: true,
         over10: maxLines.value >= 10,
@@ -636,6 +637,13 @@ defineExpose({
 </script>
 <style lang="sass">
 .code-editor
+    .system-code-box
+        border: 1px dashed $blue-grey-3
+
+    .system-code-box-dark
+        border: 2px solid $yellow-8
+
+
     .cm-lineNumbers
         min-width: 25px
 
