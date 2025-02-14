@@ -1,4 +1,4 @@
-import { onBeforeUnmount, onMounted, onUnmounted, PropType } from 'vue'
+import { onBeforeUnmount, onMounted, PropType } from 'vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { BlockStorageType } from '@/storage/blockStorage'
 import { DEFAULT_EDITOR_THEME, EditorTheme, EditorThemes } from '@/plugins/codemirror/editorThemes'
@@ -26,11 +26,13 @@ interface OptionalEditableBlockProps extends OptionalBasicBlockProps {
 
 export interface EditableBlockProps extends BasicBlockProps, OptionalEditableBlockProps {}
 
-export const DEFAULT_EDITABLE_BLOCK_PROPS: OptionalEditableBlockProps = {
+export const DEFAULT_EDITABLE_BLOCK_PROPS: InferDefaults<
+    LooseRequired<OptionalEditableBlockProps>
+> = {
     muteReadyState: false,
     editMode: false,
     visibleLines: 'auto',
-    theme: DEFAULT_EDITOR_THEME,
+    theme: () => DEFAULT_EDITOR_THEME,
 }
 
 export const useBasicBlockProps = () => {

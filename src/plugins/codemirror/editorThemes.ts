@@ -57,4 +57,4 @@ export const EditorThemes: { [key in Themes]: EditorTheme } = {
     },
 }
 
-export const DEFAULT_EDITOR_THEME = EditorThemes['basic-light']
+export const DEFAULT_EDITOR_THEME: EditorTheme = EditorThemes['basic-light']
