@@ -1,7 +1,7 @@
 <template>
     <div>
         <PlaygroundCanvas
-            ref="canvas"
+            ref="canvasElement"
             :output="finalOutputObject.initialOutput"
             :obj="block.obj"
             :key="runCount"
@@ -128,7 +128,13 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
 
 const lastRun: Ref<Date> = ref(new Date())
 const runCount: Ref<number> = ref(0)
-const canvas: Ref<HTMLElement | undefined> = ref(undefined)
+const canvasElement: Ref<HTMLElement | undefined> = ref(undefined)
+const canvas = computed<HTMLElement | undefined>(() => {
+    if (canvasElement.value && canvasElement.value.canvas) {
+        return canvasElement.value.canvas
+    }
+    return canvasElement.value
+})
 let needsCodeRebuild: boolean = false
 const initAndRebuildErrors: Ref<any[]> = ref([])
 
@@ -235,7 +241,7 @@ function resetBeforeRun(): void {
     if (block.value && block.value.obj) {
         if (block.value.shouldAutoreset || rebuildCode) {
             if (canvas.value !== undefined) {
-                console.log('Will Re-Initialize', canvas.value, $(canvas))
+                console.log('Will Re-Initialize', canvas.value, $(canvas.value))
             } else {
                 console.log('Will Re-Initialize', 'Without Canvas')
             }
@@ -274,6 +280,7 @@ function resetBeforeRun(): void {
         let doInit = () => {
             console.i('!!! DO INIT !!!')
             if (block.value.obj !== null) {
+                console.log('DATA: CanvasElement', canvas.value)
                 const jCanvas: any = $(canvas.value as HTMLElement)
                 const scope: any = block.value.scope
                 if (block.value.shouldReloadResources) {
@@ -362,6 +369,7 @@ function onFinalOutputObject(val) {
             nextTick(() => {
                 console.d('Ticked', block.value.obj, canvas.value)
                 if (block.value.obj !== null && canvas.value !== undefined) {
+                    console.log('DATA: update - CanvasElement', canvas.value)
                     let result = block.value.obj.update(val, $(canvas.value))
                     if (updateErrors()) {
                         return
@@ -403,11 +411,12 @@ function emitRun() {
 }
 
 function onCanvasChange(can) {
-    canvas.value = can.value
+    console.log('DATA: old Canvas', canvas.value)
+    canvasElement.value = can.value
     if (props.editMode) {
         updateErrors()
     }
-    //console.log("Changed Canvas", can, $(can).css('background-color'));
+    console.log('DATA: Changed Canvas', can, canvas.value)
 }
 
 function onCodeChange(newCode: string): void {
