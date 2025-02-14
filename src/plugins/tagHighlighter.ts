@@ -132,13 +132,3 @@ export function markTags(view: EditorView, tagSet: Ref<IRandomizerSet | undefine
         view.dispatch({ effects })
     }
 }
-
-// Add at the top with other exports
-export const createTagHighlightStyle = () =>
-    HighlightStyle.define([
-        {
-            tag: tags.special,
-            color: '#e06c75',
-            fontWeight: 'bold',
-        },
-    ])

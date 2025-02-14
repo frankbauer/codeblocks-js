@@ -89,15 +89,8 @@ import { createJavaCompletions } from '@/plugins/javaCompletions'
 import { createHighlightStyle } from '@/plugins/codemirror/highlightStyles'
 import { getUITheme, UITheme, UIThemeType } from '@/lib/uiTheme'
 import { DEFAULT_EDITOR_THEME, EditorTheme, EditorThemes } from '@/plugins/codemirror/editorThemes'
-
-// Add proper interface for error ranges
-interface ErrorRange {
-    from: number
-    to: number
-    severity: ErrorSeverity
-    message: string
-    decoration?: Decoration
-}
+import { createDOMEventHandlers } from '@/plugins/codemirror/keyHandling'
+import { createErrorHoverTooltip, ErrorRange } from '@/plugins/codemirror/errorHoverTooltip'
 
 // Add proper typing for the props
 interface Props {
@@ -246,52 +239,6 @@ const getIndentationAt = (context: IndentContext, pos: number): number => {
     return defaultIndent
 }
 
-function reformatCode(view: EditorView) {
-    // Get all lines
-    let changes: ChangeSpec = []
-    const doc = view.state.doc
-
-    //get all lines form the document
-    // Start with first line
-    const lines: Line[] = []
-    for (let pos = 0; pos <= doc.length; ) {
-        const line = doc.lineAt(pos)
-        if (line === undefined || line.to <= pos) {
-            break
-        }
-        lines.push(line)
-        pos = line.to + 1
-    }
-
-    // Iterate through each line
-    let before = ''
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i]
-        const after = lines
-            .filter((l) => l.from > line.from)
-            .map((l) => l.text + '\n')
-            .join('')
-        const newCode = before + line.text + '\n' + after
-        before += line.text + '\n'
-
-        const currentIndent = /^[\t ]*/.exec(line.text)![0].length
-        const indent = getIndentationInSource(newCode, line.from)
-
-        if (currentIndent !== indent) {
-            changes.push({
-                from: line.from,
-                to: line.from + currentIndent,
-                insert: ' '.repeat(indent),
-            })
-        }
-    }
-
-    // Apply all changes in one transaction
-    if (changes.length > 0) {
-        view.dispatch({ changes })
-    }
-}
-
 const createIndentService = (): Extension => {
     return indentationCompartment.of(
         indentService.of((context, pos) => {
@@ -343,64 +290,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                 formatNumber: (n, state) => lineNr(n),
             })
         ),
-        EditorView.domEventHandlers({
-            keydown: (event: KeyboardEvent, view: EditorView) => {
-                if (event.key === 'ƒ') {
-                    if (event.altKey) {
-                        event.preventDefault()
-                        reformatCode(view)
-                        return false
-                    }
-                }
-
-                if (event.key === 'Tab') {
-                    event.preventDefault()
-                    if (event.shiftKey && event.altKey) {
-                        // Handle Shift+Alt+Tab for reindenting the text
-                        reformatCode(view)
-                        return false
-                    }
-                    if (event.shiftKey) {
-                        // Handle Shift+Tab for unindent
-                        return view.dispatch(
-                            view.state.changeByRange((range) => {
-                                let lines = view.state.doc.lineAt(range.from).number
-                                let endLine = view.state.doc.lineAt(range.to).number
-                                let changes: { from: number; to: number; insert: string }[] = []
-                                for (let pos = lines; pos <= endLine; pos++) {
-                                    let line = view.state.doc.line(pos)
-                                    let text = view.state.doc
-                                        .slice(line.from, line.from + 4)
-                                        .toString()
-                                    if (text.startsWith(' '.repeat(4))) {
-                                        changes.push({
-                                            from: line.from,
-                                            to: line.from + 4,
-                                            insert: '',
-                                        })
-                                    }
-                                }
-                                return {
-                                    changes,
-                                    range: EditorSelection.range(range.from, range.to),
-                                }
-                            })
-                        )
-                    } else {
-                        // Handle Tab for indent
-                        return view.dispatch(
-                            view.state.changeByRange((range) => {
-                                return {
-                                    changes: [{ from: range.from, insert: '    ' }],
-                                    range: EditorSelection.range(range.from + 4, range.to + 4),
-                                }
-                            })
-                        )
-                    }
-                }
-                return false
-            },
-        }),
+        createDOMEventHandlers(getIndentationInSource),
         keymap.of([indentWithTab]),
         highlighterCompartment.of(editorTheme.value.highlightStyle),
         languageAutoCompleteCompartment.of(
@@ -415,26 +305,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         tagMarkField,
         tagTooltip,
         underlineField,
-        hoverTooltip((view, pos) => {
-            const error = errorRanges.value.find((e) => pos >= e.from && pos <= e.to)
-            if (error) {
-                return {
-                    pos,
-                    above: true,
-                    create() {
-                        const dom = document.createElement('div')
-                        dom.textContent = error.message
-                        dom.className =
-                            'code-tooltip ' +
-                            (error.severity === ErrorSeverity.Warning
-                                ? 'warning-tooltip'
-                                : 'error-tooltip')
-                        return { dom }
-                    },
-                }
-            }
-            return null
-        }),
+        createErrorHoverTooltip(errorRanges),
         errorGutter,
         createIndentService(),
     ] as Extension[]
