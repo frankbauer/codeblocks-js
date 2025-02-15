@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Hide the scrollbar track but keep the handle */
+.modern-scrollbar::-webkit-scrollbar {
+    width: 8px
+}
+
+.modern-scrollbar::-webkit-scrollbar-track {
+    background: transparent
+}
+
+.modern-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 4px
+}

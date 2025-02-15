@@ -96,8 +96,8 @@ const toggleItem = (item: Option) => {
       <Command>
         <CommandInput v-model="searchQuery" placeholder="Search items..." autoFocus />
         <CommandEmpty v-if="filteredOptions.length === 0">No item found.</CommandEmpty>
-        <CommandList>
-          <CommandGroup>
+        <CommandList class="modern-scrollbar">
+          <CommandGroup >
             <CommandItem
               v-for="option in filteredOptions"
               :key="option.value"
