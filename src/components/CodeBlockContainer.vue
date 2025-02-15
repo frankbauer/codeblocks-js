@@ -786,8 +786,7 @@ const filteredCopy = (objIn: object, extended: boolean = true, path: string = 't
 .inlined-input
     display: inline-block
 
-.editModeBlockContainer
-    border-radius: 0px !important
+.editModeBlockContainer    
     border-left-width: 4px !important
     border-left-style: solid !important
 
