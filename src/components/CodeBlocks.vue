@@ -331,7 +331,7 @@ const addNewBlock = (): void => {
             :blockID="block.uuid"
             :editMode="editMode"
             v-for="block in blocks"
-            :key="block.id"
+            :key="block.uuid"
             @type-change="onTypeChange"
             @visible-lines-change="onVisibleLinesChange"
             @placement-change="onPlacementChange"
