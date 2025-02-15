@@ -5,14 +5,15 @@
         <div class="tw-flex tw-items-center tw-gap-2 tw-flex-wrap">
           <Badge >
               <Code2 class="tw-w-4 tw-h-4 tw-mr-2" />
-              <span class="tw-flex tw-items-center">
-                {{ compilerLanguage.label }}
+              {{ compilerLanguage.label }}
+          </Badge>
+          <Badge variant="outline">
+            <span class="tw-flex tw-items-center">
+                {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
                 <AlertTriangle v-if="isDeprecated" class="tw-w-4 tw-h-4 tw-ml-2 tw-text-gray-400" />
                 <Flame v-if="isExperimental" class="tw-w-4 tw-h-4 tw-ml-2 tw-text-orange-500" />
               </span>
-          </Badge>
-          <Badge variant="outline">
-            {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
+            
           </Badge>
           <Badge v-if="options.randomizer.active">
               <Dices class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('RandomizerSettings.Caption') }}
@@ -118,6 +119,78 @@
                           :label="$t('CodeBlocksSettings.RunTimeShrt')"
                         />
                       </div>
+
+                      <div class="tw-space-y-2">
+                        <div v-if="runCode && (accepstArguments || allowsMessagePassing)" class="tw-flex tw-items-center tw-gap-2">
+                          <div class="tw-text-sm">{{ $t('CodeBlocksSettings.AllowArguments') }}</div>
+                          <HoverCard>
+                            <HoverCardTrigger>
+                              <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
+                            </HoverCardTrigger>
+                            <HoverCardContent class="tw-w-80">
+                              <div v-html="$t(compiler.languageType === 'java' ? 'CodeBlocksSettings.AllowArgumentsHintJava' : 'CodeBlocksSettings.AllowArgumentsHint')" 
+                                   class="hover-content" />
+                            </HoverCardContent>
+                          </HoverCard>
+                        </div>
+
+                        <div v-if="runCode && accepstArguments" class="tw-flex tw-items-center tw-space-x-2">
+                          <Switch 
+                            id="persistent-args"
+                            :checked="persistentArguments"
+                            @update:checked="(val) => persistentArguments = val"
+                            :disabled="!canPersistentArguments"
+                          />
+                          <Label for="persistent-args">{{ $t('CodeBlocksSettings.PersistentArguments') }}</Label>
+                          <HoverCard>
+                            <HoverCardTrigger>
+                              <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
+                            </HoverCardTrigger>
+                            <HoverCardContent class="tw-w-80">
+                              <div v-html="$t(compiler.languageType === 'java' ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava' : 'CodeBlocksSettings.UsePersistentArgumentsHint')" 
+                                   class="hover-content" />
+                            </HoverCardContent>
+                          </HoverCard>
+                        </div>
+
+                        <div v-if="runCode && allowsMessagePassing" class="tw-flex tw-items-center tw-space-x-2">
+                          <Switch 
+                            id="message-passing"
+                            :checked="messagePassing"
+                            @update:checked="(val) => messagePassing = val"
+                            :disabled="!allowsMessagePassing"
+                          />
+                          <Label for="message-passing">{{ $t('CodeBlocksSettings.MessagePassing') }}</Label>
+                          <HoverCard>
+                            <HoverCardTrigger>
+                              <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
+                            </HoverCardTrigger>
+                            <HoverCardContent class="tw-w-80">
+                              <div v-html="$t(compiler.languageType === 'java' ? 'CodeBlocksSettings.AllowMessagePassingHintJava' : 'CodeBlocksSettings.AllowMessagePassingHint')" 
+                                   class="hover-content" />
+                            </HoverCardContent>
+                          </HoverCard>
+                        </div>
+
+                        <div v-if="runCode && allowsMessagePassing" class="tw-flex tw-items-center tw-space-x-2 tw-pl-6">
+                          <Switch 
+                            id="keep-alive"
+                            :checked="keepAlive"
+                            @update:checked="(val) => keepAlive = val"
+                            :disabled="!allowsMessagePassing || !messagePassing"
+                          />
+                          <Label for="keep-alive">{{ $t('CodeBlocksSettings.KeepAlive') }}</Label>
+                          <HoverCard>
+                            <HoverCardTrigger>
+                              <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
+                            </HoverCardTrigger>
+                            <HoverCardContent class="tw-w-80">
+                              <div v-html="$t(compiler.languageType === 'java' ? 'CodeBlocksSettings.KeepAliveHintJava' : 'CodeBlocksSettings.KeepAliveHint')" 
+                                   class="hover-content" />
+                            </HoverCardContent>
+                          </HoverCard>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </AccordionContent>
@@ -221,7 +294,7 @@
         leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
         leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
       >
-        <Alert v-if="isExperimental" variant="warning" class="tw-bg-orange-50 tw-border-orange-200 tw-py-2  tw-mb-4">
+        <Alert v-if="isExperimental" variant="destructive" class="tw-bg-orange-50 tw-border-orange-200 tw-py-2  tw-mb-4">
           <div class="tw-flex tw-gap-3 tw-items-center">
             <Flame class="tw-h-8 tw-w-8 tw-text-orange-500" />
             <div class="">
@@ -242,7 +315,7 @@
         leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
         leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
       >
-        <Alert v-if="isDeprecated" variant="warning" class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-mb-4">
+        <Alert v-if="isDeprecated" variant="destructive" class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-mb-4">
           <div class="tw-flex tw-gap-3 tw-items-center">
             <AlertTriangle class="tw-h-8 tw-w-8 tw-text-yellow-500" />
             <div class="tw-opacity-75">
@@ -267,12 +340,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import RandomizerSettings from './RandomizerSettings.vue'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/shadcn/ui/dialog'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shadcn/ui/accordion'
-import { Switch } from '@/shadcn/ui/switch'
-import { Label } from '@/shadcn/ui/label'
-import { Badge } from '@/shadcn/ui/badge'
-import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '../shadcn/ui/dialog'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../shadcn/ui/accordion'
+import { Switch } from '../shadcn/ui/switch'
+import { Label } from '../shadcn/ui/label'
+import { Badge } from '../shadcn/ui/badge'
+import { Alert, AlertDescription, AlertTitle } from '../shadcn/ui/alert'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn/ui/hover-card'
 import CButton from './ui/CButton.vue'
 import CMultiSelect from './ui/CMultiSelect.vue'
 import CSelect from './ui/CSelect.vue'
@@ -285,7 +359,7 @@ import { globalState } from '@/lib/globalState'
 import { UIThemeType, UIThemeTypes, getUITheme } from '@/lib/uiTheme'
 import { useI18n } from 'vue-i18n'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
-import { Settings, Code2, Terminal, Library, Dices, Clock, Flame, AlertTriangle } from 'lucide-vue-next'
+import { Settings, Code2, Terminal, Library, Dices, Clock, Flame, AlertTriangle, Info } from 'lucide-vue-next'
 
 const props = defineProps<Props>()
 const emit = defineEmits(['run-state-change', 'language-change', 'compiler-change', 'timeout-change', 
@@ -637,54 +711,6 @@ const accepstArguments = computed(() => {
   return false
 })
 
-function showInfoDialog(title: string, message: string): void {
-  if (l === undefined) {
-    return
-  }
-  showDialog({
-    title: l(title),
-    message: l(message),
-    html: true,
-    style: 'width:75%',
-  })
-}
-
-function showArgsInfoDialog(): void {
-  showInfoDialog(
-    'CodeBlocksSettings.AllowArgumentsCaption',
-    compiler.value.languageType == 'java'
-      ? 'CodeBlocksSettings.AllowArgumentsHintJava'
-      : 'CodeBlocksSettings.AllowArgumentsHint'
-  )
-}
-
-function showPersistentArgsInfoDialog(): void {
-  showInfoDialog(
-    'CodeBlocksSettings.UsePersistentArgumentsCaption',
-    compiler.value.languageType == 'java'
-      ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava'
-      : 'CodeBlocksSettings.UsePersistentArgumentsHint'
-  )
-}
-
-function showMessagesInfoDialog(): void {
-  showInfoDialog(
-    'CodeBlocksSettings.AllowMessagePassingCaption',
-    compiler.value.languageType == 'java'
-      ? 'CodeBlocksSettings.AllowMessagePassingHintJava'
-      : 'CodeBlocksSettings.AllowMessagePassingHint'
-  )
-}
-
-function showAliveInfoDialog(): void {
-  showInfoDialog(
-    'CodeBlocksSettings.KeepAliveCaption',
-    compiler.value.languageType == 'java'
-      ? 'CodeBlocksSettings.KeepAliveHintJava'
-      : 'CodeBlocksSettings.KeepAliveHint'
-  )
-}
-
 function isExperimentalVersion(language: IListItemData, version: string | number | Option): boolean {
   const versionStr = typeof version === 'object' ? version.value.toString() : version.toString()
   const c = compilerRegistry.getCompiler({
@@ -716,3 +742,12 @@ function validNumber(v: any): boolean | string {
   return true
 }
 </script>
+
+<style>
+.hover-content {
+  @apply tw-text-sm tw-text-muted-foreground;
+  @apply [&>p]:tw-mb-2 [&>ul]:tw-ml-4 [&>ul]:tw-list-disc [&>ul>li]:tw-mb-1;
+  @apply [&>code]:tw-px-1.5 [&>code]:tw-py-0.5 [&>code]:tw-bg-muted [&>code]:tw-rounded-sm [&>code]:tw-font-mono [&>code]:tw-text-xs;
+  @apply [&>pre]:tw-bg-muted [&>pre]:tw-p-2 [&>pre]:tw-rounded-md [&>pre]:tw-my-2 [&>pre]:tw-font-mono [&>pre]:tw-text-xs;
+}
+</style>
