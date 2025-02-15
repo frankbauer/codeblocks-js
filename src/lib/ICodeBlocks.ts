@@ -90,6 +90,7 @@ export interface IBlockElementData {
     showControls?: boolean
     as?: string
     name?: string
+    label?: string
 }
 
 export interface ICodeBlockDataState {
@@ -126,6 +127,7 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
     generateTemplate: boolean
     lineCountHint: number
     as?: KnownBlockTypes
+    label?: string
 }
 
 export interface IBlockData extends IBlockDataBase {

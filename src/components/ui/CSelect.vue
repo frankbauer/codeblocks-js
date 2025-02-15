@@ -47,14 +47,14 @@ const findOptionByValue = (value: string): Option | string | number => {
     <Label v-if="label">{{ label }}</Label>
     <Select 
       :model-value="getOptionValue(modelValue)" 
-      @update:model-value="emit('update:modelValue', findOptionByValue($event))"
+      @update:model-value="emit('update:modelValue', findOptionByValue($event))"      
     >
       <SelectTrigger>
         <SelectValue :placeholder="placeholder">
           {{ getOptionLabel(modelValue) }}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent >
         <SelectItem 
           v-for="option in options" 
           :key="getOptionValue(option)" 

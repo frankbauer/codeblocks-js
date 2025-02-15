@@ -136,6 +136,7 @@ export class BlockData implements IBlockData {
     align: string
     lineCountHint: number
     name: string
+    label: string
     _oac?: () => string //used by Blockly to re-place the actualContent-Method while keeping the old implementation around
 
     obj: ScriptBlock | null
@@ -173,6 +174,7 @@ export class BlockData implements IBlockData {
         this.align = d.align
         this.lineCountHint = d.lineCountHint
         this.name = d.name
+        this.label = d.label ?? ''
 
         this.created()
     }
@@ -573,6 +575,8 @@ function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockData
         scopeUUID: inBlock.scopeUUID,
         scopeSelector: inBlock.scopeSelector,
     }
+
+    block.name = inBlock.name !== undefined ? inBlock.name : `v${block.id}`
 
     if (inBlock.codeExpanded !== undefined) {
         if (

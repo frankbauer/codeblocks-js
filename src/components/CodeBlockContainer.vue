@@ -10,58 +10,70 @@
             :class="`tw-mx-0 tw-my-1 tw-p-0 editModeBlockContainer ${colorClass} ${bgClass}`"
         >
             <CardContent class="tw-mb-0 tw-pb-2 tw-pt-2 ">
-                <div class="tw-flex tw-flex-col sm:tw-flex-row tw-gap-1">
-                    <div class="tw-w-full sm:tw-w-1/3 tw-flex tw-items-center tw-gap-2">
+                <div class="tw-flex tw-flex-col sm:tw-flex-row tw-gap-1 ">
+                    <div class="tw-w-full sm:tw-w-1/3 tw-flex tw-items-center tw-gap-2" v-if="block.expanded">   
+                        <div class="tw-hidden sm:tw-block">
+                            <HoverCard>
+                                <HoverCardTrigger>
+                                    <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
+                                </HoverCardTrigger>
+                                <HoverCardContent class="tw-w-80 tw-max-h-[30vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar">
+                                    
+                                        <div v-html="l('CodeBlockContainer.Types')" class="hover-content "></div>
+                                    
+                                </HoverCardContent>
+                            </HoverCard>                    
+                        </div>
                         <CSelect
                             :model-value="typeObj"
                             :options="types"
                             @update:model-value="typeObj = $event"
                             class="tw-w-full"
-                        />
-                        <HoverCard>
-                            <HoverCardTrigger>
-                                <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
-                            </HoverCardTrigger>
-                            <HoverCardContent class="tw-w-80">
-                                <div v-html="l('CodeBlockContainer.Types')" class="hover-content"></div>
-                            </HoverCardContent>
-                        </HoverCard>
+                        />                        
                     </div>
-                    <div class="tw-flex-grow"></div>
-                    <div class="rightContentContainerHeader">
+                    <div class="tw-w-full sm:tw-w-auto tw-flex-grow">
+                        <Input
+                            v-model="block.label"
+                            class="inlined-input"
+                            placeholder="Optional Label"
+                            v-if="block.expanded"
+                        />
+                        <div v-else class="tw-flex tw-px-2 tw-items-center tw-h-full"><div><b>{{typeObj.label}}:</b> {{ block.label }}</div></div>
+                    </div>                    
+                    <div class="rightContentContainerHeader tw-w-full sm:tw-w-auto">
                         <DropdownMenu v-if="hasExtendedSettings">
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline">
-                                    <Settings class="tw-h-4 tw-w-4" />
-                                </Button>
+                                <CButton variant="outline" size="xs" :icon="Settings" :no-text="true" class="tw-h-8">
+                                </CButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent 
-                                class="tw-w-[300px] sm:tw-w-[500px] md:tw-w-[600px] tw-max-h-[80vh]  tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbars"
-                                side="left"
-                                align="start"
+                                class="tw-w-[300px] sm:tw-w-[300px] md:tw-w-[45vw] tw-max-h-[40vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar"
+                                align="end"
                                 :sideOffset="5"
                             >
                                 <!-- LineNumbers -->
                                 <div v-if="canSetLineNumbers" class="tw-p-4">
-                                    <div class="tw-text-sm tw-font-medium tw-mb-4">
+                                    <div class="tw-text-lg tw-font-medium tw-mb-4">
                                         {{ l('CodeBlockContainer.Display') }}
                                     </div>
-                                    <div class="tw-flex tw-items-center tw-space-x-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Lines') }}
                                             </div>
                                             <div class="tw-text-sm tw-text-muted-foreground" v-html="l('CodeBlockContainer.Lines_detail')"></div>
                                         </div>
-                                        <Input
-                                            v-model="visibleLines"
-                                            :rules="[validNumber]"
-                                            class="tw-w-1/3"
-                                            maxlength="4"
-                                        />
+                                        <div>
+                                            <Input
+                                                v-model="visibleLines"
+                                                :rules="[validNumber]"
+                                                class="tw-w-1/3"
+                                                maxlength="4"
+                                            />
+                                        </div>
                                     </div>
-                                    <div v-if="canHaveAlternativeContent" class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div v-if="canHaveAlternativeContent" class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Prepopulate') }}
                                             </div>
@@ -77,11 +89,11 @@
 
                                 <!-- Playground Versioning -->
                                 <div v-if="isVersionedPlayground" class="tw-p-4">
-                                    <div class="tw-text-sm tw-font-medium tw-mb-4">
+                                    <div class="tw-text-lg tw-font-medium tw-mb-4">
                                         {{ l('CodeBlockContainer.Behaviour') }}
                                     </div>
-                                    <div class="tw-flex tw-items-center tw-space-x-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.ScriptV') }}
                                             </div>
@@ -89,16 +101,17 @@
                                                 {{ l('CodeBlockContainer.ScriptV_detail') }}
                                             </div>
                                         </div>
-                                        <CSelect
-                                            :model-value="scriptVersionObj"
-                                            :options="scriptVersions"
-                                            @update:model-value="scriptVersionObj = $event"
-                                            class="tw-w-1/3"
-                                        />
+                                        <div class="tw-w-1/3">
+                                            <CSelect
+                                                :model-value="scriptVersionObj"
+                                                :options="scriptVersions"
+                                                @update:model-value="scriptVersionObj = $event"                                           
+                                            />
+                                        </div>
                                     </div>
 
-                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.AutoReset') }}
                                             </div>
@@ -111,8 +124,8 @@
                                         </div>
                                     </div>
 
-                                    <div v-if="canLoadResources" class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div v-if="canLoadResources" class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.ReloadResources') }}
                                             </div>
@@ -125,8 +138,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.GenerateTemplate') }}
                                             </div>
@@ -142,11 +155,11 @@
 
                                 <!-- Positioning -->
                                 <div v-if="canDefinePlacement && shouldGenerateTemplate" class="tw-p-4">
-                                    <div class="tw-text-sm tw-font-medium tw-mb-4">
+                                    <div class="tw-text-lg tw-font-medium tw-mb-4">
                                         {{ l('CodeBlockContainer.Positioning') }}
                                     </div>
-                                    <div class="tw-flex tw-items-center tw-space-x-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Width') }}
                                             </div>
@@ -154,10 +167,12 @@
                                                 {{ l('CodeBlockContainer.Width_detail') }}
                                             </div>
                                         </div>
-                                        <Input v-model="width" maxlength="7" class="tw-w-1/3" />
+                                        <div class="tw-w-1/3">
+                                            <Input v-model="width" maxlength="7" class="tw-w-1/3" />
+                                        </div>
                                     </div>
-                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Height') }}
                                             </div>
@@ -165,10 +180,12 @@
                                                 {{ l('CodeBlockContainer.Height_detail') }}
                                             </div>
                                         </div>
-                                        <Input v-model="height" maxlength="7" class="tw-w-1/3" />
+                                        <div class="tw-w-1/3">
+                                            <Input v-model="height" maxlength="7" class="tw-w-1/3" />
+                                        </div>  
                                     </div>
-                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1 tw-w-2/3">
+                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                        <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Alignment') }}
                                             </div>
@@ -190,6 +207,7 @@
                         <Button
                             variant="outline"
                             class="tw-ml-4 tw-mr-1"
+                            size="xs"
                             :disabled="!canMoveUp"
                             @click="moveUp"
                         >
@@ -199,13 +217,15 @@
                         <CSelect
                             :model-value="order"
                             :options="positions"
+                            size="xs"
                             @update:model-value="order = $event"
-                            class="tw-w-20"
+                            class="tw-w-16"
                         />
 
                         <Button
                             variant="outline"
                             class="tw-ml-1 tw-mr-4"
+                            size="xs"
                             :disabled="!canMoveDown"
                             @click="moveDown"
                         >
@@ -214,9 +234,12 @@
 
                         <CButton
                             variant="destructive"
-                            class="tw-hidden sm:tw-block sm:tw-mr-2 md:tw-mr-6"
+                            class="tw-mr-4"
                             @click="removeBlock"
-                            :icon="AlertTriangle"
+                            size="xs"
+                            :icon="Trash2"
+                            v-if="block.expanded"
+                            :no-text="true"
                         >
                             {{ $t('CodeBlockContainer.Delete') }}
                         </CButton>
@@ -239,7 +262,7 @@
                 ></textarea>
             </CardContent>
 
-            <div class="tw-px-6">
+            <CardContent class="tw-px-6">
                 <Transition
                     enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
                     enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
@@ -281,7 +304,7 @@
                         </div>
                     </Alert>
                 </Transition>
-            </div>
+            </CardContent>
 
             <CardContent v-show="expanded" class="tw-py-1">
                 <slot></slot>
@@ -323,7 +346,7 @@ import { Input } from '@/shadcn/ui/input'
 import { Switch } from '@/shadcn/ui/switch'
 
 // Import icons
-import { AlertTriangle, ChevronDown, ChevronUp, Settings, Info, Flame, HourglassIcon } from 'lucide-vue-next'
+import { AlertTriangle, ChevronDown, ChevronUp, Settings, Info, Flame, HourglassIcon, Trash2 } from 'lucide-vue-next'
 
 // Import new components
 import CSelect  from './ui/CSelect.vue'
