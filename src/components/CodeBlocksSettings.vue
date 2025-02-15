@@ -3,7 +3,7 @@
     <div class="tw-flex tw-justify-between tw-items-center tw-p-3 tw-bg-card tw-rounded-lg tw-border">
       <div class="tw-flex tw-items-center tw-gap-2">
         <Badge variant="outline">
-          {{ compilerLanguageObj.label }} {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
+          {{ compilerLanguage }} {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
         </Badge>
         <Badge v-if="options.randomizer.active" variant="secondary">
           {{ $t('RandomizerSettings.Caption') }}
@@ -22,7 +22,7 @@
         <DialogTrigger asChild>
           <CButton :icon="Settings" variant="outline" noText />
         </DialogTrigger>
-        <DialogContent class="tw-max-w-3xl">
+        <DialogContent class="tw-max-w-3xl tw-max-h-[90vh] tw-overflow-y-auto tw-pr-4 modern-scrollbar">
           <DialogHeader>
             <DialogTitle>{{ $t('CodeBlocksSettings.Settings') }}</DialogTitle>
             <DialogDescription>
@@ -35,7 +35,7 @@
               <AccordionTrigger>
                 {{ $t('CodeBlocksSettings.Language') }}
                 <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
-                  {{ runCode ? `${compilerLanguageObj.label} v${compilerVersion}` : `${compilerLanguageObj.label} (${$t('CodeBlocksSettings.NoExecution')})` }}
+                  {{ runCode ? `${compilerLanguage} v${compilerVersion}` : `${compilerLanguage} (${$t('CodeBlocksSettings.NoExecution')})` }}
                 </span>
               </AccordionTrigger>
               <AccordionContent>
@@ -62,8 +62,8 @@
                     <div class="tw-grid tw-grid-cols-2 tw-gap-4">
                       <div :class="{'tw-col-span-2': !runCode}">
                         <CSelect
-                          :model-value="compilerLanguageObj"
-                          @update:model-value="compilerLanguageObj = $event"
+                          :model-value="compilerLanguage"
+                          @update:model-value="updateCompilerLanguage"
                           :options="compiledLanguages"
                           :label="$t('CodeBlocksSettings.Language')"
                         />
@@ -165,7 +165,7 @@
       </Dialog>
     </div>
     
-    <InfoDialog />
+
     
     <textarea
       :name="`block_settings[${options.id}]`"
@@ -188,7 +188,6 @@ import CMultiSelect from './ui/CMultiSelect.vue'
 import CSelect from './ui/CSelect.vue'
 import CInput from './ui/CInput.vue'
 import { useDialog } from './ui/useDialog'
-import InfoDialog from './ui/InfoDialog.vue'
 import type { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
 import type { IRandomizerSettings } from '@/lib/ICodeBlocks'
 import compilerRegistry from '@/lib/CompilerRegistry'
@@ -268,6 +267,13 @@ const compilerLanguage = computed(() => {
   return props.options.compiler.languageType
 })
 
+function updateCompilerLanguage(value: string) {
+  if (props.options.runCode === false) {
+    emit('language-change', value)
+  }
+  emit('compiler-change', value)
+}
+
 const compilerVersion = computed({
   get: () => {
     return props.options.compiler.version
@@ -295,14 +301,21 @@ const workerLibraries = computed(() => {
 })
 
 const languages = computed(() => {
-  return globalState.appState.knownLanguages()
+  const knownLangs = globalState.appState.knownLanguages()
+  return knownLangs.map(lang => ({
+    label: lang.label,
+    value: lang.value.toString()  // Ensure value is a string
+  }))
 })
 
 const compiledLanguages = computed(() => {
   if (props.options.runCode === false) {
     return languages.value
   }
-  return compilerRegistry.languages
+  return compilerRegistry.languages.map(lang => ({
+    label: lang.label,
+    value: lang.value.toString()  // Ensure value is a string
+  }))
 })
 
 const compilerVersions = computed(() => {
@@ -344,21 +357,6 @@ const languageHasCompiler = computed(() => {
   }
   const c = compilerRegistry.getCompiler({ languageType: compilerLanguage.value })
   return c !== undefined
-})
-
-const compilerLanguageObj = computed({
-  get: () => {
-    return globalState.appState.itemForValue(
-      compiledLanguages.value,
-      compilerLanguage.value
-    )
-  },
-  set: (v: IListItemData) => {
-    if (props.options.runCode === false) {
-      emit('language-change', v.value)
-    }
-    emit('compiler-change', v.value)
-  },
 })
 
 const maxRuntime = computed({

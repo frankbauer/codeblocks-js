@@ -29,25 +29,37 @@ const getOptionLabel = (option: Option | string | number) => {
   return option.toString()
 }
 
-const getOptionValue = (option: Option | string | number) => {
+const getOptionValue = (option: Option | string | number): string => {
   if (typeof option === 'object') {
-    return option.value
+    return option.value.toString()
   }
-  return option
+  return option.toString()
+}
+
+const findOptionByValue = (value: string): Option | string | number => {
+  const option = props.options.find(opt => getOptionValue(opt) === value)
+  return option ?? value
 }
 </script>
 
 <template>
   <div class="tw-space-y-2">
     <Label v-if="label">{{ label }}</Label>
-    <Select :model-value="modelValue" @update:model-value="emit('update:modelValue', $event)">
+    <Select 
+      :model-value="getOptionValue(modelValue)" 
+      @update:model-value="emit('update:modelValue', findOptionByValue($event))"
+    >
       <SelectTrigger>
         <SelectValue :placeholder="placeholder">
           {{ getOptionLabel(modelValue) }}
         </SelectValue>
       </SelectTrigger>
       <SelectContent>
-        <SelectItem v-for="option in options" :key="getOptionValue(option)" :value="option">
+        <SelectItem 
+          v-for="option in options" 
+          :key="getOptionValue(option)" 
+          :value="getOptionValue(option)"
+        >
           <slot name="option" :option="option">
             {{ getOptionLabel(option) }}
           </slot>
