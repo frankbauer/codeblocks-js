@@ -28,7 +28,7 @@
                         </HoverCard>
                     </div>
                     <div class="tw-flex-grow"></div>
-                    <div class="tw-w-full sm:tw-w-2/3 md:tw-w-5/12 rightContentContainerHeader">
+                    <div class="rightContentContainerHeader">
                         <DropdownMenu v-if="hasExtendedSettings">
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline">
@@ -36,8 +36,8 @@
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent 
-                                class="tw-max-h-[80vh] tw-max-w-[400px] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbars"
-                                side="right"
+                                class="tw-w-[300px] sm:tw-w-[500px] md:tw-w-[600px] tw-max-h-[80vh]  tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbars"
+                                side="left"
                                 align="start"
                                 :sideOffset="5"
                             >
@@ -239,29 +239,49 @@
                 ></textarea>
             </CardContent>
 
-            <Alert
-                v-if="isExperimentalScriptVersion"
-                variant="destructive"
-                class="tw-mx-4 tw-mb-4"
-            >
-                <Flame class="tw-h-4 tw-w-4" />
-                <AlertTitle>{{ $t('CodePlayground.ExperimentalScriptVersion') }}</AlertTitle>
-                <AlertDescription>
-                    {{ $t('CodePlayground.ExperimentalScriptVersionDesc') }}
-                </AlertDescription>
-            </Alert>
+            <div class="tw-px-6">
+                <Transition
+                    enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
+                    enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+                    enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+                    leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
+                    leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+                    leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+                    >
+                    <Alert v-if="isExperimentalScriptVersion" variant="destructive" class="tw-bg-orange-50 tw-border-orange-200  tw-py-2 tw-mb-4">
+                        <div class="tw-flex tw-gap-2 tw-items-center">
+                        <Flame class="tw-h-12 tw-w-12 tw-text-orange-500" />
+                        <div class="tw-flex-1">
+                            <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600">{{ $t('CodePlayground.ExperimentalScriptVersion') }}</AlertTitle>
+                            <AlertDescription class="tw-text-xs tw-mt-1 tw-text-orange-500">
+                            {{ $t('CodePlayground.ExperimentalScriptVersionDesc') }}
+                            </AlertDescription>
+                        </div>
+                        </div>
+                    </Alert>
+                </Transition>
 
-            <Alert
-                v-if="isDeprecatedScriptVersion"
-                variant="destructive"
-                class="tw-mx-4 tw-mb-4"
-            >
-                <HourglassIcon class="tw-h-4 tw-w-4" />
-                <AlertTitle>{{ $t('CodePlayground.DeprecatedScriptVersion') }}</AlertTitle>
-                <AlertDescription>
-                    {{ $t('CodePlayground.DeprecatedScriptVersionDesc') }}
-                </AlertDescription>
-            </Alert>
+                <Transition
+                    enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
+                    enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+                    enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+                    leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
+                    leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+                    leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+                    >
+                    <Alert v-if="isDeprecatedScriptVersion" variant="destructive" class="tw-bg-yellow-50 tw-border-yellow-300  tw-py-2 tw-mb-4 ">
+                        <div class="tw-flex tw-gap-2 tw-items-center">
+                        <AlertTriangle class="tw-h-12 tw-w-12 tw-text-yellow-500" />
+                        <div class="tw-flex-1">
+                            <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600">{{ $t('CodePlayground.DeprecatedScriptVersion') }}</AlertTitle>
+                            <AlertDescription class="tw-text-xs tw-mt-1 tw-text-yellow-500">
+                            {{ $t('CodePlayground.DeprecatedScriptVersionDesc') }}
+                            </AlertDescription>
+                        </div>
+                        </div>
+                    </Alert>
+                </Transition>
+            </div>
 
             <CardContent v-show="expanded" class="tw-py-1">
                 <slot></slot>
