@@ -9,13 +9,14 @@
             v-if="editMode"
             :class="`tw-mx-0 tw-my-1 tw-p-0 editModeBlockContainer ${colorClass} ${bgClass}`"
         >
-            <CardContent class="tw-mb-0 tw-pb-2 tw-pt-2">
-                <div class="tw-flex tw-flex-col sm:tw-flex-row tw-gap-4">
+            <CardContent class="tw-mb-0 tw-pb-2 tw-pt-2 ">
+                <div class="tw-flex tw-flex-col sm:tw-flex-row tw-gap-1">
                     <div class="tw-w-full sm:tw-w-1/3 tw-flex tw-items-center tw-gap-2">
                         <CSelect
                             :model-value="typeObj"
                             :options="types"
                             @update:model-value="typeObj = $event"
+                            class="tw-w-full"
                         />
                         <HoverCard>
                             <HoverCardTrigger>
@@ -34,14 +35,19 @@
                                     <Settings class="tw-h-4 tw-w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent>
+                            <DropdownMenuContent 
+                                class="tw-max-h-[80vh] tw-max-w-[400px] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbars"
+                                side="right"
+                                align="start"
+                                :sideOffset="5"
+                            >
                                 <!-- LineNumbers -->
                                 <div v-if="canSetLineNumbers" class="tw-p-4">
                                     <div class="tw-text-sm tw-font-medium tw-mb-4">
                                         {{ l('CodeBlockContainer.Display') }}
                                     </div>
                                     <div class="tw-flex tw-items-center tw-space-x-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Lines') }}
                                             </div>
@@ -50,12 +56,12 @@
                                         <Input
                                             v-model="visibleLines"
                                             :rules="[validNumber]"
-                                            class="tw-w-32"
+                                            class="tw-w-1/3"
                                             maxlength="4"
                                         />
                                     </div>
                                     <div v-if="canHaveAlternativeContent" class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Prepopulate') }}
                                             </div>
@@ -63,7 +69,9 @@
                                                 {{ l('CodeBlockContainer.Prepopulate_detail') }}
                                             </div>
                                         </div>
-                                        <Switch v-model="hasAltComntent" />
+                                        <div class="tw-w-1/3">
+                                            <Switch v-model="hasAltComntent" />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -73,7 +81,7 @@
                                         {{ l('CodeBlockContainer.Behaviour') }}
                                     </div>
                                     <div class="tw-flex tw-items-center tw-space-x-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.ScriptV') }}
                                             </div>
@@ -85,12 +93,12 @@
                                             :model-value="scriptVersionObj"
                                             :options="scriptVersions"
                                             @update:model-value="scriptVersionObj = $event"
-                                            class="tw-w-32"
+                                            class="tw-w-1/3"
                                         />
                                     </div>
 
                                     <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.AutoReset') }}
                                             </div>
@@ -98,11 +106,13 @@
                                                 {{ l('CodeBlockContainer.AutoReset_detail') }}
                                             </div>
                                         </div>
-                                        <Switch v-model="shouldAutoReset" />
+                                        <div class="tw-w-1/3">
+                                            <Switch v-model="shouldAutoReset" />
+                                        </div>
                                     </div>
 
                                     <div v-if="canLoadResources" class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.ReloadResources') }}
                                             </div>
@@ -110,11 +120,13 @@
                                                 {{ l('CodeBlockContainer.ReloadResources_detail') }}
                                             </div>
                                         </div>
-                                        <Switch v-model="shouldReloadResources" />
+                                        <div class="tw-w-1/3">
+                                            <Switch v-model="shouldReloadResources" />
+                                        </div>
                                     </div>
 
                                     <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.GenerateTemplate') }}
                                             </div>
@@ -122,7 +134,9 @@
                                                 {{ l('CodeBlockContainer.GenerateTemplate_detail') }}
                                             </div>
                                         </div>
-                                        <Switch v-model="shouldGenerateTemplate" />
+                                        <div class="tw-w-1/3">
+                                            <Switch v-model="shouldGenerateTemplate" />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -132,7 +146,7 @@
                                         {{ l('CodeBlockContainer.Positioning') }}
                                     </div>
                                     <div class="tw-flex tw-items-center tw-space-x-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Width') }}
                                             </div>
@@ -140,10 +154,10 @@
                                                 {{ l('CodeBlockContainer.Width_detail') }}
                                             </div>
                                         </div>
-                                        <Input v-model="width" maxlength="7" class="tw-w-32" />
+                                        <Input v-model="width" maxlength="7" class="tw-w-1/3" />
                                     </div>
                                     <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Height') }}
                                             </div>
@@ -151,10 +165,10 @@
                                                 {{ l('CodeBlockContainer.Height_detail') }}
                                             </div>
                                         </div>
-                                        <Input v-model="height" maxlength="7" class="tw-w-32" />
+                                        <Input v-model="height" maxlength="7" class="tw-w-1/3" />
                                     </div>
                                     <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-4">
-                                        <div class="tw-flex-1">
+                                        <div class="tw-flex-1 tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Alignment') }}
                                             </div>
@@ -166,7 +180,7 @@
                                             :model-value="align"
                                             :options="alignments"
                                             @update:model-value="align = $event"
-                                            class="tw-w-32"
+                                            class="tw-w-1/3"
                                         />
                                     </div>
                                 </div>
@@ -191,21 +205,21 @@
 
                         <Button
                             variant="outline"
-                            class="tw-mr-4"
+                            class="tw-ml-1 tw-mr-4"
                             :disabled="!canMoveDown"
                             @click="moveDown"
                         >
                             <ChevronDown class="tw-h-4 tw-w-4" />
                         </Button>
 
-                        <Button
+                        <CButton
                             variant="destructive"
                             class="tw-hidden sm:tw-block sm:tw-mr-2 md:tw-mr-6"
                             @click="removeBlock"
+                            :icon="AlertTriangle"
                         >
-                            <AlertTriangle class="tw-h-4 tw-w-4 tw-mr-2" />
                             {{ $t('CodeBlockContainer.Delete') }}
-                        </Button>
+                        </CButton>
 
                         <Button
                             variant="ghost"
@@ -346,9 +360,6 @@ const { editMode } = toRefs(props)
 const settingsMenu = ref<boolean>(false)
 let highlighted = ref<boolean>(false)
 const deleteDialogOpen = ref(false)
-
-// Remove dialogOpen and showTypeInfoDialog since we're using HoverCard now
-// ...rest of existing code...
 
 const removeBlock = (): void => {
     highlighted.value = true
@@ -783,4 +794,13 @@ textarea.blockoptions
     @apply [&>p]:tw-mb-2 [&>ul]:tw-ml-4 [&>ul]:tw-list-disc [&>ul>li]:tw-mb-1
     @apply [&>code]:tw-px-1.5 [&>code]:tw-py-0.5 [&>code]:tw-bg-muted [&>code]:tw-rounded-sm [&>code]:tw-font-mono [&>code]:tw-text-xs
     @apply [&>pre]:tw-bg-muted [&>pre]:tw-p-2 [&>pre]:tw-rounded-md [&>pre]:tw-my-2 [&>pre]:tw-font-mono [&>pre]:tw-text-xs
+
+:deep(.tw-max-w-\[400px\])
+    .tw-text-sm
+        word-wrap: break-word
+        overflow-wrap: break-word
+    .tw-flex
+        min-width: 0
+    .tw-flex-1
+        min-width: 0
 </style>
