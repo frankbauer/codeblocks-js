@@ -30,15 +30,20 @@
             </DialogDescription>
           </DialogHeader>
           
-          <Accordion type="single" collapsible class="tw-w-full">
+          <Accordion type="single" collapsible class="tw-w-full [&>*>*>[data-state=open]>.tw-text-xs]:tw-opacity-100">
             <AccordionItem value="language">
-              <AccordionTrigger>
-                {{ $t('CodeBlocksSettings.Language') }}
-                <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
-                  {{ runCode ? `${compilerLanguage} v${compilerVersion}` : `${compilerLanguage} (${$t('CodeBlocksSettings.NoExecution')})` }}
-                </span>
+              <AccordionTrigger class="tw-items-start">
+                <div class="tw-flex tw-flex-col tw-w-full">
+                  <div class="tw-flex tw-items-center tw-gap-2">
+                    <Code2 class="tw-w-4 tw-h-4" />
+                    {{ $t('CodeBlocksSettings.Language') }}
+                  </div>
+                  <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
+                    {{ runCode ? `${compilerLanguage} v${compilerVersion}` : `${compilerLanguage} (${$t('CodeBlocksSettings.NoExecution')})` }}
+                  </div>
+                </div>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent class="tw-pl-6 tw-mt-2">
                 <div class="tw-space-y-4">
                   <div class="tw-flex tw-flex-col tw-gap-4">
                     <div class="tw-flex tw-items-center tw-space-x-2">
@@ -93,13 +98,18 @@
             </AccordionItem>
 
             <AccordionItem value="output" v-if="runCode">
-              <AccordionTrigger>
-                {{ $t('CodeBlocksSettings.Output') }}
-                <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
-                  max. {{ maxCharacters }}, {{ outputParser.label }}
-                </span>
+              <AccordionTrigger class="tw-items-start">
+                <div class="tw-flex tw-flex-col tw-w-full">
+                  <div class="tw-flex tw-items-center tw-gap-2">
+                    <Terminal class="tw-w-4 tw-h-4" />
+                    {{ $t('CodeBlocksSettings.Output') }}
+                  </div>
+                  <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
+                    max. {{ maxCharacters }} • {{ outputParser.label }}
+                  </div>
+                </div>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent class="tw-pl-6 tw-mt-2">
                 <div class="tw-space-y-4">
                   <div class="tw-grid tw-grid-cols-2 tw-gap-4">
                     <CInput
@@ -125,14 +135,18 @@
             </AccordionItem>
 
             <AccordionItem value="libraries">
-              <AccordionTrigger>
-                {{ $t('CodeBlocksSettings.Libraries') }}
-                <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
-                  {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }},
-                  {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
-                </span>
+              <AccordionTrigger class="tw-items-start">
+                <div class="tw-flex tw-flex-col tw-w-full">
+                  <div class="tw-flex tw-items-center tw-gap-2">
+                    <Library class="tw-w-4 tw-h-4" />
+                    {{ $t('CodeBlocksSettings.Libraries') }}
+                  </div>
+                  <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
+                    {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }} • {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
+                  </div>
+                </div>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent class="tw-pl-6 tw-mt-2">
                 <div class="tw-space-y-4">
                   <CMultiSelect
                     v-model="domLibrary"
@@ -150,13 +164,18 @@
             </AccordionItem>
 
             <AccordionItem value="randomizer">
-              <AccordionTrigger>
-                {{ $t('RandomizerSettings.Caption') }}
-                <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
-                  {{ options.randomizer.active ? $t('RandomizerSettings.Active') : $t('RandomizerSettings.Inactive') }}
-                </span>
+              <AccordionTrigger class="tw-items-start">
+                <div class="tw-flex tw-flex-col tw-w-full">
+                  <div class="tw-flex tw-items-center tw-gap-2">
+                    <Dices class="tw-w-4 tw-h-4" />
+                    {{ $t('RandomizerSettings.Caption') }}
+                  </div>
+                  <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
+                    {{ options.randomizer.active ? $t('RandomizerSettings.Active') : $t('RandomizerSettings.Inactive') }}
+                  </div>
+                </div>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent class="tw-pl-6 tw-mt-2">
                 <RandomizerSettings :options="options" />
               </AccordionContent>
             </AccordionItem>
@@ -195,7 +214,7 @@ import { globalState } from '@/lib/globalState'
 import { UIThemeType, UIThemeTypes, getUITheme } from '@/lib/uiTheme'
 import { useI18n } from 'vue-i18n'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
-import { Settings } from 'lucide-vue-next'
+import { Settings, Code2, Terminal, Library, Dices } from 'lucide-vue-next'
 
 const props = defineProps<Props>()
 const emit = defineEmits(['run-state-change', 'language-change', 'compiler-change', 'timeout-change', 
