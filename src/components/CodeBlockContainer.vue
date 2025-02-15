@@ -262,7 +262,7 @@
                 ></textarea>
             </CardContent>
 
-            <CardContent class="tw-px-6">
+            <CardContent class="tw-px-6" v-if="isExperimentalScriptVersion || isDeprecatedScriptVersion">
                 <Transition
                     enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
                     enter-from-class="tw-transform tw-scale-95 tw-opacity-0"

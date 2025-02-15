@@ -34,7 +34,7 @@
         />
 
         <div v-if="editMode && hasAlternativeContent">
-            <div class="q-mt-lg text-subtitle2 q-pb-xs">{{ $t('CodeBlock.Initial_Content') }}</div>
+            <div class="tw-mt-8 text-subtitle2 q-pb-xs">{{ $t('CodeBlock.Initial_Content') }}</div>
             <textarea
                 ref="altBoxRaw"
                 style="display: block"
