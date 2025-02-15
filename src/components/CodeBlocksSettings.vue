@@ -1,885 +1,622 @@
 <template>
-    <q-list bordered class="q-pa-none q-mb-md bg-white">
-        <q-expansion-item
-            expand-separator
-            icon="settings"
-            :label="$t('CodeBlocksSettings.Settings')"
-            :caption="`${
-                runCode
-                    ? `${compilerLanguageObj.label} v${compilerVersion}`
-                    : `${compilerLanguageObj.label} (${$t('CodeBlocksSettings.NoExecution')})`
-            }${options.randomizer.active ? `,  ${$t('RandomizerSettings.Caption')}` : ''}, ${
-                outputParser.label
-            }, ${$t('CodeBlocksSettings.DomLibs')}: ${domLibrary.length}, ${$t(
-                'CodeBlocksSettings.WorkLibs'
-            )}: ${workerLibrary.length}`"
-        >
-            <q-list class="q-ml-md">
-                <q-expansion-item
-                    expand-separator
-                    icon="play_circle_outline"
-                    :label="$t('CodeBlocksSettings.Language')"
-                    :caption="
-                        runCode
-                            ? `${compilerLanguageObj.label} v${compilerVersion}`
-                            : `${compilerLanguageObj.label} (${$t(
-                                  'CodeBlocksSettings.NoExecution'
-                              )})`
-                    "
-                >
-                    <q-card class="q-ml-md">
-                        <q-card-section class="q-ml-md">
-                            <div class="row">
-                                <div class="col-12">
-                                    <q-toggle
-                                        v-model="runCode"
-                                        :disabled="!languageHasCompiler"
-                                        :label="$t('CodeBlocksSettings.AllowExec')"
-                                    />
-                                </div>
-                                <div class="col-12">
-                                    <q-toggle
-                                        v-model="continuousCompile"
-                                        :disabled="!canContinousCompile"
-                                        :label="$t('CodeBlocksSettings.ContinousCompile')"
-                                    />
-                                </div>
-
-                                <div
-                                    :class="`col-xs-12 col-sm-${runCode ? 6 : 12} col-md-${
-                                        runCode ? 8 : 12
-                                    } ${runCode ? 'q-pr-md-sm' : ''}`"
-                                >
-                                    <q-select
-                                        :options="compiledLanguages"
-                                        v-model="compilerLanguageObj"
-                                        :label="$t('CodeBlocksSettings.Language')"
-                                    />
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-6" v-if="runCode">
-                                    <q-select
-                                        :options="compilerVersions"
-                                        v-model="compilerVersion"
-                                        stack-label
-                                        :label="$t('CodeBlocksSettings.CVersion')"
-                                    >
-                                        <template v-slot:selected>
-                                            {{ compilerVersion }}
-                                            <q-avatar
-                                                rounded
-                                                size="xs"
-                                                color="yellow"
-                                                text-color="brown-10"
-                                                icon="hourglass_disabled"
-                                                v-if="isDeprecated"
-                                                class="q-ml-xs"
-                                            />
-                                            <q-avatar
-                                                rounded
-                                                size="xs"
-                                                color="orange"
-                                                text-color="white"
-                                                icon="whatshot"
-                                                v-if="isExperimental"
-                                                class="q-ml-xs"
-                                            />
-                                        </template>
-                                        <template v-slot:option="scope">
-                                            <q-item
-                                                v-bind="scope.itemProps"
-                                                v-on="scope.itemEvents"
-                                            >
-                                                <q-item-section>
-                                                    <q-item-label>
-                                                        {{ scope.opt }}
-
-                                                        <q-avatar
-                                                            rounded
-                                                            size="xs"
-                                                            color="yellow"
-                                                            text-color="brown-10"
-                                                            icon="hourglass_disabled"
-                                                            v-if="
-                                                                isDeprecatedVersion(
-                                                                    compilerLanguage,
-                                                                    scope.opt
-                                                                )
-                                                            "
-                                                            class="q-ml-xs"
-                                                        />
-                                                        <q-avatar
-                                                            rounded
-                                                            size="xs"
-                                                            color="orange"
-                                                            text-color="white"
-                                                            icon="whatshot"
-                                                            v-if="
-                                                                isExperimentalVersion(
-                                                                    compilerLanguage,
-                                                                    scope.opt
-                                                                )
-                                                            "
-                                                            class="q-ml-xs"
-                                                        />
-                                                    </q-item-label>
-                                                </q-item-section>
-                                            </q-item>
-                                        </template>
-                                    </q-select>
-                                </div>
-                                <q-slide-transition>
-                                    <q-banner
-                                        rounded
-                                        dense
-                                        class="bg-orange text-white col-12 q-mt-xs q-mb-md"
-                                        v-if="isExperimental"
-                                    >
-                                        <q-item>
-                                            <q-item-section avatar>
-                                                <q-icon
-                                                    name="whatshot"
-                                                    style="font-size: 3em"
-                                                ></q-icon>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label overline>
-                                                    {{
-                                                        $t(
-                                                            'CodeBlocksSettings.ExperimentalCompiler'
-                                                        )
-                                                    }}
-                                                </q-item-label>
-                                                <q-item-label>
-                                                    {{
-                                                        $t(
-                                                            'CodeBlocksSettings.ExperimentalCompilerDesc'
-                                                        )
-                                                    }}
-                                                </q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-banner>
-                                </q-slide-transition>
-                                <q-slide-transition>
-                                    <q-banner
-                                        rounded
-                                        dense
-                                        class="bg-yellow-12 text-black col-12 q-mt-xs q-mb-md"
-                                        v-if="isDeprecated"
-                                    >
-                                        <q-item>
-                                            <q-item-section avatar>
-                                                <q-icon
-                                                    name="hourglass_disabled"
-                                                    style="font-size: 3em"
-                                                ></q-icon>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label overline>
-                                                    {{
-                                                        $t('CodeBlocksSettings.DeprecatedCompiler')
-                                                    }}
-                                                </q-item-label>
-                                                <q-item-label>
-                                                    {{
-                                                        $t(
-                                                            'CodeBlocksSettings.DeprecatedCompilerDesc'
-                                                        )
-                                                    }}
-                                                </q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-banner>
-                                </q-slide-transition>
-                                <div class="col-12" v-if="showMaxRuntime">
-                                    <q-input
-                                        v-model="maxRuntime"
-                                        :rules="[validNumber]"
-                                        :label="$t('CodeBlocksSettings.RunTime')"
-                                        maxlength="6"
-                                    />
-                                </div>
-                                <div
-                                    class="col-12 text-body2"
-                                    v-if="runCode && (accepstArguments || allowsMessagePassing)"
-                                >
-                                    {{ $t('CodeBlocksSettings.AllowArguments') }}
-                                    <q-btn
-                                        flat
-                                        round
-                                        color="primary"
-                                        icon="info"
-                                        size="xs"
-                                        @click="showArgsInfoDialog"
-                                    ></q-btn>
-                                </div>
-
-                                <div class="col-12" v-if="runCode && accepstArguments">
-                                    <q-toggle
-                                        v-model="persistentArguments"
-                                        :disabled="!canPersistentArguments"
-                                        :label="$t('CodeBlocksSettings.PersistentArguments')"
-                                    />
-                                    <q-btn
-                                        flat
-                                        round
-                                        color="primary"
-                                        icon="info"
-                                        size="xs"
-                                        @click="showPersistentArgsInfoDialog"
-                                    ></q-btn>
-                                </div>
-                                <div class="col-12" v-if="runCode && allowsMessagePassing">
-                                    <q-toggle
-                                        v-model="messagePassing"
-                                        :disabled="!allowsMessagePassing"
-                                        :label="$t('CodeBlocksSettings.MessagePassing')"
-                                    />
-                                    <q-btn
-                                        flat
-                                        round
-                                        color="primary"
-                                        icon="info"
-                                        size="xs"
-                                        @click="showMessagesInfoDialog"
-                                    ></q-btn>
-                                </div>
-                                <div class="col-12 q-pl-lg" v-if="runCode && allowsMessagePassing">
-                                    <q-toggle
-                                        v-model="keepAlive"
-                                        :disabled="!allowsMessagePassing || !messagePassing"
-                                        :label="$t('CodeBlocksSettings.KeepAlive')"
-                                    />
-                                    <q-btn
-                                        flat
-                                        round
-                                        color="primary"
-                                        icon="info"
-                                        size="xs"
-                                        @click="showAliveInfoDialog"
-                                    ></q-btn>
-                                </div>
-                            </div>
-                        </q-card-section>
-                    </q-card>
-                </q-expansion-item>
-                <q-expansion-item
-                    v-if="runCode"
-                    expand-separator
-                    icon="text_snippet_outline"
-                    :label="$t('CodeBlocksSettings.Output')"
-                    :caption="`max. ${maxCharacters}, ${outputParser.label}`"
-                >
-                    <q-card class="q-ml-md">
-                        <q-card-section class="q-ml-md">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6 col-12 q-pr-md-sm">
-                                    <q-input
-                                        v-model="maxCharacters"
-                                        :rules="[validNumber]"
-                                        :label="$t('CodeBlocksSettings.MaxCharacters')"
-                                        maxlength="6"
-                                    />
-                                </div>
-                                <div class="col-xs-12 col-md-6">
-                                    <q-select
-                                        :options="outputParsers"
-                                        v-model="outputParser"
-                                        :label="$t('CodeBlocksSettings.Parser')"
-                                    />
-                                </div>
-                            </div>
-                        </q-card-section>
-                        <q-card-section class="q-ml-md">
-                            <div class="row" dense>
-                                <div class="col-xs-12 col-md-6">
-                                    <q-select
-                                        :options="themes"
-                                        v-model="uiTheme"
-                                        :label="$t('CodeBlocksSettings.TSolution')"
-                                    />
-                                </div>
-                            </div>
-                        </q-card-section>
-                    </q-card>
-                </q-expansion-item>
-                <q-expansion-item
-                    expand-separator
-                    icon="extension"
-                    :label="$t('CodeBlocksSettings.Libraries')"
-                    :caption="`${$t('CodeBlocksSettings.DomLibs')}: ${domLibrary.length}, ${$t(
-                        'CodeBlocksSettings.WorkLibs'
-                    )}: ${workerLibrary.length}`"
-                >
-                    <q-card class="q-ml-md">
-                        <q-card-section class="q-ml-md">
-                            <div class="row q-my-none q-py-none" dense>
-                                <div class="col-xs-12 col-sm-12 q-my-none q-py-none">
-                                    <q-select
-                                        :options="domLibraries"
-                                        v-model="domLibrary"
-                                        multiple
-                                        use-chips
-                                        stack-label
-                                        deletable-chips
-                                        :label="$t('CodeBlocksSettings.DomLibs')"
-                                    />
-                                </div>
-                                <div
-                                    class="col-xs-12 col-sm-12 q-my-none q-py-none"
-                                    v-if="runCode && workerLibraries.length > 0"
-                                >
-                                    <q-select
-                                        :options="workerLibraries"
-                                        v-model="workerLibrary"
-                                        multiple
-                                        use-chips
-                                        stack-label
-                                        deletable-chips
-                                        :label="$t('CodeBlocksSettings.WorkLibs')"
-                                    />
-                                </div>
-                            </div>
-                        </q-card-section>
-                    </q-card>
-                </q-expansion-item>
-                <q-expansion-item
-                    expand-separator
-                    icon="multiple_stop"
-                    :label="$t('RandomizerSettings.Caption')"
-                    :caption="
-                        options.randomizer.active
-                            ? $t('RandomizerSettings.Active')
-                            : $t('RandomizerSettings.Inactive')
-                    "
-                >
-                    <div class="q-ml-md">
-                        <RandomizerSettings :options="options" />
+  <div class="tw-w-full">
+    <div class="tw-flex tw-justify-between tw-items-center tw-p-3 tw-bg-card tw-rounded-lg tw-border">
+      <div class="tw-flex tw-items-center tw-gap-2">
+        <Badge variant="outline">
+          {{ compilerLanguageObj.label }} {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
+        </Badge>
+        <Badge v-if="options.randomizer.active" variant="secondary">
+          {{ $t('RandomizerSettings.Caption') }}
+        </Badge>
+        <Badge variant="outline">
+          {{ outputParser.label }}
+        </Badge>
+        <Badge variant="secondary">
+          {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }}
+        </Badge>
+        <Badge variant="secondary" v-if="workerLibrary.length > 0">
+          {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
+        </Badge>
+      </div>
+      <Dialog>
+        <DialogTrigger asChild>
+          <CButton :icon="Settings" variant="outline" noText />
+        </DialogTrigger>
+        <DialogContent class="tw-max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>{{ $t('CodeBlocksSettings.Settings') }}</DialogTitle>
+            <DialogDescription>
+              {{ $t('CodeBlocksSettings.SettingsDesc') }}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Accordion type="single" collapsible class="tw-w-full">
+            <AccordionItem value="language">
+              <AccordionTrigger>
+                {{ $t('CodeBlocksSettings.Language') }}
+                <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
+                  {{ runCode ? `${compilerLanguageObj.label} v${compilerVersion}` : `${compilerLanguageObj.label} (${$t('CodeBlocksSettings.NoExecution')})` }}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div class="tw-space-y-4">
+                  <div class="tw-flex tw-flex-col tw-gap-4">
+                    <div class="tw-flex tw-items-center tw-space-x-2">
+                      <Switch 
+                        id="run-code"
+                        v-model="runCode"
+                        :disabled="!languageHasCompiler"
+                      />
+                      <Label for="run-code">{{ $t('CodeBlocksSettings.AllowExec') }}</Label>
                     </div>
-                </q-expansion-item>
-            </q-list>
-        </q-expansion-item>
-        <div class="col-xs-12">
-            <textarea
-                :name="`block_settings[${this.options.id}]`"
-                class="blocksettings"
-                v-model="serializedOptions"
-            ></textarea>
-        </div>
-    </q-list>
+                    
+                    <div class="tw-flex tw-items-center tw-space-x-2">
+                      <Switch 
+                        id="continuous-compile"
+                        v-model="continuousCompile"
+                        :disabled="!canContinousCompile"
+                      />
+                      <Label for="continuous-compile">{{ $t('CodeBlocksSettings.ContinousCompile') }}</Label>
+                    </div>
+
+                    <div class="tw-grid tw-grid-cols-2 tw-gap-4">
+                      <div :class="{'tw-col-span-2': !runCode}">
+                        <CSelect
+                          :model-value="compilerLanguageObj"
+                          @update:model-value="compilerLanguageObj = $event"
+                          :options="compiledLanguages"
+                          :label="$t('CodeBlocksSettings.Language')"
+                        />
+                      </div>
+                      <div v-if="runCode">
+                        <CSelect
+                          :model-value="compilerVersion"
+                          @update:model-value="compilerVersion = $event"
+                          :options="compilerVersions"
+                          :label="$t('CodeBlocksSettings.CVersion')"
+                        >
+                          <template #option="{ option }">
+                            {{ option }}
+                            <Badge v-if="isDeprecatedVersion(compilerLanguage, option)" variant="destructive" class="tw-ml-2">
+                              {{ $t('CodeBlocksSettings.Deprecated') }}
+                            </Badge>
+                            <Badge v-if="isExperimentalVersion(compilerLanguage, option)" variant="secondary" class="tw-ml-2">
+                              {{ $t('CodeBlocksSettings.Experimental') }}
+                            </Badge>
+                          </template>
+                        </CSelect>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="output" v-if="runCode">
+              <AccordionTrigger>
+                {{ $t('CodeBlocksSettings.Output') }}
+                <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
+                  max. {{ maxCharacters }}, {{ outputParser.label }}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div class="tw-space-y-4">
+                  <div class="tw-grid tw-grid-cols-2 tw-gap-4">
+                    <CInput
+                      v-model="maxCharacters"
+                      :rules="[validNumber]"
+                      :label="$t('CodeBlocksSettings.MaxCharacters')"
+                    />
+                    <CSelect
+                      :model-value="outputParser"
+                      @update:model-value="outputParser = $event"
+                      :options="outputParsers"
+                      :label="$t('CodeBlocksSettings.Parser')"
+                    />
+                  </div>
+                  <CSelect
+                    :model-value="uiTheme"
+                    @update:model-value="uiTheme = $event"
+                    :options="themes"
+                    :label="$t('CodeBlocksSettings.TSolution')"
+                  />
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="libraries">
+              <AccordionTrigger>
+                {{ $t('CodeBlocksSettings.Libraries') }}
+                <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
+                  {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }},
+                  {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div class="tw-space-y-4">
+                  <CMultiSelect
+                    v-model="domLibrary"
+                    :options="domLibraries"
+                    :placeholder="$t('CodeBlocksSettings.SelectDomLibs')"
+                  />
+                  <CMultiSelect
+                    v-if="runCode && workerLibraries.length > 0"
+                    v-model="workerLibrary"
+                    :options="workerLibraries"
+                    :placeholder="$t('CodeBlocksSettings.SelectWorkLibs')"
+                  />
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="randomizer">
+              <AccordionTrigger>
+                {{ $t('RandomizerSettings.Caption') }}
+                <span class="tw-ml-2 tw-text-sm tw-text-muted-foreground">
+                  {{ options.randomizer.active ? $t('RandomizerSettings.Active') : $t('RandomizerSettings.Inactive') }}
+                </span>
+              </AccordionTrigger>
+              <AccordionContent>
+                <RandomizerSettings :options="options" />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </DialogContent>
+      </Dialog>
+    </div>
+    
+    <InfoDialog />
+    
+    <textarea
+      :name="`block_settings[${options.id}]`"
+      class="tw-hidden"
+      v-model="serializedOptions"
+    />
+  </div>
 </template>
 
-<script lang="ts">
-import RandomizerSettings from '@/components/RandomizerSettings.vue'
-import { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
-import { CodeOutputTypes, IRandomizerSettings } from '@/lib/ICodeBlocks'
-import Vue, { computed, ComputedRef, defineComponent, getCurrentInstance, PropType } from 'vue'
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import RandomizerSettings from './RandomizerSettings.vue'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/shadcn/ui/dialog'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shadcn/ui/accordion'
+import { Switch } from '@/shadcn/ui/switch'
+import { Label } from '@/shadcn/ui/label'
+import { Badge } from '@/shadcn/ui/badge'
+import CButton from './ui/CButton.vue'
+import CMultiSelect from './ui/CMultiSelect.vue'
+import CSelect from './ui/CSelect.vue'
+import CInput from './ui/CInput.vue'
+import { useDialog } from './ui/useDialog'
+import InfoDialog from './ui/InfoDialog.vue'
+import type { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
+import type { IRandomizerSettings } from '@/lib/ICodeBlocks'
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { globalState } from '@/lib/globalState'
-import { l } from '@/plugins/i18n'
-import { useQuasar } from 'quasar'
 import { UIThemeType, UIThemeTypes, getUITheme } from '@/lib/uiTheme'
+import { useI18n } from 'vue-i18n'
+import { CodeOutputTypes } from '@/lib/ICodeBlocks'
+import { Settings } from 'lucide-vue-next'
 
-export interface ICodeBlockSettingsOptions {
+const props = defineProps<Props>()
+const emit = defineEmits(['run-state-change', 'language-change', 'compiler-change', 'timeout-change', 
+  'character-limit-change', 'dom-libs-change', 'worker-libs-change', 'theme-change', 
+  'output-parser-change', 'continuous-compile-change', 'message-passing-change', 
+  'keep-alive-change', 'persistent-arguments-change', 'compiler-version-change'])
+
+const { t: l } = useI18n()
+const { showDialog } = useDialog()
+
+interface Props {
+  options: {
+    id: number | string
     language: string
     compiler: ICompilerID
     executionTimeout: number
     maxCharacters: number
     runCode: boolean
+    continuousCompilation: boolean
+    messagePassing: boolean
+    keepAlive: boolean
+    persistentArguments: boolean
     domLibs: string[]
     workerLibs: string[]
-    id: number
     uiTheme: UIThemeType
     outputParser: CodeOutputTypes
     randomizer: IRandomizerSettings
-    continuousCompilation: boolean
-    persistentArguments: boolean
-    messagePassing: boolean
-    keepAlive: boolean
+  }
 }
 
-export default defineComponent({
-    name: 'CodeBlocksSettings',
-    components: { RandomizerSettings },
-    props: {
-        options: {
-            type: Object as PropType<ICodeBlockSettingsOptions>,
-            required: true,
-        },
-    },
-    emits: [
-        'language-change',
-        'compiler-change',
-        'timeout-change',
-        'character-limit-change',
-        'run-state-change',
-        'dom-libs-change',
-        'worker-libs-change',
-        'theme-change',
-        'output-parser-change',
-        'continuous-compile-change',
-        'persistent-arguments-change',
-        'message-passing-change',
-        'keep-alive-change',
-        'compiler-version-change',
-    ],
-    setup(props, context) {
-        const instance = getCurrentInstance()
-        const q = useQuasar()
-        const t = instance?.proxy?.$root?.$t
-        //Computed
-        const themes: ComputedRef<IListItemData[]> = computed(() => {
-            return UIThemeTypes.map((k) => {
-                return { value: k, label: getUITheme(k).name }
-            })
-        })
-
-        const outputParsers: ComputedRef<IListItemData[]> = computed(() => {
-            return [
-                { label: l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
-                { label: l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
-                { label: l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
-                { label: l('CodeBlocksSettings.PData'), value: CodeOutputTypes.DATA },
-                { label: l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
-            ]
-        })
-
-        const serializedOptions = computed({
-            get: () => {
-                const o: any = {
-                    ...props.options,
-                }
-                o.randomizer = {
-                    ...props.options.randomizer,
-                }
-                o.randomizer.sets = props.options.randomizer.sets.map((s) => {
-                    let values = {}
-                    s.values.forEach((v) => (values[v.tag] = v.value))
-                    return values
-                })
-                return JSON.stringify(o)
-            },
-            set: (v) => {},
-        })
-
-        const compilerLanguage: ComputedRef<string> = computed(() => {
-            if (props.options.runCode === false) {
-                return props.options.language
-            }
-            return props.options.compiler.languageType
-        })
-
-        const compilerVersion = computed({
-            get: () => {
-                return props.options.compiler.version
-            },
-            set: (v) => {
-                context.emit('compiler-version-change', v)
-            },
-        })
-
-        const domLibraries: ComputedRef<IListItemData[]> = computed(() => {
-            return compilerRegistry.domLibraries
-        })
-
-        const workerLibraries: ComputedRef<IListItemData[]> = computed(() => {
-            const c = compilerRegistry.getCompiler({
-                languageType: compilerLanguage.value,
-                version: compilerVersion.value,
-            })
-            if (c === undefined || c.libraries === undefined) {
-                return []
-            }
-            return c.libraries.map((l) => {
-                return { label: l.displayName, value: l.key }
-            })
-        })
-
-        const languages: ComputedRef<IListItemData[]> = computed(() => {
-            return globalState.appState.knownLanguages()
-        })
-
-        const compiledLanguages: ComputedRef<IListItemData[]> = computed(() => {
-            if (props.options.runCode === false) {
-                return languages.value
-            }
-            return compilerRegistry.languages
-        })
-
-        const compilerVersions: ComputedRef<string[]> = computed(() => {
-            return compilerRegistry.versionsForLanguage(compilerLanguage.value)
-        })
-
-        const compiler: ComputedRef<ICompilerID> = computed(() => {
-            return props.options.compiler
-        })
-
-        const runCode = computed({
-            get: () => {
-                return props.options.runCode
-            },
-            set: (v) => {
-                context.emit('run-state-change', v)
-            },
-        })
-
-        const isExperimental: ComputedRef<boolean> = computed(() => {
-            const cmp = compilerRegistry.getCompiler(compiler.value)
-            if (cmp) {
-                return cmp.experimental
-            }
-            return false
-        })
-
-        const isDeprecated: ComputedRef<boolean> = computed(() => {
-            const cmp = compilerRegistry.getCompiler(compiler.value)
-            if (cmp) {
-                return cmp.deprecated
-            }
-            return false
-        })
-
-        const languageHasCompiler: ComputedRef<boolean> = computed(() => {
-            if (runCode.value) {
-                return true
-            }
-            const c = compilerRegistry.getCompiler({ languageType: compilerLanguage.value })
-            return c !== undefined
-        })
-
-        const compilerLanguageObj = computed({
-            get: () => {
-                return globalState.appState.itemForValue(
-                    compiledLanguages.value,
-                    compilerLanguage.value
-                )
-            },
-            set: (v: IListItemData) => {
-                if (props.options.runCode === false) {
-                    context.emit('language-change', v.value)
-                }
-                context.emit('compiler-change', v.value)
-            },
-        })
-
-        const maxRuntime = computed({
-            get: () => {
-                return props.options.executionTimeout
-            },
-
-            set: (v: number) => {
-                context.emit('timeout-change', v)
-            },
-        })
-
-        const maxCharacters = computed({
-            get: () => {
-                return props.options.maxCharacters
-            },
-
-            set: (v: number) => {
-                context.emit('character-limit-change', v)
-            },
-        })
-
-        const domLibrary = computed({
-            get: () => {
-                return props.options.domLibs
-                    .map((d) => domLibraries.value.find((k) => k.value == d))
-                    .filter((v) => v !== undefined) as IListItemData[]
-            },
-
-            set: (v: IListItemData[]) => {
-                context.emit(
-                    'dom-libs-change',
-                    v.map((vv) => vv.value)
-                )
-            },
-        })
-
-        const workerLibrary = computed({
-            get: () => {
-                return props.options.workerLibs
-                    .map((d) => workerLibraries.value.find((k) => k.value == d))
-                    .filter((v) => v !== undefined) as IListItemData[]
-            },
-
-            set: (v: IListItemData[]) => {
-                context.emit(
-                    'worker-libs-change',
-                    v.map((vv) => vv.value)
-                )
-            },
-        })
-
-        const uiTheme = computed({
-            get: () => {
-                return globalState.appState.itemForValue(themes.value, props.options.uiTheme)
-            },
-
-            set: (v: IListItemData) => {
-                context.emit('theme-change', {
-                    ui: v.value,
-                })
-            },
-        })
-
-        const outputParser = computed({
-            get: () => {
-                return globalState.appState.itemForValue(
-                    outputParsers.value,
-                    props.options.outputParser
-                )
-            },
-
-            set: (v: IListItemData) => {
-                context.emit('output-parser-change', v.value)
-            },
-        })
-
-        const canContinousCompile: ComputedRef<boolean> = computed(() => {
-            const cmp = compilerRegistry.getCompiler(compiler.value)
-            console.d(
-                'Continuous Compile - ',
-                'can',
-                cmp,
-                cmp ? cmp.allowsContinousCompilation : false,
-                cmp ? cmp.canRun : false
-            )
-            if (cmp) {
-                console.d(
-                    'Continuous Compile - ',
-                    'can',
-                    cmp.allowsContinousCompilation && cmp.canRun
-                )
-                return cmp.allowsContinousCompilation && cmp.canRun
-            }
-            return false
-        })
-
-        const continuousCompile = computed({
-            get: () => {
-                return props.options.continuousCompilation
-            },
-
-            set: (v: boolean) => {
-                context.emit('continuous-compile-change', v)
-            },
-        })
-
-        const allowsMessagePassing: ComputedRef<boolean> = computed(() => {
-            const cmp = compilerRegistry.getCompiler(compiler.value)
-            if (cmp) {
-                console.d('Message Passing - ', 'can', cmp.allowsContinousCompilation && cmp.canRun)
-                return cmp.allowsMessagePassing && cmp.canRun
-            }
-            return false
-        })
-
-        const messagePassing = computed({
-            get: () => {
-                return props.options.messagePassing
-            },
-
-            set: (v: boolean) => {
-                context.emit('message-passing-change', v)
-            },
-        })
-
-        const keepAlive = computed({
-            get: () => {
-                return props.options.keepAlive
-            },
-
-            set: (v: boolean) => {
-                context.emit('keep-alive-change', v)
-            },
-        })
-
-        const showMaxRuntime: ComputedRef<boolean> = computed(() => {
-            return runCode.value && !(keepAlive.value && messagePassing.value)
-        })
-
-        const allowsREPL: ComputedRef<boolean> = computed(() => {
-            const cmp = compilerRegistry.getCompiler(compiler.value)
-            if (cmp) {
-                console.d(
-                    'REPL - ',
-                    'can',
-                    cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
-                )
-                return cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
-            }
-            return false
-        })
-
-        const persistentArguments = computed({
-            get: () => {
-                return props.options.persistentArguments
-            },
-
-            set: (v: boolean) => {
-                context.emit('persistent-arguments-change', v)
-            },
-        })
-
-        const canPersistentArguments: ComputedRef<boolean> = computed(() => {
-            const cmp = compilerRegistry.getCompiler(compiler.value)
-            if (cmp) {
-                console.d(
-                    'Persistent Arguments - ',
-                    'can',
-                    cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
-                )
-                return cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
-            }
-            return false
-        })
-
-        const accepstArguments: ComputedRef<boolean> = computed(() => {
-            const cmp = compilerRegistry.getCompiler(compiler.value)
-            if (cmp) {
-                return cmp.acceptsJSONArgument
-            }
-            return false
-        })
-
-        //local Methods
-        function showInfoDialog(title, message): void {
-            if (l === undefined) {
-                return
-            }
-            q?.dialog({
-                title: l(title),
-                message: l(message),
-                html: true,
-                style: 'width:75%',
-            })
-                .onOk(() => {
-                    // console.log('OK')
-                })
-                .onCancel(() => {
-                    // console.log('Cancel')
-                })
-                .onDismiss(() => {
-                    // console.log('I am triggered on both OK and Cancel')
-                })
-        }
-
-        //exposed methods
-        function showArgsInfoDialog(): void {
-            showInfoDialog(
-                'CodeBlocksSettings.AllowArgumentsCaption',
-                compiler.value.languageType == 'java'
-                    ? 'CodeBlocksSettings.AllowArgumentsHintJava'
-                    : 'CodeBlocksSettings.AllowArgumentsHint'
-            )
-        }
-
-        function showPersistentArgsInfoDialog(): void {
-            showInfoDialog(
-                'CodeBlocksSettings.UsePersistentArgumentsCaption',
-                compiler.value.languageType == 'java'
-                    ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava'
-                    : 'CodeBlocksSettings.UsePersistentArgumentsHint'
-            )
-        }
-
-        function showMessagesInfoDialog(): void {
-            showInfoDialog(
-                'CodeBlocksSettings.AllowMessagePassingCaption',
-                compiler.value.languageType == 'java'
-                    ? 'CodeBlocksSettings.AllowMessagePassingHintJava'
-                    : 'CodeBlocksSettings.AllowMessagePassingHint'
-            )
-        }
-
-        function showAliveInfoDialog(): void {
-            showInfoDialog(
-                'CodeBlocksSettings.KeepAliveCaption',
-                compiler.value.languageType == 'java'
-                    ? 'CodeBlocksSettings.KeepAliveHintJava'
-                    : 'CodeBlocksSettings.KeepAliveHint'
-            )
-        }
-
-        function isExperimentalVersion(language: string, version: string): boolean {
-            const c = compilerRegistry.getCompiler({
-                languageType: language,
-                version: version,
-            })
-            if (c === undefined) {
-                return false
-            }
-            return c.experimental
-        }
-
-        function isDeprecatedVersion(language: string, version: string): boolean {
-            const c = compilerRegistry.getCompiler({
-                languageType: language,
-                version: version,
-            })
-            if (c === undefined) {
-                return false
-            }
-            return c.deprecated
-        }
-
-        function validNumber(v: any): boolean | string {
-            if (isNaN(v)) {
-                return 'Must be a valid Number.'
-            }
-            return true
-        }
-
-        return {
-            themes,
-            outputParsers,
-            serializedOptions,
-            compilerLanguage,
-            compilerVersion,
-            domLibraries,
-            workerLibraries,
-            languages,
-            compiledLanguages,
-            compilerVersions,
-            compiler,
-            runCode,
-            isExperimental,
-            isDeprecated,
-            languageHasCompiler,
-            compilerLanguageObj,
-            maxRuntime,
-            maxCharacters,
-            domLibrary,
-            workerLibrary,
-            uiTheme,
-            outputParser,
-            canContinousCompile,
-            continuousCompile,
-            allowsMessagePassing,
-            messagePassing,
-            keepAlive,
-            showMaxRuntime,
-            allowsREPL,
-            persistentArguments,
-            canPersistentArguments,
-            accepstArguments,
-            showArgsInfoDialog,
-            showPersistentArgsInfoDialog,
-            showMessagesInfoDialog,
-            showAliveInfoDialog,
-            isExperimentalVersion,
-            isDeprecatedVersion,
-            validNumber,
-        }
-    },
+const themes = computed(() => {
+  return UIThemeTypes.map((k) => {
+    return { value: k, label: getUITheme(k).name }
+  })
 })
-</script>
 
-<style lang="sass" scoped>
-textarea.blocksettings
-    display: none !important
-    width: 1px
-    height: 1px
-</style>
+const outputParsers = computed(() => {
+  return [
+    { label: l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
+    { label: l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
+    { label: l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
+    { label: l('CodeBlocksSettings.PData'), value: CodeOutputTypes.DATA },
+    { label: l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
+  ]
+})
+
+const serializedOptions = computed({
+  get: () => {
+    const o: any = {
+      ...props.options,
+    }
+    o.randomizer = {
+      ...props.options.randomizer,
+    }
+    o.randomizer.sets = props.options.randomizer.sets.map((s) => {
+      let values = {}
+      s.values.forEach((v) => (values[v.tag] = v.value))
+      return values
+    })
+    return JSON.stringify(o)
+  },
+  set: (v) => {},
+})
+
+const compilerLanguage = computed(() => {
+  if (props.options.runCode === false) {
+    return props.options.language
+  }
+  return props.options.compiler.languageType
+})
+
+const compilerVersion = computed({
+  get: () => {
+    return props.options.compiler.version
+  },
+  set: (v) => {
+    emit('compiler-version-change', v)
+  },
+})
+
+const domLibraries = computed(() => {
+  return compilerRegistry.domLibraries
+})
+
+const workerLibraries = computed(() => {
+  const c = compilerRegistry.getCompiler({
+    languageType: compilerLanguage.value,
+    version: compilerVersion.value,
+  })
+  if (c === undefined || c.libraries === undefined) {
+    return []
+  }
+  return c.libraries.map((l) => {
+    return { label: l.displayName, value: l.key }
+  })
+})
+
+const languages = computed(() => {
+  return globalState.appState.knownLanguages()
+})
+
+const compiledLanguages = computed(() => {
+  if (props.options.runCode === false) {
+    return languages.value
+  }
+  return compilerRegistry.languages
+})
+
+const compilerVersions = computed(() => {
+  return compilerRegistry.versionsForLanguage(compilerLanguage.value)
+})
+
+const compiler = computed(() => {
+  return props.options.compiler
+})
+
+const runCode = computed({
+  get: () => {
+    return props.options.runCode
+  },
+  set: (v) => {
+    emit('run-state-change', v)
+  },
+})
+
+const isExperimental = computed(() => {
+  const cmp = compilerRegistry.getCompiler(compiler.value)
+  if (cmp) {
+    return cmp.experimental
+  }
+  return false
+})
+
+const isDeprecated = computed(() => {
+  const cmp = compilerRegistry.getCompiler(compiler.value)
+  if (cmp) {
+    return cmp.deprecated
+  }
+  return false
+})
+
+const languageHasCompiler = computed(() => {
+  if (runCode.value) {
+    return true
+  }
+  const c = compilerRegistry.getCompiler({ languageType: compilerLanguage.value })
+  return c !== undefined
+})
+
+const compilerLanguageObj = computed({
+  get: () => {
+    return globalState.appState.itemForValue(
+      compiledLanguages.value,
+      compilerLanguage.value
+    )
+  },
+  set: (v: IListItemData) => {
+    if (props.options.runCode === false) {
+      emit('language-change', v.value)
+    }
+    emit('compiler-change', v.value)
+  },
+})
+
+const maxRuntime = computed({
+  get: () => {
+    return props.options.executionTimeout
+  },
+
+  set: (v: number) => {
+    emit('timeout-change', v)
+  },
+})
+
+const maxCharacters = computed({
+  get: () => {
+    return props.options.maxCharacters
+  },
+
+  set: (v: number) => {
+    emit('character-limit-change', v)
+  },
+})
+
+const domLibrary = computed({
+  get: () => {
+    return props.options.domLibs
+      .map((d) => domLibraries.value.find((k) => k.value == d))
+      .filter((v) => v !== undefined) as IListItemData[]
+  },
+
+  set: (v: IListItemData[]) => {
+    emit(
+      'dom-libs-change',
+      v.map((vv) => vv.value)
+    )
+  },
+})
+
+const workerLibrary = computed({
+  get: () => {
+    return props.options.workerLibs
+      .map((d) => workerLibraries.value.find((k) => k.value == d))
+      .filter((v) => v !== undefined) as IListItemData[]
+  },
+
+  set: (v: IListItemData[]) => {
+    emit(
+      'worker-libs-change',
+      v.map((vv) => vv.value)
+    )
+  },
+})
+
+const uiTheme = computed({
+  get: () => {
+    return globalState.appState.itemForValue(themes.value, props.options.uiTheme)
+  },
+
+  set: (v: IListItemData) => {
+    emit('theme-change', {
+      ui: v.value,
+    })
+  },
+})
+
+const outputParser = computed({
+  get: () => {
+    return globalState.appState.itemForValue(
+      outputParsers.value,
+      props.options.outputParser
+    )
+  },
+
+  set: (v: IListItemData) => {
+    emit('output-parser-change', v.value)
+  },
+})
+
+const canContinousCompile = computed(() => {
+  const cmp = compilerRegistry.getCompiler(compiler.value)
+  console.d(
+    'Continuous Compile - ',
+    'can',
+    cmp,
+    cmp ? cmp.allowsContinousCompilation : false,
+    cmp ? cmp.canRun : false
+  )
+  if (cmp) {
+    console.d(
+      'Continuous Compile - ',
+      'can',
+      cmp.allowsContinousCompilation && cmp.canRun
+    )
+    return cmp.allowsContinousCompilation && cmp.canRun
+  }
+  return false
+})
+
+const continuousCompile = computed({
+  get: () => {
+    return props.options.continuousCompilation
+  },
+
+  set: (v: boolean) => {
+    emit('continuous-compile-change', v)
+  },
+})
+
+const allowsMessagePassing = computed(() => {
+  const cmp = compilerRegistry.getCompiler(compiler.value)
+  if (cmp) {
+    console.d('Message Passing - ', 'can', cmp.allowsContinousCompilation && cmp.canRun)
+    return cmp.allowsMessagePassing && cmp.canRun
+  }
+  return false
+})
+
+const messagePassing = computed({
+  get: () => {
+    return props.options.messagePassing
+  },
+
+  set: (v: boolean) => {
+    emit('message-passing-change', v)
+  },
+})
+
+const keepAlive = computed({
+  get: () => {
+    return props.options.keepAlive
+  },
+
+  set: (v: boolean) => {
+    emit('keep-alive-change', v)
+  },
+})
+
+const showMaxRuntime = computed(() => {
+  return runCode.value && !(keepAlive.value && messagePassing.value)
+})
+
+const allowsREPL = computed(() => {
+  const cmp = compilerRegistry.getCompiler(compiler.value)
+  if (cmp) {
+    console.d(
+      'REPL - ',
+      'can',
+      cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
+    )
+    return cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
+  }
+  return false
+})
+
+const persistentArguments = computed({
+  get: () => {
+    return props.options.persistentArguments
+  },
+
+  set: (v: boolean) => {
+    emit('persistent-arguments-change', v)
+  },
+})
+
+const canPersistentArguments = computed(() => {
+  const cmp = compilerRegistry.getCompiler(compiler.value)
+  if (cmp) {
+    console.d(
+      'Persistent Arguments - ',
+      'can',
+      cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
+    )
+    return cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
+  }
+  return false
+})
+
+const accepstArguments = computed(() => {
+  const cmp = compilerRegistry.getCompiler(compiler.value)
+  if (cmp) {
+    return cmp.acceptsJSONArgument
+  }
+  return false
+})
+
+function showInfoDialog(title: string, message: string): void {
+  if (l === undefined) {
+    return
+  }
+  showDialog({
+    title: l(title),
+    message: l(message),
+    html: true,
+    style: 'width:75%',
+  })
+}
+
+function showArgsInfoDialog(): void {
+  showInfoDialog(
+    'CodeBlocksSettings.AllowArgumentsCaption',
+    compiler.value.languageType == 'java'
+      ? 'CodeBlocksSettings.AllowArgumentsHintJava'
+      : 'CodeBlocksSettings.AllowArgumentsHint'
+  )
+}
+
+function showPersistentArgsInfoDialog(): void {
+  showInfoDialog(
+    'CodeBlocksSettings.UsePersistentArgumentsCaption',
+    compiler.value.languageType == 'java'
+      ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava'
+      : 'CodeBlocksSettings.UsePersistentArgumentsHint'
+  )
+}
+
+function showMessagesInfoDialog(): void {
+  showInfoDialog(
+    'CodeBlocksSettings.AllowMessagePassingCaption',
+    compiler.value.languageType == 'java'
+      ? 'CodeBlocksSettings.AllowMessagePassingHintJava'
+      : 'CodeBlocksSettings.AllowMessagePassingHint'
+  )
+}
+
+function showAliveInfoDialog(): void {
+  showInfoDialog(
+    'CodeBlocksSettings.KeepAliveCaption',
+    compiler.value.languageType == 'java'
+      ? 'CodeBlocksSettings.KeepAliveHintJava'
+      : 'CodeBlocksSettings.KeepAliveHint'
+  )
+}
+
+function isExperimentalVersion(language: string, version: string): boolean {
+  const c = compilerRegistry.getCompiler({
+    languageType: language,
+    version: version,
+  })
+  if (c === undefined) {
+    return false
+  }
+  return c.experimental
+}
+
+function isDeprecatedVersion(language: string, version: string): boolean {
+  const c = compilerRegistry.getCompiler({
+    languageType: language,
+    version: version,
+  })
+  if (c === undefined) {
+    return false
+  }
+  return c.deprecated
+}
+
+function validNumber(v: any): boolean | string {
+  if (isNaN(v)) {
+    return 'Must be a valid Number.'
+  }
+  return true
+}
+</script>
