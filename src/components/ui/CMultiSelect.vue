@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { Check, ChevronsUpDown, X } from 'lucide-vue-next'
 import { Button } from '@/shadcn/ui/button'
 import {
@@ -8,6 +8,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from '@/shadcn/ui/command'
 import {
   Popover,
@@ -30,9 +31,16 @@ const emit = defineEmits(['update:modelValue'])
 
 const open = ref(false)
 const value = ref<Option[]>(props.modelValue || [])
+const searchQuery = ref('')
 
 watch(() => props.modelValue, (newVal) => {
   value.value = newVal
+})
+
+const filteredOptions = computed(() => {
+  return props.options.filter(option =>
+    option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
 })
 
 const removeItem = (item: Option) => {
@@ -58,7 +66,7 @@ const toggleItem = (item: Option) => {
         variant="outline"
         role="combobox"
         :aria-expanded="open"
-        class="tw-w-full tw-justify-between tw-min-h-[2.5rem] tw-h-auto tw-py-0.5"
+        class="tw-w-full tw-justify-between tw-min-h-[2.5rem] tw-h-auto tw-py-0.5"       
       >
         <div class="tw-flex tw-flex-wrap tw-gap-1">
           <template v-if="value.length > 0">
@@ -84,24 +92,14 @@ const toggleItem = (item: Option) => {
         <ChevronsUpDown class="tw-ml-2 tw-h-4 tw-w-4 tw-shrink-0 tw-opacity-50" />
       </Button>
     </PopoverTrigger>
-    <PopoverContent 
-      class="tw-p-0" 
-      side="bottom"
-      :side-offset="5"
-      align="start"
-      :collision-padding="16"
-      :avoid-collisions="true"
-      :style="{ width: 'var(--radix-popper-anchor-width)' }"
-    >
+    <PopoverContent class="tw-w-full tw-p-0">
       <Command>
-        
-          <CommandInput placeholder="Search items..." autoFocus />
-        
-        
-          <CommandEmpty>No item found.</CommandEmpty>
+        <CommandInput v-model="searchQuery" placeholder="Search items..." autoFocus />
+        <CommandEmpty v-if="filteredOptions.length === 0">No item found.</CommandEmpty>
+        <CommandList>
           <CommandGroup>
             <CommandItem
-              v-for="option in options"
+              v-for="option in filteredOptions"
               :key="option.value"
               :value="option.label"
               @select="() => toggleItem(option)"
@@ -116,7 +114,8 @@ const toggleItem = (item: Option) => {
               />
               {{ option.label }}
             </CommandItem>
-          </CommandGroup>        
+          </CommandGroup>
+        </CommandList>
       </Command>
     </PopoverContent>
   </Popover>
