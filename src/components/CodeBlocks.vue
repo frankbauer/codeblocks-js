@@ -24,6 +24,8 @@ import '@quasar/extras/material-icons/material-icons.css'
 import { computed, ref, toRefs } from 'vue'
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 import { CodeSplit } from '@/composables/useCodeEditor'
+import CButton from '@/components/ui/CButton.vue'
+import { Play, Square } from 'lucide-vue-next'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
@@ -431,21 +433,19 @@ const addNewBlock = (): void => {
             :data-question="blockInfo.id"
         >
             <div class="row runnerState" id="stateBox" :data-question="blockInfo.id">
-                <q-btn
+                <CButton
                     id="allow_run_button"
                     :loading="!isReady"
                     :disabled="!isReady"
-                    color="primary"
-                    class="white--text"
                     @click="run"
-                    :ripple="{ center: true }"
-                    style="border-radius: 0px"
                     :data-question="blockInfo.id"
+                    class="tw-w-[190px] tw-rounded-none"
+                    :icon="Play"
+                    fill="white"
                 >
                     {{ $t('CodeBlocks.run')
                     }}<span v-if="editMode" class="q-ml-xs">[{{ $t('CodeBlocks.run_key') }}]</span>
-                    <q-icon right dark name="play_arrow"></q-icon>
-                </q-btn>
+                </CButton>
                 <div class="animated fadeIn"></div>
                 <transition
                     appear
@@ -453,17 +453,17 @@ const addNewBlock = (): void => {
                     leave-active-class="animated fadeOut"
                 >
                     <div class="q-pl-sm" v-show="canStop">
-                        <q-btn
+                        <CButton
                             id="cancel_button"
-                            color="negative"
-                            :ripple="{ center: true }"
-                            style="border-radius: 0px"
+                            variant="destructive"
+                            fill="white"
+                            :icon="Square"
                             :data-question="blockInfo.id"
+                            class="tw-rounded-none"
                             @click="stop"
                         >
                             {{ $t('CodeBlocks.stop') }}
-                            <q-icon right dark name="stop"></q-icon>
-                        </q-btn>
+                        </CButton>
                     </div>
                 </transition>
                 <transition

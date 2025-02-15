@@ -202,17 +202,16 @@
                             </q-popup-proxy>
                         </q-btn>
 
-                        <q-btn
+                        <CButton
+                            variant="secondary"
+                            :icon="TriangleUpIcon"
+                            :disabled="!canMoveUp"
                             @click="moveUp"
-                            :disable="!canMoveUp"
-                            icon="arrow_drop_up"
-                            push
-                            dense
-                            size="sm"
+                            :no-text="true"
+                            size="xs"
                             class="q-ml-md q-mr-xs"
-                            color="orange-6"
-                            :ripple="{ center: true }"
-                        ></q-btn>
+                            fill="white"
+                        ></CButton>
                         <div class="inlined-input q-pl-sm q-pr-md q-m-none" style="width: 80px">
                             <q-select
                                 :options="positions"
@@ -221,40 +220,24 @@
                                 style="margin-top: -5px !important"
                             ></q-select>
                         </div>
-                        <q-btn
-                            @click="moveDown"
+                        <CButton
+                            variant="secondary"
+                            :icon="TriangleDownIcon"
                             :disabled="!canMoveDown"
-                            icon="arrow_drop_down"
-                            push
-                            dense
-                            size="sm"
+                            @click="moveDown"
+                            :no-text="true"
+                            size="xs"
                             class="q-mr-md"
-                            color="orange-6"
-                            :ripple="{ center: true }"
-                        ></q-btn>
-                        <q-btn
+                            fill="white"
+                        ></CButton>
+
+                        <CButton
+                            variant="destructive"
+                            :icon="TriangleAlert"
+                            class="tw-hidden sm:tw-block sm:tw-mr-2 md:tw-mr-6"
                             @click="removeBlock"
-                            :label="l('CodeBlockContainer.Delete')"
-                            icon="warning"
-                            push
-                            dense
-                            size="md"
-                            class="gt-xs q-mr-sm-sm q-mr-md-lg q-pr-sm"
-                            color="red-6"
-                            right
-                            :ripple="{ center: true }"
-                        ></q-btn>
-                        <q-btn
-                            @click="removeBlock"
-                            icon="warning"
-                            push
-                            dense
-                            class="lt-sm q-mr-lg q-pr-none"
-                            color="red-6"
-                            right
-                            size="md"
-                            :ripple="{ center: true }"
-                        ></q-btn>
+                            >{{ $t('CodeBlockContainer.Delete') }}
+                        </CButton>
                         <q-btn
                             :icon="expanded ? 'expand_less' : 'expand_more'"
                             color="primary"
@@ -335,6 +318,9 @@ import { l } from '@/plugins/i18n'
 import { BasicBlockProps, DEFAULT_BASIC_BLOCK_PROPS } from '@/composables/basicBlock'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 import { useQuasar } from 'quasar'
+import CButton from '@/components/ui/CButton.vue'
+import { TriangleAlert } from 'lucide-vue-next'
+import { TriangleDownIcon, TriangleUpIcon } from '@radix-icons/vue'
 
 interface Props extends BasicBlockProps {
     editMode?: boolean
