@@ -65,8 +65,10 @@ export default {
         AllowExec: 'Allow Code Execution',
         CVersion: 'Version',
         RunTime: 'Max. Runtime in ms.',
+        RunTimeShrt: 'Max. Runtime',
         Output: 'Output',
         MaxCharacters: 'Max. Output Characters',
+        OutputFormat: 'Output Format',
         ExperimentalCompiler: 'Experimental Language',
         ExperimentalCompilerDesc:
             'This language version is experimental. The properties and behaviour of this version might changen in the next update. You should not use this version for production.',

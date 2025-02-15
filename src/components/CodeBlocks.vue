@@ -161,6 +161,7 @@ const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {
 }
 
 const onCompilerChange = (v: string): void => {
+    console.log('Selected Compiler', v)
     if (editMode) {
         const c = compilerRegistry.getCompiler({ languageType: v })
         if (c !== undefined) {
@@ -224,6 +225,7 @@ const onPersistentArgumentsChange = (v: boolean): void => {
 }
 
 const onLanguageChange = (v: string): void => {
+    console.log('Language Change', v)
     if (editMode) {
         blockInfo.value.language = v
     }

@@ -1,20 +1,29 @@
 <template>
   <div class="tw-w-full">
     <div class="tw-flex tw-justify-between tw-items-center tw-p-3 tw-bg-card tw-rounded-lg tw-border">
-      <div class="tw-flex tw-items-center tw-gap-2">
-        <Badge variant="outline">
-          {{ compilerLanguage }} {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
-        </Badge>
-        <Badge v-if="options.randomizer.active" variant="secondary">
-          {{ $t('RandomizerSettings.Caption') }}
+      <div class="tw-flex tw-items-center tw-gap-2 tw-flex-wrap">
+        <Badge >
+            <Code2 class="tw-w-4 tw-h-4 tw-mr-2" />{{ compilerLanguage.label }}
         </Badge>
         <Badge variant="outline">
-          {{ outputParser.label }}
+          {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
+        </Badge>
+        <Badge v-if="options.randomizer.active">
+            <Dices class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('RandomizerSettings.Caption') }}
+        </Badge>
+        <Badge variant="secondary" v-if="runCode">
+            {{ $t('CodeBlocksSettings.RunTimeShrt') }}: {{ Math.round(maxRuntime/1000) }}s
+        </Badge>
+        <Badge variant="outline">
+            <Terminal class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.OutputFormat') }}: {{ outputParser.label }}
         </Badge>
         <Badge variant="secondary">
-          {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }}
+            {{ $t('CodeBlocksSettings.MaxCharacters') }}: {{ maxCharacters }}
         </Badge>
-        <Badge variant="secondary" v-if="workerLibrary.length > 0">
+        <Badge variant="secondary">
+            <Library class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }}
+        </Badge>
+        <Badge v-if="runCode && workerLibraries.length > 0" variant="secondary">
           {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
         </Badge>
       </div>
@@ -39,7 +48,7 @@
                     {{ $t('CodeBlocksSettings.Language') }}
                   </div>
                   <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
-                    {{ runCode ? `${compilerLanguage} v${compilerVersion}` : `${compilerLanguage} (${$t('CodeBlocksSettings.NoExecution')})` }}
+                    {{ runCode ? `${compilerLanguage.label} v${compilerVersion}` : `${compilerLanguage.label} (${$t('CodeBlocksSettings.NoExecution')})` }}
                   </div>
                 </div>
               </AccordionTrigger>
@@ -69,8 +78,7 @@
                     <div class="tw-grid tw-grid-cols-2 tw-gap-4">
                       <div :class="{'tw-col-span-2': !runCode}">
                         <CSelect
-                          :model-value="compilerLanguage"
-                          @update:model-value="updateCompilerLanguage"
+                          v-model="compilerLanguage"
                           :options="compiledLanguages"
                           :label="$t('CodeBlocksSettings.Language')"
                         />
@@ -107,7 +115,7 @@
                     {{ $t('CodeBlocksSettings.Output') }}
                   </div>
                   <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
-                    max. {{ maxCharacters }} • {{ outputParser.label }}
+                    {{ outputParser.label }} • {{ $t('CodeBlocksSettings.MaxCharacters') }}: {{ maxCharacters }}
                   </div>
                 </div>
               </AccordionTrigger>
@@ -128,7 +136,7 @@
                   </div>
                   <CSelect
                     :model-value="uiTheme"
-                    @update:model-value="uiTheme = $event"
+                    @update:model-value="console.log('www', uiTheme = $event)"
                     :options="themes"
                     :label="$t('CodeBlocksSettings.TSolution')"
                   />
@@ -144,7 +152,10 @@
                     {{ $t('CodeBlocksSettings.Libraries') }}
                   </div>
                   <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
-                    {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }} • {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
+                    {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }}
+                    <template v-if="runCode && workerLibraries.length > 0">
+                      • {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
+                    </template>
                   </div>
                 </div>
               </AccordionTrigger>
@@ -247,6 +258,11 @@ interface Props {
   }
 }
 
+interface Option {
+  value: string | number
+  label: string
+}
+
 const themes = computed(() => {
   return UIThemeTypes.map((k) => {
     return { value: k, label: getUITheme(k).name }
@@ -281,8 +297,14 @@ const serializedOptions = computed({
   set: (v) => {},
 })
 
-const compilerLanguage = computed(() => {
-  return props.options.runCode ? props.options.compiler.languageType : props.options.language
+const compilerLanguage = computed({
+  get: () => {
+    const value = props.options.runCode ? props.options.compiler.languageType : props.options.language
+    return globalState.appState.itemForValue(compiledLanguages.value, value)
+  },
+  set: (v: IListItemData) => {
+    updateCompilerLanguage(v.value)
+  }
 })
 
 function updateCompilerLanguage(value: string) {
@@ -293,6 +315,16 @@ function updateCompilerLanguage(value: string) {
   emit('compiler-change', value)
 }
 
+const compiledLanguages = computed(() => {
+  if (props.options.runCode === false) {
+    return languages.value
+  }
+  return compilerRegistry.languages.map(lang => ({
+    label: lang.label,
+    value: lang.value
+  }))
+})
+
 const compilerVersion = computed({
   get: () => {
     return props.options.compiler.version
@@ -302,13 +334,17 @@ const compilerVersion = computed({
   },
 })
 
+const compilerVersions = computed(() => {
+  return compilerRegistry.versionsForLanguage(compilerLanguage.value.value)
+})
+
 const domLibraries = computed(() => {
   return compilerRegistry.domLibraries
 })
 
 const workerLibraries = computed(() => {
   const c = compilerRegistry.getCompiler({
-    languageType: compilerLanguage.value,
+    languageType: compilerLanguage.value.value,
     version: compilerVersion.value,
   })
   if (c === undefined || c.libraries === undefined) {
@@ -325,20 +361,6 @@ const languages = computed(() => {
     label: lang.label,
     value: lang.value.toString()  // Ensure value is a string
   }))
-})
-
-const compiledLanguages = computed(() => {
-  if (props.options.runCode === false) {
-    return languages.value
-  }
-  return compilerRegistry.languages.map(lang => ({
-    label: lang.label,
-    value: lang.value.toString()  // Ensure value is a string
-  }))
-})
-
-const compilerVersions = computed(() => {
-  return compilerRegistry.versionsForLanguage(compilerLanguage.value)
 })
 
 const compiler = computed(() => {
@@ -605,10 +627,11 @@ function showAliveInfoDialog(): void {
   )
 }
 
-function isExperimentalVersion(language: string, version: string): boolean {
+function isExperimentalVersion(language: IListItemData, version: string | number | Option): boolean {
+  const versionStr = typeof version === 'object' ? version.value.toString() : version.toString()
   const c = compilerRegistry.getCompiler({
-    languageType: language,
-    version: version,
+    languageType: language.value,
+    version: versionStr,
   })
   if (c === undefined) {
     return false
@@ -616,10 +639,11 @@ function isExperimentalVersion(language: string, version: string): boolean {
   return c.experimental
 }
 
-function isDeprecatedVersion(language: string, version: string): boolean {
+function isDeprecatedVersion(language: IListItemData, version: string | number | Option): boolean {
+  const versionStr = typeof version === 'object' ? version.value.toString() : version.toString()
   const c = compilerRegistry.getCompiler({
-    languageType: language,
-    version: version,
+    languageType: language.value,
+    version: versionStr,
   })
   if (c === undefined) {
     return false
