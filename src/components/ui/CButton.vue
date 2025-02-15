@@ -43,6 +43,10 @@ const iconClasses = computed(() => {
         'tw-ml-2': !isIconVariant.value,
     }
 })
+
+const iconFill = computed(() => {
+    return fill.value || 'none'
+})
 </script>
 
 <template>
@@ -53,7 +57,7 @@ const iconClasses = computed(() => {
                 <slot />
             </div>
             <div v-if="icon" :class="iconClasses">
-                <component :is="icon" :fill="fill" />
+                <component :is="icon" :fill="iconFill" />
             </div>
         </div>
     </Button>
