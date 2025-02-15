@@ -161,11 +161,9 @@ const onSetGenerateTemplate = (nfo: IOnGenerateTemplateInfo): void => {
 }
 
 const onCompilerChange = (v: string): void => {
-    console.log('Selected Compiler', v)
     if (editMode) {
         const c = compilerRegistry.getCompiler({ languageType: v })
         if (c !== undefined) {
-            console.log('Selected Compiler', c, v, blockInfo.value.compiler)
             blockInfo.value.compiler.languageType = v
             blockInfo.value.compiler.version = c.version
             blockInfo.value.language = c.language
@@ -177,7 +175,6 @@ const onCompilerChange = (v: string): void => {
 
 const onCompilerVersionChange = (v: string): void => {
     if (editMode) {
-        console.log('Selected Version', v, blockInfo.value.compiler.languageType)
         const c = compilerRegistry.getCompiler({
             languageType: blockInfo.value.compiler.languageType,
             version: v,
@@ -225,7 +222,6 @@ const onPersistentArgumentsChange = (v: boolean): void => {
 }
 
 const onLanguageChange = (v: string): void => {
-    console.log('Language Change', v)
     if (editMode) {
         blockInfo.value.language = v
     }
@@ -257,7 +253,6 @@ const onDomLibChange = (v: string[]): void => {
 
 const onThemeChange = (nfo: IOnThemeChangeInfo): void => {
     if (editMode) {
-        console.log('TC', nfo)
         blockInfo.value.uiTheme = nfo.ui
     }
 }

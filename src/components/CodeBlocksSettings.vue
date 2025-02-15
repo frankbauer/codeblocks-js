@@ -12,7 +12,7 @@
             <Dices class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('RandomizerSettings.Caption') }}
         </Badge>
         <Badge variant="secondary" v-if="runCode">
-            {{ $t('CodeBlocksSettings.RunTimeShrt') }}: {{ Math.round(maxRuntime/1000) }}s
+            <Clock class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.RunTimeShrt') }}: {{ Math.round(maxRuntime/1000) }}s
         </Badge>
         <Badge variant="outline">
             <Terminal class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.OutputFormat') }}: {{ outputParser.label }}
@@ -102,6 +102,14 @@
                         </CSelect>
                       </div>
                     </div>
+
+                    <div v-if="runCode">
+                      <CInput
+                        v-model="maxRuntime"
+                        :rules="[validNumber]"
+                        :label="$t('CodeBlocksSettings.RunTimeShrt')"
+                      />
+                    </div>
                   </div>
                 </div>
               </AccordionContent>
@@ -136,7 +144,7 @@
                   </div>
                   <CSelect
                     :model-value="uiTheme"
-                    @update:model-value="console.log('www', uiTheme = $event)"
+                    @update:model-value="uiTheme = $event"
                     :options="themes"
                     :label="$t('CodeBlocksSettings.TSolution')"
                   />
@@ -227,7 +235,7 @@ import { globalState } from '@/lib/globalState'
 import { UIThemeType, UIThemeTypes, getUITheme } from '@/lib/uiTheme'
 import { useI18n } from 'vue-i18n'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
-import { Settings, Code2, Terminal, Library, Dices } from 'lucide-vue-next'
+import { Settings, Code2, Terminal, Library, Dices, Clock } from 'lucide-vue-next'
 
 const props = defineProps<Props>()
 const emit = defineEmits(['run-state-change', 'language-change', 'compiler-change', 'timeout-change', 
