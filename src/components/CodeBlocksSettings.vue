@@ -1,212 +1,261 @@
 <template>
   <div class="tw-w-full">
-    <div class="tw-flex tw-justify-between tw-items-center tw-p-3 tw-bg-card tw-rounded-lg tw-border">
-      <div class="tw-flex tw-items-center tw-gap-2 tw-flex-wrap">
-        <Badge >
-            <Code2 class="tw-w-4 tw-h-4 tw-mr-2" />{{ compilerLanguage.label }}
-        </Badge>
-        <Badge variant="outline">
-          {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
-        </Badge>
-        <Badge v-if="options.randomizer.active">
-            <Dices class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('RandomizerSettings.Caption') }}
-        </Badge>
-        <Badge variant="secondary" v-if="runCode">
-            <Clock class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.RunTimeShrt') }}: {{ Math.round(maxRuntime/1000) }}s
-        </Badge>
-        <Badge variant="outline">
-            <Terminal class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.OutputFormat') }}: {{ outputParser.label }}
-        </Badge>
-        <Badge variant="secondary">
-            {{ $t('CodeBlocksSettings.MaxCharacters') }}: {{ maxCharacters }}
-        </Badge>
-        <Badge variant="secondary">
-            <Library class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }}
-        </Badge>
-        <Badge v-if="runCode && workerLibraries.length > 0" variant="secondary">
-          {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
-        </Badge>
-      </div>
-      <Dialog>
-        <DialogTrigger asChild>
-          <CButton :icon="Settings" variant="outline" noText />
-        </DialogTrigger>
-        <DialogContent class="tw-max-w-3xl tw-max-h-[90vh] tw-overflow-y-auto tw-pr-4 modern-scrollbar">
-          <DialogHeader>
-            <DialogTitle>{{ $t('CodeBlocksSettings.Settings') }}</DialogTitle>
-            <DialogDescription>
-              {{ $t('CodeBlocksSettings.SettingsDesc') }}
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Accordion type="single" collapsible class="tw-w-full [&>*>*>[data-state=open]>.tw-text-xs]:tw-opacity-100">
-            <AccordionItem value="language">
-              <AccordionTrigger class="tw-items-start">
-                <div class="tw-flex tw-flex-col tw-w-full">
-                  <div class="tw-flex tw-items-center tw-gap-2">
-                    <Code2 class="tw-w-4 tw-h-4" />
-                    {{ $t('CodeBlocksSettings.Language') }}
-                  </div>
-                  <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
-                    {{ runCode ? `${compilerLanguage.label} v${compilerVersion}` : `${compilerLanguage.label} (${$t('CodeBlocksSettings.NoExecution')})` }}
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent class="tw-pl-6 tw-mt-2">
-                <div class="tw-space-y-4">
-                  <div class="tw-flex tw-flex-col tw-gap-4">
-                    <div class="tw-flex tw-items-center tw-space-x-2">
-                      <Switch 
-                        id="run-code"
-                        :checked="runCode"
-                        @update:checked="(val) => runCode = val"
-                        :disabled="!languageHasCompiler"
-                      />
-                      <Label for="run-code">{{ $t('CodeBlocksSettings.AllowExec') }}</Label>
+    <div class="tw-flex tw-flex-col tw-gap-2">
+      <div class="tw-flex tw-justify-between tw-items-center tw-p-3 tw-bg-card tw-rounded-lg tw-border">
+        <div class="tw-flex tw-items-center tw-gap-2 tw-flex-wrap">
+          <Badge >
+              <Code2 class="tw-w-4 tw-h-4 tw-mr-2" />
+              <span class="tw-flex tw-items-center">
+                {{ compilerLanguage.label }}
+                <AlertTriangle v-if="isDeprecated" class="tw-w-4 tw-h-4 tw-ml-2 tw-text-gray-400" />
+                <Flame v-if="isExperimental" class="tw-w-4 tw-h-4 tw-ml-2 tw-text-orange-500" />
+              </span>
+          </Badge>
+          <Badge variant="outline">
+            {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
+          </Badge>
+          <Badge v-if="options.randomizer.active">
+              <Dices class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('RandomizerSettings.Caption') }}
+          </Badge>
+          <Badge variant="secondary" v-if="showMaxRuntime">
+              <Clock class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.RunTimeShrt') }}: {{ Math.round(maxRuntime/1000) }}s
+          </Badge>
+          <Badge variant="outline">
+              <Terminal class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.OutputFormat') }}: {{ outputParser.label }}
+          </Badge>
+          <Badge variant="secondary">
+              {{ $t('CodeBlocksSettings.MaxCharacters') }}: {{ maxCharacters }}
+          </Badge>
+          <Badge variant="secondary">
+              <Library class="tw-w-4 tw-h-4 tw-mr-2" /> {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }}
+          </Badge>
+          <Badge v-if="runCode && workerLibraries.length > 0" variant="secondary">
+            {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
+          </Badge>
+        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <CButton :icon="Settings" variant="outline" noText />
+          </DialogTrigger>
+          <DialogContent class="tw-max-w-3xl tw-max-h-[90vh] tw-overflow-y-auto tw-pr-4 modern-scrollbar">
+            <DialogHeader>
+              <DialogTitle>{{ $t('CodeBlocksSettings.Settings') }}</DialogTitle>
+              <DialogDescription>
+                {{ $t('CodeBlocksSettings.SettingsDesc') }}
+              </DialogDescription>
+            </DialogHeader>
+            
+            <Accordion type="single" collapsible class="tw-w-full [&>*>*>[data-state=open]>.tw-text-xs]:tw-opacity-100">
+              <AccordionItem value="language">
+                <AccordionTrigger class="tw-items-start">
+                  <div class="tw-flex tw-flex-col tw-w-full">
+                    <div class="tw-flex tw-items-center tw-gap-2">
+                      <Code2 class="tw-w-4 tw-h-4" />
+                      {{ $t('CodeBlocksSettings.Language') }}
                     </div>
-                    
-                    <div class="tw-flex tw-items-center tw-space-x-2">
-                      <Switch 
-                        id="continuous-compile"
-                        :checked="continuousCompile"
-                        @update:checked="(val) => continuousCompile = val"
-                        :disabled="!canContinousCompile"
-                      />
-                      <Label for="continuous-compile">{{ $t('CodeBlocksSettings.ContinousCompile') }}</Label>
+                    <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
+                      {{ runCode ? `${compilerLanguage.label} v${compilerVersion}` : `${compilerLanguage.label} (${$t('CodeBlocksSettings.NoExecution')})` }}
                     </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent class="tw-pl-6 tw-mt-2">
+                  <div class="tw-space-y-4">
+                    <div class="tw-flex tw-flex-col tw-gap-4">
+                      <div class="tw-flex tw-items-center tw-space-x-2">
+                        <Switch 
+                          id="run-code"
+                          :checked="runCode"
+                          @update:checked="(val) => runCode = val"
+                          :disabled="!languageHasCompiler"
+                        />
+                        <Label for="run-code">{{ $t('CodeBlocksSettings.AllowExec') }}</Label>
+                      </div>
+                      
+                      <div class="tw-flex tw-items-center tw-space-x-2">
+                        <Switch 
+                          id="continuous-compile"
+                          :checked="continuousCompile"
+                          @update:checked="(val) => continuousCompile = val"
+                          :disabled="!canContinousCompile"
+                        />
+                        <Label for="continuous-compile">{{ $t('CodeBlocksSettings.ContinousCompile') }}</Label>
+                      </div>
 
-                    <div class="tw-grid tw-grid-cols-2 tw-gap-4">
-                      <div :class="{'tw-col-span-2': !runCode}">
-                        <CSelect
-                          v-model="compilerLanguage"
-                          :options="compiledLanguages"
-                          :label="$t('CodeBlocksSettings.Language')"
+                      <div class="tw-grid tw-grid-cols-2 tw-gap-4">
+                        <div :class="{'tw-col-span-2': !runCode}">
+                          <CSelect
+                            v-model="compilerLanguage"
+                            :options="compiledLanguages"
+                            :label="$t('CodeBlocksSettings.Language')"
+                          />
+                        </div>
+                        <div v-if="runCode">
+                          <CSelect
+                            :model-value="compilerVersion"
+                            @update:model-value="compilerVersion = $event"
+                            :options="compilerVersions"
+                            :label="$t('CodeBlocksSettings.CVersion')"
+                          >
+                            <template #option="{ option }">
+                              <div class="tw-flex tw-items-center">
+                                  {{ option }}
+                                  <Badge v-if="isDeprecatedVersion(compilerLanguage, option)" variant="secondary" class="tw-ml-2 tw-inline-flex tw-items-center">
+                                      <AlertTriangle class="tw-w-4 tw-h-4 tw-text-gray-400" />
+                                  </Badge>
+                                  <Badge v-if="isExperimentalVersion(compilerLanguage, option)" variant="secondary" class="tw-ml-2 tw-inline-flex tw-items-center">
+                                      <Flame class="tw-w-4 tw-h-4 tw-text-orange-500" />
+                                  </Badge>
+                              </div>
+                            </template>
+                          </CSelect>
+                        </div>
+                      </div>
+
+                      <div v-if="showMaxRuntime">
+                        <CInput
+                          v-model="maxRuntime"
+                          :rules="[validNumber]"
+                          :label="$t('CodeBlocksSettings.RunTimeShrt')"
                         />
                       </div>
-                      <div v-if="runCode">
-                        <CSelect
-                          :model-value="compilerVersion"
-                          @update:model-value="compilerVersion = $event"
-                          :options="compilerVersions"
-                          :label="$t('CodeBlocksSettings.CVersion')"
-                        >
-                          <template #option="{ option }">
-                            {{ option }}
-                            <Badge v-if="isDeprecatedVersion(compilerLanguage, option)" variant="destructive" class="tw-ml-2">
-                              {{ $t('CodeBlocksSettings.Deprecated') }}
-                            </Badge>
-                            <Badge v-if="isExperimentalVersion(compilerLanguage, option)" variant="secondary" class="tw-ml-2">
-                              {{ $t('CodeBlocksSettings.Experimental') }}
-                            </Badge>
-                          </template>
-                        </CSelect>
-                      </div>
                     </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
 
-                    <div v-if="runCode">
+              <AccordionItem value="output" v-if="runCode">
+                <AccordionTrigger class="tw-items-start">
+                  <div class="tw-flex tw-flex-col tw-w-full">
+                    <div class="tw-flex tw-items-center tw-gap-2">
+                      <Terminal class="tw-w-4 tw-h-4" />
+                      {{ $t('CodeBlocksSettings.Output') }}
+                    </div>
+                    <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
+                      {{ outputParser.label }} • {{ $t('CodeBlocksSettings.MaxCharacters') }}: {{ maxCharacters }}
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent class="tw-pl-6 tw-mt-2">
+                  <div class="tw-space-y-4">
+                    <div class="tw-grid tw-grid-cols-2 tw-gap-4">
                       <CInput
-                        v-model="maxRuntime"
+                        v-model="maxCharacters"
                         :rules="[validNumber]"
-                        :label="$t('CodeBlocksSettings.RunTimeShrt')"
+                        :label="$t('CodeBlocksSettings.MaxCharacters')"
+                      />
+                      <CSelect
+                        :model-value="outputParser"
+                        @update:model-value="outputParser = $event"
+                        :options="outputParsers"
+                        :label="$t('CodeBlocksSettings.Parser')"
                       />
                     </div>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="output" v-if="runCode">
-              <AccordionTrigger class="tw-items-start">
-                <div class="tw-flex tw-flex-col tw-w-full">
-                  <div class="tw-flex tw-items-center tw-gap-2">
-                    <Terminal class="tw-w-4 tw-h-4" />
-                    {{ $t('CodeBlocksSettings.Output') }}
-                  </div>
-                  <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
-                    {{ outputParser.label }} • {{ $t('CodeBlocksSettings.MaxCharacters') }}: {{ maxCharacters }}
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent class="tw-pl-6 tw-mt-2">
-                <div class="tw-space-y-4">
-                  <div class="tw-grid tw-grid-cols-2 tw-gap-4">
-                    <CInput
-                      v-model="maxCharacters"
-                      :rules="[validNumber]"
-                      :label="$t('CodeBlocksSettings.MaxCharacters')"
-                    />
                     <CSelect
-                      :model-value="outputParser"
-                      @update:model-value="outputParser = $event"
-                      :options="outputParsers"
-                      :label="$t('CodeBlocksSettings.Parser')"
+                      :model-value="uiTheme"
+                      @update:model-value="uiTheme = $event"
+                      :options="themes"
+                      :label="$t('CodeBlocksSettings.TSolution')"
                     />
                   </div>
-                  <CSelect
-                    :model-value="uiTheme"
-                    @update:model-value="uiTheme = $event"
-                    :options="themes"
-                    :label="$t('CodeBlocksSettings.TSolution')"
-                  />
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+                </AccordionContent>
+              </AccordionItem>
 
-            <AccordionItem value="libraries">
-              <AccordionTrigger class="tw-items-start">
-                <div class="tw-flex tw-flex-col tw-w-full">
-                  <div class="tw-flex tw-items-center tw-gap-2">
-                    <Library class="tw-w-4 tw-h-4" />
-                    {{ $t('CodeBlocksSettings.Libraries') }}
+              <AccordionItem value="libraries">
+                <AccordionTrigger class="tw-items-start">
+                  <div class="tw-flex tw-flex-col tw-w-full">
+                    <div class="tw-flex tw-items-center tw-gap-2">
+                      <Library class="tw-w-4 tw-h-4" />
+                      {{ $t('CodeBlocksSettings.Libraries') }}
+                    </div>
+                    <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
+                      {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }}
+                      <template v-if="runCode && workerLibraries.length > 0">
+                        • {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
+                      </template>
+                    </div>
                   </div>
-                  <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
-                    {{ $t('CodeBlocksSettings.DomLibs') }}: {{ domLibrary.length }}
-                    <template v-if="runCode && workerLibraries.length > 0">
-                      • {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
-                    </template>
+                </AccordionTrigger>
+                <AccordionContent class="tw-pl-6 tw-mt-2">
+                  <div class="tw-space-y-4">
+                    <CMultiSelect
+                      v-model="domLibrary"
+                      :options="domLibraries"
+                      :placeholder="$t('CodeBlocksSettings.SelectDomLibs')"
+                    />
+                    <CMultiSelect
+                      v-if="runCode && workerLibraries.length > 0"
+                      v-model="workerLibrary"
+                      :options="workerLibraries"
+                      :placeholder="$t('CodeBlocksSettings.SelectWorkLibs')"
+                    />
                   </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent class="tw-pl-6 tw-mt-2">
-                <div class="tw-space-y-4">
-                  <CMultiSelect
-                    v-model="domLibrary"
-                    :options="domLibraries"
-                    :placeholder="$t('CodeBlocksSettings.SelectDomLibs')"
-                  />
-                  <CMultiSelect
-                    v-if="runCode && workerLibraries.length > 0"
-                    v-model="workerLibrary"
-                    :options="workerLibraries"
-                    :placeholder="$t('CodeBlocksSettings.SelectWorkLibs')"
-                  />
-                </div>
-              </AccordionContent>
-            </AccordionItem>
+                </AccordionContent>
+              </AccordionItem>
 
-            <AccordionItem value="randomizer">
-              <AccordionTrigger class="tw-items-start">
-                <div class="tw-flex tw-flex-col tw-w-full">
-                  <div class="tw-flex tw-items-center tw-gap-2">
-                    <Dices class="tw-w-4 tw-h-4" />
-                    {{ $t('RandomizerSettings.Caption') }}
+              <AccordionItem value="randomizer">
+                <AccordionTrigger class="tw-items-start">
+                  <div class="tw-flex tw-flex-col tw-w-full">
+                    <div class="tw-flex tw-items-center tw-gap-2">
+                      <Dices class="tw-w-4 tw-h-4" />
+                      {{ $t('RandomizerSettings.Caption') }}
+                    </div>
+                    <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
+                      {{ options.randomizer.active ? $t('RandomizerSettings.Active') : $t('RandomizerSettings.Inactive') }}
+                    </div>
                   </div>
-                  <div class="tw-text-xs tw-text-muted-foreground tw-mt-0.5 tw-ml-6 tw-font-light tw-text-left tw-opacity-75 tw-transition-opacity">
-                    {{ options.randomizer.active ? $t('RandomizerSettings.Active') : $t('RandomizerSettings.Inactive') }}
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent class="tw-pl-6 tw-mt-2">
-                <RandomizerSettings :options="options" />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </DialogContent>
-      </Dialog>
+                </AccordionTrigger>
+                <AccordionContent class="tw-pl-6 tw-mt-2">
+                  <RandomizerSettings :options="options" />
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <Transition
+        enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
+        enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+        enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
+        leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+      >
+        <Alert v-if="isExperimental" variant="warning" class="tw-bg-orange-50 tw-border-orange-200 tw-py-2  tw-mb-4">
+          <div class="tw-flex tw-gap-3 tw-items-center">
+            <Flame class="tw-h-8 tw-w-8 tw-text-orange-500" />
+            <div class="">
+              <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600">{{ $t('CodeBlocksSettings.ExperimentalCompiler') }}</AlertTitle>
+              <AlertDescription class="tw-text-sm tw-mt-2 tw-text-orange-500">
+                {{ $t('CodeBlocksSettings.ExperimentalCompilerDesc') }}
+              </AlertDescription>
+            </div>
+          </div>
+        </Alert>
+      </Transition>
+
+      <Transition
+        enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
+        enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+        enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
+        leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+      >
+        <Alert v-if="isDeprecated" variant="warning" class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-mb-4">
+          <div class="tw-flex tw-gap-3 tw-items-center">
+            <AlertTriangle class="tw-h-8 tw-w-8 tw-text-yellow-500" />
+            <div class="tw-opacity-75">
+              <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600">{{ $t('CodeBlocksSettings.DeprecatedCompiler') }}</AlertTitle>
+              <AlertDescription class="tw-text-sm tw-mt-2 tw-text-yellow-500">
+                {{ $t('CodeBlocksSettings.DeprecatedCompilerDesc') }}
+              </AlertDescription>
+            </div>
+          </div>
+        </Alert>
+      </Transition>
     </div>
-    
 
-    
     <textarea
       :name="`block_settings[${options.id}]`"
       class="tw-hidden"
@@ -223,6 +272,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Switch } from '@/shadcn/ui/switch'
 import { Label } from '@/shadcn/ui/label'
 import { Badge } from '@/shadcn/ui/badge'
+import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
 import CButton from './ui/CButton.vue'
 import CMultiSelect from './ui/CMultiSelect.vue'
 import CSelect from './ui/CSelect.vue'
@@ -235,7 +285,7 @@ import { globalState } from '@/lib/globalState'
 import { UIThemeType, UIThemeTypes, getUITheme } from '@/lib/uiTheme'
 import { useI18n } from 'vue-i18n'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
-import { Settings, Code2, Terminal, Library, Dices, Clock } from 'lucide-vue-next'
+import { Settings, Code2, Terminal, Library, Dices, Clock, Flame, AlertTriangle } from 'lucide-vue-next'
 
 const props = defineProps<Props>()
 const emit = defineEmits(['run-state-change', 'language-change', 'compiler-change', 'timeout-change', 
