@@ -55,14 +55,14 @@
           <DropdownMenuTrigger asChild>
             <CButton :icon="Settings" variant="outline" noText />
           </DropdownMenuTrigger>
-          <DropdownMenuContent class="tw-w-[420px] tw-max-h-[90vh] tw-overflow-y-auto modern-scrollbar tw-px-4">
+          <DropdownMenuContent class="tw-w-[320px] sm:tw-w-[520px] md:tw-w-[720px] tw-max-h-[90vh] tw-overflow-y-auto modern-scrollbar tw-px-4"  align="end">
             <div class="tw-p-4">
               <h3 class="tw-text-lg tw-font-medium">{{ $t('CodeBlocksSettings.Settings') }}</h3>
               <p class="tw-text-sm tw-text-muted-foreground">
                 {{ $t('CodeBlocksSettings.SettingsDesc') }}
               </p>
             </div>
-            
+             
             <Accordion type="single" collapsible class="tw-w-full [&>*>*>[data-state=open]>.tw-text-xs]:tw-opacity-100">
               <AccordionItem value="language">
                 <AccordionTrigger class="tw-items-start">
