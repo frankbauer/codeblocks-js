@@ -49,7 +49,8 @@
                     <div class="tw-flex tw-items-center tw-space-x-2">
                       <Switch 
                         id="run-code"
-                        v-model="runCode"
+                        :checked="runCode"
+                        @update:checked="(val) => runCode = val"
                         :disabled="!languageHasCompiler"
                       />
                       <Label for="run-code">{{ $t('CodeBlocksSettings.AllowExec') }}</Label>
@@ -58,7 +59,8 @@
                     <div class="tw-flex tw-items-center tw-space-x-2">
                       <Switch 
                         id="continuous-compile"
-                        v-model="continuousCompile"
+                        :checked="continuousCompile"
+                        @update:checked="(val) => continuousCompile = val"
                         :disabled="!canContinousCompile"
                       />
                       <Label for="continuous-compile">{{ $t('CodeBlocksSettings.ContinousCompile') }}</Label>
@@ -280,15 +282,13 @@ const serializedOptions = computed({
 })
 
 const compilerLanguage = computed(() => {
-  if (props.options.runCode === false) {
-    return props.options.language
-  }
-  return props.options.compiler.languageType
+  return props.options.runCode ? props.options.compiler.languageType : props.options.language
 })
 
 function updateCompilerLanguage(value: string) {
-  if (props.options.runCode === false) {
+  if (!props.options.runCode) {
     emit('language-change', value)
+    return
   }
   emit('compiler-change', value)
 }
@@ -371,10 +371,7 @@ const isDeprecated = computed(() => {
 })
 
 const languageHasCompiler = computed(() => {
-  if (runCode.value) {
-    return true
-  }
-  const c = compilerRegistry.getCompiler({ languageType: compilerLanguage.value })
+  const c = compilerRegistry.getCompiler({ languageType: props.options.language })
   return c !== undefined
 })
 
