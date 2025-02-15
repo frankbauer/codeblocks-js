@@ -14,7 +14,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/shadcn/ui/popover'
-import { cn } from '@/lib/utils'
 
 interface Option {
   label: string
@@ -59,20 +58,23 @@ const toggleItem = (item: Option) => {
         variant="outline"
         role="combobox"
         :aria-expanded="open"
-        class="tw-w-full tw-justify-between"
+        class="tw-w-full tw-justify-between tw-min-h-[2.5rem] tw-h-auto tw-py-0.5"
       >
         <div class="tw-flex tw-flex-wrap tw-gap-1">
           <template v-if="value.length > 0">
             <div
               v-for="item in value"
               :key="item.value"
-              class="tw-flex tw-items-center tw-gap-1 tw-rounded-md tw-bg-secondary tw-px-2 tw-py-1"
+              class="tw-flex tw-items-center tw-gap-1 tw-rounded-sm tw-bg-secondary tw-px-1.5 tw-py-0.5 tw-text-sm"
             >
-              <span>{{ item.label }}</span>
-              <X
-                class="tw-h-4 tw-w-4 tw-cursor-pointer hover:tw-text-destructive"
+              <span class="tw-break-all">{{ item.label }}</span>
+              <button
+                type="button"
                 @click.stop="removeItem(item)"
-              />
+                class="tw-flex tw-items-center tw-justify-center"
+              >
+                <X class="tw-h-3.5 tw-w-3.5 tw-cursor-pointer hover:tw-text-destructive tw-shrink-0" />
+              </button>
             </div>
           </template>
           <span v-else class="tw-text-muted-foreground">
@@ -82,24 +84,39 @@ const toggleItem = (item: Option) => {
         <ChevronsUpDown class="tw-ml-2 tw-h-4 tw-w-4 tw-shrink-0 tw-opacity-50" />
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="tw-w-full tw-p-0">
+    <PopoverContent 
+      class="tw-p-0" 
+      side="bottom"
+      :side-offset="5"
+      align="start"
+      :collision-padding="16"
+      :avoid-collisions="true"
+      :style="{ width: 'var(--radix-popper-anchor-width)' }"
+    >
       <Command>
-        <CommandInput placeholder="Search items..." />
-        <CommandEmpty>No item found.</CommandEmpty>
-        <CommandGroup>
-          <CommandItem
-            v-for="option in options"
-            :key="option.value"
-            :value="option.label"
-            @select="() => toggleItem(option)"
-          >
-            <Check
-              class="tw-mr-2 tw-h-4 tw-w-4"
-              :class="{'tw-opacity-100': value.some(v => v.value === option.value), 'tw-opacity-0': !value.some(v => v.value === option.value)}"
-            />
-            {{ option.label }}
-          </CommandItem>
-        </CommandGroup>
+        
+          <CommandInput placeholder="Search items..." autoFocus />
+        
+        
+          <CommandEmpty>No item found.</CommandEmpty>
+          <CommandGroup>
+            <CommandItem
+              v-for="option in options"
+              :key="option.value"
+              :value="option.label"
+              @select="() => toggleItem(option)"
+              class="tw-cursor-pointer"
+            >
+              <Check
+                class="tw-mr-2 tw-h-4 tw-w-4"
+                :class="{
+                  'tw-opacity-100': value.some(v => v.value === option.value),
+                  'tw-opacity-0': !value.some(v => v.value === option.value)
+                }"
+              />
+              {{ option.label }}
+            </CommandItem>
+          </CommandGroup>        
       </Command>
     </PopoverContent>
   </Popover>
