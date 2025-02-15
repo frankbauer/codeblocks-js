@@ -10,8 +10,25 @@
           <Badge variant="outline">
             <span class="tw-flex tw-items-center">
                 {{ runCode ? `v${compilerVersion}` : `(${$t('CodeBlocksSettings.NoExecution')})` }}
-                <AlertTriangle v-if="isDeprecated" class="tw-w-4 tw-h-4 tw-ml-2 tw-text-gray-400" />
-                <Flame v-if="isExperimental" class="tw-w-4 tw-h-4 tw-ml-2 tw-text-orange-500" />
+                <HoverCard v-if="isDeprecated">
+                            <HoverCardTrigger>
+                              <AlertTriangle v-if="isDeprecated" class="tw-w-4 tw-h-4 tw-ml-2 tw-text-gray-400" />
+                            </HoverCardTrigger>
+                            <HoverCardContent class="tw-w-80">
+                              <h4 class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600">{{ $t('CodeBlocksSettings.DeprecatedCompiler') }}</h4>
+                              <p class="tw-text-xs tw-mt-2 tw-text-yellow-500">{{ $t('CodeBlocksSettings.DeprecatedCompilerDesc') }}</p>
+                            </HoverCardContent>
+                          </HoverCard>
+                
+                <HoverCard v-if="isExperimental">
+                            <HoverCardTrigger>
+                              <Flame v-if="isExperimental" class="tw-w-4 tw-h-4 tw-ml-2 tw-text-orange-500" />
+                            </HoverCardTrigger>
+                            <HoverCardContent class="tw-w-80">
+                              <h4 class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600">{{ $t('CodeBlocksSettings.ExperimentalCompiler') }}</h4>
+                              <p class="tw-text-xs tw-mt-2 tw-text-orange-500">{{ $t('CodeBlocksSettings.ExperimentalCompilerDesc') }}</p>
+                            </HoverCardContent>
+                          </HoverCard>
               </span>
             
           </Badge>
