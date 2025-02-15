@@ -111,6 +111,9 @@ export default {
             '<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the student code finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>process.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Playground</b> is called as soon as the student code finishes, which may be before the worker is terminated.',
         KeepAliveHintJava:
             '<b style=color:red>[EXPERIMENTAL]</b> Workers are not automatically terminated when the students <code>main</code>-Method finishes.<br><br>The worker is stopped by using the <em>Stop</em>-Button or by reaching the maximum execution time. Student-Code can also terminate the worker (and itself) by calling <code>System.exit(0)</code>.<br><br>The <code>whenFinished(args)</code>-Method in your <b>Playground</b> is called as soon as the <code>main</code>-Method finishes, which may be before the worker is terminated.',
+        SelectDomLibs: 'Select DOM-Libraries',
+        SelectWorkerLibs: 'Select Worker-Libraries',
+        SettingsDesc: 'Configure the settings for your code blocks.',
     },
     CodePlayground: {
         InvalidJson: 'Output is not a valid JSON-Object',

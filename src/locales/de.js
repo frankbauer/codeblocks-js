@@ -111,6 +111,9 @@ export default {
             '<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden des studentischen Codes nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Teste oder durch erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>process.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Sandkästen</b> wird sofort nach dem Ende des studentischen Codes, aber noch vor der Beendigung des Workers aufberufen.',
         KeepAliveHintJava:
             '<b style=color:red>[EXPERIMENTAL]</b> Der Worker wird nach dem beenden der studentischen <code>main</code>-methode nicht automatisch beendet und kann weiter Nachrichten empfangen und senden.<br><br>Der Worker kann jederzeit manuell durch die <em>Anhalten</em>-Taste oder durch das erreichen der maximal erlaubten Laufzeit beendet werden. Der studentische code, kann die Ausführung durch aufrufen von <code>System.exit(0)</code> beenden.<br><br>Die <code>whenFinished(args)</code>-Methode der <b>Sandkästen</b> wird sofort nach dem Ende der <code>main</code>-Methode, aber noch vor der Beendigung des Workers aufberufen.',
+        SelectDomLibs: 'DOM-Bibliotheken auswählen',
+        SelectWorkerLibs: 'Worker-Bibliotheken auswählen',
+        SettingsDesc: 'Konfigurieren Sie die Einstellungen für ihre Codeblöcke.',
     },
     CodePlayground: {
         InvalidJson: 'Ausgabe ist nicht JSON-Formatiert',
