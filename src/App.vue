@@ -1,11 +1,7 @@
 <template>
     <q-layout view="hHh lpR fFf" style="min-height: 0" class="codeblocks-app-page">
         <q-page-container>
-            <CodeBlocks 
-                :blockInfo="blocks" 
-                :event-hub="eventHub" 
-                :appID="appID" 
-            />
+            <CodeBlocks :blockInfo="blocks" :event-hub="eventHub" :appID="appID" />
         </q-page-container>
     </q-layout>
 </template>

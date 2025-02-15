@@ -1,4 +1,5 @@
 import '@/styles/app.scss'
+import '@/styles/shadcn.css'
 import { tagger } from '@/plugins/tagger'
 
 String.prototype.replaceAllPoly = function (search: string, replacement: string): string {
