@@ -111,6 +111,47 @@
                           </CSelect>
                         </div>
                       </div>
+                      <Transition
+        enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
+        enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+        enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
+        leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+      >
+        <Alert v-if="isExperimental" variant="destructive" class="tw-bg-orange-50 tw-border-orange-200 tw-py-2  tw-mb-4">
+          <div class="tw-flex tw-gap-3 tw-items-center">
+            <Flame class="tw-h-20 tw-w-20 tw-text-orange-500" />
+            <div class="">
+              <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600">{{ $t('CodeBlocksSettings.ExperimentalCompiler') }}</AlertTitle>
+              <AlertDescription class="tw-text-sm tw-mt-2 tw-text-orange-500">
+                {{ $t('CodeBlocksSettings.ExperimentalCompilerDesc') }}
+              </AlertDescription>
+            </div>
+          </div>
+        </Alert>
+      </Transition>
+
+      <Transition
+        enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
+        enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+        enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
+        leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+        leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+      >
+        <Alert v-if="isDeprecated" variant="destructive" class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-mb-4">
+          <div class="tw-flex tw-gap-3 tw-items-center">
+            <AlertTriangle class="tw-h-20 tw-w-20 tw-text-yellow-500" />
+            <div class="tw-opacity-75">
+              <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600">{{ $t('CodeBlocksSettings.DeprecatedCompiler') }}</AlertTitle>
+              <AlertDescription class="tw-text-sm tw-mt-2 tw-text-yellow-500">
+                {{ $t('CodeBlocksSettings.DeprecatedCompilerDesc') }}
+              </AlertDescription>
+            </div>
+          </div>
+        </Alert>
+      </Transition>
 
                       <div v-if="showMaxRuntime">
                         <CInput
@@ -284,49 +325,7 @@
             </Accordion>
           </DialogContent>
         </Dialog>
-      </div>
-
-      <Transition
-        enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
-        enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
-        enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
-        leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
-        leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
-        leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
-      >
-        <Alert v-if="isExperimental" variant="destructive" class="tw-bg-orange-50 tw-border-orange-200 tw-py-2  tw-mb-4">
-          <div class="tw-flex tw-gap-3 tw-items-center">
-            <Flame class="tw-h-8 tw-w-8 tw-text-orange-500" />
-            <div class="">
-              <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600">{{ $t('CodeBlocksSettings.ExperimentalCompiler') }}</AlertTitle>
-              <AlertDescription class="tw-text-sm tw-mt-2 tw-text-orange-500">
-                {{ $t('CodeBlocksSettings.ExperimentalCompilerDesc') }}
-              </AlertDescription>
-            </div>
-          </div>
-        </Alert>
-      </Transition>
-
-      <Transition
-        enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
-        enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
-        enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
-        leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
-        leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
-        leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
-      >
-        <Alert v-if="isDeprecated" variant="destructive" class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-mb-4">
-          <div class="tw-flex tw-gap-3 tw-items-center">
-            <AlertTriangle class="tw-h-8 tw-w-8 tw-text-yellow-500" />
-            <div class="tw-opacity-75">
-              <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600">{{ $t('CodeBlocksSettings.DeprecatedCompiler') }}</AlertTitle>
-              <AlertDescription class="tw-text-sm tw-mt-2 tw-text-yellow-500">
-                {{ $t('CodeBlocksSettings.DeprecatedCompilerDesc') }}
-              </AlertDescription>
-            </div>
-          </div>
-        </Alert>
-      </Transition>
+      </div>     
     </div>
 
     <textarea
