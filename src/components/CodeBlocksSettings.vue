@@ -51,17 +51,17 @@
             {{ $t('CodeBlocksSettings.WorkLibs') }}: {{ workerLibrary.length }}
           </Badge>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
+        <DropdownMenu >
+          <DropdownMenuTrigger asChild>
             <CButton :icon="Settings" variant="outline" noText />
-          </DialogTrigger>
-          <DialogContent class="tw-max-w-3xl tw-max-h-[90vh] tw-overflow-y-auto tw-pr-4 modern-scrollbar">
-            <DialogHeader>
-              <DialogTitle>{{ $t('CodeBlocksSettings.Settings') }}</DialogTitle>
-              <DialogDescription>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent class="tw-w-[420px] tw-max-h-[90vh] tw-overflow-y-auto modern-scrollbar tw-px-4">
+            <div class="tw-p-4">
+              <h3 class="tw-text-lg tw-font-medium">{{ $t('CodeBlocksSettings.Settings') }}</h3>
+              <p class="tw-text-sm tw-text-muted-foreground">
                 {{ $t('CodeBlocksSettings.SettingsDesc') }}
-              </DialogDescription>
-            </DialogHeader>
+              </p>
+            </div>
             
             <Accordion type="single" collapsible class="tw-w-full [&>*>*>[data-state=open]>.tw-text-xs]:tw-opacity-100">
               <AccordionItem value="language">
@@ -99,8 +99,8 @@
                         <Label for="continuous-compile">{{ $t('CodeBlocksSettings.ContinousCompile') }}</Label>
                       </div>
 
-                      <div class="tw-grid tw-grid-cols-2 tw-gap-4">
-                        <div :class="{'tw-col-span-2': !runCode}">
+                      <div class="tw-grid tw-gap-4">
+                        <div>
                           <CSelect
                             v-model="compilerLanguage"
                             :options="compiledLanguages"
@@ -136,12 +136,12 @@
         leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
         leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
       >
-        <Alert v-if="isExperimental" variant="destructive" class="tw-bg-orange-50 tw-border-orange-200 tw-py-2  tw-mb-4">
-          <div class="tw-flex tw-gap-3 tw-items-center">
-            <Flame class="tw-h-20 tw-w-20 tw-text-orange-500" />
-            <div class="">
+        <Alert v-if="isExperimental" variant="destructive" class="tw-bg-orange-50 tw-border-orange-200 tw-py-2 tw-mb-4 tw-w-full">
+          <div class="tw-flex tw-gap-2 tw-items-center">
+            <Flame class="tw-h-12 tw-w-12 tw-text-orange-500" />
+            <div class="tw-flex-1">
               <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600">{{ $t('CodeBlocksSettings.ExperimentalCompiler') }}</AlertTitle>
-              <AlertDescription class="tw-text-sm tw-mt-2 tw-text-orange-500">
+              <AlertDescription class="tw-text-xs tw-mt-1 tw-text-orange-500">
                 {{ $t('CodeBlocksSettings.ExperimentalCompilerDesc') }}
               </AlertDescription>
             </div>
@@ -157,12 +157,12 @@
         leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
         leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
       >
-        <Alert v-if="isDeprecated" variant="destructive" class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-mb-4">
-          <div class="tw-flex tw-gap-3 tw-items-center">
-            <AlertTriangle class="tw-h-20 tw-w-20 tw-text-yellow-500" />
-            <div class="tw-opacity-75">
+        <Alert v-if="isDeprecated" variant="destructive" class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-mb-4 tw-w-full">
+          <div class="tw-flex tw-gap-2 tw-items-center">
+            <AlertTriangle class="tw-h-12 tw-w-12 tw-text-yellow-500" />
+            <div class="tw-flex-1">
               <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600">{{ $t('CodeBlocksSettings.DeprecatedCompiler') }}</AlertTitle>
-              <AlertDescription class="tw-text-sm tw-mt-2 tw-text-yellow-500">
+              <AlertDescription class="tw-text-xs tw-mt-1 tw-text-yellow-500">
                 {{ $t('CodeBlocksSettings.DeprecatedCompilerDesc') }}
               </AlertDescription>
             </div>
@@ -185,7 +185,7 @@
                             <HoverCardTrigger>
                               <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
                             </HoverCardTrigger>
-                            <HoverCardContent class="tw-w-80">
+                            <HoverCardContent side="right" align="start" class="tw-w-[280px]">
                               <div v-html="$t(compiler.languageType === 'java' ? 'CodeBlocksSettings.AllowArgumentsHintJava' : 'CodeBlocksSettings.AllowArgumentsHint')" 
                                    class="hover-content" />
                             </HoverCardContent>
@@ -204,7 +204,7 @@
                             <HoverCardTrigger>
                               <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
                             </HoverCardTrigger>
-                            <HoverCardContent class="tw-w-80">
+                            <HoverCardContent side="right" align="start" class="tw-w-[280px]">
                               <div v-html="$t(compiler.languageType === 'java' ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava' : 'CodeBlocksSettings.UsePersistentArgumentsHint')" 
                                    class="hover-content" />
                             </HoverCardContent>
@@ -223,7 +223,7 @@
                             <HoverCardTrigger>
                               <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
                             </HoverCardTrigger>
-                            <HoverCardContent class="tw-w-80">
+                            <HoverCardContent side="right" align="start" class="tw-w-[280px]">
                               <div v-html="$t(compiler.languageType === 'java' ? 'CodeBlocksSettings.AllowMessagePassingHintJava' : 'CodeBlocksSettings.AllowMessagePassingHint')" 
                                    class="hover-content" />
                             </HoverCardContent>
@@ -242,7 +242,7 @@
                             <HoverCardTrigger>
                               <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
                             </HoverCardTrigger>
-                            <HoverCardContent class="tw-w-80">
+                            <HoverCardContent side="right" align="start" class="tw-w-[280px]">
                               <div v-html="$t(compiler.languageType === 'java' ? 'CodeBlocksSettings.KeepAliveHintJava' : 'CodeBlocksSettings.KeepAliveHint')" 
                                    class="hover-content" />
                             </HoverCardContent>
@@ -268,7 +268,7 @@
                 </AccordionTrigger>
                 <AccordionContent class="tw-pl-6 tw-mt-2">
                   <div class="tw-space-y-4">
-                    <div class="tw-grid tw-grid-cols-2 tw-gap-4">
+                    <div class="tw-grid tw-gap-4">
                       <CInput
                         v-model="maxCharacters"
                         :rules="[validNumber]"
@@ -323,7 +323,7 @@
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="randomizer">
+              <AccordionItem value="randomizer" class="tw-border-none tw-border-gray-200">
                 <AccordionTrigger class="tw-items-start">
                   <div class="tw-flex tw-flex-col tw-w-full">
                     <div class="tw-flex tw-items-center tw-gap-2">
@@ -340,8 +340,8 @@
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-          </DialogContent>
-        </Dialog>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>     
     </div>
 
@@ -356,7 +356,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import RandomizerSettings from './RandomizerSettings.vue'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '../shadcn/ui/dialog'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../shadcn/ui/dropdown-menu'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../shadcn/ui/accordion'
 import { Switch } from '../shadcn/ui/switch'
 import { Label } from '../shadcn/ui/label'
@@ -367,7 +367,6 @@ import CButton from './ui/CButton.vue'
 import CMultiSelect from './ui/CMultiSelect.vue'
 import CSelect from './ui/CSelect.vue'
 import CInput from './ui/CInput.vue'
-import { useDialog } from './ui/useDialog'
 import type { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
 import type { IRandomizerSettings } from '@/lib/ICodeBlocks'
 import compilerRegistry from '@/lib/CompilerRegistry'
@@ -384,7 +383,6 @@ const emit = defineEmits(['run-state-change', 'language-change', 'compiler-chang
   'keep-alive-change', 'persistent-arguments-change', 'compiler-version-change'])
 
 const { t: l } = useI18n()
-const { showDialog } = useDialog()
 
 interface Props {
   options: {
