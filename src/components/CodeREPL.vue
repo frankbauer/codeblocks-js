@@ -2,43 +2,40 @@
     <div :class="`codeblock block-${typeName}`">
         <div
             v-if="allowsREPL && canStartREPL"
-            class="row runnerState"
+            class="tw-flex tw-items-center runnerState"
             id="stateBox"
             :data-question="appID"
         >
-            <q-btn
+            <CButton
                 v-show="!isRunning"
                 id="allow_run_button"
                 :loading="!isReady"
                 :disabled="!isReady"
-                color="primary"
-                class="white--text q-pr-sm"
                 @click="emitRun"
-                :ripple="{ center: true }"
-                style="border-radius: 0px"
                 :data-question="appID"
+                class="tw-rounded-none"
+                :icon="Play"
+                fill="white"
             >
                 {{ $t('CodeBlocks.start') }}
-                <q-icon right dark name="play_arrow"></q-icon>
-            </q-btn>
-            <div class="animated fadeIn"></div>
+            </CButton>
             <transition
                 appear
                 enter-active-class="animated fadeIn"
                 leave-active-class="animated fadeOut"
             >
-                <div class="q-pl-0" v-show="canStop">
-                    <q-btn
+                <div class="tw-pl-0" v-show="canStop">
+                    <CButton
                         id="cancel_button"
-                        color="negative"
-                        :ripple="{ center: true }"
-                        style="border-radius: 0px"
+                        variant="destructive"
                         :data-question="appID"
+                        class="tw-rounded-none"
                         @click="emitStop"
+                        :icon="Square"
+                        fill="white"
                     >
                         {{ $t('CodeBlocks.stop') }}
-                        <q-icon right dark name="stop"></q-icon>
-                    </q-btn>
+                    </CButton>
                 </div>
             </transition>
             <transition
@@ -47,7 +44,7 @@
                 leave-active-class="animated fadeOut"
             >
                 <div
-                    class="globalState col-grow"
+                    class="tw-flex-grow globalState"
                     style="align-self: center"
                     v-show="showGlobalMessages"
                 >
@@ -60,16 +57,23 @@
             enter-active-class="animated fadeInup"
             leave-active-class="animated fadeOutDown"
         >
-            <div class="q-mt-md" v-if="!isRunning">
-                <q-banner class="bg-warning" inline-actions>
-                    Interpreter is not yet Ready. You may need to start it first.
-                    <template v-slot:action>
-                        <q-btn flat color="white" @click="emitRun" v-if="isReady && !canStop">
-                            {{ $t('CodeBlocks.start') }}
-                            <q-icon right dark name="play_arrow"></q-icon>
-                        </q-btn>
-                    </template>
-                </q-banner>
+            <div class="tw-mt-4" v-if="!isRunning">
+                <Alert
+                    variant="destructive"
+                    class="tw-flex tw-justify-between tw-items-center tw-bg-yellow-100 tw-text-yellow-600"
+                >
+                    <AlertDescription>
+                        Interpreter is not yet Ready. You may need to start it first.
+                    </AlertDescription>
+                    <CButton
+                        variant="outline"
+                        @click="emitRun"
+                        v-if="isReady && !canStop"
+                        :icon="Play"
+                    >
+                        {{ $t('CodeBlocks.start') }}
+                    </CButton>
+                </Alert>
             </div>
         </transition>
         <Terminal
@@ -83,10 +87,10 @@
             @stop="emitStop"
         ></Terminal>
 
-        <div class="q-mt-md" v-if="!allowsREPL">
+        <div class="tw-mt-4" v-if="!allowsREPL">
             The current language does not support a REPL-Element
         </div>
-        <div class="q-mt-md" v-if="!canStartREPL">
+        <div class="tw-mt-4" v-if="!canStartREPL">
             Unable to start REPL-Environment. (Code execution, message passing and keep-alive need
             to be enabled)
         </div>
@@ -117,6 +121,9 @@ import compilerRegistry from '@/lib/CompilerRegistry'
 import { EventHubType } from '@/composables/globalEvents'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
+import { Alert, AlertDescription } from '@/shadcn/ui/alert'
+import { Play, Square } from 'lucide-vue-next'
+import CButton from '@/components/ui/CButton.vue'
 
 interface Props extends EditableBlockProps {
     eventHub: EventHubType
