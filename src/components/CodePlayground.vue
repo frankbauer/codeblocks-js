@@ -68,6 +68,47 @@
                 @code-changed-in-edit-mode="onCodeChange"
             />
         </Transition>
+
+        <!-- Error Dialog -->
+        <AlertDialog :open="showErrorDialog" @update:open="showErrorDialog = $event">
+            <AlertDialogContent class="tw-max-w-2xl">
+                <AlertDialogHeader>
+                    <AlertDialogTitle class="tw-flex tw-items-center tw-gap-2 tw-text-red-600">
+                        <AlertTriangle class="tw-h-5 tw-w-5" />
+                        {{ errorDialogTitle }}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription class="tw-text-left">
+                        <div class="tw-space-y-4">
+                            <div
+                                v-if="errorOutput"
+                                class="tw-bg-gray-50 tw-p-3 tw-rounded-md tw-border"
+                            >
+                                <h4 class="tw-font-semibold tw-text-sm tw-text-gray-700 tw-mb-2">
+                                    Output:
+                                </h4>
+                                <pre
+                                    class="tw-text-xs tw-bg-amber-50 tw-p-2 tw-rounded tw-border tw-font-mono tw-overflow-x-auto"
+                                    >{{ errorOutput }}</pre
+                                >
+                            </div>
+                            <div
+                                class="tw-bg-red-50 tw-p-3 tw-rounded-md tw-border tw-border-red-200"
+                            >
+                                <h4 class="tw-font-semibold tw-text-sm tw-text-red-700 tw-mb-2">
+                                    Error Message:
+                                </h4>
+                                <p class="tw-text-sm tw-text-red-800 tw-font-medium">
+                                    {{ errorDialogMessage }}
+                                </p>
+                            </div>
+                        </div>
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogAction @click="showErrorDialog = false"> Close </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     </div>
 </template>
 
@@ -98,9 +139,17 @@ import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
-import { useQuasar } from 'quasar'
 import { Button } from '@/shadcn/ui/button'
-import { ChevronUp, ChevronDown, Maximize, Expand, Shrink } from 'lucide-vue-next'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/shadcn/ui/alert-dialog'
+import { ChevronUp, ChevronDown, Maximize, Expand, Shrink, AlertTriangle } from 'lucide-vue-next'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 
 export interface ICodePlaygroundOptions {
@@ -131,10 +180,10 @@ const emit = defineEmits(['changeOutput', 'run', 'ready'])
 
 const instance = getCurrentInstance()
 const globalCodeBlock = globalState.appState
-const q = useQuasar()
 const t = instance?.proxy?.$root?.$t
 
-const { onBeforeEnter, onEnter, onAfterEnter, onBeforeLeave, onLeave, onAfterLeave } = useSlideTransition()
+const { onBeforeEnter, onEnter, onAfterEnter, onBeforeLeave, onLeave, onAfterLeave } =
+    useSlideTransition()
 
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)
@@ -148,6 +197,13 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
 const lastRun: Ref<Date> = ref(new Date())
 const runCount: Ref<number> = ref(0)
 const canvasElement: Ref<HTMLElement | undefined> = ref(undefined)
+
+// Error dialog state
+const showErrorDialog: Ref<boolean> = ref(false)
+const errorDialogTitle: Ref<string> = ref('')
+const errorDialogMessage: Ref<string> = ref('')
+const errorOutput: Ref<string> = ref('')
+
 const canvas = computed<HTMLElement | undefined>(() => {
     if (canvasElement.value && canvasElement.value.canvas) {
         return canvasElement.value.canvas
@@ -354,30 +410,12 @@ function onFinalOutputObject(val) {
                     }
                     jStr = jStr.replace(/</g, '&lt;')
 
-                    if (q !== undefined && t != undefined) {
-                        q.dialog({
-                            title: l('CodePlayground.InvalidJson'),
-                            message:
-                                '<span class="text-caption jsonErrTitle">' +
-                                t('CodePlayground.Output') +
-                                '</span><div class="jsonErrObj">' +
-                                jStr +
-                                '</div>\n<span class="text-caption jsonErrTitle">' +
-                                t('CodePlayground.Message') +
-                                '</span><div class="jsonErr">' +
-                                val.parseError +
-                                '</div>',
-                            html: true,
-                        })
-                            .onOk(() => {
-                                // console.log('OK')
-                            })
-                            .onCancel(() => {
-                                // console.log('Cancel')
-                            })
-                            .onDismiss(() => {
-                                // console.log('I am triggered on both OK and Cancel')
-                            })
+                    if (l != undefined) {
+                        // Show error dialog instead of alert
+                        errorDialogTitle.value = l('CodePlayground.InvalidJson')
+                        errorOutput.value = jStr
+                        errorDialogMessage.value = val.parseError.toString()
+                        showErrorDialog.value = true
                     }
                 }
                 if (updateErrors()) {
@@ -480,7 +518,6 @@ onBeforeUnmount(() => {
     visibility: hidden
 </style>
 <style lang="stylus">
-//@import '../styles/quasar.variables.styl'
 .jsonErrObj, .jsonErr
     margin-left: 16px
     font-weight: bold
@@ -490,11 +527,11 @@ onBeforeUnmount(() => {
     padding-right: 4px
     font-family: monospace
     margin-bottom: 20px
-    background-color: $amber-2
+    background-color: #fff3c4
 
 .jsonErr
     font-weight: bold
-    color: $deep-orange-14
+    color: #bf360c
 
 .jsonErrTitle
     padding-left: 8px

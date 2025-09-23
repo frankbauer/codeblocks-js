@@ -1,4 +1,3 @@
-import { nextTick } from 'vue'
 
 export function useSlideTransition() {
     const onBeforeEnter = (el: Element) => {

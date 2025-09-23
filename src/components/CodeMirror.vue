@@ -57,7 +57,6 @@ import {
     ViewUpdate,
 } from '@codemirror/view'
 import { EditorView, minimalSetup } from 'codemirror'
-import { QIcon, QTooltip, Quasar } from 'quasar'
 import {
     computed,
     ComputedRef,
@@ -583,8 +582,7 @@ class ErrorMarker extends GutterMarker {
                 },
             ],
             severity: this.severity,
-        })
-        app.use(Quasar, { components: { QIcon, QTooltip } })
+        })        
         app.mount(marker)
         return marker
     }
