@@ -15,7 +15,7 @@
         />
         <div class="row justify-end">
             <div
-                class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse tw-mb-3"
+                class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse tw-mb-1"
                 v-if="editMode"
             >
                 <Button

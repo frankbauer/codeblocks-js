@@ -1,30 +1,26 @@
 <template>
     <div v-if="editMode">
-        <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-            <q-banner inline-actions class="text-white bg-red q-mb-md" v-if="hasError">
-                {{ error }}
-                <template v-slot:action>
-                    <q-btn flat color="white" label="OK" @click="error = ''" />
-                </template>
-            </q-banner>
+        <transition name="fade">
+            <Alert variant="destructive" class="tw-mb-4" v-if="hasError">
+                <AlertDescription>{{ error }}</AlertDescription>
+                <Button variant="outline" size="sm" @click="error = ''" class="tw-ml-2">OK</Button>
+            </Alert>
         </transition>
-        <div class="row justify-between controlContainer" v-if="editMode">
-            <div class="multiDiv">
-                <div class="inlined-input q-mr-sm">
-                    <q-btn
-                        flat
-                        round
-                        color="primary"
-                        icon="info"
-                        size="xs"
-                        @click="showInfoDialog"
-                    ></q-btn>
+        <div
+            class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-end tw-content-end tw-mb-1"
+            v-if="editMode"
+        >
+            <div class="tw-flex tw-items-end">
+                <div class="inlined-input tw-mr-2">
+                    <Button variant="ghost" size="sm" @click="showInfoDialog">
+                        <Info class="tw-w-4 tw-h-4" />
+                    </Button>
                 </div>
-                <div class="q-mr-lg inlined-input noMoreBottomMargin">
-                    <q-input label="Name" v-model="name" rounded filled class="noMoreBottomMargin">
-                    </q-input>
+                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">
+                    <label for="name-input" class="tw-text-sm tw-font-medium tw-mr-2">Name</label>
+                    <Input id="name-input" v-model="name" size="xs" class="tw-mb-0" />
                 </div>
-                <div class="inlined-input q-mr-sm">
+                <div class="inlined-input tw-mr-2">
                     <input
                         class="jsonFileUploader"
                         type="file"
@@ -32,18 +28,12 @@
                         @change="onUploadJson($event)"
                     />
 
-                    <q-btn
-                        color="teal-9"
-                        filled
-                        size="sm"
-                        label="Load JSON"
-                        class="q-mb-sm"
-                        icon="cloud_upload"
-                        @click="openJson"
-                    >
-                    </q-btn>
+                    <Button variant="default" size="xs" @click="openJson">
+                        <CloudUpload class="tw-w-4 tw-h-4 tw-mr-1" />
+                        Load JSON
+                    </Button>
                 </div>
-                <div class="inlined-input q-mr-sm">
+                <div class="inlined-input tw-mr-2">
                     <input
                         class="plainFileUploader"
                         type="file"
@@ -51,16 +41,10 @@
                         @change="onUploadPlain($event)"
                     />
 
-                    <q-btn
-                        color="teal-8"
-                        filled
-                        size="sm"
-                        class="q-mb-sm"
-                        label="Add Text Data"
-                        icon="post_add"
-                        @click="openPlain"
-                    >
-                    </q-btn>
+                    <Button variant="default" size="xs" @click="openPlain">
+                        <FilePlus class="tw-w-4 tw-h-4 tw-mr-1" />
+                        Add Text Data
+                    </Button>
                 </div>
                 <div class="inlined-input">
                     <input
@@ -70,46 +54,47 @@
                         @change="onUploadImage($event)"
                     />
 
-                    <q-btn
-                        color="teal"
-                        filled
-                        size="sm"
-                        label="Add Image Data"
-                        class="q-mb-sm"
-                        icon="add_photo_alternate"
-                        @click="openImage"
-                    >
-                    </q-btn>
+                    <Button variant="default" size="xs" @click="openImage">
+                        <ImagePlus class="tw-w-4 tw-h-4 tw-mr-1" />
+                        Add Image Data
+                    </Button>
                 </div>
             </div>
-            <div class="col-grow"></div>
-            <div>
-                <q-btn-group rounded dense class="q-mb-sm" v-if="editMode">
-                    <q-btn
-                        :color="isExpandedAuto ? 'primary' : 'blue-grey-4'"
-                        size="sm"
-                        label="Auto"
-                        icon="video_label"
-                        @click="setExpandedAuto"
-                    />
-                    <q-btn
-                        :color="isExpandedLarge ? 'primary' : 'blue-grey-4'"
-                        size="sm"
-                        label="Large"
-                        icon="call_to_action"
-                        @click="setExpandedLarge"
-                    />
-                    <q-btn
-                        :color="isExpandedTiny ? 'primary' : 'blue-grey-4'"
-                        size="sm"
-                        label="Small"
-                        icon="visibility_off"
-                        @click="setExpandedTiny"
-                    />
-                </q-btn-group>
+
+            <div
+                class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse"
+                v-if="editMode"
+            >
+                <Button
+                    :variant="isExpandedAuto ? 'default' : 'outline'"
+                    class="tw-rounded-none tw-rounded-s-md tw-shadow-none focus-visible:tw-z-10"
+                    size="xs"
+                    @click="setExpandedAuto"
+                >
+                    <Expand class="tw-w-4 tw-h-4 tw-mr-1" />
+                    Auto
+                </Button>
+                <Button
+                    :variant="isExpandedLarge ? 'default' : 'outline'"
+                    class="tw-rounded-none tw-shadow-none focus-visible:tw-z-10"
+                    size="xs"
+                    @click="setExpandedLarge"
+                >
+                    <Maximize class="tw-w-4 tw-h-4 tw-mr-1" />
+                    Large
+                </Button>
+                <Button
+                    :variant="isExpandedTiny ? 'default' : 'outline'"
+                    class="tw-rounded-none tw-rounded-e-md tw-shadow-none focus-visible:tw-z-10"
+                    size="xs"
+                    @click="setExpandedTiny"
+                >
+                    <Shrink class="tw-w-4 tw-h-4 tw-mr-1" />
+                    Small
+                </Button>
             </div>
         </div>
-        <q-slide-transition>
+        <transition name="slide">
             <code-mirror
                 ref="codeBox"
                 v-model="code"
@@ -123,7 +108,20 @@
                 @ready="onCodeReady"
                 @focus="onCodeFocus"
             />
-        </q-slide-transition>
+        </transition>
+        <Dialog :open="dialogOpen" @update:open="(val) => (dialogOpen = val)">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{{ l('DataBlock.InfoCaption') }}</DialogTitle>
+                    <DialogDescription
+                        v-html="l('DataBlock.Info', { NAME: name })"
+                    ></DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button @click="dialogOpen = false">OK</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </div>
 </template>
 
@@ -151,9 +149,24 @@ import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
-import { useQuasar } from 'quasar'
 import { IScriptOutputObject } from '@/lib/IScriptBlock'
 import { useCodeEditor } from '@/composables/useCodeEditor'
+
+// Shadcn components
+import { Button } from '@/shadcn/ui/button'
+import { Input } from '@/shadcn/ui/input'
+import { Alert, AlertDescription } from '@/shadcn/ui/alert'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/shadcn/ui/dialog'
+
+// Lucide icons
+import { Info, CloudUpload, FilePlus, ImagePlus, Maximize, Expand, Shrink } from 'lucide-vue-next'
 
 interface Props extends EditableBlockProps {
     namePrefix?: string
@@ -171,7 +184,6 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits(['ready'])
 
 const instance = getCurrentInstance()
-const q = useQuasar()
 const t = instance?.proxy?.$root?.$t
 
 // Block storage and mounting
@@ -193,6 +205,7 @@ const imageFileUploader: Ref<HTMLElement | null> = ref(null)
 const plainFileUploader: Ref<HTMLElement | null> = ref(null)
 const jsonFileUploader: Ref<HTMLElement | null> = ref(null)
 const codeBox = ref<InstanceType<typeof CodeMirror> | null>(null)
+const dialogOpen = ref(false)
 
 const codemirror = computed((): any | undefined => {
     if (codeBox.value === undefined || codeBox.value === null) {
@@ -312,7 +325,7 @@ const onCodeReady = (editor) => {
     }
     (codeBox.value as any)!.$el.querySelectorAll('textarea[name]').forEach((el) => {
         el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
-        el.id = codeBox.value!.id
+        el.id = (codeBox.value as any)!.$el.id
         $(el).text(block.value.content)
         el.setAttribute('data-question', `${block.value.parentID}`)
         if (editMode.value) {
@@ -335,15 +348,7 @@ const updateHeight = () => {
     codeBox.value.view.dom.style.height = height
 }
 const showInfoDialog = (): void => {
-    q?.dialog({
-        title: l('DataBlock.InfoCaption'),
-        message: l('DataBlock.Info', { NAME: name.value }),
-        html: true,
-        style: 'width:75%',
-    })
-        .onOk(() => {})
-        .onCancel(() => {})
-        .onDismiss(() => {})
+    dialogOpen.value = true
 }
 const onUpload = (
     uploader: any,
@@ -511,6 +516,20 @@ onBeforeUnmount(() => {
 .hiddenBlock
     opacity: 0
     visibility: hidden
+
+// Transitions
+.fade-enter-active, .fade-leave-active
+    transition: opacity 0.5s
+
+.fade-enter-from, .fade-leave-to
+    opacity: 0
+
+.slide-enter-active, .slide-leave-active
+    transition: all 0.3s
+
+.slide-enter-from, .slide-leave-to
+    transform: translateX(-10px)
+    opacity: 0
 </style>
 <style lang="stylus">
 .jsonErrObj, .jsonErr
