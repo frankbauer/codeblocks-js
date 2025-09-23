@@ -1,25 +1,21 @@
 <script setup lang="ts">
-import type { TooltipContentEmits, TooltipContentProps } from 'radix-vue'
-import type { HTMLAttributes } from 'vue'
-import { cn } from '@/lib/utils'
-import { TooltipContent, TooltipPortal, useForwardPropsEmits } from 'radix-vue'
-import { computed } from 'vue'
+import type { TooltipContentEmits, TooltipContentProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
+import { TooltipContent, TooltipPortal, useForwardPropsEmits } from "reka-ui"
+import { cn } from "@/lib/utils"
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const props = withDefaults(defineProps<TooltipContentProps & { class?: HTMLAttributes['class'] }>(), {
+const props = withDefaults(defineProps<TooltipContentProps & { class?: HTMLAttributes["class"] }>(), {
   sideOffset: 4,
 })
 
 const emits = defineEmits<TooltipContentEmits>()
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
+const delegatedProps = reactiveOmit(props, "class")
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>

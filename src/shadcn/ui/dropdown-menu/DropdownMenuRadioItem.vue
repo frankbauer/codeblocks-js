@@ -1,25 +1,21 @@
 <script setup lang="ts">
-import type { DropdownMenuRadioItemEmits, DropdownMenuRadioItemProps } from 'radix-vue'
-import type { HTMLAttributes } from 'vue'
-import { cn } from '@/lib/utils'
-import { DotFilledIcon } from '@radix-icons/vue'
+import type { DropdownMenuRadioItemEmits, DropdownMenuRadioItemProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
+import { Circle } from "lucide-vue-next"
 import {
   DropdownMenuItemIndicator,
   DropdownMenuRadioItem,
 
   useForwardPropsEmits,
-} from 'radix-vue'
-import { computed } from 'vue'
+} from "reka-ui"
+import { cn } from "@/lib/utils"
 
-const props = defineProps<DropdownMenuRadioItemProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<DropdownMenuRadioItemProps & { class?: HTMLAttributes["class"] }>()
 
 const emits = defineEmits<DropdownMenuRadioItemEmits>()
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
+const delegatedProps = reactiveOmit(props, "class")
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 </script>
@@ -34,7 +30,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
   >
     <span class="tw-absolute tw-left-2 tw-flex tw-h-3.5 tw-w-3.5 tw-items-center tw-justify-center">
       <DropdownMenuItemIndicator>
-        <DotFilledIcon class="tw-h-4 tw-w-4 tw-fill-current" />
+        <Circle class="tw-h-4 tw-w-4 tw-fill-current" />
       </DropdownMenuItemIndicator>
     </span>
     <slot />

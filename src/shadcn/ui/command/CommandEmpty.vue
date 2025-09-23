@@ -1,21 +1,23 @@
 <script setup lang="ts">
-import type { ComboboxEmptyProps } from 'radix-vue'
-import type { HTMLAttributes } from 'vue'
-import { cn } from '@/lib/utils'
-import { ComboboxEmpty } from 'radix-vue'
-import { computed } from 'vue'
+import type { PrimitiveProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
+import { Primitive } from "reka-ui"
+import { computed } from "vue"
+import { cn } from "@/lib/utils"
+import { useCommand } from "."
 
-const props = defineProps<ComboboxEmptyProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<PrimitiveProps & { class?: HTMLAttributes["class"] }>()
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
+const delegatedProps = reactiveOmit(props, "class")
 
-  return delegated
-})
+const { filterState } = useCommand()
+const isRender = computed(() => !!filterState.search && filterState.filtered.count === 0,
+)
 </script>
 
 <template>
-  <ComboboxEmpty v-bind="delegatedProps" :class="cn('tw-py-6 tw-text-center tw-text-sm', props.class)">
+  <Primitive v-if="isRender" v-bind="delegatedProps" :class="cn('tw-py-6 tw-text-center tw-text-sm', props.class)">
     <slot />
-  </ComboboxEmpty>
+  </Primitive>
 </template>

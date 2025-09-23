@@ -1,15 +1,9 @@
 <template>
     <div v-show="editMode" class="blocksEditorPanelContainer" :style="`width:${width}px`">
         <div class="blocksEditorPanelLeft" v-show="block !== null">
-            <q-btn
-                :icon="expanded ? 'chevron_right' : 'chevron_left'"
-                size="sm"
-                unelevated
-                align="center"
-                class="expander"
-                color="blue-grey-4"
-                @click="onExpandClick"
-            ></q-btn>
+            <Button class="expander" variant="ghost" size="icon" @click="onExpandClick">
+                <component :is="expanded ? ChevronDown : ChevronUp" />
+            </Button>
             <CodeBlock
                 :block="saveBlock"
                 :theme="themeForBlock(block)"
@@ -28,6 +22,8 @@
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue'
 import CodeBlock from '@/components/CodeBlock.vue'
+import { Button } from '@/shadcn/ui/button'
+import { ChevronUp, ChevronDown } from 'lucide-vue-next'
 import { BlockData } from '../lib/codeBlocksManager'
 import {
     IBlockData,
@@ -162,6 +158,9 @@ export default defineComponent({
             onCodeChange,
             onExpandClick,
             themeForBlock,
+            Button,
+            ChevronUp,
+            ChevronDown,
         }
     },
 })

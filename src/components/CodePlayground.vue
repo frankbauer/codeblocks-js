@@ -14,34 +14,47 @@
             @did-init="onDidInit"
         />
         <div class="row justify-end">
-            <q-btn-group rounded class="q-mb-sm" v-if="editMode">
-                <q-btn
-                    :color="isExpandedAuto ? 'primary' : 'blue-grey-4'"
-                    small
-                    size="sm"
-                    label="Auto"
-                    icon="video_label"
+            <div
+                class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse tw-mb-3"
+                v-if="editMode"
+            >
+                <Button
+                    :variant="isExpandedAuto ? 'default' : 'outline'"
+                    class="tw-rounded-none tw-rounded-s-md tw-shadow-none focus-visible:tw-z-10"
+                    size="xs"
                     @click="setExpandedAuto"
-                />
-                <q-btn
-                    :color="isExpandedLarge ? 'primary' : 'blue-grey-4'"
-                    small
-                    size="sm"
-                    label="Large"
-                    icon="call_to_action"
+                >
+                    <Expand class="tw-w-4 tw-h-4 tw-mr-1" />
+                    Auto
+                </Button>
+                <Button
+                    :variant="isExpandedLarge ? 'default' : 'outline'"
+                    class="tw-rounded-none tw-shadow-none focus-visible:tw-z-10"
+                    size="xs"
                     @click="setExpandedLarge"
-                />
-                <q-btn
-                    :color="isExpandedTiny ? 'primary' : 'blue-grey-4'"
-                    small
-                    size="sm"
-                    label="Small"
-                    icon="visibility_off"
+                >
+                    <Maximize class="tw-w-4 tw-h-4 tw-mr-1" />
+                    Large
+                </Button>
+                <Button
+                    :variant="isExpandedTiny ? 'default' : 'outline'"
+                    class="tw-rounded-none tw-rounded-e-md tw-shadow-none focus-visible:tw-z-10"
+                    size="xs"
                     @click="setExpandedTiny"
-                />
-            </q-btn-group>
+                >
+                    <Shrink class="tw-w-4 tw-h-4 tw-mr-1" />
+                    Small
+                </Button>
+            </div>
         </div>
-        <q-slide-transition>
+        <Transition
+            @before-enter="onBeforeEnter"
+            @enter="onEnter"
+            @after-enter="onAfterEnter"
+            @before-leave="onBeforeLeave"
+            @leave="onLeave"
+            @after-leave="onAfterLeave"
+        >
             <CodeBlock
                 v-if="editMode"
                 :appID="appID"
@@ -54,7 +67,7 @@
                 :muteReadyState="true"
                 @code-changed-in-edit-mode="onCodeChange"
             />
-        </q-slide-transition>
+        </Transition>
     </div>
 </template>
 
@@ -79,12 +92,16 @@ import {
     nextTick,
     Ref,
     ref,
+    Transition,
 } from 'vue'
 import { globalState } from '@/lib/globalState'
 import { EventHubType } from '@/composables/globalEvents'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 import { useQuasar } from 'quasar'
+import { Button } from '@/shadcn/ui/button'
+import { ChevronUp, ChevronDown, Maximize, Expand, Shrink } from 'lucide-vue-next'
+import { useSlideTransition } from '@/composables/useSlideTransition'
 
 export interface ICodePlaygroundOptions {
     mode: string
@@ -116,6 +133,8 @@ const instance = getCurrentInstance()
 const globalCodeBlock = globalState.appState
 const q = useQuasar()
 const t = instance?.proxy?.$root?.$t
+
+const { onBeforeEnter, onEnter, onAfterEnter, onBeforeLeave, onLeave, onAfterLeave } = useSlideTransition()
 
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)
@@ -419,7 +438,7 @@ function onCanvasChange(can) {
     console.log('DATA: Changed Canvas', can, canvas.value)
 }
 
-function onCodeChange(newCode: string): void {
+function onCodeChange(): void {
     if (props.editMode) {
         needsCodeRebuild = true
     }

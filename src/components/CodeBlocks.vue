@@ -25,7 +25,9 @@ import { computed, ref, toRefs } from 'vue'
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 import { CodeSplit } from '@/composables/useCodeEditor'
 import CButton from '@/components/ui/CButton.vue'
-import { Play, Square } from 'lucide-vue-next'
+import { CopyPlus, Play, Square } from 'lucide-vue-next'
+import { Button } from '@/shadcn/ui/button'
+import { useSlideTransition } from '@/composables/useSlideTransition'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
@@ -415,10 +417,9 @@ const addNewBlock = (): void => {
 
         <div class="row justify-end" v-if="editMode">
             <div>
-                <q-btn @click="addNewBlock" push color="green"
-                    >{{ $t('CodeBlocks.AddBlock') }}
-                    <q-icon name="library_add" class="q-ml-sm" />
-                </q-btn>
+                <Button @click="addNewBlock">{{ $t('CodeBlocks.AddBlock') }}
+                    <CopyPlus class="ml-2 h-4 w-4" />
+                </Button>
             </div>
         </div>
 
@@ -477,14 +478,21 @@ const addNewBlock = (): void => {
                     </div>
                 </transition>
             </div>
-            <q-slide-transition>
+            <Transition
+                @before-enter="onBeforeEnter"
+                @enter="onEnter"
+                @after-enter="onAfterEnter"
+                @before-leave="onBeforeLeave"
+                @leave="onLeave"
+                @after-leave="onAfterLeave"
+            >
                 <pre
                     :id="`${blockInfo.id}Output`"
                     ref="outputElement"
                     class="output"
                     v-if="hasOutput"
                 ><div id='out' v-html='outputHTML'></div></pre>
-            </q-slide-transition>
+            </Transition>
         </div>
     </div>
 </template>

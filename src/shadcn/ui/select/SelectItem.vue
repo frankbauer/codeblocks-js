@@ -1,24 +1,20 @@
 <script setup lang="ts">
-import type { SelectItemProps } from 'radix-vue'
-import type { HTMLAttributes } from 'vue'
-import { cn } from '@/lib/utils'
-import { CheckIcon } from '@radix-icons/vue'
+import type { SelectItemProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
+import { Check } from "lucide-vue-next"
 import {
   SelectItem,
   SelectItemIndicator,
 
   SelectItemText,
   useForwardProps,
-} from 'radix-vue'
-import { computed } from 'vue'
+} from "reka-ui"
+import { cn } from "@/lib/utils"
 
-const props = defineProps<SelectItemProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<SelectItemProps & { class?: HTMLAttributes["class"] }>()
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
-
-  return delegated
-})
+const delegatedProps = reactiveOmit(props, "class")
 
 const forwardedProps = useForwardProps(delegatedProps)
 </script>
@@ -35,7 +31,7 @@ const forwardedProps = useForwardProps(delegatedProps)
   >
     <span class="tw-absolute tw-right-2 tw-flex tw-h-3.5 tw-w-3.5 tw-items-center tw-justify-center">
       <SelectItemIndicator>
-        <CheckIcon class="tw-h-4 tw-w-4" />
+        <Check class="tw-h-4 tw-w-4" />
       </SelectItemIndicator>
     </span>
 

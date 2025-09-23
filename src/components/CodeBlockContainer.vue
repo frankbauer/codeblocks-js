@@ -9,27 +9,35 @@
             v-if="editMode"
             :class="`tw-mx-0 tw-my-1 tw-p-0 editModeBlockContainer ${colorClass} ${bgClass}`"
         >
-            <CardContent class="tw-mb-0 tw-pb-2 tw-pt-2 ">
-                <div class="tw-flex tw-flex-col sm:tw-flex-row tw-gap-1 ">
-                    <div class="tw-w-full sm:tw-w-1/3 tw-flex tw-items-center tw-gap-2" v-if="block.expanded">   
+            <CardContent class="tw-mb-0 tw-pb-2 tw-pt-2">
+                <div class="tw-flex tw-flex-col sm:tw-flex-row tw-gap-1">
+                    <div
+                        class="tw-w-full sm:tw-w-1/3 tw-flex tw-items-center tw-gap-2"
+                        v-if="block.expanded"
+                    >
                         <div class="tw-hidden sm:tw-block">
                             <HoverCard>
                                 <HoverCardTrigger>
-                                    <Info class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground" />
+                                    <Info
+                                        class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
+                                    />
                                 </HoverCardTrigger>
-                                <HoverCardContent class="tw-w-80 tw-max-h-[30vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar">
-                                    
-                                        <div v-html="l('CodeBlockContainer.Types')" class="hover-content "></div>
-                                    
+                                <HoverCardContent
+                                    class="tw-w-80 tw-max-h-[30vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar"
+                                >
+                                    <div
+                                        v-html="l('CodeBlockContainer.Types')"
+                                        class="hover-content"
+                                    ></div>
                                 </HoverCardContent>
-                            </HoverCard>                    
+                            </HoverCard>
                         </div>
                         <CSelect
                             :model-value="typeObj"
                             :options="types"
                             @update:model-value="typeObj = $event"
                             class="tw-w-full"
-                        />                        
+                        />
                     </div>
                     <div class="tw-w-full sm:tw-w-auto tw-flex-grow">
                         <Input
@@ -38,15 +46,25 @@
                             placeholder="Optional Label"
                             v-if="block.expanded"
                         />
-                        <div v-else class="tw-flex tw-px-2 tw-items-center tw-h-full"><div><b>{{typeObj.label}}:</b> {{ block.label }}</div></div>
-                    </div>                    
+                        <div v-else class="tw-flex tw-px-2 tw-items-center tw-h-full">
+                            <div>
+                                <b>{{ typeObj.label }}:</b> {{ block.label }}
+                            </div>
+                        </div>
+                    </div>
                     <div class="rightContentContainerHeader tw-w-full sm:tw-w-auto">
                         <DropdownMenu v-if="hasExtendedSettings">
                             <DropdownMenuTrigger asChild>
-                                <CButton variant="outline" size="xs" :icon="Settings" :no-text="true" class="tw-h-8">
+                                <CButton
+                                    variant="outline"
+                                    size="xs"
+                                    :icon="Settings"
+                                    :no-text="true"
+                                    class="tw-h-8"
+                                >
                                 </CButton>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent 
+                            <DropdownMenuContent
                                 class="tw-w-[300px] sm:tw-w-[300px] md:tw-w-[45vw] tw-max-h-[40vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar"
                                 align="end"
                                 :sideOffset="5"
@@ -61,7 +79,10 @@
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Lines') }}
                                             </div>
-                                            <div class="tw-text-sm tw-text-muted-foreground" v-html="l('CodeBlockContainer.Lines_detail')"></div>
+                                            <div
+                                                class="tw-text-sm tw-text-muted-foreground"
+                                                v-html="l('CodeBlockContainer.Lines_detail')"
+                                            ></div>
                                         </div>
                                         <div>
                                             <Input
@@ -72,7 +93,10 @@
                                             />
                                         </div>
                                     </div>
-                                    <div v-if="canHaveAlternativeContent" class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                    <div
+                                        v-if="canHaveAlternativeContent"
+                                        class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                    >
                                         <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Prepopulate') }}
@@ -105,12 +129,14 @@
                                             <CSelect
                                                 :model-value="scriptVersionObj"
                                                 :options="scriptVersions"
-                                                @update:model-value="scriptVersionObj = $event"                                           
+                                                @update:model-value="scriptVersionObj = $event"
                                             />
                                         </div>
                                     </div>
 
-                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                    <div
+                                        class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                    >
                                         <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.AutoReset') }}
@@ -124,7 +150,10 @@
                                         </div>
                                     </div>
 
-                                    <div v-if="canLoadResources" class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                    <div
+                                        v-if="canLoadResources"
+                                        class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                    >
                                         <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.ReloadResources') }}
@@ -138,13 +167,17 @@
                                         </div>
                                     </div>
 
-                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                    <div
+                                        class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                    >
                                         <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.GenerateTemplate') }}
                                             </div>
                                             <div class="tw-text-sm tw-text-muted-foreground">
-                                                {{ l('CodeBlockContainer.GenerateTemplate_detail') }}
+                                                {{
+                                                    l('CodeBlockContainer.GenerateTemplate_detail')
+                                                }}
                                             </div>
                                         </div>
                                         <div class="tw-w-1/3">
@@ -154,7 +187,10 @@
                                 </div>
 
                                 <!-- Positioning -->
-                                <div v-if="canDefinePlacement && shouldGenerateTemplate" class="tw-p-4">
+                                <div
+                                    v-if="canDefinePlacement && shouldGenerateTemplate"
+                                    class="tw-p-4"
+                                >
                                     <div class="tw-text-lg tw-font-medium tw-mb-4">
                                         {{ l('CodeBlockContainer.Positioning') }}
                                     </div>
@@ -171,7 +207,9 @@
                                             <Input v-model="width" maxlength="7" class="tw-w-1/3" />
                                         </div>
                                     </div>
-                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                    <div
+                                        class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                    >
                                         <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Height') }}
@@ -181,10 +219,16 @@
                                             </div>
                                         </div>
                                         <div class="tw-w-1/3">
-                                            <Input v-model="height" maxlength="7" class="tw-w-1/3" />
-                                        </div>  
+                                            <Input
+                                                v-model="height"
+                                                maxlength="7"
+                                                class="tw-w-1/3"
+                                            />
+                                        </div>
                                     </div>
-                                    <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
+                                    <div
+                                        class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                    >
                                         <div class="tw-w-2/3">
                                             <div class="tw-font-medium">
                                                 {{ l('CodeBlockContainer.Alignment') }}
@@ -262,7 +306,10 @@
                 ></textarea>
             </CardContent>
 
-            <CardContent class="tw-px-6" v-if="isExperimentalScriptVersion || isDeprecatedScriptVersion">
+            <CardContent
+                class="tw-px-6"
+                v-if="isExperimentalScriptVersion || isDeprecatedScriptVersion"
+            >
                 <Transition
                     enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
                     enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
@@ -270,16 +317,25 @@
                     leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
                     leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
                     leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+                >
+                    <Alert
+                        v-if="isExperimentalScriptVersion"
+                        variant="destructive"
+                        class="tw-bg-orange-50 tw-border-orange-200 tw-py-2 tw-mb-4"
                     >
-                    <Alert v-if="isExperimentalScriptVersion" variant="destructive" class="tw-bg-orange-50 tw-border-orange-200  tw-py-2 tw-mb-4">
                         <div class="tw-flex tw-gap-2 tw-items-center">
-                        <Flame class="tw-h-12 tw-w-12 tw-text-orange-500" />
-                        <div class="tw-flex-1">
-                            <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600">{{ $t('CodePlayground.ExperimentalScriptVersion') }}</AlertTitle>
-                            <AlertDescription class="tw-text-xs tw-mt-1 tw-text-orange-500">
-                            {{ $t('CodePlayground.ExperimentalScriptVersionDesc') }}
-                            </AlertDescription>
-                        </div>
+                            <Flame class="tw-h-12 tw-w-12 tw-text-orange-500" />
+                            <div class="tw-flex-1">
+                                <AlertTitle
+                                    class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600"
+                                    >{{
+                                        $t('CodePlayground.ExperimentalScriptVersion')
+                                    }}</AlertTitle
+                                >
+                                <AlertDescription class="tw-text-xs tw-mt-1 tw-text-orange-500">
+                                    {{ $t('CodePlayground.ExperimentalScriptVersionDesc') }}
+                                </AlertDescription>
+                            </div>
                         </div>
                     </Alert>
                 </Transition>
@@ -291,16 +347,23 @@
                     leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
                     leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
                     leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
+                >
+                    <Alert
+                        v-if="isDeprecatedScriptVersion"
+                        variant="destructive"
+                        class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-mb-4"
                     >
-                    <Alert v-if="isDeprecatedScriptVersion" variant="destructive" class="tw-bg-yellow-50 tw-border-yellow-300  tw-py-2 tw-mb-4 ">
                         <div class="tw-flex tw-gap-2 tw-items-center">
-                        <AlertTriangle class="tw-h-12 tw-w-12 tw-text-yellow-500" />
-                        <div class="tw-flex-1">
-                            <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600">{{ $t('CodePlayground.DeprecatedScriptVersion') }}</AlertTitle>
-                            <AlertDescription class="tw-text-xs tw-mt-1 tw-text-yellow-500">
-                            {{ $t('CodePlayground.DeprecatedScriptVersionDesc') }}
-                            </AlertDescription>
-                        </div>
+                            <AlertTriangle class="tw-h-12 tw-w-12 tw-text-yellow-500" />
+                            <div class="tw-flex-1">
+                                <AlertTitle
+                                    class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600"
+                                    >{{ $t('CodePlayground.DeprecatedScriptVersion') }}</AlertTitle
+                                >
+                                <AlertDescription class="tw-text-xs tw-mt-1 tw-text-yellow-500">
+                                    {{ $t('CodePlayground.DeprecatedScriptVersionDesc') }}
+                                </AlertDescription>
+                            </div>
                         </div>
                     </Alert>
                 </Transition>
@@ -313,31 +376,32 @@
         <div v-else class="tw-m-0 tw-p-0">
             <slot></slot>
         </div>
-    </div>
 
-    <Dialog :open="deleteDialogOpen" @update:open="deleteDialogOpen = $event">
-        <DialogContent>
-            <DialogHeader>
-                <DialogTitle>{{ l('CodeBlockContainer.Confirm') }}</DialogTitle>
-                <DialogDescription v-html="l('CodeBlockContainer.DeleteQuestion')"></DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-                <Button variant="outline" @click="deleteDialogOpen = false">Cancel</Button>
-                <Button variant="destructive" @click="confirmDelete">Delete</Button>
-            </DialogFooter>
-        </DialogContent>
-    </Dialog>
+        <Dialog :open="deleteDialogOpen" @update:open="deleteDialogOpen = $event">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{{ l('CodeBlockContainer.Confirm') }}</DialogTitle>
+                    <DialogDescription
+                        v-html="l('CodeBlockContainer.DeleteQuestion')"
+                    ></DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button variant="outline" @click="deleteDialogOpen = false">Cancel</Button>
+                    <Button variant="destructive" @click="confirmDelete">Delete</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    </div>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, toRefs, ref, computed, PropType, getCurrentInstance, nextTick } from 'vue'
+import { BasicBlockProps, DEFAULT_BASIC_BLOCK_PROPS } from '@/composables/basicBlock'
+import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { IListItemData } from '@/lib/ICompilerRegistry'
-import { IRandomizerSet, KnownBlockTypes } from '@/lib/ICodeBlocks'
-import { BlockData } from '@/lib/codeBlocksManager'
 import { globalState } from '@/lib/globalState'
 import { l } from '@/plugins/i18n'
-import { BasicBlockProps, DEFAULT_BASIC_BLOCK_PROPS } from '@/composables/basicBlock'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
+import { computed, getCurrentInstance, nextTick, ref, toRefs } from 'vue'
 
 // Import shadcn components
 import { Button } from '@/shadcn/ui/button'
@@ -346,30 +410,40 @@ import { Input } from '@/shadcn/ui/input'
 import { Switch } from '@/shadcn/ui/switch'
 
 // Import icons
-import { AlertTriangle, ChevronDown, ChevronUp, Settings, Info, Flame, HourglassIcon, Trash2 } from 'lucide-vue-next'
+import {
+    AlertTriangle,
+    ChevronDown,
+    ChevronUp,
+    Flame,
+    Info,
+    Settings,
+    Trash2,
+} from 'lucide-vue-next'
 
 // Import new components
-import CSelect  from './ui/CSelect.vue'
-import CInput  from './ui/CInput.vue'
-import  CButton  from './ui/CButton.vue'
 import { Alert, AlertDescription, AlertTitle } from '../shadcn/ui/alert'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../shadcn/ui/dialog'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../shadcn/ui/dropdown-menu'
 import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-} from '../shadcn/ui/hover-card'
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '../shadcn/ui/dialog'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../shadcn/ui/dropdown-menu'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn/ui/hover-card'
+import CButton from './ui/CButton.vue'
+import CSelect from './ui/CSelect.vue'
 
 // Define interfaces locally
 interface IOnChangeOrder {
-    id: number;
-    newID: number;
+    id: number
+    newID: number
 }
 
 interface IOnReloadResourcesInfo {
-    shouldReloadResources: boolean;
-    id: number;
+    shouldReloadResources: boolean
+    id: number
 }
 
 interface Props extends BasicBlockProps {
@@ -809,7 +883,7 @@ const filteredCopy = (objIn: object, extended: boolean = true, path: string = 't
 .inlined-input
     display: inline-block
 
-.editModeBlockContainer    
+.editModeBlockContainer
     border-left-width: 4px !important
     border-left-style: solid !important
 
