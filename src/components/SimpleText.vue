@@ -4,7 +4,7 @@
         <TipTap
             v-else
             :value="value"
-            class="editor q-my-3"
+            class="editor tw-my-3"
             :name="name"
             :language="language"
             :scopUUID="scopeUUID"

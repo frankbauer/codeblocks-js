@@ -1,20 +1,22 @@
 <template>
-    <div class="row tw-m-0 tw-p-0">
-        <div class="col-xs-12 col-md-6 tw-px-sm">        
+    <div class="tw-flex">
+        <div class="tw-w-full tw-md:tw-w-1/2 tw-px-2">
             <CodeBlock
                 :appID="appID"
                 :blockID="blockID"
                 :block="block"
                 :theme="DEFAULT_EDITOR_THEME"
-                mode="text/html"
-                visibleLines="auto"
+                :mode="'text/html'"
+                :visibleLines="'auto'"
                 :editMode="editMode"
                 :muteReadyState="true"
                 class="plain accqstXmlInput noRTEditor tw-mt-5"
             />
         </div>
-        <div class="col-xs-12 col-md-6 q-px-sm">
-            <div class="q-field__label no-pointer-events ellipsis text-caption wysiwyg">
+        <div class="tw-w-full tw-md:tw-w-1/2 tw-px-2">
+            <div
+                class="tw-text-sm tw-font-medium tw-pointer-events-none tw-truncate tw-z-50 tw-text-muted-foreground"
+            >
                 Preview
             </div>
             <div v-html="preview" v-highlight="language" v-tagged="scopeUUID"></div>
@@ -74,12 +76,3 @@ onBeforeUnmount(() => {
     tagger.offReplaceTemplateTag(replaceTemplateTags)
 })
 </script>
-
-<style lang="stylus" scoped>
-.plain
-    z-index: 2
-    border-radius: 0px !important
-
-.wysiwyg
-    z-index: 50
-</style>
