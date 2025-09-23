@@ -1,26 +1,45 @@
 <template>
-    <q-icon :class="`mdi ${severityClass} mainTipIcon`" :name="severityIcon">
-        <q-tooltip>
-            <div>
-                <ul class="tiplist">
-                    <li v-for="error in errors" v-bind:key="error.message">
-                        <div class="row">
-                            <div class="col-1">
-                                <q-icon class="" :name="iconForSeverity(error.severity)"></q-icon>
+    <TooltipProvider>
+        <Tooltip>
+            <TooltipTrigger as-child>
+                <component
+                    :is="severityIcon"
+                    :class="`tw-mt-[3px] tw-mr-1 tw-w-3 tw-h-3 ${severityClass}`"
+                />
+            </TooltipTrigger>
+            <TooltipContent>
+                <div>
+                    <ul class="tw-text-sm tw-list-none tw-pl-0 tw-max-w-120 tw-min-w-75">
+                        <li
+                            v-for="error in errors"
+                            :key="error.message"
+                            class="tw-pt-2.5 first:tw-pt-0 tw-pb-0 tw-pl-0 tw-pr-0 tw-m-0"
+                        >
+                            <div class="tw-flex">
+                                <div class="">
+                                    <component
+                                        :is="iconForSeverity(error.severity)"
+                                        class="tw-text-white tw-align-top tw-w-4 tw-h-4 tw-mr-2 tw-mt-0.5"
+                                    />
+                                </div>
+                                <div class="tw-flex-1 tw-pr-4">
+                                    <div
+                                        class="tw-align-top tw-font-mono"
+                                        v-html="errorMessage"
+                                    ></div>
+                                </div>
                             </div>
-                            <div class="col-11 q-pr-md">
-                                <div class="q-my-none tipper">{{ error.message }}</div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </q-tooltip>
-    </q-icon>
+                        </li>
+                    </ul>
+                </div>
+            </TooltipContent>
+        </Tooltip>
+    </TooltipProvider>
 </template>
 
 <script lang="ts" setup>
-import { QIcon, QTooltip } from 'quasar'
+import { AlertCircle, AlertTriangle, OctagonX, TriangleAlert } from 'lucide-vue-next'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shadcn/ui/tooltip'
 import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { computed, ComputedRef, toRefs } from 'vue'
 
@@ -34,51 +53,30 @@ const { errors, severity } = toRefs(props)
 
 function classForSeverity(s: ErrorSeverity): string {
     if (s == ErrorSeverity.Error) {
-        return 'gutter-error'
+        return 'tw-text-red-500'
     }
-    return 'gutter-warning'
+    return 'tw-text-yellow-500'
 }
 
-function iconForSeverity(s: ErrorSeverity): string {
+function iconForSeverity(s: ErrorSeverity) {
     if (s == ErrorSeverity.Error) {
-        return 'report'
+        return OctagonX
     }
-    return 'warning'
+    return TriangleAlert
 }
 
 const severityClass: ComputedRef<string> = computed(() => {
     return classForSeverity(severity.value)
 })
 
-const severityIcon: ComputedRef<string> = computed(() => {
+const severityIcon: ComputedRef<any> = computed(() => {
     return iconForSeverity(severity.value)
 })
+
+const errorMessage: ComputedRef<string> = computed(() => {
+    if (errors.value.length == 1) {
+        return errors.value[0].message.replace(/\r?\n/g, '<br>')
+    }
+    return `${errors.value.length} issues`
+})
 </script>
-
-<style lang="sass">
-.mainTipIcon
-    margin-top: -1px
-
-.tiplist
-    font-size: 0.9rem
-    list-style-type: none
-    padding-left: 0px !important
-    max-width: 480px
-    min-width: 300px
-
-    li:first-of-type
-        padding: 0px 0px 0px 0px
-
-    li
-        padding: 10px 0px 0px 0px
-        margin: 0px 0px 0px 0px
-
-        .tipicon
-            display: inline
-            color: white !important
-            vertical-align: top
-
-        .tipper
-            vertical-align: top
-            font-family: monospace
-</style>
