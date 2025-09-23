@@ -20,7 +20,6 @@ import {
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
-import '@quasar/extras/material-icons/material-icons.css'
 import { computed, ref, toRefs } from 'vue'
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 import { CodeSplit } from '@/composables/useCodeEditor'
@@ -66,6 +65,9 @@ const {
     onRunFromPlayground,
     global,
 } = codeBlockSetup(blockStorage, editMode, props.eventHub)
+
+const { onBeforeEnter, onEnter, onAfterEnter, onBeforeLeave, onLeave, onAfterLeave } =
+    useSlideTransition()
 
 const codeSplit = computed<CodeSplit>(() => {
     const codeSplit: CodeSplit = {
@@ -302,7 +304,7 @@ const addNewBlock = (): void => {
 
 <template>
     <div
-        :class="`codeblocks ${addonClass}  ${backgroundColorClass} q-mx-sm q-mb-md`"
+        :class="`codeblocks ${addonClass}  ${backgroundColorClass} tw-mx-2 tw-mb-4`"
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"
     >
@@ -417,14 +419,15 @@ const addNewBlock = (): void => {
 
         <div class="row justify-end" v-if="editMode">
             <div>
-                <Button @click="addNewBlock">{{ $t('CodeBlocks.AddBlock') }}
+                <Button @click="addNewBlock">
+                    {{ $t('CodeBlocks.AddBlock') }}
                     <CopyPlus class="ml-2 h-4 w-4" />
                 </Button>
             </div>
         </div>
 
         <div
-            :class="`runner ${editMode ? 'q-pt-lg q-mx-lg' : ''}`"
+            :class="`runner ${editMode ? 'tw-pt-8 tw-mx-8' : ''}`"
             v-show="!hasREPL"
             v-if="canRun"
             id="runContainer"
@@ -442,7 +445,7 @@ const addNewBlock = (): void => {
                     fill="white"
                 >
                     {{ $t('CodeBlocks.run')
-                    }}<span v-if="editMode" class="q-ml-xs">[{{ $t('CodeBlocks.run_key') }}]</span>
+                    }}<span v-if="editMode" class="tw-ml-1">[{{ $t('CodeBlocks.run_key') }}]</span>
                 </CButton>
                 <div class="animated fadeIn"></div>
                 <transition
@@ -450,7 +453,7 @@ const addNewBlock = (): void => {
                     enter-active-class="animated fadeIn"
                     leave-active-class="animated fadeOut"
                 >
-                    <div class="q-pl-sm" v-show="canStop">
+                    <div class="tw-pl-2" v-show="canStop">
                         <CButton
                             id="cancel_button"
                             variant="destructive"

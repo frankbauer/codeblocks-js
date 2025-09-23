@@ -1,9 +1,9 @@
 <template>
-    <q-layout view="hHh lpR fFf" style="min-height: 0" class="codeblocks-app-page">
-        <q-page-container>
+    <div class="tw-min-h-0 codeblocks-app-page tw-flex tw-flex-col">
+        <main class="tw-flex-1 tw-p-0">
             <CodeBlocks :blockInfo="blocks" :event-hub="eventHub" :appID="appID" />
-        </q-page-container>
-    </q-layout>
+        </main>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -24,7 +24,6 @@ console.log('App setup', props, blocks.value)
 </script>
 
 <style lang="sass">
-#app
-    margin-bottom: 16px
-    background-color: rgba(1, 1, 1, 0)
+.codeblocks-app-page
+    @apply tw-mb-4 tw-bg-transparent
 </style>
