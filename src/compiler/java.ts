@@ -4,16 +4,17 @@ import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 import v001 from './doppio.v001'
 import v100 from './teavm.v100'
 import v101 from './teavm.v101'
+import v102 from './teavm.v102'
 
 export class JavaCompilerInfo implements ICompilerInfo {
     type = 'java'
     displayName = 'Java'
 
     //attach all version
-    versions = [v001, v100, v101]
+    versions = [v001, v100, v101, v102]
 
     //declare the default one
-    default = v100
+    default = v101
 }
 
 export const JavaCompilers: ICompilerInfo[] | ICompilerInfo = new JavaCompilerInfo()

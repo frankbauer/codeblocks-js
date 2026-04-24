@@ -28,7 +28,7 @@ export class JavaV101Compiler implements ICompilerInstance {
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
     readonly allowsREPL = false
-    readonly experimental = true
+    readonly experimental = false
     readonly deprecated = false
     didPreload: boolean = false
     private teaworker: Worker | undefined = undefined
