@@ -1,0 +1,72 @@
+{
+  "search.exclude": {
+    "docs/**": true,
+    "public/js/brain.js/**": true,
+    "public/js/chart.js/**": true,
+    "public/js/d3/**": true,
+    "public/js/doppio/**": true,
+    "public/js/leaflet.js/**": true,
+    "public/js/lil-gui/**": true,
+    "public/js/modelviewer.js/**": true,
+    "public/js/phaser/**": true,
+    "public/js/tensorflow.js/**": true,
+    "public/js/three.js/**": true,
+    "public/js/jquery.min.js": true
+  },
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/.git": true,
+        "**/.DS_Store": true
+    },
+    "vetur.format.options.tabSize": 4,
+    "html.format.indentHandlebars": true,
+    "html.format.indentInnerHtml": true,
+    "vetur.format.defaultFormatter.html": "prettier",
+    "prettier.tabWidth": 4,
+    "prettier.preserve_newlines": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "prettier.printWidth": 100,
+    "prettier.vueIndentScriptAndStyle": true,
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+    "[json]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+    "[javascript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+    "[vue]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.eslint": true
+        }
+    },
+    "eslint.alwaysShowStatus": true,
+    "eslint.format.enable": true,
+    "eslint.probe": [
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact",
+        "html",
+        "vue",
+        "json"
+    ],
+    "git.autofetch": true,
+    "files.eol": "\n"
+}
