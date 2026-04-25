@@ -22,7 +22,7 @@ export class JavaV102Compiler implements ICompilerInstance {
     readonly language = 'java'
     readonly canRun = true
     readonly canStop = true
-    readonly allowsContinousCompilation = false
+    readonly allowsContinousCompilation = true
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
@@ -31,6 +31,7 @@ export class JavaV102Compiler implements ICompilerInstance {
     readonly deprecated = false
     didPreload: boolean = false
     private teaworker: Worker | undefined = undefined
+    private teaworkerrun: Worker | undefined = undefined
     isReady = false
     isRunning = false
 
@@ -83,6 +84,8 @@ export class JavaV102Compiler implements ICompilerInstance {
                             mainClass: 'Bootstrap',
                         })
                     }
+                } else if (e.data.id == 'prep' && e.data.command == 'compilation-complete') {
+                    // Initialization compile is complete.
                     this.isReady = true
                     if (whenReady) {
                         whenReady()
@@ -90,10 +93,20 @@ export class JavaV102Compiler implements ICompilerInstance {
                         globalState.compilerState.setAllRunButtons(true)
                         globalState.compilerState.hideGlobalState()
                     }
-                } else if (e.data.id == 'prep' && e.data.command == 'compilation-complete') {
-                    // Initialization compile is complete.
                 }
             })
+
+            this.teaworker.end = (msg: string, terminate: boolean = true) => {
+                if (this.teaworker && terminate) {
+                    this.teaworker.terminate()
+                    this.teaworker = undefined
+                    this.isReady = false
+                }
+                this.isRunning = false
+                if (msg) {
+                    console.warn(msg)
+                }
+            }
 
             return true
         }
@@ -101,9 +114,37 @@ export class JavaV102Compiler implements ICompilerInstance {
         return false
     }
 
+    private getOrCreateRunWorker(): Worker {
+        if (this.teaworkerrun) {
+            this.teaworkerrun.end('')
+        }
+
+        let workerrun: Worker
+        try {
+            workerrun = new Worker(
+                `${globalState.appState.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
+            )
+        } catch (e) {
+            workerrun = new Worker(
+                `../assCodeQuestion/js/teavm/v${this.version}/workerrun.js?&v=001`
+            )
+        }
+
+        workerrun.end = (msg: string) => {
+            if (this.teaworkerrun) {
+                this.teaworkerrun.terminate()
+                this.teaworkerrun = undefined
+            }
+            if (msg) {
+                console.warn(msg)
+            }
+        }
+
+        this.teaworkerrun = workerrun
+        return workerrun
+    }
+
     sessionCompileListener: ((e: any) => void) | undefined = undefined
-    sessionID: string = '-1'
-    sessionWorker: any = undefined
 
     compileAndRun(
         questionID: string,
@@ -147,6 +188,7 @@ export class JavaV102Compiler implements ICompilerInstance {
             err_callback(
                 'System is not yet ready. Please wait until Initialization finishes or call a tutor.'
             )
+            this.isRunning = false
             return
         }
 
@@ -158,309 +200,215 @@ export class JavaV102Compiler implements ICompilerInstance {
                     this.teaworker.end(
                         'TimeoutError:  Compilation took too long (>' +
                             time +
-                            'ms) and was terminated. Trying to reset the system. Please re-run your code and call a tutor if this problem persists.'
+                            'ms) and was terminated. Trying to reset the system.'
                     )
                 }
-
-                this.teaworker = undefined
             }
         }, teaVMRunOverhead)
 
-        let text = code
-            .replace(/"(?:[^"\\]|\\.)*"|\/\*[\s\S]*?\*\//gm, '')
-            .replace(/(^.*)\/\/.*$/gm, '$1')
-
-        text = (text as any).replaceRec(/(\{[^{}]*\})/gm, '[]')
-
-        const getMainClass = (_code: string) => {
-            let ret = 'Unknown'
-            const regexpMainClass =
-                /public\s+?class\s+?([a-zA-Z_$0-9]+?)\s*?(\[|\simplements|\sextends)/gm
-            let match: RegExpExecArray | null
-            while ((match = regexpMainClass.exec(_code)) !== null) {
-                if (match[1]) {
-                    ret = match[1]
-                    break
-                }
-            }
-            return ret
-        }
-        let mainClass = getMainClass(text)
-        if (mainClass == 'Unknown') {
-            mainClass = getMainClass(code.replace('{', '['))
-        }
+        // Simple main class detection for file naming
+        const codeWithoutComments = code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, '')
+        const mainClassMatch = codeWithoutComments.match(/public\s+class\s+([a-zA-Z_$0-9]+)/)
+        const mainClass = mainClassMatch ? mainClassMatch[1] : 'Main'
 
         const myListener = (e: any) => {
-            if (e.data.id == '' + questionID) {
-                if (e.data.command == 'phase') {
-                    if (e.data.phase == 'DEPENDENCY_ANALYSIS') {
-                        globalState.compilerState.displayGlobalState(
-                            'Compiling & Analyzing <b>' + mainClass + '.java</b>'
-                        )
-                    } else if (e.data.phase == 'LINKING') {
-                        globalState.compilerState.displayGlobalState(
-                            'Linking <b>' + mainClass + '.java</b>'
-                        )
-                    } else if (e.data.phase == 'OPTIMIZATION') {
-                        globalState.compilerState.displayGlobalState(
-                            'Optimizing <b>' + mainClass + '.java</b>'
-                        )
-                    } else if (e.data.phase == 'RENDERING') {
-                        globalState.compilerState.displayGlobalState(
-                            'Creating <b>' + mainClass + '.class</b>'
-                        )
-                    }
-                } else if (e.data.command == 'diagnostic') {
-                    if (compileFailedCallback) {
-                        compileFailedCallback({
-                            message: e.data.text || e.data.humanReadable || 'Compilation error',
-                            start: {
-                                line: (e.data.lineNumber || 0) + 1,
-                                column: 0,
-                            },
-                            end: {
-                                line: (e.data.lineNumber || 0) + 1,
-                                column: 0,
-                            },
-                            severity:
-                                e.data.severity == 'ERROR'
-                                    ? ErrorSeverity.Error
-                                    : ErrorSeverity.Warning,
-                        })
-                    }
+            if (e.data.id != '' + questionID) {
+                return
+            }
 
-                    const msg =
-                        (e.data.text || e.data.humanReadable || 'Compilation warning') + '\n'
-                    if (e.data.severity == 'ERROR') {
-                        err_callback(msg + '\n')
-                    } else {
-                        info_callback(msg + '\n')
-                    }
-                } else if (e.data.command == 'compiler-diagnostic') {
-                    if (compileFailedCallback) {
-                        compileFailedCallback({
-                            message: e.data.message || e.data.humanReadable || 'Compilation error',
-                            start: {
-                                line: (e.data.lineNumber || 0) + 1,
-                                column: (e.data.columnNumber || 0) + 1,
-                            },
-                            end: {
-                                line: (e.data.lineNumber || 0) + 1,
-                                column: (e.data.columnNumber || 0) + 1,
-                            },
-                            severity:
-                                e.data.severity == 'ERROR'
-                                    ? ErrorSeverity.Error
-                                    : ErrorSeverity.Warning,
-                        })
-                    }
+            if (e.data.command == 'phase') {
+                globalState.compilerState.displayGlobalState(
+                    'Phase: <b>' + e.data.phase + '</b> for ' + mainClass
+                )
+            } else if (e.data.command == 'diagnostic' || e.data.command == 'compiler-diagnostic') {
+                const isError = e.data.severity == 'ERROR'
+                if (compileFailedCallback) {
+                    compileFailedCallback({
+                        message:
+                            e.data.message ||
+                            e.data.text ||
+                            e.data.humanReadable ||
+                            'Compilation message',
+                        start: {
+                            line: e.data.lineNumber || 0,
+                            column: (e.data.columnNumber || 0) - 1,
+                        },
+                        end: {
+                            line: e.data.lineNumber || 0,
+                            column: (e.data.columnNumber || 0) - 1,
+                        },
+                        severity: isError ? ErrorSeverity.Error : ErrorSeverity.Warning,
+                    })
+                }
 
-                    const msg =
-                        (e.data.humanReadable || e.data.message || 'Compilation warning') + '\n'
-                    if (e.data.severity == 'ERROR') {
-                        err_callback(msg + '\n')
-                    } else {
-                        info_callback(msg + '\n')
-                    }
-                } else if (e.data.command == 'error') {
-                    if (this.teaworker) {
-                        this.teaworker.end(
-                            'Error:  An internal compiler error occurred: ' +
-                                (e.data.text || 'unknown')
-                        )
-                    }
-                    this.teaworker = undefined
-                } else if (e.data.command == 'compilation-complete') {
-                    booted = true
-                    let runTimeout: any | undefined = undefined
-                    if (this.teaworker) {
-                        this.teaworker.removeEventListener('message', myListener)
-                        this.sessionCompileListener = undefined
-                    }
-                    try {
-                        clearTimeout(compilerTimeout)
-                    } catch (e) {
-                        /* nothing to report */
-                    }
+                const msg =
+                    (e.data.humanReadable ||
+                        e.data.message ||
+                        e.data.text ||
+                        'Compilation message') + '\n'
+                if (isError) {
+                    err_callback(msg)
+                } else {
+                    info_callback(msg)
+                }
+            } else if (e.data.command == 'error') {
+                if (this.teaworker) {
+                    this.teaworker.end(
+                        'Error:  An internal compiler error occurred: ' + (e.data.text || 'unknown')
+                    )
+                }
+            } else if (e.data.command == 'compilation-complete') {
+                booted = true
+                clearTimeout(compilerTimeout)
 
-                    if (e.data.status == 'errors') {
-                        finishedExecutionCB(false, undefined, options.args)
-                        this.isRunning = false
-                    } else {
-                        globalState.compilerState.displayGlobalState(
-                            'Executing <b>' + mainClass + '</b>'
-                        )
+                if (this.teaworker) {
+                    this.teaworker.removeEventListener('message', myListener)
+                    this.sessionCompileListener = undefined
+                }
 
-                        let workerrun: Worker
-                        try {
-                            workerrun = new Worker(
-                                `${globalState.appState.baseurl}js/teavm/v${this.version}/workerrun.js?&v=001`
-                            )
-                        } catch (e) {
-                            workerrun = new Worker(
-                                `../assCodeQuestion/js/teavm/v${this.version}/workerrun.js?&v=001`
-                            )
-                        }
-                        this.sessionWorker = workerrun
+                if (e.data.status == 'errors') {
+                    finishedExecutionCB(false, undefined, options.args)
+                    this.isRunning = false
+                    globalState.compilerState.hideGlobalState()
+                    globalState.compilerState.setAllRunButtons(true)
+                } else {
+                    globalState.compilerState.displayGlobalState(
+                        'Executing <b>' + mainClass + '</b>'
+                    )
 
-                        const runListener = (ee: any) => {
-                            if (ee.data.command == 'run-finished-setup') {
-                                // Nothing to do here.
-                            } else if (
-                                ee.data.command == 'w-exit-keepalive' ||
-                                ee.data.command == 'exit-keepalive'
-                            ) {
-                                if (options.keepAlive) {
-                                    workerrun.postMessage({
-                                        command: 'session-ended',
-                                        id: '' + questionID,
-                                    })
-                                }
-                            } else if (ee.data.command == 'run-completed') {
-                                if (ee.data.args) {
-                                    options.args['return'] = ee.data.args
-                                }
-                                finishedExecutionCB(true, undefined, options.args['return'])
+                    const workerrun = this.getOrCreateRunWorker()
 
-                                console.log(
-                                    'Execution finished in ' + (Date.now() - start) + ' ms\n'
-                                )
-                                executionFinished = true
-                                this.isRunning = false
-                                workerrun.end()
-                            } else if (ee.data.command == 'stdout') {
-                                log_callback(ee.data.line + '\n')
-                            } else if (ee.data.command == 'stderr') {
-                                err_callback(ee.data.line + '\n')
-                            } else if (
-                                typeof ee.data.command === 'string' &&
-                                ee.data.command.indexOf('w-') === 0
-                            ) {
-                                const cmd = ee.data.command.substr(2)
-                                ee.data.command = cmd
-                                options.didReceiveMessage(cmd, ee.data)
-                            } else if (ee.data.command == 'main-finished') {
-                                options.postMessageFunction = (cmd: string, data: any) => {
-                                    data = { ...data }
-                                    data.command = cmd
-                                    data.id = questionID
-                                    wr.postMessage(data)
-                                }
-
-                                options.postMessageFunction('main-finished', {})
-                                options.dequeuePostponedMessages()
-                                options.whenFinishedHandler(ee.data.args)
-                            } else if (ee.data.command == 'main-will-start') {
-                                options.beforeStartHandler()
-                            } else if (ee.data.command == 'f-FINAL') {
-                                options.resultData = JSON.parse(ee.data.value)
-                            }
+                    const runListener = (ee: any) => {
+                        if (ee.data.id != '' + questionID) {
+                            return
                         }
 
-                        workerrun.addEventListener('message', runListener.bind(this))
-
-                        workerrun.postMessage({
-                            command: 'run',
-                            id: '' + questionID,
-                            code: e.data.script,
-                            args: args,
-                            messagePosting: options.allowMessagePassing,
-                            keepAlive: options.keepAlive,
-                        })
-                        const wr = workerrun
-
-                        workerrun.end = (msg: string) => {
-                            this.sessionWorker = undefined
-                            try {
-                                workerrun.terminate()
-                                if (runTimeout) {
-                                    clearTimeout(runTimeout)
-                                }
-                            } catch (e) {
-                                /* nothing to report */
+                        if (ee.data.command == 'run-finished-setup') {
+                            // Nothing to do here.
+                        } else if (
+                            ee.data.command == 'w-exit-keepalive' ||
+                            ee.data.command == 'exit-keepalive'
+                        ) {
+                            if (options.keepAlive) {
+                                workerrun.postMessage({
+                                    command: 'session-ended',
+                                    id: '' + questionID,
+                                })
                             }
-
-                            if (executionFinished) {
-                                return
+                        } else if (ee.data.command == 'run-completed') {
+                            if (ee.data.args) {
+                                options.args['return'] = ee.data.args
                             }
+                            finishedExecutionCB(true, undefined, options.args['return'])
+
+                            console.log('Execution finished in ' + (Date.now() - start) + ' ms\n')
                             executionFinished = true
-                            finishedExecutionCB(false, undefined, options.args)
                             this.isRunning = false
-                            if (msg) {
-                                err_callback(msg + '\n')
+                            if (!options.keepAlive) {
+                                workerrun.removeEventListener('message', runListener)
+                                workerrun.end('')
                             }
-                        }
+                            globalState.compilerState.hideGlobalState()
+                            globalState.compilerState.setAllRunButtons(true)
+                        } else if (ee.data.command == 'stdout') {
+                            log_callback(ee.data.line + '\n')
+                        } else if (ee.data.command == 'stderr') {
+                            err_callback(ee.data.line + '\n')
+                        } else if (
+                            typeof ee.data.command === 'string' &&
+                            ee.data.command.indexOf('w-') === 0
+                        ) {
+                            const cmd = ee.data.command.substr(2)
+                            ee.data.command = cmd
+                            options.didReceiveMessage(cmd, ee.data)
+                        } else if (ee.data.command == 'main-finished') {
+                            options.postMessageFunction = (cmd: string, data: any) => {
+                                data = { ...data }
+                                data.command = cmd
+                                data.id = questionID
+                                workerrun.postMessage(data)
+                            }
 
-                        const runStart = Date.now()
-                        if (!keepAlive) {
-                            runTimeout = setTimeout(function () {
+                            options.postMessageFunction('main-finished', {})
+                            options.dequeuePostponedMessages()
+                            if (options.whenFinishedHandler) {
+                                options.whenFinishedHandler(ee.data.args)
+                            }
+                        } else if (ee.data.command == 'main-will-start') {
+                            if (options.beforeStartHandler) {
+                                options.beforeStartHandler()
+                            }
+                        } else if (ee.data.command == 'f-FINAL') {
+                            options.resultData = JSON.parse(ee.data.value)
+                        }
+                    }
+
+                    workerrun.addEventListener('message', runListener)
+
+                    workerrun.postMessage({
+                        command: 'run',
+                        id: '' + questionID,
+                        code: e.data.script,
+                        args: args,
+                        messagePosting: options.allowsMessagePassing,
+                        keepAlive: options.keepAlive,
+                    })
+
+                    const runStart = Date.now()
+                    if (!keepAlive) {
+                        setTimeout(() => {
+                            if (!executionFinished) {
                                 const time = Date.now() - runStart
                                 workerrun.end(
                                     'TimeoutError:  Execution took too long (>' +
                                         time +
                                         'ms) and was terminated. There might be an endless loop in your code.'
                                 )
-                            }, max_ms)
-                        }
+                                this.isRunning = false
+                                finishedExecutionCB(false, undefined, options.args)
+                                globalState.compilerState.hideGlobalState()
+                                globalState.compilerState.setAllRunButtons(true)
+                            }
+                        }, max_ms)
                     }
                 }
             }
         }
 
         if (this.teaworker) {
-            this.sessionID = questionID
             this.sessionCompileListener = myListener
             this.teaworker.addEventListener('message', myListener)
-        }
-        globalState.compilerState.setAllRunButtons(false)
-        globalState.compilerState.displayGlobalState(
-            'Starting Compiler for <b>' + mainClass + '.java</b>'
-        )
 
-        if (this.teaworker) {
+            globalState.compilerState.setAllRunButtons(false)
+            globalState.compilerState.displayGlobalState(
+                'Starting Compiler for <b>' + mainClass + '.java</b>'
+            )
+
             this.teaworker.postMessage({
                 command: 'compile',
                 id: '' + questionID,
                 text: code,
                 mainClass: mainClass,
+                strict: true,
+                debugInfo: true,
             })
-        }
-
-        if (this.teaworker) {
-            this.teaworker.end = (msg: string, terminate: boolean = true) => {
-                try {
-                    clearTimeout(compilerTimeout)
-                } catch (e) {
-                    // nothing to see here
-                }
-
-                if (booted) {
-                    return
-                }
-                if (this.teaworker && terminate) {
-                    this.teaworker.terminate()
-                }
-                finishedExecutionCB(false, undefined, options.args)
-                this.isRunning = false
-                this.isReady = true
-                if (msg) {
-                    err_callback(msg + '\n')
-                }
-            }
         }
     }
 
     stop() {
         console.log('FORCE STOPPING')
-        if (this.sessionWorker) {
-            this.sessionWorker.end(l('CodeBlocks.UserCanceled'))
-        } else if (this.teaworker) {
+        if (this.teaworkerrun) {
+            this.teaworkerrun.end(l('CodeBlocks.UserCanceled'))
+        }
+        if (this.teaworker) {
             if (this.sessionCompileListener) {
                 this.teaworker.removeEventListener('message', this.sessionCompileListener)
                 this.sessionCompileListener = undefined
             }
-            this.teaworker.end(l('CodeBlocks.UserCanceled'), false)
+            this.isRunning = false
         }
+        globalState.compilerState.hideGlobalState()
+        globalState.compilerState.setAllRunButtons(true)
     }
 }
 

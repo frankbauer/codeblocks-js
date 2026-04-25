@@ -1,6 +1,7 @@
 {
   "search.exclude": {
     "docs/**": true,
+    "dev/phaser/**": true,
     "public/js/brain.js/**": true,
     "public/js/chart.js/**": true,
     "public/js/d3/**": true,
@@ -32,28 +33,28 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "dbaeumer.vscode-eslint",
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
+            "source.fixAll.eslint": "explicit"
         }
     },
     "[json]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
+            "source.fixAll.eslint": "explicit"
         }
     },
     "[javascript]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "dbaeumer.vscode-eslint",
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
+            "source.fixAll.eslint": "explicit"
         }
     },
     "[vue]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "dbaeumer.vscode-eslint",
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true
+            "source.fixAll.eslint": "explicit"
         }
     },
     "eslint.alwaysShowStatus": true,
