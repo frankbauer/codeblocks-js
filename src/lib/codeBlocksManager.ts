@@ -419,7 +419,17 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
         } else {
             data.runCode = isTrue(inData.runCode)
             data.language = c.language
-            data.compiler.version = c.version
+            if (c.deprecated) {
+                const upgraded = CompilerRegistry.getCompiler({ languageType: data.compiler.languageType })
+                if (upgraded !== undefined && !upgraded.deprecated) {
+                    console.log(`[CodeBlocks] Auto-upgrading deprecated compiler ${data.compiler.languageType} v${data.compiler.version} → v${upgraded.version}`)
+                    data.compiler.version = upgraded.version
+                } else {
+                    data.compiler.version = c.version
+                }
+            } else {
+                data.compiler.version = c.version
+            }
         }
     }
 

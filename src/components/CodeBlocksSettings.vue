@@ -731,7 +731,9 @@ const compilerVersion = computed({
 })
 
 const compilerVersions = computed(() => {
-    return compilerRegistry.versionsForLanguage(compilerLanguage.value.value)
+    return compilerRegistry
+        .versionsForLanguage(compilerLanguage.value.value)
+        .filter((v) => !isDeprecatedVersion(compilerLanguage.value, v))
 })
 
 const domLibraries = computed(() => {
