@@ -24,7 +24,7 @@
         continue.</strong>
 </noscript>
 
-<div codeblockseditor data-compiler='java' data-compiler-version='101' data-run-code='true'
+<div codeblockseditor data-compiler='java' data-compiler-version='102' data-run-code='true'
      data-max-characters='10000' data-execution-timeout='5000'
      data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]'
      data-randomizer-active='true'
@@ -32,19 +32,48 @@
      data-randomizer-sets='[{"test": "test", "check": "check"}]'
      data-randomizer-preview-index='0'
      data-ui-theme='light'
+     data-output-parser='data'
 >
     <loading>
         <div></div>
         <div></div>
     </loading>
 
+    <pre as="DATA">{"name":"test", "age":3}</pre>
     <div as="TEXT">Here is a simple &lt;b>Java&lt;/b> program:</div>
-    <pre as='BLOCK' data-hidden='true' data-label="test">public class App {
+    <pre as='BLOCK' data-hidden='true' data-label="test">import de.fau.tf.lgdv.CodeBlocks;
+import de.fau.tf.lgdv.json.JsonSerializer;
+
+class Foo implements JsonSerializer{
+        public String toJson(){
+            return "{\"test\":42}";
+        }
+}
+public class App {
     public static void main(String[] args){</pre>
     <pre as='BLOCK'>        System.out.println("Hello World {:test}");
-        System.out.println("or anyone else {:checked}");</pre>
+        System.out.println("or anyone else {:checked}");
+        int[] testArray = {1,2,3,4,5};
+        System.out.println(testArray[2]);
+        System.out.println(testArray[-1]);
+        CodeBlocks.postResult(new Foo());</pre>
     <pre as='BLOCK' data-static='true'>    }
+}
+
+class MainOverride {
+    public static void main(String[] args){
+        System.out.println("MainOverride was called");
+        App.main(args);        
+    }
 }</pre>
+    <script as="PLAYGROUND">module.exports = {
+    init: function() {
+        console.log("init");
+    },
+    update: function(textData, jsonData, canvasElement, outputElement) {
+        console.log("TEST", jsonData, textData);
+    }
+}</script>
 </div>
 
 

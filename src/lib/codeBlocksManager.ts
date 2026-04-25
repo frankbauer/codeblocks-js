@@ -30,7 +30,6 @@ import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
 
 import { taggedDirective, tagger } from '@/plugins/tagger'
 import { highlight, highlightDirective } from '@/plugins/highlight'
-import { appUseQuasar } from '@/plugins/quasar'
 import { appUseCodeMirror } from '@/plugins/codemirror'
 import { storeBlock } from '@/storage/blockStorage'
 import { UIThemeType, getUITheme } from '@/lib/uiTheme'
@@ -714,7 +713,6 @@ class InternalCodeBlocksManager {
         app.use(i18n)
         app.directive('tagged', taggedDirective)
         app.directive('highlight', highlightDirective)
-        appUseQuasar(app)
         appUseCodeMirror(app)
         app.mount(this.element)
     }

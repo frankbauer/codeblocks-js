@@ -1,5 +1,3 @@
-import { l } from './i18n'
-
 import { uuid } from 'vue-uuid'
 import '../styles/tagger.styl'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'

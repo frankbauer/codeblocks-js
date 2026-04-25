@@ -636,10 +636,10 @@ defineExpose({
 <style lang="sass">
 .code-editor
     .system-code-box
-        border: 1px dashed $blue-grey-3
+        border: 1px dashed theme('colors.slate.300')
 
     .system-code-box-dark
-        border: 2px solid $yellow-8
+        border: 2px solid theme('colors.yellow.600')
 
     .cm-focused
         outline: none !important

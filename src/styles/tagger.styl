@@ -1,29 +1,27 @@
-@import './quasar.variables.styl'
-
 .random-tag-placeholder, .template-tag-placeholder, .template-tag-placeholder-noclick
   position relative
   padding-bottom 0px
   padding-top 0px
 
 span.random-tag-placeholder, span.random-tag-placeholder > span, span.random-tag-placeholder > span > span
-  color $blue-grey-1!important
+  color theme('colors.slate.100')!important
 
 span.random-tag-placeholder
-  background-color $blue-8
+  background-color theme('colors.blue.700')
   border-radius 4px
   padding 1px 1px
 
 span.random-tag-placeholder.tag-not-found, span.random-tag-placeholder.tag-not-found > span, span.random-tag-placeholder.tag-not-found > span > span
-  color $red-2!important
+  color theme('colors.red.200')!important
 
 span.random-tag-placeholder.tag-not-found
-  background-color $red-10
-  color $red-2!important
+  background-color theme('colors.red.800')
+  color theme('colors.red.200')!important
   font-weight bold
   box-shadow none
 
 
 div.tagItem
-  border 1px solid $blue-8
+  border 1px solid theme('colors.blue.700')
   border-radius 3px
   box-shadow 1px 1px 3px rgba(0, 0, 0, 0.2)

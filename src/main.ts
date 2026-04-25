@@ -27,7 +27,6 @@ console.i = function (...lines) {
 }
 
 import './plugins/uuid'
-import './plugins/quasar'
 import './plugins/codemirror'
 import './plugins/codeBlocks'
 import './plugins/compilerState'
