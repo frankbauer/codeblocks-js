@@ -173,7 +173,7 @@ export class BlockData implements IBlockData {
         this.name = d.name
         this.label = d.label ?? ''
 
-        this.created()
+        this.initialize()
     }
 
     actualContent() {
@@ -208,7 +208,7 @@ export class BlockData implements IBlockData {
         }
     }
 
-    created() {
+    initialize() {
         this.recreateScriptObject()
     }
 
@@ -300,7 +300,6 @@ export class BlockData implements IBlockData {
         this.onTypeChanged(newType, oldType)
     }
 
-    //@Watch('type')
     onTypeChanged(newType: KnownBlockTypes, oldType: KnownBlockTypes) {
         if (newType != oldType) {
             this.recreateScriptObject()

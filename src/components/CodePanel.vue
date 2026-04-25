@@ -19,8 +19,8 @@
     </div>
 </template>
 
-<script lang="ts">
-import { computed, ComputedRef, defineComponent, PropType, Ref, ref } from 'vue'
+<script setup lang="ts">
+import { computed, PropType, ref } from 'vue'
 import CodeBlock from '@/components/CodeBlock.vue'
 import { Button } from '@/shadcn/ui/button'
 import { ChevronUp, ChevronDown } from 'lucide-vue-next'
@@ -77,93 +77,71 @@ const emptyBlockBuilder = (): IBlockDataExtended => {
     }
 }
 
-export default defineComponent({
-    name: 'CodePanel',
-    components: { CodeBlock },
-    props: {
-        editMode: {
-            type: Boolean,
-            required: true,
-            default: false,
-        },
-        panelWidth: {
-            type: Number,
-            required: false,
-            default: 400,
-        },
-        block: {
-            type: null as unknown as PropType<BlockData | null>,
-            default: null,
-            required: true,
-        },
-        visibleLines: {
-            type: [Number, String] as PropType<number | 'auto'>,
-            default: 'auto',
-        },
+const props = defineProps({
+    editMode: {
+        type: Boolean,
+        required: true,
+        default: false,
     },
-    setup(props, context) {
-        //Attributes
-        const expanded: Ref<boolean> = ref(false)
-
-        //Computed
-        const saveBlock: ComputedRef<IBlockData> = computed(() => {
-            if (
-                props.block !== null &&
-                props.block !== undefined &&
-                props.block.content !== null &&
-                props.block.content !== undefined
-            ) {
-                return props.block
-            }
-            const ret = emptyBlockBuilder()
-            return ret
-        })
-
-        const visibleLinesNow: ComputedRef<number | 'auto'> = computed(() => {
-            if (props.visibleLines === 'auto') {
-                return 'auto'
-            }
-            if (props.visibleLines <= 2) {
-                return 2
-            }
-            return props.visibleLines
-        })
-
-        const width = computed(() => {
-            if (expanded.value) {
-                return 2 * props.panelWidth
-            }
-            return props.panelWidth
-        })
-
-        //Methods
-        function onCodeChange(): void {}
-
-        function onExpandClick() {
-            expanded.value = !expanded.value
-        }
-
-        function themeForBlock(bl: BlockData | null): string {
-            if (bl === null || bl === undefined) {
-                return ''
-            }
-            return bl.themeForCodeBlock
-        }
-
-        return {
-            expanded,
-            saveBlock,
-            visibleLinesNow,
-            width,
-            onCodeChange,
-            onExpandClick,
-            themeForBlock,
-            Button,
-            ChevronUp,
-            ChevronDown,
-        }
+    panelWidth: {
+        type: Number,
+        required: false,
+        default: 400,
+    },
+    block: {
+        type: null as unknown as PropType<BlockData | null>,
+        default: null,
+        required: true,
+    },
+    visibleLines: {
+        type: [Number, String] as PropType<number | 'auto'>,
+        default: 'auto',
     },
 })
+
+const expanded = ref(false)
+
+const saveBlock = computed((): IBlockData => {
+    if (
+        props.block !== null &&
+        props.block !== undefined &&
+        props.block.content !== null &&
+        props.block.content !== undefined
+    ) {
+        return props.block
+    }
+    return emptyBlockBuilder()
+})
+
+const visibleLinesNow = computed((): number | 'auto' => {
+    if (props.visibleLines === 'auto') {
+        return 'auto'
+    }
+    if (props.visibleLines <= 2) {
+        return 2
+    }
+    return props.visibleLines
+})
+
+const width = computed(() => {
+    if (expanded.value) {
+        return 2 * props.panelWidth
+    }
+    return props.panelWidth
+})
+
+function onCodeChange(): void {}
+
+function onExpandClick() {
+    expanded.value = !expanded.value
+}
+
+function themeForBlock(bl: BlockData | null): string {
+    if (bl === null || bl === undefined) {
+        return ''
+    }
+    return bl.themeForCodeBlock
+}
 </script>
 
 <style lang="sass" scoped>

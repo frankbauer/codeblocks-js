@@ -214,20 +214,24 @@
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import RandomizerSetEditor from '@/components/RandomizerSetEditor.vue'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
-import { computed, ComputedRef, defineComponent, PropType, ref } from 'vue'
+import { computed, PropType, ref } from 'vue'
 import { uuid } from 'vue-uuid'
 import { TAG_CLASS_NAMES } from '@/plugins/tagHighlighter'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 
-// shadcn components
+// shadcn components — aliased to match template usage
 import { Switch } from '@/shadcn/ui/switch'
 import { Label } from '@/shadcn/ui/label'
 import { Button } from '@/shadcn/ui/button'
 import { Avatar } from '@/shadcn/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shadcn/ui/dialog'
+const SwitchComponent = Switch
+const LabelComponent = Label
+const ButtonComponent = Button
+const DialogComponent = Dialog
 
 // Lucide icons
 import { Plus, Trash2, Check, AlertTriangle, Eye, EyeOff, Edit } from 'lucide-vue-next'
@@ -242,166 +246,108 @@ interface ICodeBlockSettingsOptions {
     }
 }
 
-export default defineComponent({
-    name: 'RandomizerSettings',
-    components: {
-        RandomizerSetEditor,
-        SwitchComponent: Switch,
-        LabelComponent: Label,
-        ButtonComponent: Button,
-        Avatar,
-        DialogComponent: Dialog,
-        DialogContent,
-        DialogHeader,
-        DialogTitle,
-        DialogTrigger,
-        Plus,
-        Trash2,
-        Check,
-        AlertTriangle,
-        Eye,
-        EyeOff,
-        Edit,
-    },
-    props: {
-        options: {
-            type: Object as PropType<ICodeBlockSettingsOptions>,
-            required: true,
-        },
-    },
-    emits: ['update:options'],
-    setup(props, { emit }) {
-        const showAddTagDialog = ref(false)
-        const newTagName = ref('')
-
-        const { onBeforeEnter, onEnter, onAfterEnter, onBeforeLeave, onLeave, onAfterLeave } =
-            useSlideTransition()
-
-        const tagClass: ComputedRef<String> = computed(() => {
-            return TAG_CLASS_NAMES.rnd + ' tag-mark-start tag-mark-end tag-mark-shadow'
-        })
-
-        function isVisible(nr: number): boolean {
-            return nr == props.options.randomizer.previewIndex
-        }
-
-        function setVisible(nr: number): void {
-            const updatedOptions = { ...props.options }
-            updatedOptions.randomizer.previewIndex = nr
-            emit('update:options', updatedOptions)
-        }
-
-        function updateActive(checked: boolean): void {
-            const updatedOptions = { ...props.options }
-            updatedOptions.randomizer.active = checked
-            emit('update:options', updatedOptions)
-        }
-
-        function isValidTag(tag: string): boolean {
-            return props.options.randomizer.knownTags.find((t) => t == tag) !== undefined
-        }
-
-        function isCompleteSet(s: IRandomizerSet): boolean {
-            if (
-                s.values.filter((v) => props.options.randomizer.knownTags.indexOf(v.tag) < 0)
-                    .length > 0
-            ) {
-                return false
-            }
-            if (
-                props.options.randomizer.knownTags.filter(
-                    (t) => s.values.find((v) => v.tag == t) === undefined
-                ).length > 0
-            ) {
-                return false
-            }
-            return true
-        }
-
-        function getFullSet(s: IRandomizerSet): IRandomizerSet {
-            return s
-        }
-
-        function removeSet(nr: number): void {
-            const updatedOptions = { ...props.options }
-            updatedOptions.randomizer.sets.splice(nr, 1)
-            emit('update:options', updatedOptions)
-        }
-
-        function addSet(): void {
-            const updatedOptions = { ...props.options }
-            updatedOptions.randomizer.sets.push({ uuid: uuid.v4(), values: [] })
-            emit('update:options', updatedOptions)
-        }
-
-        function removeTag(nr: number): void {
-            const updatedOptions = { ...props.options }
-            updatedOptions.randomizer.knownTags.splice(nr, 1)
-            emit('update:options', updatedOptions)
-        }
-
-        function addTag(): void {
-            showAddTagDialog.value = true
-        }
-
-        function handleAddTag(): void {
-            let data = newTagName.value.replace(/\W/g, '_')
-
-            // Check if this name already exists
-            if (props.options.randomizer.knownTags.filter((t) => t == data).length > 0) {
-                let ct = 1
-                const odata = data
-                do {
-                    data = odata + '_' + ct
-                    ct++
-                } while (props.options.randomizer.knownTags.filter((t) => t == data).length > 0)
-            }
-
-            const updatedOptions = { ...props.options }
-            updatedOptions.randomizer.knownTags.push(data)
-            emit('update:options', updatedOptions)
-            showAddTagDialog.value = false
-            newTagName.value = ''
-        }
-
-        function cancelAddTag(): void {
-            showAddTagDialog.value = false
-            newTagName.value = ''
-        }
-
-        return {
-            tagClass,
-            isVisible,
-            setVisible,
-            updateActive,
-            isValidTag,
-            isCompleteSet,
-            getFullSet,
-            removeSet,
-            addSet,
-            removeTag,
-            addTag,
-            handleAddTag,
-            cancelAddTag,
-            showAddTagDialog,
-            newTagName,
-            onBeforeEnter,
-            onEnter,
-            onAfterEnter,
-            onBeforeLeave,
-            onLeave,
-            onAfterLeave,
-            // Icon components
-            Plus,
-            Trash2,
-            Check,
-            AlertTriangle,
-            Eye,
-            EyeOff,
-            Edit,
-        }
+const props = defineProps({
+    options: {
+        type: Object as PropType<ICodeBlockSettingsOptions>,
+        required: true,
     },
 })
+
+const emit = defineEmits(['update:options'])
+
+const showAddTagDialog = ref(false)
+const newTagName = ref('')
+
+const { onBeforeEnter, onEnter, onAfterEnter, onBeforeLeave, onLeave, onAfterLeave } =
+    useSlideTransition()
+
+const tagClass = computed(() => {
+    return TAG_CLASS_NAMES.rnd + ' tag-mark-start tag-mark-end tag-mark-shadow'
+})
+
+function isVisible(nr: number): boolean {
+    return nr == props.options.randomizer.previewIndex
+}
+
+function setVisible(nr: number): void {
+    const updatedOptions = { ...props.options }
+    updatedOptions.randomizer.previewIndex = nr
+    emit('update:options', updatedOptions)
+}
+
+function updateActive(checked: boolean): void {
+    const updatedOptions = { ...props.options }
+    updatedOptions.randomizer.active = checked
+    emit('update:options', updatedOptions)
+}
+
+function isValidTag(tag: string): boolean {
+    return props.options.randomizer.knownTags.find((t) => t == tag) !== undefined
+}
+
+function isCompleteSet(s: IRandomizerSet): boolean {
+    if (s.values.filter((v) => props.options.randomizer.knownTags.indexOf(v.tag) < 0).length > 0) {
+        return false
+    }
+    if (
+        props.options.randomizer.knownTags.filter(
+            (t) => s.values.find((v) => v.tag == t) === undefined
+        ).length > 0
+    ) {
+        return false
+    }
+    return true
+}
+
+function getFullSet(s: IRandomizerSet): IRandomizerSet {
+    return s
+}
+
+function removeSet(nr: number): void {
+    const updatedOptions = { ...props.options }
+    updatedOptions.randomizer.sets.splice(nr, 1)
+    emit('update:options', updatedOptions)
+}
+
+function addSet(): void {
+    const updatedOptions = { ...props.options }
+    updatedOptions.randomizer.sets.push({ uuid: uuid.v4(), values: [] })
+    emit('update:options', updatedOptions)
+}
+
+function removeTag(nr: number): void {
+    const updatedOptions = { ...props.options }
+    updatedOptions.randomizer.knownTags.splice(nr, 1)
+    emit('update:options', updatedOptions)
+}
+
+function addTag(): void {
+    showAddTagDialog.value = true
+}
+
+function handleAddTag(): void {
+    let data = newTagName.value.replace(/\W/g, '_')
+
+    if (props.options.randomizer.knownTags.filter((t) => t == data).length > 0) {
+        let ct = 1
+        const odata = data
+        do {
+            data = odata + '_' + ct
+            ct++
+        } while (props.options.randomizer.knownTags.filter((t) => t == data).length > 0)
+    }
+
+    const updatedOptions = { ...props.options }
+    updatedOptions.randomizer.knownTags.push(data)
+    emit('update:options', updatedOptions)
+    showAddTagDialog.value = false
+    newTagName.value = ''
+}
+
+function cancelAddTag(): void {
+    showAddTagDialog.value = false
+    newTagName.value = ''
+}
 </script>
 
 <style scoped>

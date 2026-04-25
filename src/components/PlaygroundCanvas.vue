@@ -12,103 +12,83 @@
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { IScriptBlock, Runner } from '@/lib/IScriptBlock'
-import Vue, {
-    computed,
-    ComputedRef,
-    defineComponent,
-    getCurrentInstance,
-    nextTick,
-    onBeforeUnmount,
-    onMounted,
-    PropType,
-    Ref,
-    ref,
-} from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, PropType, ref } from 'vue'
 import { EventHubType } from '@/composables/globalEvents'
 import compilerRegistry from '@/lib/CompilerRegistry'
 
-export default defineComponent({
-    name: 'PlaygroundCanvas',
-    components: {},
-    props: {
-        output: String,
-        obj: {
-            type: Object as PropType<IScriptBlock>,
-            required: true,
-        },
-        block: {
-            type: Object as PropType<BlockData>,
-            required: true,
-        },
-        eventHub: {
-            type: Object as PropType<EventHubType>,
-            required: true,
-        },
-        tagSet: {
-            type: Object as PropType<IRandomizerSet>,
-            required: false,
-        },
-        runner: {
-            type: Function as PropType<Runner>,
-            default: () => {},
-        },
+const props = defineProps({
+    output: String,
+    obj: {
+        type: Object as PropType<IScriptBlock>,
+        required: true,
     },
-    setup(props, context) {
-        const instance = getCurrentInstance()
-        const innerPlaygroundContainer: Ref<HTMLElement | null> = ref(null)
+    block: {
+        type: Object as PropType<BlockData>,
+        required: true,
+    },
+    eventHub: {
+        type: Object as PropType<EventHubType>,
+        required: true,
+    },
+    tagSet: {
+        type: Object as PropType<IRandomizerSet>,
+        required: false,
+    },
+    runner: {
+        type: Function as PropType<Runner>,
+        default: () => {},
+    },
+})
 
-        const canvas: ComputedRef<HTMLElement> = computed(() => {
-            console.log('PLAYGROUND REF:', innerPlaygroundContainer.value)
-            if (innerPlaygroundContainer.value == null) {
-                return new HTMLElement()
-            }
-            return innerPlaygroundContainer.value
-        })
+const emit = defineEmits(['did-init', 'canvas-change'])
 
-        function whenMounted(): void {
-            if (props.obj && compilerRegistry !== undefined) {
-                console.d('Will Init', canvas, $(canvas.value).css('background-color'))
-                compilerRegistry.loadLibraries(props.block.domLibs, () => {
-                    console.d('Will Init', canvas, $(canvas.value).css('background-color'))
-                    props.obj.resetResources()
-                    props.obj.resetBlockData(props.block.appSettings.blocks)
-                    props.obj.rebuild() //we need to rebuild the script to make sure its context is the current state of the DOM
-                    props.obj.setupDOM($(canvas.value), props.block.scope)
-                    nextTick(() => {
-                        nextTick(() => {
-                            props.obj.init($(canvas.value), props.block.scope, props.runner)
-                            context.emit('did-init', canvas)
-                        })
-                    })
+const innerPlaygroundContainer = ref<HTMLElement | null>(null)
+
+const canvas = computed(() => {
+    console.log('PLAYGROUND REF:', innerPlaygroundContainer.value)
+    if (innerPlaygroundContainer.value == null) {
+        return new HTMLElement()
+    }
+    return innerPlaygroundContainer.value
+})
+
+function whenMounted(): void {
+    if (props.obj && compilerRegistry !== undefined) {
+        console.d('Will Init', canvas, $(canvas.value).css('background-color'))
+        compilerRegistry.loadLibraries(props.block.domLibs, () => {
+            console.d('Will Init', canvas, $(canvas.value).css('background-color'))
+            props.obj.resetResources()
+            props.obj.resetBlockData(props.block.appSettings.blocks)
+            props.obj.rebuild()
+            props.obj.setupDOM($(canvas.value), props.block.scope)
+            nextTick(() => {
+                nextTick(() => {
+                    props.obj.init($(canvas.value), props.block.scope, props.runner)
+                    emit('did-init', canvas)
                 })
-            }
-        }
-
-        onMounted(() => {
-            if (props.eventHub) {
-                props.eventHub.on('all-mounted', whenMounted)
-            } else {
-                whenMounted()
-            }
-
-            context.emit('canvas-change', canvas)
+            })
         })
+    }
+}
 
-        onBeforeUnmount(() => {
-            if (props.eventHub) {
-                props.eventHub.off('all-mounted')
-            }
-        })
+onMounted(() => {
+    if (props.eventHub) {
+        props.eventHub.on('all-mounted', whenMounted)
+    } else {
+        whenMounted()
+    }
 
-        return {
-            innerPlaygroundContainer,
-            canvas,
-        }
-    },
+    emit('canvas-change', canvas)
+})
+
+onBeforeUnmount(() => {
+    if (props.eventHub) {
+        props.eventHub.off('all-mounted')
+    }
 })
 </script>
 
