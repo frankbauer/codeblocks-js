@@ -14,33 +14,40 @@ npm install
 in the folder with this README.
 
 
-### Compiles and hot-reloads for development
-During development, you can utilize a simple dev-server that recompiles and servers the app on demand.
+### Development server (hot-reload)
+During development, start the Vite dev server:
 ```
-npm run serve
+npm run dev
 ```
 
-### Compiles and minifies for production
-You can build all required files for distribution using
+### Build for production
+Build the library bundle to `./dist`:
 ```
-npm run build-lib
+npm run build
 ```
-The build command will (by default) deploy the lib to the `./dist`-Folder. Please ignore the generated `demo.html`-File. It is generated automatically by vue and does NOT relate to the project.
-
-### Customize base-configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Building for Ilias
-The **Code Question**-Plugin for Ilias makes heavy use of this app.(https://github.com/frankbauer/ilias-asscodequestion). When production-building for the plugin, you need to run another build script that takes care of some unique settings.
+The **Code Question**-Plugin for Ilias makes heavy use of this app.(https://github.com/frankbauer/ilias-asscodequestion). When production-building for the plugin, run:
 
 ```
 npm run build-ilias
 ```
 
-The command deploys the app to`../codeblocks/<version>/` (relative to the root folder of this project).
+The command deploys the app to `../codeblocks/<version>/` (relative to the root folder of this project) and generates the required PHP config file.
+
+To deploy with a custom base URL, set `ILIAS_VUE_PATH` before running:
+```
+ILIAS_VUE_PATH=/my/custom/path/ npm run build-ilias
+```
+
+### Building examples
+```
+npm run build-examples
+```
+Deploys the library to `docs/examples/js/codeblocks-js/`.
 
 ## Demos
 We currently have a [simple demo](https://frankbauer.github.io/codeblocks-js/docs/examples/simple.html) online.
 
 ## More Info
-Please refer to our [Wiki](https://github.com/frankbauer/codeblocks-js/wiki ) for more Infos.
+Please refer to our [Wiki](https://github.com/frankbauer/codeblocks-js/wiki) for more Infos.
