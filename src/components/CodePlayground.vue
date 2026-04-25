@@ -1,18 +1,6 @@
 <template>
     <div>
-        <PlaygroundCanvas
-            ref="canvasElement"
-            :output="finalOutputObject.initialOutput"
-            :obj="block.obj"
-            :key="runCount"
-            :block="block"
-            :eventHub="eventHub"
-            :tagSet="tagSet"
-            :data-question="block.parentID"
-            :runner="emitRun"
-            @canvas-change="onCanvasChange"
-            @did-init="onDidInit"
-        />
+        
         <div class="row justify-end">
             <div
                 class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse tw-mb-1"
@@ -109,6 +97,20 @@
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
+
+        <PlaygroundCanvas
+            ref="canvasElement"
+            :output="finalOutputObject.initialOutput"
+            :obj="block.obj"
+            :key="runCount"
+            :block="block"
+            :eventHub="eventHub"
+            :tagSet="tagSet"
+            :data-question="block.parentID"
+            :runner="emitRun"
+            @canvas-change="onCanvasChange"
+            @did-init="onDidInit"
+        />
     </div>
 </template>
 
