@@ -516,10 +516,6 @@ const types = computed((): IListItemData[] => {
             label: l('CodeBlockContainer.Block'),
             value: KnownBlockTypes.BLOCK,
         },
-        {
-            label: l('CodeBlockContainer.REPL'),
-            value: KnownBlockTypes.REPL,
-        },
     ]
 })
 const alignments = computed((): IListItemData[] => {
@@ -710,8 +706,6 @@ const colorClass = computed((): string => {
         return 'block-hidden-border'
     } else if (t == KnownBlockTypes.BLOCKSTATIC) {
         return 'block-static-border'
-    } else if (t == KnownBlockTypes.REPL) {
-        return 'repl-border'
     }
     return 'default-border'
 })

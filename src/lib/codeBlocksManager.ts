@@ -26,7 +26,6 @@ import {
 import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
 import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
 import dataInstaller from '@/lib/BlockloadManagers/DataManager'
-import REPLInstaller from '@/lib/BlockloadManagers/REPLManager'
 
 import { taggedDirective, tagger } from '@/plugins/tagger'
 import { highlight, highlightDirective } from '@/plugins/highlight'
@@ -38,7 +37,6 @@ import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
 playgroundInstaller(loaders)
-REPLInstaller(loaders)
 dataInstaller(loaders)
 
 export interface AppContext {

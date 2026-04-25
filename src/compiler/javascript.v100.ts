@@ -160,7 +160,6 @@ export class JavascriptV100Compiler implements ICompilerInstance {
     readonly allowsPersistentArguments = false
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
-    readonly allowsREPL = false
     readonly experimental = false
     readonly deprecated = true
     readonly isReady = true

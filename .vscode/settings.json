@@ -12,7 +12,9 @@
     "public/js/phaser/**": true,
     "public/js/tensorflow.js/**": true,
     "public/js/three.js/**": true,
-    "public/js/jquery.min.js": true
+    "public/js/jquery.min.js": true,
+    "public/js/python/v100/skulpt/**": true,
+    "public/js/python/v101/skulpt/**": true,
   },
     "files.exclude": {
         "**/node_modules": true,

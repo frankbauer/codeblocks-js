@@ -87,7 +87,7 @@ export default class Tagger {
         return str.replace(randomAndTemplateTag, (m0, m1, m2) => {
             const className = m1 === ':' ? this.className.rnd : this.className.templ
             return (
-                `<span class='q-mb-xs  tag-mark-start tag-mark-end ${className}' >` + m0 + '</span>'
+                `<span class='tw-mb-1  tag-mark-start tag-mark-end ${className}' >` + m0 + '</span>'
             )
         })
     }

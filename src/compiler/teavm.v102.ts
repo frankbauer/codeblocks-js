@@ -26,7 +26,6 @@ export class JavaV102Compiler implements ICompilerInstance {
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
-    readonly allowsREPL = false
     readonly experimental = true
     readonly deprecated = false
     didPreload: boolean = false

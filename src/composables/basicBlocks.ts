@@ -262,9 +262,6 @@ export function codeBlockSetup(
     const backgroundColorClass = computed((): string => {
         return editMode ? 'blue-grey darken-4' : ''
     })
-    const hasREPL = computed((): boolean => {
-        return blocks.value.filter((bl) => bl.type === KnownBlockTypes.REPL).length > 0
-    })
     const canStop = computed((): boolean => {
         return !isReady.value && didRunOnce.value
     })
@@ -480,11 +477,6 @@ export function codeBlockSetup(
                             cmp.allowsMessagePassing &&
                             options.value.messagePassing &&
                             options.value.keepAlive,
-                        withREPL:
-                            cmp.allowsMessagePassing &&
-                            options.value.messagePassing &&
-                            options.value.keepAlive &&
-                            hasREPL.value,
                         beforeStartHandler: () => {
                             blocks.value.forEach((bl) => {
                                 console.d('MESSAGE - Before Start')
@@ -627,7 +619,6 @@ export function codeBlockSetup(
         outputElement,
         addonClass,
         backgroundColorClass,
-        hasREPL,
         canStop,
         blockBecameReady,
         tagSet,

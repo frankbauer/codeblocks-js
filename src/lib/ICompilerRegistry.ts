@@ -106,17 +106,7 @@ export interface ICompileAndRunArguments {
 
     allowMessagePassing: boolean
     keepAlive: boolean
-    withREPL: boolean
     resultData: Object | any[] | undefined
-}
-
-export interface IReplInstance {
-    interpreter(
-        command: string,
-        onStateChange: (incomplete) => void,
-        onLog: (msg) => void,
-        onError: (msg) => void
-    ): Promise<object>
 }
 
 export interface CallingCodeBlocks {
@@ -131,7 +121,6 @@ export interface ICompilerInstance {
     readonly canRun: boolean
     readonly canStop: boolean
     readonly allowsMessagePassing: boolean
-    readonly allowsREPL: boolean
     readonly allowsContinousCompilation: boolean
     readonly allowsPersistentArguments: boolean
     readonly acceptsJSONArgument: boolean

@@ -924,15 +924,6 @@ const showMaxRuntime = computed(() => {
     return runCode.value && !(keepAlive.value && messagePassing.value)
 })
 
-const allowsREPL = computed(() => {
-    const cmp = compilerRegistry.getCompiler(compiler.value)
-    if (cmp) {
-        console.d('REPL - ', 'can', cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun)
-        return cmp.allowsREPL && cmp.allowsMessagePassing && cmp.canRun
-    }
-    return false
-})
-
 const persistentArguments = computed({
     get: () => {
         return props.options.persistentArguments

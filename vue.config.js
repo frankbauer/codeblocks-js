@@ -14,10 +14,6 @@ module.exports = {
     filenameHashing: false,
 
     pluginOptions: {
-        quasar: {
-            importStrategy: 'kebab',
-            rtlSupport: false,
-        },
         i18n: {
             locale: 'en',
             fallbackLocale: 'en',
@@ -26,6 +22,5 @@ module.exports = {
         },
     },
 
-    transpileDependencies: ['quasar'],
     configureWebpack: {},
 }

@@ -1,5 +1,3 @@
-import { QVueGlobals } from 'quasar/dist/types/globals'
-
 export {}
 import { ICompilerRegistry, ICompilerState } from '@/lib/ICompilerRegistry'
 import { IGlobalState } from './lib/ICodeBlocks'

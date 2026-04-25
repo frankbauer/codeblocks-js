@@ -3,7 +3,6 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
-import CodeREPL from '@/components/CodeREPL.vue'
 import DataBlock from '@/components/DataBlock.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import {
@@ -52,7 +51,6 @@ const {
     outputElement,
     addonClass,
     backgroundColorClass,
-    hasREPL,
     canStop,
     blockBecameReady,
     themeForBlock,
@@ -388,22 +386,6 @@ const addNewBlock = (): void => {
                 :language="language"
                 @ready="blockBecameReady"
             />
-            <CodeREPL
-                v-if="block.type == 'REPL'"
-                :appID="appID"
-                :blockID="block.uuid"
-                :block="block"
-                :eventHub="eventHub"
-                :blockInfo="blockInfo"
-                :isReady="isReady"
-                :canStop="canStop"
-                :showGlobalMessages="showGlobalMessages"
-                :globalStateMessage="global.compilerState.globalStateMessage"
-                @ready="blockBecameReady"
-                @run="run"
-                @stop="stop"
-            />
-
             <DataBlock
                 v-else-if="block.type == 'DATA'"
                 :appID="appID"
@@ -428,7 +410,6 @@ const addNewBlock = (): void => {
 
         <div
             :class="`runner ${editMode ? 'tw-pt-8 tw-mx-8' : ''}`"
-            v-show="!hasREPL"
             v-if="canRun"
             id="runContainer"
             :data-question="blockInfo.id"

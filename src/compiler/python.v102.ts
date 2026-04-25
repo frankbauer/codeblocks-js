@@ -2,16 +2,13 @@ import {
     ICompilerInstance,
     ErrorSeverity,
     ICompileAndRunArguments,
-    IReplInstance,
     CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 import Vue, { reactive } from 'vue'
 import { l } from '@/plugins/i18n'
 import { globalState } from '@/lib/globalState'
 
-interface REPLWorker extends Worker {
-    interpreter: any
-}
+interface REPLWorker extends Worker {}
 
 let spareWorker: REPLWorker | undefined
 let runningWorker: REPLWorker | undefined
@@ -38,7 +35,6 @@ function getWorker(setReady: (boolean) => void) {
             setReady(true)
         }
     }
-    spareWorker.interpreter = () => {}
     spareWorker.postMessage({
         command: 'initialize',
         id: '0',
@@ -154,8 +150,6 @@ function runPythonWorker(
             options.dequeuePostponedMessages()
 
             options.whenFinishedHandler(msg.data.args)
-        } else if (msg.data.command == 'interpreter') {
-            worker.interpreter(msg.data)
         } else if (msg.data.command == 'w-exit-keepalive' || msg.data.command == 'exit-keepalive') {
             //Make sure a keep-alive session can do proper cleanup
             if (options.keepAlive) {
@@ -215,7 +209,6 @@ function runPythonWorker(
             args: args,
             messagePosting: options.allowMessagePassing,
             keepAlive: options.keepAlive,
-            withREPL: options.withREPL,
         })
 
         //stop Worker execution when the time limit is exceeded;
@@ -259,7 +252,7 @@ function runPythonWorker(
 
 //ICompilerInstance
 
-export class PythonV102Compiler implements ICompilerInstance, IReplInstance {
+export class PythonV102Compiler implements ICompilerInstance {
     readonly version = '102'
     readonly language = 'python'
     readonly canRun = true
@@ -268,7 +261,6 @@ export class PythonV102Compiler implements ICompilerInstance, IReplInstance {
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
-    readonly allowsREPL = true
     readonly experimental = true
     readonly deprecated = false
     isReady = false
@@ -305,48 +297,6 @@ export class PythonV102Compiler implements ICompilerInstance, IReplInstance {
         if (this.worker) {
             this.worker.end(l('CodeBlocks.UserCanceled'))
         }
-    }
-
-    async interpreter(command, onStateChange, onLog, onError) {
-        const self = this
-        return new Promise<object>((resolve, reject) => {
-            if (self.worker === undefined) {
-                reject('Interpreter not Running')
-                return
-            }
-
-            self.worker.interpreter = (msg) => {
-                console.log('Message: ' + msg)
-                switch (msg.sub) {
-                    case 'did-push':
-                        onStateChange(msg.incomplete)
-                        break
-                    case 'out':
-                        onLog(msg.value)
-                        break
-                    case 'err':
-                        onError(msg.value)
-                        break
-                    case 'exception':
-                        if (msg.fatal) {
-                            reject(msg.value)
-                        } else {
-                            onError(msg.value)
-                        }
-                        break
-                    case 'finished':
-                        resolve({})
-                        break
-                    default:
-                        console.log('Unknown Message: ' + msg.sub)
-                }
-            }
-
-            self.worker.postMessage({
-                command: 'interpreter',
-                code: command,
-            })
-        })
     }
 }
 

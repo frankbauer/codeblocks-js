@@ -9,7 +9,6 @@ export enum KnownBlockTypes {
     BLOCKHIDDEN = 'BLOCK-hidden',
     BLOCKSTATIC = 'BLOCK-static',
     BLOCK = 'BLOCK',
-    REPL = 'REPL',
     DATA = 'DATA',
 }
 

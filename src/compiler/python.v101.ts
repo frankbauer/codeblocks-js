@@ -144,7 +144,6 @@ export class PythonV101LegacyCompiler implements ICompilerInstance {
     readonly allowsPersistentArguments = false
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
-    readonly allowsREPL = false
     readonly experimental = false
     readonly deprecated = false
     readonly isReady = true
@@ -201,7 +200,6 @@ export class PythonV101Compiler implements ICompilerInstance {
     readonly allowsPersistentArguments = false
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
-    readonly allowsREPL = false
     readonly experimental = false
     readonly deprecated = false
     isReady = true
