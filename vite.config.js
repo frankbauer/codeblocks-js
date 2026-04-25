@@ -35,14 +35,14 @@ export default defineConfig({
           vue: 'Vue',
         },
         assetFileNames: (assetInfo) => {
-          // Handle font files
-          if (/\.(woff2?|ttf|eot)$/.test(assetInfo.name)) {
+          const name = assetInfo.name ?? assetInfo.names?.[0] ?? ''
+          if (/\.(woff2?|ttf|eot)$/.test(name)) {
             return 'fonts/[name][extname]'
           }
-          if (assetInfo.name === 'style.css') {
+          if (name === 'style.css') {
             return 'codeblocks.css'
           }
-          return assetInfo.name
+          return name || '[name][extname]'
         },
       },
     },
