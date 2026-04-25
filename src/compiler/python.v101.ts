@@ -7,7 +7,6 @@ import {
     CallingCodeBlocks,
 } from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
-import Vue from 'vue'
 import { l } from '@/plugins/i18n'
 
 function runPythonWorker(

@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import hljs from 'highlight.js/lib/core'
 //import 'highlight.js/styles/ocean.css'
 import 'highlight.js/styles/tomorrow.css'

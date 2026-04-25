@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import { CodeOutputTypes, IGlobalSettings, IGlobalState } from '@/lib/ICodeBlocks'
 import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import { IListItemData } from '@/lib/ICompilerRegistry'
