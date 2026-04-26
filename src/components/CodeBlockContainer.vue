@@ -384,7 +384,7 @@
                 </div>
 
                 <!-- Block content -->
-                <div v-show="expanded">
+                <div v-if="expanded">
                     <slot></slot>
                 </div>
 
