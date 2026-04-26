@@ -19,12 +19,13 @@
             @leave="onLeave"
             @after-leave="onAfterLeave"
         >
-            <div v-show="options.randomizer.active" class="tw-ml-4 tw-mt-4">
-                <div class="tagList">
-                    <div
-                        class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mb-3 tw-flex tw-items-center tw-justify-between"
-                    >
-                        {{ $t('RandomizerSettings.Available') }}
+            <div v-show="options.randomizer.active" class="tw-ml-4 tw-mt-4 tw-space-y-6">
+                <!-- Tags section -->
+                <div>
+                    <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
+                        <span class="tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-text-muted-foreground">
+                            {{ $t('RandomizerSettings.Available') }}
+                        </span>
                         <DialogComponent
                             :open="showAddTagDialog"
                             @update:open="showAddTagDialog = $event"
@@ -34,159 +35,161 @@
                                     variant="outline"
                                     size="sm"
                                     @click="addTag"
-                                    class="tw-h-6 tw-w-6 tw-p-0"
+                                    class="tw-h-7 tw-w-7 tw-p-0"
                                 >
-                                    <Plus class="tw-h-3 tw-w-3" />
+                                    <Plus class="tw-h-3.5 tw-w-3.5" />
                                 </ButtonComponent>
                             </DialogTrigger>
-                            <DialogContent class="tw-sm:max-w-md">
+                            <DialogContent class="tw-max-w-sm">
                                 <DialogHeader>
                                     <DialogTitle>Create Tag</DialogTitle>
                                 </DialogHeader>
                                 <div class="tw-space-y-4">
-                                    <p class="tw-text-sm tw-text-gray-600">
-                                        This will generate a new randomizer-Tag with the below name.
+                                    <p class="tw-text-sm tw-text-muted-foreground">
+                                        This will generate a new randomizer tag with the given name.
                                     </p>
-                                    <input
+                                    <InputComponent
                                         v-model="newTagName"
                                         type="text"
                                         placeholder="Tag name"
-                                        class="tw-w-full tw-px-3 tw-py-2 tw-border tw-rounded-md tw-border-gray-300 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500"
                                         @keyup.enter="handleAddTag"
                                     />
-                                    <div class="tw-flex tw-justify-end tw-space-x-2">
+                                    <div class="tw-flex tw-justify-end tw-gap-2">
                                         <ButtonComponent variant="outline" @click="cancelAddTag">
                                             Cancel
                                         </ButtonComponent>
-                                        <ButtonComponent @click="handleAddTag"
-                                            >Create</ButtonComponent
-                                        >
+                                        <ButtonComponent @click="handleAddTag">Create</ButtonComponent>
                                     </div>
                                 </div>
                             </DialogContent>
                         </DialogComponent>
                     </div>
-                    <div class="tw-flex tw-flex-wrap tw-gap-2 tw-mb-4">
+
+                    <div v-if="options.randomizer.knownTags.length === 0" class="tw-text-xs tw-text-muted-foreground tw-italic">
+                        No tags defined yet.
+                    </div>
+                    <div class="tw-flex tw-flex-wrap tw-gap-2">
                         <div
-                            :class="`tagItem tw-ml-1 ${tagClass}`"
+                            :class="`tagItem ${tagClass}`"
                             v-for="(tag, i) in options.randomizer.knownTags"
-                            v-bind:key="tag"
+                            :key="tag"
                         >
-                            <div class="tw-flex tw-items-center tw-justify-between tw-space-x-2">
-                                <div class="tagInfo tw-flex-1">
+                            <div class="tw-flex tw-items-center tw-gap-1.5">
+                                <div class="tagInfo">
                                     <div class="tagName">{{ tag }}</div>
                                     <div class="tagString">{:{{ tag }}}</div>
                                 </div>
-                                <div class="tagAction tw-flex-shrink-0">
-                                    <ButtonComponent
-                                        variant="ghost"
-                                        size="sm"
-                                        @click="removeTag(i)"
-                                        class="tw-h-6 tw-w-6 tw-p-0 tw-text-gray-500 hover:tw-text-red-600"
-                                    >
-                                        <Trash2 class="tw-h-3 tw-w-3" />
-                                    </ButtonComponent>
-                                </div>
+                                <ButtonComponent
+                                    variant="ghost"
+                                    size="sm"
+                                    @click="removeTag(i)"
+                                    class="tw-h-5 tw-w-5 tw-p-0 tw-text-muted-foreground hover:tw-text-destructive"
+                                >
+                                    <Trash2 class="tw-h-3 tw-w-3" />
+                                </ButtonComponent>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="tagList tw-mt-8">
-                    <div
-                        class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mb-3 tw-flex tw-items-center tw-justify-between"
-                    >
-                        {{ $t('RandomizerSettings.Sets') }}
+                <!-- Sets section -->
+                <div>
+                    <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
+                        <span class="tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-text-muted-foreground">
+                            {{ $t('RandomizerSettings.Sets') }}
+                        </span>
                         <ButtonComponent
                             variant="outline"
                             size="sm"
                             @click="addSet"
-                            class="tw-h-6 tw-w-6 tw-p-0"
+                            class="tw-h-7 tw-w-7 tw-p-0"
                         >
-                            <Plus class="tw-h-3 tw-w-3" />
+                            <Plus class="tw-h-3.5 tw-w-3.5" />
                         </ButtonComponent>
                     </div>
 
-                    <div class="setList tw-space-y-3">
+                    <div v-if="options.randomizer.sets.length === 0" class="tw-text-xs tw-text-muted-foreground tw-italic">
+                        No sets defined yet.
+                    </div>
+                    <div class="tw-space-y-2">
                         <div
                             v-for="(s, i) in options.randomizer.sets"
-                            v-bind:key="s.uuid"
-                            class="tw-flex tw-items-start tw-space-x-3 tw-p-3 tw-bg-gray-50 tw-rounded-lg"
+                            :key="s.uuid"
+                            :class="[
+                                'tw-flex tw-items-start tw-gap-3 tw-p-3 tw-rounded-lg tw-border tw-transition-colors',
+                                isVisible(i)
+                                    ? 'tw-border-primary tw-bg-primary/5'
+                                    : 'tw-border-border tw-bg-card',
+                            ]"
                         >
-                            <div class="tw-flex-shrink-0">
-                                <Avatar
-                                    :class="[
-                                        'tw-h-8 tw-w-8 tw-text-sm tw-font-medium',
-                                        isVisible(i)
-                                            ? 'tw-bg-blue-700 tw-text-white'
-                                            : 'tw-bg-gray-500 tw-text-white',
-                                    ]"
-                                >
-                                    {{ i }}
-                                </Avatar>
+                            <!-- Set number badge -->
+                            <div
+                                :class="[
+                                    'tw-flex-shrink-0 tw-flex tw-items-center tw-justify-center tw-h-7 tw-w-7 tw-rounded-full tw-text-xs tw-font-semibold tw-tabular-nums',
+                                    isVisible(i)
+                                        ? 'tw-bg-primary tw-text-primary-foreground'
+                                        : 'tw-bg-muted tw-text-muted-foreground',
+                                ]"
+                            >
+                                {{ i + 1 }}
                             </div>
+
+                            <!-- Tag chips preview -->
                             <div class="tw-flex-1 tw-min-w-0">
-                                <div class="tw-text-sm tw-font-medium tw-text-gray-900">
-                                    Set {{ i + 1 }}
+                                <div v-if="s.values.length === 0" class="tw-text-xs tw-text-muted-foreground tw-italic">
+                                    Empty — click edit to fill in values.
                                 </div>
-                                <div class="tw-mt-1">
-                                    <div class="tw-flex tw-flex-wrap tw-gap-1">
-                                        <div
-                                            :class="`tagItem tw-ml-1 ${tagClass}`"
-                                            v-for="tag in s.values"
-                                            v-bind:key="tag.tag"
-                                        >
-                                            <div class="tw-flex tw-items-center">
-                                                <div class="tagInfo tw-flex-1">
-                                                    <div class="tagName">{{ tag.tag }}</div>
-                                                    <div class="tagString">{{ tag.value }}</div>
-                                                </div>
-                                            </div>
+                                <div class="tw-flex tw-flex-wrap tw-gap-1.5">
+                                    <div
+                                        :class="`tagItem ${tagClass}`"
+                                        v-for="tag in s.values"
+                                        :key="tag.tag"
+                                    >
+                                        <div class="tagInfo">
+                                            <div class="tagName">{{ tag.tag }}</div>
+                                            <div class="tagString">{{ tag.value || '—' }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="tw-flex-shrink-0 tw-flex tw-items-center tw-space-x-1">
-                                <div class="tw-mr-3">
-                                    <component
-                                        :is="isCompleteSet(s) ? Check : AlertTriangle"
-                                        :class="[
-                                            'tw-h-5 tw-w-5',
-                                            isCompleteSet(s)
-                                                ? 'tw-text-green-600'
-                                                : 'tw-text-red-600',
-                                        ]"
-                                    />
-                                </div>
+                            <!-- Actions -->
+                            <div class="tw-flex-shrink-0 tw-flex tw-items-center tw-gap-0.5">
+                                <component
+                                    :is="isCompleteSet(s) ? Check : AlertTriangle"
+                                    :class="[
+                                        'tw-h-4 tw-w-4 tw-mr-1.5',
+                                        isCompleteSet(s) ? 'tw-text-green-600' : 'tw-text-amber-500',
+                                    ]"
+                                />
 
                                 <ButtonComponent
                                     variant="ghost"
                                     size="sm"
                                     @click="setVisible(i)"
-                                    class="tw-h-6 tw-w-6 tw-p-0"
-                                    title="Use this set when running code in preview or editMode."
+                                    class="tw-h-7 tw-w-7 tw-p-0"
+                                    :title="isVisible(i) ? 'Active preview set' : 'Use this set for preview'"
                                 >
                                     <component
                                         :is="isVisible(i) ? Eye : EyeOff"
-                                        class="tw-h-3 tw-w-3"
+                                        class="tw-h-3.5 tw-w-3.5"
                                     />
                                 </ButtonComponent>
 
                                 <DialogComponent>
-                                    <DialogTrigger asChild>
+                                    <DialogTrigger as-child>
                                         <ButtonComponent
                                             variant="ghost"
                                             size="sm"
-                                            class="tw-h-6 tw-w-6 tw-p-0"
+                                            class="tw-h-7 tw-w-7 tw-p-0"
                                         >
-                                            <Edit class="tw-h-3 tw-w-3" />
+                                            <Edit class="tw-h-3.5 tw-w-3.5" />
                                         </ButtonComponent>
                                     </DialogTrigger>
                                     <DialogContent>
                                         <DialogHeader>
                                             <DialogTitle>
-                                                {{ $t('RandomizerSetEditor.Caption', { nr: i }) }}
+                                                {{ $t('RandomizerSetEditor.Caption', { nr: i + 1 }) }}
                                             </DialogTitle>
                                         </DialogHeader>
                                         <RandomizerSetEditor
@@ -201,9 +204,9 @@
                                     variant="ghost"
                                     size="sm"
                                     @click="removeSet(i)"
-                                    class="tw-h-6 tw-w-6 tw-p-0 tw-text-gray-500 hover:tw-text-red-600"
+                                    class="tw-h-7 tw-w-7 tw-p-0 tw-text-muted-foreground hover:tw-text-destructive"
                                 >
-                                    <Trash2 class="tw-h-3 tw-w-3" />
+                                    <Trash2 class="tw-h-3.5 tw-w-3.5" />
                                 </ButtonComponent>
                             </div>
                         </div>
@@ -222,21 +225,19 @@ import { uuid } from 'vue-uuid'
 import { TAG_CLASS_NAMES } from '@/plugins/tagHighlighter'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 
-// shadcn components — aliased to match template usage
 import { Switch } from '@/shadcn/ui/switch'
 import { Label } from '@/shadcn/ui/label'
 import { Button } from '@/shadcn/ui/button'
-import { Avatar } from '@/shadcn/ui/avatar'
+import { Input } from '@/shadcn/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/shadcn/ui/dialog'
 const SwitchComponent = Switch
 const LabelComponent = Label
 const ButtonComponent = Button
+const InputComponent = Input
 const DialogComponent = Dialog
 
-// Lucide icons
 import { Plus, Trash2, Check, AlertTriangle, Eye, EyeOff, Edit } from 'lucide-vue-next'
 
-// Define the interface directly here for now
 interface ICodeBlockSettingsOptions {
     randomizer: {
         active: boolean
@@ -279,10 +280,6 @@ function updateActive(checked: boolean): void {
     const updatedOptions = { ...props.options }
     updatedOptions.randomizer.active = checked
     emit('update:options', updatedOptions)
-}
-
-function isValidTag(tag: string): boolean {
-    return props.options.randomizer.knownTags.find((t) => t == tag) !== undefined
 }
 
 function isCompleteSet(s: IRandomizerSet): boolean {
@@ -353,7 +350,7 @@ function cancelAddTag(): void {
 <style scoped>
 .tagItem {
     width: auto;
-    padding-bottom: 2px;
+    padding: 2px 4px 2px 0;
     min-height: 24px;
 }
 
@@ -363,22 +360,14 @@ function cancelAddTag(): void {
 
 .tagItem .tagInfo .tagName {
     font-weight: bold;
+    line-height: 1.2;
 }
 
 .tagItem .tagInfo .tagString {
-    margin-top: -4px;
+    margin-top: -2px;
     color: #94a3b8;
     font-size: 75%;
-}
-
-.tagItem .tagAction {
-    padding-top: 2px;
-    color: #475569;
-    min-width: 36px;
-}
-
-.setList .tagItem .tagInfo {
-    padding-right: 4px;
+    line-height: 1.2;
 }
 
 .setList .tagItem .tagInfo .tagName {

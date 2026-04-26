@@ -4,170 +4,182 @@
         <div
             class="tw-flex tw-items-stretch tw-h-9 tw-rounded-lg tw-border tw-bg-card tw-overflow-hidden tw-text-xs tw-select-none"
         >
-            <!-- Language + version: click → language tab -->
-            <button
-                type="button"
-                @click="openDialogOnTab('language')"
-                class="cb-toolbar-item tw-border-r tw-font-medium tw-gap-2"
-            >
-                <Code2 class="tw-w-3.5 tw-h-3.5 tw-shrink-0" />
-                <span>{{ compilerLanguage.label }}</span>
-                <span class="tw-text-muted-foreground tw-font-normal">
-                    {{ runCode ? `v${compilerVersion}` : $t('CodeBlocksSettings.NoExecution') }}
-                </span>
-                <AlertTriangle
-                    v-if="isDeprecated"
-                    class="tw-w-3 tw-h-3 tw-text-yellow-500"
-                    :title="$t('CodeBlocksSettings.DeprecatedCompiler')"
-                />
-                <Flame
-                    v-if="isExperimental"
-                    class="tw-w-3 tw-h-3 tw-text-orange-500"
-                    :title="$t('CodeBlocksSettings.ExperimentalCompiler')"
-                />
-            </button>
+            <!-- Scrollable/clippable left section — gear always stays visible -->
+            <div class="tw-flex tw-items-stretch tw-overflow-hidden tw-flex-1 tw-min-w-0">
+                <!-- Language + version: click → language tab -->
+                <button
+                    type="button"
+                    @click="openDialogOnTab('language')"
+                    class="cb-toolbar-item tw-border-r tw-font-medium tw-gap-2"
+                >
+                    <Code2 class="tw-w-3.5 tw-h-3.5 tw-shrink-0" />
+                    <span>{{ compilerLanguage.label }}</span>
+                    <span class="tw-text-muted-foreground tw-font-normal">
+                        {{ runCode ? `v${compilerVersion}` : $t('CodeBlocksSettings.NoExecution') }}
+                    </span>
+                    <AlertTriangle
+                        v-if="isDeprecated"
+                        class="tw-w-3 tw-h-3 tw-text-yellow-500"
+                        :title="$t('CodeBlocksSettings.DeprecatedCompiler')"
+                    />
+                    <Flame
+                        v-if="isExperimental"
+                        class="tw-w-3 tw-h-3 tw-text-orange-500"
+                        :title="$t('CodeBlocksSettings.ExperimentalCompiler')"
+                    />
+                </button>
 
-            <!-- Randomizer: popover -->
-            <Popover v-if="options.randomizer.active">
-                <PopoverTrigger as-child>
-                    <button type="button" class="cb-toolbar-item tw-border-r">
-                        <Dices class="tw-w-3.5 tw-h-3.5 tw-shrink-0" />
-                        <span class="tw-font-medium">{{ options.randomizer.sets.length }}</span>
-                        <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
-                    </button>
-                </PopoverTrigger>
-                <PopoverContent class="tw-w-72 tw-p-3">
-                    <div class="tw-flex tw-items-center tw-gap-2 tw-mb-3">
-                        <Switch
-                            id="rnd-active-quick"
-                            :checked="options.randomizer.active"
-                            @update:checked="updateRandomizerActive"
-                        />
-                        <Label for="rnd-active-quick" class="tw-text-sm tw-font-medium">
-                            {{ $t('RandomizerSettings.Active') }}
-                        </Label>
-                    </div>
-                    <div class="tw-space-y-1.5 tw-max-h-56 tw-overflow-y-auto modern-scrollbar">
-                        <div
-                            v-for="(s, i) in options.randomizer.sets"
-                            :key="s.uuid"
-                            class="tw-flex tw-items-center tw-justify-between tw-px-2 tw-py-1.5 tw-rounded-md"
-                            :class="isSetVisible(i) ? 'tw-bg-primary/10' : 'tw-bg-muted/50'"
-                        >
-                            <div class="tw-flex tw-items-center tw-gap-2 tw-min-w-0 tw-flex-1">
-                                <component
-                                    :is="isCompleteSet(s) ? Check : AlertTriangle"
-                                    :class="[
-                                        'tw-h-3.5 tw-w-3.5 tw-shrink-0',
-                                        isCompleteSet(s) ? 'tw-text-green-600' : 'tw-text-red-600',
-                                    ]"
-                                />
-                                <span class="tw-text-sm tw-font-medium tw-shrink-0"
-                                    >Set {{ i + 1 }}</span
-                                >
-                                <span class="tw-text-xs tw-text-muted-foreground tw-truncate">{{
-                                    setValuesSummary(s)
-                                }}</span>
-                            </div>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                @click="setSetVisible(i)"
-                                class="tw-h-6 tw-w-6 tw-p-0 tw-shrink-0 tw-ml-1"
-                                :title="$t('RandomizerSettings.UseSet')"
-                            >
-                                <component
-                                    :is="isSetVisible(i) ? Eye : EyeOff"
-                                    class="tw-h-3 tw-w-3"
-                                />
-                            </Button>
+                <!-- Randomizer: popover -->
+                <Popover v-if="options.randomizer.active">
+                    <PopoverTrigger as-child>
+                        <button type="button" class="cb-toolbar-item tw-border-r">
+                            <Dices class="tw-w-3.5 tw-h-3.5 tw-shrink-0" />
+                            <span class="tw-font-medium">{{ options.randomizer.sets.length }}</span>
+                            <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent class="tw-w-72 tw-p-3">
+                        <div class="tw-flex tw-items-center tw-gap-2 tw-mb-3">
+                            <Switch
+                                id="rnd-active-quick"
+                                :checked="options.randomizer.active"
+                                @update:checked="updateRandomizerActive"
+                            />
+                            <Label for="rnd-active-quick" class="tw-text-sm tw-font-medium">
+                                {{ $t('RandomizerSettings.Active') }}
+                            </Label>
                         </div>
-                        <p
-                            v-if="options.randomizer.sets.length === 0"
-                            class="tw-text-sm tw-text-muted-foreground tw-text-center tw-py-2"
+                        <div
+                            class="tw-space-y-1.5 tw-max-h-56 tw-overflow-y-auto modern-scrollbar"
                         >
-                            {{ $t('RandomizerSettings.NoSets') }}
+                            <div
+                                v-for="(s, i) in options.randomizer.sets"
+                                :key="s.uuid"
+                                class="tw-flex tw-items-center tw-justify-between tw-px-2 tw-py-1.5 tw-rounded-md"
+                                :class="isSetVisible(i) ? 'tw-bg-primary/10' : 'tw-bg-muted/50'"
+                            >
+                                <div class="tw-flex tw-items-center tw-gap-2 tw-min-w-0 tw-flex-1">
+                                    <component
+                                        :is="isCompleteSet(s) ? Check : AlertTriangle"
+                                        :class="[
+                                            'tw-h-3.5 tw-w-3.5 tw-shrink-0',
+                                            isCompleteSet(s)
+                                                ? 'tw-text-green-600'
+                                                : 'tw-text-red-600',
+                                        ]"
+                                    />
+                                    <span class="tw-text-sm tw-font-medium tw-shrink-0"
+                                        >Set {{ i + 1 }}</span
+                                    >
+                                    <span
+                                        class="tw-text-xs tw-text-muted-foreground tw-truncate"
+                                        >{{ setValuesSummary(s) }}</span
+                                    >
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    @click="setSetVisible(i)"
+                                    class="tw-h-6 tw-w-6 tw-p-0 tw-shrink-0 tw-ml-1"
+                                    :title="$t('RandomizerSettings.UseSet')"
+                                >
+                                    <component
+                                        :is="isSetVisible(i) ? Eye : EyeOff"
+                                        class="tw-h-3 tw-w-3"
+                                    />
+                                </Button>
+                            </div>
+                            <p
+                                v-if="options.randomizer.sets.length === 0"
+                                class="tw-text-sm tw-text-muted-foreground tw-text-center tw-py-2"
+                            >
+                                {{ $t('RandomizerSettings.NoSets') }}
+                            </p>
+                        </div>
+                    </PopoverContent>
+                </Popover>
+
+                <!-- Timeout: popover -->
+                <Popover v-if="showMaxRuntime">
+                    <PopoverTrigger as-child>
+                        <button type="button" class="cb-toolbar-item tw-border-r">
+                            <Clock
+                                class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground"
+                            />
+                            <span class="tw-font-medium">{{ Math.round(maxRuntime / 1000) }}s</span>
+                            <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent class="tw-w-56 tw-p-3">
+                        <CInput
+                            v-model="maxRuntime"
+                            :rules="[validNumber]"
+                            :label="$t('CodeBlocksSettings.RunTimeShrt')"
+                        />
+                    </PopoverContent>
+                </Popover>
+
+                <!-- Output + char limit: click → output tab -->
+                <button
+                    v-if="runCode"
+                    type="button"
+                    @click="openDialogOnTab('output')"
+                    class="cb-toolbar-item tw-border-r"
+                >
+                    <Terminal
+                        class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground"
+                    />
+                    <span class="tw-font-medium">{{ outputParser.label }}</span>
+                    <span class="tw-text-muted-foreground">·</span>
+                    <span class="tw-text-muted-foreground">{{ maxCharacters }}</span>
+                </button>
+
+                <!-- DOM libs: popover -->
+                <Popover>
+                    <PopoverTrigger as-child>
+                        <button type="button" class="cb-toolbar-item tw-border-r">
+                            <Library
+                                class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground"
+                            />
+                            <span class="tw-font-medium">{{ domLibrary.length }}</span>
+                            <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent class="tw-w-72 tw-p-3">
+                        <p class="tw-text-xs tw-font-medium tw-text-muted-foreground tw-mb-2">
+                            {{ $t('CodeBlocksSettings.DomLibs') }}
                         </p>
-                    </div>
-                </PopoverContent>
-            </Popover>
+                        <CMultiSelect
+                            v-model="domLibrary"
+                            :options="domLibraries"
+                            :placeholder="$t('CodeBlocksSettings.SelectDomLibs')"
+                        />
+                    </PopoverContent>
+                </Popover>
 
-            <!-- Timeout: popover -->
-            <Popover v-if="showMaxRuntime">
-                <PopoverTrigger as-child>
-                    <button type="button" class="cb-toolbar-item tw-border-r">
-                        <Clock class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground" />
-                        <span class="tw-font-medium">{{ Math.round(maxRuntime / 1000) }}s</span>
-                        <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
-                    </button>
-                </PopoverTrigger>
-                <PopoverContent class="tw-w-56 tw-p-3">
-                    <CInput
-                        v-model="maxRuntime"
-                        :rules="[validNumber]"
-                        :label="$t('CodeBlocksSettings.RunTimeShrt')"
-                    />
-                </PopoverContent>
-            </Popover>
-
-            <!-- Output + char limit: click → output tab -->
-            <button
-                v-if="runCode"
-                type="button"
-                @click="openDialogOnTab('output')"
-                class="cb-toolbar-item tw-border-r"
-            >
-                <Terminal class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground" />
-                <span class="tw-font-medium">{{ outputParser.label }}</span>
-                <span class="tw-text-muted-foreground">·</span>
-                <span class="tw-text-muted-foreground">{{ maxCharacters }}</span>
-            </button>
-
-            <!-- DOM libs: popover -->
-            <Popover>
-                <PopoverTrigger as-child>
-                    <button type="button" class="cb-toolbar-item tw-border-r">
-                        <Library class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground" />
-                        <span class="tw-font-medium">{{ domLibrary.length }}</span>
-                        <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
-                    </button>
-                </PopoverTrigger>
-                <PopoverContent class="tw-w-72 tw-p-3">
-                    <p class="tw-text-xs tw-font-medium tw-text-muted-foreground tw-mb-2">
-                        {{ $t('CodeBlocksSettings.DomLibs') }}
-                    </p>
-                    <CMultiSelect
-                        v-model="domLibrary"
-                        :options="domLibraries"
-                        :placeholder="$t('CodeBlocksSettings.SelectDomLibs')"
-                    />
-                </PopoverContent>
-            </Popover>
-
-            <!-- Worker libs: popover -->
-            <Popover v-if="runCode && workerLibraries.length > 0">
-                <PopoverTrigger as-child>
-                    <button type="button" class="cb-toolbar-item tw-border-r">
-                        <span class="tw-text-muted-foreground">{{
-                            $t('CodeBlocksSettings.WorkLibs')
-                        }}</span>
-                        <span class="tw-font-medium">{{ workerLibrary.length }}</span>
-                        <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
-                    </button>
-                </PopoverTrigger>
-                <PopoverContent class="tw-w-72 tw-p-3">
-                    <p class="tw-text-xs tw-font-medium tw-text-muted-foreground tw-mb-2">
-                        {{ $t('CodeBlocksSettings.WorkLibs') }}
-                    </p>
-                    <CMultiSelect
-                        v-model="workerLibrary"
-                        :options="workerLibraries"
-                        :placeholder="$t('CodeBlocksSettings.SelectWorkLibs')"
-                    />
-                </PopoverContent>
-            </Popover>
-
-            <div class="tw-flex-1" />
+                <!-- Worker libs: popover -->
+                <Popover v-if="runCode && workerLibraries.length > 0">
+                    <PopoverTrigger as-child>
+                        <button type="button" class="cb-toolbar-item tw-border-r">
+                            <span class="tw-text-muted-foreground">{{
+                                $t('CodeBlocksSettings.WorkLibs')
+                            }}</span>
+                            <span class="tw-font-medium">{{ workerLibrary.length }}</span>
+                            <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
+                        </button>
+                    </PopoverTrigger>
+                    <PopoverContent class="tw-w-72 tw-p-3">
+                        <p class="tw-text-xs tw-font-medium tw-text-muted-foreground tw-mb-2">
+                            {{ $t('CodeBlocksSettings.WorkLibs') }}
+                        </p>
+                        <CMultiSelect
+                            v-model="workerLibrary"
+                            :options="workerLibraries"
+                            :placeholder="$t('CodeBlocksSettings.SelectWorkLibs')"
+                        />
+                    </PopoverContent>
+                </Popover>
+            </div>
 
             <!-- Settings gear -->
             <Dialog v-model:open="dialogOpen">
