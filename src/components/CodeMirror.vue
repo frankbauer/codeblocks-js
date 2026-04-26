@@ -1,20 +1,20 @@
 <template>
-    <div class="code-editor">
-        <textarea
-            style="display: none"
-            readonly
-            v-model="code"
-            :name="name"
-            :data-question="dataQuestion"
-            class="accqstXmlInput noRTEditor"
-        ></textarea>
-        <div
-            :class="mainClass"
-            :name="name"
-            :data-question="dataQuestion"
-            ref="editorElement"
-        ></div>
-    </div>
+  <div class="code-editor">
+    <textarea
+      style="display: none"
+      readonly
+      v-model="code"
+      :name="name"
+      :data-question="dataQuestion"
+      class="accqstXmlInput noRTEditor"
+    ></textarea>
+    <div
+      :class="mainClass"
+      :name="name"
+      :data-question="dataQuestion"
+      ref="editorElement"
+    ></div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -62,6 +62,7 @@ import {
     ComputedRef,
     createApp,
     nextTick,
+    onBeforeUnmount,
     onMounted,
     Ref,
     ref,
@@ -311,6 +312,8 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
     ] as Extension[]
 })
 
+// let resizeObserver: ResizeObserver | null = null
+
 onMounted(() => {
     if (editorElement.value === null) {
         console.error('Editor Element is not found.')
@@ -351,8 +354,29 @@ onMounted(() => {
             state: editorView.value.state,
             container: editorElement.value,
         })
+
+        // // Add this ResizeObserver
+        // resizeObserver = new ResizeObserver(() => {
+        //      if (editorView.value) {
+        //          editorView.value.requestMeasure()
+        //          editorView.value.dispatch({}) // Forces a full re-layout
+        //      }
+        // })
+        // resizeObserver.observe(editorElement.value)
+    })
+
+   document.fonts.ready.then(() => {
+        if (editorView.value) {
+            editorView.value.requestMeasure()
+            editorView.value.dispatch({}) // Forces a full re-layout
+        }
     })
 })
+
+// // Clean it up
+// onBeforeUnmount(() => {
+//     if (resizeObserver) resizeObserver.disconnect()
+// })
 
 function lineNr(a: number): string {
     return `${+a + firstLine.value - 1}`
@@ -582,7 +606,7 @@ class ErrorMarker extends GutterMarker {
                 },
             ],
             severity: this.severity,
-        })        
+        })
         app.mount(marker)
         return marker
     }
