@@ -1,6 +1,6 @@
 <template>
     <div class="tw-flex">
-        <div class="tw-w-full tw-md:tw-w-1/2 tw-px-2">
+        <div class="tw-w-full tw-md:tw-w-1/2">
             <CodeBlock
                 :appID="appID"
                 :blockID="blockID"
@@ -13,7 +13,7 @@
                 class="plain accqstXmlInput noRTEditor tw-mt-5"
             />
         </div>
-        <div class="tw-w-full tw-md:tw-w-1/2 tw-px-2">
+        <div class="tw-w-full tw-md:tw-w-1/2 tw-pl-4">
             <div
                 class="tw-text-sm tw-font-medium tw-pointer-events-none tw-truncate tw-z-50 tw-text-muted-foreground"
             >
