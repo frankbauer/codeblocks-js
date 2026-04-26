@@ -5,295 +5,314 @@
         :uuid="block.uuid"
         class="block-container"
     >
-        <div v-if="editMode" class="tw-flex tw-group tw-relative tw-my-1">
-            <!-- Left gutter: icon controls, visible on hover -->
+        <div
+            v-if="editMode"
+            class="tw-group tw-relative tw-my-1"
+            :style="isDragOver ? dropIndicatorStyle : {}"
+            @dragover.prevent="onDragOver"
+            @dragleave="onDragLeave"
+            @drop.prevent="onDrop"
+        >
+            <!--
+              Toolbar: appears on block-hover (opacity), extends on toolbar-hover (max-width).
+
+              The drag handle is NOT inside overflow-hidden so it is always draggable once
+              the toolbar is visible. Only the extended buttons are clipped via max-width.
+
+              Layout: [grip | <overflow-hidden>[settings, delete, collapse]</overflow-hidden>]
+              The whole assembly sits flush against the left colored border (border-radius 0 on
+              the left, rounded on the right) with a type-color gradient background and glow.
+            -->
             <div
-                class="tw-flex tw-flex-col tw-items-center tw-gap-0.5 tw-w-8 tw-shrink-0 tw-pt-1 tw-pb-1 tw-opacity-0 group-hover:tw-opacity-100 tw-transition-opacity tw-duration-150"
+                class="cbc-toolbar tw-absolute tw-top-0 tw-left-0 tw-z-10 tw-flex tw-items-center
+                       tw-pointer-events-none group-hover:tw-pointer-events-auto
+                       tw-opacity-0 group-hover:tw-opacity-100
+                       tw-transition-opacity tw-duration-150"
+                :style="toolbarBaseStyle"
             >
-                <!-- Expand/collapse always first so collapsed blocks stay compact -->
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    class="tw-h-6 tw-w-6 tw-text-muted-foreground"
-                    @click="toggleExpanded"
+                <!-- Drag handle: free from overflow-hidden so dragstart fires reliably -->
+                <div
+                    draggable="true"
+                    @dragstart="onDragStart"
+                    class="tw-w-6 tw-h-6 tw-shrink-0 tw-cursor-grab tw-flex tw-items-center tw-justify-center tw-text-foreground/50 hover:tw-text-foreground"
                 >
-                    <ChevronUp v-if="expanded" class="tw-h-3.5 tw-w-3.5" />
-                    <ChevronDown v-else class="tw-h-3.5 tw-w-3.5" />
-                </Button>
+                    <GripVertical class="tw-h-3.5 tw-w-3.5" style="pointer-events: none;" />
+                </div>
 
-                <!-- Reorder, settings and delete only shown when expanded -->
-                <template v-if="expanded">
-                <!-- Reorder via popover -->
-                <Popover v-model:open="reorderOpen">
-                    <PopoverTrigger as-child>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            class="tw-h-6 tw-w-6 tw-cursor-grab tw-text-muted-foreground hover:tw-text-foreground"
-                        >
-                            <GripVertical class="tw-h-3.5 tw-w-3.5" />
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent side="right" class="tw-w-auto tw-p-2" :sideOffset="4">
-                        <div class="tw-flex tw-items-center tw-gap-1">
-                            <Button
-                                size="icon"
-                                variant="outline"
-                                class="tw-h-6 tw-w-6"
-                                :disabled="!canMoveUp"
-                                @click="() => { moveUp(); reorderOpen = false }"
-                            >
-                                <ChevronUp class="tw-h-3 tw-w-3" />
-                            </Button>
-                            <CSelect
-                                :model-value="order"
-                                :options="positions"
-                                @update:model-value="(val) => { order = val; reorderOpen = false }"
-                                class="tw-w-16"
-                            />
-                            <Button
-                                size="icon"
-                                variant="outline"
-                                class="tw-h-6 tw-w-6"
-                                :disabled="!canMoveDown"
-                                @click="() => { moveDown(); reorderOpen = false }"
-                            >
-                                <ChevronDown class="tw-h-3 tw-w-3" />
-                            </Button>
-                        </div>
-                    </PopoverContent>
-                </Popover>
-
-                <!-- Settings dropdown: type, label, and all extended settings -->
-                <DropdownMenu>
-                    <DropdownMenuTrigger as-child>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            class="tw-h-6 tw-w-6 tw-text-muted-foreground hover:tw-text-foreground"
-                        >
-                            <Settings class="tw-h-3.5 tw-w-3.5" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                        side="right"
-                        class="tw-w-[300px] sm:tw-w-[300px] md:tw-w-[45vw] tw-max-h-[60vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar"
-                        align="start"
-                        :sideOffset="4"
-                    >
-                        <!-- Block type + label -->
-                        <div class="tw-p-4">
-                            <div class="tw-flex tw-items-center tw-gap-2 tw-mb-3">
-                                <div class="tw-hidden sm:tw-block">
-                                    <HoverCard>
-                                        <HoverCardTrigger>
-                                            <Info
-                                                class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
+                <!-- Extended buttons: slide out on toolbar :hover via CSS -->
+                <div class="cbc-extended tw-flex tw-items-center tw-w-max tw-h-6">
+                        <template v-if="expanded">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger as-child>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-foreground"
+                                    >
+                                        <Settings class="tw-h-3.5 tw-w-3.5" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    side="bottom"
+                                    class="tw-w-[300px] sm:tw-w-[300px] md:tw-w-[45vw] tw-max-h-[60vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar"
+                                    align="start"
+                                    :sideOffset="4"
+                                >
+                                    <!-- Block type + label -->
+                                    <div class="tw-p-4">
+                                        <div class="tw-flex tw-items-center tw-gap-2 tw-mb-3">
+                                            <div class="tw-hidden sm:tw-block">
+                                                <HoverCard>
+                                                    <HoverCardTrigger>
+                                                        <Info
+                                                            class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
+                                                        />
+                                                    </HoverCardTrigger>
+                                                    <HoverCardContent
+                                                        class="tw-w-80 tw-max-h-[30vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar"
+                                                    >
+                                                        <div
+                                                            v-html="l('CodeBlockContainer.Types')"
+                                                            class="hover-content"
+                                                        ></div>
+                                                    </HoverCardContent>
+                                                </HoverCard>
+                                            </div>
+                                            <CSelect
+                                                :model-value="typeObj"
+                                                :options="types"
+                                                @update:model-value="typeObj = $event"
+                                                class="tw-flex-1"
                                             />
-                                        </HoverCardTrigger>
-                                        <HoverCardContent
-                                            class="tw-w-80 tw-max-h-[30vh] tw-overflow-y-auto tw-overflow-x-hidden modern-scrollbar"
+                                        </div>
+                                        <Input
+                                            v-model="block.label"
+                                            class="tw-w-full"
+                                            placeholder="Optional Label"
+                                        />
+                                    </div>
+
+                                    <DropdownMenuSeparator v-if="hasExtendedSettings" />
+
+                                    <!-- LineNumbers (BLOCK type) -->
+                                    <div v-if="canSetLineNumbers" class="tw-p-4">
+                                        <div class="tw-text-lg tw-font-medium tw-mb-4">
+                                            {{ l('CodeBlockContainer.Display') }}
+                                        </div>
+                                        <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{ l('CodeBlockContainer.Lines') }}
+                                                </div>
+                                                <div
+                                                    class="tw-text-sm tw-text-muted-foreground"
+                                                    v-html="l('CodeBlockContainer.Lines_detail')"
+                                                ></div>
+                                            </div>
+                                            <div>
+                                                <Input
+                                                    v-model="visibleLines"
+                                                    :rules="[validNumber]"
+                                                    class="tw-w-1/3"
+                                                    maxlength="4"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div
+                                            v-if="canHaveAlternativeContent"
+                                            class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
                                         >
-                                            <div
-                                                v-html="l('CodeBlockContainer.Types')"
-                                                class="hover-content"
-                                            ></div>
-                                        </HoverCardContent>
-                                    </HoverCard>
-                                </div>
-                                <CSelect
-                                    :model-value="typeObj"
-                                    :options="types"
-                                    @update:model-value="typeObj = $event"
-                                    class="tw-flex-1"
-                                />
-                            </div>
-                            <Input
-                                v-model="block.label"
-                                class="tw-w-full"
-                                placeholder="Optional Label"
-                            />
-                        </div>
-
-                        <DropdownMenuSeparator v-if="hasExtendedSettings" />
-
-                        <!-- LineNumbers (BLOCK type) -->
-                        <div v-if="canSetLineNumbers" class="tw-p-4">
-                            <div class="tw-text-lg tw-font-medium tw-mb-4">
-                                {{ l('CodeBlockContainer.Display') }}
-                            </div>
-                            <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.Lines') }}
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{ l('CodeBlockContainer.Prepopulate') }}
+                                                </div>
+                                                <div class="tw-text-sm tw-text-muted-foreground">
+                                                    {{ l('CodeBlockContainer.Prepopulate_detail') }}
+                                                </div>
+                                            </div>
+                                            <div class="tw-w-1/3">
+                                                <Switch v-model="hasAltComntent" />
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <!-- Playground versioning (PLAYGROUND type) -->
+                                    <div v-if="isVersionedPlayground" class="tw-p-4">
+                                        <div class="tw-text-lg tw-font-medium tw-mb-4">
+                                            {{ l('CodeBlockContainer.Behaviour') }}
+                                        </div>
+                                        <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{ l('CodeBlockContainer.ScriptV') }}
+                                                </div>
+                                                <div class="tw-text-sm tw-text-muted-foreground">
+                                                    {{ l('CodeBlockContainer.ScriptV_detail') }}
+                                                </div>
+                                            </div>
+                                            <div class="tw-w-1/3">
+                                                <CSelect
+                                                    :model-value="scriptVersionObj"
+                                                    :options="scriptVersions"
+                                                    @update:model-value="scriptVersionObj = $event"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                        >
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{ l('CodeBlockContainer.AutoReset') }}
+                                                </div>
+                                                <div class="tw-text-sm tw-text-muted-foreground">
+                                                    {{
+                                                        l('CodeBlockContainer.AutoReset_detail')
+                                                    }}
+                                                </div>
+                                            </div>
+                                            <div class="tw-w-1/3">
+                                                <Switch v-model="shouldAutoReset" />
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            v-if="canLoadResources"
+                                            class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                        >
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{
+                                                        l(
+                                                            'CodeBlockContainer.ReloadResources'
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class="tw-text-sm tw-text-muted-foreground">
+                                                    {{
+                                                        l(
+                                                            'CodeBlockContainer.ReloadResources_detail'
+                                                        )
+                                                    }}
+                                                </div>
+                                            </div>
+                                            <div class="tw-w-1/3">
+                                                <Switch v-model="shouldReloadResources" />
+                                            </div>
+                                        </div>
+
+                                        <div
+                                            class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                        >
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{
+                                                        l(
+                                                            'CodeBlockContainer.GenerateTemplate'
+                                                        )
+                                                    }}
+                                                </div>
+                                                <div class="tw-text-sm tw-text-muted-foreground">
+                                                    {{
+                                                        l(
+                                                            'CodeBlockContainer.GenerateTemplate_detail'
+                                                        )
+                                                    }}
+                                                </div>
+                                            </div>
+                                            <div class="tw-w-1/3">
+                                                <Switch v-model="shouldGenerateTemplate" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Positioning (PLAYGROUND with template) -->
                                     <div
-                                        class="tw-text-sm tw-text-muted-foreground"
-                                        v-html="l('CodeBlockContainer.Lines_detail')"
-                                    ></div>
-                                </div>
-                                <div>
-                                    <Input
-                                        v-model="visibleLines"
-                                        :rules="[validNumber]"
-                                        class="tw-w-1/3"
-                                        maxlength="4"
-                                    />
-                                </div>
-                            </div>
-                            <div
-                                v-if="canHaveAlternativeContent"
-                                class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                        v-if="canDefinePlacement && shouldGenerateTemplate"
+                                        class="tw-p-4"
+                                    >
+                                        <div class="tw-text-lg tw-font-medium tw-mb-4">
+                                            {{ l('CodeBlockContainer.Positioning') }}
+                                        </div>
+                                        <div
+                                            class="tw-flex tw-items-center tw-space-x-4 tw-ml-3"
+                                        >
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{ l('CodeBlockContainer.Width') }}
+                                                </div>
+                                                <div class="tw-text-sm tw-text-muted-foreground">
+                                                    {{ l('CodeBlockContainer.Width_detail') }}
+                                                </div>
+                                            </div>
+                                            <div class="tw-w-1/3">
+                                                <Input v-model="width" maxlength="7" />
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                        >
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{ l('CodeBlockContainer.Height') }}
+                                                </div>
+                                                <div class="tw-text-sm tw-text-muted-foreground">
+                                                    {{ l('CodeBlockContainer.Height_detail') }}
+                                                </div>
+                                            </div>
+                                            <div class="tw-w-1/3">
+                                                <Input v-model="height" maxlength="7" />
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
+                                        >
+                                            <div class="tw-w-2/3">
+                                                <div class="tw-font-medium">
+                                                    {{ l('CodeBlockContainer.Alignment') }}
+                                                </div>
+                                                <div class="tw-text-sm tw-text-muted-foreground">
+                                                    {{
+                                                        l('CodeBlockContainer.Alignment_detail')
+                                                    }}
+                                                </div>
+                                            </div>
+                                            <CSelect
+                                                :model-value="align"
+                                                :options="alignments"
+                                                @update:model-value="align = $event"
+                                                class="tw-w-1/3"
+                                            />
+                                        </div>
+                                    </div>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-destructive"
+                                @click="removeBlock"
                             >
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.Prepopulate') }}
-                                    </div>
-                                    <div class="tw-text-sm tw-text-muted-foreground">
-                                        {{ l('CodeBlockContainer.Prepopulate_detail') }}
-                                    </div>
-                                </div>
-                                <div class="tw-w-1/3">
-                                    <Switch v-model="hasAltComntent" />
-                                </div>
-                            </div>
-                        </div>
+                                <Trash2 class="tw-h-3.5 tw-w-3.5" />
+                            </Button>
+                        </template>
 
-                        <!-- Playground versioning (PLAYGROUND type) -->
-                        <div v-if="isVersionedPlayground" class="tw-p-4">
-                            <div class="tw-text-lg tw-font-medium tw-mb-4">
-                                {{ l('CodeBlockContainer.Behaviour') }}
-                            </div>
-                            <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.ScriptV') }}
-                                    </div>
-                                    <div class="tw-text-sm tw-text-muted-foreground">
-                                        {{ l('CodeBlockContainer.ScriptV_detail') }}
-                                    </div>
-                                </div>
-                                <div class="tw-w-1/3">
-                                    <CSelect
-                                        :model-value="scriptVersionObj"
-                                        :options="scriptVersions"
-                                        @update:model-value="scriptVersionObj = $event"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.AutoReset') }}
-                                    </div>
-                                    <div class="tw-text-sm tw-text-muted-foreground">
-                                        {{ l('CodeBlockContainer.AutoReset_detail') }}
-                                    </div>
-                                </div>
-                                <div class="tw-w-1/3">
-                                    <Switch v-model="shouldAutoReset" />
-                                </div>
-                            </div>
-
-                            <div
-                                v-if="canLoadResources"
-                                class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
-                            >
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.ReloadResources') }}
-                                    </div>
-                                    <div class="tw-text-sm tw-text-muted-foreground">
-                                        {{ l('CodeBlockContainer.ReloadResources_detail') }}
-                                    </div>
-                                </div>
-                                <div class="tw-w-1/3">
-                                    <Switch v-model="shouldReloadResources" />
-                                </div>
-                            </div>
-
-                            <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.GenerateTemplate') }}
-                                    </div>
-                                    <div class="tw-text-sm tw-text-muted-foreground">
-                                        {{ l('CodeBlockContainer.GenerateTemplate_detail') }}
-                                    </div>
-                                </div>
-                                <div class="tw-w-1/3">
-                                    <Switch v-model="shouldGenerateTemplate" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Positioning (PLAYGROUND with template) -->
-                        <div v-if="canDefinePlacement && shouldGenerateTemplate" class="tw-p-4">
-                            <div class="tw-text-lg tw-font-medium tw-mb-4">
-                                {{ l('CodeBlockContainer.Positioning') }}
-                            </div>
-                            <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.Width') }}
-                                    </div>
-                                    <div class="tw-text-sm tw-text-muted-foreground">
-                                        {{ l('CodeBlockContainer.Width_detail') }}
-                                    </div>
-                                </div>
-                                <div class="tw-w-1/3">
-                                    <Input v-model="width" maxlength="7" />
-                                </div>
-                            </div>
-                            <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.Height') }}
-                                    </div>
-                                    <div class="tw-text-sm tw-text-muted-foreground">
-                                        {{ l('CodeBlockContainer.Height_detail') }}
-                                    </div>
-                                </div>
-                                <div class="tw-w-1/3">
-                                    <Input v-model="height" maxlength="7" />
-                                </div>
-                            </div>
-                            <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
-                                <div class="tw-w-2/3">
-                                    <div class="tw-font-medium">
-                                        {{ l('CodeBlockContainer.Alignment') }}
-                                    </div>
-                                    <div class="tw-text-sm tw-text-muted-foreground">
-                                        {{ l('CodeBlockContainer.Alignment_detail') }}
-                                    </div>
-                                </div>
-                                <CSelect
-                                    :model-value="align"
-                                    :options="alignments"
-                                    @update:model-value="align = $event"
-                                    class="tw-w-1/3"
-                                />
-                            </div>
-                        </div>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-
-                <!-- Delete -->
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    class="tw-h-6 tw-w-6 tw-text-muted-foreground hover:tw-text-destructive"
-                    @click="removeBlock"
-                >
-                    <Trash2 class="tw-h-3.5 tw-w-3.5" />
-                </Button>
-                </template>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-foreground"
+                            @click="toggleExpanded"
+                        >
+                            <ChevronUp v-if="expanded" class="tw-h-3.5 tw-w-3.5" />
+                            <ChevronDown v-else class="tw-h-3.5 tw-w-3.5" />
+                        </Button>
+                </div>
             </div>
 
-            <!-- Content area with colored left border -->
-            <div :class="`tw-flex-1 editModeBorder ${colorClass}`">
-                <!-- Experimental script version alert -->
+            <!-- Content with colored left border -->
+            <div :class="`editModeBorder ${colorClass}`">
                 <Transition
                     enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
                     enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
@@ -407,12 +426,10 @@ import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 import { computed, getCurrentInstance, nextTick, ref, toRefs } from 'vue'
 
-// Import shadcn components
 import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
 import { Switch } from '@/shadcn/ui/switch'
 
-// Import icons
 import {
     AlertTriangle,
     ChevronDown,
@@ -424,7 +441,6 @@ import {
     Trash2,
 } from 'lucide-vue-next'
 
-// Import new components
 import { Alert, AlertDescription, AlertTitle } from '../shadcn/ui/alert'
 import {
     Dialog,
@@ -441,10 +457,8 @@ import {
     DropdownMenuTrigger,
 } from '../shadcn/ui/dropdown-menu'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn/ui/hover-card'
-import { Popover, PopoverContent, PopoverTrigger } from '../shadcn/ui/popover'
 import CSelect from './ui/CSelect.vue'
 
-// Define interfaces locally
 interface IOnChangeOrder {
     id: number
     newID: number
@@ -465,8 +479,6 @@ const props = withDefaults(defineProps<Props>(), {
 })
 const emit = defineEmits([
     'change-order',
-    'move-up',
-    'move-down',
     'remove-block',
     'type-change',
     'visible-lines-change',
@@ -478,14 +490,16 @@ const emit = defineEmits([
 ])
 
 const instance = getCurrentInstance()
-
 const t = instance?.proxy?.$root?.$t
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)
 const { editMode } = toRefs(props)
 let highlighted = ref<boolean>(false)
 const deleteDialogOpen = ref(false)
-const reorderOpen = ref<boolean>(false)
+const isDragOver = ref(false)
+
+// Debounce isDragOver so child dragenter/dragleave cycles don't flicker the indicator.
+let dragLeaveTimer: ReturnType<typeof setTimeout> | null = null
 
 const removeBlock = (): void => {
     highlighted.value = true
@@ -497,174 +511,158 @@ const confirmDelete = (): void => {
     deleteDialogOpen.value = false
     highlighted.value = false
 }
-// ...rest of existing code...
 
-const types = computed((): IListItemData[] => {
-    return [
-        {
-            label: l('CodeBlockContainer.Canvas'),
-            value: KnownBlockTypes.PLAYGROUND,
-        },
-        {
-            label: l('CodeBlockContainer.DataBlock'),
-            value: KnownBlockTypes.DATA,
-        },
-        {
-            label: l('CodeBlockContainer.Text'),
-            value: KnownBlockTypes.TEXT,
-        },
-        {
-            label: l('CodeBlockContainer.Hidden'),
-            value: KnownBlockTypes.BLOCKHIDDEN,
-        },
-        {
-            label: l('CodeBlockContainer.Static'),
-            value: KnownBlockTypes.BLOCKSTATIC,
-        },
-        {
-            label: l('CodeBlockContainer.Block'),
-            value: KnownBlockTypes.BLOCK,
-        },
-    ]
-})
-const alignments = computed((): IListItemData[] => {
-    if (l == undefined) {
-        return []
+const onDragStart = (e: DragEvent): void => {
+    e.dataTransfer!.setData('text/plain', String(block.value.id))
+    e.dataTransfer!.effectAllowed = 'move'
+}
+
+const onDragOver = (e: DragEvent): void => {
+    e.dataTransfer!.dropEffect = 'move'
+    if (dragLeaveTimer !== null) {
+        clearTimeout(dragLeaveTimer)
+        dragLeaveTimer = null
     }
+    isDragOver.value = true
+}
+
+const onDragLeave = (): void => {
+    dragLeaveTimer = setTimeout(() => {
+        isDragOver.value = false
+        dragLeaveTimer = null
+    }, 60)
+}
+
+const onDrop = (e: DragEvent): void => {
+    if (dragLeaveTimer !== null) {
+        clearTimeout(dragLeaveTimer)
+        dragLeaveTimer = null
+    }
+    isDragOver.value = false
+    const sourceId = Number(e.dataTransfer?.getData('text/plain'))
+    if (!isNaN(sourceId) && sourceId !== block.value.id) {
+        emit('change-order', { id: sourceId, newID: block.value.id } as IOnChangeOrder)
+    }
+}
+
+// ── Color helpers ─────────────────────────────────────────────────────────────
+
+function hexToRgb(hex: string): [number, number, number] {
     return [
-        {
-            label: l('CodeBlockContainer.Start'),
-            value: 'left',
-        },
-        {
-            label: l('CodeBlockContainer.Center'),
-            value: 'center',
-        },
-        {
-            label: l('CodeBlockContainer.End'),
-            value: 'right',
-        },
+        parseInt(hex.slice(1, 3), 16),
+        parseInt(hex.slice(3, 5), 16),
+        parseInt(hex.slice(5, 7), 16),
+    ]
+}
+
+const typeColor = computed((): string => {
+    const t = type.value
+    if (t === KnownBlockTypes.PLAYGROUND) return '#3b82f6'
+    if (t === KnownBlockTypes.BLOCK) return '#22c55e'
+    if (t === KnownBlockTypes.DATA) return '#f59e0b'
+    if (t === KnownBlockTypes.TEXT) return '#64748b'
+    if (t === KnownBlockTypes.BLOCKHIDDEN) return '#9ca3af'
+    if (t === KnownBlockTypes.BLOCKSTATIC) return '#a855f7'
+    return '#94a3b8'
+})
+
+// Expose the type color as a CSS custom property so all toolbar states (collapsed,
+// expanded, glow) can reference it without recomputing in JS.
+const toolbarBaseStyle = computed(() => {
+    const [r, g, b] = hexToRgb(typeColor.value)
+    return { '--type-rgb': `${r}, ${g}, ${b}` }
+})
+
+// Drop-target outline uses the TARGET block's type color.
+const dropIndicatorStyle = computed(() => {
+    const [r, g, b] = hexToRgb(typeColor.value)
+    return {
+        outline: `2px solid rgba(${r},${g},${b},0.8)`,
+        outlineOffset: '2px',
+        borderRadius: '2px',
+    }
+})
+
+// ── Block data ────────────────────────────────────────────────────────────────
+
+const types = computed((): IListItemData[] => [
+    { label: l('CodeBlockContainer.Canvas'), value: KnownBlockTypes.PLAYGROUND },
+    { label: l('CodeBlockContainer.DataBlock'), value: KnownBlockTypes.DATA },
+    { label: l('CodeBlockContainer.Text'), value: KnownBlockTypes.TEXT },
+    { label: l('CodeBlockContainer.Hidden'), value: KnownBlockTypes.BLOCKHIDDEN },
+    { label: l('CodeBlockContainer.Static'), value: KnownBlockTypes.BLOCKSTATIC },
+    { label: l('CodeBlockContainer.Block'), value: KnownBlockTypes.BLOCK },
+])
+const alignments = computed((): IListItemData[] => {
+    if (l == undefined) return []
+    return [
+        { label: l('CodeBlockContainer.Start'), value: 'left' },
+        { label: l('CodeBlockContainer.Center'), value: 'center' },
+        { label: l('CodeBlockContainer.End'), value: 'right' },
     ]
 })
 const scriptVersions = computed((): IListItemData[] => {
-    if (l == undefined) {
-        return []
-    }
+    if (l == undefined) return []
     return [
-        {
-            label: l('CodeBlockContainer.ScriptVersion_1'),
-            value: '100',
-        },
-        {
-            label: l('CodeBlockContainer.ScriptVersion_2'),
-            value: '101',
-        },
-        {
-            label: l('CodeBlockContainer.ScriptVersion_3'),
-            value: '102',
-        },
+        { label: l('CodeBlockContainer.ScriptVersion_1'), value: '100' },
+        { label: l('CodeBlockContainer.ScriptVersion_2'), value: '101' },
+        { label: l('CodeBlockContainer.ScriptVersion_3'), value: '102' },
     ]
 })
-const positions = computed((): IListItemData[] => {
-    return block.value.appSettings.blocks.map((bl) => {
-        return {
-            label: `${bl.id + 1}`,
-            value: `${bl.id}`,
-        }
-    })
-})
-const isDeprecatedScriptVersion = computed((): boolean => {
-    return scriptVersion.value === '100'
-})
-const isExperimentalScriptVersion = computed((): boolean => {
-    return scriptVersion.value === '102'
-})
+const positions = computed((): IListItemData[] =>
+    block.value.appSettings.blocks.map((bl) => ({
+        label: `${bl.id + 1}`,
+        value: `${bl.id}`,
+    }))
+)
+const isDeprecatedScriptVersion = computed(() => scriptVersion.value === '100')
+const isExperimentalScriptVersion = computed(() => scriptVersion.value === '102')
 const order = computed({
     get(): IListItemData {
         return globalState.appState.itemForValue(positions.value, `${block.value.id}`)
     },
     set(val: IListItemData) {
-        const data: IOnChangeOrder = { id: block.value.id, newID: +val.value }
-        emit('change-order', data)
+        emit('change-order', { id: block.value.id, newID: +val.value } as IOnChangeOrder)
     },
 })
 const expanded = computed({
-    get(): boolean {
-        return block.value.expanded
-    },
-    set(v: boolean) {
-        block.value.expanded = v
-    },
-})
-const canMoveUp = computed((): boolean => {
-    return block.value.id > 0
-})
-const canMoveDown = computed((): boolean => {
-    return !block.value.isLast
+    get(): boolean { return block.value.expanded },
+    set(v: boolean) { block.value.expanded = v },
 })
 const serializedOptions = computed({
-    get(): string {
-        return JSON.stringify(filteredCopy(block.value))
-    },
-    set(v: string) {},
+    get(): string { return JSON.stringify(filteredCopy(block.value)) },
+    set(_v: string) {},
 })
-const hasExtendedSettings = computed((): boolean => {
-    return type.value == KnownBlockTypes.PLAYGROUND || type.value == KnownBlockTypes.BLOCK
-})
-const isVersionedPlayground = computed((): boolean => {
-    return type.value == KnownBlockTypes.PLAYGROUND
-})
-const canSetLineNumbers = computed(() => {
-    return type.value == KnownBlockTypes.BLOCK
-})
-const canHaveAlternativeContent = computed(() => {
-    return type.value == KnownBlockTypes.BLOCK
-})
-const canDefinePlacement = computed(() => {
-    return type.value == KnownBlockTypes.PLAYGROUND
-})
+const hasExtendedSettings = computed(() =>
+    type.value === KnownBlockTypes.PLAYGROUND || type.value === KnownBlockTypes.BLOCK
+)
+const isVersionedPlayground = computed(() => type.value === KnownBlockTypes.PLAYGROUND)
+const canSetLineNumbers = computed(() => type.value === KnownBlockTypes.BLOCK)
+const canHaveAlternativeContent = computed(() => type.value === KnownBlockTypes.BLOCK)
+const canDefinePlacement = computed(() => type.value === KnownBlockTypes.PLAYGROUND)
 const shouldAutoReset = computed({
-    get(): boolean {
-        return block.value.shouldAutoreset
-    },
+    get(): boolean { return block.value.shouldAutoreset },
     set(v: boolean) {
-        emit('auto-reset-change', {
-            shouldAutoreset: v,
-            id: block.value.id,
-        })
+        emit('auto-reset-change', { shouldAutoreset: v, id: block.value.id })
     },
 })
 const shouldReloadResources = computed({
-    get(): boolean {
-        return block.value.shouldReloadResources
-    },
+    get(): boolean { return block.value.shouldReloadResources },
     set(v: boolean) {
-        const data: IOnReloadResourcesInfo = {
+        emit('reload-resources-change', {
             shouldReloadResources: v,
             id: block.value.id,
-        }
-        emit('reload-resources-change', data)
+        } as IOnReloadResourcesInfo)
     },
 })
 const shouldGenerateTemplate = computed({
-    get(): boolean {
-        return block.value.generateTemplate
-    },
+    get(): boolean { return block.value.generateTemplate },
     set(v: boolean) {
-        emit('generate-template-change', {
-            generateTemplate: v,
-            id: block.value.id,
-        })
+        emit('generate-template-change', { generateTemplate: v, id: block.value.id })
     },
 })
 const scriptVersion = computed((): string => {
-    if (
-        block.value === undefined ||
-        block.value.version === undefined ||
-        block.value.version == ''
-    ) {
-        return '100'
-    }
+    if (!block.value?.version) return '100'
     return block.value.version
 })
 const scriptVersionObj = computed({
@@ -672,60 +670,39 @@ const scriptVersionObj = computed({
         return globalState.appState.itemForValue(scriptVersions.value, scriptVersion.value)
     },
     set(v: IListItemData) {
-        emit('script-version-change', {
-            version: v.value,
-            id: block.value.id,
-        })
+        emit('script-version-change', { version: v.value, id: block.value.id })
     },
 })
-const canLoadResources = computed((): boolean => {
-    return +scriptVersion.value > 100
-})
+const canLoadResources = computed(() => +scriptVersion.value > 100)
 const hasAltComntent = computed({
-    get(): boolean {
-        return block.value.hasAlternativeContent
-    },
+    get(): boolean { return block.value.hasAlternativeContent },
     set(v: boolean) {
-        if (v != block.value.hasAlternativeContent && v) {
-            nextTick(() => {
-                setTimeout(function () {
-                    $('.CodeMirror')
-                        .toArray()
-                        .forEach((cm) => {
-                            const element = cm as any
-                            element.CodeMirror.refresh()
-                        })
-                }, 200)
-            })
-        }
+        // if (v !== block.value.hasAlternativeContent && v) {
+        //     nextTick(() => {
+        //         setTimeout(() => {
+        //             $('.CodeMirror').toArray().forEach((cm) => {
+        //                 ;(cm as any).CodeMirror.refresh()
+        //             })
+        //         }, 200)
+        //     })
+        // }
         block.value.hasAlternativeContent = v
     },
 })
 const colorClass = computed((): string => {
     const t = type.value
-    if (t == KnownBlockTypes.TEXT) {
-        return 'text-border'
-    } else if (t == KnownBlockTypes.PLAYGROUND) {
-        return 'playground-border'
-    } else if (t == KnownBlockTypes.DATA) {
-        return 'data-border'
-    } else if (t == KnownBlockTypes.BLOCK) {
-        return 'block-border'
-    } else if (t == KnownBlockTypes.BLOCKHIDDEN) {
-        return 'block-hidden-border'
-    } else if (t == KnownBlockTypes.BLOCKSTATIC) {
-        return 'block-static-border'
-    }
+    if (t === KnownBlockTypes.TEXT) return 'text-border'
+    if (t === KnownBlockTypes.PLAYGROUND) return 'playground-border'
+    if (t === KnownBlockTypes.DATA) return 'data-border'
+    if (t === KnownBlockTypes.BLOCK) return 'block-border'
+    if (t === KnownBlockTypes.BLOCKHIDDEN) return 'block-hidden-border'
+    if (t === KnownBlockTypes.BLOCKSTATIC) return 'block-static-border'
     return 'default-border'
 })
 const type = computed((): KnownBlockTypes => {
-    if (block.value.type == KnownBlockTypes.BLOCK) {
-        if (block.value.hidden) {
-            return KnownBlockTypes.BLOCKHIDDEN
-        }
-        if (block.value.static) {
-            return KnownBlockTypes.BLOCKSTATIC
-        }
+    if (block.value.type === KnownBlockTypes.BLOCK) {
+        if (block.value.hidden) return KnownBlockTypes.BLOCKHIDDEN
+        if (block.value.static) return KnownBlockTypes.BLOCKSTATIC
     }
     return block.value.type
 })
@@ -735,26 +712,19 @@ const typeObj = computed({
     },
     set(val: IListItemData) {
         const v = val.value
-        let ret = {
+        const ret = {
             type: v.match(/([^-]*)/)![0],
-            hidden: v == KnownBlockTypes.BLOCKHIDDEN,
-            static: v == KnownBlockTypes.BLOCKSTATIC,
+            hidden: v === KnownBlockTypes.BLOCKHIDDEN,
+            static: v === KnownBlockTypes.BLOCKSTATIC,
             id: block.value.id,
             hasCode: false,
         }
-        ret.hasCode = ret.type == KnownBlockTypes.BLOCK
-        if (
-            ret.type == KnownBlockTypes.PLAYGROUND &&
-            block.value.content === '' &&
-            editMode.value
-        ) {
-            if (block.value.scriptVersion == '100') {
-                block.value.content =
-                    '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
-            } else {
-                block.value.content =
-                    'module.exports = {\n    init: function(canvasElement, outputElement, scope, runner) {\n\n    },\n    addArgumentsTo(args) {},\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
-            }
+        ret.hasCode = ret.type === KnownBlockTypes.BLOCK
+        if (ret.type === KnownBlockTypes.PLAYGROUND && block.value.content === '' && editMode.value) {
+            block.value.content =
+                block.value.scriptVersion === '100'
+                    ? '{\n    init: function(canvasElement) {\n\n    },\n    update: function(output, canvasElement) {\n\n    }\n}'
+                    : 'module.exports = {\n    init: function(canvasElement, outputElement, scope, runner) {\n\n    },\n    addArgumentsTo(args) {},\n    reset(canvasElement) {},\n    update: function(txt, json, canvasElement, outputElement) {\n\n    }\n}'
         }
         emit('type-change', ret)
     },
@@ -762,46 +732,25 @@ const typeObj = computed({
 const visibleLines = computed({
     get(): number | 'auto' {
         const v = block.value.visibleLines
-        if (v == 'auto' || isNaN(v)) {
-            return 'auto'
-        }
+        if (v === 'auto' || isNaN(v)) return 'auto'
         return v
     },
     set(v: number | 'auto') {
-        if (v == 'auto' || isNaN(v)) {
-            v = 'auto'
-        }
+        if (v === 'auto' || isNaN(v as number)) v = 'auto'
         console.log('set', v)
-        emit('visible-lines-change', {
-            visibleLines: v,
-            id: block.value.id,
-        })
+        emit('visible-lines-change', { visibleLines: v, id: block.value.id })
     },
 })
 const width = computed({
-    get(): string {
-        return block.value.width
-    },
+    get(): string { return block.value.width },
     set(v: string) {
-        emit('placement-change', {
-            width: v,
-            height: block.value.height,
-            align: block.value.align,
-            id: block.value.id,
-        })
+        emit('placement-change', { width: v, height: block.value.height, align: block.value.align, id: block.value.id })
     },
 })
 const height = computed({
-    get(): string {
-        return block.value.height
-    },
+    get(): string { return block.value.height },
     set(v: string) {
-        emit('placement-change', {
-            width: block.value.width,
-            height: v,
-            align: block.value.align,
-            id: block.value.id,
-        })
+        emit('placement-change', { width: block.value.width, height: v, align: block.value.align, id: block.value.id })
     },
 })
 const align = computed({
@@ -809,61 +758,38 @@ const align = computed({
         return globalState.appState.itemForValue(alignments.value, block.value.align)
     },
     set(v: IListItemData) {
-        emit('placement-change', {
-            width: block.value.width,
-            height: block.value.height,
-            align: v.value,
-            id: block.value.id,
-        })
+        emit('placement-change', { width: block.value.width, height: block.value.height, align: v.value, id: block.value.id })
     },
 })
 const validNumber = (v: 'auto' | number): boolean | string => {
-    if (v != 'auto' && isNaN(v)) {
-        return "Must be a valid Number or 'auto'."
-    }
+    if (v !== 'auto' && isNaN(v as number)) return "Must be a valid Number or 'auto'."
     return true
 }
 const toggleExpanded = (): void => {
     globalState.appState.refreshAllCodeMirrors()
     expanded.value = !expanded.value
 }
-const moveUp = (): void => {
-    emit('move-up', block.value.id)
-}
-const moveDown = (): void => {
-    emit('move-down', block.value.id)
-}
-const filteredCopy = (objIn: object, extended: boolean = true, path: string = 'this'): object => {
-    let obj = {}
+const filteredCopy = (objIn: object, extended = true, path = 'this'): object => {
+    const obj: Record<string, unknown> = {}
     Object.keys(objIn)
         .filter(
             (k) =>
-                k.indexOf('appSettings') != 0 &&
-                k.indexOf('$') != 0 &&
-                k.indexOf('_') != 0 &&
+                !k.startsWith('appSettings') &&
+                !k.startsWith('$') &&
+                !k.startsWith('_') &&
                 (!extended ||
-                    (k != 'obj' &&
-                        k != 'errors' &&
-                        k != 'content' &&
-                        k != 'firstLine' &&
-                        k != 'nextLine' &&
-                        k != 'lineCount' &&
-                        k != 'hasCode' &&
-                        k != 'isLast' &&
-                        k != 'readyCount' &&
-                        k != 'noContent')) &&
-                k != 'uuid' &&
-                k != 'scopeUUID' &&
-                k != 'scopeSelector'
+                    !['obj', 'errors', 'content', 'firstLine', 'nextLine', 'lineCount',
+                      'hasCode', 'isLast', 'readyCount', 'noContent'].includes(k)) &&
+                !['uuid', 'scopeUUID', 'scopeSelector'].includes(k)
         )
         .forEach((k) => {
-            let v = objIn[k]
+            let v = (objIn as Record<string, unknown>)[k]
             if (v !== undefined && v !== null && typeof v === 'object') {
-                if (Array.isArray(v)) {
-                    v = v.map((item, nr) => filteredCopy(item, false, path + '.' + k + `[${nr}]`))
-                } else {
-                    v = filteredCopy(v, false, path + '.' + k)
-                }
+                v = Array.isArray(v)
+                    ? (v as unknown[]).map((item, nr) =>
+                          filteredCopy(item as object, false, `${path}.${k}[${nr}]`)
+                      )
+                    : filteredCopy(v as object, false, `${path}.${k}`)
             }
             obj[k] = v
         })
@@ -872,6 +798,32 @@ const filteredCopy = (objIn: object, extended: boolean = true, path: string = 't
 </script>
 
 <style lang="sass">
+.cbc-toolbar
+    // Collapsed: opaque type-color bar; the white gradient overlay is always present
+    // but only visible when the base color is opaque (it fades with the base on hover).
+    background-color: rgba(var(--type-rgb), 1.0)
+    background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(255,255,255,0.14))
+    border-radius: 0 6px 6px 0
+    // Start with neutral backdrop-filter so the transition to blur is animated.
+    backdrop-filter: blur(0px) brightness(1) saturate(1)
+    -webkit-backdrop-filter: blur(0px) brightness(1) saturate(1)
+    transition: background-color 0.25s ease-out, backdrop-filter 0.25s ease-out, -webkit-backdrop-filter 0.25s ease-out, box-shadow 0.2s ease-out
+
+.cbc-toolbar:hover
+    // Expanded: base fades to semi-transparent, blur takes over to make it readable.
+    background-color: rgba(var(--type-rgb), 0.28)
+    backdrop-filter: blur(8px) brightness(1.15) saturate(1.5)
+    -webkit-backdrop-filter: blur(8px) brightness(1.15) saturate(1.5)
+    box-shadow: 0 0 10px 3px rgba(var(--type-rgb), 0.45)
+
+.cbc-extended
+    max-width: 0
+    overflow: hidden
+    transition: max-width 0.15s ease-out
+
+.cbc-toolbar:hover .cbc-extended
+    max-width: 200px
+
 .editModeBorder
     border-left-width: 4px
     border-left-style: solid
@@ -897,9 +849,6 @@ const filteredCopy = (objIn: object, extended: boolean = true, path: string = 't
 
 .default-border
     border-color: var(--border)
-
-.inlined-input
-    display: inline-block
 
 textarea.blockoptions
     display: none !important
