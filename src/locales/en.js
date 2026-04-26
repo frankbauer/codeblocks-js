@@ -59,6 +59,7 @@ export default {
         UserCanceled: 'Stopped By User',
     },
     CodeBlocksSettings: {
+        Runtime: "Runtime",
         NoExecution: 'Code Execution is disabled',
         Settings: 'Settings',
         Language: 'Language',

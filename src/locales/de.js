@@ -59,6 +59,7 @@ export default {
         UserCanceled: 'Vom Benutzer Abgebrochen',
     },
     CodeBlocksSettings: {
+        Runtime: "Ausführung",
         NoExecution: 'Keine Ausführung',
         Settings: 'Einstellungen',
         Language: 'Sprache',
