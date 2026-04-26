@@ -35,6 +35,8 @@ import {
     DialogDescription,
     DialogFooter,
 } from '@/shadcn/ui/dialog'
+import { l } from '@/plugins/i18n'
+import { IListItemData } from '@/lib/ICompilerRegistry'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
@@ -305,14 +307,14 @@ const removeBlock = (idx: number): void => {
 const addDialogOpen = ref(false)
 const pendingInsertPosition = ref<number | null>(null)
 
-const blockTypeChoices: { label: string; value: KnownBlockTypes }[] = [
-    { label: 'Code Block', value: KnownBlockTypes.BLOCK },
-    { label: 'Canvas (Playground)', value: KnownBlockTypes.PLAYGROUND },
-    { label: 'Data Block', value: KnownBlockTypes.DATA },
-    { label: 'Text Block', value: KnownBlockTypes.TEXT },
-    { label: 'Hidden Block', value: KnownBlockTypes.BLOCKHIDDEN },
-    { label: 'Static Block', value: KnownBlockTypes.BLOCKSTATIC },
-]
+ const blockTypeChoices = computed((): IListItemData[] => [
+    { label: l('CodeBlockContainer.Canvas'), value: KnownBlockTypes.PLAYGROUND },
+    { label: l('CodeBlockContainer.DataBlock'), value: KnownBlockTypes.DATA },
+    { label: l('CodeBlockContainer.Text'), value: KnownBlockTypes.TEXT },
+    { label: l('CodeBlockContainer.Hidden'), value: KnownBlockTypes.BLOCKHIDDEN },
+    { label: l('CodeBlockContainer.Static'), value: KnownBlockTypes.BLOCKSTATIC },
+    { label: l('CodeBlockContainer.Block'), value: KnownBlockTypes.BLOCK },
+])
 
 const addNewBlock = (): void => {
     if (editMode) {
