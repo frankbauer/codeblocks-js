@@ -129,7 +129,7 @@
                     <Terminal
                         class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground"
                     />
-                    <span class="tw-font-medium">{{ outputParser.label }}</span>
+                    <span class="tw-font-medium">{{ l(`CodeBlocksSettings.OutputType${outputParser.value.toUpperCase()}.short`) }}</span>
                     <span class="tw-text-muted-foreground">·</span>
                     <span class="tw-text-muted-foreground">{{ maxCharacters }}</span>
                 </button>
@@ -563,7 +563,25 @@
                                 @update:model-value="outputParser = $event"
                                 :options="outputParsers"
                                 :label="$t('CodeBlocksSettings.Parser')"
-                            />
+                            />                           
+                            <Alert
+                                variant="default"
+                                class="tw-bg-blue-50 tw-border-blue-300 tw-py-2 tw-w-full"
+                            >
+                                <div class="tw-flex tw-gap-2 tw-items-center">
+                                <MessageCircleMore class="tw-h-12 tw-w-12 tw-text-blue-500" />
+                                    
+                                    <div class="tw-flex-1">
+                                        
+                                        <AlertDescription
+                                            class="tw-text-xs tw-mt-1 tw-text-blue-500"
+                                            v-html=" l(`CodeBlocksSettings.OutputType${outputParser.value.toUpperCase()}.description`)"
+                                        >
+                                            
+                                        </AlertDescription>
+                                    </div>
+                                </div>
+                            </Alert>
                             <CSelect
                                 :model-value="uiTheme"
                                 @update:model-value="uiTheme = $event"
@@ -647,6 +665,8 @@ import {
     EyeOff,
     ChevronDown,
     Play,
+    AlertCircleIcon,
+    MessageCircleMore,
 } from 'lucide-vue-next'
 
 const props = defineProps<Props>()
@@ -700,14 +720,10 @@ const themes = computed(() => {
     })
 })
 
+const allTypes = [CodeOutputTypes.AUTO, CodeOutputTypes.TEXT, CodeOutputTypes.JSON, CodeOutputTypes.DATA, CodeOutputTypes.MAGIC]
+
 const outputParsers = computed(() => {
-    return [
-        { label: l('CodeBlocksSettings.PAutomatic'), value: CodeOutputTypes.AUTO },
-        { label: l('CodeBlocksSettings.PText'), value: CodeOutputTypes.TEXT },
-        { label: l('CodeBlocksSettings.PJSON'), value: CodeOutputTypes.JSON },
-        { label: l('CodeBlocksSettings.PData'), value: CodeOutputTypes.DATA },
-        { label: l('CodeBlocksSettings.PMagic'), value: CodeOutputTypes.MAGIC },
-    ]
+    return allTypes.map(t => ({ label: l(`CodeBlocksSettings.OutputType${t.toUpperCase()}.label`), value: t }))    
 })
 
 const serializedOptions = computed({

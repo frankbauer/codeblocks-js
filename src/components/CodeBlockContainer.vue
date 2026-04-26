@@ -42,49 +42,7 @@
 
                 <!-- Extended buttons: slide out on toolbar :hover via CSS -->
                 <div class="cbc-extended tw-flex tw-items-center tw-w-max tw-h-6" :class="{ 'is-open': toolbarIsOpen }">
-                        <template v-if="expanded">
-                            <!-- Add Above -->
-                            <DropdownMenu v-model:open="addAboveOpen">
-                                <DropdownMenuTrigger as-child>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-foreground"
-                                        :title="l('CodeBlockContainer.AddAbove')"
-                                    >
-                                        <ArrowUpFromLine class="tw-h-3.5 tw-w-3.5" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent side="bottom" align="start" :sideOffset="4">
-                                    <DropdownMenuItem
-                                        v-for="t in types"
-                                        :key="t.value"
-                                        @click="emit('add-above', { type: t.value, id: block.id })"
-                                    >{{ t.label }}</DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            <!-- Add Below -->
-                            <DropdownMenu v-model:open="addBelowOpen">
-                                <DropdownMenuTrigger as-child>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-foreground"
-                                        :title="l('CodeBlockContainer.AddBelow')"
-                                    >
-                                        <ArrowDownToLine class="tw-h-3.5 tw-w-3.5" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent side="bottom" align="start" :sideOffset="4">
-                                    <DropdownMenuItem
-                                        v-for="t in types"
-                                        :key="t.value"
-                                        @click="emit('add-below', { type: t.value, id: block.id })"
-                                    >{{ t.label }}</DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-
+                        <template v-if="expanded">                        
                             <!-- Settings -->
                             <DropdownMenu v-model:open="settingsOpen">
                                 <DropdownMenuTrigger as-child>
@@ -347,6 +305,49 @@
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
+                            <!-- Add Above -->
+                            <DropdownMenu v-model:open="addAboveOpen">
+                                <DropdownMenuTrigger as-child>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-foreground"
+                                        :title="l('CodeBlockContainer.AddAbove')"
+                                    >
+                                        <ArrowUpFromLine class="tw-h-3.5 tw-w-3.5" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="bottom" align="start" :sideOffset="4">
+                                    <DropdownMenuItem
+                                        v-for="t in types"
+                                        :key="t.value"
+                                        @click="emit('add-above', { type: t.value, id: block.id })"
+                                    >{{ t.label }}</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <!-- Add Below -->
+                            <DropdownMenu v-model:open="addBelowOpen">
+                                <DropdownMenuTrigger as-child>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-foreground"
+                                        :title="l('CodeBlockContainer.AddBelow')"
+                                    >
+                                        <ArrowDownToLine class="tw-h-3.5 tw-w-3.5" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="bottom" align="start" :sideOffset="4">
+                                    <DropdownMenuItem
+                                        v-for="t in types"
+                                        :key="t.value"
+                                        @click="emit('add-below', { type: t.value, id: block.id })"
+                                    >{{ t.label }}</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <!-- Delete -->
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -357,6 +358,7 @@
                             </Button>
                         </template>
 
+                        <!-- Expand/Shrink -->
                         <Button
                             variant="ghost"
                             size="icon"

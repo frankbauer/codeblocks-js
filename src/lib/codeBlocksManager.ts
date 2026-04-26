@@ -362,7 +362,7 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
         domLibs: [],
         workerLibs: [],
         blocks: [],
-        outputParser: CodeOutputTypes.AUTO,
+        outputParser: CodeOutputTypes.DATA,
         readonly: false,
         uiTheme: 'light',
         uuid: 'is-set-below',

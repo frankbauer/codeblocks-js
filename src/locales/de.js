@@ -88,11 +88,33 @@ export default {
         Libraries: 'Bibliotheken',
         DomLibs: 'DOM-Bibliotheken',
         WorkLibs: 'Worker-Bibliotheken',
-        PAutomatic: 'Automatisch',
-        PText: 'Als Text',
-        PJSON: 'Als JSON',
-        PMagic: "Text+JSON (getrennt mit '\\n\\n&lt;JSON>\\n')",
-        PData: "Text+Daten (Senden mit 'CodeBlocks.postResult(data)')",
+        OutputTypeAUTO: {
+            label: 'Automatisch',
+            short: 'Auto',
+            description:
+                'Es wird versucht, das Ausgabeformat automatisch zu bestimmen. Zunächst wird geprüft, ob die Ausgabe ein gültiges JSON-Objekt ist. Falls nicht, wird geprüft, ob sie einen Separator (\\n\\n<JSON>\\n) für das Magic-Format enthält. Wenn weder Check erfolgreich ist, wird die Ausgabe als Text behandelt.'
+        },
+        OutputTypeTEXT: {
+            label: 'Als Text',
+            short: 'Text',
+            description: 'Die Ausgabe wird immer als reiner Text behandelt.'
+        },
+        OutputTypeJSON: {
+            label: 'Als JSON',
+            short: 'JSON',
+            description: 'Die Ausgabe wird immer als JSON behandelt.',
+        },
+        OutputTypeMAGIC: {
+            label: 'Text+JSON (getrennt mit \'\\n\\n&lt;JSON>\\n\')',
+            short: 'Text+JSON',
+            description:
+                'Die Ausgabe wird durch das Trennzeichen <code>\\n\\n&lt;JSON>\\n</code> in einen Text- und einen JSON-Teil getrennt. Die Ausgabe bis zum Trennzeichen wird als Text behandelt, die Ausgabe nach dem Trennzeichen wird als JSON behandelt. Wenn die Ausgabe nicht das Trennzeichen enthält oder der Teil nach dem Trennzeichen kein gültiges JSON ist, wird die gesamte Ausgabe als Text behandelt.',
+        },
+        OutputTypeDATA: {
+            label: 'Text+Daten (Senden mit \'CodeBlocks.postResult(data)\')',
+            short: 'Daten-Methode',
+            description: 'Die Ausgabe wird durch eine spezielle Methode behandelt. Nur das zuletzt mit <code>de.fau.tf.lgdv.CodeBlocks.postResult(data)</code> übermittelte JSON-Object wird als Ausgabe behandelt.',
+        },
         NumberErr: 'Muss eine gültige Zahl sein.',
         ContinousCompile: 'Automatisch Ausführen',
         PersistentArguments: 'Persistente Argumente',
