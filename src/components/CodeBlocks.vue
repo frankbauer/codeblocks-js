@@ -19,12 +19,14 @@ import {
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
-import { computed, ref, toRefs } from 'vue'
+import { computed, ref, toRefs, watch } from 'vue'
+import { useStorage, useIntersectionObserver } from '@vueuse/core'
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 import { CodeSplit } from '@/composables/useCodeEditor'
 import CButton from '@/components/ui/CButton.vue'
-import { CopyPlus, Play, Square } from 'lucide-vue-next'
+import { CopyPlus, Pin, Play, Square, Trash2 } from 'lucide-vue-next'
 import { Button } from '@/shadcn/ui/button'
+import { Switch } from '@/shadcn/ui/switch'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import {
@@ -73,6 +75,7 @@ const {
     onRunFinished,
     onRunFromPlayground,
     global,
+    resetOutput,
 } = codeBlockSetup(blockStorage, editMode, props.eventHub)
 
 const { onBeforeEnter, onEnter, onAfterEnter, onBeforeLeave, onLeave, onAfterLeave } =
@@ -335,6 +338,27 @@ const onAddBelow = (payload: { type: KnownBlockTypes; id: number }): void => {
     }
 }
 
+const isRunnerSticky = useStorage('codeblocks:runner-sticky', false)
+const isStuck = ref(false)
+const stickySentinelRef = ref<HTMLElement | null>(null)
+
+useIntersectionObserver(
+    stickySentinelRef,
+    ([entry]) => {
+        if (!isRunnerSticky.value) {
+            isStuck.value = false
+            return
+        }
+        // Sentinel is below the viewport when runner is stuck
+        isStuck.value = !entry.isIntersecting && entry.boundingClientRect.top > 0
+    },
+    { threshold: 0 },
+)
+
+watch(isRunnerSticky, (val) => {
+    if (!val) isStuck.value = false
+})
+
 const confirmAddBlock = (type: KnownBlockTypes): void => {
     if (!editMode) return
     if (pendingInsertPosition.value !== null) {
@@ -347,202 +371,232 @@ const confirmAddBlock = (type: KnownBlockTypes): void => {
 </script>
 
 <template>
-    <div
-        :class="`codeblocks ${addonClass}  ${backgroundColorClass} tw-mx-2 tw-mb-4`"
-        :data-question="blockInfo.id"
-        :uuid="blockInfo.uuid"
+  <div
+    :class="`codeblocks ${addonClass}  ${backgroundColorClass} tw-mx-2 tw-mb-4`"
+    :data-question="blockInfo.id"
+    :uuid="blockInfo.uuid"
+  >
+    <CodeBlocksSettings
+      v-if="editMode"
+      :options="options"
+      :appID="appID"
+      @compiler-change="onCompilerChange"
+      @compiler-version-change="onCompilerVersionChange"
+      @run-state-change="onRunStateChange"
+      @continuous-compile-change="onContinousCompileStateChange"
+      @message-passing-change="onMessagePassingChange"
+      @keep-alive-change="onKeepAliveChange"
+      @persistent-arguments-change="onPersistentArgumentsChange"
+      @language-change="onLanguageChange"
+      @character-limit-change="onCharacterLimitChange"
+      @timeout-change="onTimeoutChange"
+      @worker-libs-change="onWorkerLibChange"
+      @dom-libs-change="onDomLibChange"
+      @theme-change="onThemeChange"
+      @output-parser-change="onOutputParserChange"
+    />
+    <CodeBlockContainer
+      :appID="appID"
+      :blockID="block.uuid"
+      :editMode="editMode"
+      v-for="block in blocks"
+      :key="block.uuid"
+      @type-change="onTypeChange"
+      @visible-lines-change="onVisibleLinesChange"
+      @placement-change="onPlacementChange"
+      @script-version-change="onScriptVersionChange"
+      @move-up="moveUp"
+      @move-down="moveDown"
+      @remove-block="removeBlock"
+      @auto-reset-change="onSetAutoReset"
+      @reload-resources-change="onReloadResources"
+      @generate-template-change="onSetGenerateTemplate"
+      @change-order="onChangeOrder"
+      @add-above="onAddAbove"
+      @add-below="onAddBelow"
     >
-        <CodeBlocksSettings
-            v-if="editMode"
-            :options="options"
-            :appID="appID"
-            @compiler-change="onCompilerChange"
-            @compiler-version-change="onCompilerVersionChange"
-            @run-state-change="onRunStateChange"
-            @continuous-compile-change="onContinousCompileStateChange"
-            @message-passing-change="onMessagePassingChange"
-            @keep-alive-change="onKeepAliveChange"
-            @persistent-arguments-change="onPersistentArgumentsChange"
-            @language-change="onLanguageChange"
-            @character-limit-change="onCharacterLimitChange"
-            @timeout-change="onTimeoutChange"
-            @worker-libs-change="onWorkerLibChange"
-            @dom-libs-change="onDomLibChange"
-            @theme-change="onThemeChange"
-            @output-parser-change="onOutputParserChange"
-        />
-        <CodeBlockContainer
-            :appID="appID"
-            :blockID="block.uuid"
-            :editMode="editMode"
-            v-for="block in blocks"
-            :key="block.uuid"
-            @type-change="onTypeChange"
-            @visible-lines-change="onVisibleLinesChange"
-            @placement-change="onPlacementChange"
-            @script-version-change="onScriptVersionChange"
-            @move-up="moveUp"
-            @move-down="moveDown"
-            @remove-block="removeBlock"
-            @auto-reset-change="onSetAutoReset"
-            @reload-resources-change="onReloadResources"
-            @generate-template-change="onSetGenerateTemplate"
-            @change-order="onChangeOrder"
-            @add-above="onAddAbove"
-            @add-below="onAddBelow"
-        >
-            <CodeBlock
-                v-if="block.hasCode"
-                :appID="appID"
-                :blockID="block.uuid"
-                :theme="themeForBlock(block)"
-                :mode="mimeType"
-                :visibleLines="block.visibleLines"
-                :editMode="editMode"
-                :readonly="readonly"
-                :tagSet="activeTagSet"
-                :base-indent="getBaseIndentForBlock(block)"
-                :emitWhenTypingInViewMode="continuousCompile"
-                :code-split="codeSplit"
-                @ready="blockBecameReady"
-                @build="run"
-                @code-changed-in-view-mode="onViewCodeChange"
-                @indentation-change="(level) => onIndentationChange(block.uuid, level)"
-            />
-            <CodePlayground
-                v-else-if="block.type == 'PLAYGROUND'"
-                :appID="appID"
-                :blockID="block.uuid"
-                :editMode="editMode"
-                :finalOutputObject="finalOutputObject"
-                :theme="themeForBlock(block)"
-                :tagSet="activeTagSet"
-                @changeOutput="onPlaygroundChangedOutput"
-                @ready="blockBecameReady"
-                @run="onRunFromPlayground"
-                :eventHub="eventHub"
-            />
+      <CodeBlock
+        v-if="block.hasCode"
+        :appID="appID"
+        :blockID="block.uuid"
+        :theme="themeForBlock(block)"
+        :mode="mimeType"
+        :visibleLines="block.visibleLines"
+        :editMode="editMode"
+        :readonly="readonly"
+        :tagSet="activeTagSet"
+        :base-indent="getBaseIndentForBlock(block)"
+        :emitWhenTypingInViewMode="continuousCompile"
+        :code-split="codeSplit"
+        @ready="blockBecameReady"
+        @build="run"
+        @code-changed-in-view-mode="onViewCodeChange"
+        @indentation-change="(level) => onIndentationChange(block.uuid, level)"
+      />
+      <CodePlayground
+        v-else-if="block.type == 'PLAYGROUND'"
+        :appID="appID"
+        :blockID="block.uuid"
+        :editMode="editMode"
+        :finalOutputObject="finalOutputObject"
+        :theme="themeForBlock(block)"
+        :tagSet="activeTagSet"
+        @changeOutput="onPlaygroundChangedOutput"
+        @ready="blockBecameReady"
+        @run="onRunFromPlayground"
+        :eventHub="eventHub"
+      />
 
-            <SimpleText
-                v-else-if="block.type == 'TEXT'"
-                :appID="appID"
-                :blockID="block.uuid"
-                :editMode="editMode"
-                :name="`block[${block.parentID}][${block.id}]`"
-                :scopeUUID="block.scopeUUID"
-                :tagSet="activeTagSet"
-                :language="language"
-                @ready="blockBecameReady"
-            />
-            <DataBlock
-                v-else-if="block.type == 'DATA'"
-                :appID="appID"
-                :blockID="block.uuid"
-                :editMode="editMode"
-                :finalOutputObject="finalOutputObject"
-                :theme="themeForBlock(block)"
-                :tagSet="activeTagSet"
-                @ready="blockBecameReady"
-                :eventHub="eventHub"
-            />
-        </CodeBlockContainer>
+      <SimpleText
+        v-else-if="block.type == 'TEXT'"
+        :appID="appID"
+        :blockID="block.uuid"
+        :editMode="editMode"
+        :name="`block[${block.parentID}][${block.id}]`"
+        :scopeUUID="block.scopeUUID"
+        :tagSet="activeTagSet"
+        :language="language"
+        @ready="blockBecameReady"
+      />
+      <DataBlock
+        v-else-if="block.type == 'DATA'"
+        :appID="appID"
+        :blockID="block.uuid"
+        :editMode="editMode"
+        :finalOutputObject="finalOutputObject"
+        :theme="themeForBlock(block)"
+        :tagSet="activeTagSet"
+        @ready="blockBecameReady"
+        :eventHub="eventHub"
+      />
+    </CodeBlockContainer>
 
-        <div class="tw-flex tw-justify-center tw-mt-2" v-if="editMode">
-            <Button @click="addNewBlock">
-                {{ $t('CodeBlocks.AddBlock') }}
-                <CopyPlus class="tw-ml-2 tw-h-4 tw-w-4" />
-            </Button>
-        </div>
-
-        <Dialog v-model:open="addDialogOpen">
-            <DialogContent class="tw-max-w-sm">
-                <DialogHeader>
-                    <DialogTitle>{{ $t('CodeBlocks.SelectBlockType') }}</DialogTitle>
-                    <DialogDescription>{{ $t('CodeBlocks.SelectBlockTypeDesc') }}</DialogDescription>
-                </DialogHeader>
-                <div class="tw-flex tw-flex-col tw-gap-2 tw-py-2">
-                    <Button
-                        v-for="choice in blockTypeChoices"
-                        :key="choice.value"
-                        variant="outline"
-                        class="tw-justify-start"
-                        @click="confirmAddBlock(choice.value)"
-                    >{{ choice.label }}</Button>
-                </div>
-            </DialogContent>
-        </Dialog>
-
-        <div
-            :class="`runner ${editMode ? 'tw-pt-8 tw-mx-8' : ''}`"
-            v-if="canRun"
-            id="runContainer"
-            :data-question="blockInfo.id"
-        >
-            <div class="row runnerState" id="stateBox" :data-question="blockInfo.id">
-                <CButton
-                    id="allow_run_button"
-                    :loading="!isReady"
-                    :disabled="!isReady"
-                    @click="run"
-                    :data-question="blockInfo.id"
-                    class="tw-w-[190px] tw-rounded-none"
-                    :icon="Play"
-                    fill="white"
-                >
-                    {{ $t('CodeBlocks.run')
-                    }}<span v-if="editMode" class="tw-ml-1">[{{ $t('CodeBlocks.run_key') }}]</span>
-                </CButton>
-                <div class="animated fadeIn"></div>
-                <transition
-                    appear
-                    enter-active-class="animated fadeIn"
-                    leave-active-class="animated fadeOut"
-                >
-                    <div class="tw-pl-2" v-show="canStop">
-                        <CButton
-                            id="cancel_button"
-                            variant="destructive"
-                            fill="white"
-                            :icon="Square"
-                            :data-question="blockInfo.id"
-                            class="tw-rounded-none"
-                            @click="stop"
-                        >
-                            {{ $t('CodeBlocks.stop') }}
-                        </CButton>
-                    </div>
-                </transition>
-                <transition
-                    appear
-                    enter-active-class="animated fadeIn"
-                    leave-active-class="animated fadeOut"
-                >
-                    <div
-                        class="globalState col-grow"
-                        style="align-self: center"
-                        v-show="showGlobalMessages"
-                    >
-                        <div id="message" v-html="global.compilerState.globalStateMessage"></div>
-                    </div>
-                </transition>
-            </div>
-            <Transition
-                @before-enter="onBeforeEnter"
-                @enter="onEnter"
-                @after-enter="onAfterEnter"
-                @before-leave="onBeforeLeave"
-                @leave="onLeave"
-                @after-leave="onAfterLeave"
-            >
-                <pre
-                    :id="`${blockInfo.id}Output`"
-                    ref="outputElement"
-                    class="output"
-                    v-if="hasOutput"
-                ><div id='out' v-html='outputHTML'></div></pre>
-            </Transition>
-        </div>
+    <div class="tw-flex tw-justify-center tw-mt-2 tw-mb-4" v-if="editMode">
+      <Button @click="addNewBlock">
+        {{ $t("CodeBlocks.AddBlock") }}
+        <CopyPlus class="tw-ml-2 tw-h-4 tw-w-4" />
+      </Button>
     </div>
+
+    <Dialog v-model:open="addDialogOpen">
+      <DialogContent class="tw-max-w-sm">
+        <DialogHeader>
+          <DialogTitle>{{ $t("CodeBlocks.SelectBlockType") }}</DialogTitle>
+          <DialogDescription>{{
+            $t("CodeBlocks.SelectBlockTypeDesc")
+          }}</DialogDescription>
+        </DialogHeader>
+        <div class="tw-flex tw-flex-col tw-gap-2 tw-py-2">
+          <Button
+            v-for="choice in blockTypeChoices"
+            :key="choice.value"
+            variant="outline"
+            class="tw-justify-start"
+            @click="confirmAddBlock(choice.value)"
+            >{{ choice.label }}</Button
+          >
+        </div>
+      </DialogContent>
+    </Dialog>
+
+    <!-- The runner and output section -->
+    <div
+      :class="`runner tw-mt-4 ${editMode ? 'tw-pt-4 tw-mx-8' : ''} ${
+        isRunnerSticky ? 'runner--sticky' : ''
+      } ${isStuck ? 'runner--stuck' : ''}`"
+      v-if="canRun"
+      id="runContainer"
+      :data-question="blockInfo.id"
+    >
+      <div
+        class="runnerState tw-flex tw-items-center tw-gap-2"
+        id="stateBox"
+        :data-question="blockInfo.id"
+      >
+        <CButton
+          id="allow_run_button"
+          :loading="!isReady"
+          :disabled="!isReady"
+          @click="run"
+          :data-question="blockInfo.id"
+          class="tw-w-[190px] tw-rounded-none tw-shrink-0"
+          :icon="Play"
+          fill="white"
+        >
+          {{ $t("CodeBlocks.run")
+          }}<span v-if="editMode" class="tw-ml-1">[{{ $t("CodeBlocks.run_key") }}]</span>
+        </CButton>
+        <transition
+          appear
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >
+          <CButton
+            v-show="canStop"
+            id="cancel_button"
+            variant="destructive"
+            fill="white"
+            :icon="Square"
+            :data-question="blockInfo.id"
+            class="tw-rounded-none tw-shrink-0"
+            @click="stop"
+          >
+            {{ $t("CodeBlocks.stop") }}
+          </CButton>
+        </transition>
+        <transition
+          appear
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >
+          <div class="globalState tw-grow tw-truncate" v-show="showGlobalMessages">
+            <div id="message" v-html="global.compilerState.globalStateMessage"></div>
+          </div>
+        </transition>
+        <div class="tw-ml-auto tw-flex tw-items-center tw-gap-1 tw-shrink-0">
+          <button
+            v-if="hasOutput"
+            class="tw-flex tw-items-center tw-justify-center tw-rounded tw-p-1 tw-text-muted-foreground tw-transition-colors hover:tw-text-destructive hover:tw-bg-destructive/10"
+            :title="$t('CodeBlocks.clear_output')"
+            @click="resetOutput"
+          >
+            <Trash2 class="tw-h-4 tw-w-4" />
+          </button>
+          <Switch
+            v-model="isRunnerSticky"
+            class="stickySwitch"
+            :title="
+              isRunnerSticky ? $t('CodeBlocks.unpin_runner') : $t('CodeBlocks.pin_runner')
+            "
+          >
+            <template #thumb>
+              <Pin
+                class="tw-h-2.5 tw-w-2.5 tw-transition-colors"
+                :class="isRunnerSticky ? 'tw-text-primary' : 'tw-text-muted-foreground'"
+              />
+            </template>
+          </Switch>
+        </div>
+      </div>
+      <Transition
+        @before-enter="onBeforeEnter"
+        @enter="onEnter"
+        @after-enter="onAfterEnter"
+        @before-leave="onBeforeLeave"
+        @leave="onLeave"
+        @after-leave="onAfterLeave"
+      >
+        <pre
+          :id="`${blockInfo.id}Output`"
+          ref="outputElement"
+          class="output"
+          v-if="hasOutput"
+        ><div id='out' v-html='outputHTML'></div></pre>
+      </Transition>
+    </div>
+    <!-- Sentinel element for sticky runner to detect when it is stuck to the bottom -->
+    <div ref="stickySentinelRef" class="tw-h-px tw-pointer-events-none" aria-hidden="true" />
+  </div>
 </template>
 
 <style lang="sass">
@@ -564,7 +618,33 @@ div.codeblocks
         margin: 0px
 
 div.runner
-    margin: 8px 0px !important
+    margin-bottom: 8px
+
+    &.runner--sticky
+        position: sticky
+        bottom: 0
+        z-index: 50
+        background: transparent
+        border-radius: var(--radius, 6px) var(--radius, 6px) var(--radius, 6px) var(--radius, 6px)
+        transition: border-radius 0.3s ease
+        backdrop-filter: blur(16px) brightness(0.95) saturate(1.2)
+        border: 1px solid rgba(255,255,255,0.8)
+        padding: 6px 8px 6px
+        margin: 0 !important
+
+        &.runner--stuck
+            border-radius: var(--radius, 6px) var(--radius, 6px) 0 0
+            border-bottom: none
+        .output
+            max-height: 35vh
+            overflow-y: auto
+            margin-bottom: 0
+
+    .stickySwitch
+        span[data-state]
+            display: flex !important
+            align-items: center
+            justify-content: center
 
     .runnerState
         margin: 0px !important
@@ -574,11 +654,10 @@ div.runner
             margin: 0px !important
 
         .globalState
-            margin-left: 10px
             color: gray
             padding-left: 4px
             padding-right: 4px
-            vertical-align: middle
+            font-size: 0.875rem
 
     .output
         display: block
@@ -586,7 +665,7 @@ div.runner
         border: 1px solid #ccc
         border-radius: 0px
         background-color: #f5f5f5
-        margin: 0 0 10px
+        margin: 6px 0 0
         padding: 9.5px
         line-height: 1.42857143
         color: #333333
