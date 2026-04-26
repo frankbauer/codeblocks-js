@@ -631,7 +631,7 @@ function hexToRgb(hex: string): [number, number, number] {
 
 const typeColor = computed((): string => {
     const t = type.value
-    if (t === KnownBlockTypes.PLAYGROUND) return '#3b82f6'
+    if (t === KnownBlockTypes.PLAYGROUND) return '#00aff5'
     if (t === KnownBlockTypes.BLOCK) return '#22c55e'
     if (t === KnownBlockTypes.DATA) return '#f59e0b'
     if (t === KnownBlockTypes.TEXT) return '#64748b'
@@ -914,7 +914,7 @@ const filteredCopy = (objIn: object, extended = true, path = 'this'): object => 
     padding-left: 8px
 
 .playground-border
-    border-color: #3b82f6
+    border-color: #00aff5
 
 .text-border
     border-color: #64748b
