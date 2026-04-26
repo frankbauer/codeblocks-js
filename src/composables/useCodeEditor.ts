@@ -22,6 +22,8 @@ export function useCodeEditor(
         const classes: string[] = []
         if (block.value.hidden && !editMode.value) {
             classes.push('hiddenBox')
+        } else if (block.value.hidden && editMode.value) {
+            classes.push('hiddenBoxEdit')
         }
         if (block.value.readonly || readonly.value) {
             classes.push('readonlyBox')
