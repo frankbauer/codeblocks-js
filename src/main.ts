@@ -1,3 +1,5 @@
+import './assets/css/main.css'
+import './assets/css/loader.css'
 import '@/styles/app.scss'
 import '@/styles/shadcn.css'
 import { tagger } from '@/plugins/tagger'

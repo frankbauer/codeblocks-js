@@ -8,12 +8,17 @@
     <meta name='codeblocks-baseurl' content='/'>
     <link rel='icon' href='/favicon.ico'>
     <title>frontend</title>
-    <link rel='stylesheet' href='/css/loader.css'>
+    <!-- <link rel='stylesheet' href='/css/loader.css'> -->
     <link rel='stylesheet' href='/css/roboto.css'>
-    <link rel='stylesheet' href='/css/main.css'>
+    <!-- <link rel='stylesheet' href='/css/main.css'> -->
     <script src='/js/jquery.min.js' type='text/javascript'></script>
     <style>
-
+        codeblockseditor > *,
+        codeblocks > *,
+        [codeblockseditor] > *,
+        [codeblocks] > * {
+            display: none;
+        }
     </style>
     <script type='module' src='/src/main.ts'></script>
 </head>

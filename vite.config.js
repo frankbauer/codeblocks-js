@@ -7,53 +7,62 @@ export default defineConfig({
   plugins: [vue()],
   css: {
     preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler', // Use the modern Sass API
-      },
-      sass: {
-        api: 'modern-compiler', // Use the modern Sass API
-      },
+      scss: { api: 'modern-compiler' },
+      sass: { api: 'modern-compiler' },
     },
   },
   define: {
+    // This ensures that any check for process.env.NODE_ENV is replaced with a string
+    'process.env.NODE_ENV': JSON.stringify('production'),
+    // This catches general references to process.env
     'process.env': {},
-    // If you need specific env variables:
-    // 'process.env.NODE_ENV': JSON.stringify('production')
+    // Optional: catch global process calls if specific libs are very stubborn
+    'process': { env: { NODE_ENV: 'production' } },
   },
   build: {
+    outDir: 'dist',
+    emptyOutDir: true,
     lib: {
       entry: resolve(__dirname, './src/main.ts'),
       name: 'CodeblocksJS',
-      fileName: 'codeblocks',
-      formats: ['umd'],
+      fileName: (format) => `js/codeblocks-js/codeblocks.${format === 'es' ? 'umd.js' : 'umd.cjs'}`,
+      formats: ['es', 'umd'],
     },
     rollupOptions: {
-      // Remove external: ['vue'] to include Vue in the bundle
+      external: [], 
       output: {
-        // Global variables are still needed for UMD build
         globals: {
           vue: 'Vue',
         },
+        exports: 'named', 
         assetFileNames: (assetInfo) => {
-          const name = assetInfo.name ?? assetInfo.names?.[0] ?? ''
+          const name = assetInfo.name ?? '';
+  
+          // Handle CSS
+          if (name.endsWith('.css')) {
+            return 'js/codeblocks-js/codeblocks.css';
+          }
+          
+          // Handle Fonts
           if (/\.(woff2?|ttf|eot)$/.test(name)) {
-            return 'fonts/[name][extname]'
+            return 'js/codeblocks-js/fonts/[name][extname]';
           }
-          if (name === 'style.css') {
-            return 'codeblocks.css'
+
+          // Handle Images (png, jpg, svg, etc.)
+          if (/\.(png|jpe?g|gif|svg|webp)$/.test(name)) {
+            return 'js/codeblocks-js/images/[name][extname]';
           }
-          return name || '[name][extname]'
+
+          return 'js/codeblocks-js/assets/[name][extname]';
         },
       },
     },
-    // This ensures all CSS is extracted to a single file
     cssCodeSplit: false,
-    // Ensure assets are copied
-    assetsInclude: ['**/*.woff2', '**/*.ttf', '**/*.eot'],
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // Important for bundling Vue into the lib
       vue: 'vue/dist/vue.esm-bundler',
       $: 'jquery',
       jQuery: 'jquery',
