@@ -312,7 +312,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
     ] as Extension[]
 })
 
-// let resizeObserver: ResizeObserver | null = null
+let resizeObserver: ResizeObserver | null = null
 
 onMounted(() => {
     if (editorElement.value === null) {
@@ -355,14 +355,14 @@ onMounted(() => {
             container: editorElement.value,
         })
 
-        // // Add this ResizeObserver
-        // resizeObserver = new ResizeObserver(() => {
-        //      if (editorView.value) {
-        //          editorView.value.requestMeasure()
-        //          editorView.value.dispatch({}) // Forces a full re-layout
-        //      }
-        // })
-        // resizeObserver.observe(editorElement.value)
+        // Add this ResizeObserver
+        resizeObserver = new ResizeObserver(() => {
+             if (editorView.value) {
+                 editorView.value.requestMeasure()
+                 editorView.value.dispatch({}) // Forces a full re-layout
+             }
+        })
+        resizeObserver.observe(editorElement.value)
     })
 
    document.fonts.ready.then(() => {
@@ -373,10 +373,13 @@ onMounted(() => {
     })
 })
 
-// // Clean it up
-// onBeforeUnmount(() => {
-//     if (resizeObserver) resizeObserver.disconnect()
-// })
+// Clean it up
+onBeforeUnmount(() => {
+    if (resizeObserver) {
+        resizeObserver.disconnect()
+        resizeObserver = null
+    }
+})
 
 function lineNr(a: number): string {
     return `${+a + firstLine.value - 1}`
@@ -736,4 +739,12 @@ defineExpose({
                     color: #666
                     font-size: 0.9em
                     margin-left: 8px
+    :deep(.cm-scroller)
+        // Prevents the scroller from reserving empty space for an inactive horizontal scrollbar
+        min-height: 0 !important
+
+    :deep(.cm-content)
+        // Removes CodeMirror's default top/bottom padding
+        padding-top: 0 !important
+        padding-bottom: 0 !important
 </style>

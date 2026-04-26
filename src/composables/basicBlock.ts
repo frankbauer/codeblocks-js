@@ -104,7 +104,9 @@ export function useBasicBlockMounting(
         if (props.muteReadyState) {
             return
         }
-        block.value.readyCount--
+        if (block.value !== undefined) {
+            block.value.readyCount--
+        }
     }
 
     onMounted(() => {
