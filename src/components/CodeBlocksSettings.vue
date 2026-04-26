@@ -175,7 +175,7 @@
                         <CMultiSelect
                             v-model="workerLibrary"
                             :options="workerLibraries"
-                            :placeholder="$t('CodeBlocksSettings.SelectWorkLibs')"
+                            :placeholder="$t('CodeBlocksSettings.SelectWorkerLibs')"
                         />
                     </PopoverContent>
                 </Popover>
@@ -601,7 +601,7 @@
                                 v-if="runCode && workerLibraries.length > 0"
                                 v-model="workerLibrary"
                                 :options="workerLibraries"
-                                :placeholder="$t('CodeBlocksSettings.SelectWorkLibs')"
+                                :placeholder="$t('CodeBlocksSettings.SelectWorkerLibs')"
                             />
                         </div>
 
