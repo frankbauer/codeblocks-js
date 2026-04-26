@@ -42,8 +42,8 @@
                         <div class="tw-flex tw-items-center tw-gap-2 tw-mb-3">
                             <Switch
                                 id="rnd-active-quick"
-                                :checked="options.randomizer.active"
-                                @update:checked="updateRandomizerActive"
+                                :model-value="options.randomizer.active"
+                                @update:model-value="updateRandomizerActive"
                             />
                             <Label for="rnd-active-quick" class="tw-text-sm tw-font-medium">
                                 {{ $t('RandomizerSettings.Active') }}
@@ -258,8 +258,7 @@
                             <div class="tw-flex tw-items-center tw-space-x-2">
                                 <Switch
                                     id="run-code"
-                                    :checked="runCode"
-                                    @update:checked="(val) => (runCode = val)"
+                                    v-model="runCode"
                                     :disabled="!languageHasCompiler"
                                 />
                                 <Label for="run-code">{{
@@ -270,8 +269,7 @@
                             <div class="tw-flex tw-items-center tw-space-x-2">
                                 <Switch
                                     id="continuous-compile"
-                                    :checked="continuousCompile"
-                                    @update:checked="(val) => (continuousCompile = val)"
+                                    v-model="continuousCompile"
                                     :disabled="!canContinousCompile"
                                 />
                                 <Label for="continuous-compile">{{
@@ -446,8 +444,7 @@
                                 >
                                     <Switch
                                         id="persistent-args"
-                                        :checked="persistentArguments"
-                                        @update:checked="(val) => (persistentArguments = val)"
+                                        v-model="persistentArguments"
                                         :disabled="!canPersistentArguments"
                                     />
                                     <Label for="persistent-args">{{
@@ -484,8 +481,7 @@
                                 >
                                     <Switch
                                         id="message-passing"
-                                        :checked="messagePassing"
-                                        @update:checked="(val) => (messagePassing = val)"
+                                        v-model="messagePassing"
                                         :disabled="!allowsMessagePassing"
                                     />
                                     <Label for="message-passing">{{
@@ -522,8 +518,7 @@
                                 >
                                     <Switch
                                         id="keep-alive"
-                                        :checked="keepAlive"
-                                        @update:checked="(val) => (keepAlive = val)"
+                                        v-model="keepAlive"
                                         :disabled="!allowsMessagePassing || !messagePassing"
                                     />
                                     <Label for="keep-alive">{{

@@ -3,8 +3,8 @@
         <div class="tw-flex tw-items-center tw-space-x-2">
             <SwitchComponent
                 id="randomizer-active"
-                :checked="options.randomizer.active"
-                @update:checked="updateActive"
+                :model-value="options.randomizer.active"
+                @update:model-value="updateActive"
             />
             <LabelComponent for="randomizer-active" class="tw-text-sm tw-font-medium">
                 {{ $t('RandomizerSettings.Active') }}
