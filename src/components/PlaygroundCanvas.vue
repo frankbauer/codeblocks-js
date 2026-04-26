@@ -1,6 +1,14 @@
 <template>
-    <div class="row ma-0 pa-0 block-playground" :data-question="block.parentID" :data-nr="block.id">
-        <div :class="`col-12 text-${block.align}`" v-if="block.generateTemplate">
+    <div class="tw-flex tw-w-full ma-0 pa-0 block-playground" :data-question="block.parentID" :data-nr="block.id">
+        <div
+                class="tw-w-full tw-flex"
+                :class="{
+                    'tw-justify-start': block.align === 'left',
+                    'tw-justify-center': block.align === 'center',
+                    'tw-justify-end': block.align === 'right',
+                }"
+                v-if="block.generateTemplate"
+            >
             <div
                 ref="innerPlaygroundContainer"
                 class="playground"
