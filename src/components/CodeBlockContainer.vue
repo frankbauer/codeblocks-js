@@ -25,9 +25,10 @@
             -->
             <div
                 class="cbc-toolbar tw-absolute tw-top-0 tw-left-0 tw-z-10 tw-flex tw-items-center
-                       tw-pointer-events-none group-hover:tw-pointer-events-auto
-                       tw-opacity-0 group-hover:tw-opacity-100
                        tw-transition-opacity tw-duration-150"
+                :class="toolbarIsOpen
+                    ? 'tw-pointer-events-auto tw-opacity-100'
+                    : 'tw-pointer-events-none group-hover:tw-pointer-events-auto tw-opacity-0 group-hover:tw-opacity-100'"
                 :style="toolbarBaseStyle"
             >
                 <!-- Drag handle: free from overflow-hidden so dragstart fires reliably -->
@@ -40,9 +41,52 @@
                 </div>
 
                 <!-- Extended buttons: slide out on toolbar :hover via CSS -->
-                <div class="cbc-extended tw-flex tw-items-center tw-w-max tw-h-6">
+                <div class="cbc-extended tw-flex tw-items-center tw-w-max tw-h-6" :class="{ 'is-open': toolbarIsOpen }">
                         <template v-if="expanded">
-                            <DropdownMenu>
+                            <!-- Add Above -->
+                            <DropdownMenu v-model:open="addAboveOpen">
+                                <DropdownMenuTrigger as-child>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-foreground"
+                                        :title="l('CodeBlockContainer.AddAbove')"
+                                    >
+                                        <ArrowUpFromLine class="tw-h-3.5 tw-w-3.5" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="bottom" align="start" :sideOffset="4">
+                                    <DropdownMenuItem
+                                        v-for="t in types"
+                                        :key="t.value"
+                                        @click="emit('add-above', { type: t.value, id: block.id })"
+                                    >{{ t.label }}</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <!-- Add Below -->
+                            <DropdownMenu v-model:open="addBelowOpen">
+                                <DropdownMenuTrigger as-child>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        class="tw-h-6 tw-w-6 tw-text-foreground/60 hover:tw-text-foreground"
+                                        :title="l('CodeBlockContainer.AddBelow')"
+                                    >
+                                        <ArrowDownToLine class="tw-h-3.5 tw-w-3.5" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="bottom" align="start" :sideOffset="4">
+                                    <DropdownMenuItem
+                                        v-for="t in types"
+                                        :key="t.value"
+                                        @click="emit('add-below', { type: t.value, id: block.id })"
+                                    >{{ t.label }}</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            <!-- Settings -->
+                            <DropdownMenu v-model:open="settingsOpen">
                                 <DropdownMenuTrigger as-child>
                                     <Button
                                         variant="ghost"
@@ -90,6 +134,20 @@
                                             class="tw-w-full"
                                             placeholder="Optional Label"
                                         />
+                                        <div class="tw-flex tw-items-center tw-gap-2 tw-mt-2">
+                                            <span class="tw-text-sm tw-text-muted-foreground tw-whitespace-nowrap">
+                                                {{ l('CodeBlockContainer.Position') }}
+                                            </span>
+                                            <Input
+                                                v-model="orderNumber"
+                                                type="number"
+                                                class="tw-w-20"
+                                                min="1"
+                                                :max="positions.length"
+                                                @change="applyOrderNumber"
+                                            />
+                                            <span class="tw-text-sm tw-text-muted-foreground">/ {{ positions.length }}</span>
+                                        </div>
                                     </div>
 
                                     <DropdownMenuSeparator v-if="hasExtendedSettings" />
@@ -400,7 +458,7 @@
             <slot></slot>
         </div>
 
-        <Dialog :open="deleteDialogOpen" @update:open="deleteDialogOpen = $event">
+        <Dialog v-model:open="deleteDialogOpen">
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>{{ l('CodeBlockContainer.Confirm') }}</DialogTitle>
@@ -409,7 +467,7 @@
                     ></DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
-                    <Button variant="outline" @click="deleteDialogOpen = false">Cancel</Button>
+                    <Button variant="outline" @click="cancelDelete">Cancel</Button>
                     <Button variant="destructive" @click="confirmDelete">Delete</Button>
                 </DialogFooter>
             </DialogContent>
@@ -424,7 +482,7 @@ import { IListItemData } from '@/lib/ICompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
-import { computed, getCurrentInstance, nextTick, ref, toRefs } from 'vue'
+import { computed, getCurrentInstance, nextTick, ref, toRefs, watch } from 'vue'
 
 import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
@@ -432,6 +490,8 @@ import { Switch } from '@/shadcn/ui/switch'
 
 import {
     AlertTriangle,
+    ArrowDownToLine,
+    ArrowUpFromLine,
     ChevronDown,
     ChevronUp,
     Flame,
@@ -453,6 +513,7 @@ import {
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '../shadcn/ui/dropdown-menu'
@@ -480,6 +541,8 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits([
     'change-order',
     'remove-block',
+    'add-above',
+    'add-below',
     'type-change',
     'visible-lines-change',
     'placement-change',
@@ -497,6 +560,10 @@ const { editMode } = toRefs(props)
 let highlighted = ref<boolean>(false)
 const deleteDialogOpen = ref(false)
 const isDragOver = ref(false)
+const addAboveOpen = ref(false)
+const addBelowOpen = ref(false)
+const settingsOpen = ref(false)
+const toolbarIsOpen = computed(() => addAboveOpen.value || addBelowOpen.value || settingsOpen.value)
 
 // Debounce isDragOver so child dragenter/dragleave cycles don't flicker the indicator.
 let dragLeaveTimer: ReturnType<typeof setTimeout> | null = null
@@ -504,6 +571,11 @@ let dragLeaveTimer: ReturnType<typeof setTimeout> | null = null
 const removeBlock = (): void => {
     highlighted.value = true
     deleteDialogOpen.value = true
+}
+
+const cancelDelete = (): void => {
+    deleteDialogOpen.value = false
+    highlighted.value = false
 }
 
 const confirmDelete = (): void => {
@@ -625,6 +697,15 @@ const order = computed({
         emit('change-order', { id: block.value.id, newID: +val.value } as IOnChangeOrder)
     },
 })
+const orderNumber = ref<number>(block.value.id + 1)
+watch(() => block.value.id, (id) => { orderNumber.value = id + 1 })
+const applyOrderNumber = (): void => {
+    const target = Math.min(Math.max(1, orderNumber.value), positions.value.length) - 1
+    orderNumber.value = target + 1
+    if (target !== block.value.id) {
+        emit('change-order', { id: block.value.id, newID: target } as IOnChangeOrder)
+    }
+}
 const expanded = computed({
     get(): boolean { return block.value.expanded },
     set(v: boolean) { block.value.expanded = v },
@@ -821,7 +902,8 @@ const filteredCopy = (objIn: object, extended = true, path = 'this'): object => 
     overflow: hidden
     transition: max-width 0.15s ease-out
 
-.cbc-toolbar:hover .cbc-extended
+.cbc-toolbar:hover .cbc-extended,
+.cbc-extended.is-open
     max-width: 200px
 
 .editModeBorder

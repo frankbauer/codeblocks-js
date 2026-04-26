@@ -42,6 +42,9 @@ export default {
         Block: 'Antwortfeld/Lösung',
         Blockly: 'Blockly (Experimental!!!)',
         REPL: 'Interaktive Eingabe',
+        AddAbove: 'Block darüber einfügen',
+        AddBelow: 'Block darunter einfügen',
+        Position: 'Position',
         Confirm: 'Bestätigung',
         DeleteQuestion:
             "Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?",
@@ -56,6 +59,8 @@ export default {
         start: 'Starten',
         stop: 'Anhalten',
         AddBlock: 'Neuen Block Anlegen',
+        SelectBlockType: 'Blocktyp auswählen',
+        SelectBlockTypeDesc: 'Wähle den Typ für den neuen Block.',
         UserCanceled: 'Vom Benutzer Abgebrochen',
     },
     CodeBlocksSettings: {

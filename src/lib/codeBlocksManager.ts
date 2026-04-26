@@ -324,7 +324,9 @@ export interface IMainBlock extends IAppSettings {
 
     removeBlock(idx: number): void
 
-    addNewBlock(): void
+    addNewBlock(type?: KnownBlockTypes): void
+
+    insertBlockAt(position: number, type?: KnownBlockTypes): void
 
     initArgsForLanguage(): object | string[]
 

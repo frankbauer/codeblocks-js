@@ -124,16 +124,24 @@ export default class MainBlock implements IMainBlock {
         }
     }
 
-    addNewBlock() {
+    addNewBlock(type: KnownBlockTypes = KnownBlockTypes.BLOCK) {
+        this.insertBlockAt(this.blocks.length, type)
+    }
+
+    insertBlockAt(position: number, type: KnownBlockTypes = KnownBlockTypes.BLOCK) {
+        const resolvedType =
+            type === KnownBlockTypes.BLOCKHIDDEN || type === KnownBlockTypes.BLOCKSTATIC
+                ? KnownBlockTypes.BLOCK
+                : type
         const newBlockData: IBlockDataBase = {
             noContent: false,
             alternativeContent: null,
-            hasCode: true,
-            type: KnownBlockTypes.BLOCK,
+            hasCode: resolvedType === KnownBlockTypes.BLOCK,
+            type: resolvedType,
             content: '',
-            id: this.blocks.length,
+            id: position,
             uuid: uuid.v4(),
-            name: `v${this.blocks.length}`,
+            name: `v${position}`,
             parentID: this.id,
             expanded: true,
             codeExpanded: CodeExpansionType.AUTO,
@@ -142,8 +150,8 @@ export default class MainBlock implements IMainBlock {
             align: 'center',
             obj: null,
             readonly: false,
-            static: true,
-            hidden: false,
+            static: type === KnownBlockTypes.BLOCKSTATIC,
+            hidden: type === KnownBlockTypes.BLOCKHIDDEN,
             version: '101',
             readyCount: 0,
             errors: [],
@@ -153,10 +161,11 @@ export default class MainBlock implements IMainBlock {
             hasAlternativeContent: false,
             shouldAutoreset: false,
             shouldReloadResources: false,
-            generateTemplate: true,
+            generateTemplate: resolvedType === KnownBlockTypes.PLAYGROUND,
             lineCountHint: -1,
         }
-        this.blocks.push(constructBlock(this, newBlockData))
+        this.blocks.splice(position, 0, constructBlock(this, newBlockData))
+        this.blocks.forEach((v, i) => (v.id = i))
     }
 
     totalLines(): number {

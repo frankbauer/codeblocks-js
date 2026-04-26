@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(node *)",
+      "Bash(npm install *)",
+      "Bash(npx tsup *)",
+      "Read(//tmp/tsup-test/**)",
+      "Read(//private/tmp/tsup-test/**)",
+      "Read(//tmp/tsup-esm/**)",
+      "Bash(grep -rn '$q\\\\b\\\\|useQuasar' src/ '--include=*.ts' '--include=*.vue' '--include=*.js')",
+      "Bash(grep -l 'quasar\\\\|useQuasar\\\\|$q' dist/codeblocks.umd.cjs)",
+      "Bash(npm outdated *)",
+      "Bash(npm uninstall *)",
+      "Bash(npm info *)",
+      "Bash(npx vue-tsc *)",
+      "Bash(xargs ls *)",
+      "Bash(grep -v \"^.*//.*$\")",
+      "Bash(grep -v \"^[0-9]*:.*//.*$\")"
+    ]
+  }
+}

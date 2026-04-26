@@ -42,6 +42,9 @@ export default {
         Block: 'Solution',
         Blockly: 'Blockly (Experimental!!!)',
         REPL: 'Interactive Terminal',
+        AddAbove: 'Add block above',
+        AddBelow: 'Add block below',
+        Position: 'Position',
         Confirm: 'Confirm',
         DeleteQuestion:
             "Do you really want to delete the <span class='highlightedCard sample'>highlighted</span> Block?",
@@ -56,6 +59,8 @@ export default {
         start: 'Start',
         stop: 'Stop',
         AddBlock: 'Add new Block',
+        SelectBlockType: 'Select Block Type',
+        SelectBlockTypeDesc: 'Choose the type for the new block.',
         UserCanceled: 'Stopped By User',
     },
     CodeBlocksSettings: {

@@ -26,6 +26,15 @@ import CButton from '@/components/ui/CButton.vue'
 import { CopyPlus, Play, Square } from 'lucide-vue-next'
 import { Button } from '@/shadcn/ui/button'
 import { useSlideTransition } from '@/composables/useSlideTransition'
+import { KnownBlockTypes } from '@/lib/ICodeBlocks'
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from '@/shadcn/ui/dialog'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
@@ -293,10 +302,45 @@ const removeBlock = (idx: number): void => {
     }
 }
 
+const addDialogOpen = ref(false)
+const pendingInsertPosition = ref<number | null>(null)
+
+const blockTypeChoices: { label: string; value: KnownBlockTypes }[] = [
+    { label: 'Code Block', value: KnownBlockTypes.BLOCK },
+    { label: 'Canvas (Playground)', value: KnownBlockTypes.PLAYGROUND },
+    { label: 'Data Block', value: KnownBlockTypes.DATA },
+    { label: 'Text Block', value: KnownBlockTypes.TEXT },
+    { label: 'Hidden Block', value: KnownBlockTypes.BLOCKHIDDEN },
+    { label: 'Static Block', value: KnownBlockTypes.BLOCKSTATIC },
+]
+
 const addNewBlock = (): void => {
     if (editMode) {
-        blockInfo.value.addNewBlock()
+        pendingInsertPosition.value = null
+        addDialogOpen.value = true
     }
+}
+
+const onAddAbove = (payload: { type: KnownBlockTypes; id: number }): void => {
+    if (editMode) {
+        blockInfo.value.insertBlockAt(payload.id, payload.type)
+    }
+}
+
+const onAddBelow = (payload: { type: KnownBlockTypes; id: number }): void => {
+    if (editMode) {
+        blockInfo.value.insertBlockAt(payload.id + 1, payload.type)
+    }
+}
+
+const confirmAddBlock = (type: KnownBlockTypes): void => {
+    if (!editMode) return
+    if (pendingInsertPosition.value !== null) {
+        blockInfo.value.insertBlockAt(pendingInsertPosition.value, type)
+    } else {
+        blockInfo.value.addNewBlock(type)
+    }
+    addDialogOpen.value = false
 }
 </script>
 
@@ -342,6 +386,8 @@ const addNewBlock = (): void => {
             @reload-resources-change="onReloadResources"
             @generate-template-change="onSetGenerateTemplate"
             @change-order="onChangeOrder"
+            @add-above="onAddAbove"
+            @add-below="onAddBelow"
         >
             <CodeBlock
                 v-if="block.hasCode"
@@ -399,14 +445,30 @@ const addNewBlock = (): void => {
             />
         </CodeBlockContainer>
 
-        <div class="row justify-end" v-if="editMode">
-            <div>
-                <Button @click="addNewBlock">
-                    {{ $t('CodeBlocks.AddBlock') }}
-                    <CopyPlus class="ml-2 h-4 w-4" />
-                </Button>
-            </div>
+        <div class="tw-flex tw-justify-center tw-mt-2" v-if="editMode">
+            <Button @click="addNewBlock">
+                {{ $t('CodeBlocks.AddBlock') }}
+                <CopyPlus class="tw-ml-2 tw-h-4 tw-w-4" />
+            </Button>
         </div>
+
+        <Dialog v-model:open="addDialogOpen">
+            <DialogContent class="tw-max-w-sm">
+                <DialogHeader>
+                    <DialogTitle>{{ $t('CodeBlocks.SelectBlockType') }}</DialogTitle>
+                    <DialogDescription>{{ $t('CodeBlocks.SelectBlockTypeDesc') }}</DialogDescription>
+                </DialogHeader>
+                <div class="tw-flex tw-flex-col tw-gap-2 tw-py-2">
+                    <Button
+                        v-for="choice in blockTypeChoices"
+                        :key="choice.value"
+                        variant="outline"
+                        class="tw-justify-start"
+                        @click="confirmAddBlock(choice.value)"
+                    >{{ choice.label }}</Button>
+                </div>
+            </DialogContent>
+        </Dialog>
 
         <div
             :class="`runner ${editMode ? 'tw-pt-8 tw-mx-8' : ''}`"
