@@ -19,8 +19,8 @@ import {
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
-import { computed, ref, toRefs, watch } from 'vue'
-import { useStorage, useIntersectionObserver } from '@vueuse/core'
+import { computed, nextTick, ref, toRefs, watch } from 'vue'
+import { useStorage, useIntersectionObserver, useResizeObserver } from '@vueuse/core'
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 import { CodeSplit } from '@/composables/useCodeEditor'
 import CButton from '@/components/ui/CButton.vue'
@@ -368,6 +368,82 @@ const confirmAddBlock = (type: KnownBlockTypes): void => {
     }
     addDialogOpen.value = false
 }
+
+// --- Runner Context-Aware Scroll Fix ---
+const runnerRef = ref<HTMLElement | null>(null)
+const contentEndRef = ref<HTMLElement | null>(null)
+
+const getScrollParent = (node: HTMLElement | null): HTMLElement | Window => {
+    if (!node) return window
+    let parent = node.parentElement
+    while (parent) {
+        const style = window.getComputedStyle(parent)
+        if (/(auto|scroll)/.test(style.overflowY)) {
+            return parent
+        }
+        parent = parent.parentElement
+    }
+    return window
+}
+
+let previousRunnerHeight = 0
+let wasAtBottom = false
+
+// Snapshot the scroll state right as the run begins
+watch(isReady, (ready) => {
+    if (!ready && contentEndRef.value) {
+        const rect = contentEndRef.value.getBoundingClientRect()
+        const scroller = getScrollParent(runnerRef.value)
+        // Check if the bottom of the code is currently in the viewport (with a 50px buffer for safety)
+        if (scroller === window) {
+            wasAtBottom = rect.top <= window.innerHeight + 50
+        } else {
+            const scrollerRect = (scroller as HTMLElement).getBoundingClientRect()
+            wasAtBottom = rect.top <= scrollerRect.bottom + 50
+        }
+    }
+})
+
+useResizeObserver(runnerRef, (entries) => {
+    const entry = entries[0]
+    if (!entry) return
+    
+    const currentHeight = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height
+    const delta = currentHeight - previousRunnerHeight
+
+    // Ignore initial setup
+    if (previousRunnerHeight === 0) {
+        previousRunnerHeight = currentHeight
+        return
+    }
+
+    previousRunnerHeight = currentHeight
+
+    // We only need to auto-scroll if the panel is expanding.
+    // If it shrinks (clearing output), let it collapse naturally.
+    if (delta <= 0 || !contentEndRef.value) return 
+
+    const scroller = getScrollParent(runnerRef.value)
+    const rect = contentEndRef.value.getBoundingClientRect()
+    
+    let isBottomVisible = false
+    if (scroller === window) {
+        isBottomVisible = rect.top <= window.innerHeight + 50
+    } else {
+        const scrollerRect = (scroller as HTMLElement).getBoundingClientRect()
+        isBottomVisible = rect.top <= scrollerRect.bottom + 50
+    }
+
+    // Only apply the scroll compensation if they are actively looking at the bottom, 
+    // OR if they were looking at the bottom right before clicking run.
+    if (isBottomVisible || wasAtBottom) {
+        if (scroller === window) {
+            window.scrollBy({ top: delta, behavior: 'auto' })
+        } else {
+            (scroller as HTMLElement).scrollTop += delta
+        }
+    }
+})
 </script>
 
 <template>
@@ -499,8 +575,10 @@ const confirmAddBlock = (type: KnownBlockTypes): void => {
       </DialogContent>
     </Dialog>
 
-    <!-- The runner and output section -->
+    <div ref="contentEndRef" class="tw-h-px tw-w-full tw-pointer-events-none" aria-hidden="true" />
+
     <div
+      ref="runnerRef"
       :class="`runner tw-mt-4 ${editMode ? 'tw-pt-4 tw-mx-8' : ''} ${
         isRunnerSticky ? 'runner--sticky' : ''
       } ${isStuck ? 'runner--stuck' : ''}`"
@@ -594,7 +672,6 @@ const confirmAddBlock = (type: KnownBlockTypes): void => {
         ><div id='out' v-html='outputHTML'></div></pre>
       </Transition>
     </div>
-    <!-- Sentinel element for sticky runner to detect when it is stuck to the bottom -->
     <div ref="stickySentinelRef" class="tw-h-px tw-pointer-events-none" aria-hidden="true" />
   </div>
 </template>
