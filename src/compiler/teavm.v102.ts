@@ -278,8 +278,15 @@ export class JavaV102Compiler implements ICompilerInstance {
                     const workerrun = this.getOrCreateRunWorker()
 
                     const runListener = (ee: any) => {
+                        //console.log('Received message from run worker:', ee.data, JSON.stringify(ee.data), questionID)
+
+                        if (ee.data.command == 'f-FINAL') {
+                            //console.log('Received final result from execution:', ee.data.value)
+                            options.resultData = JSON.parse(ee.data.value)
+                        }
+                        
                         if (ee.data.id != '' + questionID) {
-                            return
+                            console.warn('Received message for different session.', ee.data.id, questionID, JSON.stringify(ee.data))
                         }
 
                         if (ee.data.command == 'run-finished-setup') {
@@ -337,9 +344,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                             if (options.beforeStartHandler) {
                                 options.beforeStartHandler()
                             }
-                        } else if (ee.data.command == 'f-FINAL') {
-                            options.resultData = JSON.parse(ee.data.value)
-                        }
+                        } 
                     }
 
                     workerrun.addEventListener('message', runListener)
