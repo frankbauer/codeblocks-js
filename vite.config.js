@@ -22,6 +22,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    sourcemap: true,
     lib: {
       entry: resolve(__dirname, './src/main.ts'),
       name: 'CodeblocksJS',
