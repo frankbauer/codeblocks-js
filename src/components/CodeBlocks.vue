@@ -99,28 +99,6 @@ const codeSplit = computed<CodeSplit>(() => {
 // Replace the existing event handlers with the composable
 const { onTypeChange, onVisibleLinesChange } = useCodeBlockEvents(blockById, editMode)
 
-const blockIndentations = ref<Record<string, number>>({})
-
-const onIndentationChange = (blockId: string, level: number) => {
-    blockIndentations.value[blockId] = level
-}
-
-const getBaseIndentForBlock = (currentBlock: any): number => {
-    const currentIndex = blocks.value.findIndex((b) => b.uuid === currentBlock.uuid)
-    if (currentIndex <= 0) {
-        return 0
-    }
-
-    for (let i = currentIndex - 1; i >= 0; i--) {
-        const previousBlock = blocks.value[i]
-        if (previousBlock.hasCode) {
-            return blockIndentations.value[previousBlock.uuid] || 0
-        }
-    }
-
-    return 0
-}
-
 const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {
     if (editMode) {
         let bl = blockById(nfo.id)
@@ -546,13 +524,11 @@ useResizeObserver(runnerRef, (entries) => {
         :editMode="editMode"
         :readonly="readonly"
         :tagSet="activeTagSet"
-        :base-indent="getBaseIndentForBlock(block)"
         :emitWhenTypingInViewMode="continuousCompile"
         :code-split="codeSplit"
         @ready="blockBecameReady"
         @build="handleRun"
         @code-changed-in-view-mode="onViewCodeChange"
-        @indentation-change="(level) => onIndentationChange(block.uuid, level)"
       />
       <CodePlayground
         v-else-if="block.type == 'PLAYGROUND'"

@@ -12,7 +12,7 @@ import {
     TreeIndentContext,
 } from '@codemirror/language'
 
-const BASE_INDENT = 7
+const BASE_INDENT = 0
 
 /// Get the indentation, as a column number, at the given position.
 /// Will first consult any [indent services](#language.indentService)

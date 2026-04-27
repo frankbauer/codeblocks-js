@@ -333,6 +333,7 @@ const onCodeReady = (editor) => {
         }
     })
     onCodeChange(block.value.content)
+    updateHeight()
     whenBlockIsReady()
 }
 const updateHeight = () => {

@@ -1,39 +1,19 @@
 import { EditorView } from 'codemirror'
 import { ChangeSpec, EditorSelection, type Line } from '@codemirror/state'
+import { indentNodeProp } from '@codemirror/language'
 
 function reformatCode(
     view: EditorView,
     getIndentationInSource: (docString: string, pos: number) => number
 ): void {
-    // Get all lines
     const changes: ChangeSpec[] = []
     const doc = view.state.doc
+    const docString = doc.toString()
 
-    //get all lines form the document
-    // Start with first line
-    const lines: Line[] = []
-    for (let pos = 0; pos <= doc.length; ) {
-        const line = doc.lineAt(pos)
-        if (line === undefined || line.to <= pos) {
-            break
-        }
-        lines.push(line)
-        pos = line.to + 1
-    }
-
-    // Iterate through each line
-    let before = ''
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i]
-        const after = lines
-            .filter((l) => l.from > line.from)
-            .map((l) => l.text + '\n')
-            .join('')
-        const newCode = before + line.text + '\n' + after
-        before += line.text + '\n'
-
+    for (let i = 1; i <= doc.lines; i++) {
+        const line = doc.line(i)
         const currentIndent = /^[\t ]*/.exec(line.text)![0].length
-        const indent = getIndentationInSource(newCode, line.from)
+        const indent = getIndentationInSource(docString, line.from)
 
         if (currentIndent !== indent) {
             changes.push({
@@ -44,7 +24,6 @@ function reformatCode(
         }
     }
 
-    // Apply all changes in one transaction
     if (changes.length > 0) {
         view.dispatch({ changes })
     }

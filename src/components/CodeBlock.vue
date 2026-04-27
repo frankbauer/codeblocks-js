@@ -32,7 +32,6 @@
       @focus="onCodeFocus"
       @ready="onCodeReady"
     />
-
     <div v-if="editMode && hasAlternativeContent">
       <div class="tw-mt-8 text-subtitle2 tw-pb-1">
         {{ $t("CodeBlock.Initial_Content") }}
@@ -53,7 +52,6 @@
         :theme="block.themeForCodeBlock"
         :language="mode"
         :read-only="editorReadOnly"
-        :code-split-segment="codeSplitSegment"
         @update:model-value="onAltCodeChangeDefered"
         @ready="onAltCodeReady"
       />
@@ -94,7 +92,6 @@ interface Props extends EditableBlockProps {
     readonly?: boolean
     mode?: string
     tagSet?: IRandomizerSet
-    baseIndent?: number
     codeSplit?: CodeSplit
 }
 
@@ -105,7 +102,6 @@ const props = withDefaults(defineProps<Props>(), {
     readonly: false,
     mode: 'text/javascript',
     tagSet: undefined,
-    baseIndent: 0,
     codeSplit: undefined,
 })
 
@@ -140,7 +136,6 @@ const {
     visibleLines,
     mode,
     tagSet,
-    baseIndent,
     codeSplit,
 } = toRefs(props)
 
@@ -149,6 +144,22 @@ const codeBox = ref<InstanceType<typeof CodeMirror> | null>(null)
 const altBox = ref<InstanceType<typeof CodeMirror> | null>(null)
 const codeBoxRaw = ref<HTMLTextAreaElement | null>(null)
 const altBoxRaw = ref<HTMLTextAreaElement | null>(null)
+
+function updateHeight() {
+    if (!codeBox.value?.view) {
+        return
+    }
+
+    const height =
+        visibleLines.value === 'auto' || block.value.static
+            ? 'auto'
+            : `${Math.round(20 * Math.max(1, visibleLines.value)) + 9}px`
+
+    codeBox.value.view.dom.style.height = height
+    if (altBox.value?.view) {
+        altBox.value.view.dom.style.height = height
+    }
+}
 
 // Update timers
 let codeUpdateTimer: ReturnType<typeof setTimeout> | null = null
@@ -323,6 +334,7 @@ function onCodeReady({ view, container }: { view: EditorView; container: HTMLEle
     })
 
     onCodeChange(block.value.content)
+    updateHeight()
     whenBlockIsReady()
 }
 
@@ -384,19 +396,7 @@ onBeforeUnmount(() => {
 watch(
     () => visibleLines.value,
     () => {
-        if (!codeBox.value?.view) {
-            return
-        }
-
-        const height =
-            visibleLines.value === 'auto' || block.value.static
-                ? 'auto'
-                : `${Math.round(20 * Math.max(1, visibleLines.value)) + 9}px`
-
-        codeBox.value.view.dom.style.height = height
-        if (altBox.value?.view) {
-            altBox.value.view.dom.style.height = height
-        }
+        updateHeight()
     }
 )
 

@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import ErrorTip from '@/components/ErrorTip.vue'
-import { indentWithTab } from '@codemirror/commands'
 import { cpp } from '@codemirror/lang-cpp'
 import { css } from '@codemirror/lang-css'
 import { html } from '@codemirror/lang-html'
@@ -28,12 +27,52 @@ import { javascript } from '@codemirror/lang-javascript'
 import { json } from '@codemirror/lang-json'
 import { python } from '@codemirror/lang-python'
 import {
+    EditorView,
+    highlightSpecialChars,
+    drawSelection,
+    dropCursor,
+    rectSelection,
+    highlightActiveLine,
+    keymap,
+    lineNumbers,
+    ViewUpdate,
+    Decoration,
+    DecorationSet,
+    gutter,
+    GutterMarker,
+    hoverTooltip,
+} from '@codemirror/view'
+import {
+    indentWithTab,
+    defaultKeymap,
+    history,
+    historyKeymap,
+    insertNewlineAndIndent,
+} from '@codemirror/commands'
+import {
+    syntaxHighlighting,
+    defaultHighlightStyle,
+    indentOnInput,
+    bracketMatching,
+    foldGutter,
+    foldKeymap,
+    IndentContext,
+    indentService,
+    indentUnit,
+    getIndentation,
+    syntaxTree,
+    ensureSyntaxTree,
+} from '@codemirror/language'
+import { searchKeymap, highlightSelectionMatches } from '@codemirror/search'
+import {
     autocompletion,
-    CompletionContext,
     completionKeymap,
+    closeBrackets,
+    closeBracketsKeymap,
+    CompletionContext,
     CompletionResult,
 } from '@codemirror/autocomplete'
-import { IndentContext, indentService, indentUnit } from '@codemirror/language'
+import { lintKeymap } from '@codemirror/lint'
 import {
     ChangeSpec,
     Compartment,
@@ -45,18 +84,8 @@ import {
     StateEffect,
     StateField,
     type Transaction,
+    Prec,
 } from '@codemirror/state'
-import {
-    Decoration,
-    DecorationSet,
-    gutter,
-    GutterMarker,
-    hoverTooltip,
-    keymap,
-    lineNumbers,
-    ViewUpdate,
-} from '@codemirror/view'
-import { EditorView, minimalSetup } from 'codemirror'
 import {
     computed,
     ComputedRef,
@@ -104,7 +133,6 @@ interface Props {
     errors?: ICompilerErrorDescription[]
     maxLines?: number
     tagSet?: IRandomizerSet | undefined
-    baseIndent?: number
     codeSplitSegment?: CodeSplitSegment
 }
 
@@ -126,7 +154,6 @@ const props = withDefaults(defineProps<Props>(), {
     errors: () => [],
     maxLines: 1,
     tagSet: undefined,
-    baseIndent: 0,
     codeSplitSegment: undefined,
 })
 const {
@@ -139,7 +166,6 @@ const {
     errors,
     maxLines,
     tagSet,
-    baseIndent,
     codeSplitSegment,
 } = toRefs(props)
 
@@ -192,12 +218,20 @@ const highlighterCompartment = new Compartment()
 const readOnlyCompartment = new Compartment()
 const lineNumbersCompartment = new Compartment()
 const indentationCompartment = new Compartment()
+const handlersCompartment = new Compartment()
 
 const tagMarkField = createTagMarkField(tagSet)
 const tagTooltip = createTagTooltip(tagMarkField, tagSet)
 
-const getBaseIndent = (): number => {
-    return 0 //baseIndent.value
+const createIndentService = (): Extension => {
+    return indentationCompartment.of(
+        indentService.of((context, pos) => {
+            if (codeSplitSegment.value) {
+                return getIndentationInSource(context.state.doc.toString(), pos)
+            }
+            return getSimpleIndentation(context, pos, () => 0) ?? 0
+        })
+    )
 }
 
 const getIndentationInSource = (docString: string, pos: number): number => {
@@ -207,28 +241,28 @@ const getIndentationInSource = (docString: string, pos: number): number => {
 
     const newCode =
         codeSplitSegment.value.before +
-        (docString === '' ? '' : docString + '\n') +
-        codeSplitSegment.value.after
+        docString +
+        (codeSplitSegment.value.after ? '\n' + codeSplitSegment.value.after : '')
 
     const newState = EditorState.create({
         doc: newCode,
-        extensions: [
-            EditorState.tabSize.of(4),
-            indentUnit.of('    '),
-            languageCompartment.of(editorLanguage.value),
-        ],
+        extensions: [EditorState.tabSize.of(4), indentUnit.of('    '), editorLanguage.value],
     })
 
-    const newPos = pos + codeSplitSegment.value.offset
-    const defaultIndent = getSimpleIndentation(newState, newPos, getBaseIndent) ?? getBaseIndent()
-    // console.log(
-    //     'DEBUG indent (segment)',
-    //     defaultIndent,
-    //     newState.doc.lineAt(newPos).text,
-    //     newPos,
-    //     codeSplitSegment.value
-    // )
-    return defaultIndent
+    const newPos = Math.min(pos + codeSplitSegment.value.offset, newCode.length)
+
+    // Force synchronous parse up to newPos to ensure indentation logic has a syntax tree
+    ensureSyntaxTree(newState, newPos, 2000)
+
+    const indent = getIndentation(newState, newPos)
+
+    if (indent !== null) {
+        return indent
+    }
+
+    // Fallback to simpler indentation logic
+    const context = new IndentContext(newState, { simulateBreak: newPos })
+    return getSimpleIndentation(context, newPos, () => 0) ?? 0
 }
 
 const getIndentationAt = (context: IndentContext, pos: number): number => {
@@ -236,17 +270,7 @@ const getIndentationAt = (context: IndentContext, pos: number): number => {
         return getIndentationInSource(context.state.doc.toString(), pos)
     }
     const defaultIndent = getSimpleIndentation(context, pos, getBaseIndent) ?? getBaseIndent()
-    //console.log('DEBUG indent', defaultIndent, context.state.doc.lineAt(pos))
     return defaultIndent
-}
-
-const createIndentService = (): Extension => {
-    return indentationCompartment.of(
-        indentService.of((context, pos) => {
-            //console.log('DEBUG indent service -- from main')
-            return getIndentationAt(context, pos)
-        })
-    )
 }
 
 function combinedCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
@@ -268,7 +292,63 @@ function combinedCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
 
 const extensions: ComputedRef<Extension[]> = computed(() => {
     return [
-        minimalSetup,
+        Prec.highest(
+            keymap.of([
+                {
+                    key: 'Enter',
+                    run: (view) => {
+                        const pos = view.state.selection.main.from
+                        const line = view.state.doc.lineAt(pos)
+                        const m = line.text.match(/^\s*/)
+                        const wsLen = m ? m[0].length : 0
+                        const isAtStartOfText = pos <= line.from + wsLen
+
+                        if (isAtStartOfText) {
+                            const indent = getIndentationInSource(
+                                view.state.doc.toString(),
+                                line.from
+                            )
+                            const spaces = ' '.repeat(indent)
+                            view.dispatch({
+                                changes: {
+                                    from: line.from,
+                                    to: pos,
+                                    insert: spaces + '\n' + spaces,
+                                },
+                                selection: { anchor: line.from + indent + 1 + indent },
+                                scrollIntoView: true,
+                            })
+                            return true
+                        }
+                        return false
+                    },
+                },
+            ])
+        ),
+        highlightSpecialChars(),
+        history(),
+        drawSelection(),
+        dropCursor(),
+        EditorState.allowMultipleSelections.of(true),
+        indentOnInput(),
+        syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+        bracketMatching(),
+        closeBrackets(),
+        autocompletion({
+            activateOnTyping: true,
+        }),
+        //highlightActiveLine(),
+        highlightSelectionMatches(),
+        keymap.of([
+            ...closeBracketsKeymap,
+            ...defaultKeymap,
+            ...searchKeymap,
+            ...historyKeymap,
+            ...foldKeymap,
+            ...completionKeymap,
+            ...lintKeymap,
+            indentWithTab,
+        ]),
         // Combined update listener for focus, updates and tags
         EditorView.updateListener.of((update: ViewUpdate): void => {
             // Handle focus and update events
@@ -279,7 +359,6 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                 markTags(update.view, tagSet)
             }
         }),
-        EditorState.allowMultipleSelections.of(true),
         readOnlyCompartment.of(EditorState.readOnly.of(readOnly.value)),
         EditorView.editable.of(true),
         EditorState.tabSize.of(4),
@@ -291,18 +370,13 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                 formatNumber: (n, state) => lineNr(n),
             })
         ),
-        createDOMEventHandlers(getIndentationInSource),
-        keymap.of([indentWithTab]),
+        handlersCompartment.of(createDOMEventHandlers(getIndentationInSource)),
         highlighterCompartment.of(editorTheme.value.highlightStyle),
         languageAutoCompleteCompartment.of(
             editorLanguage.value.language.data.of({
                 autocomplete: combinedCompletions(tagSet),
             })
         ),
-        autocompletion({
-            activateOnTyping: true,
-        }),
-        keymap.of([...completionKeymap]),
         tagMarkField,
         tagTooltip,
         underlineField,
@@ -384,6 +458,23 @@ onBeforeUnmount(() => {
 function lineNr(a: number): string {
     return `${+a + firstLine.value - 1}`
 }
+
+watch([codeSplitSegment], () => {
+    if (editorView.value) {
+        editorView.value.dispatch({
+            effects: [
+                indentationCompartment.reconfigure(
+                    indentService.of((context, pos) => {
+                        if (codeSplitSegment.value) {
+                            return getIndentationInSource(context.state.doc.toString(), pos)
+                        }
+                        return getSimpleIndentation(context, pos, () => 0) ?? 0
+                    })
+                ),
+            ],
+        })
+    }
+})
 
 watch(firstLine, (newValue) => {
     if (editorView.value === null) {
@@ -747,4 +838,7 @@ defineExpose({
         // Removes CodeMirror's default top/bottom padding
         padding-top: 0 !important
         padding-bottom: 0 !important
+
+    textarea.accqstXmlInput, textarea.noRTEditor
+        display: none !important
 </style>
