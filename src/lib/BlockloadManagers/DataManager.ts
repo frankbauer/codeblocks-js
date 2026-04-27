@@ -15,7 +15,7 @@ export class DataLoadManager implements IBlockloadManager {
             ? bl.getAttribute('data-version')!
             : block.version
 
-        block.name = inBlock.name !== undefined ? inBlock.name : `v${block.id}`
+        block.name = inBlock.name !== undefined ? inBlock.name : ''
     }
 }
 

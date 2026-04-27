@@ -7,6 +7,7 @@ import {
 } from '@/lib/IScriptBlock'
 import { BaseScriptBlock } from './BaseScriptBlock'
 import { ICodeTemplate } from './utils'
+import { stripModuleSyntax } from './sandbox'
 
 const legacyCodeTemplate: ICodeTemplate = {
     prefix: 'let editors=[]; $(".CodeMirror").toArray().forEach(cm =>  {if (!cm.CodeMirror.getTextArea().hasAttribute("is-editmode")) editors[cm.CodeMirror.getTextArea().id] = cm.CodeMirror}); return function(){ return {o:',
@@ -37,7 +38,7 @@ export class LegacyScriptBlock extends BaseScriptBlock {
                 console.i('!!! REBUILDING (Legacy) !!!')
                 this.src = code
                 this.fkt = new Function(
-                    legacyCodeTemplate.prefix + code + legacyCodeTemplate.postfix
+                    legacyCodeTemplate.prefix + stripModuleSyntax(code) + legacyCodeTemplate.postfix
                 )
                 this.obj = this.fkt({})
                 this.dequeueIncoming()

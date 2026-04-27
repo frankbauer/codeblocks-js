@@ -5,12 +5,14 @@ import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 
 export enum KnownBlockTypes {
     PLAYGROUND = 'PLAYGROUND',
+    LIBRARY = 'LIBRARY',
     TEXT = 'TEXT',
     BLOCKHIDDEN = 'BLOCK-hidden',
     BLOCKSTATIC = 'BLOCK-static',
     BLOCK = 'BLOCK',
     DATA = 'DATA',
 }
+
 
 export enum CodeOutputTypes {
     AUTO = 'auto',
@@ -89,7 +91,6 @@ export interface IBlockElementData {
     showControls?: boolean
     as?: string
     name?: string
-    label?: string
 }
 
 export interface ICodeBlockDataState {
@@ -126,7 +127,6 @@ export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataStat
     generateTemplate: boolean
     lineCountHint: number
     as?: KnownBlockTypes
-    label?: string
 }
 
 export interface IBlockData extends IBlockDataBase {

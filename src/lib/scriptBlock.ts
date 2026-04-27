@@ -2,6 +2,7 @@ import { IScriptBlock } from '@/lib/IScriptBlock'
 import { LegacyScriptBlock } from './scriptBlocks/LegacyScriptBlock'
 import { ScriptBlockV101 } from './scriptBlocks/ScriptBlockV101'
 import { ScriptBlockV102 } from './scriptBlocks/ScriptBlockV102'
+import { LibraryScriptBlock } from './scriptBlocks/LibraryScriptBlock'
 
 export { jsErrorParser } from './scriptBlocks/utils'
 
@@ -13,7 +14,14 @@ export function createScriptBlock(script: string, version: string): IScriptBlock
     } else if (version === '102') {
         return new ScriptBlockV102(script, version)
     } else {
-        // Default to latest or 102 for now
         return new ScriptBlockV102(script, version)
     }
+}
+
+export function createLibraryScriptBlock(
+    script: string,
+    name: string,
+    version: string = '102'
+): LibraryScriptBlock {
+    return new LibraryScriptBlock(script, version, name)
 }

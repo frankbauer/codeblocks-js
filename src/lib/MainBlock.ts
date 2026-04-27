@@ -135,15 +135,31 @@ export default class MainBlock implements IMainBlock {
             type === KnownBlockTypes.BLOCKHIDDEN || type === KnownBlockTypes.BLOCKSTATIC
                 ? KnownBlockTypes.BLOCK
                 : type
+
+        let name = ''
+        let content = ''
+        if (resolvedType === KnownBlockTypes.DATA || resolvedType === KnownBlockTypes.LIBRARY) {
+            const prefix = resolvedType === KnownBlockTypes.DATA ? 'data' : 'lib'
+            let counter = 1
+            while (this.blocks.some((b) => b.name === `${prefix}${counter}`)) {
+                counter++
+            }
+            name = `${prefix}${counter}`
+
+            if (resolvedType === KnownBlockTypes.LIBRARY) {
+                content = `export default {\n  create(context) {\n    return { greet: () => console.log("Greetings from ${name}") }\n  }\n}`
+            }
+        }
+
         const newBlockData: IBlockDataBase = {
             noContent: false,
             alternativeContent: null,
             hasCode: resolvedType === KnownBlockTypes.BLOCK,
             type: resolvedType,
-            content: '',
+            content: content,
             id: position,
             uuid: uuid.v4(),
-            name: `v${position}`,
+            name: name,
             parentID: this.id,
             expanded: true,
             codeExpanded: CodeExpansionType.AUTO,

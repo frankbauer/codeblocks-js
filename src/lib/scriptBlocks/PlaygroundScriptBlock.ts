@@ -5,8 +5,18 @@ import {
     AnyCodeBlockScope,
 } from '@/lib/IScriptBlock'
 import { BaseScriptBlock } from './BaseScriptBlock'
+import { LibraryScriptBlock } from './LibraryScriptBlock'
+import { KnownBlockTypes } from '@/lib/ICodeBlocks'
+import { IBlockData } from '@/lib/ICodeBlocks'
 
 export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
+    // Persistent sandbox shared with the compiled playground closure via with(sandbox)
+    protected sandbox: Record<string, any> = {}
+    private activeLibraryKeys: Set<string> = new Set()
+
+    private librariesBefore: LibraryScriptBlock[] = []
+    private librariesAfter: LibraryScriptBlock[] = []
+
     protected getFallbackObject(): IPlaygroundObject {
         return {
             init: () => {
@@ -26,6 +36,7 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
     }
 
     public addArgumentsTo(args: object | string[]) {
+        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.addArgumentsTo?.(args))
         this.lazyInit()
         if (this.obj) {
             const o = this.obj as IPlaygroundObject
@@ -37,9 +48,11 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
                 }
             }
         }
+        this.chainLibraries(this.librariesAfter, (lib) => lib.libraryObject?.addArgumentsTo?.(args))
     }
 
     public didReceiveMessage(cmd: string, data: any) {
+        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.onMessage?.(cmd, data))
         this.lazyInit()
         if (this.obj) {
             const o = this.obj as IPlaygroundObject
@@ -54,9 +67,11 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
             console.i('MESSAGE - Received to Queue', cmd)
             this.queuedIncomingMessages.push({ c: cmd, d: data })
         }
+        this.chainLibraries(this.librariesAfter, (lib) => lib.libraryObject?.onMessage?.(cmd, data))
     }
 
     public beforeStart() {
+        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.beforeStart?.())
         this.lazyInit()
         if (this.obj) {
             const o = this.obj as IPlaygroundObject
@@ -65,9 +80,13 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
                 o.beforeStart()
             }
         }
+        this.chainLibraries(this.librariesAfter, (lib) => lib.libraryObject?.beforeStart?.())
     }
 
     public whenFinished(args: string[] | object, resultData?: object | any[]) {
+        this.chainLibraries(this.librariesBefore, (lib) =>
+            lib.libraryObject?.whenFinished?.(args, resultData)
+        )
         this.lazyInit()
         if (this.obj) {
             const o = this.obj as IPlaygroundObject
@@ -76,9 +95,129 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
                 o.whenFinished(args, resultData)
             }
         }
+        this.chainLibraries(this.librariesAfter, (lib) =>
+            lib.libraryObject?.whenFinished?.(args, resultData)
+        )
     }
 
+    public reset(canvasElement: JQuery<HTMLElement>): void {
+        this.chainLibraries(this.librariesBefore, (lib) =>
+            lib.libraryObject?.reset?.(canvasElement)
+        )
+        this.queuedMessages = []
+        this.queuedIncomingMessages = []
+        this.lazyInit()
+        console.i('MESSAGE - Reset Queue from Reset')
+        if (this.obj && this.obj.reset) {
+            this.obj.reset(canvasElement)
+        }
+        this.chainLibraries(this.librariesAfter, (lib) =>
+            lib.libraryObject?.reset?.(canvasElement)
+        )
+    }
+
+    public onParseError(initialOutput: string, parseError: string): boolean {
+        this.chainLibraries(this.librariesBefore, (lib) =>
+            lib.libraryObject?.onParseError?.(initialOutput, parseError)
+        )
+        this.lazyInit()
+        let handled = false
+        if (this.obj !== undefined) {
+            try {
+                if (this.obj.onParseError) {
+                    this.obj.onParseError(initialOutput, parseError)
+                    handled = true
+                } else {
+                    console.error(parseError)
+                }
+            } catch (e) {
+                this.pushError(e)
+            }
+        }
+        this.chainLibraries(this.librariesAfter, (lib) =>
+            lib.libraryObject?.onParseError?.(initialOutput, parseError)
+        )
+        return handled
+    }
+
+    public override resetBlockData(blocks: IBlockData[] | undefined): void {
+        super.resetBlockData(blocks)
+
+        // Clear only previous library instances from sandbox to preserve system utilities (console, etc.)
+        this.activeLibraryKeys.forEach((key) => {
+            delete this.sandbox[key]
+        })
+        this.activeLibraryKeys.clear()
+
+        if (blocks === undefined || parseInt(this.version) < 102) {
+            this.librariesBefore = []
+            this.librariesAfter = []
+            return
+        }
+
+        const playgroundId = blocks.find((b) => b.obj === this)?.id ?? Infinity
+
+        const libraryBlocks = blocks
+            .filter(
+                (b): b is IBlockData & { obj: LibraryScriptBlock } =>
+                    b.type === KnownBlockTypes.LIBRARY && b.obj instanceof LibraryScriptBlock
+            )
+            .sort((a, b) => a.id - b.id)
+
+        // Drop old instances from library blocks
+        for (const lib of libraryBlocks) {
+            lib.obj.instance = undefined
+        }
+
+        this.librariesBefore = libraryBlocks
+            .filter((b) => b.id < playgroundId)
+            .map((b) => b.obj)
+        this.librariesAfter = libraryBlocks
+            .filter((b) => b.id > playgroundId)
+            .map((b) => b.obj)
+
+        // Create library instances in execution order; each sees previously created instances
+        const context: Record<string, any> = {}
+        for (const lib of libraryBlocks) {
+            console.log('Creating library instance for', lib.name, lib)
+            const instance = lib.obj.createInstance(context)
+            if (lib.name && instance !== undefined) {
+                context[lib.name] = instance
+                this.activeLibraryKeys.add(lib.name)
+            }
+        }
+
+        // Inject instances into sandbox — the with(sandbox) proxy reads at call time,
+        // so playground code like `chart.render()` will resolve correctly
+        Object.assign(this.sandbox, context)
+    }
+
+    private chainLibraries(
+        libs: LibraryScriptBlock[],
+        fn: (lib: LibraryScriptBlock) => void
+    ): void {
+        for (const lib of libs) {
+            try {
+                fn(lib)
+            } catch (e) {
+                this.pushError(e)
+            }
+        }
+    }
+
+    protected abstract getScopeAndOutput(
+        canvasElement: JQuery<HTMLElement>,
+        scope: AnyCodeBlockScope
+    ): { outputElement: JQuery<HTMLElement> | undefined; smartScope: AnyCodeBlockScope }
+
     public setupDOM(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope): void {
+        this.chainLibraries(this.librariesBefore, (lib) => {
+            if (lib.libraryObject?.setupDOM) {
+                const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
+                lib.libraryObject.setupDOM(canvasElement, outputElement, smartScope)
+            }
+        })
+
         this.lazyInit()
         if (this.obj === undefined) {
             return
@@ -96,12 +235,14 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
         } catch (e) {
             this.pushError(e)
         }
-    }
 
-    protected abstract getScopeAndOutput(
-        canvasElement: JQuery<HTMLElement>,
-        scope: AnyCodeBlockScope
-    ): { outputElement: JQuery<HTMLElement> | undefined; smartScope: AnyCodeBlockScope }
+        this.chainLibraries(this.librariesAfter, (lib) => {
+            if (lib.libraryObject?.setupDOM) {
+                const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
+                lib.libraryObject.setupDOM(canvasElement, outputElement, smartScope)
+            }
+        })
+    }
 
     public init(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope, runner: Runner): void {
         const self = this
@@ -201,10 +342,19 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
         if (outputElement === undefined) {
             console.error('[Internal Error] No Output Element found!')
             this.pushError('[Internal Error] No Output Element found!')
-        } else {
-            const o = this.obj as IPlaygroundObject
-            o.init(canvasElement, outputElement, smartScope, runner)
+            return
         }
+
+        this.chainLibraries(this.librariesBefore, (lib) => {
+            lib.libraryObject?.init?.(canvasElement, outputElement, smartScope, runner)
+        })
+
+        const o = this.obj as IPlaygroundObject
+        o.init(canvasElement, outputElement, smartScope, runner)
+
+        this.chainLibraries(this.librariesAfter, (lib) => {
+            lib.libraryObject?.init?.(canvasElement, outputElement, smartScope, runner)
+        })
     }
 
     public update(
@@ -215,20 +365,43 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
         if (this.obj === undefined) {
             return outputObject.output
         }
+
+        const out = outputObject.outputElement
+
+        this.chainLibraries(this.librariesBefore, (lib) => {
+            lib.libraryObject?.update?.(
+                outputObject.processedOutput.text,
+                outputObject.processedOutput.json,
+                canvasElement,
+                out
+            )
+        })
+
+        let result: string | undefined
         try {
             const o = this.obj as IPlaygroundObject
             if (o.update) {
                 console.i('!!! UPDATE (v' + this.version + ')!!!')
-                return o.update(
+                result = o.update(
                     outputObject.processedOutput.text,
                     outputObject.processedOutput.json,
                     canvasElement,
-                    outputObject.outputElement
+                    out
                 )
             }
         } catch (e) {
             this.pushError(e)
         }
-        return outputObject.initialOutput
+
+        this.chainLibraries(this.librariesAfter, (lib) => {
+            lib.libraryObject?.update?.(
+                outputObject.processedOutput.text,
+                outputObject.processedOutput.json,
+                canvasElement,
+                out
+            )
+        })
+
+        return result ?? outputObject.initialOutput
     }
 }

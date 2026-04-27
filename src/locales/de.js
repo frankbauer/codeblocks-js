@@ -41,6 +41,7 @@ export default {
         Static: 'Quellcode (Angabe)',
         Block: 'Antwortfeld/Lösung',
         Blockly: 'Blockly (Experimental!!!)',
+        Library: 'Sandkastenbibliothek',
         REPL: 'Interaktive Eingabe',
         AddAbove: 'Block darüber einfügen',
         AddBelow: 'Block darunter einfügen',
@@ -48,6 +49,8 @@ export default {
         Confirm: 'Bestätigung',
         DeleteQuestion:
             "Soll der <span class='highlightedCard sample'>hervorgehobene</span> Block wirklick entfernt werden?",
+        Label: 'Name',
+        OptionalLabel: 'Optionaler Name',
         TypesCaption: 'Blocktypen',
         Types: 'Die Frage wird aus den folgenden Blöcken zusammengestellt. Möglichen Typen sind:<ul><li><b>Text</b>: Text der wie der ursprüngliche Fragetext ohne Syntax highlighting angezeigt wird. Die <b>[code][/code]</b> und <b>[hl][/hl]</b> können verwendet werden</li><li><b>Quellcode (Angabe)</b>: Nicht veränderbarer Quellcode mit Syntax highlighting. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Quellcode (Versteckt)</b>: Der Quellcode ist teil der ausgelieferten Webseite, wird jedoch nicht angezeigt. Diese Variante kann code enthalten der Hilfsmethoden o.ä. definiert. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Antwortfeld/Lösung</b>: Quellcode mit Syntax highlighting. Hier sollte die Musterlösung angegeben werden. Der Inhalt ist deil des ausgeführten Programmes und sollte fest vorgegebenen Code enthalten.</li><li><b>Sandkasten</b>: Eine möglichkeit um vorgegebenen Code im DOM des Browsers auszuführen. Zum Beispiel für eine Zeichenfläche die nutzbar ist um die Ergebnisse der Studenten zu visualisieren. Der Code (für Version 2.0) <b> muss ein JavaScript Object</b> mit den Methoden <ul><li><code>init(canvasElement, outputElement, scope)</code> und </li><li><code>update(txt, json, canvasElement, outputElement)</code></li></ul> definieren</b>.</li><li><b>Sandkastendaten</b>: Ermöglicht es JSON-Formatierte Daten für die Sandkästen bereitzustellen. Die angegebenen JSON-Objekte stehen in den Sandkästen als <b>this.DATA[name]</b> zur Verfügung.</li></ul>',
     },
@@ -281,5 +284,13 @@ export default {
     DataBlock: {
         InfoCaption: 'Verwendung',
         Info: "Sie können auf dieses Datum in den Sandkästen über <b>this.DATA['{NAME}']</b> zugreifen.",
+    },
+    LibraryBlock: {
+        Name: 'Name',
+        DuplicateNameTitle: 'Doppelter Bibliotheksname',
+        DuplicateNameMessage: 'Es existieren mehrere Bibliotheken mit dem Namen "{name}". Dies kann zu unerwartetem Verhalten führen.',
+        InactiveTitle: 'Bibliothek Inaktiv',
+        InactiveMessage: 'Kein Sandkasten mit mindestens {version} vorhanden. Diese Bibliothek wird nicht verwendet.',
+        ErrorTitle: 'Fehler in der Bibliothek',
     },
 }

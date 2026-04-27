@@ -28,60 +28,6 @@ export interface ILegacyPlaygroundObject {
     onParseError?(initialOutput: string, parseError: string): void
 }
 
-export interface IPlaygroundObject {
-    init(
-        canvasElement: JQuery<HTMLElement>,
-        outputElement: JQuery<HTMLElement>,
-        scope: AnyCodeBlockScope,
-        runner: () => void
-    ): void
-
-    reset?(canvasElement: JQuery<HTMLElement>): void
-
-    update(
-        txt: string,
-        json: object | undefined,
-        canvasElement: JQuery<HTMLElement>,
-        outputElement: JQuery<HTMLElement>
-    ): string | undefined
-
-    onParseError?(initialOutput: string, parseError: string): void
-
-    onMessage?(cmd: string, data: any): void
-
-    beforeStart?(): void
-
-    whenFinished?(args: string[] | object, resultData?: object | any[]): void
-
-    addArgumentsTo?(args: object | string[]): void
-
-    getResources?(): IResourceInfo[]
-
-    setupDOM?(
-        canvasElement: JQuery<HTMLElement>,
-        outputElement: JQuery<HTMLElement> | undefined,
-        scope: AnyCodeBlockScope
-    ): void
-
-    RESOURCES: any[]
-    DATA: any[]
-}
-
-export interface IProcessedScriptOutput {
-    type: 'json' | 'text' | 'dual'
-    text: string
-    json: object | undefined
-}
-
-export interface IScriptOutputObject {
-    output: string
-    sansoutput: string
-    outputElement: JQuery<HTMLElement>
-    initialOutput: string
-    processedOutput: IProcessedScriptOutput
-    parseError?: string | object
-}
-
 export interface ICodeBlockScope {
     find(selector: string): JQuery<HTMLElement>
     each(callback: (index: number, element: HTMLElement) => any): any
@@ -133,6 +79,8 @@ export interface IPlaygroundObject {
 }
 
 export interface ILibraryObject extends Omit<Partial<IPlaygroundObject>, 'RESOURCES' | 'DATA'> {
+    name?: string
+    create?(context: Record<string, any>): any
 }
 
 export interface IProcessedScriptOutput {

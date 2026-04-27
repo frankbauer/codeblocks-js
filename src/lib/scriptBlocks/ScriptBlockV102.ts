@@ -1,7 +1,7 @@
 import { AnyCodeBlockScope } from '../IScriptBlock'
 import { PlaygroundScriptBlock } from './PlaygroundScriptBlock'
 import { ICodeTemplate } from './utils'
-import { compileCode } from './sandbox'
+import { compileCode, stripModuleSyntax } from './sandbox'
 import { SmartScope } from './SmartScope'
 
 const v102CodeTemplate: ICodeTemplate = {
@@ -17,15 +17,15 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
                 console.i('!!! REBUILDING (v102) !!!')
                 this.src = code
                 this.fkt = compileCode(
-                    v102CodeTemplate.prefix + code + v102CodeTemplate.postfix
+                    v102CodeTemplate.prefix + stripModuleSyntax(code) + v102CodeTemplate.postfix
                 )
-                this.obj = this.fkt({})
+                this.obj = this.fkt(this.sandbox)
                 this.dequeueIncoming()
             } catch (e) {
                 this.pushError(e)
             }
         } else if (this.fkt !== undefined) {
-            this.obj = this.fkt({})
+            this.obj = this.fkt(this.sandbox)
             this.dequeueIncoming()
         }
     }

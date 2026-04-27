@@ -1,10 +1,11 @@
 import { AnyCodeBlockScope } from '../IScriptBlock'
 import { PlaygroundScriptBlock } from './PlaygroundScriptBlock'
 import { ICodeTemplate } from './utils'
+import { compileCode, stripModuleSyntax } from './sandbox'
 
 const v101CodeTemplate: ICodeTemplate = {
-    prefix: '"use strict"; return function(){ const module={}; return {o:',
-    postfix: '}.o}.call({})',
+    prefix: 'with(sandbox) { return function(){ return {o:',
+    postfix: '}.o}.call({})}',
 }
 
 export class ScriptBlockV101 extends PlaygroundScriptBlock {
@@ -14,16 +15,16 @@ export class ScriptBlockV101 extends PlaygroundScriptBlock {
                 this.err = []
                 console.i('!!! REBUILDING (v101) !!!')
                 this.src = code
-                this.fkt = new Function(
-                    v101CodeTemplate.prefix + code + v101CodeTemplate.postfix
+                this.fkt = compileCode(
+                    v101CodeTemplate.prefix + stripModuleSyntax(code) + v101CodeTemplate.postfix
                 )
-                this.obj = this.fkt({})
+                this.obj = this.fkt(this.sandbox)
                 this.dequeueIncoming()
             } catch (e) {
                 this.pushError(e)
             }
         } else if (this.fkt !== undefined) {
-            this.obj = this.fkt({})
+            this.obj = this.fkt(this.sandbox)
             this.dequeueIncoming()
         }
     }

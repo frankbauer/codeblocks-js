@@ -4,6 +4,7 @@ import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
 import CodePlayground from '@/components/CodePlayground.vue'
 import DataBlock from '@/components/DataBlock.vue'
+import LibraryBlock from '@/components/LibraryBlock.vue'
 import SimpleText from '@/components/SimpleText.vue'
 import {
     codeBlockSetup,
@@ -296,6 +297,7 @@ const pendingInsertPosition = ref<number | null>(null)
 
  const blockTypeChoices = computed((): IListItemData[] => [
     { label: l('CodeBlockContainer.Canvas'), value: KnownBlockTypes.PLAYGROUND },
+    { label: l('CodeBlockContainer.Library'), value: KnownBlockTypes.LIBRARY },
     { label: l('CodeBlockContainer.DataBlock'), value: KnownBlockTypes.DATA },
     { label: l('CodeBlockContainer.Text'), value: KnownBlockTypes.TEXT },
     { label: l('CodeBlockContainer.Hidden'), value: KnownBlockTypes.BLOCKHIDDEN },
@@ -563,6 +565,15 @@ useResizeObserver(runnerRef, (entries) => {
         :finalOutputObject="finalOutputObject"
         :theme="themeForBlock(block)"
         :tagSet="activeTagSet"
+        @ready="blockBecameReady"
+        :eventHub="eventHub"
+      />
+      <LibraryBlock
+        v-else-if="block.type == 'LIBRARY'"
+        :appID="appID"
+        :blockID="block.uuid"
+        :editMode="editMode"
+        :theme="themeForBlock(block)"
         @ready="blockBecameReady"
         :eventHub="eventHub"
       />

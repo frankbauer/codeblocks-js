@@ -1,5 +1,13 @@
 import compilerRegistry from '../CompilerRegistry'
 
+export function stripModuleSyntax(code: string): string {
+    return code
+        .replace(/^\s*export\s+default\s*/, '')
+        .replace(/^\s*module\.exports\s*=\s*/, '')
+        .replace(/;\s*$/, '')
+        .trim()
+}
+
 const sandboxProxies = new WeakMap()
 
 function has(target: any, key: any) {

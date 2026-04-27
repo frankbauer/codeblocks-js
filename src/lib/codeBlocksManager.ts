@@ -1,5 +1,5 @@
 import { UnwrapRef, createApp, h, type Ref } from 'vue'
-import { createScriptBlock } from './scriptBlock'
+import { createScriptBlock, createLibraryScriptBlock } from './scriptBlock'
 import i18n from '../plugins/i18n'
 
 import App from '../App.vue'
@@ -136,7 +136,6 @@ export class BlockData implements IBlockData {
     align: string
     lineCountHint: number
     name: string
-    label: string
     _oac?: () => string //used by Blockly to re-place the actualContent-Method while keeping the old implementation around
 
     obj: IScriptBlock | null
@@ -174,7 +173,6 @@ export class BlockData implements IBlockData {
         this.align = d.align
         this.lineCountHint = d.lineCountHint
         this.name = d.name
-        this.label = d.label ?? ''
 
         this.initialize()
     }
@@ -196,6 +194,16 @@ export class BlockData implements IBlockData {
             console.i('recreateScriptObject - Playground')
 
             const so = createScriptBlock(this.actualContent(), this.version)
+            this.obj = so
+            console.i('Block Rebuild', this.obj, this.uuid)
+        } else if (this.type === KnownBlockTypes.LIBRARY) {
+            console.i('recreateScriptObject - Library')
+
+            const so = createLibraryScriptBlock(
+                this.actualContent(),
+                this.name,
+                this.version
+            )
             this.obj = so
             console.i('Block Rebuild', this.obj, this.uuid)
         } else if (this.type === KnownBlockTypes.DATA) {
@@ -529,9 +537,17 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
 }
 
 export function constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
-    if (bl.type === KnownBlockTypes.PLAYGROUND || bl.type === KnownBlockTypes.DATA) {
+    if (
+        bl.type === KnownBlockTypes.PLAYGROUND ||
+        bl.type === KnownBlockTypes.LIBRARY ||
+        bl.type === KnownBlockTypes.DATA
+    ) {
         if (bl.content == '' || bl.content === undefined || bl.content === null) {
-            bl.content = '{}'
+            if (bl.type === KnownBlockTypes.LIBRARY) {
+                bl.content = `export default {\n  create(context) {\n    return { greet: () => console.log("Greetings from ${bl.name}") }\n  }\n}`
+            } else {
+                bl.content = '{}'
+            }
         }
     }
 
@@ -564,7 +580,7 @@ function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockData
         align: 'center',
         readyCount: 0,
         obj: null,
-        name: `v${data.blocks.length}`,
+        name: inBlock.name !== undefined ? inBlock.name : '',
         lineCountHint: -1,
         errors: [],
         readonly: isTrue(inBlock.readonly),
@@ -589,8 +605,6 @@ function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockData
         scopeUUID: inBlock.scopeUUID,
         scopeSelector: inBlock.scopeSelector,
     }
-
-    block.name = inBlock.name !== undefined ? inBlock.name : `v${block.id}`
 
     if (inBlock.codeExpanded !== undefined) {
         if (
