@@ -29,6 +29,19 @@
         continue.</strong>
 </noscript>
 
+<!-- <div codeblocks data-compiler='python3' data-compiler-version='103' data-run-code='true'          >
+    <loading>
+        <div></div>
+        <div></div>
+    </loading>
+
+    <pre as='BLOCK'>import numpy as np
+print(np.__version__)
+
+a = np.array([1, 2, 3, 4, 5, 6])
+print(a.shape)</pre>
+</div> -->
+
 <div codeblockseditor data-compiler='java' data-compiler-version='102' data-run-code='true'
      data-max-characters='10000' data-execution-timeout='5000'
      data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]'
@@ -38,6 +51,7 @@
      data-randomizer-preview-index='0'
      data-ui-theme='light'
      data-output-parser='data'
+     data-emit-AST='true'
 >
     <loading>
         <div></div>
@@ -56,13 +70,13 @@ class Foo implements JsonSerializer{
 }
 public class App {
     public static void main(String[] args){</pre>
-    <pre as='BLOCK'>        System.out.println("Hello World {:test}");
+    <pre as='BLOCK'>        System.out.println("Hello World {:test}"); //this is line 11
         System.out.println("or anyone else {:checked}");
         int[] testArray = {1,2,3,4,5};
         System.out.println(testArray[2]);
         System.out.println(testArray[-1]);
-        CodeBlocks.postResult(new Foo());</pre>
-    <pre as='BLOCK' data-static='true'>    }
+        CodeBlocks.postResult(new Foo()); //this is line 16</pre>
+    <pre as='BLOCK' data-static='true'>    } //this is line 17
 }
 
 class MainOverride {
