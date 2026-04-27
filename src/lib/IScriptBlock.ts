@@ -32,7 +32,7 @@ export interface IPlaygroundObject {
     init(
         canvasElement: JQuery<HTMLElement>,
         outputElement: JQuery<HTMLElement>,
-        scope: JQuery<HTMLElement>,
+        scope: AnyCodeBlockScope,
         runner: () => void
     ): void
 
@@ -60,7 +60,7 @@ export interface IPlaygroundObject {
     setupDOM?(
         canvasElement: JQuery<HTMLElement>,
         outputElement: JQuery<HTMLElement> | undefined,
-        scope: JQuery<HTMLElement>
+        scope: AnyCodeBlockScope
     ): void
 
     RESOURCES: any[]
@@ -130,6 +130,9 @@ export interface IPlaygroundObject {
 
     RESOURCES: any[]
     DATA: any[]
+}
+
+export interface ILibraryObject extends Omit<Partial<IPlaygroundObject>, 'RESOURCES' | 'DATA'> {
 }
 
 export interface IProcessedScriptOutput {
