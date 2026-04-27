@@ -369,6 +369,44 @@ const confirmAddBlock = (type: KnownBlockTypes): void => {
     addDialogOpen.value = false
 }
 
+// --- Stale Output Caching ---
+const cachedOutputHTML = ref('')
+const isShowingStale = ref(false)
+const justUpdated = ref(false) 
+
+// 1. Wrap the main run function to catch the state BEFORE it wipes
+const handleRun = () => {
+    if (hasOutput.value) {
+        cachedOutputHTML.value = outputHTML.value
+        isShowingStale.value = true
+    }
+    run() 
+}
+
+// 2. Wrap the playground run just in case it shares the same output box
+const handlePlaygroundRun = (...args: Parameters<typeof onRunFromPlayground>) => {
+    if (hasOutput.value) {
+        cachedOutputHTML.value = outputHTML.value
+        isShowingStale.value = true
+    }
+    onRunFromPlayground(...args)
+}
+
+// 3. We only need the watcher to know when to LIFT the blur
+watch(isReady, (ready) => {
+    if (ready) {
+        isShowingStale.value = false
+
+        // Trigger a flash effect when new output arrives
+        if (hasOutput.value) {
+            justUpdated.value = true
+            setTimeout(() => {
+                justUpdated.value = false
+            }, 800) // Match this to the CSS animation duration
+        }
+    }
+})
+
 // --- Runner Context-Aware Scroll Fix ---
 const runnerRef = ref<HTMLElement | null>(null)
 const contentEndRef = ref<HTMLElement | null>(null)
@@ -505,7 +543,7 @@ useResizeObserver(runnerRef, (entries) => {
         :emitWhenTypingInViewMode="continuousCompile"
         :code-split="codeSplit"
         @ready="blockBecameReady"
-        @build="run"
+        @build="handleRun"
         @code-changed-in-view-mode="onViewCodeChange"
         @indentation-change="(level) => onIndentationChange(block.uuid, level)"
       />
@@ -519,7 +557,7 @@ useResizeObserver(runnerRef, (entries) => {
         :tagSet="activeTagSet"
         @changeOutput="onPlaygroundChangedOutput"
         @ready="blockBecameReady"
-        @run="onRunFromPlayground"
+        @run="handlePlaygroundRun"
         :eventHub="eventHub"
       />
 
@@ -595,7 +633,7 @@ useResizeObserver(runnerRef, (entries) => {
           id="allow_run_button"
           :loading="!isReady"
           :disabled="!isReady"
-          @click="run"
+          @click="handleRun"
           :data-question="blockInfo.id"
           class="tw-w-[190px] tw-rounded-none tw-shrink-0"
           :icon="Play"
@@ -667,9 +705,15 @@ useResizeObserver(runnerRef, (entries) => {
         <pre
           :id="`${blockInfo.id}Output`"
           ref="outputElement"
-          class="output"
-          v-if="hasOutput"
-        ><div id='out' v-html='outputHTML'></div></pre>
+          :class="[
+            'output tw-transition-all tw-duration-300',
+            { 'is-flashing': justUpdated && !isShowingStale }
+          ]"
+          v-if="hasOutput || isShowingStale"
+        ><div id='out' v-html='isShowingStale ? cachedOutputHTML : outputHTML' :class="[
+                'outtext',
+                { 'tw-opacity-40 tw-pointer-events-none tw-select-none tw-blur-sm': isShowingStale },            
+          ]"></div></pre>
       </Transition>
     </div>
     <div ref="stickySentinelRef" class="tw-h-px tw-pointer-events-none" aria-hidden="true" />
@@ -741,12 +785,33 @@ div.runner
         font-family: monospace
         border: 1px solid #ccc
         border-radius: 0px
-        background-color: #f5f5f5
+        background-color: white
         margin: 6px 0 0
-        padding: 9.5px
         line-height: 1.42857143
         color: #333333
         white-space: pre-wrap
         word-break: break-all
         word-wrap: break-word
+        .outtext
+            padding: 9.5px
+
+// Add this anywhere in your style block
+@keyframes output-update-flash
+    0%
+        background-color: rgba(59, 130, 246, 0.1)
+    100%
+        background-color: white // Your standard output background color     
+
+@keyframes output-update-text-flash
+    0%
+        opacity: 0.1
+        filter: brightness(1000%) contrast(650%)
+    100%   
+        opacity: 1 
+        filter: brightness(100%)
+
+.output.is-flashing
+    animation: output-update-flash 0.4s ease-out
+    .outtext    
+        animation: output-update-text-flash 0.4s ease-out
 </style>
