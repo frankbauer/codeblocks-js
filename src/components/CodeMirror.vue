@@ -830,12 +830,28 @@ defineExpose({
                     color: #666
                     font-size: 0.9em
                     margin-left: 8px
-    :deep(.cm-scroller)
-        // Prevents the scroller from reserving empty space for an inactive horizontal scrollbar
+    .cm-scroller
         min-height: 0 !important
 
-    :deep(.cm-content)
-        // Removes CodeMirror's default top/bottom padding
+    .cm-scroller::-webkit-scrollbar:horizontal
+        height: 0 !important
+
+    .cm-gutters
+        transform: translateZ(0)
+
+    .theme-light .cm-gutters
+        background-color: #eceff4 !important
+
+    .theme-dark .cm-gutters
+        background-color: #3b4252 !important
+
+    .theme-solarized-light .cm-gutters
+        background-color: #dfd9c8 !important
+
+    .theme-solarized-dark .cm-gutters
+        background-color: #00252f !important
+
+    .cm-content
         padding-top: 0 !important
         padding-bottom: 0 !important
 

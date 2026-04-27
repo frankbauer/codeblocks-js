@@ -26,6 +26,7 @@ export const EditorThemes: { [key in Themes]: EditorTheme } = {
         editorTheme: basicLightTheme,
         cssClasses: {
             'system-code-box': true,
+            'theme-light': true,
         },
     },
     'bordered-dark': {
@@ -33,27 +34,28 @@ export const EditorThemes: { [key in Themes]: EditorTheme } = {
         editorTheme: basicDarkTheme,
         cssClasses: {
             'system-code-box-dark': true,
+            'theme-dark': true,
         },
     },
     'basic-light': {
         highlightStyle: syntaxHighlighting(basicLightHighlightStyle), //createHighlightStyle('light'),
         editorTheme: basicLightTheme,
-        cssClasses: {},
+        cssClasses: { 'theme-light': true },
     },
     'basic-dark': {
         highlightStyle: syntaxHighlighting(basicDarkHighlightStyle), //createHighlightStyle('dark'),
         editorTheme: basicDarkTheme,
-        cssClasses: {},
+        cssClasses: { 'theme-dark': true },
     },
     'solarized-light': {
         highlightStyle: syntaxHighlighting(solarizedLightHighlightStyle),
         editorTheme: solarizedLightTheme,
-        cssClasses: {},
+        cssClasses: { 'theme-solarized-light': true },
     },
     'solarized-dark': {
         highlightStyle: syntaxHighlighting(solarizedDarkHighlightStyle),
         editorTheme: solarizedDarkTheme,
-        cssClasses: {},
+        cssClasses: { 'theme-solarized-dark': true },
     },
 }
 
