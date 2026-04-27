@@ -174,6 +174,8 @@ const code = defineModel<string>('modelValue')
 const editorElement = ref<HTMLElement | null>(null)
 const editorView = shallowRef<EditorView | null>(new EditorView())
 
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+
 const mainClass = computed(() => {
     return {
         ...editorTheme.value.cssClasses,
@@ -263,14 +265,6 @@ const getIndentationInSource = (docString: string, pos: number): number => {
     // Fallback to simpler indentation logic
     const context = new IndentContext(newState, { simulateBreak: newPos })
     return getSimpleIndentation(context, newPos, () => 0) ?? 0
-}
-
-const getIndentationAt = (context: IndentContext, pos: number): number => {
-    if (codeSplitSegment.value) {
-        return getIndentationInSource(context.state.doc.toString(), pos)
-    }
-    const defaultIndent = getSimpleIndentation(context, pos, getBaseIndent) ?? getBaseIndent()
-    return defaultIndent
 }
 
 function combinedCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
@@ -386,7 +380,26 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
     ] as Extension[]
 })
 
-let resizeObserver: ResizeObserver | null = null
+const tryFixSafari = () => {
+    if (!isSafari) {
+        return
+    }
+
+    editorView.value?.requestMeasure()
+    const scroller = editorElement.value?.querySelector(".cm-scroller") as HTMLElement | null;
+    if (scroller){
+        scroller.style.scrollbarWidth = "none";
+    }
+    
+    setTimeout(() => {
+        if (scroller){
+            scroller.style.scrollbarWidth = "auto"            
+        }
+
+        editorView.value?.requestMeasure()
+        editorView.value?.dispatch({});
+    }, 200)
+}
 
 onMounted(() => {
     if (editorElement.value === null) {
@@ -428,32 +441,12 @@ onMounted(() => {
             state: editorView.value.state,
             container: editorElement.value,
         })
-
-        // Add this ResizeObserver
-        resizeObserver = new ResizeObserver(() => {
-             if (editorView.value) {
-                 editorView.value.requestMeasure()
-                 editorView.value.dispatch({}) // Forces a full re-layout
-             }
-        })
-        resizeObserver.observe(editorElement.value)
+        tryFixSafari()
     })
 
-   document.fonts.ready.then(() => {
-        if (editorView.value) {
-            editorView.value.requestMeasure()
-            editorView.value.dispatch({}) // Forces a full re-layout
-        }
-    })
 })
 
-// Clean it up
-onBeforeUnmount(() => {
-    if (resizeObserver) {
-        resizeObserver.disconnect()
-        resizeObserver = null
-    }
-})
+
 
 function lineNr(a: number): string {
     return `${+a + firstLine.value - 1}`
@@ -833,8 +826,11 @@ defineExpose({
     .cm-scroller
         min-height: 0 !important
 
-    .cm-scroller::-webkit-scrollbar:horizontal
-        height: 0 !important
+    .safari 
+        .cm-scroller
+            scrollbar-width: none
+        .cm-scroller::-webkit-scrollbar
+            display: none
 
     .cm-gutters
         transform: translateZ(0)
