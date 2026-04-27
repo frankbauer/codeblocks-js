@@ -10,3 +10,7 @@ public/js/phaser/
 public/js/tensorflow.js/
 public/js/three.js/
 public/js/jquery.min.js
+public/js/python/v100/skulpt/
+public/js/python/v101/skulpt/
+public/js/python/v102/pyodide-0.17.0/
+public/js/python/v103/pyodide-0.23.3/
