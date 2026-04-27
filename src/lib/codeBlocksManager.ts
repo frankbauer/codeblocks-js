@@ -1,5 +1,5 @@
 import { UnwrapRef, createApp, h, type Ref } from 'vue'
-import { ScriptBlock } from './scriptBlock'
+import { createScriptBlock } from './scriptBlock'
 import i18n from '../plugins/i18n'
 
 import App from '../App.vue'
@@ -33,6 +33,7 @@ import { appUseCodeMirror } from '@/plugins/codemirror'
 import { storeBlock } from '@/storage/blockStorage'
 import { UIThemeType, getUITheme } from '@/lib/uiTheme'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
+import { AnyCodeBlockScope, IScriptBlock } from './IScriptBlock'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -138,7 +139,7 @@ export class BlockData implements IBlockData {
     label: string
     _oac?: () => string //used by Blockly to re-place the actualContent-Method while keeping the old implementation around
 
-    obj: ScriptBlock | null
+    obj: IScriptBlock | null
     dataObj: any | null
 
     constructor(d: IBlockDataWithSettings) {
@@ -194,7 +195,7 @@ export class BlockData implements IBlockData {
         if (this.type === KnownBlockTypes.PLAYGROUND) {
             console.i('recreateScriptObject - Playground')
 
-            const so = new ScriptBlock(this.actualContent(), this.version)
+            const so = createScriptBlock(this.actualContent(), this.version)
             this.obj = so
             console.i('Block Rebuild', this.obj, this.uuid)
         } else if (this.type === KnownBlockTypes.DATA) {
@@ -308,10 +309,10 @@ export class BlockData implements IBlockData {
         }
     }
 
-    get scope(): JQuery<HTMLElement> {
-        return this.scopeSelector
+    get scope(): AnyCodeBlockScope {
+        return (this.scopeSelector
             ? $(this.scopeSelector)
-            : $(`.codeblocks[uuid="${this.appSettings.uuid}"]`)
+            : $(`.codeblocks[uuid="${this.appSettings.uuid}"]`))
     }
 }
 

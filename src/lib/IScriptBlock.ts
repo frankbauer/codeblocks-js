@@ -82,10 +82,76 @@ export interface IScriptOutputObject {
     parseError?: string | object
 }
 
+export interface ICodeBlockScope {
+    find(selector: string): JQuery<HTMLElement>
+    each(callback: (index: number, element: HTMLElement) => any): any
+    filter(selector: string): JQuery<HTMLElement>
+    children(selector?: string): JQuery<HTMLElement>
+    [index: number]: HTMLElement
+    length: number
+}
+
+export type AnyCodeBlockScope = JQuery<HTMLElement> | ICodeBlockScope
+
+export interface IPlaygroundObject {
+    init(
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>,
+        scope: AnyCodeBlockScope,
+        runner: () => void
+    ): void
+
+    reset?(canvasElement: JQuery<HTMLElement>): void
+
+    update(
+        txt: string,
+        json: object | undefined,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>
+    ): string | undefined
+
+    onParseError?(initialOutput: string, parseError: string): void
+
+    onMessage?(cmd: string, data: any): void
+
+    beforeStart?(): void
+
+    whenFinished?(args: string[] | object, resultData?: object | any[]): void
+
+    addArgumentsTo?(args: object | string[]): void
+
+    getResources?(): IResourceInfo[]
+
+    setupDOM?(
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement> | undefined,
+        scope: AnyCodeBlockScope
+    ): void
+
+    RESOURCES: any[]
+    DATA: any[]
+}
+
+export interface IProcessedScriptOutput {
+    type: 'json' | 'text' | 'dual'
+    text: string
+    json: object | undefined
+}
+
+export interface IScriptOutputObject {
+    output: string
+    sansoutput: string
+    outputElement: JQuery<HTMLElement>
+    initialOutput: string
+    processedOutput: IProcessedScriptOutput
+    parseError?: string | object
+}
+
 export interface IScriptBlock {
     err: IParsedError[]
+    version: string
 
-    requestsOriginalVersion(): void
+    requestsOriginalVersion(): boolean
 
     invalidate(): void
 
@@ -93,9 +159,9 @@ export interface IScriptBlock {
 
     pushError(e: any): void
 
-    setupDOM(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>): void
+    setupDOM(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope): void
 
-    init(canvasElement: JQuery<HTMLElement>, scope: JQuery<HTMLElement>, runner: () => void): void
+    init(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope, runner: () => void): void
 
     reset(canvasElement: JQuery<HTMLElement>): void
 
@@ -110,13 +176,13 @@ export interface IScriptBlock {
 
     runConfig: null | ICompileAndRunArguments
 
-    didReceiveMessage(cmd: string, data: any)
+    didReceiveMessage(cmd: string, data: any): void
 
-    beforeStart()
+    beforeStart(): void
 
-    whenFinished(args: string[] | object, resultData: object | any[])
+    whenFinished(args: string[] | object, resultData: object | any[]): void
 
-    resetResources()
+    resetResources(): void
 
-    resetBlockData(blocks: IBlockData[] | undefined)
+    resetBlockData(blocks: IBlockData[] | undefined): void
 }
