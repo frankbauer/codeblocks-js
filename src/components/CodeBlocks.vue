@@ -204,6 +204,12 @@ const onCompilerVersionChange = (v: string): void => {
     }
 }
 
+const onEmitASTChange = (v: boolean): void => {
+    if (editMode) {
+        blockInfo.value.emitAST = v
+    }
+}
+
 const onRunStateChange = (v: boolean): void => {
     if (editMode) {
         blockInfo.value.runCode = v
@@ -508,6 +514,7 @@ useResizeObserver(runnerRef, (entries) => {
       @dom-libs-change="onDomLibChange"
       @theme-change="onThemeChange"
       @output-parser-change="onOutputParserChange"
+      @emit-ast-change="onEmitASTChange"
     />
     <CodeBlockContainer
       :appID="appID"

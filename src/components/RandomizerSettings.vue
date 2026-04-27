@@ -237,15 +237,8 @@ const InputComponent = Input
 const DialogComponent = Dialog
 
 import { Plus, Trash2, Check, AlertTriangle, Eye, EyeOff, Edit } from 'lucide-vue-next'
+import { ICodeBlockSettingsOptions } from './CodeBlocksSettings.vue'
 
-interface ICodeBlockSettingsOptions {
-    randomizer: {
-        active: boolean
-        previewIndex: number
-        knownTags: string[]
-        sets: IRandomizerSet[]
-    }
-}
 
 const props = defineProps({
     options: {

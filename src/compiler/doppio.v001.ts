@@ -159,6 +159,7 @@ export class DoppioV001Compiler implements ICompilerInstance {
     readonly allowsPersistentArguments = false
     readonly allowsMessagePassing = false
     readonly acceptsJSONArgument = false
+    readonly canEmitAST = false
     private didPreload = false
     private requestedPreload = false
     isReady = false

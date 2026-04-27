@@ -42,6 +42,7 @@ export class GLSLV100Compiler implements ICompilerInstance {
     readonly allowsContinousCompilation = false
     readonly allowsPersistentArguments = false
     readonly acceptsJSONArgument = false
+    readonly canEmitAST = false
     readonly allowsMessagePassing = false
     readonly deprecated = false
     readonly experimental = false

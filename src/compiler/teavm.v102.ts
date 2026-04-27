@@ -26,6 +26,7 @@ export class JavaV102Compiler implements ICompilerInstance {
     readonly allowsPersistentArguments = true
     readonly allowsMessagePassing = true
     readonly acceptsJSONArgument = true
+    readonly canEmitAST = true
     readonly experimental = true
     readonly deprecated = false
     didPreload: boolean = false
@@ -211,11 +212,18 @@ export class JavaV102Compiler implements ICompilerInstance {
         const mainClass = mainClassMatch ? mainClassMatch[1] : 'Main'
 
         const myListener = (e: any) => {
+            //console.log('Received message from compiler worker:', e.data.command, e.data, questionID)
             if (e.data.id != '' + questionID) {
                 return
             }
 
-            if (e.data.command == 'phase') {
+            if (e.data.command == 'ast') {
+                //console.log('Received AST from compiler:', e.data.ast)
+                const astCallback = options.ast_callback
+                if (astCallback) {
+                    astCallback(JSON.parse(e.data.ast))
+                }
+            } else if (e.data.command == 'phase') {
                 globalState.compilerState.displayGlobalState(
                     'Phase: <b>' + e.data.phase + '</b> for ' + mainClass
                 )
@@ -387,7 +395,7 @@ export class JavaV102Compiler implements ICompilerInstance {
             globalState.compilerState.displayGlobalState(
                 'Starting Compiler for <b>' + mainClass + '.java</b>'
             )
-
+            console.log('Will receive AST:', options.sendAST===true && !!options.ast_callback)
             this.teaworker.postMessage({
                 command: 'compile',
                 id: '' + questionID,
@@ -395,6 +403,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                 mainClass: mainClass,
                 strict: true,
                 debugInfo: true,
+                emitAst: options.sendAST===true && !!options.ast_callback,
             })
         }
     }

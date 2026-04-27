@@ -107,6 +107,9 @@ export interface ICompileAndRunArguments {
     allowMessagePassing: boolean
     keepAlive: boolean
     resultData: Object | any[] | undefined
+
+    sendAST?: boolean
+    ast_callback?: (ast: any) => void
 }
 
 export interface CallingCodeBlocks {
@@ -124,6 +127,7 @@ export interface ICompilerInstance {
     readonly allowsContinousCompilation: boolean
     readonly allowsPersistentArguments: boolean
     readonly acceptsJSONArgument: boolean
+    readonly canEmitAST: boolean
     readonly experimental: boolean
     readonly deprecated: boolean
     isReady: boolean

@@ -58,6 +58,7 @@ export interface IAppSettings {
     compiler: ICompilerID
     language: string
     runCode: boolean
+    emitAST: boolean
     domLibs: string[]
     workerLibs: string[]
     outputParser: CodeOutputTypes
@@ -90,6 +91,7 @@ interface IInputElementData extends IInputElementDataDeprecated {
     workerLibs?: string
     readonly?: string
     runCode?: string
+    emitAst?: string
     id?: string
     executionTimeout?: string
     maxCharacters?: string
@@ -348,6 +350,7 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
         id: runningAppNumber++,
         editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor'),
         runCode: false,
+        emitAST: false,
         language: 'javascript',
         compiler: {
             languageType: 'javascript',
@@ -416,9 +419,11 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
         const c = CompilerRegistry.getCompiler(data.compiler)
         if (c === undefined) {
             data.runCode = false
+            data.emitAST = false
             data.language = data.compiler.languageType
         } else {
-            data.runCode = isTrue(inData.runCode)
+            data.runCode = isTrue(inData.runCode)            
+            data.emitAST = isTrue(inData.emitAst) && c.canEmitAST
             data.language = c.language
             if (c.deprecated) {
                 const upgraded = CompilerRegistry.getCompiler({ languageType: data.compiler.languageType })

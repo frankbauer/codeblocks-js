@@ -405,11 +405,25 @@
                                 />
                             </div>
 
+                             <div
+                                    v-if="canEmitAST"
+                                    class="tw-flex tw-items-center tw-space-x-2 tw-mb-4"
+                                >
+                                <Switch
+                                    id="emit-ast"
+                                    v-model="emitAST"
+                                />
+                                <Label for="emit-ast">{{
+                                    $t('CodeBlocksSettings.EmitAST')
+                                }}</Label>
+                            </div>
+
                             <div
                                 v-if="accepstArguments || allowsMessagePassing"
                                 class="tw-space-y-2"
                             >
-                                <div class="tw-flex tw-items-center tw-gap-2">
+                           
+                                <div class="tw-flex tw-items-center tw-gap-2">                                 
                                     <div class="tw-text-sm">
                                         {{ $t('CodeBlocksSettings.AllowArguments') }}
                                     </div>
@@ -639,7 +653,6 @@ import { Badge } from '../shadcn/ui/badge' // kept: used in dialog tab content (
 import { Alert, AlertDescription, AlertTitle } from '../shadcn/ui/alert'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn/ui/hover-card'
 import { Button } from '../shadcn/ui/button'
-import CButton from './ui/CButton.vue'
 import CMultiSelect from './ui/CMultiSelect.vue'
 import CSelect from './ui/CSelect.vue'
 import CInput from './ui/CInput.vue'
@@ -685,18 +698,18 @@ const emit = defineEmits([
     'keep-alive-change',
     'persistent-arguments-change',
     'compiler-version-change',
+    'emit-ast-change',
 ])
 
 const { t: l } = useI18n()
-
-interface Props {
-    options: {
+export interface ICodeBlockSettingsOptions {
         id: number | string
         language: string
         compiler: ICompilerID
         executionTimeout: number
         maxCharacters: number
         runCode: boolean
+        emitAST: boolean
         continuousCompilation: boolean
         messagePassing: boolean
         keepAlive: boolean
@@ -707,6 +720,8 @@ interface Props {
         outputParser: CodeOutputTypes
         randomizer: IRandomizerSettings
     }
+interface Props {
+    options: ICodeBlockSettingsOptions
 }
 
 interface Option {
@@ -1013,6 +1028,23 @@ const canPersistentArguments = computed(() => {
         return cmp.acceptsJSONArgument && cmp.allowsPersistentArguments && cmp.canRun
     }
     return false
+})
+
+const canEmitAST = computed(() => {
+    const cmp = compilerRegistry.getCompiler(compiler.value)
+    if (cmp) {
+        return cmp.canEmitAST && cmp.canRun
+    }
+    return false
+})
+
+const emitAST = computed({
+    get: () => {
+        return props.options.emitAST
+    },
+    set: (v: boolean) => {
+        emit('emit-ast-change', v)
+    },
 })
 
 const accepstArguments = computed(() => {

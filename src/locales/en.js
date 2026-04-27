@@ -64,6 +64,7 @@ export default {
         UserCanceled: 'Stopped By User',
     },
     CodeBlocksSettings: {
+        EmitAST: 'Emit AST',
         Runtime: "Runtime",
         NoExecution: 'Code Execution is disabled',
         Settings: 'Settings',

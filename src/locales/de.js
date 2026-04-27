@@ -64,6 +64,7 @@ export default {
         UserCanceled: 'Vom Benutzer Abgebrochen',
     },
     CodeBlocksSettings: {
+        EmitAST: 'AST-Erzeugen',
         Runtime: "Ausführung",
         NoExecution: 'Keine Ausführung',
         Settings: 'Einstellungen',

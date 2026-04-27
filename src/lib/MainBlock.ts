@@ -20,6 +20,7 @@ export default class MainBlock implements IMainBlock {
     compiler: ICompilerID
     language: string
     runCode: boolean
+    emitAST: boolean
     domLibs: string[]
     workerLibs: string[]
     outputParser: CodeOutputTypes
@@ -43,6 +44,7 @@ export default class MainBlock implements IMainBlock {
         this.compiler = data.compiler
         this.language = data.language
         this.runCode = data.runCode
+        this.emitAST = data.emitAST
         this.domLibs = data.domLibs
         this.workerLibs = data.workerLibs
         this.outputParser = data.outputParser

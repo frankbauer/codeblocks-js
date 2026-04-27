@@ -149,6 +149,7 @@ export function codeBlockSetup(
             executionTimeout: executionTimeout.value,
             maxCharacters: maxCharacters.value,
             runCode: runCode.value,
+            emitAST: emitAST.value,
             domLibs: domLibraries.value,
             workerLibs: workerLibraries.value,
             id: blockInfo.value.id,
@@ -183,6 +184,9 @@ export function codeBlockSetup(
     })
     const runCode = computed((): boolean => {
         return blockInfo.value.runCode
+    })
+    const emitAST = computed((): boolean => {
+        return blockInfo.value.emitAST
     })
     const domLibraries = computed((): string[] => {
         return blockInfo.value.domLibs
@@ -309,6 +313,9 @@ export function codeBlockSetup(
         didClip.value = false
         outputHTML.value = ''
     }
+    const astCallback = (ast: any): void => {
+        console.log('Received AST', ast)
+    }
     const log = (text: string): void => {
         output.value += text
         text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
@@ -431,6 +438,10 @@ export function codeBlockSetup(
                         log_callback: log,
                         info_callback: logInfo,
                         err_callback: logError,
+                        ast_callback: astCallback,
+                        get sendAST(){
+                            return emitAST.value
+                        },
                         compileFailedCallback: processDiagnostics,
                         finishedExecutionCB: (
                             success = true,
