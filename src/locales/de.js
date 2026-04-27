@@ -62,6 +62,9 @@ export default {
         SelectBlockType: 'Blocktyp auswählen',
         SelectBlockTypeDesc: 'Wähle den Typ für den neuen Block.',
         UserCanceled: 'Vom Benutzer Abgebrochen',
+        unpin_runner: 'Klicken, um den Ausführen-Button und die Ausgabe zu lösen.',
+        pin_runner: 'Klicken, um den Ausführen-Button und die Ausgabe unten auf der Seite zu verankern.',
+        clear_output: 'Ausgabe löschen',
     },
     CodeBlocksSettings: {
         EmitAST: 'AST-Erzeugen',

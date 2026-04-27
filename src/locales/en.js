@@ -62,6 +62,9 @@ export default {
         SelectBlockType: 'Select Block Type',
         SelectBlockTypeDesc: 'Choose the type for the new block.',
         UserCanceled: 'Stopped By User',
+        unpin_runner: 'Click to unpin the run button and output.',
+        pin_runner: 'Click to pin the run button and output to the bottom of the page.',
+        clear_output: 'Clear Output',
     },
     CodeBlocksSettings: {
         EmitAST: 'Emit AST',
