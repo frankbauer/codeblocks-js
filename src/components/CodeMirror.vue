@@ -398,7 +398,7 @@ const tryFixSafari = () => {
 
         editorView.value?.requestMeasure()
         editorView.value?.dispatch({});
-    }, 200)
+    }, 500)
 }
 
 onMounted(() => {

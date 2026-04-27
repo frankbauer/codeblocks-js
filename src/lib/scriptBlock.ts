@@ -387,13 +387,37 @@ export class ScriptBlock implements IScriptBlock {
                 console.i('!!! SETUP CANVAS !!!')
                 if (o.setupDOM) {
                     let outputElement: JQuery<HTMLElement> | undefined = undefined
-                    if (scope === undefined || scope.length === 0) {
-                        scope = canvasElement.parents('.codeblocks')
+                    if (this.version !== '101' && !this.requestsOriginalVersion()) {
+                        const localScope = canvasElement.closest('.codeblocks')
+                        let smartScope = localScope.slice(0) as any
+                        const originalScope = scope
+
+                        smartScope.find = function (selector: string) {
+                            let res = localScope.find(selector)
+                            if (
+                                res.length === 0 &&
+                                originalScope !== undefined &&
+                                originalScope.length > 0 &&
+                                originalScope[0] !== localScope[0]
+                            ) {
+                                res = originalScope.find(selector)
+                            }
+                            return res
+                        }
+
+                        if (smartScope !== undefined) {
+                            outputElement = smartScope.find('div.runner pre.output')
+                        }
+                        o.setupDOM(canvasElement, outputElement, smartScope)
+                    } else {
+                        if (scope === undefined || scope.length === 0) {
+                            scope = canvasElement.parents('.codeblocks')
+                        }
+                        if (scope !== undefined) {
+                            outputElement = scope.find('div.runner pre.output')
+                        }
+                        o.setupDOM(canvasElement, outputElement, scope)
                     }
-                    if (scope !== undefined) {
-                        outputElement = scope.find('div.runner pre.output')
-                    }
-                    o.setupDOM(canvasElement, outputElement, scope)
                 }
             }
         } catch (e) {
@@ -501,18 +525,49 @@ export class ScriptBlock implements IScriptBlock {
         arunner.postMessage = this.doPostMessageToWorker.bind(this)
 
         let outputElement: JQuery<HTMLElement> | undefined = undefined
-        if (scope === undefined || scope.length === 0) {
-            scope = canvasElement.parents('.codeblocks')
-        }
-        if (scope !== undefined) {
-            outputElement = scope.find('div.runner pre.output')
-        }
-        if (outputElement === undefined) {
-            console.error('[Internal Error] No Output Element found!')
-            this.pushError('[Internal Error] No Output Element found!')
+
+        if (this.version !== '101' && !this.requestsOriginalVersion()) {
+            const localScope = canvasElement.closest('.codeblocks')
+            let smartScope = localScope.slice(0) as any
+            const originalScope = scope
+
+            smartScope.find = function (selector: string) {
+                let res = localScope.find(selector)
+                if (
+                    res.length === 0 &&
+                    originalScope !== undefined &&
+                    originalScope.length > 0 &&
+                    originalScope[0] !== localScope[0]
+                ) {
+                    res = originalScope.find(selector)
+                }
+                return res
+            }
+
+            if (smartScope !== undefined) {
+                outputElement = smartScope.find('div.runner pre.output')
+            }
+            if (outputElement === undefined) {
+                console.error('[Internal Error] No Output Element found!')
+                this.pushError('[Internal Error] No Output Element found!')
+            } else {
+                const o = this.obj as IPlaygroundObject
+                o.init(canvasElement, outputElement, smartScope, runner)
+            }
         } else {
-            const o = this.obj as IPlaygroundObject
-            o.init(canvasElement, outputElement, scope, runner)
+            if (scope === undefined || scope.length === 0) {
+                scope = canvasElement.parents('.codeblocks')
+            }
+            if (scope !== undefined) {
+                outputElement = scope.find('div.runner pre.output')
+            }
+            if (outputElement === undefined) {
+                console.error('[Internal Error] No Output Element found!')
+                this.pushError('[Internal Error] No Output Element found!')
+            } else {
+                const o = this.obj as IPlaygroundObject
+                o.init(canvasElement, outputElement, scope, runner)
+            }
         }
     }
 

@@ -291,9 +291,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                         if (ee.data.command == 'f-FINAL') {
                             //console.log('Received final result from execution:', ee.data.value)
                             options.resultData = JSON.parse(ee.data.value)
-                        }
-                        
-                        if (ee.data.id != '' + questionID) {
+                        } else if (ee.data.id != '' + questionID) {
                             console.warn('Received message for different session.', ee.data.id, questionID, JSON.stringify(ee.data))
                         }
 

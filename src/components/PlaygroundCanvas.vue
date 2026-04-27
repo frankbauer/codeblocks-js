@@ -58,11 +58,10 @@ const innerPlaygroundContainer = ref<HTMLElement | null>(null)
 
 const canvas = computed(() => {
     console.log('PLAYGROUND REF:', innerPlaygroundContainer.value)
-    if (innerPlaygroundContainer.value == null) {
-        return new HTMLElement()
-    }
-    return innerPlaygroundContainer.value
+    return innerPlaygroundContainer.value || undefined
 })
+
+defineExpose({ canvas })
 
 function whenMounted(): void {
     if (props.obj && compilerRegistry !== undefined) {

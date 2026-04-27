@@ -98,7 +98,7 @@
         </AlertDialog>
 
         <PlaygroundCanvas
-            ref="canvasElement"
+            ref="playgroundCanvasComponent"
             :output="finalOutputObject.initialOutput"
             :obj="block.obj"
             :key="runCount"
@@ -197,7 +197,8 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
 
 const lastRun: Ref<Date> = ref(new Date())
 const runCount: Ref<number> = ref(0)
-const canvasElement: Ref<HTMLElement | undefined> = ref(undefined)
+const playgroundCanvasComponent = ref<any>(null)
+const canvasElementFromEvent = ref<HTMLElement | undefined>(undefined)
 
 // Error dialog state
 const showErrorDialog: Ref<boolean> = ref(false)
@@ -206,10 +207,7 @@ const errorDialogMessage: Ref<string> = ref('')
 const errorOutput: Ref<string> = ref('')
 
 const canvas = computed<HTMLElement | undefined>(() => {
-    if (canvasElement.value && canvasElement.value.canvas) {
-        return canvasElement.value.canvas
-    }
-    return canvasElement.value
+    return canvasElementFromEvent.value || playgroundCanvasComponent.value?.canvas
 })
 let needsCodeRebuild: boolean = false
 const initAndRebuildErrors: Ref<any[]> = ref([])
@@ -322,6 +320,7 @@ function resetBeforeRun(): void {
                 console.log('Will Re-Initialize', 'Without Canvas')
             }
             lastRun.value = new Date()
+            canvasElementFromEvent.value = undefined // Clear stale element
             runCount.value++
             reInitCode = true
             onNextTick = true
@@ -356,6 +355,10 @@ function resetBeforeRun(): void {
         let doInit = () => {
             console.i('!!! DO INIT !!!')
             if (block.value.obj !== null) {
+                if (canvas.value === undefined) {
+                    console.i('Canvas not available for doInit, skipping (will be handled by mount)')
+                    return true
+                }
                 console.log('DATA: CanvasElement', canvas.value)
                 const jCanvas: any = $(canvas.value as HTMLElement)
                 const scope: any = block.value.scope
@@ -470,7 +473,7 @@ function emitRun() {
 
 function onCanvasChange(can) {
     console.log('DATA: old Canvas', canvas.value)
-    canvasElement.value = can.value
+    canvasElementFromEvent.value = can.value
     if (props.editMode) {
         updateErrors()
     }
