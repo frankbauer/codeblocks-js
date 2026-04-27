@@ -6,16 +6,14 @@ import {
 } from '@/lib/IScriptBlock'
 import { BaseScriptBlock } from './BaseScriptBlock'
 import { LibraryScriptBlock } from './LibraryScriptBlock'
-import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { IBlockData } from '@/lib/ICodeBlocks'
 
 export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
     // Persistent sandbox shared with the compiled playground closure via with(sandbox)
     protected sandbox: Record<string, any> = {}
-    private activeLibraryKeys: Set<string> = new Set()
 
-    private librariesBefore: LibraryScriptBlock[] = []
-    private librariesAfter: LibraryScriptBlock[] = []
+    protected librariesBefore: LibraryScriptBlock[] = []
+    protected librariesAfter: LibraryScriptBlock[] = []
 
     protected getFallbackObject(): IPlaygroundObject {
         return {
@@ -138,58 +136,6 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
             lib.libraryObject?.onParseError?.(initialOutput, parseError)
         )
         return handled
-    }
-
-    public override resetBlockData(blocks: IBlockData[] | undefined): void {
-        super.resetBlockData(blocks)
-
-        // Clear only previous library instances from sandbox to preserve system utilities (console, etc.)
-        this.activeLibraryKeys.forEach((key) => {
-            delete this.sandbox[key]
-        })
-        this.activeLibraryKeys.clear()
-
-        if (blocks === undefined || parseInt(this.version) < 102) {
-            this.librariesBefore = []
-            this.librariesAfter = []
-            return
-        }
-
-        const playgroundId = blocks.find((b) => b.obj === this)?.id ?? Infinity
-
-        const libraryBlocks = blocks
-            .filter(
-                (b): b is IBlockData & { obj: LibraryScriptBlock } =>
-                    b.type === KnownBlockTypes.LIBRARY && b.obj instanceof LibraryScriptBlock
-            )
-            .sort((a, b) => a.id - b.id)
-
-        // Drop old instances from library blocks
-        for (const lib of libraryBlocks) {
-            lib.obj.instance = undefined
-        }
-
-        this.librariesBefore = libraryBlocks
-            .filter((b) => b.id < playgroundId)
-            .map((b) => b.obj)
-        this.librariesAfter = libraryBlocks
-            .filter((b) => b.id > playgroundId)
-            .map((b) => b.obj)
-
-        // Create library instances in execution order; each sees previously created instances
-        const context: Record<string, any> = {}
-        for (const lib of libraryBlocks) {
-            console.log('Creating library instance for', lib.name, lib)
-            const instance = lib.obj.createInstance(context)
-            if (lib.name && instance !== undefined) {
-                context[lib.name] = instance
-                this.activeLibraryKeys.add(lib.name)
-            }
-        }
-
-        // Inject instances into sandbox — the with(sandbox) proxy reads at call time,
-        // so playground code like `chart.render()` will resolve correctly
-        Object.assign(this.sandbox, context)
     }
 
     private chainLibraries(
