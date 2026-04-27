@@ -4,6 +4,7 @@ import { ICompilerInfo } from '@/lib/ICompilerRegistry'
 import v100 from './python.v100'
 import v101 from './python.v101'
 import v102 from './python.v102'
+import v103 from './python.v103'
 
 export class PythonCompilerInfo implements ICompilerInfo {
     type = 'python'
@@ -21,7 +22,7 @@ export class Python3CompilerInfo implements ICompilerInfo {
     displayName = 'Python 3'
 
     //attach all version
-    versions = [v101.python3, v102.python3]
+    versions = [v101.python3, v102.python3, v103.python3]
 
     //declare the default one
     default = v101.python3

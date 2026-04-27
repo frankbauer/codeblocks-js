@@ -1,0 +1,312 @@
+import {
+    ICompilerInstance,
+    ErrorSeverity,
+    ICompileAndRunArguments,
+    CallingCodeBlocks,
+} from '@/lib/ICompilerRegistry'
+import Vue, { reactive } from 'vue'
+import { l } from '@/plugins/i18n'
+import { globalState } from '@/lib/globalState'
+
+interface REPLWorker extends Worker {}
+
+let spareWorker: REPLWorker | undefined
+let runningWorker: REPLWorker | undefined
+
+function getWorker(setReady: (boolean) => void) {
+    if (!window.Worker) {
+        return undefined
+    }
+
+    setReady(false)
+    if (runningWorker !== undefined) {
+        console.d('FORCE STOPPING ON RERUN')
+        runningWorker.end(l('CodeBlocks.UserCanceled'))
+        runningWorker = undefined
+    }
+
+    runningWorker = spareWorker
+    console.i('Starting Spare Pyodide Server')
+    spareWorker = new Worker(
+        globalState.appState.baseurl + 'js/python/v103/pyWorker.js'
+    ) as REPLWorker
+    spareWorker.onmessage = function (msg: any) {
+        if (msg.data.command == 'finished-init') {
+            setReady(true)
+        }
+    }
+    spareWorker.postMessage({
+        command: 'initialize',
+        id: '0',
+    })
+    return runningWorker
+}
+
+function runPythonWorker(
+    questionID: string,
+    code: string,
+    callingCodeBlocks: CallingCodeBlocks,
+    options: ICompileAndRunArguments,
+    setReady: (boolean) => void
+): REPLWorker | undefined {
+    const {
+        max_ms,
+        log_callback,
+        info_callback,
+        err_callback,
+        compileFailedCallback,
+        finishedExecutionCB,
+        args,
+        keepAlive,
+    } = options
+
+    //WebWorkers need to be supported
+    if (!window.Worker) {
+        err_callback(
+            'CRITICAL-ERROR: your browser does not support WebWorkers! (please consult a Tutor).'
+        )
+        return
+    }
+
+    //const lines = code.split('\n').length;
+    const startTime = performance.now()
+    let executionFinished = false
+    const worker = getWorker(setReady)
+    if (worker === undefined) {
+        err_callback('CRITICAL-ERROR: Unable to get background worker.')
+        return
+    }
+
+    worker.onmessage = function (msg: any) {
+        console.d('pyrunner message', questionID, executionFinished, msg.data, msg.data.command)
+        //only accept messages, as long as the worker is not terminated
+        if (executionFinished) {
+            return
+        }
+
+        const time = performance.now() - startTime
+        if (time > max_ms && !keepAlive) {
+            triggerTimeout()
+        }
+
+        if (msg.data.command == 'finished') {
+            if (options.allowMessagePassing) {
+                options.whenFinishedHandler(msg.data.args)
+            }
+            if (msg && msg.data && msg.data.args) {
+                args['return'] = msg.data.args
+            } else {
+                args['return'] = {}
+            }
+            console.d('returned msg:', msg, ', args:', args)
+            executionFinished = true
+            finishedExecutionCB(true, undefined, args['return'])
+            setReady(true)
+            console.i('Execution finished in ' + time + ' ms\n')
+            //info_callback('Info: Execution finished in ' + time + ' ms\n')
+            worker.end()
+        } else if (msg.data.command == 'exception') {
+            if (compileFailedCallback) {
+                compileFailedCallback({
+                    message: msg.data.text,
+                    start: {
+                        line: msg.data.lineNumber,
+                        column: 0,
+                    },
+                    end: {
+                        line: msg.data.lineNumber,
+                        column: 0,
+                    },
+                    severity:
+                        msg.data.severity == 'ERROR' ? ErrorSeverity.Error : ErrorSeverity.Warning,
+                })
+            }
+        } else if (msg.data.command == 'log') {
+            log_callback(msg.data.s + '\n')
+        } else if (msg.data.command == 'err') {
+            err_callback(msg.data.s + '\n')
+        } else if (msg.data.command == 'loaded-imports') {
+            if (spareWorker !== undefined) {
+                spareWorker.postMessage({
+                    command: 'preload-imports',
+                    names: msg.data.names,
+                })
+            }
+        } else if (msg.data.command == 'main-will-start') {
+            options.beforeStartHandler()
+        } else if (msg.data.command == 'main-finished') {
+            console.d('MESSAGE - Main Finished')
+            //set up the real message handler
+            options.postMessageFunction = (cmd, data) => {
+                data = { ...data }
+                console.d('MESSAGE - JS Post ', cmd, data)
+                data.command = cmd
+                data.id = questionID
+                worker.postMessage(data)
+            }
+
+            options.postMessageFunction('main-finished', {})
+
+            //make sure to send all queued messages now
+            options.dequeuePostponedMessages()
+
+            options.whenFinishedHandler(msg.data.args)
+        } else if (msg.data.command == 'w-exit-keepalive' || msg.data.command == 'exit-keepalive') {
+            //Make sure a keep-alive session can do proper cleanup
+            if (options.keepAlive) {
+                worker.postMessage({
+                    command: 'session-ended',
+                    id: '' + questionID,
+                })
+            }
+        } else if (msg.data.command == 'finished-init') {
+            // spare worker finished initializing after being promoted to running worker; harmless
+        } else if (msg.data.command.indexOf('w-') == 0) {
+            msg.data.command = msg.data.command.substr(2)
+        } else {
+            console.i('MESSAGE - ', msg.data)
+            worker.end(
+                'HackerError: Great! You invaded our System. Sadly this will lead you nowhere. Please focus on the Test.'
+            )
+        }
+    }
+
+    worker.onerror = function (e) {
+        compileFailedCallback({
+            start: { line: e.lineno - 3, column: e.colno - 1 },
+            end: { line: e.lineno - 3, column: e.colno },
+            message: e.message,
+            severity: ErrorSeverity.Error,
+        })
+        worker.end('Line ' + (e.lineno - 3) + ': ' + e.message)
+    }
+
+    worker.end = function (msg) {
+        if (executionFinished) {
+            return
+        }
+        worker.terminate()
+        executionFinished = true
+        //when aborting, the result is 'undefined'
+        if (msg) {
+            err_callback(msg + '\n')
+        }
+        finishedExecutionCB(false)
+        setReady(true)
+    }
+
+    function triggerTimeout() {
+        if (worker !== undefined) {
+            worker.end(
+                'TimeoutError:  Execution took too long (>' +
+                    (performance.now() - startTime) +
+                    'ms) and was terminated. There might be an endless loop in your code.'
+            )
+        }
+    }
+
+    const startExecution = function (args: object, options: ICompileAndRunArguments) {
+        //start worker execution
+        worker.postMessage({
+            command: 'start',
+            code: code,
+            args: args,
+            messagePosting: options.allowMessagePassing,
+            keepAlive: options.keepAlive,
+        })
+
+        //stop Worker execution when the time limit is exceeded;
+        if (!keepAlive) {
+            setTimeout(triggerTimeout, max_ms)
+        }
+    }
+
+    let willStartExecution = false
+    console.log(
+        'callingCodeBlocks.workerLibraries',
+        callingCodeBlocks,
+        callingCodeBlocks.workerLibraries,
+        callingCodeBlocks.$compilerRegistry.loadLibraries
+    )
+    callingCodeBlocks.workerLibraries.forEach((l) => {
+        if (l === 'd3-101') {
+            willStartExecution = true
+            callingCodeBlocks.$compilerRegistry.loadLibraries(
+                ['d3-5.13.4', 'd3proxy-101'],
+                function () {
+                    worker.postMessage({ command: 'importD3' })
+                    startExecution(args, options)
+                }
+            )
+        } else if (l === 'brain-2.0.0') {
+            willStartExecution = true
+            callingCodeBlocks.$compilerRegistry.loadLibraries([], function () {
+                worker.postMessage({ command: 'importBrain' })
+                startExecution(args, options)
+            })
+        }
+    })
+
+    if (!willStartExecution) {
+        startExecution(args, options)
+    }
+
+    return worker
+}
+
+//ICompilerInstance
+
+export class PythonV103Compiler implements ICompilerInstance {
+    readonly version = '103'
+    readonly language = 'python'
+    readonly canRun = true
+    readonly canStop = true
+    readonly allowsContinousCompilation = true
+    readonly allowsPersistentArguments = true
+    readonly allowsMessagePassing = true
+    readonly acceptsJSONArgument = true
+    readonly canEmitAST = false
+    readonly experimental = true
+    readonly deprecated = false
+    isReady = false
+    readonly isRunning = false
+
+    preload() {
+        getWorker(this.setReady.bind(this)) //this will initialize our first worker
+    }
+
+    private setReady(val: boolean) {
+        console.i('Changing READY-State to ' + val)
+        this.isReady = val
+    }
+
+    private worker: REPLWorker | undefined = undefined
+
+    compileAndRun(
+        questionID: string,
+        code: string,
+        callingCodeBlocks: CallingCodeBlocks,
+        options: ICompileAndRunArguments
+    ): void {
+        this.worker = runPythonWorker(
+            questionID,
+            code,
+            callingCodeBlocks,
+            options,
+            this.setReady.bind(this)
+        )
+    }
+
+    stop() {
+        console.d('FORCE STOPPING')
+        if (this.worker) {
+            this.worker.end(l('CodeBlocks.UserCanceled'))
+        }
+    }
+}
+
+export const pythonCompiler_V103 = reactive(new PythonV103Compiler())
+
+export default {
+    python3: pythonCompiler_V103,
+}
