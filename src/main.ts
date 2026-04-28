@@ -60,6 +60,8 @@ window.codeblocks = {
     },
 }
 
+window.dispatchEvent(new CustomEvent('codeblocks:ready', { detail: window.codeblocks }))
+
 window.mountInElement = function (element: any): void {
     console.error('mountInElement is deprecated, please use codeblocks.mountInElement instead')
     window.codeblocks.mountInElement(element)
@@ -70,4 +72,6 @@ window.mountCodeBlocks = function (scope: HTMLElement | Document | undefined) {
     window.codeblocks.mountInScope(scope)
 }
 
-CodeBlocksManager.loadAndMount()
+CodeBlocksManager.loadAndMount().then(() => {
+    window.dispatchEvent(new CustomEvent('codeblocks:mounted', { detail: window.codeblocks }))
+})

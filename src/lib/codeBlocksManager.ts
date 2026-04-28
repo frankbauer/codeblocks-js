@@ -34,7 +34,13 @@ import { storeBlock } from '@/storage/blockStorage'
 import { UIThemeType, getUITheme } from '@/lib/uiTheme'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 import { AnyCodeBlockScope, IScriptBlock } from './IScriptBlock'
-import { IJsonExport, applyImportToMainBlock } from './importExportUtils'
+import {
+    IJsonExport,
+    applyImportToMainBlock,
+    getImportData,
+    validateImportData,
+    processImportData,
+} from './importExportUtils'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -74,6 +80,7 @@ export interface IAppSettings {
     keepAlive: boolean
     persistentArguments: boolean
     shadowRoot?: ShadowRoot
+    error?: string
 }
 
 interface IInputElementDataDeprecated {
@@ -334,6 +341,7 @@ export class BlockData implements IBlockData {
 }
 
 export interface IMainBlock extends IAppSettings {
+    error?: string
     swap(id1: number, id2: number): void
 
     moveUp(id: number): void
@@ -739,15 +747,48 @@ class InternalCodeBlocksManager {
         if (src) {
             try {
                 const response = await fetch(src)
-                const json = (await response.json()) as IJsonExport
-                // We apply the JSON directly to our internal data object
-                // Since _data is an IAppSettings and applyImportToMainBlock expects a MainBlock (which is a superset),
-                // we can safely cast it or refine the utility.
-                // Actually, MainBlock is a class wrapper. Let's just update the internal data.
+                if (!response.ok) {
+                    throw new Error(
+                        `Failed to fetch ${src}: ${response.status} ${response.statusText}`
+                    )
+                }
+                let json: IJsonExport
+                if (src.toLowerCase().endsWith('.zip')) {
+                    const blob = await response.blob()
+                    json = await getImportData(blob)
+                } else {
+                    json = validateImportData(await response.json(), false)
+                    // Handle deferred loading for JSON exports
+                    const baseUrl = src.substring(0, src.lastIndexOf('/') + 1)
+                    await Promise.all(
+                        json.blocks.map(async (block) => {
+                            if (block.file && !block.content) {
+                                try {
+                                    const fileResponse = await fetch(baseUrl + block.file)
+                                    if (fileResponse.ok) {
+                                        block.content = await fileResponse.text()
+                                    } else {
+                                        console.error(
+                                            `Failed to load referenced file ${block.file}: ${fileResponse.status}`
+                                        )
+                                    }
+                                } catch (fileError) {
+                                    console.error(
+                                        `Failed to load referenced file ${block.file} for block ${block.id}`,
+                                        fileError
+                                    )
+                                }
+                            }
+                        })
+                    )
+                    json = processImportData(json, true) // validate JSON and throw if invalid
+                }
+
                 applyImportToMainBlock(json, this.data as any, 'override', true)
                 this.element.removeAttribute('src') // avoid re-loading
-            } catch (e) {
+            } catch (e: any) {
                 console.error(`Failed to load codeblocks from ${src}`, e)
+                this.data.error = e.message || String(e)
             }
         }
     }

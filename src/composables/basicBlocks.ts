@@ -197,6 +197,9 @@ export function codeBlockSetup(
     const uiTheme = computed((): UIThemeType => {
         return blockInfo.value.uiTheme
     })
+    const error = computed((): string | undefined => {
+        return blockInfo.value.error
+    })
     const readonly = computed((): boolean => {
         return blockInfo.value.readonly
     })
@@ -620,6 +623,7 @@ export function codeBlockSetup(
         domLibraries,
         workerLibraries,
         uiTheme,
+        error,
         readonly,
         outputParser,
         hasOutput,

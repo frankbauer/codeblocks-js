@@ -56,17 +56,51 @@ const metadataSchema = z.union([
     playgroundMetadataSchema,
 ])
 
-const exportBlockMetadataSchema = z.object({
+const baseBlockSchema = z.object({
     id: z.number(),
-    type: z.nativeEnum(KnownBlockTypes),
     name: z.string().optional().default(''),
     file: z.string().optional(),
     isCombined: z.boolean().optional(),
-    metadata: blockMetadataSchema.optional().default({}),
     content: z.string().optional(),
     alternativeContent: z.string().optional().nullable(),
     hasAlternativeContent: z.boolean().optional(),
 })
+
+const exportBlockMetadataSchema = z
+    .discriminatedUnion('type', [
+        baseBlockSchema.extend({
+            type: z.literal(KnownBlockTypes.PLAYGROUND),
+            metadata: playgroundMetadataSchema.optional().default({}),
+        }),
+        baseBlockSchema.extend({
+            type: z.literal(KnownBlockTypes.BLOCK),
+            metadata: blockMetadataSchema.optional().default({}),
+        }),
+        baseBlockSchema.extend({
+            type: z.literal(KnownBlockTypes.BLOCKSTATIC),
+            metadata: blockMetadataSchema.optional().default({}),
+        }),
+        baseBlockSchema.extend({
+            type: z.literal(KnownBlockTypes.BLOCKHIDDEN),
+            metadata: blockMetadataSchema.optional().default({}),
+        }),
+        baseBlockSchema.extend({
+            type: z.literal(KnownBlockTypes.LIBRARY),
+            metadata: expandableCodeMetadataSchema.optional().default({}),
+        }),
+        baseBlockSchema.extend({
+            type: z.literal(KnownBlockTypes.DATA),
+            metadata: expandableCodeMetadataSchema.optional().default({}),
+        }),
+        baseBlockSchema.extend({
+            type: z.literal(KnownBlockTypes.TEXT),
+            metadata: commonMetadataSchema.optional().default({}),
+        }),
+    ])
+    .refine((data) => data.content !== undefined || data.file !== undefined, {
+        message: 'Either content or file must be provided',
+        path: ['content'],
+    })
 
 const exportedSettingsSchema = z.object({
     readonly: z.boolean().optional().default(false),
@@ -105,6 +139,15 @@ export type IExpandableCodeMetadata = z.infer<typeof expandableCodeMetadataSchem
 export type IPlaygroundMetadata = z.infer<typeof playgroundMetadataSchema>
 export type IBlockMetadata = z.infer<typeof blockMetadataSchema>
 export type IMetadata = z.infer<typeof metadataSchema>
+
+export type MetadataByType<T extends KnownBlockTypes> = T extends KnownBlockTypes.PLAYGROUND
+    ? IPlaygroundMetadata
+    : T extends KnownBlockTypes.BLOCK | KnownBlockTypes.BLOCKSTATIC | KnownBlockTypes.BLOCKHIDDEN
+      ? IBlockMetadata
+      : T extends KnownBlockTypes.LIBRARY | KnownBlockTypes.DATA
+        ? IExpandableCodeMetadata
+        : ICommonMetadata
+
 export type IExportBlockMetadata = z.infer<typeof exportBlockMetadataSchema>
 export type IExportedSettings = z.infer<typeof exportedSettingsSchema>
 export type IJsonExport = z.infer<typeof jsonExportSchema>
@@ -203,7 +246,7 @@ export async function exportToZip(
                     file: combinedFileName,
                     isCombined: true,
                     metadata: getBlockMetadata(metaSupplier),
-                })
+                } as IExportBlockMetadata)
 
                 zip.file(combinedFileName, combinedContent)
                 i = j
@@ -220,7 +263,7 @@ export async function exportToZip(
             name: block.name,
             file: fileName,
             metadata: getBlockMetadata(block),
-        })
+        } as IExportBlockMetadata)
         i++
     }
 
@@ -278,16 +321,17 @@ function getSourceBlockTypeLabel(block: BlockData): TypeStartLabels {
     return 'SOLUTION'
 }
 
-function getBlockMetadata(block: BlockData): IMetadata {
-    const commonMetadata: any = {
+function getBlockMetadata<T extends KnownBlockTypes>(
+    block: BlockData & { type: T }
+): MetadataByType<T> {
+    const commonMetadata: ICommonMetadata = {
         expanded: block.expanded,
-        version: block.version,
-        static: block.static,
-        hidden: block.hidden,
     }
+
     if (block.type === KnownBlockTypes.PLAYGROUND) {
         return {
             ...commonMetadata,
+            version: block.version,
             codeExpanded: block.codeExpanded,
             shouldAutoreset: block.shouldAutoreset,
             shouldReloadResources: block.shouldReloadResources,
@@ -295,38 +339,29 @@ function getBlockMetadata(block: BlockData): IMetadata {
             width: block.width,
             height: block.height,
             align: block.align,
-        }
-    } else if (block.isSourceCode) {
+        } as MetadataByType<T>
+    } else if (
+        block.type === KnownBlockTypes.BLOCK ||
+        block.type === KnownBlockTypes.BLOCKSTATIC ||
+        block.type === KnownBlockTypes.BLOCKHIDDEN
+    ) {
         return {
             ...commonMetadata,
             visibleLines: block.visibleLines,
             hasAlternativeContent: block.hasAlternativeContent,
-        }
-    } else if (block.type === KnownBlockTypes.LIBRARY) {
+            static: block.type === KnownBlockTypes.BLOCKSTATIC || block.static,
+            hidden: block.type === KnownBlockTypes.BLOCKHIDDEN || block.hidden,
+        } as MetadataByType<T>
+    } else if (block.type === KnownBlockTypes.LIBRARY || block.type === KnownBlockTypes.DATA) {
         return {
             ...commonMetadata,
             codeExpanded: block.codeExpanded,
-        }
-    } else if (block.type === KnownBlockTypes.DATA) {
-        return {
-            ...commonMetadata,
-            codeExpanded: block.codeExpanded,
-        }
+        } as MetadataByType<T>
     }
-    return commonMetadata
+    return commonMetadata as MetadataByType<T>
 }
 
-function getSourceBlockTypeLabelFromType(type: KnownBlockTypes): TypeStartLabels {
-    if (type === KnownBlockTypes.BLOCKHIDDEN) {
-        return 'API'
-    }
-    if (type === KnownBlockTypes.BLOCKSTATIC) {
-        return 'STATIC'
-    }
-    return 'SOLUTION'
-}
-
-export async function getImportData(file: File) {
+export async function getImportData(file: File | Blob): Promise<IJsonExport> {
     const zip = await JSZip.loadAsync(file)
     const blocksJsonFile = zip.file('blocks.json')
     if (!blocksJsonFile) {
@@ -336,7 +371,7 @@ export async function getImportData(file: File) {
     let data: IJsonExport
     try {
         const rawData = JSON.parse(await blocksJsonFile.async('text'))
-        data = jsonExportSchema.parse(rawData)
+        data = validateImportData(rawData, false)
     } catch (e) {
         if (e instanceof z.ZodError) {
             console.error('Validation error in blocks.json:', e.issues)
@@ -347,16 +382,58 @@ export async function getImportData(file: File) {
         throw e
     }
 
-    const expandedBlocks: IExportBlockMetadata[] = []
     const fileCache: Record<string, string> = {}
 
-    for (const block of data.blocks) {
-        if (!fileCache[block.file]) {
-            fileCache[block.file] = await zip.file(block.file)!.async('text')
-        }
+    //resolve file references in parallel first to speed up imports with many blocks
+    await Promise.all(
+        data.blocks.map(async (block) => {
+            if (block.file && !block.content) {
+                if (!fileCache[block.file]) {
+                    const zipFile = zip.file(block.file)
+                    if (zipFile) {
+                        fileCache[block.file] = await zipFile.async('text')
+                    } else {
+                        console.warn(`Referenced file ${block.file} not found in zip.`)
+                        fileCache[block.file] = ''
+                    }
+                }
+                block.content = fileCache[block.file]
+                delete block.file
+            }
+        })
+    )
+    return processImportData(data, false) // skip validation here since we already validated the structure with zod
+}
 
+export function validateImportData(data: any, strict = true): IJsonExport {
+    try {
+        if (strict) data = jsonExportSchema.strict().parse(data)
+        else data = jsonExportSchema.parse(data)
+    } catch (e) {
+        console.error('Validation error during import processing:', e)
+        if (e instanceof z.ZodError) {
+            throw new Error(
+                `Failed to validate import data: ${e.issues.map((err) => `${err.path.join('.')}: ${err.message}`).join(', ')}`
+            )
+        }
+        throw e
+    }
+    return data
+}
+
+export function processImportData(data: IJsonExport, validate = false): IJsonExport {
+    if (validate) data = validateImportData(data)
+
+    const expandedBlocks: IExportBlockMetadata[] = []
+    for (const block of data.blocks) {
         if (block.isCombined) {
-            const fullContent = fileCache[block.file]
+            const fullContent = block.content
+            if (!fullContent) {
+                console.warn(
+                    `Combined block ${block.id} has no content and no valid file reference.`
+                )
+                continue
+            }
             const sections = fullContent.split(new RegExp('^//#START ', 'm')).slice(1)
 
             sections.forEach((section, index) => {
@@ -374,7 +451,7 @@ export async function getImportData(file: File) {
                     const name = headerMatch[3] || ''
 
                     let blockType = KnownBlockTypes.BLOCK
-                    const metadata = { ...block.metadata }
+                    const metadata: any = { ...block.metadata }
 
                     if (typeLabel === 'API') {
                         blockType = KnownBlockTypes.BLOCKHIDDEN
@@ -396,13 +473,13 @@ export async function getImportData(file: File) {
                         }
                     }
 
-                    const newBlock: IExportBlockMetadata = {
+                    const newBlock = {
                         id: block.id + index, // approximate
                         type: blockType,
                         name: name || block.name,
                         file: block.file,
                         metadata: metadata,
-                    }
+                    } as IExportBlockMetadata
 
                     if (content.match(/\/\/#END STUDENT\r?\n/)) {
                         const parts = content.split(/\/\/#END STUDENT\r?\n/)
@@ -420,7 +497,6 @@ export async function getImportData(file: File) {
                 }
             })
         } else {
-            block.content = fileCache[block.file]
             expandedBlocks.push(block)
         }
     }
@@ -429,13 +505,16 @@ export async function getImportData(file: File) {
 }
 
 export function applyImportToMainBlock(
-    importData: IJsonExport,
+    importData: any, // accept any for validation
     main: MainBlock,
     mode: 'append' | 'prepend' | 'override' = 'append',
     importSettings = true
 ) {
+    const validatedData = validateImportData(importData)
+    console.i('Validated JSON before applyImportToMainBlock:', validatedData)
+
     if (importSettings) {
-        const s = importData.settings
+        const s = validatedData.settings
         main.language = s.language
         main.compiler = s.compiler
         main.runCode = s.runCode
@@ -453,7 +532,7 @@ export function applyImportToMainBlock(
         main.randomizer = s.randomizer
     }
 
-    const newBlocks: BlockData[] = importData.blocks.map((b) => {
+    const newBlocks: BlockData[] = validatedData.blocks.map((b) => {
         const data: any = {
             ...b.metadata,
             type: b.type,
@@ -468,6 +547,7 @@ export function applyImportToMainBlock(
             readyCount: 0,
             errors: [],
             lineCountHint: -1,
+            obj: null,
         }
 
         // Ensure flags are set, prioritizing metadata if available, otherwise inferring from type
@@ -479,7 +559,8 @@ export function applyImportToMainBlock(
             (b.type === KnownBlockTypes.BLOCK ||
                 b.type === KnownBlockTypes.BLOCKSTATIC ||
                 b.type === KnownBlockTypes.BLOCKHIDDEN)
-        // Default to '101' only if it's truly missing, to avoid '100' which is deprecated
+
+        // Default to '101' only if it's truly missing
         if (!data.version) {
             data.version = '101'
         }

@@ -206,26 +206,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { applyImportToMainBlock, exportToZip, getImportData } from '@/lib/importExportUtils'
+import MainBlock from '@/lib/MainBlock'
+import { Button } from '@/shadcn/ui/button'
+import { Checkbox } from '@/shadcn/ui/checkbox'
 import {
     Dialog,
-    DialogContent,
     DialogDescription,
     DialogHeader,
-    DialogTitle,
     DialogScrollContent,
+    DialogTitle,
 } from '@/shadcn/ui/dialog'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shadcn/ui/tabs'
-import { Checkbox } from '@/shadcn/ui/checkbox'
-import { Button } from '@/shadcn/ui/button'
 import { Label } from '@/shadcn/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/shadcn/ui/radio-group'
-import { Download, Upload, FileArchive } from 'lucide-vue-next'
-import { exportToZip, getImportData, applyImportToMainBlock } from '@/lib/importExportUtils'
-import MainBlock from '@/lib/MainBlock'
-import { BlockData, constructBlock } from '@/lib/codeBlocksManager'
-import { KnownBlockTypes } from '@/lib/ICodeBlocks'
-import { uuid } from 'vue-uuid'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shadcn/ui/tabs'
+import { Download, Upload } from 'lucide-vue-next'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
     open: boolean

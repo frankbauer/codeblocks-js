@@ -25,7 +25,8 @@ import { useStorage, useIntersectionObserver, useResizeObserver } from '@vueuse/
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 import { CodeSplit } from '@/composables/useCodeEditor'
 import CButton from '@/components/ui/CButton.vue'
-import { CopyPlus, Pin, Play, Square, Trash2 } from 'lucide-vue-next'
+import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
+import { AlertCircle, CopyPlus, Pin, Play, Square, Trash2 } from 'lucide-vue-next'
 import { Button } from '@/shadcn/ui/button'
 import { Switch } from '@/shadcn/ui/switch'
 import { useSlideTransition } from '@/composables/useSlideTransition'
@@ -59,6 +60,7 @@ const {
     readonly,
     mimeType,
     isReady,
+    error,
     canRun,
     activeTagSet,
     showGlobalMessages,
@@ -496,6 +498,13 @@ useResizeObserver(runnerRef, (entries) => {
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"
     >
+        <Alert variant="destructive" v-if="error" class="tw-mb-4">
+            <AlertCircle class="tw-h-4 tw-w-4" />
+            <AlertTitle>{{ $t('CodeBlocks.error') }}</AlertTitle>
+            <AlertDescription>
+                {{ error }}
+            </AlertDescription>
+        </Alert>
         <CodeBlocksSettings
             v-if="editMode"
             :options="options"

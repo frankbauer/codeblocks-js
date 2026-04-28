@@ -33,6 +33,7 @@ export default class MainBlock implements IMainBlock {
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean
+    error?: string
 
     constructor(data: IAppSettings) {
         this.id = data.id
@@ -57,6 +58,7 @@ export default class MainBlock implements IMainBlock {
         this.messagePassing = data.messagePassing
         this.keepAlive = data.keepAlive
         this.persistentArguments = data.persistentArguments
+        this.error = data.error
 
         this.blocks.forEach((v, i) => {
             this.blocks[i].appSettings = this

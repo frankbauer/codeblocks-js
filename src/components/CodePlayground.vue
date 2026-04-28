@@ -519,8 +519,9 @@ function emitRun() {
 }
 
 function onCanvasChange(can) {
+    if (!can) return
     console.log('DATA: old Canvas', canvas.value)
-    canvasElementFromEvent.value = can.value
+    canvasElementFromEvent.value = can.value !== undefined ? can.value : can
     if (props.editMode) {
         updateErrors()
     }
