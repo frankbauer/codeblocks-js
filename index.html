@@ -58,7 +58,7 @@ print(a.shape)</pre>
         <div></div>
     </loading>
 
-    <pre as="DATA">{"name":"test", "age":3}</pre>
+    <pre as="DATA" data-name="v0">{"name":"test", "age":3}</pre>
     <div as="TEXT">Here is a simple &lt;b>Java&lt;/b> program:</div>
     <pre as='BLOCK' data-hidden='true' data-label="test">import de.fau.tf.lgdv.CodeBlocks;
 import de.fau.tf.lgdv.json.JsonSerializer;
@@ -74,7 +74,7 @@ public class App {
         System.out.println("or anyone else {:checked}");
         int[] testArray = {1,2,3,4,5};
         System.out.println(testArray[2]);
-        System.out.println(testArray[-1]);
+        //System.out.println(testArray[-1]);
         CodeBlocks.postResult(new Foo()); //this is line 16</pre>
     <pre as='BLOCK' data-static='true'>    } //this is line 17
 }
@@ -85,14 +85,34 @@ class MainOverride {
         App.main(args);        
     }
 }</pre>
-    <script as="PLAYGROUND">module.exports = {
-    init: function() {
-        console.log("init");
+ <script as="LIBRARY" type="text/x-codeblocks" data-name="testPre100">
+    export default {                                          
+      create() {
+        console.log("LIB: Creating testPre100")
+          return { greet: () => console.log("LIB: GREETINGS from testPre100") }
+      },                                                                                                    
+      init() {
+          console.log("LIB: Hello testPre100")                                                              
+      }                                                     
+  }     
+ </script>
+    <script as="PLAYGROUND" type="text/x-codeblocks" data-version="102" data-height="40px">export default {
+    init: function(canvasElement, outputElement, scope, runner) {
+        console.log("LIB: Hello PLAYGROUND")
+        testPre100.greet()
+        canvasElement.html("CANVAS")
+        console.log("TEST init", canvasElement, outputElement, scope, runner);
     },
     update: function(textData, jsonData, canvasElement, outputElement) {
-        console.log("TEST", jsonData, textData);
+        console.log("TEST update", jsonData, textData, canvasElement, outputElement);
+        canvasElement.html("HALLO")
+        outputElement.html("OUTPUT: " + textData);
+    },
+    onASTAvailable: function(ast) {
+        console.log("TEST AST", ast);
     }
-}</script>
+}
+    </script>
 </div>
 
 
