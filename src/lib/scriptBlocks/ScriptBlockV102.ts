@@ -215,7 +215,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         this.librariesBefore.forEach((lib) => lib.libraryObject?.onASTAvailable?.(ast))
         this.lazyInit()
         if (this.obj) {
-            const o = this.obj as IPlaygroundObject
+            const o = this.obj as unknown as IPlaygroundObjectV102
             if (o.onASTAvailable) {
                 try {
                     o.onASTAvailable(ast)

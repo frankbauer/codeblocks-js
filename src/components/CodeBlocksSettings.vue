@@ -241,59 +241,32 @@
                             </DialogDescription>
                         </DialogHeader>
 
-                        <!-- Tab bar -->
-                        <div class="tw-flex tw-border-b tw-mt-2 tw-gap-0">
-                            <button
-                                type="button"
-                                @click="activeTab = 'language'"
-                                class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-2 tw-text-sm tw-font-medium tw-border-b-2 tw-transition-colors tw-whitespace-nowrap"
-                                :class="activeTab === 'language' ? 'tw-border-primary tw-text-primary' : 'tw-border-transparent tw-text-muted-foreground hover:tw-text-foreground hover:tw-border-muted-foreground/30'"
-                            >
-                                <Code2 class="tw-w-4 tw-h-4" />
-                                {{ $t('CodeBlocksSettings.Language') }}
-                            </button>
-                            <button
-                                v-if="runCode"
-                                type="button"
-                                @click="activeTab = 'runtime'"
-                                class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-2 tw-text-sm tw-font-medium tw-border-b-2 tw-transition-colors tw-whitespace-nowrap"
-                                :class="activeTab === 'runtime' ? 'tw-border-primary tw-text-primary' : 'tw-border-transparent tw-text-muted-foreground hover:tw-text-foreground hover:tw-border-muted-foreground/30'"
-                            >
-                                <Play class="tw-w-4 tw-h-4" />
-                                {{ $t('CodeBlocksSettings.Runtime') }}
-                            </button>
-                            <button
-                                v-if="runCode"
-                                type="button"
-                                @click="activeTab = 'output'"
-                                class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-2 tw-text-sm tw-font-medium tw-border-b-2 tw-transition-colors tw-whitespace-nowrap"
-                                :class="activeTab === 'output' ? 'tw-border-primary tw-text-primary' : 'tw-border-transparent tw-text-muted-foreground hover:tw-text-foreground hover:tw-border-muted-foreground/30'"
-                            >
-                                <Terminal class="tw-w-4 tw-h-4" />
-                                {{ $t('CodeBlocksSettings.Output') }}
-                            </button>
-                            <button
-                                type="button"
-                                @click="activeTab = 'libraries'"
-                                class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-2 tw-text-sm tw-font-medium tw-border-b-2 tw-transition-colors tw-whitespace-nowrap"
-                                :class="activeTab === 'libraries' ? 'tw-border-primary tw-text-primary' : 'tw-border-transparent tw-text-muted-foreground hover:tw-text-foreground hover:tw-border-muted-foreground/30'"
-                            >
-                                <Library class="tw-w-4 tw-h-4" />
-                                {{ $t('CodeBlocksSettings.Libraries') }}
-                            </button>
-                            <button
-                                type="button"
-                                @click="activeTab = 'randomizer'"
-                                class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-2 tw-text-sm tw-font-medium tw-border-b-2 tw-transition-colors tw-whitespace-nowrap"
-                                :class="activeTab === 'randomizer' ? 'tw-border-primary tw-text-primary' : 'tw-border-transparent tw-text-muted-foreground hover:tw-text-foreground hover:tw-border-muted-foreground/30'"
-                            >
-                                <Dices class="tw-w-4 tw-h-4" />
-                                {{ $t('RandomizerSettings.Caption') }}
-                            </button>
-                        </div>
+                        <Tabs v-model="activeTab" class="tw-mt-2">
+                            <TabsList class="tw-grid tw-w-full tw-grid-cols-5">
+                                <TabsTrigger value="language">
+                                    <Code2 class="tw-w-4 tw-h-4" />
+                                    {{ $t('CodeBlocksSettings.Language') }}
+                                </TabsTrigger>
+                                <TabsTrigger v-if="runCode" value="runtime">
+                                    <Play class="tw-w-4 tw-h-4" />
+                                    {{ $t('CodeBlocksSettings.Runtime') }}
+                                </TabsTrigger>
+                                <TabsTrigger v-if="runCode" value="output">
+                                    <Terminal class="tw-w-4 tw-h-4" />
+                                    {{ $t('CodeBlocksSettings.Output') }}
+                                </TabsTrigger>
+                                <TabsTrigger value="libraries">
+                                    <Library class="tw-w-4 tw-h-4" />
+                                    {{ $t('CodeBlocksSettings.Libraries') }}
+                                </TabsTrigger>
+                                <TabsTrigger value="randomizer">
+                                    <Dices class="tw-w-4 tw-h-4" />
+                                    {{ $t('RandomizerSettings.Caption') }}
+                                </TabsTrigger>
+                            </TabsList>
 
                         <!-- Tab: Language -->
-                        <div v-if="activeTab === 'language'" class="tw-space-y-4 tw-mt-4">
+                        <TabsContent value="language" class="tw-space-y-4 tw-mt-4 tw-px-2">
                             <div class="tw-flex tw-items-center tw-space-x-2">
                                 <Switch
                                     id="run-code"
@@ -432,10 +405,10 @@
                                     </div>
                                 </Alert>
                             </Transition>
-                        </div>
+                        </TabsContent>
 
                         <!-- Tab: Runtime (only when execution is enabled) -->
-                        <div v-if="activeTab === 'runtime' && runCode" class="tw-space-y-4 tw-mt-4">
+                        <TabsContent value="runtime" class="tw-space-y-4 tw-mt-4 tw-px-2">
                             <div v-if="showMaxRuntime">
                                 <CInput
                                     v-model="maxRuntime"
@@ -602,10 +575,10 @@
                                     </HoverCard>
                                 </div>
                             </div>
-                        </div>
+                        </TabsContent>
 
                         <!-- Tab: Output -->
-                        <div v-if="activeTab === 'output'" class="tw-space-y-4 tw-mt-4">
+                        <TabsContent value="output" class="tw-space-y-4 tw-mt-4 tw-px-2">
                             <CInput
                                 v-model="maxCharacters"
                                 :rules="[validNumber]"
@@ -641,10 +614,10 @@
                                 :options="themes"
                                 :label="$t('CodeBlocksSettings.TSolution')"
                             />
-                        </div>
+                        </TabsContent>
 
                         <!-- Tab: Libraries -->
-                        <div v-if="activeTab === 'libraries'" class="tw-space-y-4 tw-mt-4">
+                        <TabsContent value="libraries" class="tw-space-y-4 tw-mt-4 tw-px-2">
                             <CMultiSelect
                                 v-model="domLibrary"
                                 :options="domLibraries"
@@ -656,16 +629,35 @@
                                 :options="workerLibraries"
                                 :placeholder="$t('CodeBlocksSettings.SelectWorkerLibs')"
                             />
-                        </div>
+                        </TabsContent>
 
                         <!-- Tab: Randomizer (full config) -->
-                        <div v-if="activeTab === 'randomizer'" class="tw-mt-4">
+                        <TabsContent value="randomizer" class="w-space-y-4 tw-mt-4 tw-px-2">
                             <RandomizerSettings :options="options" />
-                        </div>
+                        </TabsContent>
+                        </Tabs>
                     </DialogScrollContent>
                 </Dialog>
+
+                <!-- Import / Export button -->
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <button
+                            type="button"
+                            class="cb-toolbar-item tw-border-l tw-px-3"
+                            @click="importExportOpen = true"
+                        >
+                            <Import class="tw-w-3.5 tw-h-3.5" />
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {{ $t('ImportExport.Title') }}
+                    </TooltipContent>
+                </Tooltip>
             </TooltipProvider>
         </div>
+
+        <ImportExportDialog v-model:open="importExportOpen" :main-block="mainBlock" />
 
         <textarea
             :name="`block_settings[${options.id}]`"
@@ -695,13 +687,16 @@ import { Alert, AlertDescription, AlertTitle } from '../shadcn/ui/alert'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn/ui/hover-card'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../shadcn/ui/tooltip'
 import { Button } from '../shadcn/ui/button'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../shadcn/ui/tabs'
 import CMultiSelect from './ui/CMultiSelect.vue'
 import CSelect from './ui/CSelect.vue'
 import CInput from './ui/CInput.vue'
+import ImportExportDialog from './ImportExportDialog.vue'
 import type { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
 import type { IRandomizerSet, IRandomizerSettings, ICodeBlockSettingsOptions } from '@/lib/ICodeBlocks'
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { globalState } from '@/lib/globalState'
+import { useBlockStorage, type BlockStorageType } from '@/storage/blockStorage'
 import { UIThemeType, UIThemeTypes, getUITheme } from '@/lib/uiTheme'
 import { useI18n } from 'vue-i18n'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
@@ -724,6 +719,7 @@ import {
     Play,
     AlertCircleIcon,
     MessageCircleMore,
+    Import,
 } from 'lucide-vue-next'
 
 const props = defineProps<Props>()
@@ -750,6 +746,7 @@ const emit = defineEmits([
 const { t: l } = useI18n()
 interface Props {
     options: ICodeBlockSettingsOptions
+    appID: number
 }
 
 interface Option {
@@ -881,6 +878,10 @@ const runCode = computed({
 
 const activeTab = ref('language')
 const dialogOpen = ref(false)
+const importExportOpen = ref(false)
+
+const blockStorage: BlockStorageType = useBlockStorage(props.appID)
+const mainBlock = blockStorage.appInfo
 
 const leftSection = ref<HTMLElement | null>(null)
 const hasOverflow = ref(false)

@@ -164,6 +164,11 @@ export default {
         DeprecatedScriptVersion: 'Deprecated Scripting Version',
         DeprecatedScriptVersionDesc:
             'This scripting version is deprecated and will be removed in upcoming updates. Please upgrade your project to a later version.',
+        UpgradeToV102: 'Upgrade to Script Version 3',
+        UpgradeToV102Tooltip:
+            'Automatically converts the code to the new v3 API: DOM elements (canvasElement, outputElement, scope, runner) are available as this.X instead of being passed as parameters.',
+        UpgradeToV102TooltipWarning:
+            'Warning: This migration only works for simple, straightforward code. Please review the migrated code carefully afterwards.',
     },
     Tagger: {
         ConfirmRepl: 'Confirm Tag Replacement',
@@ -265,5 +270,27 @@ export default {
         InactiveMessage: 'No playground block with at least version {version} exists. This library will not be used.',
         ErrorTitle: 'Library Error',
         UsageTooltip: 'This library is available as "{name}" in the playground.',
+    },
+    ImportExport: {
+        Title: 'Import / Export',
+        Description: 'Export your codeblocks to a file or import them from a previously exported zip.',
+        Export: 'Export',
+        Import: 'Import',
+        SelectBlocks: 'Select blocks to include in the export:',
+        SelectBlocksImport: 'Select blocks to import:',
+        SelectAll: 'Select All',
+        DeselectAll: 'Deselect All',
+        Cancel: 'Cancel',
+        RunExport: 'Export to Zip',
+        RunImport: 'Import selected',
+        DropZip: 'Drop your .codeblocks.zip file here',
+        ChooseFile: 'Choose File',
+        Settings: 'Import Settings',
+        IncludeSettings: 'Import global page settings',
+        ImportMode: 'Import Mode',
+        Append: 'Append',
+        Prepend: 'Prepend',
+        Override: 'Override (Clear existing)',
+        Back: 'Back'
     },
 }

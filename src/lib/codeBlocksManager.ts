@@ -248,6 +248,16 @@ export class BlockData implements IBlockData {
         )
     }
 
+    get descriptiveName(): string {
+        if (this.name) return this.name
+        const content = this.content || ''
+        const firstLine = content.replace(/\s*\n\s*/g, ' ').trim()
+        if (firstLine.length > 0) {
+            return firstLine.substring(0, 60) + (firstLine.length > 60 ? '...' : '')
+        }
+        return this.type
+    }
+
     get isLast(): boolean {
         return this.id == this.appSettings.blocks.length - 1
     }

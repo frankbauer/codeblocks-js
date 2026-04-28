@@ -165,6 +165,11 @@ export default {
         DeprecatedScriptVersion: 'Veralteter Scriptversion',
         DeprecatedScriptVersionDesc:
             'Diese Scriptversion ist veraltet und wird in einem der nächsten Updates entfernt. Bitte aktualisieren Sie Ihr Projekt auf eine aktuelle Version.',
+        UpgradeToV102: 'Auf Script-Version 3 aktualisieren',
+        UpgradeToV102Tooltip:
+            'Konvertiert den Code automatisch auf die neue v3-API: DOM-Elemente (canvasElement, outputElement, scope, runner) werden als this.X bereitgestellt statt als Parameter übergeben.',
+        UpgradeToV102TooltipWarning:
+            'Warnung: Diese Migration funktioniert nur für einfachen, unkomplizierten Code. Bitte den migrierten Code anschließend sorgfältig prüfen.',
     },
     Tagger: {
         ConfirmRepl: 'Ersetzung Bestätigen',
@@ -302,5 +307,27 @@ export default {
         InactiveMessage: 'Kein Sandkasten mit mindestens {version} vorhanden. Diese Bibliothek wird nicht verwendet.',
         ErrorTitle: 'Fehler in der Bibliothek',
         UsageTooltip: 'Diese Bibliothek ist als "{name}" im Sandkasten verfügbar.',
+    },
+    ImportExport: {
+        Title: 'Import / Export',
+        Description: 'Exportieren Sie Ihre Codeblöcke in eine Datei oder importieren Sie sie aus einem zuvor exportierten Zip.',
+        Export: 'Exportieren',
+        Import: 'Importieren',
+        SelectBlocks: 'Wählen Sie die Blöcke aus, die exportiert werden sollen:',
+        SelectBlocksImport: 'Wählen Sie die Blöcke aus, die importiert werden sollen:',
+        SelectAll: 'Alle auswählen',
+        DeselectAll: 'Alle abwählen',
+        Cancel: 'Abbrechen',
+        RunExport: 'Als Zip exportieren',
+        RunImport: 'Ausgewählte importieren',
+        DropZip: 'Ziehen Sie Ihre .codeblocks.zip Datei hierher',
+        ChooseFile: 'Datei auswählen',
+        Settings: 'Import-Einstellungen',
+        IncludeSettings: 'Globale Seiteneinstellungen importieren',
+        ImportMode: 'Import-Modus',
+        Append: 'Anhängen',
+        Prepend: 'Voranstellen',
+        Override: 'Überschreiben (Bestehende löschen)',
+        Back: 'Zurück'
     },
 }

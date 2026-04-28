@@ -19,7 +19,7 @@
             @leave="onLeave"
             @after-leave="onAfterLeave"
         >
-            <div v-show="options.randomizer.active" class="tw-ml-4 tw-mt-4 tw-space-y-6">
+            <div v-show="options.randomizer.active" class="tw-mt-4 tw-space-y-6">
                 <!-- Tags section -->
                 <div>
                     <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">

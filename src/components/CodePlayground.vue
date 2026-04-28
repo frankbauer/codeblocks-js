@@ -1,7 +1,26 @@
 <template>
     <div>
         <div class="tw-flex tw-w-full tw-justify-end tw-mb-1">
-            <div
+            <TooltipProvider v-if="canUpgradeToV102">
+                <Tooltip :delay-duration="300">
+                    <TooltipTrigger as-child>
+                        <Button
+                            variant="outline"
+                            size="xs"
+                            class="tw-mr-2 tw-shadow-none"
+                            @click="upgradeToV102"
+                        >
+                            <Wand2 class="tw-w-4 tw-h-4 tw-mr-1" />
+                            {{ l('CodePlayground.UpgradeToV102') }}
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent class="tw-max-w-xs">
+                        <p>{{ l('CodePlayground.UpgradeToV102Tooltip') }}</p>
+                        <p class="tw-mt-1 tw-font-semibold tw-text-yellow-400">{{ l('CodePlayground.UpgradeToV102TooltipWarning') }}</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+        <div
                 class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse"
                 v-if="editMode"
             >
@@ -115,6 +134,7 @@
 
 <script lang="ts" setup>
 import PlaygroundCanvas from '@/components/PlaygroundCanvas.vue'
+import { migrateV101ToV102 } from '@/lib/scriptBlocks/migrationV101ToV102'
 
 import CodeBlock from '@/components/CodeBlock.vue'
 import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
@@ -141,6 +161,7 @@ import { EventHubType } from '@/composables/globalEvents'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 import { Button } from '@/shadcn/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shadcn/ui/tooltip'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -150,7 +171,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/shadcn/ui/alert-dialog'
-import { ChevronUp, ChevronDown, Maximize, Expand, Shrink, AlertTriangle } from 'lucide-vue-next'
+import { ChevronUp, ChevronDown, Maximize, Expand, Shrink, AlertTriangle, Wand2 } from 'lucide-vue-next'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 
 export interface ICodePlaygroundOptions {
@@ -262,6 +283,18 @@ function setExpanded(val: CodeExpansionType): void {
     if (block.value.codeExpanded != CodeExpansionType.TINY) {
         globalCodeBlock?.refreshAllCodeMirrors()
     }
+}
+
+const canUpgradeToV102: ComputedRef<boolean> = computed(
+    () => props.editMode && parseInt(block.value.version) === 101
+)
+
+function upgradeToV102(): void {
+    if (!canUpgradeToV102.value) return
+    block.value.content = migrateV101ToV102(block.value.content)
+    block.value.version = '102'
+    ;(block.value as any).recreateScriptObject?.()
+    needsCodeRebuild = true
 }
 
 function setExpandedLarge(): void {
