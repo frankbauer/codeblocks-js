@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="tw-flex tw-w-full tw-justify-end">
+        <div class="tw-flex tw-w-full tw-justify-end tw-mb-1">
             <div
-                class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse tw-mb-1"
+                class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse"
                 v-if="editMode"
             >
                 <Button

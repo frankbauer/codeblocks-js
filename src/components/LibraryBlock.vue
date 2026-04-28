@@ -4,12 +4,13 @@
             class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-center tw-content-center tw-mb-1"
         >
             <div class="tw-flex tw-items-center tw-flex-1">
-                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex tw-flex-1 tw-ml-6">
+                <div class="tw-ml-6 "> <TagIcon class="tw-w-4 tw-h-4 tw-text-muted-foreground tw-mr-1" /></div>
+                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">                   
                     <Input
                         id="library-name-input"
                         v-model="name"
                         size="xs"
-                        class="tw-mb-0 tw-bg-muted tw-pl-3"
+                        class="tw-mb-0 tw-bg-white tw-pl-3"
                         :placeholder="$t('LibraryBlock.Name')"
                     />
                 </div>
@@ -48,7 +49,7 @@
             </div>
         </div>
 
-        <div class="tw-space-y-2 tw-mb-2">
+        <div>
             <Alert
                 v-if="hasDuplicateName"
                 variant="destructive"
@@ -162,7 +163,7 @@ import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
 import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
 
-import { Expand, Maximize, Shrink, AlertTriangle, ZapOff, BookCopy } from 'lucide-vue-next'
+import { Expand, Maximize, Shrink, AlertTriangle, ZapOff, BookCopy, TagIcon } from 'lucide-vue-next'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
 

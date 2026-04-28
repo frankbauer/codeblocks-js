@@ -9,18 +9,14 @@
         <div
             class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-center tw-content-center tw-mb-1"
         >
-            <div class="tw-flex tw-items-center tw-flex-1">
-                <div class="inlined-input tw-mr-2 tw-ml-6">
-                    <Button variant="ghost" size="sm" @click="showInfoDialog">
-                        <Info class="tw-w-4 tw-h-4" />
-                    </Button>
-                </div>
-                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex tw-flex-1">
+            <div class="tw-flex tw-items-center tw-flex-1">   
+                <div class="tw-ml-6 "> <TagIcon class="tw-w-4 tw-h-4 tw-text-muted-foreground tw-mr-1" /></div>                             
+                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">
                     <Input
                         id="name-input"
                         v-model="name"
                         size="xs"
-                        class="tw-mb-0 tw-bg-muted tw-pl-3"
+                        class="tw-mb-0 tw-pl-3 tw-bg-white"
                         :placeholder="$t('LibraryBlock.Name')"
                     />
                 </div>
@@ -191,6 +187,7 @@ import {
     Expand,
     Shrink,
     Plus,
+    TagIcon,
 } from 'lucide-vue-next'
 
 interface Props extends EditableBlockProps {
