@@ -1,4 +1,4 @@
-import { AnyCodeBlockScope } from '../IScriptBlock'
+import { AnyCodeBlockScope, IPlaygroundObject } from '../IScriptBlock'
 import { PlaygroundScriptBlock } from './PlaygroundScriptBlock'
 import { ICodeTemplate } from './utils'
 import { compileCode, stripModuleSyntax } from './sandbox'
@@ -96,5 +96,21 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         }
 
         return { outputElement, smartScope }
+    }
+
+    public override onASTAvailable(ast: any) {
+        this.librariesBefore.forEach((lib) => lib.libraryObject?.onASTAvailable?.(ast))
+        this.lazyInit()
+        if (this.obj) {
+            const o = this.obj as IPlaygroundObject
+            if (o.onASTAvailable) {
+                try {
+                    o.onASTAvailable(ast)
+                } catch (e) {
+                    this.pushError(e)
+                }
+            }
+        }
+        this.librariesAfter.forEach((lib) => lib.libraryObject?.onASTAvailable?.(ast))
     }
 }

@@ -172,6 +172,10 @@ export abstract class BaseScriptBlock implements IScriptBlock {
         canvasElement: JQuery<HTMLElement>
     ): string | undefined
 
+    public onASTAvailable(ast: any) {
+        // Default no-op
+    }
+
     public onParseError(initialOutput: string, parseError: string): boolean {
         this.lazyInit()
         if (this.obj === undefined) {

@@ -315,6 +315,11 @@ export function codeBlockSetup(
     }
     const astCallback = (ast: any): void => {
         console.log('Received AST', ast)
+        blocks.value.forEach((bl) => {
+            if (bl.obj) {
+                bl.obj.onASTAvailable(ast)
+            }
+        })
     }
     const log = (text: string): void => {
         output.value += text

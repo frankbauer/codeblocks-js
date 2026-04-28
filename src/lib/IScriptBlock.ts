@@ -56,6 +56,8 @@ export interface IPlaygroundObject {
         outputElement: JQuery<HTMLElement>
     ): string | undefined
 
+    onASTAvailable?(ast: any): void
+
     onParseError?(initialOutput: string, parseError: string): void
 
     onMessage?(cmd: string, data: any): void
@@ -120,6 +122,8 @@ export interface IScriptBlock {
         outputObject: IScriptOutputObject,
         canvasElement: JQuery<HTMLElement>
     ): string | undefined
+
+    onASTAvailable(ast: any): void
 
     addArgumentsTo(args: object | string[]): void
 
