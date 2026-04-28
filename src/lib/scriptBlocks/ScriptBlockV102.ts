@@ -1,4 +1,12 @@
-import { AnyCodeBlockScope, IPlaygroundObject } from '../IScriptBlock'
+import {
+    AnyCodeBlockScope,
+    ICodeBlockScope,
+    ILibraryObject,
+    IPlaygroundObject,
+    IPlaygroundObjectV102,
+    IScriptOutputObject,
+    Runner,
+} from '../IScriptBlock'
 import { PlaygroundScriptBlock } from './PlaygroundScriptBlock'
 import { ICodeTemplate } from './utils'
 import { compileCode, stripModuleSyntax } from './sandbox'
@@ -14,6 +22,55 @@ const v102CodeTemplate: ICodeTemplate = {
 export class ScriptBlockV102 extends PlaygroundScriptBlock {
     protected activeLibraryKeys: Set<string> = new Set()
 
+    private _domCtx:
+        | {
+              canvasElement: JQuery<HTMLElement>
+              outputElement: JQuery<HTMLElement> | undefined
+              scope: ICodeBlockScope
+              runner: Runner | undefined
+          }
+        | undefined
+
+    public override setupDOM(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope): void {
+        const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
+        this._domCtx = { canvasElement, outputElement, scope: smartScope as ICodeBlockScope, runner: undefined }
+        super.setupDOM(canvasElement, scope)
+    }
+
+    protected override _runInit(
+        canvasElement: JQuery<HTMLElement>,
+        scope: AnyCodeBlockScope,
+        runner: Runner
+    ): void {
+        const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
+        this._domCtx = { canvasElement, outputElement, scope: smartScope as ICodeBlockScope, runner }
+        super._runInit(canvasElement, scope, runner)
+    }
+
+    public override update(
+        outputObject: IScriptOutputObject,
+        canvasElement: JQuery<HTMLElement>
+    ): string | undefined {
+        if (this._domCtx) {
+            this._domCtx.canvasElement = canvasElement
+            this._domCtx.outputElement = outputObject.outputElement
+        }
+        return super.update(outputObject, canvasElement)
+    }
+
+    public override reset(canvasElement: JQuery<HTMLElement>): void {
+        if (this._domCtx) this._domCtx.canvasElement = canvasElement
+        super.reset(canvasElement)
+    }
+
+    protected override prepareLibraryObject(lib: LibraryScriptBlock): void {
+        if (!this._domCtx || !lib.libraryObject) return
+        const l = lib.libraryObject as unknown as ILibraryObject
+        l.canvasElement = this._domCtx.canvasElement
+        l.outputElement = this._domCtx.outputElement
+        l.scope = this._domCtx.scope
+        l.runner = this._domCtx.runner
+    }
 
     public override resetBlockData(blocks: IBlockData[] | undefined): void {
             // Clear only previous library instances from sandbox to preserve system utilities (console, etc.)
@@ -71,6 +128,53 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
             // so playground code like `chart.render()` will resolve correctly
             Object.assign(this.sandbox, context)
         }
+    protected override callObjSetupDOM(
+        o: IPlaygroundObject,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement> | undefined,
+        scope: AnyCodeBlockScope
+    ): void {
+        const v = o as unknown as IPlaygroundObjectV102
+        v.canvasElement = canvasElement
+        v.outputElement = outputElement
+        v.scope = scope as ICodeBlockScope
+        v.setupDOM?.()
+    }
+
+    protected override callObjInit(
+        o: IPlaygroundObject,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>,
+        scope: AnyCodeBlockScope,
+        runner: Runner
+    ): void {
+        const v = o as unknown as IPlaygroundObjectV102
+        v.canvasElement = canvasElement
+        v.outputElement = outputElement
+        v.scope = scope as ICodeBlockScope
+        v.runner = runner
+        v.init()
+    }
+
+    protected override callObjUpdate(
+        o: IPlaygroundObject,
+        txt: string,
+        json: object | undefined,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>
+    ): string | undefined {
+        const v = o as unknown as IPlaygroundObjectV102
+        v.canvasElement = canvasElement
+        v.outputElement = outputElement
+        return v.update(txt, json)
+    }
+
+    protected override callObjReset(o: IPlaygroundObject, canvasElement: JQuery<HTMLElement>): void {
+        const v = o as unknown as IPlaygroundObjectV102
+        v.canvasElement = canvasElement
+        v.reset?.()
+    }
+
     public rebuild(code?: string) {
         if (code !== undefined) {
             try {

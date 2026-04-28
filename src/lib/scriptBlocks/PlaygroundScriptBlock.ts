@@ -99,19 +99,15 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
     }
 
     public reset(canvasElement: JQuery<HTMLElement>): void {
-        this.chainLibraries(this.librariesBefore, (lib) =>
-            lib.libraryObject?.reset?.(canvasElement)
-        )
+        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.reset?.())
         this.queuedMessages = []
         this.queuedIncomingMessages = []
         this.lazyInit()
         console.i('MESSAGE - Reset Queue from Reset')
         if (this.obj && this.obj.reset) {
-            this.obj.reset(canvasElement)
+            this.callObjReset(this.obj as IPlaygroundObject, canvasElement)
         }
-        this.chainLibraries(this.librariesAfter, (lib) =>
-            lib.libraryObject?.reset?.(canvasElement)
-        )
+        this.chainLibraries(this.librariesAfter, (lib) => lib.libraryObject?.reset?.())
     }
 
     public onParseError(initialOutput: string, parseError: string): boolean {
@@ -138,12 +134,49 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
         return handled
     }
 
-    private chainLibraries(
+    protected callObjSetupDOM(
+        o: IPlaygroundObject,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement> | undefined,
+        scope: AnyCodeBlockScope
+    ): void {
+        o.setupDOM?.(canvasElement, outputElement, scope)
+    }
+
+    protected callObjInit(
+        o: IPlaygroundObject,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>,
+        scope: AnyCodeBlockScope,
+        runner: Runner
+    ): void {
+        o.init(canvasElement, outputElement, scope, runner)
+    }
+
+    protected callObjUpdate(
+        o: IPlaygroundObject,
+        txt: string,
+        json: object | undefined,
+        canvasElement: JQuery<HTMLElement>,
+        outputElement: JQuery<HTMLElement>
+    ): string | undefined {
+        return o.update(txt, json, canvasElement, outputElement)
+    }
+
+    protected callObjReset(o: IPlaygroundObject, canvasElement: JQuery<HTMLElement>): void {
+        o.reset?.(canvasElement)
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    protected prepareLibraryObject(_lib: LibraryScriptBlock): void {}
+
+    protected chainLibraries(
         libs: LibraryScriptBlock[],
         fn: (lib: LibraryScriptBlock) => void
     ): void {
         for (const lib of libs) {
             try {
+                this.prepareLibraryObject(lib)
                 fn(lib)
             } catch (e) {
                 this.pushError(e)
@@ -157,12 +190,7 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
     ): { outputElement: JQuery<HTMLElement> | undefined; smartScope: AnyCodeBlockScope }
 
     public setupDOM(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope): void {
-        this.chainLibraries(this.librariesBefore, (lib) => {
-            if (lib.libraryObject?.setupDOM) {
-                const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
-                lib.libraryObject.setupDOM(canvasElement, outputElement, smartScope)
-            }
-        })
+        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.setupDOM?.())
 
         this.lazyInit()
         if (this.obj === undefined) {
@@ -174,20 +202,13 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
             o.DATA = this.DATA
 
             console.i('!!! SETUP CANVAS !!!')
-            if (o.setupDOM) {
-                const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
-                o.setupDOM(canvasElement, outputElement, smartScope)
-            }
+            const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
+            this.callObjSetupDOM(o, canvasElement, outputElement, smartScope)
         } catch (e) {
             this.pushError(e)
         }
 
-        this.chainLibraries(this.librariesAfter, (lib) => {
-            if (lib.libraryObject?.setupDOM) {
-                const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
-                lib.libraryObject.setupDOM(canvasElement, outputElement, smartScope)
-            }
-        })
+        this.chainLibraries(this.librariesAfter, (lib) => lib.libraryObject?.setupDOM?.())
     }
 
     public init(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope, runner: Runner): void {
@@ -291,16 +312,12 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
             return
         }
 
-        this.chainLibraries(this.librariesBefore, (lib) => {
-            lib.libraryObject?.init?.(canvasElement, outputElement, smartScope, runner)
-        })
+        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.init?.())
 
         const o = this.obj as IPlaygroundObject
-        o.init(canvasElement, outputElement, smartScope, runner)
+        this.callObjInit(o, canvasElement, outputElement, smartScope, runner)
 
-        this.chainLibraries(this.librariesAfter, (lib) => {
-            lib.libraryObject?.init?.(canvasElement, outputElement, smartScope, runner)
-        })
+        this.chainLibraries(this.librariesAfter, (lib) => lib.libraryObject?.init?.())
     }
 
     public update(
@@ -314,39 +331,28 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
 
         const out = outputObject.outputElement
 
-        this.chainLibraries(this.librariesBefore, (lib) => {
-            lib.libraryObject?.update?.(
-                outputObject.processedOutput.text,
-                outputObject.processedOutput.json,
-                canvasElement,
-                out
-            )
-        })
+        this.chainLibraries(this.librariesBefore, (lib) =>
+            lib.libraryObject?.update?.(outputObject.processedOutput.text, outputObject.processedOutput.json)
+        )
 
         let result: string | undefined
         try {
             const o = this.obj as IPlaygroundObject
-            if (o.update) {
-                console.i('!!! UPDATE (v' + this.version + ')!!!')
-                result = o.update(
-                    outputObject.processedOutput.text,
-                    outputObject.processedOutput.json,
-                    canvasElement,
-                    out
-                )
-            }
-        } catch (e) {
-            this.pushError(e)
-        }
-
-        this.chainLibraries(this.librariesAfter, (lib) => {
-            lib.libraryObject?.update?.(
+            console.i('!!! UPDATE (v' + this.version + ')!!!')
+            result = this.callObjUpdate(
+                o,
                 outputObject.processedOutput.text,
                 outputObject.processedOutput.json,
                 canvasElement,
                 out
             )
-        })
+        } catch (e) {
+            this.pushError(e)
+        }
+
+        this.chainLibraries(this.librariesAfter, (lib) =>
+            lib.libraryObject?.update?.(outputObject.processedOutput.text, outputObject.processedOutput.json)
+        )
 
         return result ?? outputObject.initialOutput
     }

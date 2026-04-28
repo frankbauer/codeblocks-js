@@ -80,9 +80,51 @@ export interface IPlaygroundObject {
     DATA: any[]
 }
 
-export interface ILibraryObject extends Omit<Partial<IPlaygroundObject>, 'RESOURCES' | 'DATA'> {
+export interface IPlaygroundObjectV102 {
+    // Injected by ScriptBlockV102 before any method call — playground code reads these directly
+    canvasElement: JQuery<HTMLElement>
+    outputElement: JQuery<HTMLElement> | undefined
+    scope: ICodeBlockScope
+    runner: Runner
+
+    init(): void
+    reset?(): void
+    update(txt: string, json: object | undefined): string | undefined
+    setupDOM?(): void
+
+    onASTAvailable?(ast: any): void
+    onParseError?(initialOutput: string, parseError: string): void
+    onMessage?(cmd: string, data: any): void
+    beforeStart?(): void
+    whenFinished?(args: string[] | object, resultData?: object | any[]): void
+    addArgumentsTo?(args: object | string[]): void
+    getResources?(): IResourceInfo[]
+
+    RESOURCES: any[]
+    DATA: any[]
+}
+
+export interface ILibraryObject {
+    // Injected by ScriptBlockV102 before any method call
+    canvasElement: JQuery<HTMLElement>
+    outputElement: JQuery<HTMLElement> | undefined
+    scope: ICodeBlockScope
+    runner: Runner | undefined
+
     name?: string
     create?(context: Record<string, any>): any
+
+    setupDOM?(): void
+    init?(): void
+    reset?(): void
+    update?(txt: string, json: object | undefined): void
+
+    onASTAvailable?(ast: any): void
+    onParseError?(initialOutput: string, parseError: string): void
+    onMessage?(cmd: string, data: any): void
+    beforeStart?(): void
+    whenFinished?(args: string[] | object, resultData?: object | any[]): void
+    addArgumentsTo?(args: object | string[]): void
 }
 
 export interface IProcessedScriptOutput {
