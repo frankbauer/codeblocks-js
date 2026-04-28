@@ -663,7 +663,7 @@ useResizeObserver(runnerRef, (entries) => {
             <div id="message" v-html="global.compilerState.globalStateMessage"></div>
           </div>
         </transition>
-        <div class="tw-ml-auto tw-flex tw-items-center tw-gap-1 tw-shrink-0">
+        <div class="tw-ml-auto tw-flex tw-items-center tw-gap-1 tw-shrink-0" id="makeRunStick">
           <button
             v-if="hasOutput"
             class="tw-flex tw-items-center tw-justify-center tw-rounded tw-p-1 tw-text-muted-foreground tw-transition-colors hover:tw-text-destructive hover:tw-bg-destructive/10"
