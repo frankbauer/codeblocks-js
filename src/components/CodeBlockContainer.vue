@@ -449,11 +449,29 @@
                 <!-- Collapsed summary: click to expand -->
                 <div
                     v-if="!expanded"
-                    class="tw-py-1.5 tw-px-3 tw-text-xs tw-text-muted-foreground tw-cursor-pointer"
+                    class="tw-py-1.5 tw-px-3 tw-text-xs tw-text-muted-foreground tw-cursor-pointer tw-flex tw-items-center cbc-summary tw-min-w-0"
                     @click="toggleExpanded"
                 >
-                    <span class="tw-font-semibold">{{ typeObj.label }}</span>
-                    <span v-if="block.name" class="tw-ml-1">{{ block.name }}</span>
+                    <span class="tw-font-semibold tw-shrink-0">{{ typeObj.label }}</span>
+                    <span
+                        class="tw-ml-1 tw-truncate tw-mr-12 "
+                        :class="{ 'tw-font-mono cbc-summary-name': !block.name }"
+                        :style="{ maxWidth: '500px' }"
+                    ><ChevronRight v-if="!block.name" class="tw-inline tw-h-3 tw-w-3 tw-opacity-50 tw-ml-2" />{{ block.name || generatedName }}</span>
+                    <div class="tw-flex-1"></div>
+                    <TooltipProvider :delay-duration="300">
+                        <Tooltip>
+                            <TooltipTrigger as-child>
+                                <Expand
+                                    class="cbc-expand-icon tw-ml-4 tw-h-3 tw-w-3"
+                                    :style="{ '--hover-color': typeColor }"
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                {{ l('CodeBlockContainer.Expand') }}
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
 
                 <!-- Block content -->
@@ -509,7 +527,9 @@ import {
     ArrowDownToLine,
     ArrowUpFromLine,
     ChevronDown,
+    ChevronRight,
     ChevronUp,
+    Expand,
     Flame,
     GripVertical,
     Info,
@@ -534,6 +554,7 @@ import {
     DropdownMenuTrigger,
 } from '../shadcn/ui/dropdown-menu'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn/ui/hover-card'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../shadcn/ui/tooltip'
 import CSelect from './ui/CSelect.vue'
 
 interface IOnChangeOrder {
@@ -724,6 +745,10 @@ const applyOrderNumber = (): void => {
         emit('change-order', { id: block.value.id, newID: target } as IOnChangeOrder)
     }
 }
+const generatedName = computed(() => {
+    const content = block.value.content || ''
+    return content.replace(/[\r\n]+/g, ' ').trim().substring(0, 200)
+})
 const expanded = computed({
     get(): boolean { return block.value.expanded },
     set(v: boolean) { block.value.expanded = v },
@@ -924,6 +949,16 @@ const filteredCopy = (objIn: object, extended = true, path = 'this'): object => 
 .cbc-toolbar:hover .cbc-extended,
 .cbc-extended.is-open
     max-width: 200px
+
+.cbc-summary:hover .cbc-expand-icon
+    color: var(--hover-color)
+
+.cbc-summary-name
+    -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,0.25) 100%)
+    mask-image: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,0.25) 100%)
+
+.cbc-expand-icon
+    transition: color 0.2s ease-out
 
 .editModeBorder
     border-left-width: 4px

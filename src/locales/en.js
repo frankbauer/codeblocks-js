@@ -43,6 +43,7 @@ export default {
         Blockly: 'Blockly (Experimental!!!)',
         Library: 'Playground Library',
         REPL: 'Interactive Terminal',
+        Expand: 'Expand',
         AddAbove: 'Add block above',
         AddBelow: 'Add block below',
         Position: 'Position',
@@ -95,6 +96,8 @@ export default {
         Libraries: 'Libraries',
         DomLibs: 'DOM-Libraries',
         WorkLibs: 'Worker-Libraries',
+        ExpandAll: 'Expand All',
+        CollapseAll: 'Collapse All',
         OutputTypeAUTO: {
             label: 'Automatisch',
             short: 'Auto',

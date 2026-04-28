@@ -189,6 +189,16 @@ const onEmitASTChange = (v: boolean): void => {
     }
 }
 
+const onExpandAll = (): void => {
+    blockInfo.value.blocks.forEach((b) => (b.expanded = true))
+    global.value.appState.refreshAllCodeMirrors()
+}
+
+const onCollapseAll = (): void => {
+    blockInfo.value.blocks.forEach((b) => (b.expanded = false))
+    global.value.appState.refreshAllCodeMirrors()
+}
+
 const onRunStateChange = (v: boolean): void => {
     if (editMode) {
         blockInfo.value.runCode = v
@@ -495,6 +505,8 @@ useResizeObserver(runnerRef, (entries) => {
       @theme-change="onThemeChange"
       @output-parser-change="onOutputParserChange"
       @emit-ast-change="onEmitASTChange"
+      @expand-all="onExpandAll"
+      @collapse-all="onCollapseAll"
     />
     <CodeBlockContainer
       :appID="appID"

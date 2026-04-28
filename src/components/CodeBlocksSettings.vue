@@ -5,7 +5,7 @@
             class="tw-flex tw-items-stretch tw-h-9 tw-rounded-lg tw-border tw-bg-card tw-overflow-hidden tw-text-xs tw-select-none"
         >
             <!-- Scrollable/clippable left section — gear always stays visible -->
-            <div class="tw-flex tw-items-stretch tw-overflow-hidden tw-flex-1 tw-min-w-0">
+            <div ref="leftSection" class="tw-flex tw-items-stretch tw-overflow-hidden tw-flex-1 tw-min-w-0">
                 <!-- Language + version: click → language tab -->
                 <button
                     type="button"
@@ -180,6 +180,40 @@
                     </PopoverContent>
                 </Popover>
             </div>
+
+            <!-- Expand/Collapse All buttons -->
+            <TooltipProvider :delay-duration="300">
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <button
+                            type="button"
+                            @click="emit('expand-all')"
+                            class="cb-toolbar-item tw-border-l tw-transition-shadow"
+                            :class="{ 'tw-shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.15)] tw-z-10': hasOverflow }"
+                        >
+                            <ChevronsUpDown class="tw-w-3.5 tw-h-3.5" />
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {{ l('CodeBlocksSettings.ExpandAll') }}
+                    </TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                    <TooltipTrigger as-child>
+                        <button
+                            type="button"
+                            @click="emit('collapse-all')"
+                            class="cb-toolbar-item tw-border-l"
+                        >
+                            <ChevronsDownUp class="tw-w-3.5 tw-h-3.5" />
+                        </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        {{ l('CodeBlocksSettings.CollapseAll') }}
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
 
             <!-- Settings gear -->
             <Dialog v-model:open="dialogOpen">
@@ -636,7 +670,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useResizeObserver } from '@vueuse/core'
 import RandomizerSettings from './RandomizerSettings.vue'
 import {
     Dialog,
@@ -652,6 +687,7 @@ import { Label } from '../shadcn/ui/label'
 import { Badge } from '../shadcn/ui/badge' // kept: used in dialog tab content (version option badges)
 import { Alert, AlertDescription, AlertTitle } from '../shadcn/ui/alert'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn/ui/hover-card'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../shadcn/ui/tooltip'
 import { Button } from '../shadcn/ui/button'
 import CMultiSelect from './ui/CMultiSelect.vue'
 import CSelect from './ui/CSelect.vue'
@@ -677,6 +713,8 @@ import {
     Eye,
     EyeOff,
     ChevronDown,
+    ChevronsDownUp,
+    ChevronsUpDown,
     Play,
     AlertCircleIcon,
     MessageCircleMore,
@@ -699,6 +737,8 @@ const emit = defineEmits([
     'persistent-arguments-change',
     'compiler-version-change',
     'emit-ast-change',
+    'expand-all',
+    'collapse-all',
 ])
 
 const { t: l } = useI18n()
@@ -835,6 +875,14 @@ const runCode = computed({
 
 const activeTab = ref('language')
 const dialogOpen = ref(false)
+
+const leftSection = ref<HTMLElement | null>(null)
+const hasOverflow = ref(false)
+
+useResizeObserver(leftSection, (entries) => {
+    const el = entries[0].target as HTMLElement
+    hasOverflow.value = el.scrollWidth > el.clientWidth
+})
 
 function openDialogOnTab(tab: string) {
     activeTab.value = tab

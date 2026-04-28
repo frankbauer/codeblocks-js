@@ -43,6 +43,7 @@ export default {
         Blockly: 'Blockly (Experimental!!!)',
         Library: 'Sandkastenbibliothek',
         REPL: 'Interaktive Eingabe',
+        Expand: 'Aufklappen',
         AddAbove: 'Block darüber einfügen',
         AddBelow: 'Block darunter einfügen',
         Position: 'Position',
@@ -95,6 +96,8 @@ export default {
         Libraries: 'Bibliotheken',
         DomLibs: 'DOM-Bibliotheken',
         WorkLibs: 'Worker-Bibliotheken',
+        ExpandAll: 'Alle aufklappen',
+        CollapseAll: 'Alle zuklappen',
         OutputTypeAUTO: {
             label: 'Automatisch',
             short: 'Auto',
