@@ -34,7 +34,9 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
     }
 
     public addArgumentsTo(args: object | string[]) {
-        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.addArgumentsTo?.(args))
+        this.chainLibraries(this.librariesBefore, (lib) =>
+            lib.libraryObject?.addArgumentsTo?.(args)
+        )
         this.lazyInit()
         if (this.obj) {
             const o = this.obj as IPlaygroundObject
@@ -50,7 +52,9 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
     }
 
     public didReceiveMessage(cmd: string, data: any) {
-        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.onMessage?.(cmd, data))
+        this.chainLibraries(this.librariesBefore, (lib) =>
+            lib.libraryObject?.onMessage?.(cmd, data)
+        )
         this.lazyInit()
         if (this.obj) {
             const o = this.obj as IPlaygroundObject
@@ -167,7 +171,6 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
         o.reset?.(canvasElement)
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     protected prepareLibraryObject(_lib: LibraryScriptBlock): void {}
 
     protected chainLibraries(
@@ -211,7 +214,11 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
         this.chainLibraries(this.librariesAfter, (lib) => lib.libraryObject?.setupDOM?.())
     }
 
-    public init(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope, runner: Runner): void {
+    public init(
+        canvasElement: JQuery<HTMLElement>,
+        scope: AnyCodeBlockScope,
+        runner: Runner
+    ): void {
         const self = this
         this.queuedMessages = []
         this.queuedIncomingMessages = []
@@ -332,7 +339,10 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
         const out = outputObject.outputElement
 
         this.chainLibraries(this.librariesBefore, (lib) =>
-            lib.libraryObject?.update?.(outputObject.processedOutput.text, outputObject.processedOutput.json)
+            lib.libraryObject?.update?.(
+                outputObject.processedOutput.text,
+                outputObject.processedOutput.json
+            )
         )
 
         let result: string | undefined
@@ -351,7 +361,10 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
         }
 
         this.chainLibraries(this.librariesAfter, (lib) =>
-            lib.libraryObject?.update?.(outputObject.processedOutput.text, outputObject.processedOutput.json)
+            lib.libraryObject?.update?.(
+                outputObject.processedOutput.text,
+                outputObject.processedOutput.json
+            )
         )
 
         return result ?? outputObject.initialOutput

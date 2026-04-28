@@ -5,7 +5,9 @@
                 <LabelComponent :for="`tag-${tag.tag}`" class="tw-text-sm tw-font-medium">
                     {{ tag.tag }}
                 </LabelComponent>
-                <span class="tw-text-xs tw-text-muted-foreground tw-font-mono">{:{{ tag.tag }}}</span>
+                <span class="tw-text-xs tw-text-muted-foreground tw-font-mono"
+                    >{:{{ tag.tag }}}</span
+                >
             </div>
             <InputComponent :id="`tag-${tag.tag}`" v-model="tag.value" class="tw-w-full" />
         </div>
@@ -48,13 +50,12 @@ const tags = computed(() => {
 
 function onShow() {
     // Direct prop mutation is intentional here — tagSet is a reference into the parent's data
-    // eslint-disable-next-line vue/no-mutating-props
+
     props.tagSet.values = props.tagSet.values.filter(
         (v) => props.options.randomizer.knownTags.indexOf(v.tag) >= 0
     )
     props.options.randomizer.knownTags.forEach((t) => {
         if (props.tagSet.values.find((v) => v.tag == t) === undefined) {
-            // eslint-disable-next-line vue/no-mutating-props
             props.tagSet.values.push({ tag: t, value: '' })
         }
     })

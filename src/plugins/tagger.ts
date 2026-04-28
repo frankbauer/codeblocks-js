@@ -80,7 +80,7 @@ export default class Tagger {
     }
 
     processElement(el: HTMLElement, scopeUUID: string): void {
-        el.innerHTML = this.processString(el.innerHTML, scopeUUID)        
+        el.innerHTML = this.processString(el.innerHTML, scopeUUID)
     }
 
     processString(str: string, scopeUUID: string): string {
@@ -107,7 +107,7 @@ export default class Tagger {
     }
 
     replaceTemplateTagInString(str: string, name: string, newValue: string): string {
-        return str;
+        return str
         // return str.replace(randomAndTemplateTag, (m0, m1, m2) => {
         //     if (m1 == '!' && m2 == name) {
         //         return newValue

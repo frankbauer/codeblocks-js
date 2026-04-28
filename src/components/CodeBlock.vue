@@ -1,62 +1,62 @@
 `
 <template>
-  <div :class="`codeblock block-${typeName}`">
-    <textarea
-      ref="codeBoxRaw"
-      style="display: none"
-      readonly
-      v-model="block.content"
-      :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
-      :id="`teQ${block.parentID}B${block.id}`"
-      :data-question="block.parentID"
-      :data-blocktype="iliasTypeNr"
-      :is-editmode="editMode"
-      class="accqstXmlInput noRTEditor"
-    />
-    <code-mirror
-      ref="codeBox"
-      v-model="code"
-      :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"
-      :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
-      :id="`teQ${block.parentID}B${block.id}`"
-      :data-question="block.parentID"
-      :theme="block.themeForCodeBlock"
-      :language="mode"
-      :first-line="block.firstLine"
-      :read-only="editorReadOnly"
-      :errors="block.errors"
-      :max-lines="totalLines"
-      :tag-set="editMode ? tagSet : undefined"
-      :code-split-segment="codeSplitSegment"
-      @update:model-value="onCodeChangeDefered"
-      @focus="onCodeFocus"
-      @ready="onCodeReady"
-    />
-    <div v-if="editMode && hasAlternativeContent">
-      <div class="tw-mt-8 text-subtitle2 tw-pb-1">
-        {{ $t("CodeBlock.Initial_Content") }}
-      </div>
-      <textarea
-        ref="altBoxRaw"
-        style="display: none"
-        readonly
-        v-model="block.alternativeContent"
-        :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
-        class="accqstXmlInput noRTEditor"
-      />
-      <code-mirror
-        ref="altBox"
-        v-model="altCode"
-        :class="`accqstXmlInput noRTEditor ${boxClass}`"
-        :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
-        :theme="block.themeForCodeBlock"
-        :language="mode"
-        :read-only="editorReadOnly"
-        @update:model-value="onAltCodeChangeDefered"
-        @ready="onAltCodeReady"
-      />
+    <div :class="`codeblock block-${typeName}`">
+        <textarea
+            ref="codeBoxRaw"
+            style="display: none"
+            readonly
+            v-model="block.content"
+            :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
+            :id="`teQ${block.parentID}B${block.id}`"
+            :data-question="block.parentID"
+            :data-blocktype="iliasTypeNr"
+            :is-editmode="editMode"
+            class="accqstXmlInput noRTEditor"
+        />
+        <code-mirror
+            ref="codeBox"
+            v-model="code"
+            :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"
+            :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
+            :id="`teQ${block.parentID}B${block.id}`"
+            :data-question="block.parentID"
+            :theme="block.themeForCodeBlock"
+            :language="mode"
+            :first-line="block.firstLine"
+            :read-only="editorReadOnly"
+            :errors="block.errors"
+            :max-lines="totalLines"
+            :tag-set="editMode ? tagSet : undefined"
+            :code-split-segment="codeSplitSegment"
+            @update:model-value="onCodeChangeDefered"
+            @focus="onCodeFocus"
+            @ready="onCodeReady"
+        />
+        <div v-if="editMode && hasAlternativeContent">
+            <div class="tw-mt-8 text-subtitle2 tw-pb-1">
+                {{ $t('CodeBlock.Initial_Content') }}
+            </div>
+            <textarea
+                ref="altBoxRaw"
+                style="display: none"
+                readonly
+                v-model="block.alternativeContent"
+                :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
+                class="accqstXmlInput noRTEditor"
+            />
+            <code-mirror
+                ref="altBox"
+                v-model="altCode"
+                :class="`accqstXmlInput noRTEditor ${boxClass}`"
+                :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
+                :theme="block.themeForCodeBlock"
+                :language="mode"
+                :read-only="editorReadOnly"
+                @update:model-value="onAltCodeChangeDefered"
+                @ready="onAltCodeReady"
+            />
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -417,7 +417,7 @@ defineExpose({
 
 .staticBox
     opacity: 1
-    filter: saturate(150%) 
+    filter: saturate(150%)
 
 .codeblock
     width: 100%

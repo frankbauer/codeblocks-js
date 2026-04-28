@@ -67,12 +67,13 @@ export default {
         SelectBlockTypeDesc: 'Wähle den Typ für den neuen Block.',
         UserCanceled: 'Vom Benutzer Abgebrochen',
         unpin_runner: 'Klicken, um den Ausführen-Button und die Ausgabe zu lösen.',
-        pin_runner: 'Klicken, um den Ausführen-Button und die Ausgabe unten auf der Seite zu verankern.',
+        pin_runner:
+            'Klicken, um den Ausführen-Button und die Ausgabe unten auf der Seite zu verankern.',
         clear_output: 'Ausgabe löschen',
     },
     CodeBlocksSettings: {
         EmitAST: 'AST-Erzeugen',
-        Runtime: "Ausführung",
+        Runtime: 'Ausführung',
         NoExecution: 'Keine Ausführung',
         Settings: 'Einstellungen',
         Language: 'Sprache',
@@ -102,12 +103,12 @@ export default {
             label: 'Automatisch',
             short: 'Auto',
             description:
-                'Es wird versucht, das Ausgabeformat automatisch zu bestimmen. Zunächst wird geprüft, ob die Ausgabe ein gültiges JSON-Objekt ist. Falls nicht, wird geprüft, ob sie einen Separator (\\n\\n<JSON>\\n) für das Magic-Format enthält. Wenn weder Check erfolgreich ist, wird die Ausgabe als Text behandelt.'
+                'Es wird versucht, das Ausgabeformat automatisch zu bestimmen. Zunächst wird geprüft, ob die Ausgabe ein gültiges JSON-Objekt ist. Falls nicht, wird geprüft, ob sie einen Separator (\\n\\n<JSON>\\n) für das Magic-Format enthält. Wenn weder Check erfolgreich ist, wird die Ausgabe als Text behandelt.',
         },
         OutputTypeTEXT: {
             label: 'Als Text',
             short: 'Text',
-            description: 'Die Ausgabe wird immer als reiner Text behandelt.'
+            description: 'Die Ausgabe wird immer als reiner Text behandelt.',
         },
         OutputTypeJSON: {
             label: 'Als JSON',
@@ -115,15 +116,16 @@ export default {
             description: 'Die Ausgabe wird immer als JSON behandelt.',
         },
         OutputTypeMAGIC: {
-            label: 'Text+JSON (getrennt mit \'\\n\\n&lt;JSON>\\n\')',
+            label: "Text+JSON (getrennt mit '\\n\\n&lt;JSON>\\n')",
             short: 'Text+JSON',
             description:
                 'Die Ausgabe wird durch das Trennzeichen <code>\\n\\n&lt;JSON>\\n</code> in einen Text- und einen JSON-Teil getrennt. Die Ausgabe bis zum Trennzeichen wird als Text behandelt, die Ausgabe nach dem Trennzeichen wird als JSON behandelt. Wenn die Ausgabe nicht das Trennzeichen enthält oder der Teil nach dem Trennzeichen kein gültiges JSON ist, wird die gesamte Ausgabe als Text behandelt.',
         },
         OutputTypeDATA: {
-            label: 'Text+Daten (Senden mit \'CodeBlocks.postResult(data)\')',
+            label: "Text+Daten (Senden mit 'CodeBlocks.postResult(data)')",
             short: 'Daten-Methode',
-            description: 'Die Ausgabe wird durch eine spezielle Methode behandelt. Nur das zuletzt mit <code>de.fau.tf.lgdv.CodeBlocks.postResult(data)</code> übermittelte JSON-Object wird als Ausgabe behandelt.',
+            description:
+                'Die Ausgabe wird durch eine spezielle Methode behandelt. Nur das zuletzt mit <code>de.fau.tf.lgdv.CodeBlocks.postResult(data)</code> übermittelte JSON-Object wird als Ausgabe behandelt.',
         },
         NumberErr: 'Muss eine gültige Zahl sein.',
         ContinousCompile: 'Automatisch Ausführen',
@@ -302,15 +304,18 @@ export default {
     LibraryBlock: {
         Name: 'Name',
         DuplicateNameTitle: 'Doppelter Name',
-        DuplicateNameMessage: 'Es existieren mehrere Blöcke mit dem Namen "{name}". Dies kann zu unerwartetem Verhalten führen.',
+        DuplicateNameMessage:
+            'Es existieren mehrere Blöcke mit dem Namen "{name}". Dies kann zu unerwartetem Verhalten führen.',
         InactiveTitle: 'Bibliothek Inaktiv',
-        InactiveMessage: 'Kein Sandkasten mit mindestens {version} vorhanden. Diese Bibliothek wird nicht verwendet.',
+        InactiveMessage:
+            'Kein Sandkasten mit mindestens {version} vorhanden. Diese Bibliothek wird nicht verwendet.',
         ErrorTitle: 'Fehler in der Bibliothek',
         UsageTooltip: 'Diese Bibliothek ist als "{name}" im Sandkasten verfügbar.',
     },
     ImportExport: {
         Title: 'Import / Export',
-        Description: 'Exportieren Sie Ihre Codeblöcke in eine Datei oder importieren Sie sie aus einem zuvor exportierten Zip.',
+        Description:
+            'Exportieren Sie Ihre Codeblöcke in eine Datei oder importieren Sie sie aus einem zuvor exportierten Zip.',
         Export: 'Exportieren',
         Import: 'Importieren',
         SelectBlocks: 'Wählen Sie die Blöcke aus, die exportiert werden sollen:',
@@ -328,6 +333,6 @@ export default {
         Append: 'Anhängen',
         Prepend: 'Voranstellen',
         Override: 'Überschreiben (Bestehende löschen)',
-        Back: 'Zurück'
+        Back: 'Zurück',
     },
 }

@@ -23,7 +23,9 @@
                 <!-- Tags section -->
                 <div>
                     <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
-                        <span class="tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-text-muted-foreground">
+                        <span
+                            class="tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-text-muted-foreground"
+                        >
                             {{ $t('RandomizerSettings.Available') }}
                         </span>
                         <DialogComponent
@@ -58,14 +60,19 @@
                                         <ButtonComponent variant="outline" @click="cancelAddTag">
                                             Cancel
                                         </ButtonComponent>
-                                        <ButtonComponent @click="handleAddTag">Create</ButtonComponent>
+                                        <ButtonComponent @click="handleAddTag"
+                                            >Create</ButtonComponent
+                                        >
                                     </div>
                                 </div>
                             </DialogContent>
                         </DialogComponent>
                     </div>
 
-                    <div v-if="options.randomizer.knownTags.length === 0" class="tw-text-xs tw-text-muted-foreground tw-italic">
+                    <div
+                        v-if="options.randomizer.knownTags.length === 0"
+                        class="tw-text-xs tw-text-muted-foreground tw-italic"
+                    >
                         No tags defined yet.
                     </div>
                     <div class="tw-flex tw-flex-wrap tw-gap-2">
@@ -95,7 +102,9 @@
                 <!-- Sets section -->
                 <div>
                     <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
-                        <span class="tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-text-muted-foreground">
+                        <span
+                            class="tw-text-xs tw-font-semibold tw-uppercase tw-tracking-wider tw-text-muted-foreground"
+                        >
                             {{ $t('RandomizerSettings.Sets') }}
                         </span>
                         <ButtonComponent
@@ -108,7 +117,10 @@
                         </ButtonComponent>
                     </div>
 
-                    <div v-if="options.randomizer.sets.length === 0" class="tw-text-xs tw-text-muted-foreground tw-italic">
+                    <div
+                        v-if="options.randomizer.sets.length === 0"
+                        class="tw-text-xs tw-text-muted-foreground tw-italic"
+                    >
                         No sets defined yet.
                     </div>
                     <div class="tw-space-y-2">
@@ -136,7 +148,10 @@
 
                             <!-- Tag chips preview -->
                             <div class="tw-flex-1 tw-min-w-0">
-                                <div v-if="s.values.length === 0" class="tw-text-xs tw-text-muted-foreground tw-italic">
+                                <div
+                                    v-if="s.values.length === 0"
+                                    class="tw-text-xs tw-text-muted-foreground tw-italic"
+                                >
                                     Empty — click edit to fill in values.
                                 </div>
                                 <div class="tw-flex tw-flex-wrap tw-gap-1.5">
@@ -159,7 +174,9 @@
                                     :is="isCompleteSet(s) ? Check : AlertTriangle"
                                     :class="[
                                         'tw-h-4 tw-w-4 tw-mr-1.5',
-                                        isCompleteSet(s) ? 'tw-text-green-600' : 'tw-text-amber-500',
+                                        isCompleteSet(s)
+                                            ? 'tw-text-green-600'
+                                            : 'tw-text-amber-500',
                                     ]"
                                 />
 
@@ -168,7 +185,11 @@
                                     size="sm"
                                     @click="setVisible(i)"
                                     class="tw-h-7 tw-w-7 tw-p-0"
-                                    :title="isVisible(i) ? 'Active preview set' : 'Use this set for preview'"
+                                    :title="
+                                        isVisible(i)
+                                            ? 'Active preview set'
+                                            : 'Use this set for preview'
+                                    "
                                 >
                                     <component
                                         :is="isVisible(i) ? Eye : EyeOff"
@@ -189,7 +210,9 @@
                                     <DialogContent>
                                         <DialogHeader>
                                             <DialogTitle>
-                                                {{ $t('RandomizerSetEditor.Caption', { nr: i + 1 }) }}
+                                                {{
+                                                    $t('RandomizerSetEditor.Caption', { nr: i + 1 })
+                                                }}
                                             </DialogTitle>
                                         </DialogHeader>
                                         <RandomizerSetEditor
@@ -238,7 +261,6 @@ const DialogComponent = Dialog
 
 import { Plus, Trash2, Check, AlertTriangle, Eye, EyeOff, Edit } from 'lucide-vue-next'
 import { ICodeBlockSettingsOptions } from './CodeBlocksSettings.vue'
-
 
 const props = defineProps({
     options: {

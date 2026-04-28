@@ -55,7 +55,11 @@ export class LegacyScriptBlock extends BaseScriptBlock {
         // Legacy didn't have setupDOM
     }
 
-    public init(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope, runner: Runner): void {
+    public init(
+        canvasElement: JQuery<HTMLElement>,
+        scope: AnyCodeBlockScope,
+        runner: Runner
+    ): void {
         this.lazyInit()
         if (this.obj === undefined) {
             return

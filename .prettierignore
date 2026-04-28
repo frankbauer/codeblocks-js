@@ -1,0 +1,17 @@
+node_modules
+dist
+public/js/brain.js
+public/js/chart.js
+public/js/d3
+public/js/doppio
+public/js/leaflet.js
+public/js/lil-gui
+public/js/modelviewer.js
+public/js/phaser
+public/js/tensorflow.js
+public/js/three.js
+public/js/jquery.min.js
+public/js/python
+docs
+**/*.d.ts
+package-lock.json

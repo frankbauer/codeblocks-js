@@ -25,18 +25,37 @@ function findMatchingBrace(code: string, openPos: number): number {
     while (i < code.length) {
         const ch = code[i]
         if (inLineComment) {
-            if (ch === '\n') inLineComment = false
+            if (ch === '\n') {
+                inLineComment = false
+            }
         } else if (inBlockComment) {
-            if (ch === '*' && code[i + 1] === '/') { inBlockComment = false; i++ }
+            if (ch === '*' && code[i + 1] === '/') {
+                inBlockComment = false
+                i++
+            }
         } else if (inStr) {
-            if (ch === '\\') i++ // skip escaped char
-            else if (ch === inStr) inStr = null
+            if (ch === '\\') {
+                i++
+            } // skip escaped char
+            else if (ch === inStr) {
+                inStr = null
+            }
         } else {
-            if (ch === '/' && code[i + 1] === '/') inLineComment = true
-            else if (ch === '/' && code[i + 1] === '*') { inBlockComment = true; i++ }
-            else if (ch === '"' || ch === "'" || ch === '`') inStr = ch
-            else if (ch === '{') depth++
-            else if (ch === '}') { depth--; if (depth === 0) return i }
+            if (ch === '/' && code[i + 1] === '/') {
+                inLineComment = true
+            } else if (ch === '/' && code[i + 1] === '*') {
+                inBlockComment = true
+                i++
+            } else if (ch === '"' || ch === "'" || ch === '`') {
+                inStr = ch
+            } else if (ch === '{') {
+                depth++
+            } else if (ch === '}') {
+                depth--
+                if (depth === 0) {
+                    return i
+                }
+            }
         }
         i++
     }
@@ -54,10 +73,25 @@ interface MethodSpec {
 }
 
 const METHOD_SPECS: MethodSpec[] = [
-    { name: 'init',     domIndices: [0, 1, 2, 3], standardNames: ['canvasElement', 'outputElement', 'scope', 'runner'], keepIndices: [] },
-    { name: 'update',   domIndices: [2, 3],        standardNames: ['canvasElement', 'outputElement'],                   keepIndices: [0, 1] },
-    { name: 'setupDOM', domIndices: [0, 1, 2],     standardNames: ['canvasElement', 'outputElement', 'scope'],          keepIndices: [] },
-    { name: 'reset',    domIndices: [0],            standardNames: ['canvasElement'],                                    keepIndices: [] },
+    {
+        name: 'init',
+        domIndices: [0, 1, 2, 3],
+        standardNames: ['canvasElement', 'outputElement', 'scope', 'runner'],
+        keepIndices: [],
+    },
+    {
+        name: 'update',
+        domIndices: [2, 3],
+        standardNames: ['canvasElement', 'outputElement'],
+        keepIndices: [0, 1],
+    },
+    {
+        name: 'setupDOM',
+        domIndices: [0, 1, 2],
+        standardNames: ['canvasElement', 'outputElement', 'scope'],
+        keepIndices: [],
+    },
+    { name: 'reset', domIndices: [0], standardNames: ['canvasElement'], keepIndices: [] },
 ]
 
 // Within a method body, comment out explicit `this.X = param` assignments (the old
@@ -97,7 +131,12 @@ function transformMethod(code: string, spec: MethodSpec): string {
     )
 
     // Collect occurrences first; process in reverse so offsets stay valid.
-    type Occurrence = { matchStart: number; paramsStart: number; paramsEnd: number; braceOpen: number }
+    type Occurrence = {
+        matchStart: number
+        paramsStart: number
+        paramsEnd: number
+        braceOpen: number
+    }
     const occurrences: Occurrence[] = []
     let m: RegExpExecArray | null
     while ((m = pattern.exec(code)) !== null) {
@@ -107,16 +146,23 @@ function transformMethod(code: string, spec: MethodSpec): string {
         let parenDepth = 1
         let j = paramsStart
         while (j < code.length && parenDepth > 0) {
-            if (code[j] === '(') parenDepth++
-            else if (code[j] === ')') parenDepth--
+            if (code[j] === '(') {
+                parenDepth++
+            } else if (code[j] === ')') {
+                parenDepth--
+            }
             j++
         }
         const paramsEnd = j - 1 // position of ')'
 
         // Find opening brace (skip whitespace only — arrow functions won't have one here)
         let braceOpen = paramsEnd + 1
-        while (braceOpen < code.length && /\s/.test(code[braceOpen])) braceOpen++
-        if (code[braceOpen] !== '{') continue
+        while (braceOpen < code.length && /\s/.test(code[braceOpen])) {
+            braceOpen++
+        }
+        if (code[braceOpen] !== '{') {
+            continue
+        }
 
         occurrences.push({ matchStart: m.index, paramsStart, paramsEnd, braceOpen })
     }
@@ -128,9 +174,13 @@ function transformMethod(code: string, spec: MethodSpec): string {
 
         // Parse actual parameter names (strip type annotations and defaults)
         const rawParams = result.substring(paramsStart, paramsEnd)
-        const params = rawParams
-            .split(',')
-            .map((p) => p.trim().replace(/\s*=.*$/, '').replace(/\s*:.*$/, '').trim())
+        const params = rawParams.split(',').map((p) =>
+            p
+                .trim()
+                .replace(/\s*=.*$/, '')
+                .replace(/\s*:.*$/, '')
+                .trim()
+        )
 
         // Build mapping from author's param name → standard attribute name
         const paramMap = new Map<string, string>()
@@ -146,7 +196,9 @@ function transformMethod(code: string, spec: MethodSpec): string {
 
         // Extract and transform body
         const braceClose = findMatchingBrace(result, braceOpen)
-        if (braceClose === -1) continue
+        if (braceClose === -1) {
+            continue
+        }
 
         const body = result.substring(braceOpen + 1, braceClose)
         const newBody = transformBody(body, paramMap)

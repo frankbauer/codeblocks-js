@@ -5,18 +5,18 @@ export class PositioninLoadManager {
         block.width = bl.getAttribute('width')
             ? bl.getAttribute('width')!
             : inBlock.width
-            ? inBlock.width
-            : '100%'
+              ? inBlock.width
+              : '100%'
         block.height = bl.getAttribute('height')
             ? bl.getAttribute('height')!
             : inBlock.height
-            ? inBlock.height
-            : '300px'
+              ? inBlock.height
+              : '300px'
         block.align = bl.getAttribute('align')
             ? bl.getAttribute('align')!
             : inBlock.align
-            ? inBlock.align
-            : 'center'
+              ? inBlock.align
+              : 'center'
     }
 }
 

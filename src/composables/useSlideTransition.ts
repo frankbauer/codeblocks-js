@@ -1,4 +1,3 @@
-
 export function useSlideTransition() {
     const onBeforeEnter = (el: Element) => {
         const element = el as HTMLElement

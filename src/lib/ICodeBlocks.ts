@@ -14,7 +14,6 @@ export enum KnownBlockTypes {
     DATA = 'DATA',
 }
 
-
 export enum CodeOutputTypes {
     AUTO = 'auto',
     TEXT = 'text',

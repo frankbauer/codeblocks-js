@@ -3,11 +3,18 @@ import type { IOnTypeChangeInfo, IOnVisibleLinesChangeInfo } from '@/composables
 import { BlockData } from '@/lib/codeBlocksManager'
 import { UnwrapRef } from 'vue'
 
-export function useCodeBlockEvents(blockById: (id:number) => UnwrapRef<BlockData> | undefined, editMode: boolean) {    
+export function useCodeBlockEvents(
+    blockById: (id: number) => UnwrapRef<BlockData> | undefined,
+    editMode: boolean
+) {
     const onTypeChange = (nfo: IOnTypeChangeInfo): void => {
-        if (!editMode) return
+        if (!editMode) {
+            return
+        }
         const bl = blockById(nfo.id)
-        if (!bl) return
+        if (!bl) {
+            return
+        }
         bl.type = nfo.type
         bl.hidden = nfo.hidden
         bl.static = nfo.static
@@ -15,13 +22,24 @@ export function useCodeBlockEvents(blockById: (id:number) => UnwrapRef<BlockData
     }
 
     const onVisibleLinesChange = (nfo: IOnVisibleLinesChangeInfo): void => {
-        console.log('onVisibleLinesChange', nfo, editMode,  nfo.visibleLines !== 'auto', isNaN(nfo.visibleLines as number))
-        if (!editMode) return
+        console.log(
+            'onVisibleLinesChange',
+            nfo,
+            editMode,
+            nfo.visibleLines !== 'auto',
+            isNaN(nfo.visibleLines as number)
+        )
+        if (!editMode) {
+            return
+        }
         const bl = blockById(nfo.id)
-        if (!bl) return
-        bl.visibleLines = nfo.visibleLines !== 'auto' && isNaN(nfo.visibleLines as number) 
-            ? 'auto' 
-            : nfo.visibleLines
+        if (!bl) {
+            return
+        }
+        bl.visibleLines =
+            nfo.visibleLines !== 'auto' && isNaN(nfo.visibleLines as number)
+                ? 'auto'
+                : nfo.visibleLines
     }
 
     return {
@@ -29,4 +47,4 @@ export function useCodeBlockEvents(blockById: (id:number) => UnwrapRef<BlockData
         onVisibleLinesChange,
         // Add other event handlers as needed
     }
-} 
+}

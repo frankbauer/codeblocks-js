@@ -1,14 +1,18 @@
 <template>
-    <div class="tw-flex tw-w-full ma-0 pa-0 block-playground" :data-question="block.parentID" :data-nr="block.id">
+    <div
+        class="tw-flex tw-w-full ma-0 pa-0 block-playground"
+        :data-question="block.parentID"
+        :data-nr="block.id"
+    >
         <div
-                class="tw-w-full tw-flex"
-                :class="{
-                    'tw-justify-start': block.align === 'left',
-                    'tw-justify-center': block.align === 'center',
-                    'tw-justify-end': block.align === 'right',
-                }"
-                v-if="block.generateTemplate"
-            >
+            class="tw-w-full tw-flex"
+            :class="{
+                'tw-justify-start': block.align === 'left',
+                'tw-justify-center': block.align === 'center',
+                'tw-justify-end': block.align === 'right',
+            }"
+            v-if="block.generateTemplate"
+        >
             <div
                 ref="innerPlaygroundContainer"
                 class="playground"
@@ -75,7 +79,7 @@ function whenMounted(): void {
             nextTick(() => {
                 nextTick(() => {
                     props.obj.init($(canvas.value), props.block.scope, props.runner)
-                    emit('did-init', canvas)
+                    emit('did-init', canvas.value)
                 })
             })
         })
@@ -89,7 +93,7 @@ onMounted(() => {
         whenMounted()
     }
 
-    emit('canvas-change', canvas)
+    emit('canvas-change', canvas.value)
 })
 
 onBeforeUnmount(() => {

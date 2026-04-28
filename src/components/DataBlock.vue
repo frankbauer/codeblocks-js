@@ -9,8 +9,10 @@
         <div
             class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-center tw-content-center tw-mb-1"
         >
-            <div class="tw-flex tw-items-center tw-flex-1">   
-                <div class="tw-ml-0 tw-transition-opacity tw-duration-250 group-hover:tw-opacity-0"> <TagIcon class="tw-w-4 tw-h-4 tw-text-muted-foreground tw-mr-1" /></div>                             
+            <div class="tw-flex tw-items-center tw-flex-1">
+                <div class="tw-ml-0 tw-transition-opacity tw-duration-250 group-hover:tw-opacity-0">
+                    <TagIcon class="tw-w-4 tw-h-4 tw-text-muted-foreground tw-mr-1" />
+                </div>
                 <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">
                     <TooltipProvider>
                         <Tooltip :delay-duration="300">
@@ -195,12 +197,7 @@ import { useCodeEditor } from '@/composables/useCodeEditor'
 import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
 import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/shadcn/ui/tooltip'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shadcn/ui/tooltip'
 import {
     Dialog,
     DialogContent,
@@ -400,7 +397,7 @@ const onCodeReady = (editor) => {
     ) {
         codemirror.value.display.input.textarea.className = 'noRTEditor'
     }
-    (codeBox.value as any)!.$el.querySelectorAll('textarea[name]').forEach((el) => {
+    ;(codeBox.value as any)!.$el.querySelectorAll('textarea[name]').forEach((el) => {
         el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
         el.id = (codeBox.value as any)!.$el.id
         $(el).text(block.value.content)

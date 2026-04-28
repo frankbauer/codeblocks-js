@@ -1,10 +1,15 @@
-import { IAppSettings } from '@/lib/codeBlocksManager';
+import { IAppSettings } from '@/lib/codeBlocksManager'
 import JSZip from 'jszip'
-import { CodeExpansionType, CodeOutputTypes, IRandomizerSettings, KnownBlockTypes } from './ICodeBlocks'
+import {
+    CodeExpansionType,
+    CodeOutputTypes,
+    IRandomizerSettings,
+    KnownBlockTypes,
+} from './ICodeBlocks'
 import MainBlock from './MainBlock'
 import { BlockData } from './codeBlocksManager'
-import { ICompilerID } from './ICompilerRegistry';
-import { UIThemeType } from './uiTheme';
+import { ICompilerID } from './ICompilerRegistry'
+import { UIThemeType } from './uiTheme'
 import { z } from 'zod'
 
 const blockMetadataSchema = z.object({
@@ -19,14 +24,19 @@ const blockMetadataSchema = z.object({
     version: z.string().optional(),
     static: z.boolean().optional(),
     hidden: z.boolean().optional(),
-    visibleLines: z.union([z.number().int().min(1), z.literal('auto'), z.string()]).optional().transform((val) => {
-        if (val === 'auto') return 'auto'
-        if (typeof val === 'string') {
-            const parsed = parseInt(val, 10)
-            return isNaN(parsed) || parsed < 1 ? 'auto' : parsed
-        }
-        return val
-    }),
+    visibleLines: z
+        .union([z.number().int().min(1), z.literal('auto'), z.string()])
+        .optional()
+        .transform((val) => {
+            if (val === 'auto') {
+                return 'auto'
+            }
+            if (typeof val === 'string') {
+                const parsed = parseInt(val, 10)
+                return isNaN(parsed) || parsed < 1 ? 'auto' : parsed
+            }
+            return val
+        }),
     hasAlternativeContent: z.boolean().optional(),
 })
 
@@ -45,10 +55,12 @@ const exportBlockMetadataSchema = z.object({
 const exportedSettingsSchema = z.object({
     readonly: z.boolean().optional().default(false),
     language: z.string().optional().default('javascript'),
-    compiler: z.object({
-        languageType: z.string().optional().default('javascript'),
-        version: z.string().optional().default('v100'),
-    }).default({ languageType: 'javascript', version: 'v100' }) as z.ZodType<ICompilerID>,
+    compiler: z
+        .object({
+            languageType: z.string().optional().default('javascript'),
+            version: z.string().optional().default('v100'),
+        })
+        .default({ languageType: 'javascript', version: 'v100' }) as z.ZodType<ICompilerID>,
     runCode: z.boolean().optional().default(true),
     emitAST: z.boolean().optional().default(false),
     executionTimeout: z.number().optional().default(5000),
@@ -89,16 +101,27 @@ const LANGUAGE_EXTENSIONS: Record<string, string> = {
 }
 
 function getExtension(language: string, block: BlockData): string {
-    if (block.type === KnownBlockTypes.TEXT) return 'html'
-    if (block.type === KnownBlockTypes.DATA) return 'json'
-    if (block.type === KnownBlockTypes.LIBRARY) return 'js'
-    if (block.type === KnownBlockTypes.PLAYGROUND) return 'js'
+    if (block.type === KnownBlockTypes.TEXT) {
+        return 'html'
+    }
+    if (block.type === KnownBlockTypes.DATA) {
+        return 'json'
+    }
+    if (block.type === KnownBlockTypes.LIBRARY) {
+        return 'js'
+    }
+    if (block.type === KnownBlockTypes.PLAYGROUND) {
+        return 'js'
+    }
     return LANGUAGE_EXTENSIONS[language.toLowerCase()] || 'txt'
 }
 
-type TypeStartLabels = 'API' | 'STATIC' | 'SOLUTION' 
+type TypeStartLabels = 'API' | 'STATIC' | 'SOLUTION'
 
-export async function exportToZip(mainBlock: MainBlock, selectedBlockUuids: string[]): Promise<Blob> {
+export async function exportToZip(
+    mainBlock: MainBlock,
+    selectedBlockUuids: string[]
+): Promise<Blob> {
     const zip = new JSZip()
     const blocksToExport = mainBlock.blocks.filter((b) => selectedBlockUuids.includes(b.uuid))
 
@@ -137,7 +160,9 @@ export async function exportToZip(mainBlock: MainBlock, selectedBlockUuids: stri
                             blockSettingString += ` [${cb.visibleLines}]`
                         }
                     }
-                    if (cb.name) blockSettingString += `:: ${cb.name}`
+                    if (cb.name) {
+                        blockSettingString += `:: ${cb.name}`
+                    }
 
                     combinedContent += `//#START ${typeLabel}${blockSettingString} \n`
                     if (cb.hasAlternativeContent) {
@@ -146,7 +171,9 @@ export async function exportToZip(mainBlock: MainBlock, selectedBlockUuids: stri
                     }
 
                     combinedContent += cb.content
-                    if (!cb.content.endsWith('\n')) combinedContent += '\n'
+                    if (!cb.content.endsWith('\n')) {
+                        combinedContent += '\n'
+                    }
                 })
 
                 exportedBlocks.push({
@@ -177,7 +204,7 @@ export async function exportToZip(mainBlock: MainBlock, selectedBlockUuids: stri
         i++
     }
 
-    const settings:IExportedSettings = {
+    const settings: IExportedSettings = {
         readonly: mainBlock.readonly,
         language: mainBlock.language,
         compiler: mainBlock.compiler,
@@ -207,24 +234,27 @@ export async function exportToZip(mainBlock: MainBlock, selectedBlockUuids: stri
     } catch (e) {
         console.error('Validation error during export:', e)
         if (e instanceof z.ZodError) {
-            throw new Error(`Failed to validate export data: ${e.issues.map((err) => `${err.path.join('.')}: ${err.message}`).join(', ')}`)
+            throw new Error(
+                `Failed to validate export data: ${e.issues.map((err) => `${err.path.join('.')}: ${err.message}`).join(', ')}`
+            )
         }
         throw e
     }
 
     console.log('Exporting with data', exportData)
 
-    zip.file(
-        'blocks.json',
-        JSON.stringify(exportData, null, 2)
-    )
+    zip.file('blocks.json', JSON.stringify(exportData, null, 2))
 
     return await zip.generateAsync({ type: 'blob' })
 }
 
 function getSourceBlockTypeLabel(block: BlockData): TypeStartLabels {
-    if (block.type === KnownBlockTypes.BLOCKHIDDEN || block.hidden) return 'API'
-    if (block.type === KnownBlockTypes.BLOCKSTATIC || block.static) return 'STATIC'
+    if (block.type === KnownBlockTypes.BLOCKHIDDEN || block.hidden) {
+        return 'API'
+    }
+    if (block.type === KnownBlockTypes.BLOCKSTATIC || block.static) {
+        return 'STATIC'
+    }
     return 'SOLUTION'
 }
 
@@ -266,16 +296,22 @@ function getBlockMetadata(block: BlockData): IMetadata {
     return commonMetadata
 }
 
-function getSourceBlockTypeLabelFromType(type: KnownBlockTypes):TypeStartLabels {
-    if (type === KnownBlockTypes.BLOCKHIDDEN) return 'API'
-    if (type === KnownBlockTypes.BLOCKSTATIC) return 'STATIC'
+function getSourceBlockTypeLabelFromType(type: KnownBlockTypes): TypeStartLabels {
+    if (type === KnownBlockTypes.BLOCKHIDDEN) {
+        return 'API'
+    }
+    if (type === KnownBlockTypes.BLOCKSTATIC) {
+        return 'STATIC'
+    }
     return 'SOLUTION'
 }
 
 export async function getImportData(file: File) {
     const zip = await JSZip.loadAsync(file)
     const blocksJsonFile = zip.file('blocks.json')
-    if (!blocksJsonFile) throw new Error('Invalid codeblocks zip: missing blocks.json')
+    if (!blocksJsonFile) {
+        throw new Error('Invalid codeblocks zip: missing blocks.json')
+    }
 
     let data: IJsonExport
     try {
@@ -284,7 +320,9 @@ export async function getImportData(file: File) {
     } catch (e) {
         if (e instanceof z.ZodError) {
             console.error('Validation error in blocks.json:', e.issues)
-            throw new Error(`Invalid codeblocks.json structure: ${e.issues.map((err) => `${err.path.join('.')}: ${err.message}`).join(', ')}`)
+            throw new Error(
+                `Invalid codeblocks.json structure: ${e.issues.map((err) => `${err.path.join('.')}: ${err.message}`).join(', ')}`
+            )
         }
         throw e
     }
@@ -307,7 +345,9 @@ export async function getImportData(file: File) {
                 let content = section.substring(firstNewline + 1)
 
                 // Regex to parse: TYPE [visibleLines]:: Name
-                const headerMatch = header.match(/^(API|STATIC|SOLUTION)(?:\s+\[(\d+|auto)\])?(?:\s*::\s*(.*))?/)
+                const headerMatch = header.match(
+                    /^(API|STATIC|SOLUTION)(?:\s+\[(\d+|auto)\])?(?:\s*::\s*(.*))?/
+                )
                 if (headerMatch) {
                     const typeLabel = headerMatch[1]
                     const visibleLines = headerMatch[2]
@@ -331,7 +371,8 @@ export async function getImportData(file: File) {
                         metadata.static = false
                         metadata.hidden = false
                         if (visibleLines) {
-                            metadata.visibleLines = visibleLines === 'auto' ? 'auto' : parseInt(visibleLines, 10)
+                            metadata.visibleLines =
+                                visibleLines === 'auto' ? 'auto' : parseInt(visibleLines, 10)
                         }
                     }
 
@@ -346,7 +387,10 @@ export async function getImportData(file: File) {
                     if (content.match(/\/\/#END STUDENT\r?\n/)) {
                         const parts = content.split(/\/\/#END STUDENT\r?\n/)
                         newBlock.alternativeContent = parts[0].replace(/\r?\n$/, '')
-                        newBlock.content = parts.slice(1).join('//#END STUDENT\n').replace(/\r?\n$/, '')
+                        newBlock.content = parts
+                            .slice(1)
+                            .join('//#END STUDENT\n')
+                            .replace(/\r?\n$/, '')
                         newBlock.hasAlternativeContent = true
                     } else {
                         newBlock.content = content.replace(/\r?\n$/, '')

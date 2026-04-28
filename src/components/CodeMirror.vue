@@ -1,20 +1,20 @@
 <template>
-  <div class="code-editor">
-    <textarea
-      style="display: none"
-      readonly
-      v-model="code"
-      :name="name"
-      :data-question="dataQuestion"
-      class="accqstXmlInput noRTEditor"
-    ></textarea>
-    <div
-      :class="mainClass"
-      :name="name"
-      :data-question="dataQuestion"
-      ref="editorElement"
-    ></div>
-  </div>
+    <div class="code-editor">
+        <textarea
+            style="display: none"
+            readonly
+            v-model="code"
+            :name="name"
+            :data-question="dataQuestion"
+            class="accqstXmlInput noRTEditor"
+        ></textarea>
+        <div
+            :class="mainClass"
+            :name="name"
+            :data-question="dataQuestion"
+            ref="editorElement"
+        ></div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -386,18 +386,18 @@ const tryFixSafari = () => {
     }
 
     editorView.value?.requestMeasure()
-    const scroller = editorElement.value?.querySelector(".cm-scroller") as HTMLElement | null;
-    if (scroller){
-        scroller.style.scrollbarWidth = "none";
+    const scroller = editorElement.value?.querySelector('.cm-scroller') as HTMLElement | null
+    if (scroller) {
+        scroller.style.scrollbarWidth = 'none'
     }
-    
+
     setTimeout(() => {
-        if (scroller){
-            scroller.style.scrollbarWidth = "auto"            
+        if (scroller) {
+            scroller.style.scrollbarWidth = 'auto'
         }
 
         editorView.value?.requestMeasure()
-        editorView.value?.dispatch({});
+        editorView.value?.dispatch({})
     }, 500)
 }
 
@@ -443,10 +443,7 @@ onMounted(() => {
         })
         tryFixSafari()
     })
-
 })
-
-
 
 function lineNr(a: number): string {
     return `${+a + firstLine.value - 1}`
@@ -679,7 +676,10 @@ function underlineErrors() {
 
 // Custom gutter marker for error symbols
 class ErrorMarker extends GutterMarker {
-    constructor(private severity: ErrorSeverity, private msg: string) {
+    constructor(
+        private severity: ErrorSeverity,
+        private msg: string
+    ) {
         super()
     }
 
@@ -826,7 +826,7 @@ defineExpose({
     .cm-scroller
         min-height: 0 !important
 
-    .safari 
+    .safari
         .cm-scroller
             scrollbar-width: none
         .cm-scroller::-webkit-scrollbar

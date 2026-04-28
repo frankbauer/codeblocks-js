@@ -72,7 +72,7 @@ export default {
     },
     CodeBlocksSettings: {
         EmitAST: 'Emit AST',
-        Runtime: "Runtime",
+        Runtime: 'Runtime',
         NoExecution: 'Code Execution is disabled',
         Settings: 'Settings',
         Language: 'Language',
@@ -101,10 +101,10 @@ export default {
         OutputTypeAUTO: {
             label: 'Automatisch',
             short: 'Auto',
-            description: 'The system tries to automatically determine the output format. It first checks if the output is a valid JSON-Object, if not it checks if it contains a seperator (\\n\\n<JSON>\\n) for the Magic-Format. If neither check is successful, the output is treated as text.',
+            description:
+                'The system tries to automatically determine the output format. It first checks if the output is a valid JSON-Object, if not it checks if it contains a seperator (\\n\\n<JSON>\\n) for the Magic-Format. If neither check is successful, the output is treated as text.',
         },
         OutputTypeTEXT: {
-
             label: 'Text Passthrough',
             short: 'Text',
             description: 'The output is treated as plain text.',
@@ -115,14 +115,16 @@ export default {
             description: 'The output is treated as JSON.',
         },
         OutputTypeMAGIC: {
-            label: 'Text+JSON (seperated by \'\\n\\n&lt;JSON>\\n\')',
+            label: "Text+JSON (seperated by '\\n\\n&lt;JSON>\\n')",
             short: 'Magic',
-            description: 'The output is separated by the delimiter <code>\\n\\n&lt;JSON>\\n</code> into a text and a JSON part. The output up to the delimiter is treated as text, the output after the delimiter is treated as JSON. If the output does not contain the delimiter or the part after the delimiter is not valid JSON, the entire output is treated as text.',
+            description:
+                'The output is separated by the delimiter <code>\\n\\n&lt;JSON>\\n</code> into a text and a JSON part. The output up to the delimiter is treated as text, the output after the delimiter is treated as JSON. If the output does not contain the delimiter or the part after the delimiter is not valid JSON, the entire output is treated as text.',
         },
         OutputTypeDATA: {
-            label: 'Text+Data (send using \'CodeBlocks.postResult(data)\')',
+            label: "Text+Data (send using 'CodeBlocks.postResult(data)')",
             short: 'Data-Method',
-            description: 'The output is handled by a special method. Only the last JSON object sent with <code>de.fau.tf.lgdv.CodeBlocks.postResult(data)</code> is treated as output.',
+            description:
+                'The output is handled by a special method. Only the last JSON object sent with <code>de.fau.tf.lgdv.CodeBlocks.postResult(data)</code> is treated as output.',
         },
         NumberErr: 'Must be a valid number.',
         ContinousCompile: 'Automatic Execution (while typing)',
@@ -265,15 +267,18 @@ export default {
     LibraryBlock: {
         Name: 'Name',
         DuplicateNameTitle: 'Duplicate Name',
-        DuplicateNameMessage: 'Multiple blocks with the name "{name}" exist. This might lead to unexpected behavior.',
+        DuplicateNameMessage:
+            'Multiple blocks with the name "{name}" exist. This might lead to unexpected behavior.',
         InactiveTitle: 'Library Inactive',
-        InactiveMessage: 'No playground block with at least version {version} exists. This library will not be used.',
+        InactiveMessage:
+            'No playground block with at least version {version} exists. This library will not be used.',
         ErrorTitle: 'Library Error',
         UsageTooltip: 'This library is available as "{name}" in the playground.',
     },
     ImportExport: {
         Title: 'Import / Export',
-        Description: 'Export your codeblocks to a file or import them from a previously exported zip.',
+        Description:
+            'Export your codeblocks to a file or import them from a previously exported zip.',
         Export: 'Export',
         Import: 'Import',
         SelectBlocks: 'Select blocks to include in the export:',
@@ -291,6 +296,6 @@ export default {
         Append: 'Append',
         Prepend: 'Prepend',
         Override: 'Override (Clear existing)',
-        Back: 'Back'
+        Back: 'Back',
     },
 }

@@ -20,7 +20,9 @@ export const useBlockStorage = (appID: number) => {
     const blockIDs = computed(() => appInfo.value.blocks.map((v) => v.uuid))
 
     function getBlock(id: string): ComputedRef<BlockData> {
-        return computed(() => appInfo.value.blocks.find((v) => v.uuid === id)) as ComputedRef<BlockData>
+        return computed(() =>
+            appInfo.value.blocks.find((v) => v.uuid === id)
+        ) as ComputedRef<BlockData>
     }
 
     return {

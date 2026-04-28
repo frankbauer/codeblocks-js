@@ -4,8 +4,10 @@
             class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-center tw-content-center tw-mb-1"
         >
             <div class="tw-flex tw-items-center tw-flex-1">
-                <div class="tw-ml-0 tw-transition-opacity tw-duration-250 group-hover:tw-opacity-0"> <TagIcon class="tw-w-4 tw-h-4 tw-text-muted-foreground tw-mr-1" /></div>
-                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">                   
+                <div class="tw-ml-0 tw-transition-opacity tw-duration-250 group-hover:tw-opacity-0">
+                    <TagIcon class="tw-w-4 tw-h-4 tw-text-muted-foreground tw-mr-1" />
+                </div>
+                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">
                     <TooltipProvider>
                         <Tooltip :delay-duration="300">
                             <TooltipTrigger as-child>
@@ -171,12 +173,7 @@ import { l } from '@/plugins/i18n'
 import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
 import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/shadcn/ui/tooltip'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shadcn/ui/tooltip'
 
 import { Expand, Maximize, Shrink, AlertTriangle, ZapOff, BookCopy, TagIcon } from 'lucide-vue-next'
 import { useSlideTransition } from '@/composables/useSlideTransition'
@@ -202,11 +199,8 @@ const emit = defineEmits(['ready'])
 
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)
-const { whenBlockIsReady } = useBasicBlockMounting(
-    true,
-    props,
-    blockStorage,
-    (block) => emit('ready', block)
+const { whenBlockIsReady } = useBasicBlockMounting(true, props, blockStorage, (block) =>
+    emit('ready', block)
 )
 
 // Error state
@@ -257,8 +251,12 @@ const hasModernPlayground = computed(() => {
 })
 
 const visibleLinesNow = computed((): 'auto' | number => {
-    if (isExpandedTiny.value) return 2.4
-    if (isExpandedLarge.value) return 33.4
+    if (isExpandedTiny.value) {
+        return 2.4
+    }
+    if (isExpandedLarge.value) {
+        return 33.4
+    }
     return 'auto'
 })
 const isExpandedLarge = computed(() => block.value.codeExpanded === CodeExpansionType.LARGE)

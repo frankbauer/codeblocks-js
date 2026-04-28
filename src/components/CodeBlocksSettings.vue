@@ -5,7 +5,10 @@
             class="tw-flex tw-items-stretch tw-h-9 tw-rounded-lg tw-border tw-bg-card tw-overflow-hidden tw-text-xs tw-select-none"
         >
             <!-- Scrollable/clippable left section — gear always stays visible -->
-            <div ref="leftSection" class="tw-flex tw-items-stretch tw-overflow-hidden tw-flex-1 tw-min-w-0">
+            <div
+                ref="leftSection"
+                class="tw-flex tw-items-stretch tw-overflow-hidden tw-flex-1 tw-min-w-0"
+            >
                 <!-- Language + version: click → language tab -->
                 <button
                     type="button"
@@ -49,9 +52,7 @@
                                 {{ $t('RandomizerSettings.Active') }}
                             </Label>
                         </div>
-                        <div
-                            class="tw-space-y-1.5 tw-max-h-56 tw-overflow-y-auto modern-scrollbar"
-                        >
+                        <div class="tw-space-y-1.5 tw-max-h-56 tw-overflow-y-auto modern-scrollbar">
                             <div
                                 v-for="(s, i) in options.randomizer.sets"
                                 :key="s.uuid"
@@ -71,10 +72,9 @@
                                     <span class="tw-text-sm tw-font-medium tw-shrink-0"
                                         >Set {{ i + 1 }}</span
                                     >
-                                    <span
-                                        class="tw-text-xs tw-text-muted-foreground tw-truncate"
-                                        >{{ setValuesSummary(s) }}</span
-                                    >
+                                    <span class="tw-text-xs tw-text-muted-foreground tw-truncate">{{
+                                        setValuesSummary(s)
+                                    }}</span>
                                 </div>
                                 <Button
                                     variant="ghost"
@@ -103,9 +103,7 @@
                 <Popover v-if="showMaxRuntime">
                     <PopoverTrigger as-child>
                         <button type="button" class="cb-toolbar-item tw-border-r">
-                            <Clock
-                                class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground"
-                            />
+                            <Clock class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground" />
                             <span class="tw-font-medium">{{ Math.round(maxRuntime / 1000) }}s</span>
                             <ChevronDown class="tw-w-3 tw-h-3 tw-text-muted-foreground" />
                         </button>
@@ -126,10 +124,10 @@
                     @click="openDialogOnTab('output')"
                     class="cb-toolbar-item tw-border-r"
                 >
-                    <Terminal
-                        class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground"
-                    />
-                    <span class="tw-font-medium">{{ l(`CodeBlocksSettings.OutputType${outputParser.value.toUpperCase()}.short`) }}</span>
+                    <Terminal class="tw-w-3.5 tw-h-3.5 tw-shrink-0 tw-text-muted-foreground" />
+                    <span class="tw-font-medium">{{
+                        l(`CodeBlocksSettings.OutputType${outputParser.value.toUpperCase()}.short`)
+                    }}</span>
                     <span class="tw-text-muted-foreground">·</span>
                     <span class="tw-text-muted-foreground">{{ maxCharacters }}</span>
                 </button>
@@ -189,7 +187,10 @@
                             type="button"
                             @click="emit('expand-all')"
                             class="cb-toolbar-item tw-border-l tw-transition-shadow"
-                            :class="{ 'tw-shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.15)] tw-z-10': hasOverflow }"
+                            :class="{
+                                'tw-shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.15)] tw-z-10':
+                                    hasOverflow,
+                            }"
                         >
                             <ChevronsUpDown class="tw-w-3.5 tw-h-3.5" />
                         </button>
@@ -219,10 +220,7 @@
                     <Tooltip>
                         <TooltipTrigger as-child>
                             <DialogTrigger as-child>
-                                <button
-                                    type="button"
-                                    class="cb-toolbar-item tw-border-l tw-px-3"
-                                >
+                                <button type="button" class="cb-toolbar-item tw-border-l tw-px-3">
                                     <Settings class="tw-w-3.5 tw-h-3.5" />
                                 </button>
                             </DialogTrigger>
@@ -265,376 +263,384 @@
                                 </TabsTrigger>
                             </TabsList>
 
-                        <!-- Tab: Language -->
-                        <TabsContent value="language" class="tw-space-y-4 tw-mt-4 tw-px-2">
-                            <div class="tw-flex tw-items-center tw-space-x-2">
-                                <Switch
-                                    id="run-code"
-                                    v-model="runCode"
-                                    :disabled="!languageHasCompiler"
-                                />
-                                <Label for="run-code">{{
-                                    $t('CodeBlocksSettings.AllowExec')
-                                }}</Label>
-                            </div>
+                            <!-- Tab: Language -->
+                            <TabsContent value="language" class="tw-space-y-4 tw-mt-4 tw-px-2">
+                                <div class="tw-flex tw-items-center tw-space-x-2">
+                                    <Switch
+                                        id="run-code"
+                                        v-model="runCode"
+                                        :disabled="!languageHasCompiler"
+                                    />
+                                    <Label for="run-code">{{
+                                        $t('CodeBlocksSettings.AllowExec')
+                                    }}</Label>
+                                </div>
 
-                            <div class="tw-flex tw-items-center tw-space-x-2">
-                                <Switch
-                                    id="continuous-compile"
-                                    v-model="continuousCompile"
-                                    :disabled="!canContinousCompile"
-                                />
-                                <Label for="continuous-compile">{{
-                                    $t('CodeBlocksSettings.ContinousCompile')
-                                }}</Label>
-                            </div>
+                                <div class="tw-flex tw-items-center tw-space-x-2">
+                                    <Switch
+                                        id="continuous-compile"
+                                        v-model="continuousCompile"
+                                        :disabled="!canContinousCompile"
+                                    />
+                                    <Label for="continuous-compile">{{
+                                        $t('CodeBlocksSettings.ContinousCompile')
+                                    }}</Label>
+                                </div>
 
-                            <div class="tw-grid tw-gap-4">
-                                <CSelect
-                                    v-model="compilerLanguage"
-                                    :options="compiledLanguages"
-                                    :label="$t('CodeBlocksSettings.Language')"
-                                />
-                                <CSelect
-                                    v-if="runCode"
-                                    :model-value="compilerVersion"
-                                    @update:model-value="compilerVersion = $event"
-                                    :options="compilerVersions"
-                                    :label="$t('CodeBlocksSettings.CVersion')"
+                                <div class="tw-grid tw-gap-4">
+                                    <CSelect
+                                        v-model="compilerLanguage"
+                                        :options="compiledLanguages"
+                                        :label="$t('CodeBlocksSettings.Language')"
+                                    />
+                                    <CSelect
+                                        v-if="runCode"
+                                        :model-value="compilerVersion"
+                                        @update:model-value="compilerVersion = $event"
+                                        :options="compilerVersions"
+                                        :label="$t('CodeBlocksSettings.CVersion')"
+                                    >
+                                        <template #option="{ option }">
+                                            <div class="tw-flex tw-items-center">
+                                                {{ option }}
+                                                <Badge
+                                                    v-if="
+                                                        isDeprecatedVersion(
+                                                            compilerLanguage,
+                                                            option
+                                                        )
+                                                    "
+                                                    variant="secondary"
+                                                    class="tw-ml-2 tw-inline-flex tw-items-center"
+                                                >
+                                                    <AlertTriangle
+                                                        class="tw-w-4 tw-h-4 tw-text-gray-400"
+                                                    />
+                                                </Badge>
+                                                <Badge
+                                                    v-if="
+                                                        isExperimentalVersion(
+                                                            compilerLanguage,
+                                                            option
+                                                        )
+                                                    "
+                                                    variant="secondary"
+                                                    class="tw-ml-2 tw-inline-flex tw-items-center"
+                                                >
+                                                    <Flame
+                                                        class="tw-w-4 tw-h-4 tw-text-orange-500"
+                                                    />
+                                                </Badge>
+                                            </div>
+                                        </template>
+                                    </CSelect>
+                                </div>
+
+                                <Transition
+                                    enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
+                                    enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+                                    enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+                                    leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
+                                    leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+                                    leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
                                 >
-                                    <template #option="{ option }">
-                                        <div class="tw-flex tw-items-center">
-                                            {{ option }}
-                                            <Badge
-                                                v-if="
-                                                    isDeprecatedVersion(compilerLanguage, option)
-                                                "
-                                                variant="secondary"
-                                                class="tw-ml-2 tw-inline-flex tw-items-center"
-                                            >
-                                                <AlertTriangle
-                                                    class="tw-w-4 tw-h-4 tw-text-gray-400"
-                                                />
-                                            </Badge>
-                                            <Badge
-                                                v-if="
-                                                    isExperimentalVersion(compilerLanguage, option)
-                                                "
-                                                variant="secondary"
-                                                class="tw-ml-2 tw-inline-flex tw-items-center"
-                                            >
-                                                <Flame class="tw-w-4 tw-h-4 tw-text-orange-500" />
-                                            </Badge>
+                                    <Alert
+                                        v-if="isExperimental"
+                                        variant="destructive"
+                                        class="tw-bg-orange-50 tw-border-orange-200 tw-py-2 tw-w-full"
+                                    >
+                                        <div class="tw-flex tw-gap-2 tw-items-center">
+                                            <Flame class="tw-h-12 tw-w-12 tw-text-orange-500" />
+                                            <div class="tw-flex-1">
+                                                <AlertTitle
+                                                    class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600"
+                                                    >{{
+                                                        $t(
+                                                            'CodeBlocksSettings.ExperimentalCompiler'
+                                                        )
+                                                    }}</AlertTitle
+                                                >
+                                                <AlertDescription
+                                                    class="tw-text-xs tw-mt-1 tw-text-orange-500"
+                                                >
+                                                    {{
+                                                        $t(
+                                                            'CodeBlocksSettings.ExperimentalCompilerDesc'
+                                                        )
+                                                    }}
+                                                </AlertDescription>
+                                            </div>
                                         </div>
-                                    </template>
-                                </CSelect>
-                            </div>
+                                    </Alert>
+                                </Transition>
 
-                            <Transition
-                                enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
-                                enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
-                                enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
-                                leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
-                                leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
-                                leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
-                            >
-                                <Alert
-                                    v-if="isExperimental"
-                                    variant="destructive"
-                                    class="tw-bg-orange-50 tw-border-orange-200 tw-py-2 tw-w-full"
+                                <Transition
+                                    enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
+                                    enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
+                                    enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
+                                    leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
+                                    leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
+                                    leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
                                 >
-                                    <div class="tw-flex tw-gap-2 tw-items-center">
-                                        <Flame class="tw-h-12 tw-w-12 tw-text-orange-500" />
-                                        <div class="tw-flex-1">
-                                            <AlertTitle
-                                                class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600"
-                                                >{{
-                                                    $t(
-                                                        'CodeBlocksSettings.ExperimentalCompiler'
-                                                    )
-                                                }}</AlertTitle
-                                            >
-                                            <AlertDescription
-                                                class="tw-text-xs tw-mt-1 tw-text-orange-500"
-                                            >
-                                                {{
-                                                    $t(
-                                                        'CodeBlocksSettings.ExperimentalCompilerDesc'
-                                                    )
-                                                }}
-                                            </AlertDescription>
+                                    <Alert
+                                        v-if="isDeprecated"
+                                        variant="destructive"
+                                        class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-w-full"
+                                    >
+                                        <div class="tw-flex tw-gap-2 tw-items-center">
+                                            <AlertTriangle
+                                                class="tw-h-12 tw-w-12 tw-text-yellow-500"
+                                            />
+                                            <div class="tw-flex-1">
+                                                <AlertTitle
+                                                    class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600"
+                                                    >{{
+                                                        $t('CodeBlocksSettings.DeprecatedCompiler')
+                                                    }}</AlertTitle
+                                                >
+                                                <AlertDescription
+                                                    class="tw-text-xs tw-mt-1 tw-text-yellow-500"
+                                                >
+                                                    {{
+                                                        $t(
+                                                            'CodeBlocksSettings.DeprecatedCompilerDesc'
+                                                        )
+                                                    }}
+                                                </AlertDescription>
+                                            </div>
                                         </div>
-                                    </div>
-                                </Alert>
-                            </Transition>
+                                    </Alert>
+                                </Transition>
+                            </TabsContent>
 
-                            <Transition
-                                enter-active-class="tw-transition-all tw-duration-300 tw-ease-out"
-                                enter-from-class="tw-transform tw-scale-95 tw-opacity-0"
-                                enter-to-class="tw-transform tw-scale-100 tw-opacity-100"
-                                leave-active-class="tw-transition-all tw-duration-200 tw-ease-in"
-                                leave-from-class="tw-transform tw-scale-100 tw-opacity-100"
-                                leave-to-class="tw-transform tw-scale-95 tw-opacity-0"
-                            >
-                                <Alert
-                                    v-if="isDeprecated"
-                                    variant="destructive"
-                                    class="tw-bg-yellow-50 tw-border-yellow-300 tw-py-2 tw-w-full"
-                                >
-                                    <div class="tw-flex tw-gap-2 tw-items-center">
-                                        <AlertTriangle
-                                            class="tw-h-12 tw-w-12 tw-text-yellow-500"
-                                        />
-                                        <div class="tw-flex-1">
-                                            <AlertTitle
-                                                class="tw-text-xs tw-font-medium tw-mb-0 tw-text-yellow-600"
-                                                >{{
-                                                    $t('CodeBlocksSettings.DeprecatedCompiler')
-                                                }}</AlertTitle
-                                            >
-                                            <AlertDescription
-                                                class="tw-text-xs tw-mt-1 tw-text-yellow-500"
-                                            >
-                                                {{
-                                                    $t(
-                                                        'CodeBlocksSettings.DeprecatedCompilerDesc'
-                                                    )
-                                                }}
-                                            </AlertDescription>
-                                        </div>
-                                    </div>
-                                </Alert>
-                            </Transition>
-                        </TabsContent>
+                            <!-- Tab: Runtime (only when execution is enabled) -->
+                            <TabsContent value="runtime" class="tw-space-y-4 tw-mt-4 tw-px-2">
+                                <div v-if="showMaxRuntime">
+                                    <CInput
+                                        v-model="maxRuntime"
+                                        :rules="[validNumber]"
+                                        :label="$t('CodeBlocksSettings.RunTimeShrt')"
+                                    />
+                                </div>
 
-                        <!-- Tab: Runtime (only when execution is enabled) -->
-                        <TabsContent value="runtime" class="tw-space-y-4 tw-mt-4 tw-px-2">
-                            <div v-if="showMaxRuntime">
-                                <CInput
-                                    v-model="maxRuntime"
-                                    :rules="[validNumber]"
-                                    :label="$t('CodeBlocksSettings.RunTimeShrt')"
-                                />
-                            </div>
-
-                             <div
+                                <div
                                     v-if="canEmitAST"
                                     class="tw-flex tw-items-center tw-space-x-2 tw-mb-4"
                                 >
-                                <Switch
-                                    id="emit-ast"
-                                    v-model="emitAST"
+                                    <Switch id="emit-ast" v-model="emitAST" />
+                                    <Label for="emit-ast">{{
+                                        $t('CodeBlocksSettings.EmitAST')
+                                    }}</Label>
+                                </div>
+
+                                <div
+                                    v-if="accepstArguments || allowsMessagePassing"
+                                    class="tw-space-y-2"
+                                >
+                                    <div class="tw-flex tw-items-center tw-gap-2">
+                                        <div class="tw-text-sm">
+                                            {{ $t('CodeBlocksSettings.AllowArguments') }}
+                                        </div>
+                                        <HoverCard>
+                                            <HoverCardTrigger>
+                                                <Info
+                                                    class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
+                                                />
+                                            </HoverCardTrigger>
+                                            <HoverCardContent
+                                                side="right"
+                                                align="start"
+                                                class="tw-w-[280px]"
+                                            >
+                                                <div
+                                                    v-html="
+                                                        $t(
+                                                            compiler.languageType === 'java'
+                                                                ? 'CodeBlocksSettings.AllowArgumentsHintJava'
+                                                                : 'CodeBlocksSettings.AllowArgumentsHint'
+                                                        )
+                                                    "
+                                                    class="hover-content"
+                                                />
+                                            </HoverCardContent>
+                                        </HoverCard>
+                                    </div>
+
+                                    <div
+                                        v-if="accepstArguments"
+                                        class="tw-flex tw-items-center tw-space-x-2"
+                                    >
+                                        <Switch
+                                            id="persistent-args"
+                                            v-model="persistentArguments"
+                                            :disabled="!canPersistentArguments"
+                                        />
+                                        <Label for="persistent-args">{{
+                                            $t('CodeBlocksSettings.PersistentArguments')
+                                        }}</Label>
+                                        <HoverCard>
+                                            <HoverCardTrigger>
+                                                <Info
+                                                    class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
+                                                />
+                                            </HoverCardTrigger>
+                                            <HoverCardContent
+                                                side="right"
+                                                align="start"
+                                                class="tw-w-[280px]"
+                                            >
+                                                <div
+                                                    v-html="
+                                                        $t(
+                                                            compiler.languageType === 'java'
+                                                                ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava'
+                                                                : 'CodeBlocksSettings.UsePersistentArgumentsHint'
+                                                        )
+                                                    "
+                                                    class="hover-content"
+                                                />
+                                            </HoverCardContent>
+                                        </HoverCard>
+                                    </div>
+
+                                    <div
+                                        v-if="allowsMessagePassing"
+                                        class="tw-flex tw-items-center tw-space-x-2"
+                                    >
+                                        <Switch
+                                            id="message-passing"
+                                            v-model="messagePassing"
+                                            :disabled="!allowsMessagePassing"
+                                        />
+                                        <Label for="message-passing">{{
+                                            $t('CodeBlocksSettings.MessagePassing')
+                                        }}</Label>
+                                        <HoverCard>
+                                            <HoverCardTrigger>
+                                                <Info
+                                                    class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
+                                                />
+                                            </HoverCardTrigger>
+                                            <HoverCardContent
+                                                side="right"
+                                                align="start"
+                                                class="tw-w-[280px]"
+                                            >
+                                                <div
+                                                    v-html="
+                                                        $t(
+                                                            compiler.languageType === 'java'
+                                                                ? 'CodeBlocksSettings.AllowMessagePassingHintJava'
+                                                                : 'CodeBlocksSettings.AllowMessagePassingHint'
+                                                        )
+                                                    "
+                                                    class="hover-content"
+                                                />
+                                            </HoverCardContent>
+                                        </HoverCard>
+                                    </div>
+
+                                    <div
+                                        v-if="allowsMessagePassing"
+                                        class="tw-flex tw-items-center tw-space-x-2 tw-pl-6"
+                                    >
+                                        <Switch
+                                            id="keep-alive"
+                                            v-model="keepAlive"
+                                            :disabled="!allowsMessagePassing || !messagePassing"
+                                        />
+                                        <Label for="keep-alive">{{
+                                            $t('CodeBlocksSettings.KeepAlive')
+                                        }}</Label>
+                                        <HoverCard>
+                                            <HoverCardTrigger>
+                                                <Info
+                                                    class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
+                                                />
+                                            </HoverCardTrigger>
+                                            <HoverCardContent
+                                                side="right"
+                                                align="start"
+                                                class="tw-w-[280px]"
+                                            >
+                                                <div
+                                                    v-html="
+                                                        $t(
+                                                            compiler.languageType === 'java'
+                                                                ? 'CodeBlocksSettings.KeepAliveHintJava'
+                                                                : 'CodeBlocksSettings.KeepAliveHint'
+                                                        )
+                                                    "
+                                                    class="hover-content"
+                                                />
+                                            </HoverCardContent>
+                                        </HoverCard>
+                                    </div>
+                                </div>
+                            </TabsContent>
+
+                            <!-- Tab: Output -->
+                            <TabsContent value="output" class="tw-space-y-4 tw-mt-4 tw-px-2">
+                                <CInput
+                                    v-model="maxCharacters"
+                                    :rules="[validNumber]"
+                                    :label="$t('CodeBlocksSettings.MaxCharacters')"
                                 />
-                                <Label for="emit-ast">{{
-                                    $t('CodeBlocksSettings.EmitAST')
-                                }}</Label>
-                            </div>
+                                <CSelect
+                                    :model-value="outputParser"
+                                    @update:model-value="outputParser = $event"
+                                    :options="outputParsers"
+                                    :label="$t('CodeBlocksSettings.Parser')"
+                                />
+                                <Alert
+                                    variant="default"
+                                    class="tw-bg-blue-50 tw-border-blue-300 tw-py-2 tw-w-full"
+                                >
+                                    <div class="tw-flex tw-gap-2 tw-items-center">
+                                        <MessageCircleMore
+                                            class="tw-h-12 tw-w-12 tw-text-blue-500"
+                                        />
 
-                            <div
-                                v-if="accepstArguments || allowsMessagePassing"
-                                class="tw-space-y-2"
-                            >
-                           
-                                <div class="tw-flex tw-items-center tw-gap-2">                                 
-                                    <div class="tw-text-sm">
-                                        {{ $t('CodeBlocksSettings.AllowArguments') }}
+                                        <div class="tw-flex-1">
+                                            <AlertDescription
+                                                class="tw-text-xs tw-mt-1 tw-text-blue-500"
+                                                v-html="
+                                                    l(
+                                                        `CodeBlocksSettings.OutputType${outputParser.value.toUpperCase()}.description`
+                                                    )
+                                                "
+                                            >
+                                            </AlertDescription>
+                                        </div>
                                     </div>
-                                    <HoverCard>
-                                        <HoverCardTrigger>
-                                            <Info
-                                                class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
-                                            />
-                                        </HoverCardTrigger>
-                                        <HoverCardContent
-                                            side="right"
-                                            align="start"
-                                            class="tw-w-[280px]"
-                                        >
-                                            <div
-                                                v-html="
-                                                    $t(
-                                                        compiler.languageType === 'java'
-                                                            ? 'CodeBlocksSettings.AllowArgumentsHintJava'
-                                                            : 'CodeBlocksSettings.AllowArgumentsHint'
-                                                    )
-                                                "
-                                                class="hover-content"
-                                            />
-                                        </HoverCardContent>
-                                    </HoverCard>
-                                </div>
+                                </Alert>
+                                <CSelect
+                                    :model-value="uiTheme"
+                                    @update:model-value="uiTheme = $event"
+                                    :options="themes"
+                                    :label="$t('CodeBlocksSettings.TSolution')"
+                                />
+                            </TabsContent>
 
-                                <div
-                                    v-if="accepstArguments"
-                                    class="tw-flex tw-items-center tw-space-x-2"
-                                >
-                                    <Switch
-                                        id="persistent-args"
-                                        v-model="persistentArguments"
-                                        :disabled="!canPersistentArguments"
-                                    />
-                                    <Label for="persistent-args">{{
-                                        $t('CodeBlocksSettings.PersistentArguments')
-                                    }}</Label>
-                                    <HoverCard>
-                                        <HoverCardTrigger>
-                                            <Info
-                                                class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
-                                            />
-                                        </HoverCardTrigger>
-                                        <HoverCardContent
-                                            side="right"
-                                            align="start"
-                                            class="tw-w-[280px]"
-                                        >
-                                            <div
-                                                v-html="
-                                                    $t(
-                                                        compiler.languageType === 'java'
-                                                            ? 'CodeBlocksSettings.UsePersistentArgumentsHintJava'
-                                                            : 'CodeBlocksSettings.UsePersistentArgumentsHint'
-                                                    )
-                                                "
-                                                class="hover-content"
-                                            />
-                                        </HoverCardContent>
-                                    </HoverCard>
-                                </div>
+                            <!-- Tab: Libraries -->
+                            <TabsContent value="libraries" class="tw-space-y-4 tw-mt-4 tw-px-2">
+                                <CMultiSelect
+                                    v-model="domLibrary"
+                                    :options="domLibraries"
+                                    :placeholder="$t('CodeBlocksSettings.SelectDomLibs')"
+                                />
+                                <CMultiSelect
+                                    v-if="runCode && workerLibraries.length > 0"
+                                    v-model="workerLibrary"
+                                    :options="workerLibraries"
+                                    :placeholder="$t('CodeBlocksSettings.SelectWorkerLibs')"
+                                />
+                            </TabsContent>
 
-                                <div
-                                    v-if="allowsMessagePassing"
-                                    class="tw-flex tw-items-center tw-space-x-2"
-                                >
-                                    <Switch
-                                        id="message-passing"
-                                        v-model="messagePassing"
-                                        :disabled="!allowsMessagePassing"
-                                    />
-                                    <Label for="message-passing">{{
-                                        $t('CodeBlocksSettings.MessagePassing')
-                                    }}</Label>
-                                    <HoverCard>
-                                        <HoverCardTrigger>
-                                            <Info
-                                                class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
-                                            />
-                                        </HoverCardTrigger>
-                                        <HoverCardContent
-                                            side="right"
-                                            align="start"
-                                            class="tw-w-[280px]"
-                                        >
-                                            <div
-                                                v-html="
-                                                    $t(
-                                                        compiler.languageType === 'java'
-                                                            ? 'CodeBlocksSettings.AllowMessagePassingHintJava'
-                                                            : 'CodeBlocksSettings.AllowMessagePassingHint'
-                                                    )
-                                                "
-                                                class="hover-content"
-                                            />
-                                        </HoverCardContent>
-                                    </HoverCard>
-                                </div>
-
-                                <div
-                                    v-if="allowsMessagePassing"
-                                    class="tw-flex tw-items-center tw-space-x-2 tw-pl-6"
-                                >
-                                    <Switch
-                                        id="keep-alive"
-                                        v-model="keepAlive"
-                                        :disabled="!allowsMessagePassing || !messagePassing"
-                                    />
-                                    <Label for="keep-alive">{{
-                                        $t('CodeBlocksSettings.KeepAlive')
-                                    }}</Label>
-                                    <HoverCard>
-                                        <HoverCardTrigger>
-                                            <Info
-                                                class="tw-h-4 tw-w-4 tw-cursor-help tw-text-muted-foreground hover:tw-text-foreground"
-                                            />
-                                        </HoverCardTrigger>
-                                        <HoverCardContent
-                                            side="right"
-                                            align="start"
-                                            class="tw-w-[280px]"
-                                        >
-                                            <div
-                                                v-html="
-                                                    $t(
-                                                        compiler.languageType === 'java'
-                                                            ? 'CodeBlocksSettings.KeepAliveHintJava'
-                                                            : 'CodeBlocksSettings.KeepAliveHint'
-                                                    )
-                                                "
-                                                class="hover-content"
-                                            />
-                                        </HoverCardContent>
-                                    </HoverCard>
-                                </div>
-                            </div>
-                        </TabsContent>
-
-                        <!-- Tab: Output -->
-                        <TabsContent value="output" class="tw-space-y-4 tw-mt-4 tw-px-2">
-                            <CInput
-                                v-model="maxCharacters"
-                                :rules="[validNumber]"
-                                :label="$t('CodeBlocksSettings.MaxCharacters')"
-                            />
-                            <CSelect
-                                :model-value="outputParser"
-                                @update:model-value="outputParser = $event"
-                                :options="outputParsers"
-                                :label="$t('CodeBlocksSettings.Parser')"
-                            />                           
-                            <Alert
-                                variant="default"
-                                class="tw-bg-blue-50 tw-border-blue-300 tw-py-2 tw-w-full"
-                            >
-                                <div class="tw-flex tw-gap-2 tw-items-center">
-                                <MessageCircleMore class="tw-h-12 tw-w-12 tw-text-blue-500" />
-                                    
-                                    <div class="tw-flex-1">
-                                        
-                                        <AlertDescription
-                                            class="tw-text-xs tw-mt-1 tw-text-blue-500"
-                                            v-html=" l(`CodeBlocksSettings.OutputType${outputParser.value.toUpperCase()}.description`)"
-                                        >
-                                            
-                                        </AlertDescription>
-                                    </div>
-                                </div>
-                            </Alert>
-                            <CSelect
-                                :model-value="uiTheme"
-                                @update:model-value="uiTheme = $event"
-                                :options="themes"
-                                :label="$t('CodeBlocksSettings.TSolution')"
-                            />
-                        </TabsContent>
-
-                        <!-- Tab: Libraries -->
-                        <TabsContent value="libraries" class="tw-space-y-4 tw-mt-4 tw-px-2">
-                            <CMultiSelect
-                                v-model="domLibrary"
-                                :options="domLibraries"
-                                :placeholder="$t('CodeBlocksSettings.SelectDomLibs')"
-                            />
-                            <CMultiSelect
-                                v-if="runCode && workerLibraries.length > 0"
-                                v-model="workerLibrary"
-                                :options="workerLibraries"
-                                :placeholder="$t('CodeBlocksSettings.SelectWorkerLibs')"
-                            />
-                        </TabsContent>
-
-                        <!-- Tab: Randomizer (full config) -->
-                        <TabsContent value="randomizer" class="w-space-y-4 tw-mt-4 tw-px-2">
-                            <RandomizerSettings :options="options" />
-                        </TabsContent>
+                            <!-- Tab: Randomizer (full config) -->
+                            <TabsContent value="randomizer" class="w-space-y-4 tw-mt-4 tw-px-2">
+                                <RandomizerSettings :options="options" />
+                            </TabsContent>
                         </Tabs>
                     </DialogScrollContent>
                 </Dialog>
@@ -693,7 +699,11 @@ import CSelect from './ui/CSelect.vue'
 import CInput from './ui/CInput.vue'
 import ImportExportDialog from './ImportExportDialog.vue'
 import type { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
-import type { IRandomizerSet, IRandomizerSettings, ICodeBlockSettingsOptions } from '@/lib/ICodeBlocks'
+import type {
+    IRandomizerSet,
+    IRandomizerSettings,
+    ICodeBlockSettingsOptions,
+} from '@/lib/ICodeBlocks'
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import { useBlockStorage, type BlockStorageType } from '@/storage/blockStorage'
@@ -760,10 +770,19 @@ const themes = computed(() => {
     })
 })
 
-const allTypes = [CodeOutputTypes.AUTO, CodeOutputTypes.TEXT, CodeOutputTypes.JSON, CodeOutputTypes.DATA, CodeOutputTypes.MAGIC]
+const allTypes = [
+    CodeOutputTypes.AUTO,
+    CodeOutputTypes.TEXT,
+    CodeOutputTypes.JSON,
+    CodeOutputTypes.DATA,
+    CodeOutputTypes.MAGIC,
+]
 
 const outputParsers = computed(() => {
-    return allTypes.map(t => ({ label: l(`CodeBlocksSettings.OutputType${t.toUpperCase()}.label`), value: t }))    
+    return allTypes.map((t) => ({
+        label: l(`CodeBlocksSettings.OutputType${t.toUpperCase()}.label`),
+        value: t,
+    }))
 })
 
 const serializedOptions = computed({

@@ -199,11 +199,7 @@ export class BlockData implements IBlockData {
         } else if (this.type === KnownBlockTypes.LIBRARY) {
             console.i('recreateScriptObject - Library')
 
-            const so = createLibraryScriptBlock(
-                this.actualContent(),
-                this.name,
-                this.version
-            )
+            const so = createLibraryScriptBlock(this.actualContent(), this.name, this.version)
             this.obj = so
             console.i('Block Rebuild', this.obj, this.uuid)
         } else if (this.type === KnownBlockTypes.DATA) {
@@ -249,7 +245,9 @@ export class BlockData implements IBlockData {
     }
 
     get descriptiveName(): string {
-        if (this.name) return this.name
+        if (this.name) {
+            return this.name
+        }
         const content = this.content || ''
         const firstLine = content.replace(/\s*\n\s*/g, ' ').trim()
         if (firstLine.length > 0) {
@@ -328,9 +326,9 @@ export class BlockData implements IBlockData {
     }
 
     get scope(): AnyCodeBlockScope {
-        return (this.scopeSelector
+        return this.scopeSelector
             ? $(this.scopeSelector)
-            : $(`.codeblocks[uuid="${this.appSettings.uuid}"]`))
+            : $(`.codeblocks[uuid="${this.appSettings.uuid}"]`)
     }
 }
 
@@ -441,13 +439,17 @@ function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined):
             data.emitAST = false
             data.language = data.compiler.languageType
         } else {
-            data.runCode = isTrue(inData.runCode)            
+            data.runCode = isTrue(inData.runCode)
             data.emitAST = isTrue(inData.emitAst) && c.canEmitAST
             data.language = c.language
             if (c.deprecated) {
-                const upgraded = CompilerRegistry.getCompiler({ languageType: data.compiler.languageType })
+                const upgraded = CompilerRegistry.getCompiler({
+                    languageType: data.compiler.languageType,
+                })
                 if (upgraded !== undefined && !upgraded.deprecated) {
-                    console.log(`[CodeBlocks] Auto-upgrading deprecated compiler ${data.compiler.languageType} v${data.compiler.version} → v${upgraded.version}`)
+                    console.log(
+                        `[CodeBlocks] Auto-upgrading deprecated compiler ${data.compiler.languageType} v${data.compiler.version} → v${upgraded.version}`
+                    )
                     data.compiler.version = upgraded.version
                 } else {
                     data.compiler.version = c.version

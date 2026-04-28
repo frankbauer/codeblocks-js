@@ -292,7 +292,12 @@ export class JavaV102Compiler implements ICompilerInstance {
                             //console.log('Received final result from execution:', ee.data.value)
                             options.resultData = JSON.parse(ee.data.value)
                         } else if (ee.data.id != '' + questionID) {
-                            console.warn('Received message for different session.', ee.data.id, questionID, JSON.stringify(ee.data))
+                            console.warn(
+                                'Received message for different session.',
+                                ee.data.id,
+                                questionID,
+                                JSON.stringify(ee.data)
+                            )
                         }
 
                         if (ee.data.command == 'run-finished-setup') {
@@ -350,7 +355,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                             if (options.beforeStartHandler) {
                                 options.beforeStartHandler()
                             }
-                        } 
+                        }
                     }
 
                     workerrun.addEventListener('message', runListener)
@@ -393,7 +398,7 @@ export class JavaV102Compiler implements ICompilerInstance {
             globalState.compilerState.displayGlobalState(
                 'Starting Compiler for <b>' + mainClass + '.java</b>'
             )
-            console.log('Will receive AST:', options.sendAST===true && !!options.ast_callback)
+            console.log('Will receive AST:', options.sendAST === true && !!options.ast_callback)
             this.teaworker.postMessage({
                 command: 'compile',
                 id: '' + questionID,
@@ -401,7 +406,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                 mainClass: mainClass,
                 strict: true,
                 debugInfo: true,
-                emitAst: options.sendAST===true && !!options.ast_callback,
+                emitAst: options.sendAST === true && !!options.ast_callback,
             })
         }
     }

@@ -18,7 +18,10 @@ export abstract class BaseScriptBlock implements IScriptBlock {
     protected obj: IPlaygroundObject | ILegacyPlaygroundObject | undefined = undefined
     protected didInit: boolean = false
 
-    constructor(script: string, public version: string) {
+    constructor(
+        script: string,
+        public version: string
+    ) {
         this.didInit = false
         this.src = script
         this.obj = this.getFallbackObject()

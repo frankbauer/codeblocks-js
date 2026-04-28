@@ -16,26 +16,50 @@
                 <TabsContent value="export" class="tw-mt-4 tw-space-y-4">
                     <div class="tw-max-h-[50vh] tw-overflow-y-auto tw-pr-2 modern-scrollbar">
                         <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
-                            <h3 class="tw-text-sm tw-font-medium">{{ $t('ImportExport.SelectBlocks') }}</h3>
+                            <h3 class="tw-text-sm tw-font-medium">
+                                {{ $t('ImportExport.SelectBlocks') }}
+                            </h3>
                             <div class="tw-flex tw-items-center tw-gap-2">
-                                <Button variant="ghost" size="sm" @click="selectAll(true)">{{ $t('ImportExport.SelectAll') }}</Button>
-                                <Button variant="ghost" size="sm" @click="selectAll(false)">{{ $t('ImportExport.DeselectAll') }}</Button>
+                                <Button variant="ghost" size="sm" @click="selectAll(true)">{{
+                                    $t('ImportExport.SelectAll')
+                                }}</Button>
+                                <Button variant="ghost" size="sm" @click="selectAll(false)">{{
+                                    $t('ImportExport.DeselectAll')
+                                }}</Button>
                             </div>
                         </div>
 
                         <div class="tw-space-y-2">
-                            <div v-for="block in blocks" :key="block.uuid" class="tw-flex tw-items-center tw-gap-3 tw-p-2 tw-rounded-md hover:tw-bg-accent/50">
-                                <Checkbox :id="'export-' + block.uuid" :model-value="selectedBlockUuids.includes(block.uuid)" @update:model-value="toggleBlock(block.uuid, $event)" />
-                                <Label :for="'export-' + block.uuid" class="tw-flex-1 tw-cursor-pointer">
-                                    <div class="tw-font-medium tw-text-sm" v-html="block.descriptiveName"></div>
-                                    <div class="tw-text-xs tw-text-muted-foreground">{{ block.type }}</div>
+                            <div
+                                v-for="block in blocks"
+                                :key="block.uuid"
+                                class="tw-flex tw-items-center tw-gap-3 tw-p-2 tw-rounded-md hover:tw-bg-accent/50"
+                            >
+                                <Checkbox
+                                    :id="'export-' + block.uuid"
+                                    :model-value="selectedBlockUuids.includes(block.uuid)"
+                                    @update:model-value="toggleBlock(block.uuid, $event)"
+                                />
+                                <Label
+                                    :for="'export-' + block.uuid"
+                                    class="tw-flex-1 tw-cursor-pointer"
+                                >
+                                    <div
+                                        class="tw-font-medium tw-text-sm"
+                                        v-html="block.descriptiveName"
+                                    ></div>
+                                    <div class="tw-text-xs tw-text-muted-foreground">
+                                        {{ block.type }}
+                                    </div>
                                 </Label>
                             </div>
                         </div>
                     </div>
 
                     <div class="tw-flex tw-justify-end tw-gap-3 tw-pt-4 tw-border-t">
-                        <Button variant="outline" @click="$emit('update:open', false)">{{ $t('ImportExport.Cancel') }}</Button>
+                        <Button variant="outline" @click="$emit('update:open', false)">{{
+                            $t('ImportExport.Cancel')
+                        }}</Button>
                         <Button :disabled="selectedBlockUuids.length === 0" @click="handleExport">
                             <Download class="tw-mr-2 tw-h-4 tw-w-4" />
                             {{ $t('ImportExport.RunExport') }} ({{ selectedBlockUuids.length }})
@@ -45,56 +69,111 @@
 
                 <!-- Import Tab -->
                 <TabsContent value="import" class="tw-mt-4 tw-space-y-4">
-                    <div v-if="!importData" class="tw-min-h-[300px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-border-2 tw-border-dashed tw-rounded-lg tw-p-8 tw-transition-colors hover:tw-bg-accent/30" @dragover.prevent @drop.prevent="handleDrop">
+                    <div
+                        v-if="!importData"
+                        class="tw-min-h-[300px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-border-2 tw-border-dashed tw-rounded-lg tw-p-8 tw-transition-colors hover:tw-bg-accent/30"
+                        @dragover.prevent
+                        @drop.prevent="handleDrop"
+                    >
                         <Upload class="tw-h-12 tw-w-12 tw-text-muted-foreground tw-mb-4" />
                         <p class="tw-text-sm tw-text-muted-foreground tw-text-center tw-mb-4">
                             {{ $t('ImportExport.DropZip') }}
                         </p>
-                        <input type="file" ref="fileInput" class="tw-hidden" accept=".zip,.codeblocks.zip" @change="handleFileSelect" />
-                        <Button variant="secondary" @click="$refs.fileInput.click()">{{ $t('ImportExport.ChooseFile') }}</Button>
+                        <input
+                            type="file"
+                            ref="fileInput"
+                            class="tw-hidden"
+                            accept=".zip,.codeblocks.zip"
+                            @change="handleFileSelect"
+                        />
+                        <Button variant="secondary" @click="$refs.fileInput.click()">{{
+                            $t('ImportExport.ChooseFile')
+                        }}</Button>
                     </div>
 
                     <div v-else class="tw-space-y-4">
                         <div class="tw-max-h-[50vh] tw-overflow-y-auto tw-pr-2 modern-scrollbar">
-                             <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
-                                <h3 class="tw-text-sm tw-font-medium">{{ $t('ImportExport.SelectBlocksImport') }}</h3>
+                            <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
+                                <h3 class="tw-text-sm tw-font-medium">
+                                    {{ $t('ImportExport.SelectBlocksImport') }}
+                                </h3>
                                 <div class="tw-flex tw-items-center tw-gap-2">
-                                    <Button variant="ghost" size="sm" @click="selectAllImport(true)">{{ $t('ImportExport.SelectAll') }}</Button>
-                                    <Button variant="ghost" size="sm" @click="selectAllImport(false)">{{ $t('ImportExport.DeselectAll') }}</Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        @click="selectAllImport(true)"
+                                        >{{ $t('ImportExport.SelectAll') }}</Button
+                                    >
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        @click="selectAllImport(false)"
+                                        >{{ $t('ImportExport.DeselectAll') }}</Button
+                                    >
                                 </div>
                             </div>
 
                             <div class="tw-space-y-2">
-                                <div v-for="(block, index) in importData.blocks" :key="index" class="tw-flex tw-items-center tw-gap-3 tw-p-2 tw-rounded-md hover:tw-bg-accent/50">
-                                    <Checkbox :id="'import-' + index" :model-value="selectedImportIndexes.includes(index)" @update:model-value="toggleImportBlock(index, $event)" />
-                                    <Label :for="'import-' + index" class="tw-flex-1 tw-cursor-pointer">
-                                        <div class="tw-font-medium tw-text-sm">{{ block.name || block.type }}</div>
-                                        <div class="tw-text-xs tw-text-muted-foreground">{{ block.type }}</div>
+                                <div
+                                    v-for="(block, index) in importData.blocks"
+                                    :key="index"
+                                    class="tw-flex tw-items-center tw-gap-3 tw-p-2 tw-rounded-md hover:tw-bg-accent/50"
+                                >
+                                    <Checkbox
+                                        :id="'import-' + index"
+                                        :model-value="selectedImportIndexes.includes(index)"
+                                        @update:model-value="toggleImportBlock(index, $event)"
+                                    />
+                                    <Label
+                                        :for="'import-' + index"
+                                        class="tw-flex-1 tw-cursor-pointer"
+                                    >
+                                        <div class="tw-font-medium tw-text-sm">
+                                            {{ block.name || block.type }}
+                                        </div>
+                                        <div class="tw-text-xs tw-text-muted-foreground">
+                                            {{ block.type }}
+                                        </div>
                                     </Label>
                                 </div>
                             </div>
 
                             <div class="tw-mt-6 tw-pt-6 tw-border-t">
-                                <h3 class="tw-text-sm tw-font-medium tw-mb-4">{{ $t('ImportExport.Settings') }}</h3>
+                                <h3 class="tw-text-sm tw-font-medium tw-mb-4">
+                                    {{ $t('ImportExport.Settings') }}
+                                </h3>
                                 <div class="tw-flex tw-items-center tw-gap-3 tw-mb-4">
-                                    <Checkbox id="import-settings" v-model:model-value="importSettings" />
-                                    <Label for="import-settings" class="tw-text-sm">{{ $t('ImportExport.IncludeSettings') }}</Label>
+                                    <Checkbox
+                                        id="import-settings"
+                                        v-model:model-value="importSettings"
+                                    />
+                                    <Label for="import-settings" class="tw-text-sm">{{
+                                        $t('ImportExport.IncludeSettings')
+                                    }}</Label>
                                 </div>
 
                                 <div class="tw-space-y-2">
-                                    <Label class="tw-text-xs tw-text-muted-foreground">{{ $t('ImportExport.ImportMode') }}</Label>
+                                    <Label class="tw-text-xs tw-text-muted-foreground">{{
+                                        $t('ImportExport.ImportMode')
+                                    }}</Label>
                                     <RadioGroup v-model="importMode" class="tw-flex tw-gap-4">
                                         <div class="tw-flex tw-items-center tw-space-x-2">
                                             <RadioGroupItem value="append" id="mode-append" />
-                                            <Label for="mode-append" class="tw-text-sm">{{ $t('ImportExport.Append') }}</Label>
+                                            <Label for="mode-append" class="tw-text-sm">{{
+                                                $t('ImportExport.Append')
+                                            }}</Label>
                                         </div>
                                         <div class="tw-flex tw-items-center tw-space-x-2">
                                             <RadioGroupItem value="prepend" id="mode-prepend" />
-                                            <Label for="mode-prepend" class="tw-text-sm">{{ $t('ImportExport.Prepend') }}</Label>
+                                            <Label for="mode-prepend" class="tw-text-sm">{{
+                                                $t('ImportExport.Prepend')
+                                            }}</Label>
                                         </div>
                                         <div class="tw-flex tw-items-center tw-space-x-2">
                                             <RadioGroupItem value="override" id="mode-override" />
-                                            <Label for="mode-override" class="tw-text-sm">{{ $t('ImportExport.Override') }}</Label>
+                                            <Label for="mode-override" class="tw-text-sm">{{
+                                                $t('ImportExport.Override')
+                                            }}</Label>
                                         </div>
                                     </RadioGroup>
                                 </div>
@@ -102,10 +181,19 @@
                         </div>
 
                         <div class="tw-flex tw-justify-between tw-pt-4 tw-border-t">
-                            <Button variant="ghost" @click="importData = null">{{ $t('ImportExport.Back') }}</Button>
+                            <Button variant="ghost" @click="importData = null">{{
+                                $t('ImportExport.Back')
+                            }}</Button>
                             <div class="tw-flex tw-gap-3">
-                                <Button variant="outline" @click="$emit('update:open', false)">{{ $t('ImportExport.Cancel') }}</Button>
-                                <Button :disabled="selectedImportIndexes.length === 0 && !importSettings" @click="handleImport">
+                                <Button variant="outline" @click="$emit('update:open', false)">{{
+                                    $t('ImportExport.Cancel')
+                                }}</Button>
+                                <Button
+                                    :disabled="
+                                        selectedImportIndexes.length === 0 && !importSettings
+                                    "
+                                    @click="handleImport"
+                                >
                                     {{ $t('ImportExport.RunImport') }}
                                 </Button>
                             </div>
@@ -119,7 +207,14 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogScrollContent } from '@/shadcn/ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogScrollContent,
+} from '@/shadcn/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shadcn/ui/tabs'
 import { Checkbox } from '@/shadcn/ui/checkbox'
 import { Button } from '@/shadcn/ui/button'
@@ -149,15 +244,19 @@ const importSettings = ref(true)
 const importMode = ref<'append' | 'prepend' | 'override'>('append')
 
 // Initialize selections when dialog opens or blocks change
-watch([() => props.open, blocks], ([open, newBlocks]) => {
-    if (open && newBlocks.length > 0 && selectedBlockUuids.value.length === 0) {
-        selectedBlockUuids.value = newBlocks.map(b => b.uuid)
-    }
-}, { immediate: true })
+watch(
+    [() => props.open, blocks],
+    ([open, newBlocks]) => {
+        if (open && newBlocks.length > 0 && selectedBlockUuids.value.length === 0) {
+            selectedBlockUuids.value = newBlocks.map((b) => b.uuid)
+        }
+    },
+    { immediate: true }
+)
 
 function selectAll(val: boolean) {
     if (val) {
-        selectedBlockUuids.value = blocks.value.map(b => b.uuid)
+        selectedBlockUuids.value = blocks.value.map((b) => b.uuid)
     } else {
         selectedBlockUuids.value = []
     }
@@ -166,9 +265,13 @@ function selectAll(val: boolean) {
 function toggleBlock(uuid: string, checked: boolean | 'indeterminate') {
     const index = selectedBlockUuids.value.indexOf(uuid)
     if (checked === true) {
-        if (index === -1) selectedBlockUuids.value.push(uuid)
+        if (index === -1) {
+            selectedBlockUuids.value.push(uuid)
+        }
     } else if (checked === false) {
-        if (index !== -1) selectedBlockUuids.value.splice(index, 1)
+        if (index !== -1) {
+            selectedBlockUuids.value.splice(index, 1)
+        }
     }
 }
 
@@ -196,9 +299,13 @@ function selectAllImport(val: boolean) {
 function toggleImportBlock(index: number, checked: boolean | 'indeterminate') {
     const idx = selectedImportIndexes.value.indexOf(index)
     if (checked === true) {
-        if (idx === -1) selectedImportIndexes.value.push(index)
+        if (idx === -1) {
+            selectedImportIndexes.value.push(index)
+        }
     } else if (checked === false) {
-        if (idx !== -1) selectedImportIndexes.value.splice(idx, 1)
+        if (idx !== -1) {
+            selectedImportIndexes.value.splice(idx, 1)
+        }
     }
 }
 
@@ -227,7 +334,9 @@ async function processFile(file: File) {
 }
 
 function handleImport() {
-    if (!importData.value) return
+    if (!importData.value) {
+        return
+    }
 
     const main = props.mainBlock
 
@@ -250,7 +359,7 @@ function handleImport() {
         main.randomizer = s.randomizer
     }
 
-    const newBlocks: BlockData[] = selectedImportIndexes.value.map(idx => {
+    const newBlocks: BlockData[] = selectedImportIndexes.value.map((idx) => {
         const b = importData.value.blocks[idx]
         const data: any = {
             ...b.metadata,
@@ -265,18 +374,18 @@ function handleImport() {
             noContent: !b.content,
             readyCount: 0,
             errors: [],
-            lineCountHint: -1
+            lineCountHint: -1,
         }
 
         // Ensure flags are set, prioritizing metadata if available, otherwise inferring from type
-        data.static = data.static ?? (b.type === KnownBlockTypes.BLOCKSTATIC)
-        data.hidden = data.hidden ?? (b.type === KnownBlockTypes.BLOCKHIDDEN)
+        data.static = data.static ?? b.type === KnownBlockTypes.BLOCKSTATIC
+        data.hidden = data.hidden ?? b.type === KnownBlockTypes.BLOCKHIDDEN
         data.readonly = data.readonly ?? (data.static || data.hidden)
-        data.hasCode = data.hasCode ?? (
-            b.type === KnownBlockTypes.BLOCK ||
-            b.type === KnownBlockTypes.BLOCKSTATIC ||
-            b.type === KnownBlockTypes.BLOCKHIDDEN
-        )
+        data.hasCode =
+            data.hasCode ??
+            (b.type === KnownBlockTypes.BLOCK ||
+                b.type === KnownBlockTypes.BLOCKSTATIC ||
+                b.type === KnownBlockTypes.BLOCKHIDDEN)
         // Default to '101' only if it's truly missing, to avoid '100' which is deprecated
         if (!data.version) {
             data.version = '101'
@@ -294,8 +403,8 @@ function handleImport() {
     }
 
     // Re-index
-    main.blocks.forEach((b, i) => b.id = i)
-    
+    main.blocks.forEach((b, i) => (b.id = i))
+
     emit('imported')
     emit('update:open', false)
 }

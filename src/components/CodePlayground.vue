@@ -16,11 +16,13 @@
                     </TooltipTrigger>
                     <TooltipContent class="tw-max-w-xs">
                         <p>{{ l('CodePlayground.UpgradeToV102Tooltip') }}</p>
-                        <p class="tw-mt-1 tw-font-semibold tw-text-yellow-400">{{ l('CodePlayground.UpgradeToV102TooltipWarning') }}</p>
+                        <p class="tw-mt-1 tw-font-semibold tw-text-yellow-400">
+                            {{ l('CodePlayground.UpgradeToV102TooltipWarning') }}
+                        </p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-        <div
+            <div
                 class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse"
                 v-if="editMode"
             >
@@ -171,7 +173,15 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/shadcn/ui/alert-dialog'
-import { ChevronUp, ChevronDown, Maximize, Expand, Shrink, AlertTriangle, Wand2 } from 'lucide-vue-next'
+import {
+    ChevronUp,
+    ChevronDown,
+    Maximize,
+    Expand,
+    Shrink,
+    AlertTriangle,
+    Wand2,
+} from 'lucide-vue-next'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 
 export interface ICodePlaygroundOptions {
@@ -290,7 +300,9 @@ const canUpgradeToV102: ComputedRef<boolean> = computed(
 )
 
 function upgradeToV102(): void {
-    if (!canUpgradeToV102.value) return
+    if (!canUpgradeToV102.value) {
+        return
+    }
     block.value.content = migrateV101ToV102(block.value.content)
     block.value.version = '102'
     ;(block.value as any).recreateScriptObject?.()
@@ -389,7 +401,9 @@ function resetBeforeRun(): void {
             console.i('!!! DO INIT !!!')
             if (block.value.obj !== null) {
                 if (canvas.value === undefined) {
-                    console.i('Canvas not available for doInit, skipping (will be handled by mount)')
+                    console.i(
+                        'Canvas not available for doInit, skipping (will be handled by mount)'
+                    )
                     return true
                 }
                 console.log('DATA: CanvasElement', canvas.value)

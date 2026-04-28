@@ -305,7 +305,7 @@ const removeBlock = (idx: number): void => {
 const addDialogOpen = ref(false)
 const pendingInsertPosition = ref<number | null>(null)
 
- const blockTypeChoices = computed((): IListItemData[] => [
+const blockTypeChoices = computed((): IListItemData[] => [
     { label: l('CodeBlockContainer.Canvas'), value: KnownBlockTypes.PLAYGROUND },
     { label: l('CodeBlockContainer.Library'), value: KnownBlockTypes.LIBRARY },
     { label: l('CodeBlockContainer.DataBlock'), value: KnownBlockTypes.DATA },
@@ -348,15 +348,19 @@ useIntersectionObserver(
         // Sentinel is below the viewport when runner is stuck
         isStuck.value = !entry.isIntersecting && entry.boundingClientRect.top > 0
     },
-    { threshold: 0 },
+    { threshold: 0 }
 )
 
 watch(isRunnerSticky, (val) => {
-    if (!val) isStuck.value = false
+    if (!val) {
+        isStuck.value = false
+    }
 })
 
 const confirmAddBlock = (type: KnownBlockTypes): void => {
-    if (!editMode) return
+    if (!editMode) {
+        return
+    }
     if (pendingInsertPosition.value !== null) {
         blockInfo.value.insertBlockAt(pendingInsertPosition.value, type)
     } else {
@@ -368,7 +372,7 @@ const confirmAddBlock = (type: KnownBlockTypes): void => {
 // --- Stale Output Caching ---
 const cachedOutputHTML = ref('')
 const isShowingStale = ref(false)
-const justUpdated = ref(false) 
+const justUpdated = ref(false)
 
 // 1. Wrap the main run function to catch the state BEFORE it wipes
 const handleRun = () => {
@@ -376,7 +380,7 @@ const handleRun = () => {
         cachedOutputHTML.value = outputHTML.value
         isShowingStale.value = true
     }
-    run() 
+    run()
 }
 
 // 2. Wrap the playground run just in case it shares the same output box
@@ -408,7 +412,9 @@ const runnerRef = ref<HTMLElement | null>(null)
 const contentEndRef = ref<HTMLElement | null>(null)
 
 const getScrollParent = (node: HTMLElement | null): HTMLElement | Window => {
-    if (!node) return window
+    if (!node) {
+        return window
+    }
     let parent = node.parentElement
     while (parent) {
         const style = window.getComputedStyle(parent)
@@ -440,8 +446,10 @@ watch(isReady, (ready) => {
 
 useResizeObserver(runnerRef, (entries) => {
     const entry = entries[0]
-    if (!entry) return
-    
+    if (!entry) {
+        return
+    }
+
     const currentHeight = entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height
     const delta = currentHeight - previousRunnerHeight
 
@@ -455,11 +463,13 @@ useResizeObserver(runnerRef, (entries) => {
 
     // We only need to auto-scroll if the panel is expanding.
     // If it shrinks (clearing output), let it collapse naturally.
-    if (delta <= 0 || !contentEndRef.value) return 
+    if (delta <= 0 || !contentEndRef.value) {
+        return
+    }
 
     const scroller = getScrollParent(runnerRef.value)
     const rect = contentEndRef.value.getBoundingClientRect()
-    
+
     let isBottomVisible = false
     if (scroller === window) {
         isBottomVisible = rect.top <= window.innerHeight + 50
@@ -468,262 +478,273 @@ useResizeObserver(runnerRef, (entries) => {
         isBottomVisible = rect.top <= scrollerRect.bottom + 50
     }
 
-    // Only apply the scroll compensation if they are actively looking at the bottom, 
+    // Only apply the scroll compensation if they are actively looking at the bottom,
     // OR if they were looking at the bottom right before clicking run.
     if (isBottomVisible || wasAtBottom) {
         if (scroller === window) {
             window.scrollBy({ top: delta, behavior: 'auto' })
         } else {
-            (scroller as HTMLElement).scrollTop += delta
+            ;(scroller as HTMLElement).scrollTop += delta
         }
     }
 })
 </script>
 
 <template>
-  <div
-    :class="`codeblocks ${addonClass}  ${backgroundColorClass} tw-mx-2 tw-mb-4`"
-    :data-question="blockInfo.id"
-    :uuid="blockInfo.uuid"
-  >
-    <CodeBlocksSettings
-      v-if="editMode"
-      :options="options"
-      :appID="appID"
-      @compiler-change="onCompilerChange"
-      @compiler-version-change="onCompilerVersionChange"
-      @run-state-change="onRunStateChange"
-      @continuous-compile-change="onContinousCompileStateChange"
-      @message-passing-change="onMessagePassingChange"
-      @keep-alive-change="onKeepAliveChange"
-      @persistent-arguments-change="onPersistentArgumentsChange"
-      @language-change="onLanguageChange"
-      @character-limit-change="onCharacterLimitChange"
-      @timeout-change="onTimeoutChange"
-      @worker-libs-change="onWorkerLibChange"
-      @dom-libs-change="onDomLibChange"
-      @theme-change="onThemeChange"
-      @output-parser-change="onOutputParserChange"
-      @emit-ast-change="onEmitASTChange"
-      @expand-all="onExpandAll"
-      @collapse-all="onCollapseAll"
-    />
-    <CodeBlockContainer
-      :appID="appID"
-      :blockID="block.uuid"
-      :editMode="editMode"
-      v-for="block in blocks"
-      :key="block.uuid"
-      @type-change="onTypeChange"
-      @visible-lines-change="onVisibleLinesChange"
-      @placement-change="onPlacementChange"
-      @script-version-change="onScriptVersionChange"
-      @move-up="moveUp"
-      @move-down="moveDown"
-      @remove-block="removeBlock"
-      @auto-reset-change="onSetAutoReset"
-      @reload-resources-change="onReloadResources"
-      @generate-template-change="onSetGenerateTemplate"
-      @change-order="onChangeOrder"
-      @add-above="onAddAbove"
-      @add-below="onAddBelow"
-    >
-      <CodeBlock
-        v-if="block.hasCode"
-        :appID="appID"
-        :blockID="block.uuid"
-        :theme="themeForBlock(block)"
-        :mode="mimeType"
-        :visibleLines="block.visibleLines"
-        :editMode="editMode"
-        :readonly="readonly"
-        :tagSet="activeTagSet"
-        :emitWhenTypingInViewMode="continuousCompile"
-        :code-split="codeSplit"
-        @ready="blockBecameReady"
-        @build="handleRun"
-        @code-changed-in-view-mode="onViewCodeChange"
-      />
-      <CodePlayground
-        v-else-if="block.type == 'PLAYGROUND'"
-        :appID="appID"
-        :blockID="block.uuid"
-        :editMode="editMode"
-        :finalOutputObject="finalOutputObject"
-        :theme="themeForBlock(block)"
-        :tagSet="activeTagSet"
-        @changeOutput="onPlaygroundChangedOutput"
-        @ready="blockBecameReady"
-        @run="handlePlaygroundRun"
-        :eventHub="eventHub"
-      />
-
-      <SimpleText
-        v-else-if="block.type == 'TEXT'"
-        :appID="appID"
-        :blockID="block.uuid"
-        :editMode="editMode"
-        :name="`block[${block.parentID}][${block.id}]`"
-        :scopeUUID="block.scopeUUID"
-        :tagSet="activeTagSet"
-        :language="language"
-        @ready="blockBecameReady"
-      />
-      <DataBlock
-        v-else-if="block.type == 'DATA'"
-        :appID="appID"
-        :blockID="block.uuid"
-        :editMode="editMode"
-        :finalOutputObject="finalOutputObject"
-        :theme="themeForBlock(block)"
-        :tagSet="activeTagSet"
-        @ready="blockBecameReady"
-        :eventHub="eventHub"
-      />
-      <LibraryBlock
-        v-else-if="block.type == 'LIBRARY'"
-        :appID="appID"
-        :blockID="block.uuid"
-        :editMode="editMode"
-        :theme="themeForBlock(block)"
-        @ready="blockBecameReady"
-        :eventHub="eventHub"
-      />
-    </CodeBlockContainer>
-
-    <div class="tw-flex tw-justify-center tw-mt-2 tw-mb-4" v-if="editMode">
-      <Button @click="addNewBlock">
-        {{ $t("CodeBlocks.AddBlock") }}
-        <CopyPlus class="tw-ml-2 tw-h-4 tw-w-4" />
-      </Button>
-    </div>
-
-    <Dialog v-model:open="addDialogOpen">
-      <DialogContent class="tw-max-w-sm">
-        <DialogHeader>
-          <DialogTitle>{{ $t("CodeBlocks.SelectBlockType") }}</DialogTitle>
-          <DialogDescription>{{
-            $t("CodeBlocks.SelectBlockTypeDesc")
-          }}</DialogDescription>
-        </DialogHeader>
-        <div class="tw-flex tw-flex-col tw-gap-2 tw-py-2">
-          <Button
-            v-for="choice in blockTypeChoices"
-            :key="choice.value"
-            variant="outline"
-            class="tw-justify-start"
-            @click="confirmAddBlock(choice.value)"
-            >{{ choice.label }}</Button
-          >
-        </div>
-      </DialogContent>
-    </Dialog>
-
-    <div ref="contentEndRef" class="tw-h-px tw-w-full tw-pointer-events-none" aria-hidden="true" />
-
     <div
-      ref="runnerRef"
-      :class="`runner tw-mt-4 ${editMode ? 'tw-pt-4 tw-mx-8' : ''} ${
-        isRunnerSticky ? 'runner--sticky' : ''
-      } ${isStuck ? 'runner--stuck' : ''}`"
-      v-if="canRun"
-      id="runContainer"
-      :data-question="blockInfo.id"
-    >
-      <div
-        class="runnerState tw-flex tw-items-center tw-gap-2"
-        id="stateBox"
+        :class="`codeblocks ${addonClass}  ${backgroundColorClass} tw-mx-2 tw-mb-4`"
         :data-question="blockInfo.id"
-      >
-        <CButton
-          id="allow_run_button"
-          :loading="!isReady"
-          :disabled="!isReady"
-          @click="handleRun"
-          :data-question="blockInfo.id"
-          class="tw-w-[190px] tw-rounded-none tw-shrink-0"
-          :icon="Play"
-          fill="white"
+        :uuid="blockInfo.uuid"
+    >
+        <CodeBlocksSettings
+            v-if="editMode"
+            :options="options"
+            :appID="appID"
+            @compiler-change="onCompilerChange"
+            @compiler-version-change="onCompilerVersionChange"
+            @run-state-change="onRunStateChange"
+            @continuous-compile-change="onContinousCompileStateChange"
+            @message-passing-change="onMessagePassingChange"
+            @keep-alive-change="onKeepAliveChange"
+            @persistent-arguments-change="onPersistentArgumentsChange"
+            @language-change="onLanguageChange"
+            @character-limit-change="onCharacterLimitChange"
+            @timeout-change="onTimeoutChange"
+            @worker-libs-change="onWorkerLibChange"
+            @dom-libs-change="onDomLibChange"
+            @theme-change="onThemeChange"
+            @output-parser-change="onOutputParserChange"
+            @emit-ast-change="onEmitASTChange"
+            @expand-all="onExpandAll"
+            @collapse-all="onCollapseAll"
+        />
+        <CodeBlockContainer
+            :appID="appID"
+            :blockID="block.uuid"
+            :editMode="editMode"
+            v-for="block in blocks"
+            :key="block.uuid"
+            @type-change="onTypeChange"
+            @visible-lines-change="onVisibleLinesChange"
+            @placement-change="onPlacementChange"
+            @script-version-change="onScriptVersionChange"
+            @move-up="moveUp"
+            @move-down="moveDown"
+            @remove-block="removeBlock"
+            @auto-reset-change="onSetAutoReset"
+            @reload-resources-change="onReloadResources"
+            @generate-template-change="onSetGenerateTemplate"
+            @change-order="onChangeOrder"
+            @add-above="onAddAbove"
+            @add-below="onAddBelow"
         >
-          {{ $t("CodeBlocks.run")
-          }}<span v-if="editMode" class="tw-ml-1">[{{ $t("CodeBlocks.run_key") }}]</span>
-        </CButton>
-        <transition
-          appear
-          enter-active-class="animated fadeIn"
-          leave-active-class="animated fadeOut"
-        >
-          <CButton
-            v-show="canStop"
-            id="cancel_button"
-            variant="destructive"
-            fill="white"
-            :icon="Square"
-            :data-question="blockInfo.id"
-            class="tw-rounded-none tw-shrink-0"
-            @click="stop"
-          >
-            {{ $t("CodeBlocks.stop") }}
-          </CButton>
-        </transition>
-        <transition
-          appear
-          enter-active-class="animated fadeIn"
-          leave-active-class="animated fadeOut"
-        >
-          <div class="globalState tw-grow tw-truncate" v-show="showGlobalMessages">
-            <div id="message" v-html="global.compilerState.globalStateMessage"></div>
-          </div>
-        </transition>
-        <div class="tw-ml-auto tw-flex tw-items-center tw-gap-1 tw-shrink-0" id="makeRunStick">
-          <button
-            v-if="hasOutput"
-            class="tw-flex tw-items-center tw-justify-center tw-rounded tw-p-1 tw-text-muted-foreground tw-transition-colors hover:tw-text-destructive hover:tw-bg-destructive/10"
-            :title="$t('CodeBlocks.clear_output')"
-            @click="resetOutput"
-          >
-            <Trash2 class="tw-h-4 tw-w-4" />
-          </button>
-          <Switch
-            v-model="isRunnerSticky"
-            class="stickySwitch"
-            :title="
-              isRunnerSticky ? $t('CodeBlocks.unpin_runner') : $t('CodeBlocks.pin_runner')
-            "
-          >
-            <template #thumb>
-              <Pin
-                class="tw-h-2.5 tw-w-2.5 tw-transition-colors"
-                :class="isRunnerSticky ? 'tw-text-primary' : 'tw-text-muted-foreground'"
-              />
-            </template>
-          </Switch>
+            <CodeBlock
+                v-if="block.hasCode"
+                :appID="appID"
+                :blockID="block.uuid"
+                :theme="themeForBlock(block)"
+                :mode="mimeType"
+                :visibleLines="block.visibleLines"
+                :editMode="editMode"
+                :readonly="readonly"
+                :tagSet="activeTagSet"
+                :emitWhenTypingInViewMode="continuousCompile"
+                :code-split="codeSplit"
+                @ready="blockBecameReady"
+                @build="handleRun"
+                @code-changed-in-view-mode="onViewCodeChange"
+            />
+            <CodePlayground
+                v-else-if="block.type == 'PLAYGROUND'"
+                :appID="appID"
+                :blockID="block.uuid"
+                :editMode="editMode"
+                :finalOutputObject="finalOutputObject"
+                :theme="themeForBlock(block)"
+                :tagSet="activeTagSet"
+                @changeOutput="onPlaygroundChangedOutput"
+                @ready="blockBecameReady"
+                @run="handlePlaygroundRun"
+                :eventHub="eventHub"
+            />
+
+            <SimpleText
+                v-else-if="block.type == 'TEXT'"
+                :appID="appID"
+                :blockID="block.uuid"
+                :editMode="editMode"
+                :name="`block[${block.parentID}][${block.id}]`"
+                :scopeUUID="block.scopeUUID"
+                :tagSet="activeTagSet"
+                :language="language"
+                @ready="blockBecameReady"
+            />
+            <DataBlock
+                v-else-if="block.type == 'DATA'"
+                :appID="appID"
+                :blockID="block.uuid"
+                :editMode="editMode"
+                :finalOutputObject="finalOutputObject"
+                :theme="themeForBlock(block)"
+                :tagSet="activeTagSet"
+                @ready="blockBecameReady"
+                :eventHub="eventHub"
+            />
+            <LibraryBlock
+                v-else-if="block.type == 'LIBRARY'"
+                :appID="appID"
+                :blockID="block.uuid"
+                :editMode="editMode"
+                :theme="themeForBlock(block)"
+                @ready="blockBecameReady"
+                :eventHub="eventHub"
+            />
+        </CodeBlockContainer>
+
+        <div class="tw-flex tw-justify-center tw-mt-2 tw-mb-4" v-if="editMode">
+            <Button @click="addNewBlock">
+                {{ $t('CodeBlocks.AddBlock') }}
+                <CopyPlus class="tw-ml-2 tw-h-4 tw-w-4" />
+            </Button>
         </div>
-      </div>
-      <Transition
-        @before-enter="onBeforeEnter"
-        @enter="onEnter"
-        @after-enter="onAfterEnter"
-        @before-leave="onBeforeLeave"
-        @leave="onLeave"
-        @after-leave="onAfterLeave"
-      >
-        <pre
-          :id="`${blockInfo.id}Output`"
-          ref="outputElement"
-          :class="[
-            'output tw-transition-all tw-duration-300',
-            { 'is-flashing': justUpdated && !isShowingStale }
-          ]"
-          v-if="hasOutput || isShowingStale"
-        ><div id='out' v-html='isShowingStale ? cachedOutputHTML : outputHTML' :class="[
+
+        <Dialog v-model:open="addDialogOpen">
+            <DialogContent class="tw-max-w-sm">
+                <DialogHeader>
+                    <DialogTitle>{{ $t('CodeBlocks.SelectBlockType') }}</DialogTitle>
+                    <DialogDescription>{{
+                        $t('CodeBlocks.SelectBlockTypeDesc')
+                    }}</DialogDescription>
+                </DialogHeader>
+                <div class="tw-flex tw-flex-col tw-gap-2 tw-py-2">
+                    <Button
+                        v-for="choice in blockTypeChoices"
+                        :key="choice.value"
+                        variant="outline"
+                        class="tw-justify-start"
+                        @click="confirmAddBlock(choice.value)"
+                        >{{ choice.label }}</Button
+                    >
+                </div>
+            </DialogContent>
+        </Dialog>
+
+        <div
+            ref="contentEndRef"
+            class="tw-h-px tw-w-full tw-pointer-events-none"
+            aria-hidden="true"
+        />
+
+        <div
+            ref="runnerRef"
+            :class="`runner tw-mt-4 ${editMode ? 'tw-pt-4 tw-mx-8' : ''} ${
+                isRunnerSticky ? 'runner--sticky' : ''
+            } ${isStuck ? 'runner--stuck' : ''}`"
+            v-if="canRun"
+            id="runContainer"
+            :data-question="blockInfo.id"
+        >
+            <div
+                class="runnerState tw-flex tw-items-center tw-gap-2"
+                id="stateBox"
+                :data-question="blockInfo.id"
+            >
+                <CButton
+                    id="allow_run_button"
+                    :loading="!isReady"
+                    :disabled="!isReady"
+                    @click="handleRun"
+                    :data-question="blockInfo.id"
+                    class="tw-w-[190px] tw-rounded-none tw-shrink-0"
+                    :icon="Play"
+                    fill="white"
+                >
+                    {{ $t('CodeBlocks.run')
+                    }}<span v-if="editMode" class="tw-ml-1">[{{ $t('CodeBlocks.run_key') }}]</span>
+                </CButton>
+                <transition
+                    appear
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
+                >
+                    <CButton
+                        v-show="canStop"
+                        id="cancel_button"
+                        variant="destructive"
+                        fill="white"
+                        :icon="Square"
+                        :data-question="blockInfo.id"
+                        class="tw-rounded-none tw-shrink-0"
+                        @click="stop"
+                    >
+                        {{ $t('CodeBlocks.stop') }}
+                    </CButton>
+                </transition>
+                <transition
+                    appear
+                    enter-active-class="animated fadeIn"
+                    leave-active-class="animated fadeOut"
+                >
+                    <div class="globalState tw-grow tw-truncate" v-show="showGlobalMessages">
+                        <div id="message" v-html="global.compilerState.globalStateMessage"></div>
+                    </div>
+                </transition>
+                <div
+                    class="tw-ml-auto tw-flex tw-items-center tw-gap-1 tw-shrink-0"
+                    id="makeRunStick"
+                >
+                    <button
+                        v-if="hasOutput"
+                        class="tw-flex tw-items-center tw-justify-center tw-rounded tw-p-1 tw-text-muted-foreground tw-transition-colors hover:tw-text-destructive hover:tw-bg-destructive/10"
+                        :title="$t('CodeBlocks.clear_output')"
+                        @click="resetOutput"
+                    >
+                        <Trash2 class="tw-h-4 tw-w-4" />
+                    </button>
+                    <Switch
+                        v-model="isRunnerSticky"
+                        class="stickySwitch"
+                        :title="
+                            isRunnerSticky
+                                ? $t('CodeBlocks.unpin_runner')
+                                : $t('CodeBlocks.pin_runner')
+                        "
+                    >
+                        <template #thumb>
+                            <Pin
+                                class="tw-h-2.5 tw-w-2.5 tw-transition-colors"
+                                :class="
+                                    isRunnerSticky ? 'tw-text-primary' : 'tw-text-muted-foreground'
+                                "
+                            />
+                        </template>
+                    </Switch>
+                </div>
+            </div>
+            <Transition
+                @before-enter="onBeforeEnter"
+                @enter="onEnter"
+                @after-enter="onAfterEnter"
+                @before-leave="onBeforeLeave"
+                @leave="onLeave"
+                @after-leave="onAfterLeave"
+            >
+                <pre
+                    :id="`${blockInfo.id}Output`"
+                    ref="outputElement"
+                    :class="[
+                        'output tw-transition-all tw-duration-300',
+                        { 'is-flashing': justUpdated && !isShowingStale },
+                    ]"
+                    v-if="hasOutput || isShowingStale"
+                ><div id='out' v-html='isShowingStale ? cachedOutputHTML : outputHTML' :class="[
                 'outtext',
                 { 'tw-opacity-40 tw-pointer-events-none tw-select-none tw-blur-sm': isShowingStale },            
           ]"></div></pre>
-      </Transition>
+            </Transition>
+        </div>
+        <div ref="stickySentinelRef" class="tw-h-px tw-pointer-events-none" aria-hidden="true" />
     </div>
-    <div ref="stickySentinelRef" class="tw-h-px tw-pointer-events-none" aria-hidden="true" />
-  </div>
 </template>
 
 <style lang="sass">
@@ -806,18 +827,18 @@ div.runner
     0%
         background-color: rgba(59, 130, 246, 0.1)
     100%
-        background-color: white // Your standard output background color     
+        background-color: white // Your standard output background color
 
 @keyframes output-update-text-flash
     0%
         opacity: 0.1
         filter: brightness(1000%) contrast(650%)
-    100%   
-        opacity: 1 
+    100%
+        opacity: 1
         filter: brightness(100%)
 
 .output.is-flashing
     animation: output-update-flash 0.4s ease-out
-    .outtext    
+    .outtext
         animation: output-update-text-flash 0.4s ease-out
 </style>

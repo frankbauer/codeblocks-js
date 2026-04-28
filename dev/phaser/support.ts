@@ -354,8 +354,8 @@ class AnimatedSprite extends BaseAnimatedSprite {
             (config.originY
                 ? config.originY
                 : config.tile
-                ? (config.y - config.tile.bottom.y) / s.height + 1
-                : 0.5) +
+                  ? (config.y - config.tile.bottom.y) / s.height + 1
+                  : 0.5) +
             shiftY / s.height
         const ox = config.originX ? config.originX : 0.5
         s.setOrigin(ox, oy)

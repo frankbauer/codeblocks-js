@@ -32,6 +32,6 @@ export class BlockLoadManager implements IBlockloadManager {
 
 export const blockLoader = new BlockLoadManager()
 
-export default function(loaders: { [index: string]: IBlockloadManager }) {
+export default function (loaders: { [index: string]: IBlockloadManager }) {
     loaders[blockLoader.blockTag] = blockLoader
 }

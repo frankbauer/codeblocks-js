@@ -444,7 +444,7 @@ export function codeBlockSetup(
                         info_callback: logInfo,
                         err_callback: logError,
                         ast_callback: astCallback,
-                        get sendAST(){
+                        get sendAST() {
                             return emitAST.value
                         },
                         compileFailedCallback: processDiagnostics,
