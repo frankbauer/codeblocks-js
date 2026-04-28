@@ -897,7 +897,7 @@ const filteredCopy = (objIn: object, extended = true, path = 'this'): object => 
 }
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .cbc-toolbar
     // Collapsed: opaque type-color bar; the white gradient overlay is always present
     // but only visible when the base color is opaque (it fades with the base on hover).
