@@ -25,7 +25,7 @@
 
                         <div class="tw-space-y-2">
                             <div v-for="block in blocks" :key="block.uuid" class="tw-flex tw-items-center tw-gap-3 tw-p-2 tw-rounded-md hover:tw-bg-accent/50">
-                                <Checkbox :id="'export-' + block.uuid" :checked="selectedBlockUuids.includes(block.uuid)" @update:checked="toggleBlock(block.uuid, $event)" />
+                                <Checkbox :id="'export-' + block.uuid" :model-value="selectedBlockUuids.includes(block.uuid)" @update:model-value="toggleBlock(block.uuid, $event)" />
                                 <Label :for="'export-' + block.uuid" class="tw-flex-1 tw-cursor-pointer">
                                     <div class="tw-font-medium tw-text-sm" v-html="block.descriptiveName"></div>
                                     <div class="tw-text-xs tw-text-muted-foreground">{{ block.type }}</div>
@@ -66,7 +66,7 @@
 
                             <div class="tw-space-y-2">
                                 <div v-for="(block, index) in importData.blocks" :key="index" class="tw-flex tw-items-center tw-gap-3 tw-p-2 tw-rounded-md hover:tw-bg-accent/50">
-                                    <Checkbox :id="'import-' + index" :checked="selectedImportIndexes.includes(index)" @update:checked="toggleImportBlock(index, $event)" />
+                                    <Checkbox :id="'import-' + index" :model-value="selectedImportIndexes.includes(index)" @update:model-value="toggleImportBlock(index, $event)" />
                                     <Label :for="'import-' + index" class="tw-flex-1 tw-cursor-pointer">
                                         <div class="tw-font-medium tw-text-sm">{{ block.name || block.type }}</div>
                                         <div class="tw-text-xs tw-text-muted-foreground">{{ block.type }}</div>
@@ -77,7 +77,7 @@
                             <div class="tw-mt-6 tw-pt-6 tw-border-t">
                                 <h3 class="tw-text-sm tw-font-medium tw-mb-4">{{ $t('ImportExport.Settings') }}</h3>
                                 <div class="tw-flex tw-items-center tw-gap-3 tw-mb-4">
-                                    <Checkbox id="import-settings" :checked="importSettings" @update:checked="importSettings = !!$event" />
+                                    <Checkbox id="import-settings" v-model:model-value="importSettings" />
                                     <Label for="import-settings" class="tw-text-sm">{{ $t('ImportExport.IncludeSettings') }}</Label>
                                 </div>
 
@@ -129,6 +129,7 @@ import { Download, Upload, FileArchive } from 'lucide-vue-next'
 import { exportToZip, getImportData } from '@/lib/importExportUtils'
 import MainBlock from '@/lib/MainBlock'
 import { BlockData, constructBlock } from '@/lib/codeBlocksManager'
+import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { uuid } from 'vue-uuid'
 
 const props = defineProps<{
@@ -251,15 +252,36 @@ function handleImport() {
 
     const newBlocks: BlockData[] = selectedImportIndexes.value.map(idx => {
         const b = importData.value.blocks[idx]
-        const data = {
+        const data: any = {
             ...b.metadata,
             type: b.type,
             name: b.name,
-            content: b.content,
+            content: b.content || '',
+            alternativeContent: b.alternativeContent || null,
+            hasAlternativeContent: b.hasAlternativeContent || false,
             id: 0, // temporary
             uuid: uuid.v4(),
-            parentID: main.id
+            parentID: main.id,
+            noContent: !b.content,
+            readyCount: 0,
+            errors: [],
+            lineCountHint: -1
         }
+
+        // Ensure flags are set, prioritizing metadata if available, otherwise inferring from type
+        data.static = data.static ?? (b.type === KnownBlockTypes.BLOCKSTATIC)
+        data.hidden = data.hidden ?? (b.type === KnownBlockTypes.BLOCKHIDDEN)
+        data.readonly = data.readonly ?? (data.static || data.hidden)
+        data.hasCode = data.hasCode ?? (
+            b.type === KnownBlockTypes.BLOCK ||
+            b.type === KnownBlockTypes.BLOCKSTATIC ||
+            b.type === KnownBlockTypes.BLOCKHIDDEN
+        )
+        // Default to '101' only if it's truly missing, to avoid '100' which is deprecated
+        if (!data.version) {
+            data.version = '101'
+        }
+
         return constructBlock(main, data)
     })
 

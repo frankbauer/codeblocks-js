@@ -38,7 +38,7 @@
       </div>
       <textarea
         ref="altBoxRaw"
-        style="display: block"
+        style="display: none"
         readonly
         v-model="block.alternativeContent"
         :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
