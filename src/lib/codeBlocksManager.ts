@@ -1,121 +1,28 @@
-import { UnwrapRef, createApp, h, type Ref } from 'vue'
-import { createScriptBlock, createLibraryScriptBlock } from './scriptBlock'
-import i18n from '../plugins/i18n'
-
-import App from '../App.vue'
-import { uuid } from 'vue-uuid'
-
-import compilerRegistry, { compilerRegistry as CompilerRegistry } from './CompilerRegistry'
-import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
 import {
-    IRandomizerSettings,
     CodeOutputTypes,
     IBlockData,
     KnownBlockTypes,
-    IRandomizerSet,
-    IRandomizerSetTag,
-    ICodeBlockDataState,
-    IBlockDataBase,
-    IBlockloadManager,
-    IBlockElementData,
+    IRandomizerSettings,
     CodeExpansionType,
-    IBlockDataWithSettings,
 } from './ICodeBlocks'
 
-//get loaders
-import blockInstaller from '@/lib/BlockloadManagers/BlockManager'
-import playgroundInstaller from '@/lib/BlockloadManagers/PlaygroundManager'
-import dataInstaller from '@/lib/BlockloadManagers/DataManager'
-
-import { taggedDirective, tagger } from '@/plugins/tagger'
-import { highlight, highlightDirective } from '@/plugins/highlight'
-import { appUseCodeMirror } from '@/plugins/codemirror'
+import { tagger } from '@/plugins/tagger'
+import { highlight } from '@/plugins/highlight'
 import { storeBlock } from '@/storage/blockStorage'
 import { UIThemeType, getUITheme } from '@/lib/uiTheme'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 import { AnyCodeBlockScope, IScriptBlock } from './IScriptBlock'
-import {
-    IJsonExport,
-    applyImportToMainBlock,
-    getImportData,
-    validateImportData,
-    processImportData,
-} from './importExportUtils'
-
-const loaders: { [index: string]: IBlockloadManager } = {}
-blockInstaller(loaders)
-playgroundInstaller(loaders)
-dataInstaller(loaders)
+import { IRuntimeData, IRuntimeBlock } from './importExportUtils'
+import { InternalCodeBlocksManager } from './domParser'
+import { createScriptBlock, createLibraryScriptBlock } from './scriptBlock'
+import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
 
 export interface AppContext {
     appID: number
 }
 
-export type AppContextRef = {
-    [P in keyof AppContext]: Ref<UnwrapRef<AppContext[P]>>
-}
-let runningAppNumber = 10000
-
-export interface IAppSettings {
-    id: number
-    uuid: string
-    editMode: boolean
-    readonly: boolean
-    randomizer: IRandomizerSettings
-    blocks: BlockData[]
-    compiler: ICompilerID
-    language: string
-    runCode: boolean
-    emitAST: boolean
-    domLibs: string[]
-    workerLibs: string[]
-    outputParser: CodeOutputTypes
-    uiTheme: UIThemeType
-    executionTimeout: number
-    maxCharacters: number
-    scopeUUID?: string
-    scopeSelector?: string
-    continuousCompilation: boolean
-    messagePassing: boolean
-    keepAlive: boolean
-    persistentArguments: boolean
-    shadowRoot?: ShadowRoot
-    error?: string
-}
-
-interface IInputElementDataDeprecated {
-    solutionTheme?: string //Deprecated
-    codeTheme?: string //Deprecated
-}
-
-interface IInputElementData extends IInputElementDataDeprecated {
-    randomizerActive?: string
-    randomizerPreviewIndex?: string
-    randomizerKnownTags?: string
-    randomizerSets?: string
-    question?: string
-    compiler?: string
-    compilerVersion?: string
-    domLibs?: string
-    workerLibs?: string
-    readonly?: string
-    runCode?: string
-    emitAst?: string
-    id?: string
-    executionTimeout?: string
-    maxCharacters?: string
-    scopeUUID?: string
-    scopeSelector?: string
-    continuousCompilation?: string
-    messagePassing?: string
-    keepAlive?: string
-    persistentArguments?: string
-    outputParser?: CodeOutputTypes
-    uiTheme?: string
-}
-
 export class BlockData implements IBlockData {
-    appSettings: IAppSettings
+    appSettings: IMainBlock
     hasCode: boolean
     _type: KnownBlockTypes
     content: string
@@ -144,49 +51,72 @@ export class BlockData implements IBlockData {
     align: string
     lineCountHint: number
     name: string
-    _oac?: () => string //used by Blockly to re-place the actualContent-Method while keeping the old implementation around
 
     obj: IScriptBlock | null
     dataObj: any | null
 
-    constructor(d: IBlockDataWithSettings) {
+    constructor(d: IRuntimeBlock, mainBlock: IMainBlock) {
         this.obj = null
         this.dataObj = null
 
-        this.appSettings = d.appSettings
-        this.hasCode = d.hasCode
+        this.appSettings = mainBlock
         this._type = d.type
         this.content = d.content
-        this.alternativeContent = d.alternativeContent
+        this.alternativeContent = d.alternativeContent || null
         this.noContent = d.noContent
         this.id = d.id
         this.uuid = d.uuid
         this.parentID = d.parentID
-        this.expanded = d.expanded
-        this.codeExpanded = d.codeExpanded
-        this.readonly = d.readonly
-        this.static = d.static
-        this.hidden = d.hidden
-        this.version = d.version
+
+        const m = d.metadata as any
+        this.expanded = m.expanded ?? true
+        this.codeExpanded = m.codeExpanded ?? CodeExpansionType.AUTO
+        this.static = m.static ?? d.type === KnownBlockTypes.BLOCKSTATIC
+        this.hidden = m.hidden ?? d.type === KnownBlockTypes.BLOCKHIDDEN
+        this.readonly = this.static || this.hidden || !!m.readonly
+        this.hasCode =
+            (m as any).hasCode ??
+            (this.type === KnownBlockTypes.BLOCK ||
+                this.type === KnownBlockTypes.BLOCKSTATIC ||
+                this.type === KnownBlockTypes.BLOCKHIDDEN)
+
+        this.version = m.version ?? '101'
         this.readyCount = d.readyCount
         this.errors = d.errors
         this.scopeUUID = d.scopeUUID
-        this.visibleLines = d.visibleLines
-        this.hasAlternativeContent = d.hasAlternativeContent
-        this.shouldAutoreset = d.shouldAutoreset
-        this.shouldReloadResources = d.shouldReloadResources
-        this.generateTemplate = d.generateTemplate
-        this.width = d.width
-        this.height = d.height
-        this.align = d.align
+        this.scopeSelector = d.scopeSelector || ''
+        this.visibleLines = m.visibleLines ?? 'auto'
+        this.hasAlternativeContent = d.hasAlternativeContent ?? false
+        this.shouldAutoreset = m.shouldAutoreset ?? false
+        this.shouldReloadResources = m.shouldReloadResources ?? false
+        this.generateTemplate = m.generateTemplate ?? this.type === KnownBlockTypes.PLAYGROUND
+        this.width = m.width ?? '100%'
+        this.height = m.height ?? '200px'
+        this.align = m.align ?? 'center'
         this.lineCountHint = d.lineCountHint
         this.name = d.name
+
+        if (
+            this.type === KnownBlockTypes.PLAYGROUND ||
+            this.type === KnownBlockTypes.LIBRARY ||
+            this.type === KnownBlockTypes.DATA
+        ) {
+            if (this.content == '' || this.content === undefined || this.content === null) {
+                if (this.type === KnownBlockTypes.LIBRARY) {
+                    this.content = `export default {\n  create(context) {\n    return { greet: () => console.log("Greetings from ${this.name}") }\n  }\n}`
+                } else if (this.type === KnownBlockTypes.PLAYGROUND) {
+                    this.content = `export default {\n    init: function() {\n        // this.canvasElement.hide()\n    },\n    addArgumentsTo(args) {},\n    reset() {},\n    update: function(txt, json) {\n\n    }\n}`
+                } else {
+                    this.content = '{}'
+                }
+            }
+        }
 
         this.initialize()
     }
 
     actualContent() {
-        console.log('this.appSettings.randomizer.active', this.appSettings.randomizer.active)
+        console.i('this.appSettings.randomizer.active', this.appSettings.randomizer.active)
         if (this.appSettings.randomizer.active) {
             return tagger.replaceRandomTagsInString(
                 this.content,
@@ -227,7 +157,7 @@ export class BlockData implements IBlockData {
         this.recreateScriptObject()
     }
 
-    getThemeForBlock(bl: ICodeBlockDataState): EditorTheme {
+    getThemeForBlock(bl: BlockData): EditorTheme {
         const theme = getUITheme(this.appSettings.uiTheme)
         if (bl.hasCode) {
             if (bl.static || bl.readonly || bl.hidden) {
@@ -340,8 +270,34 @@ export class BlockData implements IBlockData {
     }
 }
 
-export interface IMainBlock extends IAppSettings {
+export interface IMainBlock {
+    id: number
+    uuid: string
+    editMode: boolean
+    readonly: boolean
+    randomizer: IRandomizerSettings
+    blocks: BlockData[]
+    compiler: ICompilerID
+    language: string
+    runCode: boolean
+    emitAST: boolean
+    domLibs: string[]
+    workerLibs: string[]
+    outputParser: CodeOutputTypes
+    uiTheme: UIThemeType
+    executionTimeout: number
+    maxCharacters: number
+    scopeUUID?: string
+    scopeSelector?: string
+    continuousCompilation: boolean
+    messagePassing: boolean
+    keepAlive: boolean
+    persistentArguments: boolean
+    shadowRoot?: ShadowRoot
     error?: string
+
+    applyRuntimeData(data: IRuntimeData, importSettings?: boolean): void
+
     swap(id1: number, id2: number): void
 
     moveUp(id: number): void
@@ -361,455 +317,6 @@ export interface IMainBlock extends IAppSettings {
     storeDefaultArgs(args: object | string[]): void
 
     clearDefaultArgs(): void
-}
-
-function isTrue(val: any): boolean {
-    //return val !== undefined || val == 'true' || val == '1'
-    return val !== undefined && val != 'false' && val != '0'
-}
-
-const useShadowDOM = false
-
-function parseInputElement(el: HTMLElement, shadowRoot: ShadowRoot | undefined): IAppSettings {
-    const inData = el.dataset as IInputElementData
-    const data: IAppSettings = {
-        id: runningAppNumber++,
-        editMode: el.tagName == 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor'),
-        runCode: false,
-        emitAST: false,
-        language: 'javascript',
-        compiler: {
-            languageType: 'javascript',
-            version: '101',
-        },
-        randomizer: {
-            active: false,
-            previewIndex: 0,
-            knownTags: [],
-            sets: [],
-        },
-        domLibs: [],
-        workerLibs: [],
-        blocks: [],
-        outputParser: CodeOutputTypes.DATA,
-        readonly: false,
-        uiTheme: 'light',
-        uuid: 'is-set-below',
-        executionTimeout: 5000,
-        maxCharacters: 1000,
-        continuousCompilation: isTrue(inData.continuousCompilation),
-        messagePassing: isTrue(inData.messagePassing),
-        keepAlive: isTrue(inData.keepAlive),
-        persistentArguments: isTrue(inData.persistentArguments),
-        shadowRoot: shadowRoot,
-    }
-
-    if (inData.randomizerActive !== undefined) {
-        data.randomizer.active = isTrue(inData.randomizerActive)
-    }
-    if (inData.randomizerPreviewIndex !== undefined) {
-        data.randomizer.previewIndex = Number(inData.randomizerPreviewIndex)
-    }
-    if (inData.randomizerKnownTags !== undefined) {
-        data.randomizer.knownTags = JSON.parse(inData.randomizerKnownTags)
-    }
-    if (inData.randomizerSets !== undefined) {
-        data.randomizer.sets = JSON.parse(inData.randomizerSets).map((o: object, i: number) => {
-            const ret: IRandomizerSet = {
-                uuid: uuid.v4(),
-                values: [],
-            }
-            Object.keys(o).forEach((tag) => {
-                const item: IRandomizerSetTag = {
-                    tag: tag,
-                    value: o[tag],
-                }
-                ret.values.push(item)
-            })
-
-            return ret
-        })
-    }
-
-    if (inData.question !== undefined) {
-        data.id = Number(inData.question)
-    }
-
-    if (inData.compiler !== undefined) {
-        const cInfo: ICompilerID = {
-            languageType: inData.compiler,
-            version: inData.compilerVersion!,
-        }
-        data.compiler = cInfo
-
-        const c = CompilerRegistry.getCompiler(data.compiler)
-        if (c === undefined) {
-            data.runCode = false
-            data.emitAST = false
-            data.language = data.compiler.languageType
-        } else {
-            data.runCode = isTrue(inData.runCode)
-            data.emitAST = isTrue(inData.emitAst) && c.canEmitAST
-            data.language = c.language
-            if (c.deprecated) {
-                const upgraded = CompilerRegistry.getCompiler({
-                    languageType: data.compiler.languageType,
-                })
-                if (upgraded !== undefined && !upgraded.deprecated) {
-                    console.log(
-                        `[CodeBlocks] Auto-upgrading deprecated compiler ${data.compiler.languageType} v${data.compiler.version} → v${upgraded.version}`
-                    )
-                    data.compiler.version = upgraded.version
-                } else {
-                    data.compiler.version = c.version
-                }
-            } else {
-                data.compiler.version = c.version
-            }
-        }
-    }
-
-    if (inData.domLibs !== undefined) {
-        data.domLibs = JSON.parse(inData.domLibs).map((l: string) => compilerRegistry.mapLibrary(l))
-    }
-
-    if (inData.readonly !== undefined) {
-        if (data.editMode) {
-            data.readonly = false
-        } else {
-            data.readonly = isTrue(inData.readonly)
-        }
-    }
-
-    if (inData.workerLibs !== undefined) {
-        data.workerLibs = JSON.parse(inData.workerLibs)
-    }
-
-    if (el.hasAttribute('uuid')) {
-        data.uuid = el.getAttribute('uuid')!
-    } else {
-        data.uuid = uuid.v4()
-        el.setAttribute('uuid', data.uuid)
-    }
-
-    //data.id = Number(data.id)
-
-    if (inData.executionTimeout !== undefined) {
-        data.executionTimeout = Number(inData.executionTimeout)
-    }
-
-    if (inData.maxCharacters !== undefined) {
-        data.maxCharacters = Number(inData.maxCharacters)
-    }
-
-    if (inData.scopeUUID !== undefined) {
-        data.scopeUUID = inData.scopeUUID
-    }
-    if (inData.scopeSelector !== undefined) {
-        data.scopeSelector = inData.scopeSelector
-    }
-
-    if (inData.outputParser !== undefined) {
-        data.outputParser = inData.outputParser
-    }
-
-    if (inData.solutionTheme !== undefined) {
-        console.error('SolutionTheme is deprecated, us uiTheme instead')
-    }
-
-    if (inData.codeTheme !== undefined) {
-        console.error('CodeTheme is deprecated, us uiTheme instead')
-    }
-
-    if (inData.uiTheme !== undefined) {
-        data.uiTheme = inData.uiTheme as UIThemeType
-    } else {
-        let oldTheme: string | undefined = undefined
-        if (inData.solutionTheme !== undefined) {
-            oldTheme = inData.solutionTheme
-        } else if (inData.codeTheme !== undefined) {
-            oldTheme = inData.codeTheme
-        }
-
-        if (oldTheme !== undefined) {
-            if (
-                oldTheme === 'solarized light' ||
-                oldTheme === 'base16-light' ||
-                oldTheme === 'duotone-light' ||
-                oldTheme === 'xq-light' ||
-                oldTheme === 'neo' ||
-                oldTheme === 'mbo' ||
-                oldTheme === 'mdn-like'
-            ) {
-                data.uiTheme = 'light'
-            } else if (
-                oldTheme === 'solarized dark' ||
-                oldTheme === 'base16-dark' ||
-                oldTheme === 'duotone-dark' ||
-                oldTheme === 'xq-dark' ||
-                oldTheme === 'blackboard'
-            ) {
-                data.uiTheme = 'dark'
-            }
-        }
-    }
-
-    return data
-}
-
-export function constructBlock(data: IAppSettings, bl: IBlockDataBase): BlockData {
-    if (
-        bl.type === KnownBlockTypes.PLAYGROUND ||
-        bl.type === KnownBlockTypes.LIBRARY ||
-        bl.type === KnownBlockTypes.DATA
-    ) {
-        if (bl.content == '' || bl.content === undefined || bl.content === null) {
-            if (bl.type === KnownBlockTypes.LIBRARY) {
-                bl.content = `export default {\n  create(context) {\n    return { greet: () => console.log("Greetings from ${bl.name}") }\n  }\n}`
-            } else {
-                bl.content = '{}'
-            }
-        }
-    }
-
-    return new BlockData({
-        ...bl,
-        appSettings: data,
-    })
-}
-
-function parseInputBlockElement(bl: HTMLElement, data: IAppSettings): IBlockDataBase | undefined {
-    const inBlock = bl.dataset as IBlockElementData
-    const as = bl.getAttribute('as')
-    if (as !== null) {
-        inBlock.as = as.trim().toUpperCase()
-    }
-
-    const block: IBlockDataBase = {
-        as: inBlock.as ? KnownBlockTypes[inBlock.as] : undefined,
-        hasCode: false,
-        version: '101',
-        type: bl.tagName as KnownBlockTypes,
-        content: bl.textContent ? bl.textContent : '',
-        alternativeContent: null,
-        hasAlternativeContent: false,
-        id: data.blocks.length,
-        uuid: uuid.v4(),
-        parentID: data.id,
-        width: '100%',
-        height: '200px',
-        align: 'center',
-        readyCount: 0,
-        obj: null,
-        name: inBlock.name !== undefined ? inBlock.name : '',
-        lineCountHint: -1,
-        errors: [],
-        readonly: isTrue(inBlock.readonly),
-        static: isTrue(inBlock.static),
-        hidden: isTrue(inBlock.hidden),
-        visibleLines:
-            inBlock.visibleLines === undefined ||
-            inBlock.visibleLines?.trim().toLowerCase() == 'auto'
-                ? 'auto'
-                : Number(inBlock.visibleLines),
-        shouldAutoreset: isTrue(inBlock.shouldAutoreset),
-        shouldReloadResources: isTrue(inBlock.shouldReloadResources),
-        generateTemplate:
-            inBlock.generateTemplate === undefined ||
-            (inBlock.generateTemplate != 'false' && inBlock.generateTemplate != '0'),
-
-        expanded:
-            inBlock.expanded === undefined ||
-            (inBlock.expanded != 'false' && inBlock.expanded != '0'),
-        codeExpanded: CodeExpansionType.AUTO,
-        noContent: isTrue(inBlock.noContent),
-        scopeUUID: inBlock.scopeUUID,
-        scopeSelector: inBlock.scopeSelector,
-    }
-
-    if (inBlock.codeExpanded !== undefined) {
-        if (
-            inBlock.codeExpanded.toUpperCase() == 'TINY' ||
-            inBlock.codeExpanded == 'false' ||
-            inBlock.codeExpanded == '0'
-        ) {
-            block.codeExpanded = CodeExpansionType.TINY
-        } else if (inBlock.codeExpanded.toUpperCase() == 'LARGE' || inBlock.codeExpanded == '2') {
-            block.codeExpanded = CodeExpansionType.LARGE
-        }
-    }
-
-    if (!data.editMode && block.noContent) {
-        block.content = ''
-    }
-    if (inBlock.alternativeContent !== undefined && !block.static && !block.hidden) {
-        block.alternativeContent = inBlock.alternativeContent
-        block.hasAlternativeContent = true
-        if (!data.editMode && block.noContent) {
-            block.content = block.alternativeContent
-        }
-    } else {
-        block.hasAlternativeContent = false
-    }
-
-    console.log('BL', block.type, block.as)
-    if (block.as) {
-        block.type = block.as
-    }
-
-    if (block.type !== 'TEXT') {
-        const loader = loaders[block.type]
-        console.d('LOADER', loader, loaders, block.type)
-        if (loader === undefined) {
-            console.i('Skipping', block.type, block.as)
-            return undefined
-        } else {
-            loader.loadFromDatablock(bl, inBlock, block, data.editMode)
-        }
-    } else {
-        console.d('LOADER TEXT', block)
-    }
-    return block
-}
-
-//this will handle the vue mounting on the dom
-class InternalCodeBlocksManager {
-    readonly element: HTMLElement
-    private _data: IAppSettings | undefined
-    readonly shadowRoot: ShadowRoot | undefined = undefined
-
-    get data() {
-        if (this._data === undefined) {
-            throw new Error('Data was already consumed!')
-        }
-        return this._data
-    }
-
-    constructor(el: HTMLElement) {
-        if (useShadowDOM) {
-            const content = el.outerHTML
-
-            //replace original element with empty div that will store the shadowDOM
-            const parent = el.parentElement!
-            const rewrap = document.createElement('DIV')
-            parent.replaceChild(rewrap, el)
-
-            //add shadowDOM and clear content
-            const shadow = rewrap.attachShadow({ mode: 'open' })
-            this.shadowRoot = shadow
-            shadow.innerHTML = ''
-
-            //copy root-level styles into the shadowDOM
-            $('style').each((idx, style) => {
-                const st = document.createElement('STYLE')
-                st.innerHTML = style.innerHTML
-                shadow.appendChild(st)
-            })
-
-            $('link[shadow]').each((idx, link) => {
-                shadow.appendChild(link.cloneNode())
-            })
-
-            //append original element to shadowDOM
-            shadow.appendChild(el)
-            this.element = el
-        } else {
-            this.shadowRoot = undefined
-            this.element = el
-        }
-        this.initialize()
-    }
-
-    initialize() {
-        const data = parseInputElement(this.element, this.shadowRoot)
-        for (const blIn of this.element.children) {
-            const bl = blIn as HTMLElement
-            //only first level children
-            if (bl.parentElement != this.element) {
-                continue
-            }
-
-            const block = parseInputBlockElement(bl, data)
-            if (block === undefined) {
-                continue
-            }
-
-            data.blocks.push(constructBlock(data, block))
-        }
-
-        this._data = data
-
-        console.d('INPUT DATA', data)
-    }
-
-    async resolveSrc() {
-        const src = this.element.getAttribute('src')
-        if (src) {
-            try {
-                const response = await fetch(src)
-                if (!response.ok) {
-                    throw new Error(
-                        `Failed to fetch ${src}: ${response.status} ${response.statusText}`
-                    )
-                }
-                let json: IJsonExport
-                if (src.toLowerCase().endsWith('.zip')) {
-                    const blob = await response.blob()
-                    json = await getImportData(blob)
-                } else {
-                    json = validateImportData(await response.json(), false)
-                    // Handle deferred loading for JSON exports
-                    const baseUrl = src.substring(0, src.lastIndexOf('/') + 1)
-                    await Promise.all(
-                        json.blocks.map(async (block) => {
-                            if (block.file && !block.content) {
-                                try {
-                                    const fileResponse = await fetch(baseUrl + block.file)
-                                    if (fileResponse.ok) {
-                                        block.content = await fileResponse.text()
-                                    } else {
-                                        console.error(
-                                            `Failed to load referenced file ${block.file}: ${fileResponse.status}`
-                                        )
-                                    }
-                                } catch (fileError) {
-                                    console.error(
-                                        `Failed to load referenced file ${block.file} for block ${block.id}`,
-                                        fileError
-                                    )
-                                }
-                            }
-                        })
-                    )
-                    json = processImportData(json, true) // validate JSON and throw if invalid
-                }
-
-                applyImportToMainBlock(json, this.data as any, 'override', true)
-                this.element.removeAttribute('src') // avoid re-loading
-            } catch (e: any) {
-                console.error(`Failed to load codeblocks from ${src}`, e)
-                this.data.error = e.message || String(e)
-            }
-        }
-    }
-
-    instantiateVue() {
-        const data = this.data
-        this._data = undefined
-
-        // No need to check attribute again - data.editMode is already set correctly
-        const storeageInfo = storeBlock(data)
-        const context = {
-            appID: storeageInfo.appID,
-        }
-
-        const app = createApp(App, context)
-        app.use(i18n)
-        app.directive('tagged', taggedDirective)
-        app.directive('highlight', highlightDirective)
-        appUseCodeMirror(app)
-        app.mount(this.element)
-    }
 }
 
 export class MountableArray extends Array<InternalCodeBlocksManager> {
@@ -849,24 +356,24 @@ export const CodeBlocksManager = {
         allCodeBlockParents.forEach((elIn) => {
             const el = elIn as HTMLElement
             const cbm = new InternalCodeBlocksManager(el)
-            let scope = cbm.data.scopeSelector
-                ? document.querySelector(cbm.data.scopeSelector)
+            let scope = cbm.data.settings.scopeSelector
+                ? document.querySelector(cbm.data.settings.scopeSelector)
                 : undefined
             if (scope === undefined || scope === null) {
                 scope = el
             }
 
             highlight.$vue.processElements(scope)
-            if (cbm.data.editMode) {
+            if (cbm.data.settings.editMode) {
                 tagger.processElements(scope as HTMLElement)
-                cbm.data.scopeSelector = `[uuid=${scope.getAttribute('uuid')}]`
-                cbm.data.scopeUUID = scope.getAttribute('uuid')
+                cbm.data.settings.scopeSelector = `[uuid=${scope.getAttribute('uuid')}]`
+                cbm.data.settings.scopeUUID = scope.getAttribute('uuid')
                     ? scope.getAttribute('uuid')!
                     : undefined
                 cbm.data.blocks.forEach((b) => {
-                    b.scopeUUID = cbm.data.scopeUUID
-                    b.scopeSelector = cbm.data.scopeSelector
-                        ? cbm.data.scopeSelector
+                    b.scopeUUID = cbm.data.settings.scopeUUID
+                    b.scopeSelector = cbm.data.settings.scopeSelector
+                        ? cbm.data.settings.scopeSelector
                         : `[uuid=${b.scopeUUID}]`
                 })
             }

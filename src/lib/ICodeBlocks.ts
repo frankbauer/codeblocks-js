@@ -1,6 +1,5 @@
 import { ICompilerID, IListItemData } from './ICompilerRegistry'
 import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
-import { IAppSettings } from '@/lib/codeBlocksManager'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 import { UIThemeType } from '@/lib/uiTheme'
 
@@ -28,14 +27,9 @@ export enum CodeExpansionType {
     TINY = 0,
 }
 
-export interface IBlockloadManager {
-    readonly blockTag: string
-    loadFromDatablock: (
-        bl: HTMLElement,
-        inBlock: IBlockElementData,
-        block: IBlockDataBase,
-        editMode: boolean
-    ) => void
+export interface IBlockError {
+    error: string
+    uuid: string
 }
 
 export interface IRandomizerSet {
@@ -55,83 +49,13 @@ export interface IRandomizerSettings {
     sets: IRandomizerSet[]
 }
 
-export interface IBlockDataPlayground {
-    width: string
-    height: string
-    align: string
-}
-
-export interface IBlockDataData {
-    name: string
-}
-
-export interface IBlockError {
-    error: string
-    uuid: string
-}
-
-export interface IBlockElementData {
-    readonly?: string
-    static?: string
-    hidden?: string
-    visibleLines?: string
-    shouldAutoreset?: string
-    shouldReloadResources?: string
-    generateTemplate?: string
-    expanded?: string
-    codeExpanded?: string
-    noContent?: string
-    alternativeContent?: string
-    width?: string
-    height?: string
-    align?: string
-    version?: string
-    scopeUUID?: string
-    scopeSelector?: string
-    showControls?: boolean
-    as?: string
-    name?: string
-}
-
-export interface ICodeBlockDataState {
-    readonly: boolean
-    static: boolean
-    hidden: boolean
-    hasCode: boolean
-}
-
-export interface IBlockDataWithSettings extends IBlockDataBase {
-    appSettings: IAppSettings
-}
-
-export interface IBlockDataBase extends IBlockDataPlayground, ICodeBlockDataState, IBlockDataData {
-    type: KnownBlockTypes
-    content: string
-    alternativeContent: string | null
-    noContent: boolean
-    id: number
-    uuid: string
-    parentID: number
-    expanded: boolean
-    codeExpanded: CodeExpansionType
-    obj: object | null
-    version: string
-    readyCount: number
-    errors: any[]
-    scopeUUID?: string
-    scopeSelector?: string
-    visibleLines: number | 'auto'
-    hasAlternativeContent: boolean
-    shouldAutoreset: boolean
-    shouldReloadResources: boolean
-    generateTemplate: boolean
-    lineCountHint: number
-    as?: KnownBlockTypes
-}
-
-export interface IBlockData extends IBlockDataBase {
-    getThemeForBlock(bl: ICodeBlockDataState): EditorTheme
-
+export interface IBlockData {
+    readonly id: number
+    readonly type: KnownBlockTypes
+    readonly uuid: string
+    readonly name: string
+    readonly content: string
+    readonly obj: any
     readonly themeForCodeBlock: EditorTheme
 }
 

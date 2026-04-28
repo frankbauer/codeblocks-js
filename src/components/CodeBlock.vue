@@ -221,7 +221,6 @@ const iliasTypeNr = computed(() => {
         block: 2,
         'block-hidden': 3,
         playground: 4,
-        blockly: 5,
         repl: 6,
         data: 7,
     }

@@ -1,4 +1,4 @@
-import { IAppSettings, BlockData, constructBlock } from '@/lib/codeBlocksManager'
+import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import JSZip from 'jszip'
 import {
     CodeExpansionType,
@@ -12,18 +12,53 @@ import { UIThemeType } from './uiTheme'
 import { z } from 'zod'
 import { uuid } from 'vue-uuid'
 
+const isTrue = (val: any): boolean =>
+    val !== undefined && val !== 'false' && val !== '0' && val !== false
+
+const booleanCoerce = z
+    .union([z.boolean(), z.string()])
+    .transform((val) => (typeof val === 'string' ? isTrue(val) : !!val))
+
+const numberCoerce = z.union([z.number(), z.string()]).transform((val) => Number(val))
+
+const jsonCoerce = z.union([z.string(), z.any()]).transform((val) => {
+    if (typeof val === 'string') {
+        try {
+            return JSON.parse(val)
+        } catch (e) {
+            return val
+        }
+    }
+    return val
+})
+
 const commonMetadataSchema = z.object({
-    expanded: z.boolean().optional(),
+    expanded: booleanCoerce.optional(),
 })
 
 const expandableCodeMetadataSchema = commonMetadataSchema.extend({
-    codeExpanded: z.nativeEnum(CodeExpansionType).optional(),
+    codeExpanded: z
+        .union([z.nativeEnum(CodeExpansionType), z.string()])
+        .transform((val) => {
+            if (typeof val === 'string') {
+                const upper = val.toUpperCase()
+                if (upper === 'TINY' || val === 'false' || val === '0') {
+                    return CodeExpansionType.TINY
+                }
+                if (upper === 'LARGE' || val === '2') {
+                    return CodeExpansionType.LARGE
+                }
+                return CodeExpansionType.AUTO
+            }
+            return val
+        })
+        .optional(),
 })
 
 const playgroundMetadataSchema = expandableCodeMetadataSchema.extend({
-    shouldAutoreset: z.boolean().optional(),
-    shouldReloadResources: z.boolean().optional(),
-    generateTemplate: z.boolean().optional(),
+    shouldAutoreset: booleanCoerce.optional(),
+    shouldReloadResources: booleanCoerce.optional(),
+    generateTemplate: booleanCoerce.optional(),
     width: z.string().optional(),
     height: z.string().optional(),
     align: z.string().optional(),
@@ -31,11 +66,10 @@ const playgroundMetadataSchema = expandableCodeMetadataSchema.extend({
 })
 
 const blockMetadataSchema = commonMetadataSchema.extend({
-    static: z.boolean().optional(),
-    hidden: z.boolean().optional(),
+    static: booleanCoerce.optional(),
+    hidden: booleanCoerce.optional(),
     visibleLines: z
         .union([z.number().int().min(1), z.literal('auto'), z.string()])
-        .optional()
         .transform((val) => {
             if (val === 'auto') {
                 return 'auto'
@@ -45,8 +79,9 @@ const blockMetadataSchema = commonMetadataSchema.extend({
                 return isNaN(parsed) || parsed < 1 ? 'auto' : parsed
             }
             return val
-        }),
-    hasAlternativeContent: z.boolean().optional(),
+        })
+        .optional(),
+    hasAlternativeContent: booleanCoerce.optional(),
 })
 
 const metadataSchema = z.union([
@@ -57,13 +92,13 @@ const metadataSchema = z.union([
 ])
 
 const baseBlockSchema = z.object({
-    id: z.number(),
+    id: numberCoerce,
     name: z.string().optional().default(''),
     file: z.string().optional(),
-    isCombined: z.boolean().optional(),
+    isCombined: booleanCoerce.optional(),
     content: z.string().optional(),
     alternativeContent: z.string().optional().nullable(),
-    hasAlternativeContent: z.boolean().optional(),
+    hasAlternativeContent: booleanCoerce.optional(),
 })
 
 const exportBlockMetadataSchema = z
@@ -102,30 +137,79 @@ const exportBlockMetadataSchema = z
         path: ['content'],
     })
 
+const randomizerSetTagSchema = z.object({
+    tag: z.string(),
+    value: z.string(),
+})
+
+const randomizerSetSchema = z.object({
+    uuid: z.string(),
+    values: z.array(randomizerSetTagSchema),
+})
+
+const randomizerSettingsSchema = z
+    .object({
+        active: booleanCoerce.optional().default(false),
+        previewIndex: numberCoerce.optional().default(0),
+        knownTags: z.array(z.string()).optional().default([]),
+        sets: z.array(randomizerSetSchema).optional().default([]),
+    })
+    .superRefine((data, ctx) => {
+        const known = new Set(data.knownTags)
+        data.sets.forEach((set) => {
+            set.values.forEach((tag) => {
+                if (!known.has(tag.tag)) {
+                    console.warn(
+                        `[CodeBlocks] Randomizer set ${set.uuid} uses unknown tag "${tag.tag}". Known tags: ${data.knownTags.join(', ')}`
+                    )
+                }
+            })
+        })
+    })
+
 const exportedSettingsSchema = z.object({
-    readonly: z.boolean().optional().default(false),
+    readonly: booleanCoerce.optional().default(false),
     language: z.string().optional().default('javascript'),
     compiler: z
-        .object({
-            languageType: z.string().optional().default('javascript'),
-            version: z.string().optional().default('v100'),
-        })
+        .union([
+            z.string().transform((val) => {
+                // Handle legacy 'compiler' + 'compilerVersion' logic?
+                // Actually, domToRuntimeData will handle merging them into an object first
+                return val
+            }),
+            z.object({
+                languageType: z.string().optional().default('javascript'),
+                version: z.string().optional().default('v100'),
+            }),
+        ])
         .default({ languageType: 'javascript', version: 'v100' }) as z.ZodType<ICompilerID>,
-    runCode: z.boolean().optional().default(true),
-    emitAST: z.boolean().optional().default(false),
-    executionTimeout: z.number().optional().default(5000),
-    maxCharacters: z.number().optional().default(10000),
-    outputParser: z.nativeEnum(CodeOutputTypes).optional().default(CodeOutputTypes.AUTO),
+    runCode: booleanCoerce.optional().default(true),
+    emitAST: booleanCoerce.optional().default(false),
+    executionTimeout: numberCoerce.optional().default(5000),
+    maxCharacters: numberCoerce.optional().default(10000),
+    outputParser: z
+        .union([z.nativeEnum(CodeOutputTypes), z.string()])
+        .transform((val) => (val as CodeOutputTypes) || CodeOutputTypes.AUTO)
+        .optional()
+        .default(CodeOutputTypes.AUTO),
     uiTheme: z.string().optional().default('light') as z.ZodType<UIThemeType>,
-    domLibs: z.array(z.string()).optional().default([]),
-    workerLibs: z.array(z.string()).optional().default([]),
-    continuousCompilation: z.boolean().optional().default(false),
-    messagePassing: z.boolean().optional().default(false),
-    keepAlive: z.boolean().optional().default(false),
-    persistentArguments: z.boolean().optional().default(false),
-    randomizer: z.any().optional(), // IRandomizerSettings
+    domLibs: jsonCoerce.optional().default([]),
+    workerLibs: jsonCoerce.optional().default([]),
+    continuousCompilation: booleanCoerce.optional().default(false),
+    messagePassing: booleanCoerce.optional().default(false),
+    keepAlive: booleanCoerce.optional().default(false),
+    persistentArguments: booleanCoerce.optional().default(false),
+    randomizer: randomizerSettingsSchema.optional(),
     scopeUUID: z.string().optional(),
     scopeSelector: z.string().optional(),
+})
+
+export const runtimeSettingsSchema = exportedSettingsSchema.extend({
+    id: z.number(),
+    uuid: z.string(),
+    editMode: z.boolean().default(false),
+    shadowRoot: z.custom<ShadowRoot>().optional(),
+    error: z.string().optional(),
 })
 
 const jsonExportSchema = z.object({
@@ -151,6 +235,61 @@ export type MetadataByType<T extends KnownBlockTypes> = T extends KnownBlockType
 export type IExportBlockMetadata = z.infer<typeof exportBlockMetadataSchema>
 export type IExportedSettings = z.infer<typeof exportedSettingsSchema>
 export type IJsonExport = z.infer<typeof jsonExportSchema>
+
+const runtimeBlockExtension = z.object({
+    uuid: z.string(),
+    parentID: z.number(),
+    readyCount: z.number().default(0),
+    errors: z.array(z.any()).default([]),
+    scopeUUID: z.string().optional(),
+    scopeSelector: z.string().optional(),
+    lineCountHint: z.number().default(-1),
+    noContent: booleanCoerce.optional().default(false),
+    // content is already on the export schema, but must be present at runtime
+    content: z.string().default(''),
+})
+
+const baseRuntimeBlock = baseBlockSchema.merge(runtimeBlockExtension)
+
+export const runtimeBlockSchema = z.discriminatedUnion('type', [
+    baseRuntimeBlock.extend({
+        type: z.literal(KnownBlockTypes.PLAYGROUND),
+        metadata: playgroundMetadataSchema.optional().default({}),
+    }),
+    baseRuntimeBlock.extend({
+        type: z.literal(KnownBlockTypes.BLOCK),
+        metadata: blockMetadataSchema.optional().default({}),
+    }),
+    baseRuntimeBlock.extend({
+        type: z.literal(KnownBlockTypes.BLOCKSTATIC),
+        metadata: blockMetadataSchema.optional().default({}),
+    }),
+    baseRuntimeBlock.extend({
+        type: z.literal(KnownBlockTypes.BLOCKHIDDEN),
+        metadata: blockMetadataSchema.optional().default({}),
+    }),
+    baseRuntimeBlock.extend({
+        type: z.literal(KnownBlockTypes.LIBRARY),
+        metadata: expandableCodeMetadataSchema.optional().default({}),
+    }),
+    baseRuntimeBlock.extend({
+        type: z.literal(KnownBlockTypes.DATA),
+        metadata: expandableCodeMetadataSchema.optional().default({}),
+    }),
+    baseRuntimeBlock.extend({
+        type: z.literal(KnownBlockTypes.TEXT),
+        metadata: commonMetadataSchema.optional().default({}),
+    }),
+])
+
+export const runtimeDataSchema = z.object({
+    settings: runtimeSettingsSchema,
+    blocks: z.array(runtimeBlockSchema),
+})
+
+export type IRuntimeSettings = z.infer<typeof runtimeSettingsSchema>
+export type IRuntimeBlock = z.infer<typeof runtimeBlockSchema>
+export type IRuntimeData = z.infer<typeof runtimeDataSchema>
 
 const LANGUAGE_EXTENSIONS: Record<string, string> = {
     javascript: 'js',
@@ -510,6 +649,39 @@ export function processImportData(data: IJsonExport, validate = false): IJsonExp
     return data
 }
 
+export function importDataToRuntimeData(
+    importData: IJsonExport,
+    overrideSettings?: Partial<IRuntimeSettings>
+): IRuntimeData {
+    const settings: IRuntimeSettings = {
+        ...importData.settings,
+        id: overrideSettings?.id ?? 0,
+        uuid: overrideSettings?.uuid ?? uuid.v4(),
+        editMode: overrideSettings?.editMode ?? false,
+        shadowRoot: overrideSettings?.shadowRoot,
+        error: overrideSettings?.error,
+        ...overrideSettings,
+    }
+
+    const blocks: IRuntimeBlock[] = importData.blocks.map((b) => {
+        return {
+            ...b,
+            uuid: uuid.v4(),
+            parentID: settings.id,
+            readyCount: 0,
+            errors: [],
+            lineCountHint: -1,
+            noContent: !b.content,
+            content: b.content || '',
+        } as IRuntimeBlock
+    })
+
+    return runtimeDataSchema.parse({
+        settings,
+        blocks,
+    })
+}
+
 export function applyImportToMainBlock(
     importData: any, // accept any for validation
     main: MainBlock,
@@ -517,69 +689,28 @@ export function applyImportToMainBlock(
     importSettings = true
 ) {
     const validatedData = validateImportData(importData)
-    console.i('Validated JSON before applyImportToMainBlock:', validatedData)
-
-    if (importSettings) {
-        const s = validatedData.settings
-        main.language = s.language
-        main.compiler = s.compiler
-        main.runCode = s.runCode
-        main.emitAST = s.emitAST
-        main.executionTimeout = s.executionTimeout
-        main.maxCharacters = s.maxCharacters
-        main.outputParser = s.outputParser
-        main.uiTheme = s.uiTheme
-        main.domLibs = s.domLibs
-        main.workerLibs = s.workerLibs
-        main.continuousCompilation = s.continuousCompilation
-        main.messagePassing = s.messagePassing
-        main.keepAlive = s.keepAlive
-        main.persistentArguments = s.persistentArguments
-        main.randomizer = s.randomizer
-    }
-
-    const newBlocks: BlockData[] = validatedData.blocks.map((b) => {
-        const data: any = {
-            ...b.metadata,
-            type: b.type,
-            name: b.name,
-            content: b.content || '',
-            alternativeContent: b.alternativeContent || null,
-            hasAlternativeContent: b.hasAlternativeContent || false,
-            id: 0, // temporary
-            uuid: uuid.v4(),
-            parentID: main.id,
-            noContent: !b.content,
-            readyCount: 0,
-            errors: [],
-            lineCountHint: -1,
-            obj: null,
-        }
-
-        // Ensure flags are set, prioritizing metadata if available, otherwise inferring from type
-        data.static = data.static ?? b.type === KnownBlockTypes.BLOCKSTATIC
-        data.hidden = data.hidden ?? b.type === KnownBlockTypes.BLOCKHIDDEN
-        data.readonly = data.readonly ?? (data.static || data.hidden)
-        data.hasCode =
-            data.hasCode ??
-            (b.type === KnownBlockTypes.BLOCK ||
-                b.type === KnownBlockTypes.BLOCKSTATIC ||
-                b.type === KnownBlockTypes.BLOCKHIDDEN)
-
-        // Default to '101' only if it's truly missing
-        if (!data.version) {
-            data.version = '101'
-        }
-
-        return constructBlock(main, data)
+    const runtimeData = importDataToRuntimeData(validatedData, {
+        id: main.id,
+        uuid: main.uuid,
+        editMode: main.editMode,
+        shadowRoot: main.shadowRoot,
     })
 
     if (mode === 'override') {
-        main.blocks = newBlocks
-    } else if (mode === 'prepend') {
-        main.blocks.unshift(...newBlocks)
+        main.applyRuntimeData(runtimeData, importSettings)
     } else {
-        main.blocks.push(...newBlocks)
+        const newBlocks: BlockData[] = runtimeData.blocks.map((b) => new BlockData(b, main))
+
+        if (mode === 'prepend') {
+            main.blocks.unshift(...newBlocks)
+        } else {
+            main.blocks.push(...newBlocks)
+        }
+
+        if (importSettings) {
+            const settingsOnly = { ...runtimeData, blocks: [] }
+            main.applyRuntimeData(settingsOnly, true)
+        }
     }
 
     // Re-index

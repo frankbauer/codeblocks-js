@@ -7,7 +7,6 @@ import {
 import { globalState } from '@/lib/globalState'
 import Vue, { reactive } from 'vue'
 import { l } from '@/plugins/i18n'
-import { IAppSettings } from '@/lib/codeBlocksManager'
 
 declare global {
     interface Worker {

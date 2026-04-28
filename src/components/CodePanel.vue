@@ -25,12 +25,7 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import { Button } from '@/shadcn/ui/button'
 import { ChevronUp, ChevronDown } from 'lucide-vue-next'
 import { BlockData } from '../lib/codeBlocksManager'
-import {
-    IBlockData,
-    KnownBlockTypes,
-    ICodeBlockDataState,
-    CodeExpansionType,
-} from '../lib/ICodeBlocks'
+import { IBlockData, KnownBlockTypes, CodeExpansionType } from '../lib/ICodeBlocks'
 
 interface IBlockDataExtended extends IBlockData {
     firstLine: number
@@ -71,7 +66,7 @@ const emptyBlockBuilder = (): IBlockDataExtended => {
         themeForCodeBlock: '',
         lineCountHint: -0,
         name: '',
-        getThemeForBlock: (bl: ICodeBlockDataState) => {
+        getThemeForBlock: (bl: any) => {
             return ''
         },
     }

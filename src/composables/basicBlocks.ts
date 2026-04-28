@@ -1,9 +1,4 @@
-import {
-    CodeOutputTypes,
-    IBlockDataPlayground,
-    IRandomizerSet,
-    KnownBlockTypes,
-} from '@/lib/ICodeBlocks'
+import { CodeOutputTypes, IRandomizerSet, KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, Ref, UnwrapRef } from 'vue'
 import { BlockData } from '@/lib/codeBlocksManager'
 import { EventHubType } from '@/composables/globalEvents'
@@ -38,7 +33,10 @@ export interface IOnVisibleLinesChangeInfo {
     id: number
 }
 
-export interface IOnPlacementChangeInfo extends IBlockDataPlayground {
+export interface IOnPlacementChangeInfo {
+    width: string
+    height: string
+    align: string
     id: number
 }
 

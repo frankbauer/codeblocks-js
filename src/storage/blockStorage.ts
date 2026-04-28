@@ -1,10 +1,11 @@
-import { AppContext, BlockData, IAppSettings } from '@/lib/codeBlocksManager'
+import { AppContext, BlockData } from '@/lib/codeBlocksManager'
 import MainBlock from '@/lib/MainBlock'
 import { computed, ComputedRef, Ref, ref, UnwrapNestedRefs, UnwrapRef } from 'vue'
+import { IRuntimeData } from '@/lib/importExportUtils'
 
 const storage: Ref<UnwrapNestedRefs<MainBlock>>[] = []
 
-export function storeBlock(data: IAppSettings) {
+export function storeBlock(data: IRuntimeData) {
     storage.push(ref(new MainBlock(data)))
     return { appID: storage.length - 1 }
 }

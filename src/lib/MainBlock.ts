@@ -1,14 +1,14 @@
 import {
     CodeExpansionType,
     CodeOutputTypes,
-    IBlockDataBase,
     IRandomizerSettings,
     KnownBlockTypes,
 } from '@/lib/ICodeBlocks'
 import { uuid } from 'vue-uuid'
 import { ICompilerID } from '@/lib/ICompilerRegistry'
-import { BlockData, constructBlock, IAppSettings, IMainBlock } from '@/lib/codeBlocksManager'
+import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import { UITheme, UIThemeType } from '@/lib/uiTheme'
+import { IRuntimeData, IRuntimeBlock, runtimeBlockSchema } from './importExportUtils'
 
 export default class MainBlock implements IMainBlock {
     id: number
@@ -33,35 +33,74 @@ export default class MainBlock implements IMainBlock {
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean
+    shadowRoot?: ShadowRoot
     error?: string
 
-    constructor(data: IAppSettings) {
-        this.id = data.id
-        this.uuid = data.uuid
-        this.editMode = data.editMode
-        this.readonly = data.readonly
-        this.randomizer = data.randomizer
-        this.blocks = data.blocks
-        this.compiler = data.compiler
-        this.language = data.language
-        this.runCode = data.runCode
-        this.emitAST = data.emitAST
-        this.domLibs = data.domLibs
-        this.workerLibs = data.workerLibs
-        this.outputParser = data.outputParser
-        this.uiTheme = data.uiTheme
-        this.executionTimeout = data.executionTimeout
-        this.maxCharacters = data.maxCharacters
-        this.scopeUUID = data.scopeUUID
-        this.scopeSelector = data.scopeSelector
-        this.continuousCompilation = data.continuousCompilation
-        this.messagePassing = data.messagePassing
-        this.keepAlive = data.keepAlive
-        this.persistentArguments = data.persistentArguments
-        this.error = data.error
+    constructor(data: IRuntimeData) {
+        const s = data.settings
+        this.id = s.id
+        this.uuid = s.uuid
+        this.editMode = s.editMode
+        this.readonly = s.readonly
+        this.randomizer = s.randomizer ?? {
+            active: false,
+            previewIndex: 0,
+            knownTags: [],
+            sets: [],
+        }
+        this.compiler = s.compiler
+        this.language = s.language
+        this.runCode = s.runCode
+        this.emitAST = s.emitAST
+        this.domLibs = s.domLibs
+        this.workerLibs = s.workerLibs
+        this.outputParser = s.outputParser
+        this.uiTheme = s.uiTheme
+        this.executionTimeout = s.executionTimeout
+        this.maxCharacters = s.maxCharacters
+        this.scopeUUID = s.scopeUUID
+        this.scopeSelector = s.scopeSelector
+        this.continuousCompilation = s.continuousCompilation
+        this.messagePassing = s.messagePassing
+        this.keepAlive = s.keepAlive
+        this.persistentArguments = s.persistentArguments
+        this.shadowRoot = s.shadowRoot
+        this.error = s.error
 
+        this.blocks = data.blocks.map((b) => new BlockData(b, this))
         this.blocks.forEach((v, i) => {
-            this.blocks[i].appSettings = this
+            v.id = i
+        })
+    }
+
+    applyRuntimeData(data: IRuntimeData, importSettings = true): void {
+        if (importSettings) {
+            const s = data.settings
+            this.language = s.language
+            this.compiler = s.compiler
+            this.runCode = s.runCode
+            this.emitAST = s.emitAST
+            this.executionTimeout = s.executionTimeout
+            this.maxCharacters = s.maxCharacters
+            this.outputParser = s.outputParser
+            this.uiTheme = s.uiTheme
+            this.domLibs = s.domLibs
+            this.workerLibs = s.workerLibs
+            this.continuousCompilation = s.continuousCompilation
+            this.messagePassing = s.messagePassing
+            this.keepAlive = s.keepAlive
+            this.persistentArguments = s.persistentArguments
+            this.randomizer = s.randomizer ?? {
+                active: false,
+                previewIndex: 0,
+                knownTags: [],
+                sets: [],
+            }
+        }
+        // Update blocks using the new BlockData constructor (Task 5)
+        this.blocks = data.blocks.map((b) => new BlockData(b, this))
+        this.blocks.forEach((b, i) => {
+            b.id = i
         })
     }
 
@@ -147,44 +186,39 @@ export default class MainBlock implements IMainBlock {
                 counter++
             }
             name = `${prefix}${counter}`
-
-            if (resolvedType === KnownBlockTypes.LIBRARY) {
-                content = `export default {\n  create(context) {\n    return { greet: () => console.log("Greetings from ${name}") }\n  }\n}`
-            }
         }
 
-        const newBlockData: IBlockDataBase = {
-            noContent: false,
-            alternativeContent: null,
-            hasCode: resolvedType === KnownBlockTypes.BLOCK,
+        const newBlockData = runtimeBlockSchema.parse({
             type: resolvedType,
             content: content,
             id: position,
             uuid: uuid.v4(),
             name: name,
             parentID: this.id,
-            expanded: true,
-            codeExpanded: CodeExpansionType.AUTO,
-            width: '100%',
-            height: '200px',
-            align: 'center',
-            obj: null,
-            readonly: false,
-            static: type === KnownBlockTypes.BLOCKSTATIC,
-            hidden: type === KnownBlockTypes.BLOCKHIDDEN,
-            version: '101',
+            noContent: false,
             readyCount: 0,
             errors: [],
             scopeUUID: this.scopeUUID,
             scopeSelector: this.scopeSelector,
-            visibleLines: 10,
-            hasAlternativeContent: false,
-            shouldAutoreset: false,
-            shouldReloadResources: false,
-            generateTemplate: resolvedType === KnownBlockTypes.PLAYGROUND,
             lineCountHint: -1,
-        }
-        this.blocks.splice(position, 0, constructBlock(this, newBlockData))
+            hasAlternativeContent: false,
+            alternativeContent: null,
+            metadata: {
+                expanded: true,
+                codeExpanded: CodeExpansionType.AUTO,
+                static: type === KnownBlockTypes.BLOCKSTATIC,
+                hidden: type === KnownBlockTypes.BLOCKHIDDEN,
+                version: '101',
+                visibleLines: 10,
+                shouldAutoreset: false,
+                shouldReloadResources: false,
+                generateTemplate: resolvedType === KnownBlockTypes.PLAYGROUND,
+                width: '100%',
+                height: '200px',
+                align: 'center',
+            },
+        })
+        this.blocks.splice(position, 0, new BlockData(newBlockData, this))
         this.blocks.forEach((v, i) => (v.id = i))
     }
 

@@ -1,5 +1,4 @@
-import MainBlock from '@/lib/MainBlock'
-import { BlockData, IAppSettings } from '@/lib/codeBlocksManager'
+import { BlockData } from '@/lib/codeBlocksManager'
 
 export type finishedCallbackSignatur = (
     success: boolean,
