@@ -49,7 +49,7 @@
             <code-mirror
                 ref="altBox"
                 v-model="altCode"
-                :class="`accqstXmlInput noRTEditor ${boxClass}`"
+                :class="`accqstXmlInput noRTEditor ${boxClass} alternative-codebox`"
                 :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
                 :theme="block.themeForCodeBlock"
                 :language="mode"
@@ -423,5 +423,8 @@ defineExpose({
 
 .codeblock
     width: 100%
+
+.alternative-codebox
+    filter: grayscale(50%) brightness(105%) saturate(120%)
 </style>
 `
