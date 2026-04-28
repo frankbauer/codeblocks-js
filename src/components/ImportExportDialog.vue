@@ -221,7 +221,7 @@ import { Button } from '@/shadcn/ui/button'
 import { Label } from '@/shadcn/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/shadcn/ui/radio-group'
 import { Download, Upload, FileArchive } from 'lucide-vue-next'
-import { exportToZip, getImportData } from '@/lib/importExportUtils'
+import { exportToZip, getImportData, applyImportToMainBlock } from '@/lib/importExportUtils'
 import MainBlock from '@/lib/MainBlock'
 import { BlockData, constructBlock } from '@/lib/codeBlocksManager'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
@@ -338,72 +338,20 @@ function handleImport() {
         return
     }
 
-    const main = props.mainBlock
-
-    if (importSettings.value) {
-        const s = importData.value.settings
-        main.language = s.language
-        main.compiler = s.compiler
-        main.runCode = s.runCode
-        main.emitAST = s.emitAST
-        main.executionTimeout = s.executionTimeout
-        main.maxCharacters = s.maxCharacters
-        main.outputParser = s.outputParser
-        main.uiTheme = s.uiTheme
-        main.domLibs = s.domLibs
-        main.workerLibs = s.workerLibs
-        main.continuousCompilation = s.continuousCompilation
-        main.messagePassing = s.messagePassing
-        main.keepAlive = s.keepAlive
-        main.persistentArguments = s.persistentArguments
-        main.randomizer = s.randomizer
+    // Filter blocks to import based on selection
+    const filteredImportData = {
+        ...importData.value,
+        blocks: importData.value.blocks.filter((_: any, idx: number) =>
+            selectedImportIndexes.value.includes(idx)
+        ),
     }
 
-    const newBlocks: BlockData[] = selectedImportIndexes.value.map((idx) => {
-        const b = importData.value.blocks[idx]
-        const data: any = {
-            ...b.metadata,
-            type: b.type,
-            name: b.name,
-            content: b.content || '',
-            alternativeContent: b.alternativeContent || null,
-            hasAlternativeContent: b.hasAlternativeContent || false,
-            id: 0, // temporary
-            uuid: uuid.v4(),
-            parentID: main.id,
-            noContent: !b.content,
-            readyCount: 0,
-            errors: [],
-            lineCountHint: -1,
-        }
-
-        // Ensure flags are set, prioritizing metadata if available, otherwise inferring from type
-        data.static = data.static ?? b.type === KnownBlockTypes.BLOCKSTATIC
-        data.hidden = data.hidden ?? b.type === KnownBlockTypes.BLOCKHIDDEN
-        data.readonly = data.readonly ?? (data.static || data.hidden)
-        data.hasCode =
-            data.hasCode ??
-            (b.type === KnownBlockTypes.BLOCK ||
-                b.type === KnownBlockTypes.BLOCKSTATIC ||
-                b.type === KnownBlockTypes.BLOCKHIDDEN)
-        // Default to '101' only if it's truly missing, to avoid '100' which is deprecated
-        if (!data.version) {
-            data.version = '101'
-        }
-
-        return constructBlock(main, data)
-    })
-
-    if (importMode.value === 'override') {
-        main.blocks = newBlocks
-    } else if (importMode.value === 'prepend') {
-        main.blocks.unshift(...newBlocks)
-    } else {
-        main.blocks.push(...newBlocks)
-    }
-
-    // Re-index
-    main.blocks.forEach((b, i) => (b.id = i))
+    applyImportToMainBlock(
+        filteredImportData,
+        props.mainBlock,
+        importMode.value,
+        importSettings.value
+    )
 
     emit('imported')
     emit('update:open', false)

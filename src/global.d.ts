@@ -17,6 +17,12 @@ declare global {
 
         mountCodeBlocks(scope: HTMLElement | Document | undefined): void
 
+        loadAndMount(): Promise<void>
+
+        loadAndMountInElement(element: any): Promise<void>
+
+        loadAndMountInScope(scope: HTMLElement | Document | undefined): Promise<void>
+
         MathJax: any
 
         highlightAll(): void

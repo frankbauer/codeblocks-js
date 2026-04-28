@@ -1,4 +1,4 @@
-import { IAppSettings } from '@/lib/codeBlocksManager'
+import { IAppSettings, BlockData, constructBlock } from '@/lib/codeBlocksManager'
 import JSZip from 'jszip'
 import {
     CodeExpansionType,
@@ -7,14 +7,20 @@ import {
     KnownBlockTypes,
 } from './ICodeBlocks'
 import MainBlock from './MainBlock'
-import { BlockData } from './codeBlocksManager'
 import { ICompilerID } from './ICompilerRegistry'
 import { UIThemeType } from './uiTheme'
 import { z } from 'zod'
+import { uuid } from 'vue-uuid'
 
-const blockMetadataSchema = z.object({
+const commonMetadataSchema = z.object({
     expanded: z.boolean().optional(),
+})
+
+const expandableCodeMetadataSchema = commonMetadataSchema.extend({
     codeExpanded: z.nativeEnum(CodeExpansionType).optional(),
+})
+
+const playgroundMetadataSchema = expandableCodeMetadataSchema.extend({
     shouldAutoreset: z.boolean().optional(),
     shouldReloadResources: z.boolean().optional(),
     generateTemplate: z.boolean().optional(),
@@ -22,6 +28,9 @@ const blockMetadataSchema = z.object({
     height: z.string().optional(),
     align: z.string().optional(),
     version: z.string().optional(),
+})
+
+const blockMetadataSchema = commonMetadataSchema.extend({
     static: z.boolean().optional(),
     hidden: z.boolean().optional(),
     visibleLines: z
@@ -40,11 +49,18 @@ const blockMetadataSchema = z.object({
     hasAlternativeContent: z.boolean().optional(),
 })
 
+const metadataSchema = z.union([
+    commonMetadataSchema,
+    blockMetadataSchema,
+    expandableCodeMetadataSchema,
+    playgroundMetadataSchema,
+])
+
 const exportBlockMetadataSchema = z.object({
     id: z.number(),
     type: z.nativeEnum(KnownBlockTypes),
     name: z.string().optional().default(''),
-    file: z.string(),
+    file: z.string().optional(),
     isCombined: z.boolean().optional(),
     metadata: blockMetadataSchema.optional().default({}),
     content: z.string().optional(),
@@ -84,7 +100,11 @@ const jsonExportSchema = z.object({
     blocks: z.array(exportBlockMetadataSchema),
 })
 
-export type IMetadata = z.infer<typeof blockMetadataSchema>
+export type ICommonMetadata = z.infer<typeof commonMetadataSchema>
+export type IExpandableCodeMetadata = z.infer<typeof expandableCodeMetadataSchema>
+export type IPlaygroundMetadata = z.infer<typeof playgroundMetadataSchema>
+export type IBlockMetadata = z.infer<typeof blockMetadataSchema>
+export type IMetadata = z.infer<typeof metadataSchema>
 export type IExportBlockMetadata = z.infer<typeof exportBlockMetadataSchema>
 export type IExportedSettings = z.infer<typeof exportedSettingsSchema>
 export type IJsonExport = z.infer<typeof jsonExportSchema>
@@ -406,4 +426,75 @@ export async function getImportData(file: File) {
     }
     data.blocks = expandedBlocks
     return data
+}
+
+export function applyImportToMainBlock(
+    importData: IJsonExport,
+    main: MainBlock,
+    mode: 'append' | 'prepend' | 'override' = 'append',
+    importSettings = true
+) {
+    if (importSettings) {
+        const s = importData.settings
+        main.language = s.language
+        main.compiler = s.compiler
+        main.runCode = s.runCode
+        main.emitAST = s.emitAST
+        main.executionTimeout = s.executionTimeout
+        main.maxCharacters = s.maxCharacters
+        main.outputParser = s.outputParser
+        main.uiTheme = s.uiTheme
+        main.domLibs = s.domLibs
+        main.workerLibs = s.workerLibs
+        main.continuousCompilation = s.continuousCompilation
+        main.messagePassing = s.messagePassing
+        main.keepAlive = s.keepAlive
+        main.persistentArguments = s.persistentArguments
+        main.randomizer = s.randomizer
+    }
+
+    const newBlocks: BlockData[] = importData.blocks.map((b) => {
+        const data: any = {
+            ...b.metadata,
+            type: b.type,
+            name: b.name,
+            content: b.content || '',
+            alternativeContent: b.alternativeContent || null,
+            hasAlternativeContent: b.hasAlternativeContent || false,
+            id: 0, // temporary
+            uuid: uuid.v4(),
+            parentID: main.id,
+            noContent: !b.content,
+            readyCount: 0,
+            errors: [],
+            lineCountHint: -1,
+        }
+
+        // Ensure flags are set, prioritizing metadata if available, otherwise inferring from type
+        data.static = data.static ?? b.type === KnownBlockTypes.BLOCKSTATIC
+        data.hidden = data.hidden ?? b.type === KnownBlockTypes.BLOCKHIDDEN
+        data.readonly = data.readonly ?? (data.static || data.hidden)
+        data.hasCode =
+            data.hasCode ??
+            (b.type === KnownBlockTypes.BLOCK ||
+                b.type === KnownBlockTypes.BLOCKSTATIC ||
+                b.type === KnownBlockTypes.BLOCKHIDDEN)
+        // Default to '101' only if it's truly missing, to avoid '100' which is deprecated
+        if (!data.version) {
+            data.version = '101'
+        }
+
+        return constructBlock(main, data)
+    })
+
+    if (mode === 'override') {
+        main.blocks = newBlocks
+    } else if (mode === 'prepend') {
+        main.blocks.unshift(...newBlocks)
+    } else {
+        main.blocks.push(...newBlocks)
+    }
+
+    // Re-index
+    main.blocks.forEach((b, i) => (b.id = i))
 }

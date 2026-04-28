@@ -49,6 +49,15 @@ window.codeblocks = {
     mountInScope: function (scope: HTMLElement | Document | undefined) {
         return CodeBlocksManager.find(scope).mount()
     },
+    loadAndMount: async function () {
+        return CodeBlocksManager.loadAndMount()
+    },
+    loadAndMountInElement: async function (element: Document | HTMLElement) {
+        return CodeBlocksManager.loadAndMountInElement(element)
+    },
+    loadAndMountInScope: async function (scope: HTMLElement | Document | undefined) {
+        return CodeBlocksManager.loadAndMountInScope(scope)
+    },
 }
 
 window.mountInElement = function (element: any): void {
@@ -61,4 +70,4 @@ window.mountCodeBlocks = function (scope: HTMLElement | Document | undefined) {
     window.codeblocks.mountInScope(scope)
 }
 
-CodeBlocksManager.find(document).mount()
+CodeBlocksManager.loadAndMount()

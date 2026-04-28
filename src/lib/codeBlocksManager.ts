@@ -34,6 +34,7 @@ import { storeBlock } from '@/storage/blockStorage'
 import { UIThemeType, getUITheme } from '@/lib/uiTheme'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 import { AnyCodeBlockScope, IScriptBlock } from './IScriptBlock'
+import { IJsonExport, applyImportToMainBlock } from './importExportUtils'
 
 const loaders: { [index: string]: IBlockloadManager } = {}
 blockInstaller(loaders)
@@ -701,15 +702,6 @@ class InternalCodeBlocksManager {
                 shadow.appendChild(link.cloneNode())
             })
 
-            // //add new root and append original Element
-            // const root = document.createElement('DIV')
-            // root.id = 'root'
-            // //root.innerHTML = noContent
-            // root.appendChild(el)
-            // shadow.appendChild(root)
-            // console.log($('style').length)
-            // this.element = root
-
             //append original element to shadowDOM
             shadow.appendChild(el)
             this.element = el
@@ -717,13 +709,15 @@ class InternalCodeBlocksManager {
             this.shadowRoot = undefined
             this.element = el
         }
-        //console.log(this.element)
-        const data = parseInputElement(el, this.shadowRoot)
-        //el.querySelectorAll('*').forEach((blIn) => {
-        for (const blIn of el.children) {
+        this.initialize()
+    }
+
+    initialize() {
+        const data = parseInputElement(this.element, this.shadowRoot)
+        for (const blIn of this.element.children) {
             const bl = blIn as HTMLElement
             //only first level children
-            if (bl.parentElement != el) {
+            if (bl.parentElement != this.element) {
                 continue
             }
 
@@ -738,6 +732,24 @@ class InternalCodeBlocksManager {
         this._data = data
 
         console.d('INPUT DATA', data)
+    }
+
+    async resolveSrc() {
+        const src = this.element.getAttribute('src')
+        if (src) {
+            try {
+                const response = await fetch(src)
+                const json = (await response.json()) as IJsonExport
+                // We apply the JSON directly to our internal data object
+                // Since _data is an IAppSettings and applyImportToMainBlock expects a MainBlock (which is a superset),
+                // we can safely cast it or refine the utility.
+                // Actually, MainBlock is a class wrapper. Let's just update the internal data.
+                applyImportToMainBlock(json, this.data as any, 'override', true)
+                this.element.removeAttribute('src') // avoid re-loading
+            } catch (e) {
+                console.error(`Failed to load codeblocks from ${src}`, e)
+            }
+        }
     }
 
     instantiateVue() {
@@ -763,9 +775,28 @@ export class MountableArray extends Array<InternalCodeBlocksManager> {
     mount() {
         this.forEach((el) => el.instantiateVue())
     }
+
+    async loadAndMount() {
+        for (const cbm of this) {
+            await cbm.resolveSrc()
+        }
+        this.mount()
+    }
 }
 
 export const CodeBlocksManager = {
+    async loadAndMountInElement(element: Document | HTMLElement): Promise<void> {
+        return this.find(element).loadAndMount()
+    },
+
+    async loadAndMountInScope(scope: HTMLElement | Document | undefined): Promise<void> {
+        return this.loadAndMountInElement(scope || document)
+    },
+
+    async loadAndMount(): Promise<void> {
+        return this.loadAndMountInElement(document)
+    },
+
     find(scope: HTMLElement | Document | undefined) {
         if (scope === undefined) {
             scope = document
@@ -774,8 +805,9 @@ export const CodeBlocksManager = {
             'codeblocks, codeblockseditor, div[codeblocks], div[codeblockseditor]'
         )
         const result = new MountableArray()
-        allCodeBlockParents.forEach((el) => {
-            const cbm = new InternalCodeBlocksManager(el as HTMLElement)
+        allCodeBlockParents.forEach((elIn) => {
+            const el = elIn as HTMLElement
+            const cbm = new InternalCodeBlocksManager(el)
             let scope = cbm.data.scopeSelector
                 ? document.querySelector(cbm.data.scopeSelector)
                 : undefined
