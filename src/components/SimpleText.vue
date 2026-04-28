@@ -7,7 +7,7 @@
             class="editor tw-my-3"
             :name="name"
             :language="language"
-            :scopUUID="scopeUUID"
+            :scopeUUID="scopeUUID"
             :editMode="editMode"
             :appID="props.appID"
             :blockID="props.blockID"
