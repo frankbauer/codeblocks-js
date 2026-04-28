@@ -28,14 +28,13 @@ export function compileCode(src: string) {
         compilerRegistry.addLoadedToSandbox(sandbox)
         sandbox.$ = (input: any) => {
             if (typeof input === 'string') {
+                if (input.trim().startsWith('<')) {
+                    return $(input)
+                }
                 console.error(
-                    `You can not use JQuerry globally from this context. Please try scope.find('${input}') instead.`
+                    `You can not use jQuery globally from this context. Please try scope.find('${input}') instead.`
                 )
             } else {
-                if (input && input.getAttribute === undefined) {
-                    console.error('You may only wrap DOMElements using $')
-                    return
-                }
                 return $(input)
             }
         }
