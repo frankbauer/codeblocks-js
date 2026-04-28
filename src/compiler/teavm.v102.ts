@@ -360,7 +360,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                         id: '' + questionID,
                         code: e.data.script,
                         args: args,
-                        messagePosting: options.allowsMessagePassing,
+                        messagePosting: options.allowMessagePassing,
                         keepAlive: options.keepAlive,
                     })
 

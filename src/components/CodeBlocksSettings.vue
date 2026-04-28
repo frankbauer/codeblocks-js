@@ -657,7 +657,7 @@ import CMultiSelect from './ui/CMultiSelect.vue'
 import CSelect from './ui/CSelect.vue'
 import CInput from './ui/CInput.vue'
 import type { IListItemData, ICompilerID } from '@/lib/ICompilerRegistry'
-import type { IRandomizerSet, IRandomizerSettings } from '@/lib/ICodeBlocks'
+import type { IRandomizerSet, IRandomizerSettings, ICodeBlockSettingsOptions } from '@/lib/ICodeBlocks'
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { globalState } from '@/lib/globalState'
 import { UIThemeType, UIThemeTypes, getUITheme } from '@/lib/uiTheme'
@@ -702,24 +702,6 @@ const emit = defineEmits([
 ])
 
 const { t: l } = useI18n()
-export interface ICodeBlockSettingsOptions {
-        id: number | string
-        language: string
-        compiler: ICompilerID
-        executionTimeout: number
-        maxCharacters: number
-        runCode: boolean
-        emitAST: boolean
-        continuousCompilation: boolean
-        messagePassing: boolean
-        keepAlive: boolean
-        persistentArguments: boolean
-        domLibs: string[]
-        workerLibs: string[]
-        uiTheme: UIThemeType
-        outputParser: CodeOutputTypes
-        randomizer: IRandomizerSettings
-    }
 interface Props {
     options: ICodeBlockSettingsOptions
 }

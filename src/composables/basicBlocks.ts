@@ -15,7 +15,7 @@ import {
     ICompilerErrorDescription,
     ICompilerID,
 } from '@/lib/ICompilerRegistry'
-import { ICodeBlockSettingsOptions } from '@/components/CodeBlocksSettings.vue'
+import { ICodeBlockSettingsOptions } from '@/lib/ICodeBlocks'
 import { BlockStorageType } from '@/storage/blockStorage'
 import { UIThemeType } from '@/lib/uiTheme'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
@@ -283,10 +283,10 @@ export function codeBlockSetup(
     const tagSet = (nr: number): IRandomizerSet => {
         return blockInfo.value.randomizer.sets[nr]
     }
-    const themeForBlock = (bl: UnwrapRef<BlockData>): EditorTheme => {
+    const themeForBlock = (bl: BlockData): EditorTheme => {
         return bl.themeForCodeBlock
     }
-    const blockById = (id: number): UnwrapRef<BlockData> | undefined => {
+    const blockById = (id: number): BlockData | undefined => {
         return blocks.value.find((block) => block.id == id)
     }
 

@@ -167,7 +167,7 @@ export function createJavaCompletions(context: CompletionContext): CompletionRes
             info: item.info
                 ? () => {
                       const dom = document.createElement('div')
-                      dom.textContent = item.info
+                      dom.textContent = item.info || null
                       return dom
                   }
                 : undefined,

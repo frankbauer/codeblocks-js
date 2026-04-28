@@ -1,4 +1,4 @@
-import type { Updater } from "@tanstack/vue-table"
+export type Updater<T> = T | ((old: T) => T);
 import type { ClassValue } from "clsx"
 import type { Ref } from "vue"
 import { clsx } from "clsx"

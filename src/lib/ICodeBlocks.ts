@@ -2,6 +2,7 @@ import { ICompilerID, IListItemData } from './ICompilerRegistry'
 import { IProcessedScriptOutput } from '@/lib/IScriptBlock'
 import { IAppSettings } from '@/lib/codeBlocksManager'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
+import { UIThemeType } from '@/lib/uiTheme'
 
 export enum KnownBlockTypes {
     PLAYGROUND = 'PLAYGROUND',
@@ -169,4 +170,23 @@ export interface IGlobalState extends IGlobalSettings {
     refreshAllCodeMirrorsSync(): void
 
     itemForValue(items: IListItemData[], value: string): IListItemData
+}
+
+export interface ICodeBlockSettingsOptions {
+    id: number | string
+    language: string
+    compiler: ICompilerID
+    executionTimeout: number
+    maxCharacters: number
+    runCode: boolean
+    emitAST: boolean
+    continuousCompilation: boolean
+    messagePassing: boolean
+    keepAlive: boolean
+    persistentArguments: boolean
+    domLibs: string[]
+    workerLibs: string[]
+    uiTheme: UIThemeType
+    outputParser: CodeOutputTypes
+    randomizer: IRandomizerSettings
 }

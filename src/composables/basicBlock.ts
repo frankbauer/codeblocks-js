@@ -26,12 +26,10 @@ interface OptionalEditableBlockProps extends OptionalBasicBlockProps {
 
 export interface EditableBlockProps extends BasicBlockProps, OptionalEditableBlockProps {}
 
-export const DEFAULT_EDITABLE_BLOCK_PROPS: InferDefaults<
-    LooseRequired<OptionalEditableBlockProps>
-> = {
+export const DEFAULT_EDITABLE_BLOCK_PROPS = {
     muteReadyState: false,
     editMode: false,
-    visibleLines: 'auto',
+    visibleLines: 'auto' as VisibleLinesType,
     theme: () => DEFAULT_EDITOR_THEME,
 }
 

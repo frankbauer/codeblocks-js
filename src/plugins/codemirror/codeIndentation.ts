@@ -47,7 +47,7 @@ function syntaxIndentation(cx: IndentContext, ast: Tree, pos: number, topIndent:
 }
 
 function ignoreClosed(cx: TreeIndentContext) {
-    return cx.pos == cx.options.simulateBreak && cx.options.simulateDoubleBreak
+    return cx.pos == (cx as any).options.simulateBreak && (cx as any).options.simulateDoubleBreak
 }
 
 function indentStrategy(
@@ -74,7 +74,6 @@ function indentStrategy(
     }
     return tree.parent == null ? topIndent : null
 }
-
 function indentFrom(
     node: SyntaxNode | null,
     pos: number,
@@ -84,7 +83,7 @@ function indentFrom(
     for (; node; node = node.parent) {
         const strategy = indentStrategy(node, topIndent)
         if (strategy) {
-            return strategy(TreeIndentContext.create(base, pos, node))
+            return strategy((TreeIndentContext as any).create(base, pos, node))
         }
     }
     return null
@@ -100,7 +99,7 @@ function bracketedAligned(context: TreeIndentContext) {
     if (!openToken) {
         return null
     }
-    const sim = context.options.simulateBreak
+    const sim = (context as any).options.simulateBreak
     const openLine = context.state.doc.lineAt(openToken.from)
     const lineEnd = sim == null || sim <= openLine.from ? openLine.to : Math.min(openLine.to, sim)
     for (let pos = openToken.to; ; ) {

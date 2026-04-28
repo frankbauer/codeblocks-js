@@ -135,7 +135,7 @@ export interface IScriptBlock {
 
     beforeStart(): void
 
-    whenFinished(args: string[] | object, resultData: object | any[]): void
+    whenFinished(args: string[] | object, resultData?: object | any[]): void
 
     resetResources(): void
 
