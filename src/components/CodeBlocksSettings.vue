@@ -213,22 +213,27 @@
                         {{ l('CodeBlocksSettings.CollapseAll') }}
                     </TooltipContent>
                 </Tooltip>
-            </TooltipProvider>
 
-            <!-- Settings gear -->
-            <Dialog v-model:open="dialogOpen">
-                <DialogTrigger as-child>
-                    <button
-                        type="button"
-                        class="cb-toolbar-item tw-border-l tw-px-3"
-                        :title="$t('CodeBlocksSettings.Settings')"
+                <!-- Settings gear -->
+                <Dialog v-model:open="dialogOpen">
+                    <Tooltip>
+                        <TooltipTrigger as-child>
+                            <DialogTrigger as-child>
+                                <button
+                                    type="button"
+                                    class="cb-toolbar-item tw-border-l tw-px-3"
+                                >
+                                    <Settings class="tw-w-3.5 tw-h-3.5" />
+                                </button>
+                            </DialogTrigger>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {{ $t('CodeBlocksSettings.Settings') }}
+                        </TooltipContent>
+                    </Tooltip>
+                    <DialogScrollContent
+                        class="tw-w-full tw-max-w-lg sm:tw-max-w-xl md:tw-max-w-2xl"
                     >
-                        <Settings class="tw-w-3.5 tw-h-3.5" />
-                    </button>
-                </DialogTrigger>
-                <DialogScrollContent
-                    class="tw-w-full tw-max-w-lg sm:tw-max-w-xl md:tw-max-w-2xl"
-                >
                         <DialogHeader>
                             <DialogTitle>{{ $t('CodeBlocksSettings.Settings') }}</DialogTitle>
                             <DialogDescription>
@@ -659,6 +664,7 @@
                         </div>
                     </DialogScrollContent>
                 </Dialog>
+            </TooltipProvider>
         </div>
 
         <textarea
