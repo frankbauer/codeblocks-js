@@ -12,13 +12,27 @@
             <div class="tw-flex tw-items-center tw-flex-1">   
                 <div class="tw-ml-0 tw-transition-opacity tw-duration-250 group-hover:tw-opacity-0"> <TagIcon class="tw-w-4 tw-h-4 tw-text-muted-foreground tw-mr-1" /></div>                             
                 <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">
-                    <Input
-                        id="name-input"
-                        v-model="name"
-                        size="xs"
-                        class="tw-mb-0 tw-pl-3 tw-bg-white"
-                        :placeholder="$t('LibraryBlock.Name')"
-                    />
+                    <TooltipProvider>
+                        <Tooltip :delay-duration="300">
+                            <TooltipTrigger as-child>
+                                <Input
+                                    id="name-input"
+                                    v-model="name"
+                                    size="xs"
+                                    class="tw-mb-0 tw-pl-3 tw-bg-white"
+                                    :placeholder="$t('LibraryBlock.Name')"
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p v-if="hasModernPlayground">
+                                    {{ $t('DataBlock.UsageTooltip', { name: name }) }}
+                                </p>
+                                <p v-else>
+                                    {{ $t('DataBlock.UsageTooltipLegacy', { name: name }) }}
+                                </p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             </div>
 
@@ -100,6 +114,25 @@
                 </div>
             </div>
         </div>
+
+        <Alert
+            v-if="hasDuplicateName"
+            variant="destructive"
+            class="tw-bg-orange-50 tw-border-orange-200 tw-py-2 tw-mb-2"
+        >
+            <div class="tw-flex tw-gap-2 tw-items-center">
+                <BookCopy class="tw-h-12 tw-w-12 tw-text-orange-500" />
+                <div class="tw-flex-1">
+                    <AlertTitle class="tw-text-xs tw-font-medium tw-mb-0 tw-text-orange-600">
+                        {{ $t('LibraryBlock.DuplicateNameTitle') }}
+                    </AlertTitle>
+                    <AlertDescription class="tw-text-xs tw-mt-1 tw-text-orange-500">
+                        {{ $t('LibraryBlock.DuplicateNameMessage', { name: name }) }}
+                    </AlertDescription>
+                </div>
+            </div>
+        </Alert>
+
         <transition name="slide">
             <code-mirror
                 ref="codeBox"
@@ -143,7 +176,7 @@ import {
     Ref,
     watch,
 } from 'vue'
-import { IRandomizerSet, CodeExpansionType } from '@/lib/ICodeBlocks'
+import { IRandomizerSet, CodeExpansionType, KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { ICodePlaygroundOptions } from './CodePlayground.vue'
 
 import {
@@ -162,6 +195,12 @@ import { useCodeEditor } from '@/composables/useCodeEditor'
 import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
 import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/shadcn/ui/tooltip'
 import {
     Dialog,
     DialogContent,
@@ -188,6 +227,7 @@ import {
     Shrink,
     Plus,
     TagIcon,
+    BookCopy,
 } from 'lucide-vue-next'
 
 interface Props extends EditableBlockProps {
@@ -266,6 +306,21 @@ const name = computed({
     set(newName: string) {
         block.value.name = newName
     },
+})
+
+const hasDuplicateName = computed(() => {
+    return blockStorage.appInfo.value.blocks.some(
+        (b) =>
+            b.uuid !== block.value.uuid &&
+            (b.type === KnownBlockTypes.LIBRARY || b.type === KnownBlockTypes.DATA) &&
+            b.name === block.value.name
+    )
+})
+
+const hasModernPlayground = computed(() => {
+    return blockStorage.appInfo.value.blocks.some(
+        (b) => b.type === KnownBlockTypes.PLAYGROUND && parseInt(b.version) >= 102
+    )
 })
 
 //watch for changes in codeExpanded

@@ -254,13 +254,16 @@ export default {
         AddImageData: 'Add Image Data',
         InfoCaption: 'Usage',
         Info: "You can access this data in your Sandboxes using <b>this.DATA['{NAME}']</b>",
+        UsageTooltip: 'This data is available as "{name}" in the playground.',
+        UsageTooltipLegacy: "This data is available as this.DATA['{name}'] in the playground.",
     },
     LibraryBlock: {
         Name: 'Name',
-        DuplicateNameTitle: 'Duplicate Library Name',
-        DuplicateNameMessage: 'Multiple libraries with the name "{name}" exist. This might lead to unexpected behavior.',
+        DuplicateNameTitle: 'Duplicate Name',
+        DuplicateNameMessage: 'Multiple blocks with the name "{name}" exist. This might lead to unexpected behavior.',
         InactiveTitle: 'Library Inactive',
         InactiveMessage: 'No playground block with at least version {version} exists. This library will not be used.',
         ErrorTitle: 'Library Error',
+        UsageTooltip: 'This library is available as "{name}" in the playground.',
     },
 }

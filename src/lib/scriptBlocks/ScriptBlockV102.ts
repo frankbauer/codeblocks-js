@@ -49,6 +49,15 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
     
             // Create library instances in execution order; each sees previously created instances
             const context: Record<string, any> = {}
+
+            // Inject Data into context so libraries can use it too
+            for (const key in this.DATA) {
+                if (Object.prototype.hasOwnProperty.call(this.DATA, key)) {
+                    context[key] = this.DATA[key]
+                    this.activeLibraryKeys.add(key)
+                }
+            }
+
             for (const lib of libraryBlocks) {
                 console.log('Creating library instance for', lib.name, lib)
                 const instance = lib.obj.createInstance(context)

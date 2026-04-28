@@ -6,13 +6,22 @@
             <div class="tw-flex tw-items-center tw-flex-1">
                 <div class="tw-ml-0 tw-transition-opacity tw-duration-250 group-hover:tw-opacity-0"> <TagIcon class="tw-w-4 tw-h-4 tw-text-muted-foreground tw-mr-1" /></div>
                 <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">                   
-                    <Input
-                        id="library-name-input"
-                        v-model="name"
-                        size="xs"
-                        class="tw-mb-0 tw-bg-white tw-pl-3"
-                        :placeholder="$t('LibraryBlock.Name')"
-                    />
+                    <TooltipProvider>
+                        <Tooltip :delay-duration="300">
+                            <TooltipTrigger as-child>
+                                <Input
+                                    id="library-name-input"
+                                    v-model="name"
+                                    size="xs"
+                                    class="tw-mb-0 tw-bg-white tw-pl-3"
+                                    :placeholder="$t('LibraryBlock.Name')"
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>{{ $t('LibraryBlock.UsageTooltip', { name: name }) }}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             </div>
 
@@ -162,6 +171,12 @@ import { l } from '@/plugins/i18n'
 import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
 import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/shadcn/ui/tooltip'
 
 import { Expand, Maximize, Shrink, AlertTriangle, ZapOff, BookCopy, TagIcon } from 'lucide-vue-next'
 import { useSlideTransition } from '@/composables/useSlideTransition'
@@ -230,7 +245,7 @@ const hasDuplicateName = computed(() => {
     return blockStorage.appInfo.value.blocks.some(
         (b) =>
             b.uuid !== block.value.uuid &&
-            b.type === KnownBlockTypes.LIBRARY &&
+            (b.type === KnownBlockTypes.LIBRARY || b.type === KnownBlockTypes.DATA) &&
             b.name === block.value.name
     )
 })

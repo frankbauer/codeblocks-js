@@ -291,13 +291,16 @@ export default {
         AddImageData: 'Bilddaten hinzufügen',
         InfoCaption: 'Verwendung',
         Info: "Sie können auf dieses Datum in den Sandkästen über <b>this.DATA['{NAME}']</b> zugreifen.",
+        UsageTooltip: 'Diese Daten sind als "{name}" im Sandkasten verfügbar.',
+        UsageTooltipLegacy: "Diese Daten sind als this.DATA['{name}'] im Sandkasten verfügbar.",
     },
     LibraryBlock: {
         Name: 'Name',
-        DuplicateNameTitle: 'Doppelter Bibliotheksname',
-        DuplicateNameMessage: 'Es existieren mehrere Bibliotheken mit dem Namen "{name}". Dies kann zu unerwartetem Verhalten führen.',
+        DuplicateNameTitle: 'Doppelter Name',
+        DuplicateNameMessage: 'Es existieren mehrere Blöcke mit dem Namen "{name}". Dies kann zu unerwartetem Verhalten führen.',
         InactiveTitle: 'Bibliothek Inaktiv',
         InactiveMessage: 'Kein Sandkasten mit mindestens {version} vorhanden. Diese Bibliothek wird nicht verwendet.',
         ErrorTitle: 'Fehler in der Bibliothek',
+        UsageTooltip: 'Diese Bibliothek ist als "{name}" im Sandkasten verfügbar.',
     },
 }
