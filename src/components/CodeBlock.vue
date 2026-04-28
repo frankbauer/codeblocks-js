@@ -32,8 +32,10 @@
             @focus="onCodeFocus"
             @ready="onCodeReady"
         />
-        <div v-if="editMode && hasAlternativeContent">
-            <div class="tw-mt-8 text-subtitle2 tw-pb-1">
+        <div v-if="editMode && hasAlternativeContent" class="tw-mt-2">
+            <div
+                class="tw-pb-0 tw-text-sm tw-font-medium tw-pointer-events-none tw-truncate tw-z-50 tw-text-muted-foreground"
+            >
                 {{ $t('CodeBlock.Initial_Content') }}
             </div>
             <textarea
