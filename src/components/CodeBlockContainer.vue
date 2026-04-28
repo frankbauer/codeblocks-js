@@ -661,7 +661,7 @@ const typeColor = computed((): string => {
         return '#64748b'
     }
     if (t === KnownBlockTypes.BLOCKHIDDEN) {
-        return '#9ca3af'
+        return '#bfc9db'
     }
     if (t === KnownBlockTypes.BLOCKSTATIC) {
         return '#a855f7'
@@ -1059,7 +1059,7 @@ const filteredCopy = (objIn: object, extended = true, path = 'this'): object => 
     border-color: #22c55e
 
 .block-hidden-border
-    border-color: #9ca3af
+    border-color: #bfc9db
 
 .block-static-border
     border-color: #a855f7
