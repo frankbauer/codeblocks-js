@@ -13,7 +13,7 @@ export type BlockStorageType = ReturnType<typeof useBlockStorage>
 
 export const useBlockStorage = (appID: number) => {
     const appInfo: ComputedRef<MainBlock> = computed(() => {
-        console.log('appInfo', appID, storage[appID].value)
+        console.i('appInfo', appID, storage[appID].value)
         return storage[appID].value as unknown as MainBlock
     })
 
