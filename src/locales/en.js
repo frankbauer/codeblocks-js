@@ -245,6 +245,10 @@ export default {
         },
     },
     DataBlock: {
+        Add: 'Add...',
+        LoadJSON: 'Load JSON',
+        AddTextData: 'Add Text Data',
+        AddImageData: 'Add Image Data',
         InfoCaption: 'Usage',
         Info: "You can access this data in your Sandboxes using <b>this.DATA['{NAME}']</b>",
     },

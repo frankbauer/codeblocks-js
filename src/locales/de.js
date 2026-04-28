@@ -282,6 +282,10 @@ export default {
         },
     },
     DataBlock: {
+        Add: 'Upload...',
+        LoadJSON: 'JSON laden',
+        AddTextData: 'Textdaten hinzufügen',
+        AddImageData: 'Bilddaten hinzufügen',
         InfoCaption: 'Verwendung',
         Info: "Sie können auf dieses Datum in den Sandkästen über <b>this.DATA['{NAME}']</b> zugreifen.",
     },

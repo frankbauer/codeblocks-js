@@ -7,46 +7,39 @@
             </Alert>
         </transition>
         <div
-            class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-end tw-content-end tw-mb-1"
-            v-if="editMode"
+            class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-center tw-content-center tw-mb-1"
         >
-            <div class="tw-flex tw-items-end">
-                <div class="inlined-input tw-mr-2">
+            <div class="tw-flex tw-items-center tw-flex-1">
+                <div class="inlined-input tw-mr-2 tw-ml-6">
                     <Button variant="ghost" size="sm" @click="showInfoDialog">
                         <Info class="tw-w-4 tw-h-4" />
                     </Button>
                 </div>
-                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">
-                    <label for="name-input" class="tw-text-sm tw-font-medium tw-mr-2">Name</label>
-                    <Input id="name-input" v-model="name" size="xs" class="tw-mb-0" />
+                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex tw-flex-1">
+                    <Input
+                        id="name-input"
+                        v-model="name"
+                        size="xs"
+                        class="tw-mb-0 tw-bg-muted tw-pl-3"
+                        :placeholder="$t('LibraryBlock.Name')"
+                    />
                 </div>
-                <div class="inlined-input tw-mr-2">
+            </div>
+
+            <div class="tw-flex tw-items-center tw-gap-2">
+                <div class="inlined-input">
                     <input
                         class="jsonFileUploader"
                         type="file"
                         ref="jsonFileUploader"
                         @change="onUploadJson($event)"
                     />
-
-                    <Button variant="default" size="xs" @click="openJson">
-                        <CloudUpload class="tw-w-4 tw-h-4 tw-mr-1" />
-                        Load JSON
-                    </Button>
-                </div>
-                <div class="inlined-input tw-mr-2">
                     <input
                         class="plainFileUploader"
                         type="file"
                         ref="plainFileUploader"
                         @change="onUploadPlain($event)"
                     />
-
-                    <Button variant="default" size="xs" @click="openPlain">
-                        <FilePlus class="tw-w-4 tw-h-4 tw-mr-1" />
-                        Add Text Data
-                    </Button>
-                </div>
-                <div class="inlined-input">
                     <input
                         class="imageFileUploader"
                         type="file"
@@ -54,44 +47,61 @@
                         @change="onUploadImage($event)"
                     />
 
-                    <Button variant="default" size="xs" @click="openImage">
-                        <ImagePlus class="tw-w-4 tw-h-4 tw-mr-1" />
-                        Add Image Data
+                    <DropdownMenu>
+                        <DropdownMenuTrigger as-child>
+                            <Button variant="default" size="xs">
+                                <Plus class="tw-w-4 tw-h-4 tw-mr-1" />
+                                {{ $t('DataBlock.Add') || 'Add...' }}
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem @click="openJson">
+                                <CloudUpload class="tw-w-4 tw-h-4 tw-mr-2" />
+                                {{ $t('DataBlock.LoadJSON') || 'Load JSON' }}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem @click="openPlain">
+                                <FilePlus2 class="tw-w-4 tw-h-4 tw-mr-2" />
+                                {{ $t('DataBlock.AddTextData') || 'Add Text Data' }}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem @click="openImage">
+                                <ImagePlus class="tw-w-4 tw-h-4 tw-mr-2" />
+                                {{ $t('DataBlock.AddImageData') || 'Add Image Data' }}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+
+                <div
+                    class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse"
+                >
+                    <Button
+                        :variant="isExpandedAuto ? 'default' : 'outline'"
+                        class="tw-rounded-none tw-rounded-s-md tw-shadow-none focus-visible:tw-z-10"
+                        size="xs"
+                        @click="setExpandedAuto"
+                    >
+                        <Expand class="tw-w-4 tw-h-4 tw-mr-1" />
+                        Auto
+                    </Button>
+                    <Button
+                        :variant="isExpandedLarge ? 'default' : 'outline'"
+                        class="tw-rounded-none tw-shadow-none focus-visible:tw-z-10"
+                        size="xs"
+                        @click="setExpandedLarge"
+                    >
+                        <Maximize class="tw-w-4 tw-h-4 tw-mr-1" />
+                        Large
+                    </Button>
+                    <Button
+                        :variant="isExpandedTiny ? 'default' : 'outline'"
+                        class="tw-rounded-none tw-rounded-e-md tw-shadow-none focus-visible:tw-z-10"
+                        size="xs"
+                        @click="setExpandedTiny"
+                    >
+                        <Shrink class="tw-w-4 tw-h-4 tw-mr-1" />
+                        Small
                     </Button>
                 </div>
-            </div>
-
-            <div
-                class="tw-inline-flex tw-w-fit -tw-space-x-px tw-rounded-md tw-shadow-xs rtl:tw-space-x-reverse"
-                v-if="editMode"
-            >
-                <Button
-                    :variant="isExpandedAuto ? 'default' : 'outline'"
-                    class="tw-rounded-none tw-rounded-s-md tw-shadow-none focus-visible:tw-z-10"
-                    size="xs"
-                    @click="setExpandedAuto"
-                >
-                    <Expand class="tw-w-4 tw-h-4 tw-mr-1" />
-                    Auto
-                </Button>
-                <Button
-                    :variant="isExpandedLarge ? 'default' : 'outline'"
-                    class="tw-rounded-none tw-shadow-none focus-visible:tw-z-10"
-                    size="xs"
-                    @click="setExpandedLarge"
-                >
-                    <Maximize class="tw-w-4 tw-h-4 tw-mr-1" />
-                    Large
-                </Button>
-                <Button
-                    :variant="isExpandedTiny ? 'default' : 'outline'"
-                    class="tw-rounded-none tw-rounded-e-md tw-shadow-none focus-visible:tw-z-10"
-                    size="xs"
-                    @click="setExpandedTiny"
-                >
-                    <Shrink class="tw-w-4 tw-h-4 tw-mr-1" />
-                    Small
-                </Button>
             </div>
         </div>
         <transition name="slide">
@@ -155,7 +165,7 @@ import { useCodeEditor } from '@/composables/useCodeEditor'
 // Shadcn components
 import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
-import { Alert, AlertDescription } from '@/shadcn/ui/alert'
+import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
 import {
     Dialog,
     DialogContent,
@@ -164,9 +174,24 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/shadcn/ui/dialog'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/shadcn/ui/dropdown-menu'
 
 // Lucide icons
-import { Info, CloudUpload, FilePlus, ImagePlus, Maximize, Expand, Shrink } from 'lucide-vue-next'
+import {
+    Info,
+    CloudUpload,
+    FilePlus2,
+    ImagePlus,
+    Maximize,
+    Expand,
+    Shrink,
+    Plus,
+} from 'lucide-vue-next'
 
 interface Props extends EditableBlockProps {
     namePrefix?: string

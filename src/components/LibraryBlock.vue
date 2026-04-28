@@ -1,14 +1,17 @@
 <template>
     <div v-if="editMode">
         <div
-            class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-end tw-content-end tw-mb-1"
+            class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-center tw-content-center tw-mb-1"
         >
-            <div class="tw-flex tw-items-end">
-                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex">
-                    <label for="library-name-input" class="tw-text-sm tw-font-medium tw-mr-2"
-                        >{{ $t('LibraryBlock.Name') }}</label
-                    >
-                    <Input id="library-name-input" v-model="name" size="xs" class="tw-mb-0" />
+            <div class="tw-flex tw-items-center tw-flex-1">
+                <div class="tw-mr-4 inlined-input tw-mb-0 tw-flex tw-flex-1 tw-ml-6">
+                    <Input
+                        id="library-name-input"
+                        v-model="name"
+                        size="xs"
+                        class="tw-mb-0 tw-bg-muted tw-pl-3"
+                        :placeholder="$t('LibraryBlock.Name')"
+                    />
                 </div>
             </div>
 
