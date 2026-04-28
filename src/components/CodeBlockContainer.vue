@@ -501,6 +501,7 @@ import { computed, getCurrentInstance, nextTick, ref, toRefs, watch } from 'vue'
 
 import { Button } from '@/shadcn/ui/button'
 import { Input } from '@/shadcn/ui/input'
+import { Label } from '@/shadcn/ui/label'
 import { Switch } from '@/shadcn/ui/switch'
 
 import {
