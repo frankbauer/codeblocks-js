@@ -406,9 +406,13 @@ export async function getImportData(file: File | Blob): Promise<IJsonExport> {
 }
 
 export function validateImportData(data: any, strict = true): IJsonExport {
+    let parsedData: IJsonExport
     try {
-        if (strict) data = jsonExportSchema.strict().parse(data)
-        else data = jsonExportSchema.parse(data)
+        if (strict) {
+            parsedData = jsonExportSchema.strict().parse(data)
+        } else {
+            parsedData = jsonExportSchema.parse(data)
+        }
     } catch (e) {
         console.error('Validation error during import processing:', e)
         if (e instanceof z.ZodError) {
@@ -418,11 +422,13 @@ export function validateImportData(data: any, strict = true): IJsonExport {
         }
         throw e
     }
-    return data
+    return parsedData
 }
 
 export function processImportData(data: IJsonExport, validate = false): IJsonExport {
-    if (validate) data = validateImportData(data)
+    if (validate) {
+        data = validateImportData(data)
+    }
 
     const expandedBlocks: IExportBlockMetadata[] = []
     for (const block of data.blocks) {
