@@ -228,7 +228,8 @@ export class JavaV102Compiler implements ICompilerInstance {
                     'Phase: <b>' + e.data.phase + '</b> for ' + mainClass
                 )
             } else if (e.data.command == 'diagnostic' || e.data.command == 'compiler-diagnostic') {
-                const isError = e.data.severity == 'ERROR'
+                console.log('Received diagnostic message from compiler:', e.data)
+                const isError = e.data.severity == 'ERROR' || e.data.severity == 'error'
                 if (compileFailedCallback) {
                     compileFailedCallback({
                         message:
