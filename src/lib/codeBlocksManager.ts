@@ -115,6 +115,31 @@ export class BlockData implements IBlockData {
         this.initialize()
     }
 
+    randomizerContent(setIndex: number): string | undefined {
+        if (setIndex >= 0 && setIndex < this.appSettings.randomizer.sets.length) {
+            return tagger.replaceRandomTagsInString(
+                this.content,
+                this.appSettings.randomizer.sets[setIndex]
+            )
+        }
+
+        return undefined
+    }
+
+    randomizerAlternativeContent(setIndex: number): string | null | undefined {
+        if (this.alternativeContent === null) {
+            return null
+        }
+        if (setIndex >= 0 && setIndex < this.appSettings.randomizer.sets.length) {
+            return tagger.replaceRandomTagsInString(
+                this.alternativeContent,
+                this.appSettings.randomizer.sets[setIndex]
+            )
+        }
+
+        return undefined
+    }
+
     actualContent() {
         console.i('this.appSettings.randomizer.active', this.appSettings.randomizer.active)
         if (this.appSettings.randomizer.active) {
@@ -125,6 +150,20 @@ export class BlockData implements IBlockData {
         }
 
         return this.content
+    }
+
+    actualAlternativeContent() {
+        if (this.alternativeContent === null) {
+            return null
+        }
+        if (this.appSettings.randomizer.active) {
+            return tagger.replaceRandomTagsInString(
+                this.alternativeContent,
+                this.appSettings.randomizer.sets[this.appSettings.randomizer.previewIndex]
+            )
+        }
+
+        return this.alternativeContent
     }
 
     recreateScriptObject() {

@@ -54,6 +54,44 @@
                                 </Label>
                             </div>
                         </div>
+
+                        <div
+                            v-if="mainBlock.randomizer.active"
+                            class="tw-mt-6 tw-pt-6 tw-border-t tw-space-y-4"
+                        >
+                            <h3 class="tw-text-sm tw-font-medium">
+                                {{ $t('ImportExport.RandomizerOptions') }}
+                            </h3>
+                            <RadioGroup v-model="randomizerExportMode" class="tw-space-y-2">
+                                <div class="tw-flex tw-items-center tw-space-x-2">
+                                    <RadioGroupItem
+                                        :value="ExportRandomizerMode.ORIGINAL"
+                                        id="export-mode-original"
+                                    />
+                                    <Label for="export-mode-original" class="tw-text-sm">{{
+                                        $t('ImportExport.ExportOriginal')
+                                    }}</Label>
+                                </div>
+                                <div class="tw-flex tw-items-center tw-space-x-2">
+                                    <RadioGroupItem
+                                        :value="ExportRandomizerMode.CURRENT"
+                                        id="export-mode-current"
+                                    />
+                                    <Label for="export-mode-current" class="tw-text-sm">{{
+                                        $t('ImportExport.ExportCurrent')
+                                    }}</Label>
+                                </div>
+                                <div class="tw-flex tw-items-center tw-space-x-2">
+                                    <RadioGroupItem
+                                        :value="ExportRandomizerMode.ALL"
+                                        id="export-mode-all"
+                                    />
+                                    <Label for="export-mode-all" class="tw-text-sm">{{
+                                        $t('ImportExport.ExportAll')
+                                    }}</Label>
+                                </div>
+                            </RadioGroup>
+                        </div>
                     </div>
 
                     <div class="tw-flex tw-justify-end tw-gap-3 tw-pt-4 tw-border-t">
@@ -206,7 +244,12 @@
 </template>
 
 <script setup lang="ts">
-import { applyImportToMainBlock, exportToZip, getImportData } from '@/lib/importExportUtils'
+import {
+    applyImportToMainBlock,
+    exportToZip,
+    getImportData,
+    ExportRandomizerMode,
+} from '@/lib/importExportUtils'
 import MainBlock from '@/lib/MainBlock'
 import { Button } from '@/shadcn/ui/button'
 import { Checkbox } from '@/shadcn/ui/checkbox'
@@ -233,6 +276,8 @@ const emit = defineEmits(['update:open', 'imported'])
 const activeTab = ref('export')
 const blocks = computed(() => props.mainBlock?.blocks || [])
 const selectedBlockUuids = ref<string[]>([])
+
+const randomizerExportMode = ref<ExportRandomizerMode>(ExportRandomizerMode.ORIGINAL)
 
 const importData = ref<any>(null)
 const selectedImportIndexes = ref<number[]>([])
@@ -271,16 +316,37 @@ function toggleBlock(uuid: string, checked: boolean | 'indeterminate') {
     }
 }
 
-async function handleExport() {
-    const blob = await exportToZip(props.mainBlock, selectedBlockUuids.value)
+function downloadBlob(blob: Blob, fileName: string) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `codeblocks_${new Date().toISOString().split('T')[0]}.codeblocks.zip`
+    a.download = fileName
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
+}
+
+async function handleExport() {
+    if (randomizerExportMode.value === ExportRandomizerMode.ALL) {
+        for (let i = 0; i < props.mainBlock.randomizer.sets.length; i++) {
+            const blob = await exportToZip(
+                props.mainBlock,
+                selectedBlockUuids.value,
+                { randomizerMode: ExportRandomizerMode.ALL },
+                i
+            )
+            downloadBlob(
+                blob,
+                `codeblocks_set_${i}_${new Date().toISOString().split('T')[0]}.codeblocks.zip`
+            )
+        }
+    } else {
+        const blob = await exportToZip(props.mainBlock, selectedBlockUuids.value, {
+            randomizerMode: randomizerExportMode.value,
+        })
+        downloadBlob(blob, `codeblocks_${new Date().toISOString().split('T')[0]}.codeblocks.zip`)
+    }
     emit('update:open', false)
 }
 

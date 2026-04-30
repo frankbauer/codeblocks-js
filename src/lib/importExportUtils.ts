@@ -318,11 +318,23 @@ function getExtension(language: string, block: BlockData): string {
     return LANGUAGE_EXTENSIONS[language.toLowerCase()] || 'txt'
 }
 
-type TypeStartLabels = 'API' | 'STATIC' | 'SOLUTION'
+export type TypeStartLabels = 'API' | 'STATIC' | 'SOLUTION'
+
+export enum ExportRandomizerMode {
+    ORIGINAL = 'original',
+    CURRENT = 'current',
+    ALL = 'all',
+}
+
+export interface ExportOptions {
+    randomizerMode: ExportRandomizerMode
+}
 
 export async function exportToZip(
     mainBlock: MainBlock,
-    selectedBlockUuids: string[]
+    selectedBlockUuids: string[],
+    options: ExportOptions = { randomizerMode: ExportRandomizerMode.ORIGINAL },
+    setIndex?: number
 ): Promise<Blob> {
     const zip = new JSZip()
     const blocksToExport = mainBlock.blocks.filter((b) => selectedBlockUuids.includes(b.uuid))
@@ -334,6 +346,18 @@ export async function exportToZip(
         const block = blocksToExport[i]
 
         const extension = getExtension(mainBlock.language, block)
+
+        let blockContent = block.content
+        let blockAltContent = block.alternativeContent
+
+        if (options.randomizerMode === ExportRandomizerMode.CURRENT) {
+            blockContent = block.actualContent()
+            blockAltContent = block.actualAlternativeContent()
+        } else if (options.randomizerMode === ExportRandomizerMode.ALL && setIndex !== undefined) {
+            blockContent = block.randomizerContent(setIndex) || block.content
+            blockAltContent =
+                block.randomizerAlternativeContent(setIndex) ?? block.alternativeContent
+        }
 
         if (block.isSourceCode) {
             // Try to combine continuous source code blocks
@@ -367,13 +391,29 @@ export async function exportToZip(
                     }
 
                     combinedContent += `//#START ${typeLabel}${blockSettingString} \n`
-                    if (cb.hasAlternativeContent) {
-                        combinedContent += cb.alternativeContent + '\n'
+
+                    let cbContent = cb.content
+                    let cbAltContent = cb.alternativeContent
+
+                    if (options.randomizerMode === ExportRandomizerMode.CURRENT) {
+                        cbContent = cb.actualContent()
+                        cbAltContent = cb.actualAlternativeContent()
+                    } else if (
+                        options.randomizerMode === ExportRandomizerMode.ALL &&
+                        setIndex !== undefined
+                    ) {
+                        cbContent = cb.randomizerContent(setIndex) || cb.content
+                        cbAltContent =
+                            cb.randomizerAlternativeContent(setIndex) ?? cb.alternativeContent
+                    }
+
+                    if (cbAltContent !== null && cb.hasAlternativeContent) {
+                        combinedContent += cbAltContent + '\n'
                         combinedContent += `//#END STUDENT\n`
                     }
 
-                    combinedContent += cb.content
-                    if (!cb.content.endsWith('\n')) {
+                    combinedContent += cbContent
+                    if (!cbContent.endsWith('\n')) {
                         combinedContent += '\n'
                     }
                 })
@@ -395,12 +435,14 @@ export async function exportToZip(
 
         // Single block
         const fileName = `${String(block.id).padStart(2, '0')}_${block.name || 'block'}.${extension}`
-        zip.file(fileName, block.content)
+        zip.file(fileName, blockContent)
         exportedBlocks.push({
             id: block.id,
             type: block.type,
             name: block.name,
             file: fileName,
+            alternativeContent: blockAltContent,
+            hasAlternativeContent: block.hasAlternativeContent,
             metadata: getBlockMetadata(block),
         } as IExportBlockMetadata)
         i++
@@ -422,7 +464,10 @@ export async function exportToZip(
         messagePassing: mainBlock.messagePassing,
         keepAlive: mainBlock.keepAlive,
         persistentArguments: mainBlock.persistentArguments,
-        randomizer: mainBlock.randomizer,
+        randomizer:
+            options.randomizerMode === ExportRandomizerMode.ORIGINAL
+                ? mainBlock.randomizer
+                : { ...mainBlock.randomizer, active: false },
     }
 
     const exportData: IJsonExport = {

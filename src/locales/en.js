@@ -230,5 +230,9 @@ export default {
         Prepend: 'Prepend',
         Override: 'Override (Clear existing)',
         Back: 'Back',
+        RandomizerOptions: 'Randomizer Export Options',
+        ExportOriginal: 'Export original content (with tags)',
+        ExportCurrent: 'Export current randomized set',
+        ExportAll: 'Export all randomized sets',
     },
 }

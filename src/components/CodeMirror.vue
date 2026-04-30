@@ -851,6 +851,19 @@ defineExpose({
         padding-top: 0 !important
         padding-bottom: 0 !important
 
+    .cm-matchingBracket
+        outline: none !important
+        border-radius: 2px;
+        padding: 2px;
+        background-color: theme('colors.orange.400') !important
+        color: theme('colors.slate.100') !important
+        .ͼ3w, .ͼ28, .ͼ42, .ͼ1x, *
+            color: theme('colors.slate.100') !important
+
+    .cm-cursor
+        border-left: 2px solid theme('colors.slate.700') !important
+        padding: 5px;
+
     textarea.accqstXmlInput, textarea.noRTEditor
         display: none !important
 </style>

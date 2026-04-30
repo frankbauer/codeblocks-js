@@ -231,5 +231,9 @@ export default {
         Prepend: 'Voranstellen',
         Override: 'Überschreiben (Bestehende löschen)',
         Back: 'Zurück',
+        RandomizerOptions: 'Würfler-Exportoptionen',
+        ExportOriginal: 'Originalinhalt exportieren (mit Platzhaltern)',
+        ExportCurrent: 'Aktuelle Würfler-Zusammenstellung exportieren',
+        ExportAll: 'Alle Würfler-Zusammenstellungen exportieren',
     },
 }
