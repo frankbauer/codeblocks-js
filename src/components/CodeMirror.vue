@@ -199,14 +199,16 @@ const editorLanguage = computed(() => {
         case 'text/html':
             return html()
         case 'text/json':
+        case 'application/json':
             return json()
         case 'text/python':
+        case 'text/x-python':
             return python()
         case 'text/x-java':
-            return java()
         case 'text/java':
             return java()
         case 'text/cpp':
+        case 'text/x-c++src':
             return cpp()
         default:
             return javascript()
@@ -228,30 +230,24 @@ const tagTooltip = createTagTooltip(tagMarkField, tagSet)
 const createIndentService = (): Extension => {
     return indentationCompartment.of(
         indentService.of((context, pos) => {
-            if (codeSplitSegment.value) {
-                return getIndentationInSource(context.state.doc.toString(), pos)
-            }
-            return getSimpleIndentation(context, pos, () => 0) ?? 0
+            return getIndentationInSource(context.state.doc.toString(), pos)
         })
     )
 }
 
 const getIndentationInSource = (docString: string, pos: number): number => {
-    if (codeSplitSegment.value === undefined) {
-        return 0
-    }
-
-    const newCode =
-        codeSplitSegment.value.before +
-        docString +
-        (codeSplitSegment.value.after ? '\n' + codeSplitSegment.value.after : '')
-
     const newState = EditorState.create({
-        doc: newCode,
+        doc: codeSplitSegment.value
+            ? codeSplitSegment.value.before +
+              docString +
+              (codeSplitSegment.value.after ? '\n' + codeSplitSegment.value.after : '')
+            : docString,
         extensions: [EditorState.tabSize.of(4), indentUnit.of('    '), editorLanguage.value],
     })
 
-    const newPos = Math.min(pos + codeSplitSegment.value.offset, newCode.length)
+    const newPos = codeSplitSegment.value
+        ? Math.min(pos + codeSplitSegment.value.offset, newState.doc.length)
+        : pos
 
     // Force synchronous parse up to newPos to ensure indentation logic has a syntax tree
     ensureSyntaxTree(newState, newPos, 2000)

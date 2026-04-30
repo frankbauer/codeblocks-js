@@ -1,6 +1,6 @@
 `
 <template>
-    <div :class="`codeblock block-${typeName}`">
+    <div :class="[`codeblock block-${typeName}`, { 'non-student-editor': isNonStudentBlock }]">
         <textarea
             ref="codeBoxRaw"
             style="display: none"
@@ -214,6 +214,10 @@ const typeName = computed(() => {
     return type
 })
 
+const isNonStudentBlock = computed(() => {
+    return !['block', 'block-hidden', 'block-static'].includes(typeName.value)
+})
+
 const iliasTypeNr = computed(() => {
     const types = {
         text: 0,
@@ -425,5 +429,20 @@ defineExpose({
 
 .alternative-codebox
     filter: grayscale(50%) brightness(105%) saturate(120%)
+
+.non-student-editor
+    :deep(.system-code-box), :deep(.system-code-box-dark)
+        border: none !important
+
+    :deep(.cm-editor)
+        border-radius: 8px
+        overflow: hidden
+        transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out
+        box-shadow: 0 0 5px rgba(var(--type-rgb), 0.2)
+        border: 1px solid rgba(var(--type-rgb), 0.3)
+
+    :deep(.cm-editor.cm-focused)
+        box-shadow: 0 0 12px rgba(var(--type-rgb), 0.45)
+        border: 1px solid rgba(var(--type-rgb), 0.6)
 </style>
 `

@@ -17,6 +17,7 @@ const mimeTypesForLanguage = {
     html: { mime: 'text/html', displayName: 'HTML' }, // (HTML)
     java: { mime: 'text/x-java', displayName: 'Java' }, // (Java),
     javascript: { mime: 'text/javascript', displayName: 'JavaScript' }, // (JavaScript)
+    json: { mime: 'application/json', displayName: 'JSON' }, // (JSON)
     perl: { mime: 'text/x-perl', displayName: 'Perl' }, // (Perl)
     php: { mime: 'application/x-httpd-php', displayName: 'PHP' }, // (PHP)
     python: { mime: 'text/x-python', displayName: 'Python' }, // (Python)

@@ -136,19 +136,20 @@
         </Alert>
 
         <transition name="slide">
-            <code-mirror
+            <CodeBlock
+                v-if="editMode"
                 ref="codeBox"
-                v-model="code"
-                :class="`accqstXmlInput noRTEditor codebox`"
-                :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
-                :id="`teQ${block.parentID}B${block.id}`"
-                :data-question="block.parentID"
-                :theme="block.themeForCodeBlock"
+                :appID="appID"
+                :blockID="blockID"
+                :block="block"
+                :theme="options.theme"
+                :mode="options.mode"
+                :visibleLines="visibleLines"
+                :editMode="editMode"
                 :tagSet="tagSet"
-                language="text/json"
-                @update:model-value="onCodeChange"
+                :muteReadyState="true"
+                @code-changed-in-edit-mode="onCodeChange"
                 @ready="onCodeReady"
-                @focus="onCodeFocus"
             />
         </transition>
         <Dialog :open="dialogOpen" @update:open="(val) => (dialogOpen = val)">
@@ -168,7 +169,7 @@
 </template>
 
 <script lang="ts" setup>
-import CodeMirror from '@/components/CodeMirror.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
 import {
     toRefs,
     ref,
@@ -180,7 +181,7 @@ import {
     watch,
 } from 'vue'
 import { IRandomizerSet, CodeExpansionType, KnownBlockTypes } from '@/lib/ICodeBlocks'
-import { ICodePlaygroundOptions } from './CodePlayground.vue'
+import { IPlaygroundBlockOptions } from './PlaygroundBlock.vue'
 
 import {
     DEFAULT_EDITABLE_BLOCK_PROPS,
@@ -264,15 +265,9 @@ const readonyl = computed(() => !editMode.value)
 const imageFileUploader: Ref<HTMLElement | null> = ref(null)
 const plainFileUploader: Ref<HTMLElement | null> = ref(null)
 const jsonFileUploader: Ref<HTMLElement | null> = ref(null)
-const codeBox = ref<InstanceType<typeof CodeMirror> | null>(null)
+const codeBox = ref<InstanceType<typeof CodeBlock> | null>(null)
 const dialogOpen = ref(false)
 
-const codemirror = computed((): any | undefined => {
-    if (codeBox.value === undefined || codeBox.value === null) {
-        return undefined
-    }
-    return (codeBox.value as any).codemirror
-})
 const originalMode = computed((): boolean => {
     if (block.value.obj === null) {
         return false
@@ -282,7 +277,7 @@ const originalMode = computed((): boolean => {
 
 const { editorReadOnly, code } = useCodeEditor(block, editMode, readonyl)
 
-const options = computed((): ICodePlaygroundOptions => {
+const options = computed((): IPlaygroundBlockOptions => {
     return {
         mode: globalState.appState.mimeType('json'),
         theme: theme.value,
@@ -374,13 +369,7 @@ const updateErrors = (): boolean => {
     return false
 }
 const resetBeforeRun = (): void => {}
-const onCodeChange = (newCode) => {
-    if (codeBox.value === null) {
-        return
-    }
-    const tb = (codeBox.value as any).$el.querySelector('textarea[name]') as HTMLTextAreaElement
-    tb.value = newCode
-    block.value.content = newCode
+const onCodeChange = () => {
     if (editMode.value) {
         needsCodeRebuild.value = true
     }
@@ -389,25 +378,7 @@ const onCodeFocus = (editor) => {}
 const onDidInit = (): void => {
     updateErrors()
 }
-const onCodeReady = (editor) => {
-    if (
-        codemirror.value &&
-        codemirror.value.display &&
-        codemirror.value.display.input &&
-        codemirror.value.display.input.textarea
-    ) {
-        codemirror.value.display.input.textarea.className = 'noRTEditor'
-    }
-    ;(codeBox.value as any)!.$el.querySelectorAll('textarea[name]').forEach((el) => {
-        el.className = (el.className + ' accqstXmlInput noRTEditor').trim()
-        el.id = (codeBox.value as any)!.$el.id
-        $(el).text(block.value.content)
-        el.setAttribute('data-question', `${block.value.parentID}`)
-        if (editMode.value) {
-            el.setAttribute('is-editmode', `${editMode.value}`)
-        }
-    })
-    onCodeChange(block.value.content)
+const onCodeReady = () => {
     updateHeight()
     whenBlockIsReady()
 }

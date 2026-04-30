@@ -4,6 +4,7 @@
         :data-nr="block.id"
         :uuid="block.uuid"
         class="block-container"
+        :style="toolbarBaseStyle"
     >
         <div
             v-if="editMode"

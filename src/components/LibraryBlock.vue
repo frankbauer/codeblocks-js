@@ -178,7 +178,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shad
 
 import { Expand, Maximize, Shrink, AlertTriangle, ZapOff, BookCopy, TagIcon } from 'lucide-vue-next'
 import { useSlideTransition } from '@/composables/useSlideTransition'
-import { ICodePlaygroundOptions } from './CodePlayground.vue'
+import { IPlaygroundBlockOptions } from './PlaygroundBlock.vue'
 
 interface Props extends EditableBlockProps {
     namePrefix?: string
@@ -210,7 +210,7 @@ const { whenBlockIsReady } = useBasicBlockMounting(true, props, blockStorage, (b
 const hasErrors: Ref<boolean> = ref(false)
 const errorDialogMessage: Ref<string> = ref('')
 
-const options: ComputedRef<ICodePlaygroundOptions> = computed((): ICodePlaygroundOptions => {
+const options: ComputedRef<IPlaygroundBlockOptions> = computed((): IPlaygroundBlockOptions => {
     return {
         // codemirror options
         mode: globalCodeBlock?.mimeType('javascript') ?? 'javascript',

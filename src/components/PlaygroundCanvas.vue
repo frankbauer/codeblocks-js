@@ -108,10 +108,15 @@ onBeforeUnmount(() => {
     display: inline-block
     width: 100%
     height: 200px
-    border: 1px dashed rgb(128, 48, 48, 0.66)
-    border-radius: 3px
-    background-color: rgba(255, 255, 255, 0.63766)
-    margin-top: 4px
-    margin-bottom: 4px
-    transition: opacity 600ms, visibility 600ms
+    border: none
+    border-radius: 8px
+    background-color: #ffffff
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04)
+    margin-top: 8px
+    margin-bottom: 8px
+    transition: opacity 600ms, visibility 600ms, box-shadow 0.3s ease
+    overflow: hidden
+
+    &:hover
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06)
 </style>

@@ -2,10 +2,10 @@
 import CodeBlock from '@/components/CodeBlock.vue'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
-import CodePlayground from '@/components/CodePlayground.vue'
+import PlaygroundBlock from '@/components/PlaygroundBlock.vue'
 import DataBlock from '@/components/DataBlock.vue'
 import LibraryBlock from '@/components/LibraryBlock.vue'
-import SimpleText from '@/components/SimpleText.vue'
+import TextBlock from '@/components/TextBlock.vue'
 import {
     codeBlockSetup,
     CodeBlocksProperties,
@@ -563,7 +563,7 @@ useResizeObserver(runnerRef, (entries) => {
                 @build="handleRun"
                 @code-changed-in-view-mode="onViewCodeChange"
             />
-            <CodePlayground
+            <PlaygroundBlock
                 v-else-if="block.type == 'PLAYGROUND'"
                 :appID="appID"
                 :blockID="block.uuid"
@@ -577,7 +577,7 @@ useResizeObserver(runnerRef, (entries) => {
                 :eventHub="eventHub"
             />
 
-            <SimpleText
+            <TextBlock
                 v-else-if="block.type == 'TEXT'"
                 :appID="appID"
                 :blockID="block.uuid"

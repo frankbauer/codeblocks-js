@@ -185,7 +185,7 @@ import {
 } from 'lucide-vue-next'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 
-export interface ICodePlaygroundOptions {
+export interface IPlaygroundBlockOptions {
     mode: string
     theme: string
     lineNumbers: boolean
@@ -251,7 +251,7 @@ const originalMode: ComputedRef<Boolean> = computed(() => {
     return block.value.obj.requestsOriginalVersion()
 })
 
-const options: ComputedRef<ICodePlaygroundOptions> = computed((): ICodePlaygroundOptions => {
+const options: ComputedRef<IPlaygroundBlockOptions> = computed((): IPlaygroundBlockOptions => {
     return {
         // codemirror options
         mode: globalCodeBlock?.mimeType('javascript') ?? 'javascript',
