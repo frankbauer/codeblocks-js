@@ -154,14 +154,14 @@
                                 >
                                     Empty — click edit to fill in values.
                                 </div>
-                                <div class="tw-flex tw-flex-wrap tw-gap-1.5">
+                                <div class="tw-flex tw-flex-wrap tw-gap-1.5 setList">
                                     <div
                                         :class="`tagItem ${tagClass}`"
                                         v-for="tag in s.values"
                                         :key="tag.tag"
                                     >
                                         <div class="tagInfo">
-                                            <div class="tagName">{{ tag.tag }}</div>
+                                            <div class="tagName">{:{{ tag.tag }}}</div>
                                             <div class="tagString">{{ tag.value || '—' }}</div>
                                         </div>
                                     </div>
@@ -387,6 +387,7 @@ function cancelAddTag(): void {
 
 .setList .tagItem .tagInfo .tagName {
     font-weight: normal;
+    color: #94a3b8;
     font-size: 75%;
 }
 

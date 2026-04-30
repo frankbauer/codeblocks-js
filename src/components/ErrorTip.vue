@@ -55,7 +55,7 @@ function classForSeverity(s: ErrorSeverity): string {
     if (s == ErrorSeverity.Error) {
         return 'tw-text-red-500'
     }
-    return 'tw-text-yellow-500'
+    return 'tw-text-blue-500'
 }
 
 function iconForSeverity(s: ErrorSeverity) {
