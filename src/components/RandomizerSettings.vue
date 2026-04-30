@@ -128,7 +128,7 @@
                             v-for="(s, i) in options.randomizer.sets"
                             :key="s.uuid"
                             :class="[
-                                'tw-flex tw-items-start tw-gap-3 tw-p-3 tw-rounded-lg tw-border tw-transition-colors',
+                                'tw-flex tw-items-start tw-gap-3 tw-p-3 tw-rounded-md tw-border tw-transition-colors',
                                 isVisible(i)
                                     ? 'tw-border-primary tw-bg-primary/5'
                                     : 'tw-border-border tw-bg-card',

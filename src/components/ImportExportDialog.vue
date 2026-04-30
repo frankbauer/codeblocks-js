@@ -109,7 +109,7 @@
                 <TabsContent value="import" class="tw-mt-4 tw-space-y-4">
                     <div
                         v-if="!importData"
-                        class="tw-min-h-[300px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-border-2 tw-border-dashed tw-rounded-lg tw-p-8 tw-transition-colors hover:tw-bg-accent/30"
+                        class="tw-min-h-[300px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-border-2 tw-border-dashed tw-rounded-md tw-p-8 tw-transition-colors hover:tw-bg-accent/30"
                         @dragover.prevent
                         @drop.prevent="handleDrop"
                     >

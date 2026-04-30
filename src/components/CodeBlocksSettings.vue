@@ -2,7 +2,7 @@
     <div class="tw-w-full">
         <!-- Toolbar strip -->
         <div
-            class="tw-flex tw-items-stretch tw-h-9 tw-rounded-lg tw-border tw-bg-card tw-overflow-hidden tw-text-xs tw-select-none"
+            class="tw-flex tw-items-stretch tw-h-9 tw-rounded-md tw-border tw-bg-card tw-overflow-hidden tw-text-xs tw-select-none"
         >
             <!-- Scrollable/clippable left section — gear always stays visible -->
             <div

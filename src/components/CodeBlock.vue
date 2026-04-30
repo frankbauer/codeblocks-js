@@ -205,10 +205,10 @@ const { boxClass, editorReadOnly, code } = useCodeEditor(block, editMode, readon
 
 const typeName = computed(() => {
     let type = block.value.type.toLowerCase()
-    if (block.value.hidden) {
+    if (block.value.hidden && !type.endsWith('-hidden')) {
         type += '-hidden'
     }
-    if (block.value.static) {
+    if (block.value.static && !type.endsWith('-static')) {
         type += '-static'
     }
     return type
@@ -435,7 +435,7 @@ defineExpose({
         border: none !important
 
     :deep(.cm-editor)
-        border-radius: 8px
+        border-radius: 6px
         overflow: hidden
         transition: box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out
         box-shadow: 0 0 5px rgba(var(--type-rgb), 0.2)

@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
     width: 100%
     height: 200px
     border: none
-    border-radius: 8px
+    border-radius: 6px
     background-color: #ffffff
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04)
     margin-top: 8px
