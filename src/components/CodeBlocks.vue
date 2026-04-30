@@ -605,6 +605,7 @@ useResizeObserver(runnerRef, (entries) => {
                 :blockID="block.uuid"
                 :editMode="editMode"
                 :theme="themeForBlock(block)"
+                :tagSet="activeTagSet"
                 @ready="blockBecameReady"
                 :eventHub="eventHub"
             />

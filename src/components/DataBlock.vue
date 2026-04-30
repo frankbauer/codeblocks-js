@@ -144,6 +144,7 @@
                 :id="`teQ${block.parentID}B${block.id}`"
                 :data-question="block.parentID"
                 :theme="block.themeForCodeBlock"
+                :tagSet="tagSet"
                 language="text/json"
                 @update:model-value="onCodeChange"
                 @ready="onCodeReady"

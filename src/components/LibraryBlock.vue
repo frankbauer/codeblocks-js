@@ -139,6 +139,7 @@
                 :mode="options.mode"
                 :visibleLines="visibleLinesNow"
                 :editMode="editMode"
+                :tagSet="tagSet"
                 :muteReadyState="true"
                 @code-changed-in-edit-mode="onCodeChange"
             />
@@ -182,11 +183,13 @@ import { ICodePlaygroundOptions } from './CodePlayground.vue'
 interface Props extends EditableBlockProps {
     namePrefix?: string
     eventHub: EventHubType
+    tagSet?: IRandomizerSet | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {
     ...DEFAULT_EDITABLE_BLOCK_PROPS,
     namePrefix: '',
+    tagSet: undefined,
 })
 
 const instance = getCurrentInstance()
