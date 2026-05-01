@@ -35,7 +35,7 @@ export const jsErrorParser = function (e: any, templ?: ICodeTemplate): IParsedEr
 
     if (line !== undefined) {
         line--
-        if (line == 1) {
+        if (line == 0) {
             if (column === undefined) {
                 column = 0
             }

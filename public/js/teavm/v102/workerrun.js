@@ -65,9 +65,7 @@ async function listener(event) {
 
         self.postMessage({ command: 'run-finished-setup', id: reqID })
 
-        if (request.messagePosting) {
-            self.postMessage({ command: 'main-will-start', id: reqID })
-        }
+        self.postMessage({ command: 'main-will-start', id: reqID })
 
         try {
             module.exports.main(Array.isArray(request.args) ? request.args : [])
@@ -158,24 +156,19 @@ async function listener(event) {
                         ) {
                             continue
                         }
-                        if (frame.line>=0) {
-                        javaStack +=
-                            '\tat ' +
-                            frame.className +
-                            '.' +
-                            frame.method +
-                            '(' +
-                            (frame.file || 'Unknown Source') +
-                            ':' +
-                            frame.line +
-                            ')\n'
-                        } else {
+                        if (frame.line >= 0) {
                             javaStack +=
                                 '\tat ' +
                                 frame.className +
                                 '.' +
                                 frame.method +
-                                '\n'
+                                '(' +
+                                (frame.file || 'Unknown Source') +
+                                ':' +
+                                frame.line +
+                                ')\n'
+                        } else {
+                            javaStack += '\tat ' + frame.className + '.' + frame.method + '\n'
                         }
                     }
                     stderrBuffer += javaStack
@@ -183,21 +176,21 @@ async function listener(event) {
                     stderrBuffer += 'Application Terminated: ' + (e.stack || e)
                 }
             } else {
-                stderrBuffer += '3Application Terminated: ' + e
+                stderrBuffer += 'Application Terminated: ' + e
             }
         }
 
         rArgs = Array.isArray(request.args) ? request.args.slice() : []
 
-        if (request.messagePosting) {
-            self.postMessage({ command: 'main-finished', id: reqID, args: rArgs })
-        }
+        self.postMessage({ command: 'main-finished', id: reqID, args: rArgs })
     } catch (e) {
         if (e instanceof Error) {
             stderrBuffer += 'Fatal Error: ' + e.message + '\n' + e.stack
         } else {
             stderrBuffer += 'Fatal Error occurred during initialization.'
         }
+        endSession(reqID)
+        return
     }
 
     if (!request.keepAlive) {

@@ -24,6 +24,7 @@ export class ScriptBlockV101 extends PlaygroundScriptBlock {
                 this.pushError(e)
             }
         } else if (this.fkt !== undefined) {
+            console.i('!!! REBUILDING (v101, fkt) !!!')
             this.obj = this.fkt(this.sandbox)
             this.dequeueIncoming()
         }

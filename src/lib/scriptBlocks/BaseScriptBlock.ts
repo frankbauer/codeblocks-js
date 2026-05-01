@@ -9,7 +9,7 @@ import {
 } from '@/lib/IScriptBlock'
 import { ICompileAndRunArguments } from '../ICompilerRegistry'
 import { IBlockData } from '../ICodeBlocks'
-import { jsErrorParser } from './utils'
+import { ICodeTemplate, jsErrorParser } from './utils'
 
 export abstract class BaseScriptBlock implements IScriptBlock {
     public err: IParsedError[] = []
@@ -37,8 +37,8 @@ export abstract class BaseScriptBlock implements IScriptBlock {
 
     public abstract rebuild(code?: string): void
 
-    public pushError(e: any) {
-        this.err.push(jsErrorParser(e))
+    public pushError(e: any, templ?: ICodeTemplate) {
+        this.err.push(jsErrorParser(e, templ))
     }
 
     protected lazyInit() {
@@ -113,6 +113,10 @@ export abstract class BaseScriptBlock implements IScriptBlock {
     }
 
     public beforeStart() {
+        // Default no-op
+    }
+
+    public afterStop() {
         // Default no-op
     }
 

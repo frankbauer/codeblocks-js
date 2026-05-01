@@ -6,7 +6,6 @@ import {
 } from '@/lib/IScriptBlock'
 import { BaseScriptBlock } from './BaseScriptBlock'
 import { LibraryScriptBlock } from './LibraryScriptBlock'
-import { IBlockData } from '@/lib/ICodeBlocks'
 
 export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
     // Persistent sandbox shared with the compiled playground closure via with(sandbox)

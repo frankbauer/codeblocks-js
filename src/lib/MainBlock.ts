@@ -35,6 +35,7 @@ export default class MainBlock implements IMainBlock {
     persistentArguments: boolean
     shadowRoot?: ShadowRoot
     error?: string
+    buildVersion: number = 0
 
     constructor(data: IRuntimeData) {
         const s = data.settings
@@ -102,6 +103,7 @@ export default class MainBlock implements IMainBlock {
         this.blocks.forEach((b, i) => {
             b.id = i
         })
+        this.buildVersion++
     }
 
     initArgsForLanguage() {
@@ -135,6 +137,7 @@ export default class MainBlock implements IMainBlock {
 
         this.blocks[id1].id = id1
         this.blocks[id2].id = id2
+        this.buildVersion++
     }
 
     moveUp(id: number) {
@@ -165,6 +168,7 @@ export default class MainBlock implements IMainBlock {
         for (let i = idx; i < this.blocks.length; i++) {
             this.blocks[i].id = i
         }
+        this.buildVersion++
     }
 
     addNewBlock(type: KnownBlockTypes = KnownBlockTypes.BLOCK) {
@@ -220,6 +224,7 @@ export default class MainBlock implements IMainBlock {
         })
         this.blocks.splice(position, 0, new BlockData(newBlockData, this))
         this.blocks.forEach((v, i) => (v.id = i))
+        this.buildVersion++
     }
 
     totalLines(): number {

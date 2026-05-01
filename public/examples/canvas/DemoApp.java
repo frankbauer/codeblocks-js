@@ -163,6 +163,7 @@ public class DemoApp  {
         System.out.println("Image is ready with dimensions: " + img.getWidth() + "x" + img.getHeight());
          Canvas canvas = new Canvas();
          canvas.drawImage(img, 10, 20, 0.5);
+         // CodeBlocks.exit(0);
     }
 
     static void onFailed(Image img, String message) {

@@ -258,7 +258,6 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
 )
 
 const { namePrefix, finalOutputObject, editMode, theme, eventHub, tagSet } = toRefs(props)
-const needsCodeRebuild = ref<boolean>(false)
 const error = ref<string>('')
 const readonyl = computed(() => !editMode.value)
 
@@ -368,10 +367,9 @@ const setExpanded = (val: CodeExpansionType): void => {
 const updateErrors = (): boolean => {
     return false
 }
-const resetBeforeRun = (): void => {}
 const onCodeChange = () => {
     if (editMode.value) {
-        needsCodeRebuild.value = true
+        block.value.needsCodeRebuild = true
     }
 }
 const onCodeFocus = (editor) => {}
@@ -509,7 +507,6 @@ const addToContent = (fileName: string, data: string) => {
     block.value.content = JSON.stringify(json, undefined, 2)
 }
 ;(() => {
-    eventHub.value.on('before-run', resetBeforeRun)
     eventHub.value.on('render-diagnostics', updateErrors)
 })()
 onMounted(() => {
@@ -520,7 +517,6 @@ onMounted(() => {
     updateHeight()
 })
 onBeforeUnmount(() => {
-    eventHub.value.off('before-run', resetBeforeRun)
     eventHub.value.off('render-diagnostics', updateErrors)
 })
 </script>

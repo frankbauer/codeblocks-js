@@ -424,6 +424,20 @@ export function codeBlockSetup(
         eventHub.emit('clicked-run')
         clearDiagnostics()
         loadLibraries(() => {
+            let anyRebuild = false
+            blocks.value.forEach((bl) => {
+                const rebuildCode =
+                    blockInfo.value.editMode &&
+                    (bl.needsCodeRebuild || activeTagSet.value !== undefined)
+                if (rebuildCode && bl.obj != null) {
+                    bl.obj.rebuild(bl.actualContent())
+                    bl.needsCodeRebuild = false
+                    anyRebuild = true
+                }
+            })
+            if (anyRebuild) {
+                blockInfo.value.buildVersion++
+            }
             eventHub.emit('before-run', {})
             console.d('compileAndRun')
             didRunOnce.value = true
@@ -499,6 +513,14 @@ export function codeBlockSetup(
                                 console.d('MESSAGE - Before Start')
                                 if (bl.obj) {
                                     bl.obj.beforeStart()
+                                }
+                            })
+                        },
+                        afterStopHandler: () => {
+                            blocks.value.forEach((bl) => {
+                                console.d('MESSAGE - After Stop')
+                                if (bl.obj) {
+                                    bl.obj.afterStop()
                                 }
                             })
                         },

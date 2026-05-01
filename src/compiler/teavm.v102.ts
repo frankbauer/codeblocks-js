@@ -32,6 +32,7 @@ export class JavaV102Compiler implements ICompilerInstance {
     didPreload: boolean = false
     private teaworker: Worker | undefined = undefined
     private teaworkerrun: Worker | undefined = undefined
+    private currentOptions: ICompileAndRunArguments | undefined = undefined
     isReady = false
     isRunning = false
 
@@ -103,6 +104,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                     this.isReady = false
                 }
                 this.isRunning = false
+                this.triggerAfterStop()
                 if (msg) {
                     console.warn(msg)
                 }
@@ -135,6 +137,8 @@ export class JavaV102Compiler implements ICompilerInstance {
                 this.teaworkerrun.terminate()
                 this.teaworkerrun = undefined
             }
+            this.isRunning = false
+            this.triggerAfterStop()
             if (msg) {
                 console.warn(msg)
             }
@@ -173,6 +177,7 @@ export class JavaV102Compiler implements ICompilerInstance {
             return
         }
         this.isRunning = true
+        this.currentOptions = options
         if (runCreate) {
             if (
                 this.createTeaWorker(() => {
@@ -277,6 +282,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                 if (e.data.status == 'errors') {
                     finishedExecutionCB(false, undefined, options.args)
                     this.isRunning = false
+                    this.triggerAfterStop()
                     globalState.compilerState.hideGlobalState()
                     globalState.compilerState.setAllRunButtons(true)
                 } else {
@@ -292,6 +298,9 @@ export class JavaV102Compiler implements ICompilerInstance {
                         if (ee.data.command == 'f-FINAL') {
                             //console.log('Received final result from execution:', ee.data.value)
                             options.resultData = JSON.parse(ee.data.value)
+                        } else if (ee.data.command == 'f-EXIT') {
+                            console.log('Received exit code from execution:', ee.data.value)
+                            this.stop()
                         } else if (ee.data.id != '' + questionID) {
                             console.warn(
                                 'Received message for different session.',
@@ -322,6 +331,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                             console.log('Execution finished in ' + (Date.now() - start) + ' ms\n')
                             executionFinished = true
                             this.isRunning = false
+                            this.triggerAfterStop()
                             if (!options.keepAlive) {
                                 workerrun.removeEventListener('message', runListener)
                                 workerrun.end('')
@@ -412,6 +422,13 @@ export class JavaV102Compiler implements ICompilerInstance {
         }
     }
 
+    private triggerAfterStop() {
+        if (this.currentOptions) {
+            this.currentOptions.afterStopHandler()
+            this.currentOptions = undefined
+        }
+    }
+
     stop() {
         console.log('FORCE STOPPING')
         if (this.teaworkerrun) {
@@ -424,6 +441,7 @@ export class JavaV102Compiler implements ICompilerInstance {
             }
             this.isRunning = false
         }
+        this.triggerAfterStop()
         globalState.compilerState.hideGlobalState()
         globalState.compilerState.setAllRunButtons(true)
     }

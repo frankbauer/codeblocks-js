@@ -378,7 +378,7 @@ const justUpdated = ref(false)
 
 // 1. Wrap the main run function to catch the state BEFORE it wipes
 const handleRun = () => {
-    if (hasOutput.value) {
+    if (hasOutput.value && !options.value.keepAlive) {
         cachedOutputHTML.value = outputHTML.value
         isShowingStale.value = true
     }
@@ -387,7 +387,7 @@ const handleRun = () => {
 
 // 2. Wrap the playground run just in case it shares the same output box
 const handlePlaygroundRun = (...args: Parameters<typeof onRunFromPlayground>) => {
-    if (hasOutput.value) {
+    if (hasOutput.value && !options.value.keepAlive) {
         cachedOutputHTML.value = outputHTML.value
         isShowingStale.value = true
     }

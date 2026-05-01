@@ -41,7 +41,7 @@ export class LibraryScriptBlock extends BaseScriptBlock {
                 this.libraryObject = this.fkt({}) as ILibraryObject
                 this.dequeueIncoming()
             } catch (e) {
-                this.pushError(e)
+                this.pushError(e, libraryCodeTemplate)
             }
         } else if (this.fkt !== undefined) {
             this.libraryObject = this.fkt({}) as ILibraryObject

@@ -87,6 +87,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
     }
 
     public override resetBlockData(blocks: IBlockData[] | undefined): void {
+        // console.i('Resetting block data for v102, new blocks:', blocks)
         // Clear only previous library instances from sandbox to preserve system utilities (console, etc.)
         this.activeLibraryKeys.forEach((key) => {
             delete this.sandbox[key]
@@ -112,6 +113,14 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         for (const lib of libraryBlocks) {
             lib.obj.instance = undefined
         }
+
+        console.i(
+            'Processing block data for v102, new blocks:',
+            blocks,
+            libraryBlocks,
+            'playgroundId:',
+            playgroundId
+        )
 
         this.librariesBefore = libraryBlocks.filter((b) => b.id < playgroundId).map((b) => b.obj)
         this.librariesAfter = libraryBlocks.filter((b) => b.id > playgroundId).map((b) => b.obj)
@@ -146,6 +155,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         outputElement: JQuery<HTMLElement> | undefined,
         scope: AnyCodeBlockScope
     ): void {
+        //console.i('Calling setupDOM for v102 object', o)
         const v = o as unknown as IPlaygroundObjectV102
         v.canvasElement = canvasElement
         v.outputElement = outputElement
@@ -160,6 +170,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         scope: AnyCodeBlockScope,
         runner: Runner
     ): void {
+        //console.i('Calling init for v102 object', o)
         const v = o as unknown as IPlaygroundObjectV102
         v.canvasElement = canvasElement
         v.outputElement = outputElement
@@ -202,9 +213,10 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
                 this.obj = this.fkt(this.sandbox)
                 this.dequeueIncoming()
             } catch (e) {
-                this.pushError(e)
+                this.pushError(e, v102CodeTemplate)
             }
         } else if (this.fkt !== undefined) {
+            console.i('!!! REBUILDING (v102, fkt) !!!')
             this.obj = this.fkt(this.sandbox)
             this.dequeueIncoming()
         }
@@ -240,5 +252,19 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
             }
         }
         this.librariesAfter.forEach((lib) => lib.libraryObject?.onASTAvailable?.(ast))
+    }
+
+    public afterStop() {
+        super.afterStop()
+        this.chainLibraries(this.librariesBefore, (lib) => lib.libraryObject?.afterStop?.())
+        this.lazyInit()
+        if (this.obj) {
+            const o = this.obj as IPlaygroundObjectV102
+            if (o.afterStop) {
+                console.i('MESSAGE - afterStop')
+                o.afterStop()
+            }
+        }
+        this.chainLibraries(this.librariesAfter, (lib) => lib.libraryObject?.afterStop?.())
     }
 }

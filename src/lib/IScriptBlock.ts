@@ -94,6 +94,7 @@ export interface IPlaygroundObjectV102 {
     onParseError?(initialOutput: string, parseError: string): void
     onMessage?(cmd: string, data: any): void
     beforeStart?(): void
+    afterStop?(): void
     whenFinished?(args: string[] | object, resultData?: object | any[]): void
     addArgumentsTo?(args: object | string[]): void
     getResources?(): IResourceInfo[]
@@ -121,6 +122,7 @@ export interface ILibraryObject {
     onParseError?(initialOutput: string, parseError: string): void
     onMessage?(cmd: string, data: any): void
     beforeStart?(): void
+    afterStop?(): void
     whenFinished?(args: string[] | object, resultData?: object | any[]): void
     addArgumentsTo?(args: object | string[]): void
 }
@@ -174,6 +176,7 @@ export interface IScriptBlock {
     didReceiveMessage(cmd: string, data: any): void
 
     beforeStart(): void
+    afterStop(): void
 
     whenFinished(args: string[] | object, resultData?: object | any[]): void
 

@@ -2,10 +2,10 @@ import compilerRegistry from '../CompilerRegistry'
 
 export function stripModuleSyntax(code: string): string {
     return code
-        .replace(/^\s*export\s+default\s*/, '')
-        .replace(/^\s*module\.exports\s*=\s*/, '')
-        .replace(/;\s*$/, '')
-        .trim()
+        .replace(/^\s*export\s+default\s*/, (m) => m.replace(/[^\n]/g, ' '))
+        .replace(/^\s*module\.exports\s*=\s*/, (m) => m.replace(/[^\n]/g, ' '))
+        .replace(/;\s*$/, (m) => m.replace(/[^\n]/g, ' '))
+        .trimEnd()
 }
 
 const sandboxProxies = new WeakMap()

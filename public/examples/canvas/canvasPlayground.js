@@ -2,9 +2,11 @@ export default {
     setupDOM() {
         //called when the site forst loaded
         //this.canvasElement is a dive that can host the actual canvas element
+        console.log('PLAyRun: setupDOM')
     },
     init() {
         //called when the site and all resources were loaded
+        console.log('PLAyRun: init', this.canvasElement[0])
     },
     beforeStart() {
         //called just before the java code is executed
@@ -21,6 +23,10 @@ export default {
     whenFinished() {
         //called when the main method of the java code ended, the event loop will still continue to run at this point
         console.log('PLAyRUN: whenFinished')
+    },
+    afterStop() {
+        //called after the java code stopped and the event loop ended, this is the last thing that happens during a run
+        console.log('PLAyRUN: afterStop')
     },
     update(txt, json) {
         console.log('PLAyRUN: update', txt, json)

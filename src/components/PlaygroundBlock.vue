@@ -229,6 +229,7 @@ const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
 
 const lastRun: Ref<Date> = ref(new Date())
 const runCount: Ref<number> = ref(0)
+const lastAppliedBuildVersion: Ref<number> = ref(block.value.appSettings.buildVersion)
 const playgroundCanvasComponent = ref<any>(null)
 const canvasElementFromEvent = ref<HTMLElement | undefined>(undefined)
 
@@ -241,7 +242,6 @@ const errorOutput: Ref<string> = ref('')
 const canvas = computed<HTMLElement | undefined>(() => {
     return canvasElementFromEvent.value || playgroundCanvasComponent.value?.canvas
 })
-let needsCodeRebuild: boolean = false
 const initAndRebuildErrors: Ref<any[]> = ref([])
 
 const originalMode: ComputedRef<Boolean> = computed(() => {
@@ -307,7 +307,7 @@ function upgradeToV102(): void {
     block.value.content = migrateV101ToV102(block.value.content)
     block.value.version = '102'
     ;(block.value as any).recreateScriptObject?.()
-    needsCodeRebuild = true
+    block.value.needsCodeRebuild = true
 }
 
 function setExpandedLarge(): void {
@@ -347,7 +347,7 @@ function updateErrors(): boolean {
     })
 
     if (block.value.obj.err.length > 0 && props.editMode) {
-        needsCodeRebuild = true
+        block.value.needsCodeRebuild = true
         return true
     } else {
         return false
@@ -355,7 +355,7 @@ function updateErrors(): boolean {
 }
 
 function resetBeforeRun(): void {
-    const rebuildCode = props.editMode && (needsCodeRebuild || props.tagSet !== undefined)
+    const rebuildCode = block.value.appSettings.buildVersion !== lastAppliedBuildVersion.value
     let reInitCode = rebuildCode
     let onNextTick = false
     if (block.value && block.value.obj) {
@@ -366,6 +366,7 @@ function resetBeforeRun(): void {
                 console.log('Will Re-Initialize', 'Without Canvas')
             }
             lastRun.value = new Date()
+            lastAppliedBuildVersion.value = block.value.appSettings.buildVersion
             canvasElementFromEvent.value = undefined // Clear stale element
             runCount.value++
             reInitCode = true
@@ -381,21 +382,6 @@ function resetBeforeRun(): void {
         }
     }
 
-    if (rebuildCode) {
-        initAndRebuildErrors.value = []
-
-        if (block.value.obj != null) {
-            block.value.obj.rebuild(block.value.actualContent())
-            if (updateErrors()) {
-                initAndRebuildErrors.value = block.value.obj.err
-                block.value.obj.invalidate()
-                return
-            }
-        }
-
-        reInitCode = true
-    }
-
     if (reInitCode) {
         initAndRebuildErrors.value = []
         let doInit = () => {
@@ -407,7 +393,7 @@ function resetBeforeRun(): void {
                     )
                     return true
                 }
-                console.log('DATA: CanvasElement', canvas.value)
+                console.i('DATA: CanvasElement', canvas.value)
                 const jCanvas: any = $(canvas.value as HTMLElement)
                 const scope: any = block.value.scope
                 if (block.value.shouldReloadResources) {
@@ -533,7 +519,7 @@ function onCanvasChange(can) {
 
 function onCodeChange(): void {
     if (props.editMode) {
-        needsCodeRebuild = true
+        block.value.needsCodeRebuild = true
     }
 }
 

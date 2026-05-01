@@ -439,6 +439,10 @@
                         />{{ block.name || generatedName }}</span
                     >
                     <div class="tw-flex-1"></div>
+                    <AlertCircle
+                        v-if="hasErrors"
+                        class="tw-h-4 tw-w-4 tw-text-destructive tw-mr-2"
+                    />
                     <TooltipProvider :delay-duration="300">
                         <Tooltip>
                             <TooltipTrigger as-child>
@@ -455,7 +459,7 @@
                 </div>
 
                 <!-- Block content -->
-                <div v-if="expanded">
+                <div v-show="expanded">
                     <slot></slot>
                 </div>
 
@@ -503,6 +507,7 @@ import { Label } from '@/shadcn/ui/label'
 import { Switch } from '@/shadcn/ui/switch'
 
 import {
+    AlertCircle,
     AlertTriangle,
     ArrowDownToLine,
     ArrowUpFromLine,
@@ -726,6 +731,7 @@ const positions = computed((): IListItemData[] =>
 )
 const isDeprecatedScriptVersion = computed(() => scriptVersion.value === '100')
 const isExperimentalScriptVersion = computed(() => scriptVersion.value === '102')
+const hasErrors = computed(() => block.value.errors && block.value.errors.length > 0)
 const order = computed({
     get(): IListItemData {
         return globalState.appState.itemForValue(positions.value, `${block.value.id}`)

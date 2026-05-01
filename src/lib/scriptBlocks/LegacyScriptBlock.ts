@@ -46,6 +46,7 @@ export class LegacyScriptBlock extends BaseScriptBlock {
                 this.pushError(e)
             }
         } else if (this.fkt !== undefined) {
+            console.i('!!! REBUILDING (Legacy, fkt) !!!')
             this.obj = this.fkt({})
             this.dequeueIncoming()
         }

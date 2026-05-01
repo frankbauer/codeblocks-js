@@ -31,7 +31,7 @@
             "file": "DemoApp.java",
             "isCombined": false,
             "metadata": {
-                "expanded": true,
+                "expanded": false,
                 "visibleLines": "auto"
             }
         },
@@ -41,7 +41,7 @@
             "name": "objectManager",
             "file": "objectManager.js",
             "metadata": {
-                "expanded": true,
+                "expanded": false,
                 "codeExpanded": 1
             }
         },
@@ -51,12 +51,12 @@
             "name": "canvasManager",
             "file": "canvasManager.js",
             "metadata": {
-                "expanded": true,
+                "expanded": false,
                 "codeExpanded": 1
             }
         },
         {
-            "id": 3,
+            "id": 4,
             "type": "PLAYGROUND",
             "name": "",
             "file": "canvasPlayground.js",

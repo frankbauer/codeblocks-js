@@ -51,6 +51,8 @@ export class BlockData implements IBlockData {
     align: string
     lineCountHint: number
     name: string
+    //true when the code has been changed and the script object needs to be rebuilt, false otherwise. This is used to delay the rebuild until the playground is actually run to avoid unnecessary rebuilds while editing.
+    needsCodeRebuild: boolean
 
     obj: IScriptBlock | null
     dataObj: any | null
@@ -58,6 +60,7 @@ export class BlockData implements IBlockData {
     constructor(d: IRuntimeBlock, mainBlock: IMainBlock) {
         this.obj = null
         this.dataObj = null
+        this.needsCodeRebuild = false
 
         this.appSettings = mainBlock
         this._type = d.type
@@ -299,6 +302,7 @@ export class BlockData implements IBlockData {
     onTypeChanged(newType: KnownBlockTypes, oldType: KnownBlockTypes) {
         if (newType != oldType) {
             this.recreateScriptObject()
+            this.appSettings.buildVersion++
         }
     }
 
@@ -334,6 +338,7 @@ export interface IMainBlock {
     persistentArguments: boolean
     shadowRoot?: ShadowRoot
     error?: string
+    buildVersion: number
 
     applyRuntimeData(data: IRuntimeData, importSettings?: boolean): void
 

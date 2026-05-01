@@ -277,40 +277,61 @@ const setExpanded = (val: CodeExpansionType): void => {
     }
 }
 
-let needsCodeRebuild: boolean = false
+function updateErrors(): boolean {
+    block.value.errors = []
+    if (block.value.obj === null) {
+        hasErrors.value = false
+        errorDialogMessage.value = ''
+        return false
+    }
 
-const onCodeChange = () => {
-    if (props.editMode) {
-        needsCodeRebuild = true
+    block.value.obj.err.forEach((e) => {
+        let err = {
+            start: { line: e.line, column: e.column },
+            end: { line: e.line, column: e.column + 1 },
+            message: e.msg,
+            severity: globalState.SEVERITY_ERROR,
+        }
+        if (e.line === undefined) {
+            err.start = { line: 1, column: -1 }
+            err.end = { line: 1, column: -1 }
+        } else if (e.column === undefined) {
+            err.start = { line: e.line, column: -1 }
+            err.end = { line: e.line, column: -1 }
+        }
+        block.value.errors.push(err)
+    })
+
+    hasErrors.value = block.value.obj.err.length > 0
+    if (hasErrors.value) {
+        errorDialogMessage.value = block.value.obj.err.map((e) => e.msg).join('\n')
+        block.value.needsCodeRebuild = true
+        return true
+    } else {
+        errorDialogMessage.value = ''
+        return false
     }
 }
 
-function resetBeforeRun(): void {
-    if (props.editMode && needsCodeRebuild) {
-        if (block.value.obj != null) {
-            block.value.obj.rebuild(block.value.actualContent())
-            if (block.value.obj.err && block.value.obj.err.length > 0) {
-                errorDialogMessage.value = block.value.obj.err.map((e: any) => e.msg).join('\n')
-                hasErrors.value = true
-            } else {
-                hasErrors.value = false
-                errorDialogMessage.value = ''
-            }
-        }
-        needsCodeRebuild = false
+const onCodeChange = () => {
+    if (props.editMode) {
+        block.value.needsCodeRebuild = true
     }
 }
 
 onBeforeMount(() => {
-    props.eventHub.on('before-run', resetBeforeRun)
+    props.eventHub.on('render-diagnostics', updateErrors)
 })
 
 onMounted(() => {
     whenBlockIsReady()
+    if (block.value && block.value.obj && block.value.obj.err.length > 0) {
+        updateErrors()
+    }
 })
 
 onBeforeUnmount(() => {
-    props.eventHub.off('before-run', resetBeforeRun)
+    props.eventHub.off('render-diagnostics', updateErrors)
 })
 </script>
 
