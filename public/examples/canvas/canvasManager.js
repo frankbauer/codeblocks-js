@@ -2,6 +2,7 @@ export default {
     canvas: null,
     ctx: null,
     active: false,
+    allowedInputEvents: ['click', 'keyup'],
     state: {
         x: 0,
         y: 0,
@@ -58,20 +59,18 @@ export default {
                     }
                     if (cmd === 'draw') {
                         if (this.ctx) {
-                            if (data.width && data.height) {
-                                this.ctx.drawImage(obj.img, data.x, data.y, data.width, data.height)
+                            const anchor = {
+                                x: data.ax || 0,
+                                y: data.ay || 0,
                             }
-                            if (data.scale) {
-                                this.ctx.drawImage(
-                                    obj.img,
-                                    data.x,
-                                    data.y,
-                                    obj.img.width * data.scale,
-                                    obj.img.height * data.scale
-                                )
-                            } else {
-                                this.ctx.drawImage(obj.img, data.x, data.y)
+                            const size = {
+                                w: (data.width || obj.img.width) * (data.scale || 1),
+                                h: (data.height || obj.img.height) * (data.scale || 1),
                             }
+                            const drawX = data.x - anchor.x * size.w
+                            const drawY = data.y - anchor.y * size.h
+
+                            this.ctx.drawImage(obj.img, drawX, drawY, size.w, size.h)
                         }
                     }
                     console.log('PLAyRUN: onMessage for object:', obj.id, cmd, data, this.canvas)
@@ -81,22 +80,94 @@ export default {
             }
             return obj
         })
+
+        return {
+            getContext: () => this.ctx,
+            forbidAllInputEvents: () => {
+                this.allowedInputEvents = []
+                this.unbindEvents()
+            },
+            allowAllMouseEvents: () =>
+                this.addAllowedEvents([
+                    'mousedown',
+                    'mouseup',
+                    'click',
+                    'mousemove',
+                    'mouseenter',
+                    'mouseleave',
+                ]),
+            allowAllKeyboardEvents: () => this.addAllowedEvents(['keydown', 'keyup']),
+            allowMouseClickEvents: () => this.addAllowedEvents(['mousedown', 'mouseup', 'click']),
+            allowMouseMoveEvents: () =>
+                this.addAllowedEvents(['mousemove', 'mouseenter', 'mouseleave']),
+            allowAllInputEvents: () =>
+                this.addAllowedEvents([
+                    'mousedown',
+                    'mouseup',
+                    'click',
+                    'mousemove',
+                    'mouseenter',
+                    'mouseleave',
+                    'keydown',
+                    'keyup',
+                ]),
+        }
+    },
+    addAllowedEvents(events) {
+        events.forEach((evt) => {
+            if (!this.allowedInputEvents.includes(evt)) {
+                this.allowedInputEvents.push(evt)
+            }
+        })
+        this.unbindEvents()
+        this.bindEvents()
+    },
+    removeAllowedEvents(events) {
+        this.allowedInputEvents = this.allowedInputEvents.filter((evt) => !events.includes(evt))
+        this.unbindEvents()
+        this.bindEvents()
     },
     beforeStart() {
         console.log('PLAyRUN: canvasManager beforeStart')
         this.active = true
         this.bindEvents()
+
+        if (window.ResizeObserver && this.canvasElement) {
+            this.resizeObserver = new ResizeObserver(() => this.resize())
+            this.resizeObserver.observe(this.canvasElement[0])
+        }
+        this.resize()
     },
     afterStop() {
         console.log('PLAyRUN: canvasManager afterStop')
         this.active = false
         this.unbindEvents()
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect()
+            this.resizeObserver = null
+        }
         // Reset volatile state
         this.state.buttons = 0
         this.state.ctrl = false
         this.state.alt = false
         this.state.shift = false
         this.state.meta = false
+    },
+    resize() {
+        if (!this.canvas || !this.canvasElement) {
+            return
+        }
+        const dpr = window.devicePixelRatio || 1
+        const rect = this.canvasElement[0].getBoundingClientRect()
+        const width = rect.width
+        const height = rect.height
+
+        this.canvas[0].width = width * dpr
+        this.canvas[0].height = height * dpr
+        this.ctx = this.canvas[0].getContext('2d')
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0)
+        this.ctx.scale(dpr, dpr)
+        console.log('PLAyRUN: Canvas resized:', width, height, 'DPR:', dpr)
     },
     updateState(e) {
         this.state.ctrl = e.ctrlKey || false
@@ -128,7 +199,14 @@ export default {
             return
         }
 
-        const mouseEvents = ['mousedown', 'mouseup', 'click', 'mouseenter', 'mouseleave']
+        const mouseEvents = [
+            'mousemove',
+            'mousedown',
+            'mouseup',
+            'click',
+            'mouseenter',
+            'mouseleave',
+        ].filter((evt) => this.allowedInputEvents.includes(evt))
         mouseEvents.forEach((type) => {
             this.canvas.on(type + '.canvasManager', (e) => {
                 this.updateState(e)
@@ -136,11 +214,9 @@ export default {
             })
         })
 
-        this.canvas.on('mousemove.canvasManager', (e) => {
-            this.updateState(e)
-        })
-
-        const keyEvents = ['keydown', 'keyup']
+        const keyEvents = ['keydown', 'keyup'].filter((evt) =>
+            this.allowedInputEvents.includes(evt)
+        )
         keyEvents.forEach((type) => {
             this.canvas.on(type + '.canvasManager', (e) => {
                 this.updateState(e)
@@ -173,5 +249,7 @@ export default {
 
         // Make canvas focusable
         this.canvas.attr('tabindex', '0').css('outline', 'none')
+
+        this.resize()
     },
 }

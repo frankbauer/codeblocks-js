@@ -25,9 +25,20 @@
     },
     "blocks": [
         {
+            "id": 0,
+            "type": "BLOCK",
+            "name": "Imports",
+            "file": "Imports.java",
+            "isCombined": false,
+            "metadata": {
+                "expanded": false,
+                "hidden": true
+            }
+        },
+        {
             "id": 1,
             "type": "BLOCK",
-            "name": "DemoApp.java",
+            "name": "DemoApp",
             "file": "DemoApp.java",
             "isCombined": false,
             "metadata": {
@@ -37,6 +48,28 @@
         },
         {
             "id": 2,
+            "type": "BLOCK",
+            "name": "Canvas",
+            "file": "Canvas.java",
+            "isCombined": false,
+            "metadata": {
+                "expanded": false,
+                "static": true
+            }
+        },
+        {
+            "id": 3,
+            "type": "BLOCK",
+            "name": "Image",
+            "file": "Image.java",
+            "isCombined": false,
+            "metadata": {
+                "expanded": false,
+                "static": true
+            }
+        },
+        {
+            "id": 4,
             "type": "LIBRARY",
             "name": "objectManager",
             "file": "objectManager.js",
@@ -46,7 +79,7 @@
             }
         },
         {
-            "id": 3,
+            "id": 5,
             "type": "LIBRARY",
             "name": "canvasManager",
             "file": "canvasManager.js",
@@ -56,7 +89,7 @@
             }
         },
         {
-            "id": 4,
+            "id": 6,
             "type": "PLAYGROUND",
             "name": "",
             "file": "canvasPlayground.js",

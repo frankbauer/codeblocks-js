@@ -342,6 +342,21 @@ export class JavaV102Compiler implements ICompilerInstance {
                             log_callback(ee.data.line + '\n')
                         } else if (ee.data.command == 'stderr') {
                             err_callback(ee.data.line + '\n')
+                        } else if (ee.data.command == 'exception') {
+                            if (options.compileFailedCallback) {
+                                options.compileFailedCallback({
+                                    message: ee.data.text,
+                                    start: {
+                                        line: ee.data.line || 0,
+                                        column: 0,
+                                    },
+                                    end: {
+                                        line: ee.data.line || 0,
+                                        column: 0,
+                                    },
+                                    severity: ErrorSeverity.Error,
+                                })
+                            }
                         } else if (
                             typeof ee.data.command === 'string' &&
                             ee.data.command.indexOf('w-') === 0

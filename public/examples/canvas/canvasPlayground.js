@@ -7,27 +7,21 @@ export default {
     init() {
         //called when the site and all resources were loaded
         console.log('PLAyRun: init', this.canvasElement[0])
+        canvasManager.allowMouseClickEvents()
+        canvasManager.allowAllKeyboardEvents()
     },
-    beforeStart() {
-        //called just before the java code is executed
-        console.log('PLAyRUN: beforeStart')
-        setTimeout(() => {
-            console.log('PLAyRUN: postMessage')
-            this.runner.postMessage('hello', {})
-        }, 1000)
-        setTimeout(() => {
-            console.log('PLAyRUN: postMessage')
-            this.runner.postMessage('example', { flag: true, value: 123 })
-        }, 2000)
-    },
-    whenFinished() {
-        //called when the main method of the java code ended, the event loop will still continue to run at this point
-        console.log('PLAyRUN: whenFinished')
-    },
-    afterStop() {
-        //called after the java code stopped and the event loop ended, this is the last thing that happens during a run
-        console.log('PLAyRUN: afterStop')
-    },
+    // beforeStart() {
+    //     //called just before the java code is executed
+    //     console.log('PLAyRUN: beforeStart')
+    // },
+    // whenFinished() {
+    //     //called when the main method of the java code ended, the event loop will still continue to run at this point
+    //     console.log('PLAyRUN: whenFinished')
+    // },
+    // afterStop() {
+    //     //called after the java code stopped and the event loop ended, this is the last thing that happens during a run
+    //     console.log('PLAyRUN: afterStop')
+    // },
     update(txt, json) {
         console.log('PLAyRUN: update', txt, json)
         // Called when app finished running.
