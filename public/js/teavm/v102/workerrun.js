@@ -6,6 +6,8 @@ let stdoutBuffer = ''
 let rArgs = []
 let currentReqID = null
 
+let currentMainClass = 'Main'
+
 function endSession(reqID) {
     if (stderrBuffer !== '') {
         self.postMessage({ command: 'stderr', line: stderrBuffer, id: reqID })
@@ -102,6 +104,7 @@ function processException(e) {
             }
 
             let javaStack = className + (message ? ': ' + message : '') + '\n'
+            const studentFile = currentMainClass + '.java'
             for (let i = firstStack + 1; i < stack.length; i++) {
                 const frame = stack[i]
                 if (
@@ -111,7 +114,7 @@ function processException(e) {
                     continue
                 }
 
-                if (frame.line >= 0 && line === -1) {
+                if (frame.line >= 0 && line === -1 && frame.file === studentFile) {
                     line = frame.line
                     file = frame.file
                 }
@@ -136,7 +139,7 @@ function processException(e) {
             output += 'Application Terminated: ' + (e.stack || e)
         }
     } else {
-        output += 'Application Terminated: ' + (e ? (e.stack || e) : 'Unknown Error')
+        output += 'Application Terminated: ' + (e ? e.stack || e : 'Unknown Error')
     }
     return { text: output, line: line, file: file }
 }
@@ -152,6 +155,16 @@ self.addEventListener('error', (event) => {
             file: result.file,
             id: currentReqID,
         })
+        if (result.line >= 0) {
+            self.postMessage({
+                command: 'diagnostic',
+                severity: 'ERROR',
+                text: result.text,
+                line: result.line,
+                file: result.file,
+                id: currentReqID,
+            })
+        }
     }
 })
 
@@ -170,6 +183,16 @@ self.addEventListener('unhandledrejection', (event) => {
             file: result.file,
             id: currentReqID,
         })
+        if (result.line >= 0) {
+            self.postMessage({
+                command: 'diagnostic',
+                severity: 'ERROR',
+                text: 'Unhandled Rejection: ' + result.text,
+                line: result.line,
+                file: result.file,
+                id: currentReqID,
+            })
+        }
     }
 })
 
@@ -187,6 +210,7 @@ async function listener(event) {
 
     didRun = true
     currentReqID = request.id
+    currentMainClass = request.mainClass || 'Main'
     const reqID = request.id
 
     try {
@@ -234,6 +258,16 @@ async function listener(event) {
                 file: result.file,
                 id: reqID,
             })
+            if (result.line >= 0) {
+                self.postMessage({
+                    command: 'diagnostic',
+                    severity: 'ERROR',
+                    text: result.text,
+                    line: result.line,
+                    file: result.file,
+                    id: reqID,
+                })
+            }
         }
 
         rArgs = Array.isArray(request.args) ? request.args.slice() : []

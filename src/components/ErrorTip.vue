@@ -25,7 +25,7 @@
                                 <div class="tw-flex-1 tw-pr-4">
                                     <div
                                         class="tw-align-top tw-font-mono"
-                                        v-html="errorMessage"
+                                        v-html="formatMessage(error.message)"
                                     ></div>
                                 </div>
                             </div>
@@ -65,18 +65,15 @@ function iconForSeverity(s: ErrorSeverity) {
     return TriangleAlert
 }
 
+function formatMessage(msg: string): string {
+    return msg.replace(/\r?\n/g, '<br>')
+}
+
 const severityClass: ComputedRef<string> = computed(() => {
     return classForSeverity(severity.value)
 })
 
 const severityIcon: ComputedRef<any> = computed(() => {
     return iconForSeverity(severity.value)
-})
-
-const errorMessage: ComputedRef<string> = computed(() => {
-    if (errors.value.length == 1) {
-        return errors.value[0].message.replace(/\r?\n/g, '<br>')
-    }
-    return `${errors.value.length} issues`
 })
 </script>

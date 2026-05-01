@@ -674,7 +674,7 @@ function underlineErrors() {
 class ErrorMarker extends GutterMarker {
     constructor(
         private severity: ErrorSeverity,
-        private msg: string
+        private errors: ICompilerErrorDescription[]
     ) {
         super()
     }
@@ -682,12 +682,7 @@ class ErrorMarker extends GutterMarker {
     toDOM() {
         const marker = document.createElement('span')
         const app = createApp(ErrorTip, {
-            errors: [
-                {
-                    severity: this.severity,
-                    message: this.msg,
-                },
-            ],
+            errors: this.errors,
             severity: this.severity,
         })
         app.mount(marker)
@@ -700,12 +695,27 @@ const errorGutter = gutter({
     class: 'error-gutter',
     markers: (view: EditorView) => {
         let builder = new RangeSetBuilder<GutterMarker>()
+        const errorsByLine = new Map<number, ICompilerErrorDescription[]>()
 
         errors.value.forEach((e) => {
             const lineNumber = e.start.line - firstLine.value + 1
-            const line = view.state.doc.line(lineNumber)
-            builder.add(line.from, line.from, new ErrorMarker(e.severity, e.message))
+            if (lineNumber >= 1 && lineNumber <= view.state.doc.lines) {
+                if (!errorsByLine.has(lineNumber)) {
+                    errorsByLine.set(lineNumber, [])
+                }
+                errorsByLine.get(lineNumber)!.push(e)
+            }
         })
+
+        const sortedLines = Array.from(errorsByLine.keys()).sort((a, b) => a - b)
+        for (const lineNr of sortedLines) {
+            const lineErrors = errorsByLine.get(lineNr)!
+            const line = view.state.doc.line(lineNr)
+            const maxSeverity = lineErrors.some((e) => e.severity === ErrorSeverity.Error)
+                ? ErrorSeverity.Error
+                : ErrorSeverity.Warning
+            builder.add(line.from, line.from, new ErrorMarker(maxSeverity, lineErrors))
+        }
 
         return builder.finish()
     },

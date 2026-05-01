@@ -365,6 +365,7 @@ export function codeBlockSetup(
                 block.errors.push(error)
             }
         })
+        eventHub.emit('render-diagnostics', {})
     }
     const clearDiagnostics = (): void => {
         blocks.value.forEach((block) => (block.errors = []))

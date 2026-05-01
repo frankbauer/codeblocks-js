@@ -342,6 +342,33 @@ export class JavaV102Compiler implements ICompilerInstance {
                             log_callback(ee.data.line + '\n')
                         } else if (ee.data.command == 'stderr') {
                             err_callback(ee.data.line + '\n')
+                        } else if (
+                            ee.data.command == 'diagnostic' ||
+                            ee.data.command == 'compiler-diagnostic'
+                        ) {
+                            console.log('Received diagnostic message from run worker:', ee.data)
+                            const isError =
+                                ee.data.severity == 'ERROR' ||
+                                ee.data.severity == 'error' ||
+                                ee.data.kind == 'ERROR'
+                            if (compileFailedCallback) {
+                                compileFailedCallback({
+                                    message:
+                                        ee.data.message ||
+                                        ee.data.text ||
+                                        ee.data.humanReadable ||
+                                        'Runtime message',
+                                    start: {
+                                        line: ee.data.lineNumber || ee.data.line || 0,
+                                        column: (ee.data.columnNumber || 0) - 1,
+                                    },
+                                    end: {
+                                        line: ee.data.lineNumber || ee.data.line || 0,
+                                        column: (ee.data.columnNumber || 0) - 1,
+                                    },
+                                    severity: isError ? ErrorSeverity.Error : ErrorSeverity.Warning,
+                                })
+                            }
                         } else if (ee.data.command == 'exception') {
                             if (options.compileFailedCallback) {
                                 options.compileFailedCallback({
@@ -357,6 +384,8 @@ export class JavaV102Compiler implements ICompilerInstance {
                                     severity: ErrorSeverity.Error,
                                 })
                             }
+                            finishedExecutionCB(false, undefined, options.args)
+                            this.stop()
                         } else if (
                             typeof ee.data.command === 'string' &&
                             ee.data.command.indexOf('w-') === 0
@@ -393,6 +422,7 @@ export class JavaV102Compiler implements ICompilerInstance {
                         args: args,
                         messagePosting: options.allowMessagePassing,
                         keepAlive: options.keepAlive,
+                        mainClass: mainClass,
                     })
 
                     const runStart = Date.now()
