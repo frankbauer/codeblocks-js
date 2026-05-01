@@ -33,6 +33,13 @@ interface InputMessage extends CodeBlocksBaseMessage {
     int getKeyCode();
 }
 
+interface TickMessage extends CodeBlocksBaseMessage {
+    @JSProperty
+    double getTime();
+
+    @JSProperty
+    double getDelta();
+}
 
 enum MouseEventType {
     MOUSE_MOVE("mousemove"),
@@ -74,9 +81,14 @@ interface KeyEvent {
   void onKeyEvent(KeyEventType type, boolean ctrl, boolean alt, boolean shift, boolean meta, String key, String code, int keyCode, Vec2D position, int buttons);
 }
 
+interface TickEvent {
+    void onTick(double time, double delta);
+}
+
 class Canvas {
     private static List<MouseEvent> mouseEventListeners = new ArrayList<>();
     private static List<KeyEvent> keyEventListeners = new ArrayList<>();
+    private static List<TickEvent> tickEventListeners = new ArrayList<>();
 
     public static void addMouseEventListener(MouseEvent listener) {
         mouseEventListeners.add(listener);
@@ -85,6 +97,27 @@ class Canvas {
     public static void addKeyEventListener(KeyEvent listener) {
         keyEventListeners.add(listener);
     }
+
+    public static void addTickEventListener(TickEvent listener) {
+        tickEventListeners.add(listener);
+    }
+
+    public static void enableTicks() {
+        CodeBlocks.postMessage("enableTicks", -1);
+    }
+
+    public static void disableTicks() {
+        CodeBlocks.postMessage("disableTicks", -1);
+    }
+
+    public static void setInputEventEnabled(MouseEventType type, boolean enabled) {
+        CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent", -1, type.getEventName());
+    }
+
+    public static void setInputEventEnabled(KeyEventType type, boolean enabled) {
+        CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent",-1,  type.getEventName());
+    }
+
     public static void drawImage(Image img, Vec2D position) {
         img.draw( position, 1.0);
     }
@@ -107,6 +140,12 @@ class Canvas {
 
     protected static void onMessage(CodeBlocksBaseMessage msg) {
         switch (msg.getCommand()) {
+            case "tick":
+                TickMessage tick = (TickMessage) msg.cast();
+                double time = tick.getTime();
+                double delta = tick.getDelta();
+                tickEventListeners.forEach(listener -> listener.onTick(time, delta));
+                break;
             case "input":
                 InputMessage input = (InputMessage) msg.cast();
                 String typeString = new String(input.getType());

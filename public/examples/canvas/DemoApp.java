@@ -21,10 +21,16 @@ public class DemoApp  {
         System.out.println("Key Event: " + type + " key: " + key + " code: " + code + " keyCode: " + keyCode);
     }
 
+    static void onTick(double time, double delta) {
+        System.out.println("Tick: time=" + time + " delta=" + delta);
+    }
+
     public static void main(String[] args) {
         img = new Image("/common/scene/floatingworld/img/Player1.png", DemoApp::onReady, DemoApp::onFailed);        
         Canvas.addMouseEventListener(DemoApp::onMouseEvent);
         Canvas.addKeyEventListener(DemoApp::onKeyEvent);
+        Canvas.addTickEventListener(DemoApp::onTick);
+        //Canvas.enableTicks();
         Canvas.drawImage(img, new Vec2D(100, 42), 1.2);
     }
 }

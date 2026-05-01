@@ -3,6 +3,10 @@ export default {
     ctx: null,
     active: false,
     allowedInputEvents: ['click', 'keyup'],
+    allowTick: false,
+    startTime: null,
+    lastTickTime: null,
+    animationFrameId: null,
     state: {
         x: 0,
         y: 0,
@@ -111,7 +115,19 @@ export default {
                     'keydown',
                     'keyup',
                 ]),
+            enableTicks: () => this.enableTicks(),
+            disableTicks: () => this.disableTicks(),
         }
+    },
+    enableTicks() {
+        this.allowTick = true
+        if (this.active && !this.animationFrameId) {
+            this.lastTickTime = null
+            this.animationFrameId = requestAnimationFrame((t) => this.tickLoop(t))
+        }
+    },
+    disableTicks() {
+        this.allowTick = false
     },
     addAllowedEvents(events) {
         events.forEach((evt) => {
@@ -130,6 +146,8 @@ export default {
     beforeStart() {
         console.log('PLAyRUN: canvasManager beforeStart')
         this.active = true
+        this.startTime = null
+        this.lastTickTime = null
         this.bindEvents()
 
         if (window.ResizeObserver && this.canvasElement) {
@@ -137,10 +155,18 @@ export default {
             this.resizeObserver.observe(this.canvasElement[0])
         }
         this.resize()
+
+        if (this.allowTick) {
+            this.enableTicks()
+        }
     },
     afterStop() {
         console.log('PLAyRUN: canvasManager afterStop')
         this.active = false
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId)
+            this.animationFrameId = null
+        }
         this.unbindEvents()
         if (this.resizeObserver) {
             this.resizeObserver.disconnect()
@@ -152,6 +178,45 @@ export default {
         this.state.alt = false
         this.state.shift = false
         this.state.meta = false
+    },
+    onMessage(cmd, data) {
+        if (cmd === 'enableTicks') {
+            this.enableTicks()
+        } else if (cmd === 'disableTicks') {
+            this.disableTicks()
+        } else if (cmd === 'enableInputEvent') {
+            this.addAllowedEvents([data])
+        } else if (cmd === 'disableInputEvent') {
+            this.removeAllowedEvents([data])
+        }
+    },
+    tickLoop(timestamp) {
+        if (!this.active || !this.allowTick) {
+            this.animationFrameId = null
+            return
+        }
+
+        const now = timestamp / 1000
+        if (this.startTime === null) {
+            this.startTime = now
+        }
+
+        // If we just started or restarted, delta should be 0 or small
+        if (this.lastTickTime === null) {
+            this.lastTickTime = now
+        }
+
+        if (this.runner) {
+            const time = now - this.startTime
+            const delta = now - this.lastTickTime
+
+            this.runner.postMessage('tick', {
+                time,
+                delta,
+            })
+        }
+        this.lastTickTime = now
+        this.animationFrameId = requestAnimationFrame((t) => this.tickLoop(t))
     },
     resize() {
         if (!this.canvas || !this.canvasElement) {
