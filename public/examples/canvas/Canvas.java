@@ -1,34 +1,24 @@
 interface InputMessage extends CodeBlocksBaseMessage {
     @JSProperty
     String getType();
-
     @JSProperty
     int getX();
-
     @JSProperty
     int getY();
-
     @JSProperty
     int getButtons();
-
     @JSProperty
     boolean getCtrl();
-
     @JSProperty
     boolean getAlt();
-
     @JSProperty
     boolean getShift();
-
     @JSProperty
     boolean getMeta();
-
     @JSProperty
     String getKey();
-
     @JSProperty
     String getCode();
-
     @JSProperty
     int getKeyCode();
 }
@@ -36,7 +26,6 @@ interface InputMessage extends CodeBlocksBaseMessage {
 interface TickMessage extends CodeBlocksBaseMessage {
     @JSProperty
     double getTime();
-
     @JSProperty
     double getDelta();
 }
@@ -86,6 +75,18 @@ interface TickEvent {
 }
 
 class Canvas {
+    @JSQuery
+    protected static native JsonElement getScreenSize();
+
+    public static Int2D getScreenDimensions() {
+        JsonElement el = getScreenSize();
+        if (el != null && el.isObject()) {
+            JsonObject obj = el.getObject();
+            return new Int2D(obj.getInt("width", 0), obj.getInt("height", 0));
+        }
+        return new Int2D(0, 0);
+    }
+
     private static List<MouseEvent> mouseEventListeners = new ArrayList<>();
     private static List<KeyEvent> keyEventListeners = new ArrayList<>();
     private static List<TickEvent> tickEventListeners = new ArrayList<>();
@@ -111,11 +112,11 @@ class Canvas {
     }
 
     public static void setInputEventEnabled(MouseEventType type, boolean enabled) {
-        CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent", -1, type.getEventName());
+        CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent", type.getEventName());
     }
 
     public static void setInputEventEnabled(KeyEventType type, boolean enabled) {
-        CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent",-1,  type.getEventName());
+        CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent", type.getEventName());
     }
 
     public static void drawImage(Image img, Vec2D position) {
@@ -138,56 +139,41 @@ class Canvas {
         img.draw(position, size);
     }
 
-    protected static void onMessage(CodeBlocksBaseMessage msg) {
-        switch (msg.getCommand()) {
-            case "tick":
-                TickMessage tick = (TickMessage) msg.cast();
-                double time = tick.getTime();
-                double delta = tick.getDelta();
-                tickEventListeners.forEach(listener -> listener.onTick(time, delta));
-                break;
-            case "input":
-                InputMessage input = (InputMessage) msg.cast();
-                String typeString = new String(input.getType());
-                int x = input.getX();
-                int y = input.getY();     
-                int buttons = input.getButtons();          
-                System.out.println("Input" + " type: " + typeString + " x: " + x + " y: " + y);
-                if (typeString.startsWith("key")) {
-                    KeyEventType type = null;
-                    for (KeyEventType t : KeyEventType.values()) {
-                        if (t.getEventName().equals(typeString)) {
-                            type = t;
-                            break;
-                        }
-                    }
-                    if (type != null) {
-                        KeyEventType finalType = type;
-                        String key = new String(input.getKey() != null ? input.getKey() : "");
-                        String code = new String(input.getCode() != null ? input.getCode() : "");
-                        int keyCode = input.getKeyCode();
-                        keyEventListeners.forEach(listener -> listener.onKeyEvent(finalType, input.getCtrl(), input.getAlt(), input.getShift(), input.getMeta(), key, code, keyCode, new Vec2D(x, y), buttons));
-                    }
-                } else {
-                    MouseEventType type = null;
-                    for (MouseEventType t : MouseEventType.values()) {
-                        if (t.getEventName().equals(typeString)) {
-                            type = t;
-                            break;
-                        }
-                    }
-                    if (type != null) {
-                        MouseEventType finalType = type;
-                        mouseEventListeners.forEach(listener -> listener.onMouseEvent(finalType, new Vec2D(x, y), buttons, input.getCtrl(), input.getAlt(), input.getShift(), input.getMeta()));
-                    }
-                }
-                break;
-            default:
-                System.out.println("Unknown command: " + msg.getCommand() + " with id: " + msg.getId());
-        }
-    }  
+    @JSEvent("tick")
+    private static void onTick(TickMessage msg) {
+        double time = msg.getTime();
+        double delta = msg.getDelta();
+        tickEventListeners.forEach(listener -> listener.onTick(time, delta));
+    }
 
-    static {
-      CodeBlocks.startReceivingEvents(Canvas::onMessage);
+    @JSEvent("input")
+    private static void onInput(InputMessage msg) {
+        String typeString = new String(msg.getType());
+        int x = msg.getX();
+        int y = msg.getY();
+        int buttons = msg.getButtons();
+        System.out.println("Input type: " + typeString + " x: " + x + " y: " + y);
+        if (typeString.startsWith("key")) {
+            KeyEventType type = null;
+            for (KeyEventType t : KeyEventType.values()) {
+                if (t.getEventName().equals(typeString)) { type = t; break; }
+            }
+            if (type != null) {
+                KeyEventType finalType = type;
+                String key = new String(msg.getKey() != null ? msg.getKey() : "");
+                String code = new String(msg.getCode() != null ? msg.getCode() : "");
+                int keyCode = msg.getKeyCode();
+                keyEventListeners.forEach(l -> l.onKeyEvent(finalType, msg.getCtrl(), msg.getAlt(), msg.getShift(), msg.getMeta(), key, code, keyCode, new Vec2D(x, y), buttons));
+            }
+        } else {
+            MouseEventType type = null;
+            for (MouseEventType t : MouseEventType.values()) {
+                if (t.getEventName().equals(typeString)) { type = t; break; }
+            }
+            if (type != null) {
+                MouseEventType finalType = type;
+                mouseEventListeners.forEach(l -> l.onMouseEvent(finalType, new Vec2D(x, y), buttons, msg.getCtrl(), msg.getAlt(), msg.getShift(), msg.getMeta()));
+            }
+        }
     }
 }

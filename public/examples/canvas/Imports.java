@@ -1,9 +1,12 @@
 import de.fau.tf.lgdv.*;
 import org.teavm.jso.JSProperty;
+import org.teavm.jso.browser.Window;
 import de.fau.tf.lgdv.runtime.RemoteObject;
 import de.fau.tf.lgdv.json.*;
 import org.teavm.jso.JSObject;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import de.fau.tf.lgdv.math.Vec2D;
 import de.fau.tf.lgdv.math.Int2D;

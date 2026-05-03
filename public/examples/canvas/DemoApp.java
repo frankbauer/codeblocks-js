@@ -2,8 +2,6 @@ public class DemoApp  {
     static Image img;
     static void onReady(Image img) {
         System.out.println("Image is ready with dimensions: " + img.getWidth() + "x" + img.getHeight());
-         //Canvas.drawImage(img, 10, 20, 0.5);
-         // CodeBlocks.exit(0);
     }
 
     static void onFailed(Image img, String message) {
@@ -30,7 +28,13 @@ public class DemoApp  {
         Canvas.addMouseEventListener(DemoApp::onMouseEvent);
         Canvas.addKeyEventListener(DemoApp::onKeyEvent);
         Canvas.addTickEventListener(DemoApp::onTick);
-        //Canvas.enableTicks();
+        
+        img.waitForReady();
+        System.out.println("Width: " + img.getWidth());
+   
+        Int2D size = Canvas.getScreenDimensions(); 
+        System.out.println("Canvas size: " + size.x + "x" + size.y);
+
         Canvas.drawImage(img, new Vec2D(100, 42), 1.2);
     }
 }

@@ -10,16 +10,16 @@ let currentMainClass = 'Main'
 
 function endSession(reqID) {
     if (stderrBuffer !== '') {
-        self.postMessage({ command: 'stderr', line: stderrBuffer, id: reqID })
+        self.postMessage({ command: 'stderr', line: stderrBuffer, sessionId: reqID })
     }
     if (stdoutBuffer !== '') {
-        self.postMessage({ command: 'stdout', line: stdoutBuffer, id: reqID })
+        self.postMessage({ command: 'stdout', line: stdoutBuffer, sessionId: reqID })
     }
 
     stderrBuffer = ''
     stdoutBuffer = ''
 
-    self.postMessage({ command: 'run-completed', id: reqID, args: rArgs })
+    self.postMessage({ command: 'run-completed', sessionId: reqID, args: rArgs })
 }
 
 function processException(e) {
@@ -147,13 +147,13 @@ function processException(e) {
 self.addEventListener('error', (event) => {
     if (currentReqID) {
         const result = processException(event.error || event.message)
-        self.postMessage({ command: 'stderr', line: result.text + '\n', id: currentReqID })
+        self.postMessage({ command: 'stderr', line: result.text + '\n', sessionId: currentReqID })
         self.postMessage({
             command: 'exception',
             text: result.text,
             line: result.line,
             file: result.file,
-            id: currentReqID,
+            sessionId: currentReqID,
         })
         if (result.line >= 0) {
             self.postMessage({
@@ -162,7 +162,7 @@ self.addEventListener('error', (event) => {
                 text: result.text,
                 line: result.line,
                 file: result.file,
-                id: currentReqID,
+                sessionId: currentReqID,
             })
         }
     }
@@ -174,14 +174,14 @@ self.addEventListener('unhandledrejection', (event) => {
         self.postMessage({
             command: 'stderr',
             line: 'Unhandled Rejection: ' + result.text + '\n',
-            id: currentReqID,
+            sessionId: currentReqID,
         })
         self.postMessage({
             command: 'exception',
             text: 'Unhandled Rejection: ' + result.text,
             line: result.line,
             file: result.file,
-            id: currentReqID,
+            sessionId: currentReqID,
         })
         if (result.line >= 0) {
             self.postMessage({
@@ -190,7 +190,7 @@ self.addEventListener('unhandledrejection', (event) => {
                 text: 'Unhandled Rejection: ' + result.text,
                 line: result.line,
                 file: result.file,
-                id: currentReqID,
+                sessionId: currentReqID,
             })
         }
     }
@@ -225,7 +225,7 @@ async function listener(event) {
             installImports(o) {
                 o.teavmConsole.putcharStdout = function (ch) {
                     if (ch === 0xa) {
-                        self.postMessage({ command: 'stdout', line: stdoutBuffer, id: reqID })
+                        self.postMessage({ command: 'stdout', line: stdoutBuffer, sessionId: reqID })
                         stdoutBuffer = ''
                     } else {
                         stdoutBuffer += String.fromCharCode(ch)
@@ -233,7 +233,7 @@ async function listener(event) {
                 }
                 o.teavmConsole.putcharStderr = function (ch) {
                     if (ch === 0xa) {
-                        self.postMessage({ command: 'stderr', line: stderrBuffer, id: reqID })
+                        self.postMessage({ command: 'stderr', line: stderrBuffer, sessionId: reqID })
                         stderrBuffer = ''
                     } else {
                         stderrBuffer += String.fromCharCode(ch)
@@ -242,9 +242,9 @@ async function listener(event) {
             },
         })
 
-        self.postMessage({ command: 'run-finished-setup', id: reqID })
+        self.postMessage({ command: 'run-finished-setup', sessionId: reqID })
 
-        self.postMessage({ command: 'main-will-start', id: reqID })
+        self.postMessage({ command: 'main-will-start', sessionId: reqID })
 
         try {
             module.exports.main(Array.isArray(request.args) ? request.args : [])
@@ -256,7 +256,7 @@ async function listener(event) {
                 text: result.text,
                 line: result.line,
                 file: result.file,
-                id: reqID,
+                sessionId: reqID,
             })
             if (result.line >= 0) {
                 self.postMessage({
@@ -265,14 +265,14 @@ async function listener(event) {
                     text: result.text,
                     line: result.line,
                     file: result.file,
-                    id: reqID,
+                    sessionId: reqID,
                 })
             }
         }
 
         rArgs = Array.isArray(request.args) ? request.args.slice() : []
 
-        self.postMessage({ command: 'main-finished', id: reqID, args: rArgs })
+        self.postMessage({ command: 'main-finished', sessionId: reqID, args: rArgs })
     } catch (e) {
         if (e instanceof Error) {
             stderrBuffer += 'Fatal Error: ' + e.message + '\n' + e.stack

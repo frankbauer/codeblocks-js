@@ -294,6 +294,7 @@ export class JavaV102Compiler implements ICompilerInstance {
 
                     const runListener = (ee: any) => {
                         //console.log('Received message from run worker:', ee.data, JSON.stringify(ee.data), questionID)
+                        const msgSessionId = ee.data.sessionId || ee.data.id
 
                         if (ee.data.command == 'f-FINAL') {
                             //console.log('Received final result from execution:', ee.data.value)
@@ -301,13 +302,14 @@ export class JavaV102Compiler implements ICompilerInstance {
                         } else if (ee.data.command == 'f-EXIT') {
                             console.log('Received exit code from execution:', ee.data.value)
                             this.stop()
-                        } else if (ee.data.id != '' + questionID) {
-                            console.warn(
+                        } else if (msgSessionId != '' + questionID) {
+                            console.error(
                                 'Received message for different session.',
-                                ee.data.id,
+                                msgSessionId,
                                 questionID,
                                 JSON.stringify(ee.data)
                             )
+                            return
                         }
 
                         if (ee.data.command == 'run-finished-setup') {

@@ -1,94 +1,97 @@
 export default {
     objects: new Map(),
-    makeObject: undefined,
+    typeFactories: new Map(),
+
     create() {
         this.objects = new Map()
-        this.makeObject = undefined
+        this.typeFactories = new Map()
         console.log('PLAyRUN: Object manager created')
         return {
             get: (id) => this.objects.get(id),
             getAll: () => Array.from(this.objects.values()),
             delete: (id) => this.objects.delete(id),
             has: (id) => this.objects.has(id),
-            setObjectMaker: (fn) => {
-                this.makeObject = fn
-            },
+            registerType: (type, factory) => this.typeFactories.set(type, factory),
         }
     },
+
+    _reply(objid, type, cmd, queryId) {
+        return (payload = {}) => {
+            this.runner.postMessage('o', {
+                json: JSON.stringify(payload),
+                objid,
+                queryId,
+                type,
+                cmd,
+            })
+        }
+    },
+
     onMessage(cmd, data) {
         if (cmd === 'n') {
             const parsedData = data.json ? JSON.parse(data.json) : {}
-            const objid = data.id ?? parsedData.id
-            const type = data.type ?? parsedData.type
-            console.log('PLAyRUN: RemoteObject Creation:', cmd, data)
+            const objid = data.objid
+            const queryId = data.queryId
+            const type = parsedData.type
+            console.log('PLAyRUN: RemoteObject Creation:', type, '#' + objid)
+
             if (this.objects.has(objid)) {
                 console.warn('Object with id already exists:', objid, type)
                 return
             }
 
-            let obj = {
-                ...parsedData,
-                id: objid,
-                type: type,
-                reply: (cmd, payload) => {
-                    const value = {
-                        json: JSON.stringify(payload),
-                        objid: obj.id,
-                        type: obj.type,
-                        cmd,
-                    }
-                    console.log('PLAyRUN: Object reply:', value, data, obj.id, obj.type)
-                    this.runner.postMessage('o', value)
-                },
-                onMessage: undefined,
+            const attrs = { ...parsedData, id: objid, type }
+            const factory = this.typeFactories.get(type)
+
+            if (!factory) {
+                console.warn('PLAyRUN: No factory registered for type:', type)
+                this.objects.set(objid, { ...attrs, onMessage: undefined, onQuery: undefined })
+                this._reply(objid, type, 'ready', queryId)()
+                return
             }
-            if (this.makeObject) {
-                obj = this.makeObject(obj)
+
+            const onReady = (obj, payload = {}) => {
+                obj.id = objid
+                obj.type = type
+                this.objects.set(objid, obj)
+                this._reply(objid, type, 'ready', queryId)(payload)
+                console.log('PLAyRUN: Object ready:', type, '#' + objid)
             }
-            console.log('PLAyRUN: Created object:', obj)
-            this.objects.set(objid, obj)
+            const onError = (message) => {
+                this._reply(objid, type, 'error', queryId)({ message })
+                console.error('PLAyRUN: Object creation failed:', type, '#' + objid, message)
+            }
+
+            factory(attrs, onReady, onError)
+
         } else if (cmd === 'o') {
             const objid = data.objid
             const type = data.type
             const subCommand = data.cmd
-            const obj = this.objects.get(data.objid)
+            const queryId = data.queryId
+            const obj = this.objects.get(objid)
+
             if (!obj) {
-                console.error(
-                    'Received message "' + subCommand + '"for non-existing object:',
-                    objid,
-                    type
-                )
+                console.error('Received message "' + subCommand + '" for non-existing object:', objid, type)
                 return
             }
             if (obj.type !== type) {
                 console.error(
                     'Received message "' + subCommand + '" for object with mismatching type:',
-                    objid,
-                    'expected:',
-                    obj.type,
-                    'got:',
-                    type
+                    objid, 'expected:', obj.type, 'got:', type
                 )
                 return
             }
-            if (obj.onMessage) {
-                console.log(
-                    'PLAyRUN: Dispatching message for object:',
-                    obj.id,
-                    obj.type,
-                    subCommand,
-                    data
-                )
-                const parsedData = data.json ? JSON.parse(data.json) : {}
+
+            const parsedData = data.json ? JSON.parse(data.json) : {}
+
+            if (queryId != null && obj.onQuery) {
+                const reply = this._reply(objid, type, subCommand, queryId)
+                obj.onQuery(subCommand, parsedData, reply)
+            } else if (obj.onMessage) {
                 obj.onMessage(subCommand, parsedData)
             } else {
-                console.warn(
-                    'PLAyRUN: Received message for object without onMessage handler:',
-                    obj.id,
-                    obj.type,
-                    subCommand,
-                    data
-                )
+                console.warn('PLAyRUN: Received message for object without handler:', obj.id, obj.type, subCommand)
             }
         }
     },

@@ -25,64 +25,39 @@ export default {
             return null
         }
         console.log('PLAyRUN: Canvas manager created')
-        objectManager.setObjectMaker((obj) => {
-            if (obj.type === 'IMAGE') {
-                let img = new Image()
-                img.onload = () => {
-                    obj.img = img
-                    obj.ready = true
-                    if (obj.queue) {
-                        console.log(
-                            'PLAyRUN: Processing queued messages for object:',
-                            obj.id,
-                            obj.queue.length
-                        )
-                        obj.queue.forEach(({ cmd, data }) => obj.onMessage(cmd, data))
-                        obj.queue = []
-                    }
-                    obj.reply('ready', { width: img.width, height: img.height })
-                    console.log('PLAyRUN: Image loaded and object updated:', obj)
-                }
-                img.onerror = (err) => {
-                    console.error('PLAyRUN: Failed to load image:', obj.src, err)
-                    obj.ready = false
-                    obj.reply('load-error', {})
-                }
-                obj.ready = false
-                obj.queue = []
-                obj.onMessage = (cmd, data) => {
+
+        objectManager.registerType('IMAGE', (attrs, onReady, onError) => {
+            const img = new Image()
+            const obj = {
+                ...attrs,
+                img: null,
+                ready: false,
+                queue: [],
+                onMessage: (cmd, data) => {
                     if (!obj.ready) {
-                        console.log(
-                            'PLAyRUN: Object not ready, queuing message:',
-                            obj.id,
-                            cmd,
-                            data
-                        )
                         obj.queue.push({ cmd, data })
                         return
                     }
                     if (cmd === 'draw') {
-                        if (this.ctx) {
-                            const anchor = {
-                                x: data.ax || 0,
-                                y: data.ay || 0,
-                            }
-                            const size = {
-                                w: (data.width || obj.img.width) * (data.scale || 1),
-                                h: (data.height || obj.img.height) * (data.scale || 1),
-                            }
-                            const drawX = data.x - anchor.x * size.w
-                            const drawY = data.y - anchor.y * size.h
-
-                            this.ctx.drawImage(obj.img, drawX, drawY, size.w, size.h)
-                        }
+                        this._drawImage(img, data)
                     }
-                    console.log('PLAyRUN: onMessage for object:', obj.id, cmd, data, this.canvas)
-                }
-                obj.foo = 42
-                img.src = obj.src
+                },
             }
-            return obj
+
+            img.onload = () => {
+                obj.img = img
+                obj.ready = true
+                if (obj.queue.length > 0) {
+                    obj.queue.forEach(({ cmd, data }) => obj.onMessage(cmd, data))
+                    obj.queue = []
+                }
+                onReady(obj, { width: img.width, height: img.height })
+            }
+            img.onerror = (err) => {
+                console.error('PLAyRUN: Failed to load image:', attrs.src, err)
+                onError('Failed to load image: ' + attrs.src)
+            }
+            img.src = attrs.src
         })
 
         return {
@@ -118,6 +93,18 @@ export default {
             enableTicks: () => this.enableTicks(),
             disableTicks: () => this.disableTicks(),
         }
+    },
+    _drawImage(img, data) {
+        if (!this.ctx) return
+        const position = data.position || { x: data.x, y: data.y }
+        const anchor = data.anchor || { x: data.ax || 0, y: data.ay || 0 }
+        const size = data.size || { x: data.width || img.width, y: data.height || img.height }
+        const scale = data.scale || 1
+        const drawW = size.x * scale
+        const drawH = size.y * scale
+        const drawX = position.x - anchor.x * drawW
+        const drawY = position.y - anchor.y * drawH
+        this.ctx.drawImage(img, drawX, drawY, drawW, drawH)
     },
     enableTicks() {
         this.allowTick = true
@@ -184,6 +171,16 @@ export default {
             this.enableTicks()
         } else if (cmd === 'disableTicks') {
             this.disableTicks()
+        } else if (cmd === 'getScreenSize') {
+            if (this.runner) {
+                this.runner.postMessage('getScreenSizeReply', {
+                    queryId: data.queryId,
+                    json: JSON.stringify({
+                        width: this.canvas ? this.canvas[0].width : 0,
+                        height: this.canvas ? this.canvas[0].height : 0,
+                    }),
+                })
+            }
         } else if (cmd === 'enableInputEvent') {
             this.addAllowedEvents([data])
         } else if (cmd === 'disableInputEvent') {
@@ -201,7 +198,6 @@ export default {
             this.startTime = now
         }
 
-        // If we just started or restarted, delta should be 0 or small
         if (this.lastTickTime === null) {
             this.lastTickTime = now
         }
