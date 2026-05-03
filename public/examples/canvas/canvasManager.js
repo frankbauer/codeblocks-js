@@ -80,7 +80,9 @@ export default {
         }
     },
     _drawImage(img, data) {
-        if (!this.ctx) return
+        if (!this.ctx) {
+            return
+        }
         const pos = data.position ?? { x: data.x ?? 0, y: data.y ?? 0 }
         const anchor = data.anchor ?? { x: 0, y: 0 }
         const scale = data.scale ?? 1
