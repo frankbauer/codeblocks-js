@@ -1,45 +1,51 @@
 import de.fau.tf.lgdv.*;
+import de.fau.tf.lgdv.runtime.annotations.*;
 import org.teavm.jso.JSProperty;
 
-interface MyExampleMessage extends CodeBlocksBaseMessage {
-    @JSProperty
-    boolean getFlag();
-
-    @JSProperty
-    void setFlag(boolean value);
-
-    @JSProperty
-    int getValue();
-
-    @JSProperty
-    void setValue(int value);
-}
-
 public class DemoApp  {  
-    static void postExampleCommand(boolean flag, int value) {
-        MyExampleMessage reply = CodeBlocks.createJSObject();
-        reply.setCommand("example");
-        reply.setFlag(flag);
-        reply.setValue(value);
-        CodeBlocks.postMessage(reply);
+
+    /**
+     * Sends an 'example' command to the JavaScript side.
+     * The @JSCommand annotation marks this as a command that will be posted as a message.
+     */
+    @JSCommand("example")
+    static native void postExample(boolean flag, int value);
+
+    /**
+     * Sends a synchronous 'query' to the JavaScript side and waits for a response.
+     * The @JSQuery annotation marks this as a synchronous request.
+     */
+    @JSQuery("info")
+    static native String getInfo();
+
+    /**
+     * Handles the 'hello' event received from JavaScript.
+     * The @JSEvent annotation routes messages with command 'hello' to this method.
+     */
+    @JSEvent("hello")
+    static void onHello(String id) {
+        System.out.println("Hello received! with id: " + id);
+        
+        // Example of using @JSQuery to get information synchronously from JavaScript
+        String info = getInfo();
+        System.out.println("Info from JS: " + info);
+
+        // Reply with an example command
+        postExample(false, 456);
     }
 
-    protected static void onMessage(CodeBlocksBaseMessage msg) {
-        switch (msg.getCommand()) {
-            case "hello":
-                System.out.println("Hello received!"  + " with id: " + msg.getId());
-                postExampleCommand(false, 456);
-                break;
-            case "example":
-                MyExampleMessage exampleMsg = (MyExampleMessage) msg.cast();
-                System.out.println("Example received with flag: " + exampleMsg.getFlag() + " and value: " + exampleMsg.getValue() + " with id: " + msg.getId());
-                break;
-            default:
-                System.out.println("Unknown command: " + msg.getCommand() + " with id: " + msg.getId());
-        }
-    }  
+    /**
+     * Handles the 'example' event received from JavaScript.
+     * Parameters are automatically mapped from the JSON payload keys.
+     */
+    @JSEvent("example")
+    static void onExample(boolean flag, int value, String id) {
+        System.out.println("Example received with flag: " + flag + " and value: " + value + " with id: " + id);
+    }
 
     public static void main(String[] args) {
-        CodeBlocks.startReceivingEvents(DemoApp::onMessage);
+        // With @JSEvent annotations, the runtime automatically sets up event routing.
+        // No manual registration with CodeBlocks.startReceivingEvents is required.
+        System.out.println("DemoApp started. Waiting for events...");
     }
 }

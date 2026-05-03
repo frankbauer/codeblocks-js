@@ -22,5 +22,12 @@ export default {
     reset() {},
     onMessage(cmd, data) {
         console.log('PLAyRUN: Received message:', cmd, data)
+        if (cmd === 'info') {
+            // Synchronous reply to a @JSQuery
+            this.runner.postMessage('infoReply', {
+                queryId: data.queryId,
+                json: JSON.stringify('Modernized DemoApp v1.0'),
+            })
+        }
     },
 }
