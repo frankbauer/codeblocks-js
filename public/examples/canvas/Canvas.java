@@ -23,20 +23,84 @@ interface InputMessage extends CodeBlocksBaseMessage {
     int getKeyCode();
 }
 
-interface TickMessage extends CodeBlocksBaseMessage {
-    @JSProperty
-    double getTime();
-    @JSProperty
-    double getDelta();
+class MouseInfo implements JsonObjectable {
+    public final Vec2D position;
+    public final int buttons;
+    
+    public MouseInfo(JsonObject obj) {
+        JsonElement pElement = obj.get("p");
+        this.position = new Vec2D(pElement.getObject());
+        this.buttons = obj.getInt("b", 0);        
+    }
+
+    @Override
+    public JsonElement toJsonElement() {
+        JsonObject obj = new JsonObject();
+        obj.put("p", position.toJsonElement());
+        obj.put("b", buttons);
+        return obj.toJsonElement();
+    }
 }
 
-enum MouseEventType {
+class ModifiersInfo implements JsonObjectable {
+    public final boolean ctrl;
+    public final boolean alt;
+    public final boolean shift;
+    public final boolean meta;
+
+    public ModifiersInfo(JsonObject obj) {
+        this.ctrl = obj.getBoolean("ctrl", false);
+        this.alt = obj.getBoolean("alt", false);
+        this.shift = obj.getBoolean("shift", false);
+        this.meta = obj.getBoolean("meta", false);
+    }
+
+    @Override
+    public JsonElement toJsonElement() {
+        JsonObject obj = new JsonObject();
+        obj.put("ctrl", ctrl);
+        obj.put("alt", alt);
+        obj.put("shift", shift);
+        obj.put("meta", meta);
+        return obj.toJsonElement();
+    }
+}
+
+class KeyInfo implements JsonObjectable {
+    public final String key;
+    public final String code;
+    public final int keyCode;
+
+    public KeyInfo(JsonObject obj) {
+        if (obj==null) {
+            this.key = "";
+            this.code = "";
+            this.keyCode = 0;         
+        } else {
+            this.key = obj.getString("key", "");
+            this.code = obj.getString("code", "");
+            this.keyCode = obj.getInt("keyCode", 0);
+        }
+    }
+
+    @Override
+    public JsonElement toJsonElement() {
+        JsonObject obj = new JsonObject();
+        obj.put("key", key);
+        obj.put("code", code);
+        obj.put("keyCode", keyCode);
+        return obj.toJsonElement();
+    }
+}   
+
+enum MouseEventType  implements JsonObjectable{
     MOUSE_MOVE("mousemove"),
     MOUSE_DOWN("mousedown"),
     MOUSE_UP("mouseup"),
     CLICK("click"),
     MOUSE_ENTER("mouseenter"),
-    MOUSE_LEAVE("mouseleave");
+    MOUSE_LEAVE("mouseleave"),
+    UNKNOWN("unknown");
 
     private final String eventName;
 
@@ -47,10 +111,28 @@ enum MouseEventType {
     public String getEventName() {
         return eventName;
     }
+
+    @Override
+    public JsonElement toJsonElement(){
+        return JsonElement.from(eventName);
+    }
+
+    public static MouseEventType fromJsonElement(JsonElement el) {
+        return fromString(el.getString(""));
+    }
+
+    public static MouseEventType fromString(String s) {
+        for (MouseEventType v : values()) {
+            if (v.eventName.equals(s)) return v;
+        }
+        return UNKNOWN;
+    }
+
 }
-enum KeyEventType {
+enum KeyEventType implements JsonObjectable{
     KEY_DOWN("keydown"),
-    KEY_UP("keyup");
+    KEY_UP("keyup"),
+    UNKNOWN("unknown");
 
     private final String eventName;
 
@@ -61,13 +143,29 @@ enum KeyEventType {
     public String getEventName() {
         return eventName;
     }
-} 
+
+    @Override
+    public JsonElement toJsonElement(){
+        return JsonElement.from(eventName);
+    }
+
+    public static KeyEventType fromJsonElement(JsonElement el) {
+        return fromString(el.getString(""));
+    }
+
+    public static KeyEventType fromString(String s) {
+        for (KeyEventType v : values()) {
+            if (v.eventName.equals(s)) return v;
+        }
+        return UNKNOWN;
+    }
+}
 interface MouseEvent {
-  void onMouseEvent(MouseEventType type, Vec2D position, int buttons, boolean ctrl, boolean alt, boolean shift, boolean meta);
+  void onMouseEvent(MouseEventType type, MouseInfo mouse, ModifiersInfo modifiers);
 }
 
 interface KeyEvent {
-  void onKeyEvent(KeyEventType type, boolean ctrl, boolean alt, boolean shift, boolean meta, String key, String code, int keyCode, Vec2D position, int buttons);
+  void onKeyEvent(KeyEventType type, KeyInfo key, ModifiersInfo modifiers, MouseInfo mouse);
 }
 
 interface TickEvent {
@@ -76,7 +174,7 @@ interface TickEvent {
 
 class Canvas {
     @JSQuery
-    protected static native JsonElement getScreenSize();
+    private static native JsonElement getScreenSize();
 
     public static Int2D getScreenDimensions() {
         JsonElement el = getScreenSize();
@@ -103,13 +201,11 @@ class Canvas {
         tickEventListeners.add(listener);
     }
 
-    public static void enableTicks() {
-        CodeBlocks.postMessage("enableTicks", -1);
-    }
+    @JSCommand
+    public static native void enableTicks();
 
-    public static void disableTicks() {
-        CodeBlocks.postMessage("disableTicks", -1);
-    }
+    @JSCommand
+    public static native void disableTicks();
 
     public static void setInputEventEnabled(MouseEventType type, boolean enabled) {
         CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent", type.getEventName());
@@ -140,39 +236,26 @@ class Canvas {
     }
 
     @JSEvent("tick")
-    private static void onTick(TickMessage msg) {
-        double time = msg.getTime();
-        double delta = msg.getDelta();
+    private static void onTick(double time, double delta) {
         tickEventListeners.forEach(listener -> listener.onTick(time, delta));
     }
 
     @JSEvent("input")
-    private static void onInput(InputMessage msg) {
-        String typeString = new String(msg.getType());
-        int x = msg.getX();
-        int y = msg.getY();
-        int buttons = msg.getButtons();
-        System.out.println("Input type: " + typeString + " x: " + x + " y: " + y);
-        if (typeString.startsWith("key")) {
-            KeyEventType type = null;
-            for (KeyEventType t : KeyEventType.values()) {
-                if (t.getEventName().equals(typeString)) { type = t; break; }
-            }
-            if (type != null) {
+    private static void onInput(String t, MouseInfo m, ModifiersInfo d, KeyInfo k) {
+        if (t.startsWith("key")) {
+            KeyEventType type = KeyEventType.fromString(t);            
+            if (type != null && type != KeyEventType.UNKNOWN) {
                 KeyEventType finalType = type;
-                String key = new String(msg.getKey() != null ? msg.getKey() : "");
-                String code = new String(msg.getCode() != null ? msg.getCode() : "");
-                int keyCode = msg.getKeyCode();
-                keyEventListeners.forEach(l -> l.onKeyEvent(finalType, msg.getCtrl(), msg.getAlt(), msg.getShift(), msg.getMeta(), key, code, keyCode, new Vec2D(x, y), buttons));
+                String key = new String(k.key);
+                String code = new String(k.code);
+                int keyCode = k.keyCode;
+                keyEventListeners.forEach(l -> l.onKeyEvent(finalType, k, d, m));
             }
         } else {
-            MouseEventType type = null;
-            for (MouseEventType t : MouseEventType.values()) {
-                if (t.getEventName().equals(typeString)) { type = t; break; }
-            }
-            if (type != null) {
+            MouseEventType type = MouseEventType.fromString(t);
+            if (type != null && type != MouseEventType.UNKNOWN) {
                 MouseEventType finalType = type;
-                mouseEventListeners.forEach(l -> l.onMouseEvent(finalType, new Vec2D(x, y), buttons, msg.getCtrl(), msg.getAlt(), msg.getShift(), msg.getMeta()));
+                mouseEventListeners.forEach(l -> l.onMouseEvent(finalType, m, d));
             }
         }
     }

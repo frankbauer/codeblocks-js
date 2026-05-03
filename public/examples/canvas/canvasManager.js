@@ -95,7 +95,9 @@ export default {
         }
     },
     _drawImage(img, data) {
-        if (!this.ctx) return
+        if (!this.ctx) {
+            return
+        }
         const position = data.position || { x: data.x, y: data.y }
         const anchor = data.anchor || { x: data.ax || 0, y: data.ay || 0 }
         const size = data.size || { x: data.width || img.width, y: data.height || img.height }
@@ -205,10 +207,10 @@ export default {
         if (this.runner) {
             const time = now - this.startTime
             const delta = now - this.lastTickTime
-
             this.runner.postMessage('tick', {
                 time,
                 delta,
+                json: JSON.stringify({ time, delta }),
             })
         }
         this.lastTickTime = now
@@ -247,11 +249,29 @@ export default {
     },
     sendInputEvent(type, data = {}) {
         if (this.active && this.runner) {
+            //const payload = { type, ...this.state, cmd: this.state.meta, ...data }
+            const payload = {
+                t: type,
+                m: {
+                    p: { x: this.state.x, y: this.state.y },
+                    b: this.state.buttons,
+                },
+                d: {
+                    ctrl: this.state.ctrl,
+                    alt: this.state.alt,
+                    shift: this.state.shift,
+                    meta: this.state.meta,
+                },
+                k: data.key
+                    ? {
+                          key: data.key,
+                          code: data.code,
+                          keyCode: data.keyCode,
+                      }
+                    : {},
+            }
             this.runner.postMessage('input', {
-                type,
-                ...this.state,
-                cmd: this.state.meta,
-                ...data,
+                json: JSON.stringify(payload),
             })
         }
     },

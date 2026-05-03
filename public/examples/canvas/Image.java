@@ -5,7 +5,6 @@ class Image extends RemoteObject {
     public final String src;
     private final OnReady onReadyCallback;
     private final OnFailed onFailedCallback;
-    private boolean ready = false;
     private int width;
     private int height;
 
@@ -17,18 +16,22 @@ class Image extends RemoteObject {
         this.onReadyCallback = onReadyCallback;
         this.onFailedCallback = onFailedCallback;
         this.sendNew();
+        this.waitForReady();
     }
 
-    public boolean isReady() { return ready; }
+    public boolean isReady() { return this.didReceiveReady(); }
 
-    public void waitForReady() {
-        JsonElement e = super.waitForCreated();
-        if (e != null) {
-            this.width = e.getObject().getInt("width", -1);
-            this.height = e.getObject().getInt("height", -1);
-            this.ready = true;
-            if (this.onReadyCallback != null) this.onReadyCallback.onReady(this);
-        }
+    @Override
+    protected void onCreated(JsonElement json) {
+        super.onCreated(json);
+
+        this.width = json.getObject().getInt("width", -1);
+        this.height = json.getObject().getInt("height", -1);        
+        if (this.onReadyCallback != null) this.onReadyCallback.onReady(this);
+    }
+
+    private void waitForReady() {
+        super.waitForCreated();
     }
 
     public int getWidth() { return width; }
@@ -36,14 +39,6 @@ class Image extends RemoteObject {
 
     @Override
     protected void addAttributes(JsonObject json){ json.put("src", src); }
-
-    // @JSEvent("ready")
-    // public void onReadyEvent(JsonElement json) {
-    //     this.width = json.getObject().getInt("width", -1);
-    //     this.height = json.getObject().getInt("height", -1);
-    //     this.ready = true;  
-    //     if (this.onReadyCallback != null) this.onReadyCallback.onReady(this);
-    // }
 
     @JSEvent("load-error")
     public void onLoadError(JsonElement json) {
@@ -56,9 +51,9 @@ class Image extends RemoteObject {
     @JSCommand(params = {"position", "size"})                 
     public native void draw(Vec2D position, Int2D size);
 
-    @JSCommand(params = {"position", "scale"})                                                                  
-    public  void draw(Vec2D position, double scale){}
+    @JSCommand
+    public void draw(Vec2D position, double scale){}
 
     @JSCommand
-    public  void draw(Vec2D position, double scale, Vec2D anchor){}
+    public void draw(Vec2D position, double scale, Vec2D anchor){}
 }

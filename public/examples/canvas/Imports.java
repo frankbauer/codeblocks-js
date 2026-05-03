@@ -1,4 +1,5 @@
 import de.fau.tf.lgdv.*;
+import de.fau.tf.lgdv.runtime.annotations.*;
 import org.teavm.jso.JSProperty;
 import org.teavm.jso.browser.Window;
 import de.fau.tf.lgdv.runtime.RemoteObject;

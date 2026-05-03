@@ -8,15 +8,15 @@ public class DemoApp  {
         System.err.println("Failed to load image: " + img.src + " with message: " + message);
     }
 
-    static void onMouseEvent(MouseEventType type, Vec2D position, int buttons, boolean ctrl, boolean alt, boolean shift, boolean meta){
-        System.out.println("Mouse Event: " + type + " at (" + position.x + "," + position.y + ") buttons: " + buttons);
+    static void onMouseEvent(MouseEventType type, MouseInfo mouse, ModifiersInfo modifiers){
+        System.out.println("Mouse Event: " + type + " at (" + mouse.position.x + "," + mouse.position.y + ") buttons: " + mouse.buttons);
         if (img!=null && type == MouseEventType.CLICK){
-            Canvas.drawImage(img, position, 0.5, new Vec2D(0.5, 1));
+            Canvas.drawImage(img, mouse.position, 0.5, new Vec2D(0.5, 1));
         }
     }
 
-    static void onKeyEvent(KeyEventType type, boolean ctrl, boolean alt, boolean shift, boolean meta, String key, String code, int keyCode, Vec2D position, int buttons){
-        System.out.println("Key Event: " + type + " key: " + key + " code: " + code + " keyCode: " + keyCode);
+    static void onKeyEvent(KeyEventType type, KeyInfo key, ModifiersInfo modifiers, MouseInfo mouse){
+        System.out.println("Key Event: " + type + " key: " + new String(key.key) + " code: " + new String(key.code) + " keyCode: " + key.keyCode);
     }
 
     static void onTick(double time, double delta) {
@@ -29,12 +29,13 @@ public class DemoApp  {
         Canvas.addKeyEventListener(DemoApp::onKeyEvent);
         Canvas.addTickEventListener(DemoApp::onTick);
         
-        img.waitForReady();
+        //img.waitForReady();
         System.out.println("Width: " + img.getWidth());
    
         Int2D size = Canvas.getScreenDimensions(); 
         System.out.println("Canvas size: " + size.x + "x" + size.y);
 
         Canvas.drawImage(img, new Vec2D(100, 42), 1.2);
+        //Canvas.enableTicks();
     }
 }
