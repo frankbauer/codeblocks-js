@@ -1,28 +1,3 @@
-interface InputMessage extends CodeBlocksBaseMessage {
-    @JSProperty
-    String getType();
-    @JSProperty
-    int getX();
-    @JSProperty
-    int getY();
-    @JSProperty
-    int getButtons();
-    @JSProperty
-    boolean getCtrl();
-    @JSProperty
-    boolean getAlt();
-    @JSProperty
-    boolean getShift();
-    @JSProperty
-    boolean getMeta();
-    @JSProperty
-    String getKey();
-    @JSProperty
-    String getCode();
-    @JSProperty
-    int getKeyCode();
-}
-
 class MouseInfo implements JsonObjectable {
     public final Vec2D position;
     public final int buttons;
