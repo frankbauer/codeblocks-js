@@ -7,11 +7,11 @@ export default {
         this.typeFactories = new Map()
         console.log('PLAyRUN: Object manager created')
         return {
-            get: (id) => this.objects.get(id),
-            getAll: () => Array.from(this.objects.values()),
-            delete: (id) => this.objects.delete(id),
-            has: (id) => this.objects.has(id),
             registerType: (type, factory) => this.typeFactories.set(type, factory),
+            get: (id) => this.objects.get(id)?.instance ?? null,
+            has: (id) => this.objects.has(id),
+            delete: (id) => this.objects.delete(id),
+            getAll: () => Array.from(this.objects.values()).map((o) => o.instance),
         }
     },
 
@@ -27,12 +27,34 @@ export default {
         }
     },
 
+    _dispatch(entry, data) {
+        const objid = data.objid
+        const type = data.type
+        const subCommand = data.cmd
+        const queryId = data.queryId
+        const payload = data.json ? JSON.parse(data.json) : {}
+        const instance = entry.instance
+
+        if (queryId != null && instance.onQuery) {
+            instance.onQuery(subCommand, payload, this._reply(objid, type, subCommand, queryId))
+        } else if (instance.onMessage) {
+            instance.onMessage(subCommand, payload)
+        } else {
+            console.warn(
+                'PLAyRUN: Received message for object without handler:',
+                objid,
+                type,
+                subCommand
+            )
+        }
+    },
+
     onMessage(cmd, data) {
         if (cmd === 'n') {
             const parsedData = data.json ? JSON.parse(data.json) : {}
             const objid = data.objid
             const queryId = data.queryId
-            const type = parsedData.type
+            const type = parsedData.type || data.type
             console.log('PLAyRUN: RemoteObject Creation:', type, '#' + objid)
 
             if (this.objects.has(objid)) {
@@ -40,58 +62,75 @@ export default {
                 return
             }
 
-            const attrs = { ...parsedData, id: objid, type }
-            const factory = this.typeFactories.get(type)
+            const entry = {
+                type,
+                instance: null,
+                ready: false,
+                queue: [],
+            }
+            this.objects.set(objid, entry)
 
+            const factory = this.typeFactories.get(type)
             if (!factory) {
                 console.warn('PLAyRUN: No factory registered for type:', type)
-                this.objects.set(objid, { ...attrs, onMessage: undefined, onQuery: undefined })
+                entry.instance = { ...parsedData, id: objid, type }
+                entry.ready = true
                 this._reply(objid, type, 'ready', queryId)()
                 return
             }
 
-            const onReady = (obj, payload = {}) => {
-                obj.id = objid
-                obj.type = type
-                this.objects.set(objid, obj)
+            const attrs = { ...parsedData, id: objid, type }
+            const onReady = (payload = {}) => {
+                if (entry.ready) return
+                entry.ready = true
                 this._reply(objid, type, 'ready', queryId)(payload)
                 console.log('PLAyRUN: Object ready:', type, '#' + objid)
+
+                const q = entry.queue
+                entry.queue = []
+                q.forEach((msg) => this._dispatch(entry, msg))
             }
-            const onError = (message) => {
-                this._reply(objid, type, 'error', queryId)({ message })
-                console.error('PLAyRUN: Object creation failed:', type, '#' + objid, message)
+            const onError = (errorPayload) => {
+                this._reply(objid, type, 'load-error', queryId)(errorPayload)
+                console.error('PLAyRUN: Object creation failed:', type, '#' + objid, errorPayload)
+                this.objects.delete(objid)
             }
 
-            factory(attrs, onReady, onError)
-
+            const instance = factory(attrs, onReady, onError)
+            if (instance) {
+                entry.instance = instance
+            } else {
+                console.warn('PLAyRUN: Factory did not return an instance for type:', type)
+            }
         } else if (cmd === 'o') {
             const objid = data.objid
             const type = data.type
-            const subCommand = data.cmd
-            const queryId = data.queryId
-            const obj = this.objects.get(objid)
+            const entry = this.objects.get(objid)
 
-            if (!obj) {
-                console.error('Received message "' + subCommand + '" for non-existing object:', objid, type)
+            if (!entry) {
+                console.error(
+                    'Received message "' + data.cmd + '" for non-existing object:',
+                    objid,
+                    type
+                )
                 return
             }
-            if (obj.type !== type) {
+            if (entry.type !== type) {
                 console.error(
-                    'Received message "' + subCommand + '" for object with mismatching type:',
-                    objid, 'expected:', obj.type, 'got:', type
+                    'Received message "' + data.cmd + '" for object with mismatching type:',
+                    objid,
+                    'expected:',
+                    entry.type,
+                    'got:',
+                    type
                 )
                 return
             }
 
-            const parsedData = data.json ? JSON.parse(data.json) : {}
-
-            if (queryId != null && obj.onQuery) {
-                const reply = this._reply(objid, type, subCommand, queryId)
-                obj.onQuery(subCommand, parsedData, reply)
-            } else if (obj.onMessage) {
-                obj.onMessage(subCommand, parsedData)
+            if (!entry.ready) {
+                entry.queue.push(data)
             } else {
-                console.warn('PLAyRUN: Received message for object without handler:', obj.id, obj.type, subCommand)
+                this._dispatch(entry, data)
             }
         }
     },

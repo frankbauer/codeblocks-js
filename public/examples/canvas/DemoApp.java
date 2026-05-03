@@ -10,7 +10,7 @@ public class DemoApp  {
 
     static void onMouseEvent(MouseEventType type, MouseInfo mouse, ModifiersInfo modifiers){
         System.out.println("Mouse Event: " + type + " at (" + mouse.position.x + "," + mouse.position.y + ") buttons: " + mouse.buttons);
-        if (img!=null && type == MouseEventType.CLICK){
+        if (img!=null && type == MouseEventType.MOUSE_DOWN) {
             Canvas.drawImage(img, mouse.position, 0.5, new Vec2D(0.5, 1));
         }
     }

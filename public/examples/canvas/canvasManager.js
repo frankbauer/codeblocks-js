@@ -26,38 +26,23 @@ export default {
         }
         console.log('PLAyRUN: Canvas manager created')
 
-        objectManager.registerType('IMAGE', (attrs, onReady, onError) => {
+        objectManager.registerType('IMAGE', (attrs, ready, error) => {
             const img = new Image()
-            const obj = {
-                ...attrs,
-                img: null,
-                ready: false,
-                queue: [],
+
+            img.onload = () => ready({ width: img.width, height: img.height })
+            img.onerror = (err) => {
+                console.error('PLAyRUN: Failed to load image:', attrs.src, err)
+                error({ message: 'Failed to load image: ' + attrs.src })
+            }
+            img.src = attrs.src
+
+            return {
                 onMessage: (cmd, data) => {
-                    if (!obj.ready) {
-                        obj.queue.push({ cmd, data })
-                        return
-                    }
                     if (cmd === 'draw') {
                         this._drawImage(img, data)
                     }
                 },
             }
-
-            img.onload = () => {
-                obj.img = img
-                obj.ready = true
-                if (obj.queue.length > 0) {
-                    obj.queue.forEach(({ cmd, data }) => obj.onMessage(cmd, data))
-                    obj.queue = []
-                }
-                onReady(obj, { width: img.width, height: img.height })
-            }
-            img.onerror = (err) => {
-                console.error('PLAyRUN: Failed to load image:', attrs.src, err)
-                onError('Failed to load image: ' + attrs.src)
-            }
-            img.src = attrs.src
         })
 
         return {
@@ -95,18 +80,13 @@ export default {
         }
     },
     _drawImage(img, data) {
-        if (!this.ctx) {
-            return
-        }
-        const position = data.position || { x: data.x, y: data.y }
-        const anchor = data.anchor || { x: data.ax || 0, y: data.ay || 0 }
-        const size = data.size || { x: data.width || img.width, y: data.height || img.height }
-        const scale = data.scale || 1
-        const drawW = size.x * scale
-        const drawH = size.y * scale
-        const drawX = position.x - anchor.x * drawW
-        const drawY = position.y - anchor.y * drawH
-        this.ctx.drawImage(img, drawX, drawY, drawW, drawH)
+        if (!this.ctx) return
+        const pos = data.position ?? { x: data.x ?? 0, y: data.y ?? 0 }
+        const anchor = data.anchor ?? { x: 0, y: 0 }
+        const scale = data.scale ?? 1
+        const w = (data.size?.x ?? data.width ?? img.width) * scale
+        const h = (data.size?.y ?? data.height ?? img.height) * scale
+        this.ctx.drawImage(img, pos.x - anchor.x * w, pos.y - anchor.y * h, w, h)
     },
     enableTicks() {
         this.allowTick = true
