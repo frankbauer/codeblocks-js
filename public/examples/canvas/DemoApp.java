@@ -38,8 +38,8 @@ public class DemoApp  {
 
         Canvas.drawImage(img, new Vec2D(100, 42), 1.2);
         //Canvas.enableTicks();
-        int guests = 0;
-        int maxGuests = (int)(Math.random() * 50);
-        System.out.println(10/guests);
+        // int guests = 0;
+        // int maxGuests = (int)(Math.random() * 50);
+        // System.out.println(maxGuests/guests);
     }
 }

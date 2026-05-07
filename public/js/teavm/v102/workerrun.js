@@ -23,6 +23,7 @@ function endSession(reqID) {
 }
 
 function processException(e) {
+    console.error('[workerrun] processException:', e)
     const state = globalThis.teavm_internal_state
     const deobf = state ? state.stackDeobfuscator : null
     let output = ''
@@ -99,17 +100,39 @@ function processException(e) {
                 message = null
             }
 
+            // Track whether the exception type was found in the deobfuscated Java stack.
+            // If not (e.g. wasm traps like divide-by-zero), we must start the frame loop
+            // from index 0 instead of firstStack+1, so the student's code frame isn't skipped.
+            const classFoundInStack = className !== null
+
             if (!className) {
-                className = 'java.lang.Throwable'
+                // Map well-known wasm trap messages to Java exception types
+                const msg = (message || '').toLowerCase()
+                if (msg.includes('divide by zero') || msg.includes('integer divide by zero')) {
+                    className = 'java.lang.ArithmeticException'
+                    message = '/ by zero'
+                } else if (msg.includes('null') || msg.includes('dereferenc')) {
+                    className = 'java.lang.NullPointerException'
+                } else if (msg.includes('out of bounds') || msg.includes('index')) {
+                    className = 'java.lang.ArrayIndexOutOfBoundsException'
+                } else if (msg.includes('stack overflow') || msg.includes('call stack')) {
+                    className = 'java.lang.StackOverflowError'
+                } else {
+                    className = 'java.lang.Throwable'
+                }
             }
 
             let javaStack = className + (message ? ': ' + message : '') + '\n'
             const studentFile = currentMainClass + '.java'
-            for (let i = firstStack + 1; i < stack.length; i++) {
+            // When the exception class came from the Java stack, skip past the constructor
+            // frames (firstStack+1). When it was inferred from a wasm trap, start at frame 0
+            // so the actual throw site in student code is included.
+            for (let i = (classFoundInStack ? firstStack + 1 : 0); i < stack.length; i++) {
                 const frame = stack[i]
                 if (
                     frame.className.startsWith('org.teavm.') ||
-                    frame.className.startsWith('MainOverride')
+                    frame.className.startsWith('MainOverride') ||
+                    frame.className.startsWith('de.fau.tf.lgdv.CodeBlocks')
                 ) {
                     continue
                 }
