@@ -24,6 +24,7 @@ public class DemoApp  {
     }
 
     public static void main(String[] args) {
+        System.out.println("DemoApp started: " + CodeBlocks.getVersion());
         img = new Image("/common/scene/floatingworld/img/Player1.png", DemoApp::onReady, DemoApp::onFailed);        
         Canvas.addMouseEventListener(DemoApp::onMouseEvent);
         Canvas.addKeyEventListener(DemoApp::onKeyEvent);
@@ -37,5 +38,8 @@ public class DemoApp  {
 
         Canvas.drawImage(img, new Vec2D(100, 42), 1.2);
         //Canvas.enableTicks();
+        int guests = 0;
+        int maxGuests = (int)(Math.random() * 50);
+        System.out.println(10/guests);
     }
 }

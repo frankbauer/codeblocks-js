@@ -217,7 +217,12 @@ export class JavaV102Compiler implements ICompilerInstance {
         const mainClass = mainClassMatch ? mainClassMatch[1] : 'Main'
 
         const myListener = (e: any) => {
-            //console.log('Received message from compiler worker:', e.data.command, e.data, questionID)
+            console.log(
+                'Received message from compiler worker:',
+                e.data.command,
+                e.data,
+                questionID
+            )
             if (e.data.id != '' + questionID) {
                 return
             }
@@ -233,7 +238,6 @@ export class JavaV102Compiler implements ICompilerInstance {
                     'Phase: <b>' + e.data.phase + '</b> for ' + mainClass
                 )
             } else if (e.data.command == 'diagnostic' || e.data.command == 'compiler-diagnostic') {
-                console.log('Received diagnostic message from compiler:', e.data)
                 const isError = e.data.severity == 'ERROR' || e.data.severity == 'error'
                 if (compileFailedCallback) {
                     compileFailedCallback({
@@ -285,6 +289,11 @@ export class JavaV102Compiler implements ICompilerInstance {
                     this.triggerAfterStop()
                     globalState.compilerState.hideGlobalState()
                     globalState.compilerState.setAllRunButtons(true)
+                    if (e.data.requiresRestart && this.teaworker) {
+                        console.log('Worker requires restart. Restarting...')
+                        this.teaworker.terminate()
+                        this.teaworker = undefined
+                    }
                 } else {
                     globalState.compilerState.displayGlobalState(
                         'Executing <b>' + mainClass + '</b>'

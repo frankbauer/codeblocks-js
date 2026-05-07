@@ -4,6 +4,8 @@ export default {
     active: false,
     allowedInputEvents: ['click', 'keyup'],
     allowTick: false,
+    tickMode: false,
+    commandBuffer: [],
     startTime: null,
     lastTickTime: null,
     animationFrameId: null,
@@ -39,7 +41,11 @@ export default {
             return {
                 onMessage: (cmd, data) => {
                     if (cmd === 'draw') {
-                        this._drawImage(img, data)
+                        if (this.tickMode) {
+                            this.commandBuffer.push({ type: 'IMAGE', img, data })
+                        } else {
+                            this._drawImage(img, data)
+                        }
                     }
                 },
             }
@@ -149,12 +155,18 @@ export default {
         this.state.alt = false
         this.state.shift = false
         this.state.meta = false
+        this.commandBuffer = []
     },
     onMessage(cmd, data) {
         if (cmd === 'enableTicks') {
             this.enableTicks()
         } else if (cmd === 'disableTicks') {
             this.disableTicks()
+        } else if (cmd === 'setTickMode') {
+            this.tickMode = !!data
+            if (!this.tickMode) {
+                this.applyCommandBuffer()
+            }
         } else if (cmd === 'getScreenSize') {
             if (this.runner) {
                 this.runner.postMessage('getScreenSizeReply', {
@@ -169,7 +181,118 @@ export default {
             this.addAllowedEvents([data])
         } else if (cmd === 'disableInputEvent') {
             this.removeAllowedEvents([data])
+        } else if (this.ctx) {
+            if (this.tickMode) {
+                this.commandBuffer.push({ type: 'CMD', cmd, data })
+            } else {
+                this.executeCommand(cmd, data)
+            }
         }
+    },
+    executeCommand(cmd, data) {
+        switch (cmd) {
+            case 'setStrokeStyle':
+                this.ctx.strokeStyle = data
+                break
+            case 'setFillStyle':
+                this.ctx.fillStyle = data
+                break
+            case 'setLineWidth':
+                this.ctx.lineWidth = data
+                break
+            case 'setFont':
+                this.ctx.font = data
+                break
+            case 'setTextAlign':
+                this.ctx.textAlign = data
+                break
+            case 'beginPath':
+                this.ctx.beginPath()
+                break
+            case 'closePath':
+                this.ctx.closePath()
+                break
+            case 'stroke':
+                this.ctx.stroke()
+                break
+            case 'fill':
+                this.ctx.fill()
+                break
+            case 'moveTo':
+                this.ctx.moveTo(data.x, data.y)
+                break
+            case 'lineTo':
+                this.ctx.lineTo(data.x, data.y)
+                break
+            case 'fillRect':
+                this.ctx.fillRect(data.x, data.y, data.w, data.h)
+                break
+            case 'strokeRect':
+                this.ctx.strokeRect(data.x, data.y, data.w, data.h)
+                break
+            case 'clearRect':
+                this.ctx.clearRect(data.x, data.y, data.w, data.h)
+                break
+            case 'arc':
+                this.ctx.arc(
+                    data.x,
+                    data.y,
+                    data.radius,
+                    data.startAngle,
+                    data.endAngle,
+                    data.anticlockwise
+                )
+                break
+            case 'fillText':
+                this.ctx.fillText(data.text, data.x, data.y)
+                break
+            case 'strokeText':
+                this.ctx.strokeText(data.text, data.x, data.y)
+                break
+            case 'save':
+                this.ctx.save()
+                break
+            case 'restore':
+                this.ctx.restore()
+                break
+            case 'translate':
+                this.ctx.translate(data.x, data.y)
+                break
+            case 'rotate':
+                this.ctx.rotate(data.angle)
+                break
+            case 'scale':
+                this.ctx.scale(data.x, data.y)
+                break
+            case 'clear':
+                const dpr = window.devicePixelRatio || 1
+                this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+                if (data && typeof data === 'string') {
+                    this.ctx.fillStyle = data
+                    this.ctx.fillRect(0, 0, this.canvas[0].width / dpr, this.canvas[0].height / dpr)
+                } else {
+                    this.ctx.clearRect(
+                        0,
+                        0,
+                        this.canvas[0].width / dpr,
+                        this.canvas[0].height / dpr
+                    )
+                }
+                break
+        }
+    },
+    applyCommandBuffer() {
+        if (this.commandBuffer.length === 0) {
+            return
+        }
+        this.commandBuffer.forEach((entry) => {
+            if (entry.type === 'IMAGE') {
+                this._drawImage(entry.img, entry.data)
+            } else if (entry.type === 'CMD') {
+                this.executeCommand(entry.cmd, entry.data)
+            }
+        })
+        this.commandBuffer = []
     },
     tickLoop(timestamp) {
         if (!this.active || !this.allowTick) {
@@ -186,6 +309,12 @@ export default {
             this.lastTickTime = now
         }
 
+        if (this.tickMode && this.ctx) {
+            // Apply buffered commands from the previous frame
+            this.applyCommandBuffer()
+        }
+
+        // Send tick notification to Java
         if (this.runner) {
             const time = now - this.startTime
             const delta = now - this.lastTickTime

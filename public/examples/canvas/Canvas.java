@@ -135,6 +135,32 @@ enum KeyEventType implements JsonObjectable{
         return UNKNOWN;
     }
 }
+
+class Color implements JsonObjectable {
+    public final int r, g, b;
+    public final double a;
+
+    public Color(int r, int g, int b) {
+        this(r, g, b, 1.0);
+    }
+
+    public Color(int r, int g, int b, double a) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = (a < 0) ? 0 : (a > 1 ? 1 : a);
+    }
+
+    public String toRgbaString() {
+        return "rgba(" + r + "," + g + "," + b + "," + a + ")";
+    }
+
+    @Override
+    public JsonElement toJsonElement() {
+        return JsonElement.from(toRgbaString());
+    }
+}
+
 interface MouseEvent {
   void onMouseEvent(MouseEventType type, MouseInfo mouse, ModifiersInfo modifiers);
 }
@@ -182,12 +208,120 @@ class Canvas {
     @JSCommand
     public static native void disableTicks();
 
+    @JSCommand
+    public static native void setTickMode(boolean enabled);
+
+    @JSCommand
+    public static native void clear();
+
+    public static void clear(Color color) {
+        CodeBlocks.postMessage("clear", color.toRgbaString());
+    }
+
     public static void setInputEventEnabled(MouseEventType type, boolean enabled) {
         CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent", type.getEventName());
     }
 
     public static void setInputEventEnabled(KeyEventType type, boolean enabled) {
         CodeBlocks.postMessage(enabled ? "enableInputEvent" : "disableInputEvent", type.getEventName());
+    }
+
+    @JSCommand
+    public static native void setStrokeStyle(String style);
+    public static void setStrokeStyle(Color color) { setStrokeStyle(color.toRgbaString()); }
+
+    @JSCommand
+    public static native void setFillStyle(String style);
+    public static void setFillStyle(Color color) { setFillStyle(color.toRgbaString()); }
+
+    @JSCommand
+    public static native void setLineWidth(double width);
+
+    @JSCommand
+    public static native void setFont(String font);
+
+    @JSCommand
+    public static native void setTextAlign(String align);
+
+    @JSCommand
+    public static native void beginPath();
+
+    @JSCommand
+    public static native void closePath();
+
+    @JSCommand
+    public static native void stroke();
+
+    @JSCommand
+    public static native void fill();
+
+    @JSCommand
+    public static native void moveTo(double x, double y);
+
+    @JSCommand
+    public static native void lineTo(double x, double y);
+
+    @JSCommand
+    public static native void fillRect(double x, double y, double w, double h);
+
+    @JSCommand
+    public static native void strokeRect(double x, double y, double w, double h);
+
+    @JSCommand
+    public static native void clearRect(double x, double y, double w, double h);
+
+    @JSCommand
+    public static native void arc(double x, double y, double radius, double startAngle, double endAngle, boolean anticlockwise);
+
+    @JSCommand
+    public static native void fillText(String text, double x, double y);
+
+    @JSCommand
+    public static native void strokeText(String text, double x, double y);
+
+    @JSCommand
+    public static native void save();
+
+    @JSCommand
+    public static native void restore();
+
+    @JSCommand
+    public static native void translate(double x, double y);
+
+    @JSCommand
+    public static native void rotate(double angle);
+
+    @JSCommand
+    public static native void scale(double x, double y);
+
+    public static void line(double x1, double y1, double x2, double y2) {
+        beginPath();
+        moveTo(x1, y1);
+        lineTo(x2, y2);
+        stroke();
+    }
+
+    public static void rectangle(double x1, double y1, double x2, double y2, boolean fill) {
+        double x = Math.min(x1, x2);
+        double y = Math.min(y1, y2);
+        double w = Math.abs(x2 - x1);
+        double h = Math.abs(y2 - y1);
+        if (fill) fillRect(x, y, w, h);
+        else strokeRect(x, y, w, h);
+    }
+
+    public static void circle(double x, double y, double radius, boolean fill) {
+        beginPath();
+        arc(x, y, radius, 0, Math.PI * 2, false);
+        if (fill) fill();
+        else stroke();
+    }
+
+    public static void circle(double x1, double y1, double x2, double y2, boolean fill) {
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double radius = Math.sqrt(dx * dx + dy * dy);
+        circle(x1, y1, radius, fill);
     }
 
     public static void drawImage(Image img, Vec2D position) {

@@ -47,28 +47,6 @@
             }
         },
         {
-            "id": 2,
-            "type": "BLOCK",
-            "name": "Canvas",
-            "file": "Canvas.java",
-            "isCombined": false,
-            "metadata": {
-                "expanded": false,
-                "static": true
-            }
-        },
-        {
-            "id": 3,
-            "type": "BLOCK",
-            "name": "Image",
-            "file": "Image.java",
-            "isCombined": false,
-            "metadata": {
-                "expanded": false,
-                "static": true
-            }
-        },
-        {
             "id": 4,
             "type": "LIBRARY",
             "name": "objectManager",
