@@ -50,14 +50,24 @@
             "id": 4,
             "type": "LIBRARY",
             "name": "objectManager",
-            "file": "objectManager.js",
+            "metadata": {
+                "expanded": false,
+                "codeExpanded": 1,
+                "embeddedLibrary": "objectManager"
+            }
+        },
+        {
+            "id": 5,
+            "type": "LIBRARY",
+            "name": "domManager",
+            "file": "domManager.js",
             "metadata": {
                 "expanded": false,
                 "codeExpanded": 1
             }
         },
         {
-            "id": 5,
+            "id": 6,
             "type": "LIBRARY",
             "name": "canvasManager",
             "file": "canvasManager.js",
@@ -67,7 +77,7 @@
             }
         },
         {
-            "id": 6,
+            "id": 7,
             "type": "PLAYGROUND",
             "name": "",
             "file": "canvasPlayground.js",

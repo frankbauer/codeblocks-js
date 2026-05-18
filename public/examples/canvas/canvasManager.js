@@ -1,6 +1,7 @@
 export default {
     canvas: null,
     ctx: null,
+    objectManager: null,
     active: false,
     allowedInputEvents: ['click', 'keyup'],
     allowTick: false,
@@ -26,21 +27,45 @@ export default {
             )
             return null
         }
+        this.objectManager = objectManager
         console.log('PLAyRUN: Canvas manager created')
 
         objectManager.registerType('IMAGE', (attrs, ready, error) => {
+            const safeSrc = this._normalizeAllowedImageSource(attrs ? attrs.src : null)
+            if (!safeSrc) {
+                const blockedSrc = attrs && attrs.src ? String(attrs.src) : ''
+                const message =
+                    'Blocked image source. Only relative URLs or same-origin HTTP(S) image URLs are allowed: ' +
+                    blockedSrc
+                console.error('PLAyRUN:', message)
+                error({ message })
+                return {
+                    src: null,
+                    onMessage: () => {},
+                }
+            }
+
             const img = new Image()
 
             img.onload = () => ready({ width: img.width, height: img.height })
             img.onerror = (err) => {
-                console.error('PLAyRUN: Failed to load image:', attrs.src, err)
-                error({ message: 'Failed to load image: ' + attrs.src })
+                console.error('PLAyRUN: Failed to load image:', safeSrc, err)
+                error({ message: 'Failed to load image: ' + safeSrc })
             }
-            img.src = attrs.src
+            img.src = safeSrc
+
+            const imageRef = { type: 'IMAGE', id: attrs.id }
 
             return {
+                src: safeSrc,
                 onMessage: (cmd, data) => {
                     if (cmd === 'draw') {
+                        const managedImage = this.objectManager
+                            ? this.objectManager.get(imageRef, 'IMAGE')
+                            : null
+                        if (!managedImage) {
+                            return
+                        }
                         if (this.tickMode) {
                             this.commandBuffer.push({ type: 'IMAGE', img, data })
                         } else {
@@ -84,6 +109,42 @@ export default {
             enableTicks: () => this.enableTicks(),
             disableTicks: () => this.disableTicks(),
         }
+    },
+    _normalizeAllowedImageSource(src) {
+        if (typeof src !== 'string') {
+            return null
+        }
+
+        const trimmed = src.trim()
+        if (!trimmed) {
+            return null
+        }
+
+        if (trimmed.startsWith('//')) {
+            return null
+        }
+
+        const schemeMatch = /^([a-zA-Z][a-zA-Z0-9+.-]*):/.exec(trimmed)
+        if (!schemeMatch) {
+            return trimmed
+        }
+
+        const scheme = schemeMatch[1].toLowerCase()
+        if (scheme !== 'http' && scheme !== 'https') {
+            return null
+        }
+
+        try {
+            const url = new URL(trimmed, window.location.href)
+            const protocol = url.protocol.toLowerCase()
+            if ((protocol === 'http:' || protocol === 'https:') && url.origin === window.location.origin) {
+                return url.href
+            }
+        } catch (_e) {
+            return null
+        }
+
+        return null
     },
     _drawImage(img, data) {
         if (!this.ctx) {
