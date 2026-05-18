@@ -31,6 +31,7 @@ export default class MainBlock implements IMainBlock {
     scopeSelector?: string
     continuousCompilation: boolean
     enableCompletionInViewMode: boolean
+    enableAICompletion: boolean
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean
@@ -64,6 +65,7 @@ export default class MainBlock implements IMainBlock {
         this.scopeSelector = s.scopeSelector
         this.continuousCompilation = s.continuousCompilation
         this.enableCompletionInViewMode = s.enableCompletionInViewMode ?? true
+        this.enableAICompletion = s.enableAICompletion ?? false
         this.messagePassing = s.messagePassing
         this.keepAlive = s.keepAlive
         this.persistentArguments = s.persistentArguments
@@ -91,6 +93,7 @@ export default class MainBlock implements IMainBlock {
             this.workerLibs = s.workerLibs
             this.continuousCompilation = s.continuousCompilation
             this.enableCompletionInViewMode = s.enableCompletionInViewMode ?? true
+            this.enableAICompletion = s.enableAICompletion ?? false
             this.messagePassing = s.messagePassing
             this.keepAlive = s.keepAlive
             this.persistentArguments = s.persistentArguments

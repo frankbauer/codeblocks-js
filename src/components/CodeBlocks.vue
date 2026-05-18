@@ -20,14 +20,15 @@ import {
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
-import { computed, nextTick, ref, toRefs, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, toRefs, watch } from 'vue'
 import { useStorage, useIntersectionObserver, useResizeObserver } from '@vueuse/core'
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 import { CodeSplit } from '@/composables/useCodeEditor'
 import CButton from '@/components/ui/CButton.vue'
 import { Alert, AlertDescription, AlertTitle } from '@/shadcn/ui/alert'
-import { AlertCircle, CopyPlus, Pin, Play, Square, Trash2 } from 'lucide-vue-next'
+import { AlertCircle, Bot, CopyPlus, Pin, Play, Square, Trash2 } from 'lucide-vue-next'
 import { Button } from '@/shadcn/ui/button'
+import { Progress } from '@/shadcn/ui/progress'
 import { Switch } from '@/shadcn/ui/switch'
 import { useSlideTransition } from '@/composables/useSlideTransition'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
@@ -41,6 +42,8 @@ import {
 } from '@/shadcn/ui/dialog'
 import { l } from '@/plugins/i18n'
 import { IListItemData } from '@/lib/ICompilerRegistry'
+import AICompletionConsentDialog from '@/components/AICompletionConsentDialog.vue'
+import { globalState } from '@/lib/globalState'
 
 const props = defineProps<CodeBlocksProperties>()
 const { appID } = toRefs(props)
@@ -310,6 +313,37 @@ const removeBlock = (idx: number): void => {
     }
 }
 
+// --- AI Completion ---
+const isAIConsentOwner = ref(false)
+
+async function triggerAIInit() {
+    isAIConsentOwner.value = await globalState.aiCompletion.checkAndInit(
+        blockInfo.value.enableAICompletion,
+        editMode,
+        blockInfo.value.enableCompletionInViewMode
+    )
+}
+
+function onAIConsentAccept() {
+    isAIConsentOwner.value = false
+    globalState.aiCompletion.accept()
+}
+
+function onAIConsentDecline() {
+    isAIConsentOwner.value = false
+    globalState.aiCompletion.decline()
+}
+
+const onEnableAICompletionChange = (v: boolean): void => {
+    if (editMode) blockInfo.value.enableAICompletion = v
+    triggerAIInit()
+}
+
+onMounted(() => {
+    triggerAIInit()
+})
+
+// --- Add Block Dialog ---
 const addDialogOpen = ref(false)
 const pendingInsertPosition = ref<number | null>(null)
 
@@ -504,6 +538,32 @@ useResizeObserver(runnerRef, (entries) => {
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"
     >
+        <!-- AI model download progress (shown on every instance while downloading) -->
+        <div
+            v-if="globalState.aiCompletion.state.isDownloading"
+            class="tw-rounded-lg tw-border tw-border-border tw-bg-card tw-px-4 tw-py-3 tw-mb-3 tw-shadow-sm"
+        >
+            <div class="tw-flex tw-items-center tw-gap-2 tw-mb-1.5">
+                <Bot class="tw-h-4 tw-w-4 tw-shrink-0 tw-text-primary" />
+                <span class="tw-text-xs tw-font-medium tw-text-foreground tw-flex-1 tw-truncate">
+                    {{ globalState.aiCompletion.state.downloadMessage }}
+                </span>
+                <span class="tw-text-xs tw-tabular-nums tw-text-muted-foreground tw-shrink-0">
+                    {{ globalState.aiCompletion.state.downloadProgress }}&thinsp;%
+                </span>
+            </div>
+            <Progress :model-value="globalState.aiCompletion.state.downloadProgress" class="tw-h-1.5" />
+        </div>
+
+        <!-- Consent dialog: only the instance that claimed it renders this -->
+        <AICompletionConsentDialog
+            v-if="isAIConsentOwner"
+            :open="isAIConsentOwner"
+            @update:open="onAIConsentDecline"
+            @accept="onAIConsentAccept"
+            @decline="onAIConsentDecline"
+        />
+
         <Alert variant="destructive" v-if="error" class="tw-mb-4">
             <AlertCircle class="tw-h-4 tw-w-4" />
             <AlertTitle>{{ $t('CodeBlocks.error') }}</AlertTitle>
@@ -520,6 +580,7 @@ useResizeObserver(runnerRef, (entries) => {
             @run-state-change="onRunStateChange"
             @continuous-compile-change="onContinousCompileStateChange"
             @enable-completion-in-view-mode-change="onEnableCompletionInViewModeChange"
+            @enable-ai-completion-change="onEnableAICompletionChange"
             @message-passing-change="onMessagePassingChange"
             @keep-alive-change="onKeepAliveChange"
             @persistent-arguments-change="onPersistentArgumentsChange"

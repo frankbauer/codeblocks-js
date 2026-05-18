@@ -431,6 +431,16 @@
                                     </Label>
                                 </div>
 
+                                <div class="tw-flex tw-items-center tw-space-x-2 tw-mb-2">
+                                    <Switch
+                                        id="enable-ai-completion"
+                                        v-model="enableAICompletion"
+                                    />
+                                    <Label for="enable-ai-completion">
+                                        {{ $t('CodeBlocksSettings.EnableAICompletion') }}
+                                    </Label>
+                                </div>
+
                                 <div v-if="showMaxRuntime">
                                     <CInput
                                         v-model="maxRuntime"
@@ -770,6 +780,7 @@ const emit = defineEmits([
     'output-parser-change',
     'continuous-compile-change',
     'enable-completion-in-view-mode-change',
+    'enable-ai-completion-change',
     'message-passing-change',
     'keep-alive-change',
     'persistent-arguments-change',
@@ -1065,6 +1076,15 @@ const enableCompletionInViewMode = computed({
     },
     set: (v: boolean) => {
         emit('enable-completion-in-view-mode-change', v)
+    },
+})
+
+const enableAICompletion = computed({
+    get: () => {
+        return props.options.enableAICompletion
+    },
+    set: (v: boolean) => {
+        emit('enable-ai-completion-change', v)
     },
 })
 

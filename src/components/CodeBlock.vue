@@ -1,4 +1,3 @@
-`
 <template>
     <div :class="[`codeblock block-${typeName}`, { 'non-student-editor': isNonStudentBlock }]">
         <textarea
@@ -13,6 +12,8 @@
             :is-editmode="editMode"
             class="accqstXmlInput noRTEditor"
         />
+        {{ block.enableAICompletion }}
+        {{ block.enableCompletionInViewMode }}
         <code-mirror
             ref="codeBox"
             v-model="code"
@@ -29,7 +30,8 @@
             :tag-set="editMode ? tagSet : undefined"
             :code-split-segment="codeSplitSegment"
             :is-edit-mode="editMode"
-            :enable-completion-in-view-mode="enableCompletionInViewMode"
+            :enable-completion-in-view-mode="block.enableCompletionInViewMode"
+            :enable-ai-completion="block.enableAICompletion"
             @update:model-value="onCodeChangeDefered"
             @focus="onCodeFocus"
             @ready="onCodeReady"
@@ -57,7 +59,8 @@
                 :language="mode"
                 :read-only="editorReadOnly"
                 :is-edit-mode="editMode"
-                :enable-completion-in-view-mode="enableCompletionInViewMode"
+                :enable-completion-in-view-mode="block.enableCompletionInViewMode"
+                :enable-ai-completion="block.enableAICompletion"
                 @update:model-value="onAltCodeChangeDefered"
                 @ready="onAltCodeReady"
             />
@@ -221,10 +224,6 @@ const typeName = computed(() => {
 const isNonStudentBlock = computed(() => {
     return !['block', 'block-hidden', 'block-static'].includes(typeName.value)
 })
-
-const enableCompletionInViewMode = computed(
-    () => blockStorage.appInfo.value.enableCompletionInViewMode ?? true
-)
 
 const iliasTypeNr = computed(() => {
     const types = {

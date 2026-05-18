@@ -156,6 +156,9 @@ export function codeBlockSetup(
             randomizer: blockInfo.value.randomizer,
             continuousCompilation: blockInfo.value.continuousCompilation,
             enableCompletionInViewMode: blockInfo.value.enableCompletionInViewMode,
+            enableAICompletion: blockInfo.value.enableAICompletion,
+            // eslint-disable-next-line no-console
+            ...(console.debug('[basicBlocks] options computed — enableAICompletion:', blockInfo.value.enableAICompletion), {}),
             persistentArguments: blockInfo.value.persistentArguments,
             messagePassing: blockInfo.value.messagePassing,
             keepAlive: blockInfo.value.keepAlive,

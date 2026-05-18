@@ -230,6 +230,16 @@ export class BlockData implements IBlockData {
         return this.getThemeForBlock(this)
     }
 
+    get enableAICompletion(): boolean {
+        const v = this.appSettings.enableAICompletion ?? false
+        console.debug('[BlockData] enableAICompletion getter → appSettings:', this.appSettings, 'value:', v)
+        return v
+    }
+
+    get enableCompletionInViewMode(): boolean {
+        return this.appSettings.enableCompletionInViewMode ?? true
+    }
+
     get isSourceCode(): boolean {
         return (
             this.type === KnownBlockTypes.BLOCK ||

@@ -1,5 +1,6 @@
 <template>
     <div class="code-editor">
+        {{ enableCompletionInViewMode }} {{ enableAiCompletion }}
         <textarea
             style="display: none"
             readonly
@@ -124,6 +125,7 @@ import { getUITheme, UITheme, UIThemeType } from '@/lib/uiTheme'
 import { DEFAULT_EDITOR_THEME, EditorTheme, EditorThemes } from '@/plugins/codemirror/editorThemes'
 import { createDOMEventHandlers } from '@/plugins/codemirror/keyHandling'
 import { createErrorHoverTooltip, ErrorRange } from '@/plugins/codemirror/errorHoverTooltip'
+import { getAICompletion, isAIModelReady } from '@/plugins/aiCompletion'
 
 // Add proper typing for the props
 interface Props {
@@ -140,6 +142,7 @@ interface Props {
     codeSplitSegment?: CodeSplitSegment
     isEditMode?: boolean
     enableCompletionInViewMode?: boolean
+    enableAiCompletion?: boolean
 }
 
 // Fix emit types to match expected usage
@@ -163,6 +166,7 @@ const props = withDefaults(defineProps<Props>(), {
     codeSplitSegment: undefined,
     isEditMode: false,
     enableCompletionInViewMode: true,
+    enableAiCompletion: false,
 })
 const {
     name,
@@ -177,6 +181,7 @@ const {
     codeSplitSegment,
     isEditMode,
     enableCompletionInViewMode,
+    enableAiCompletion,
 } = toRefs(props)
 
 // Replace code.value with proper v-model handling
@@ -257,7 +262,6 @@ const editorLanguage = computed(() => {
 })
 
 const languageCompartment = new Compartment()
-const languageAutoCompleteCompartment = new Compartment()
 const themeCompartment = new Compartment()
 const highlighterCompartment = new Compartment()
 const readOnlyCompartment = new Compartment()
@@ -307,30 +311,66 @@ const getIndentationInSource = (docString: string, pos: number): number => {
 function combinedCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
     const tagCompletions = createTagCompletions(tagSet)
 
-    return (context: CompletionContext): CompletionResult | null => {
+    return async (context: CompletionContext): Promise<CompletionResult | null> => {
         if (!isEditMode.value && !enableCompletionInViewMode.value) {
             return null
         }
 
-        let res: CompletionResult | null = null
-        if (tagCompletions && !isJsonLanguage.value) {
-            res = tagCompletions(context)
+        // Language / tag completions
+        let langResult: CompletionResult | null = null
+        const tagResult = tagCompletions && !isJsonLanguage.value ? tagCompletions(context) : null
+        if (tagResult !== null) {
+            langResult = tagResult
+        } else if (isJavaLanguage.value) {
+            langResult = createJavaCompletions(context, { includeRuntime: isEditMode.value })
+        } else if (isJavaScriptLanguage.value) {
+            langResult = createJavaScriptCompletions(context, { includeRuntime: isEditMode.value })
+        } else if (isJsonLanguage.value) {
+            langResult = createJsonCompletions(context)
+        } else if (isPythonLanguage.value) {
+            langResult = createPythonCompletions(context)
         }
-        if (res === null) {
-            if (isJavaLanguage.value) {
-                return createJavaCompletions(context, { includeRuntime: isEditMode.value })
-            }
-            if (isJavaScriptLanguage.value) {
-                return createJavaScriptCompletions(context, { includeRuntime: isEditMode.value })
-            }
-            if (isJsonLanguage.value) {
-                return createJsonCompletions(context)
-            }
-            if (isPythonLanguage.value) {
-                return createPythonCompletions(context)
-            }
+
+        // AI completions — always registered, returns null until model is ready
+        if (!enableAiCompletion.value || !isAIModelReady()) {
+            console.debug(`[AI Completion] not ready`, enableAiCompletion.value, isAIModelReady())
+            return langResult
         }
-        return res
+
+        try {
+            console.debug(
+                `[AI Completion] requesting — lang:${normalizedLanguage.value} pos:${context.pos}`
+            )
+            const before = context.state.sliceDoc(Math.max(0, context.pos - 400), context.pos)
+            const prefix = `// ${normalizedLanguage.value}\n` + before
+            const completions = await getAICompletion(prefix, 60)
+            console.debug('[AI Completion] results:', prefix, completions)
+
+            if (completions.length === 0) {
+                return langResult
+            }
+
+            const aiFrom = context.matchBefore(/\w*/)?.from ?? context.pos
+            const aiOptions = completions.map((c) => ({
+                label: c,
+                detail: '🤖',
+                type: 'variable' as const,
+                boost: 99,
+            }))
+
+            if (langResult === null) {
+                return { from: aiFrom, options: aiOptions }
+            }
+
+            // Merge results — both use word-boundary matching so from should match
+            return {
+                from: Math.min(langResult.from, aiFrom),
+                options: [...aiOptions, ...langResult.options],
+            }
+        } catch (error) {
+            console.warn('[AI Completion] error:', error)
+            return langResult
+        }
     }
 }
 
@@ -380,6 +420,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         closeBrackets(),
         autocompletion({
             activateOnTyping: true,
+            override: [combinedCompletions(tagSet)],
         }),
         //highlightActiveLine(),
         highlightSelectionMatches(),
@@ -416,11 +457,6 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         ),
         handlersCompartment.of(createDOMEventHandlers(getIndentationInSource)),
         highlighterCompartment.of(editorTheme.value.highlightStyle),
-        languageAutoCompleteCompartment.of(
-            editorLanguage.value.language.data.of({
-                autocomplete: combinedCompletions(tagSet),
-            })
-        ),
         tagMarkField,
         tagTooltip,
         underlineField,
@@ -538,42 +574,15 @@ watch(editorLanguage, (newValue) => {
     editorView.value.dispatch({
         effects: languageCompartment.reconfigure(newValue),
     })
-    editorView.value.dispatch({
-        effects: languageAutoCompleteCompartment.reconfigure(
-            newValue.language.data.of({
-                autocomplete: combinedCompletions(tagSet),
-            })
-        ),
-    })
 })
 
-watch(isEditMode, () => {
-    if (editorView.value === null) {
-        return
-    }
-
-    editorView.value.dispatch({
-        effects: languageAutoCompleteCompartment.reconfigure(
-            editorLanguage.value.language.data.of({
-                autocomplete: combinedCompletions(tagSet),
-            })
-        ),
-    })
-})
-
-watch(enableCompletionInViewMode, () => {
-    if (editorView.value === null) {
-        return
-    }
-
-    editorView.value.dispatch({
-        effects: languageAutoCompleteCompartment.reconfigure(
-            editorLanguage.value.language.data.of({
-                autocomplete: combinedCompletions(tagSet),
-            })
-        ),
-    })
-})
+watch(
+    enableAiCompletion,
+    (v) => {
+        console.debug('[AI prop] enableAICompletion changed →', v)
+    },
+    { immediate: true }
+)
 
 watch(editorTheme, (newValue) => {
     if (editorView.value === null) {

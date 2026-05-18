@@ -21,7 +21,9 @@
         "persistentArguments": false,
         "randomizer": {
             "active": false
-        }
+        },
+        "enableAICompletion": true,
+        "enableCompletionInViewMode": true
     },
     "blocks": [
         {

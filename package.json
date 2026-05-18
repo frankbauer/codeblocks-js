@@ -23,6 +23,7 @@
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/lang-python": "^6.1.6",
     "@codemirror/view": "^6.34.1",
+    "@mlc-ai/web-llm": "^0.2.83",
     "@radix-icons/vue": "^1.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
