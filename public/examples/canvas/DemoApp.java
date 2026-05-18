@@ -47,7 +47,9 @@ public class DemoApp {
         panel.setBorderColor(new Color(0.45, 0.70, 1.0, 1.0));
         panel.setRoundness(12);
         panel.setShadow(0, 8, 20, 0, new Color(0.0, 0.0, 0.0, 0.35));
+        panel.setPadding(8);
         panel.setMarkdown("## Layer Example\n- Typed styling\n- Strict markdown\n- Child layers");
+        panel.setTextColor(Color.White);
 
         badge = new Layer("CHILD", panel);
         badge.setPosition(new Vec2D(190, 96));
@@ -55,8 +57,11 @@ public class DemoApp {
         badge.setBackground(new Color(1.0, 0.73, 0.2, 1.0));
         badge.setBorderWidth(1);
         badge.setBorderType(Layer.BorderType.SOLID);
+        badge.setTextAlign(Layer.TextAlign.CENTER);
         badge.setBorderColor(new Color(0.75, 0.45, 0.0, 1.0));
         badge.setRoundness(6);
+        badge.setPadding(4);
+        badge.setTextVerticalAlign(Layer.TextVerticalAlign.MIDDLE);
         badge.setText("child div");
 
         Canvas.drawImage(img, new Vec2D(100, 42), 1.2);

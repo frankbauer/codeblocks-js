@@ -33,7 +33,8 @@ export default {
             }
 
             let parentNode = this._getContainer()
-            const parentRef = attrs && attrs.parent && typeof attrs.parent === 'object' ? attrs.parent : null
+            const parentRef =
+                attrs && attrs.parent && typeof attrs.parent === 'object' ? attrs.parent : null
             const parentId =
                 parentRef && Number.isInteger(parentRef.id)
                     ? parentRef.id
@@ -105,14 +106,18 @@ export default {
         const payload = data && typeof data === 'object' ? data : {}
         switch (cmd) {
             case 'setPosition': {
-                const position = payload.position && typeof payload.position === 'object' ? payload.position : payload
+                const position =
+                    payload.position && typeof payload.position === 'object'
+                        ? payload.position
+                        : payload
                 const x = this._numberOr(position.x, 0)
                 const y = this._numberOr(position.y, 0)
                 node.css({ left: x + 'px', top: y + 'px' })
                 break
             }
             case 'setSize': {
-                const size = payload.size && typeof payload.size === 'object' ? payload.size : payload
+                const size =
+                    payload.size && typeof payload.size === 'object' ? payload.size : payload
                 if (this._isFiniteNumber(size.x)) {
                     node.css('width', size.x + 'px')
                 }
@@ -209,7 +214,12 @@ export default {
                 break
             }
             case 'setTextAlign': {
-                const alignMap = { LEFT: 'left', CENTER: 'center', RIGHT: 'right', JUSTIFY: 'justify' }
+                const alignMap = {
+                    LEFT: 'left',
+                    CENTER: 'center',
+                    RIGHT: 'right',
+                    JUSTIFY: 'justify',
+                }
                 const align = alignMap[String(payload.align).toUpperCase()] || 'left'
                 node.css('text-align', align)
                 break
@@ -268,7 +278,18 @@ export default {
                 const offsetY = this._intOr(payload.offsetY, 0)
                 const blurRadius = Math.max(0, this._intOr(payload.blurRadius, 0))
                 const color = this._toCssColor(payload.color)
-                node.css('text-shadow', offsetX + 'px ' + offsetY + 'px ' + blurRadius + 'px ' + color)
+                node.css(
+                    'text-shadow',
+                    offsetX + 'px ' + offsetY + 'px ' + blurRadius + 'px ' + color
+                )
+                break
+            }
+            case 'setPadding': {
+                const top = Math.max(0, this._intOr(payload.top, 0))
+                const right = Math.max(0, this._intOr(payload.right, 0))
+                const bottom = Math.max(0, this._intOr(payload.bottom, 0))
+                const left = Math.max(0, this._intOr(payload.left, 0))
+                node.css('padding', top + 'px ' + right + 'px ' + bottom + 'px ' + left + 'px')
                 break
             }
         }
@@ -290,6 +311,7 @@ export default {
         const lines = source.split('\n')
         let listEl = null
         let listType = null
+        let hasRenderedBlock = false
 
         const closeList = () => {
             listEl = null
@@ -300,6 +322,7 @@ export default {
             const p = document.createElement('p')
             p.appendChild(this._renderInlineMarkdown(text))
             host.appendChild(p)
+            hasRenderedBlock = true
         }
 
         for (let i = 0; i < lines.length; i++) {
@@ -316,8 +339,23 @@ export default {
                 closeList()
                 const level = headingMatch[1].length
                 const el = document.createElement('h' + level)
+                const headingStyles = {
+                    1: { 'font-size': '2em', 'font-weight': '700', margin: '0.67em 0 0.5em' },
+                    2: { 'font-size': '1.5em', 'font-weight': '700', margin: '0.83em 0 0.5em' },
+                    3: { 'font-size': '1.25em', 'font-weight': '700', margin: '1em 0 0.5em' },
+                    4: { 'font-size': '1.1em', 'font-weight': '700', margin: '1.33em 0 0.5em' },
+                    5: { 'font-size': '1em', 'font-weight': '700', margin: '1.67em 0 0.5em' },
+                    6: { 'font-size': '0.875em', 'font-weight': '700', margin: '2.33em 0 0.5em' },
+                }
+                if (!hasRenderedBlock) {
+                    headingStyles[level].margin = '0 0 0.5em'
+                }
+                el.style.cssText = Object.entries(headingStyles[level])
+                    .map(([key, value]) => key + ': ' + value)
+                    .join('; ')
                 el.appendChild(this._renderInlineMarkdown(headingMatch[2]))
                 host.appendChild(el)
+                hasRenderedBlock = true
                 continue
             }
 
@@ -328,6 +366,7 @@ export default {
                     listType = 'ul'
                     listEl = document.createElement('ul')
                     host.appendChild(listEl)
+                    hasRenderedBlock = true
                 }
                 const li = document.createElement('li')
                 li.appendChild(this._renderInlineMarkdown(ulMatch[1]))
@@ -342,6 +381,7 @@ export default {
                     listType = 'ol'
                     listEl = document.createElement('ol')
                     host.appendChild(listEl)
+                    hasRenderedBlock = true
                 }
                 const li = document.createElement('li')
                 li.appendChild(this._renderInlineMarkdown(olMatch[1]))
@@ -440,7 +480,13 @@ export default {
 
     _toBorderType(value) {
         const raw = String(value || 'solid').toLowerCase()
-        if (raw === 'none' || raw === 'solid' || raw === 'dotted' || raw === 'dashed' || raw === 'double') {
+        if (
+            raw === 'none' ||
+            raw === 'solid' ||
+            raw === 'dotted' ||
+            raw === 'dashed' ||
+            raw === 'double'
+        ) {
             return raw
         }
         return 'solid'
@@ -456,11 +502,7 @@ export default {
         }
 
         if (value && typeof value === 'object') {
-            if (
-                Number.isFinite(value.r) &&
-                Number.isFinite(value.g) &&
-                Number.isFinite(value.b)
-            ) {
+            if (Number.isFinite(value.r) && Number.isFinite(value.g) && Number.isFinite(value.b)) {
                 const r = this._clamp(this._intOr(value.r, 0), 0, 255)
                 const g = this._clamp(this._intOr(value.g, 0), 0, 255)
                 const b = this._clamp(this._intOr(value.b, 0), 0, 255)
@@ -468,33 +510,15 @@ export default {
                 return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')'
             }
 
-            if (
-                Number.isFinite(value.h) &&
-                Number.isFinite(value.s) &&
-                Number.isFinite(value.l)
-            ) {
+            if (Number.isFinite(value.h) && Number.isFinite(value.s) && Number.isFinite(value.l)) {
                 const hue = ((value.h % 360) + 360) % 360
                 const sat = this._clamp(this._numberOr(value.s, 0), 0, 1)
                 const light = this._clamp(this._numberOr(value.l, 0), 0, 1)
                 const a = this._clamp(this._numberOr(value.a, 1), 0, 1)
-                return (
-                    'hsla(' +
-                    hue +
-                    ',' +
-                    sat * 100 +
-                    '%,' +
-                    light * 100 +
-                    '%,' +
-                    a +
-                    ')'
-                )
+                return 'hsla(' + hue + ',' + sat * 100 + '%,' + light * 100 + '%,' + a + ')'
             }
 
-            if (
-                Number.isFinite(value.h) &&
-                Number.isFinite(value.s) &&
-                Number.isFinite(value.v)
-            ) {
+            if (Number.isFinite(value.h) && Number.isFinite(value.s) && Number.isFinite(value.v)) {
                 const rgba = this._hsvToRgba(value.h, value.s, value.v, value.a)
                 return 'rgba(' + rgba.r + ',' + rgba.g + ',' + rgba.b + ',' + rgba.a + ')'
             }
@@ -530,7 +554,10 @@ export default {
         try {
             const url = new URL(trimmed, window.location.href)
             const protocol = url.protocol.toLowerCase()
-            if ((protocol === 'http:' || protocol === 'https:') && url.origin === window.location.origin) {
+            if (
+                (protocol === 'http:' || protocol === 'https:') &&
+                url.origin === window.location.origin
+            ) {
                 return url.href
             }
         } catch (_e) {
