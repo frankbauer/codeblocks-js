@@ -1,4 +1,5 @@
 public class DemoApp {
+    static Image img;
     static Layer panel;
     static Layer badge;
     static void onReady(Image img) {

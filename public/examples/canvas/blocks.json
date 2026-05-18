@@ -60,20 +60,20 @@
             "id": 5,
             "type": "LIBRARY",
             "name": "domManager",
-            "file": "domManager.js",
             "metadata": {
                 "expanded": false,
-                "codeExpanded": 1
+                "codeExpanded": 1,
+                "embeddedLibrary": "domManager"
             }
         },
         {
             "id": 6,
             "type": "LIBRARY",
             "name": "canvasManager",
-            "file": "canvasManager.js",
             "metadata": {
                 "expanded": false,
-                "codeExpanded": 1
+                "codeExpanded": 1,
+                "embeddedLibrary": "canvasManager"
             }
         },
         {
