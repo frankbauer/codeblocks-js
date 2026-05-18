@@ -465,7 +465,7 @@
                 <!-- Collapsed summary: click to expand -->
                 <div
                     v-if="!expanded"
-                    class="tw-py-1.5 tw-px-3 tw-text-xs tw-text-muted-foreground tw-cursor-pointer tw-flex tw-items-center cbc-summary tw-min-w-0"
+                    class="tw-h-6 tw-px-3 tw-text-xs tw-text-muted-foreground tw-cursor-pointer tw-flex tw-items-center cbc-summary tw-min-w-0"
                     @click="toggleExpanded"
                 >
                     <span class="tw-font-semibold tw-shrink-0">{{ typeObj.label }}</span>
