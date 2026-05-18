@@ -1,6 +1,6 @@
 export default {
     setupDOM() {
-        //called when the site forst loaded
+        //called when the site is first loaded.
         //this.canvasElement is a dive that can host the actual canvas element
         console.log('PLAyRun: setupDOM')
     },
