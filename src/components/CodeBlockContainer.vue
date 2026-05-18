@@ -102,7 +102,12 @@
                                     </Label>
                                     <Input
                                         v-model="editableBlockName"
-                                        class="tw-w-full"
+                                        :class="[
+                                            'tw-w-full',
+                                            isEmbeddedLibrarySelected
+                                                ? 'tw-bg-gray-50 tw-text-gray-500'
+                                                : '',
+                                        ]"
                                         :readonly="isEmbeddedLibrarySelected"
                                         :placeholder="
                                             block.type === KnownBlockTypes.DATA ||
@@ -139,39 +144,34 @@
                                 <div class="tw-text-lg tw-font-medium tw-mb-4">
                                     {{ l('CodeBlockContainer.Display') }}
                                 </div>
-                                <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
+                                <div class="tw-space-y-4">
+                                    <div class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
                                             {{ l('CodeBlockContainer.Lines') }}
-                                        </div>
-                                        <div
-                                            class="tw-text-sm tw-text-muted-foreground"
-                                            v-html="l('CodeBlockContainer.Lines_detail')"
-                                        ></div>
-                                    </div>
-                                    <div>
+                                        </Label>
                                         <Input
                                             v-model="visibleLines"
                                             :rules="[validNumber]"
-                                            class="tw-w-1/3"
+                                            class="tw-w-full sm:tw-w-24"
                                             maxlength="4"
                                         />
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                            v-html="l('CodeBlockContainer.Lines_detail')"
+                                        ></div>
                                     </div>
                                 </div>
-                                <div
-                                    v-if="canHaveAlternativeContent"
-                                    class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
-                                >
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
-                                            {{ l('CodeBlockContainer.Prepopulate') }}
-                                        </div>
-                                        <div class="tw-text-sm tw-text-muted-foreground">
-                                            {{ l('CodeBlockContainer.Prepopulate_detail') }}
-                                        </div>
-                                    </div>
-                                    <div class="tw-w-1/3">
+                                <div v-if="canHaveAlternativeContent" class="tw-space-y-1 tw-mt-4">
+                                    <Label class="tw-text-xs tw-text-muted-foreground">
+                                        {{ l('CodeBlockContainer.Prepopulate') }}
+                                    </Label>
+                                    <div>
                                         <Switch v-model="hasAltComntent" />
+                                    </div>
+                                    <div
+                                        class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                    >
+                                        {{ l('CodeBlockContainer.Prepopulate_detail') }}
                                     </div>
                                 </div>
                             </div>
@@ -181,66 +181,63 @@
                                 <div class="tw-text-lg tw-font-medium tw-mb-4">
                                     {{ l('CodeBlockContainer.Behaviour') }}
                                 </div>
-                                <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
+                                <div class="tw-space-y-4">
+                                    <div class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
                                             {{ l('CodeBlockContainer.ScriptV') }}
-                                        </div>
-                                        <div class="tw-text-sm tw-text-muted-foreground">
-                                            {{ l('CodeBlockContainer.ScriptV_detail') }}
-                                        </div>
-                                    </div>
-                                    <div class="tw-w-1/3">
+                                        </Label>
                                         <CSelect
                                             :model-value="scriptVersionObj"
                                             :options="scriptVersions"
                                             @update:model-value="scriptVersionObj = $event"
                                         />
-                                    </div>
-                                </div>
-
-                                <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
-                                            {{ l('CodeBlockContainer.AutoReset') }}
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                        >
+                                            {{ l('CodeBlockContainer.ScriptV_detail') }}
                                         </div>
-                                        <div class="tw-text-sm tw-text-muted-foreground">
+                                    </div>
+
+                                    <div class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
+                                            {{ l('CodeBlockContainer.AutoReset') }}
+                                        </Label>
+                                        <div>
+                                            <Switch v-model="shouldAutoReset" />
+                                        </div>
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                        >
                                             {{ l('CodeBlockContainer.AutoReset_detail') }}
                                         </div>
                                     </div>
-                                    <div class="tw-w-1/3">
-                                        <Switch v-model="shouldAutoReset" />
-                                    </div>
-                                </div>
 
-                                <div
-                                    v-if="canLoadResources"
-                                    class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4"
-                                >
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
+                                    <div v-if="canLoadResources" class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
                                             {{ l('CodeBlockContainer.ReloadResources') }}
+                                        </Label>
+                                        <div>
+                                            <Switch v-model="shouldReloadResources" />
                                         </div>
-                                        <div class="tw-text-sm tw-text-muted-foreground">
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                        >
                                             {{ l('CodeBlockContainer.ReloadResources_detail') }}
                                         </div>
                                     </div>
-                                    <div class="tw-w-1/3">
-                                        <Switch v-model="shouldReloadResources" />
-                                    </div>
-                                </div>
 
-                                <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
+                                    <div class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
                                             {{ l('CodeBlockContainer.GenerateTemplate') }}
+                                        </Label>
+                                        <div>
+                                            <Switch v-model="shouldGenerateTemplate" />
                                         </div>
-                                        <div class="tw-text-sm tw-text-muted-foreground">
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                        >
                                             {{ l('CodeBlockContainer.GenerateTemplate_detail') }}
                                         </div>
-                                    </div>
-                                    <div class="tw-w-1/3">
-                                        <Switch v-model="shouldGenerateTemplate" />
                                     </div>
                                 </div>
                             </div>
@@ -289,47 +286,55 @@
                                 <div class="tw-text-lg tw-font-medium tw-mb-4">
                                     {{ l('CodeBlockContainer.Positioning') }}
                                 </div>
-                                <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3">
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
+                                <div class="tw-space-y-4">
+                                    <div class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
                                             {{ l('CodeBlockContainer.Width') }}
-                                        </div>
-                                        <div class="tw-text-sm tw-text-muted-foreground">
+                                        </Label>
+                                        <Input
+                                            v-model="width"
+                                            maxlength="7"
+                                            class="tw-w-full sm:tw-w-32"
+                                        />
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                        >
                                             {{ l('CodeBlockContainer.Width_detail') }}
                                         </div>
                                     </div>
-                                    <div class="tw-w-1/3">
-                                        <Input v-model="width" maxlength="7" />
-                                    </div>
-                                </div>
-                                <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
+
+                                    <div class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
                                             {{ l('CodeBlockContainer.Height') }}
-                                        </div>
-                                        <div class="tw-text-sm tw-text-muted-foreground">
+                                        </Label>
+                                        <Input
+                                            v-model="height"
+                                            maxlength="7"
+                                            class="tw-w-full sm:tw-w-32"
+                                        />
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                        >
                                             {{ l('CodeBlockContainer.Height_detail') }}
                                         </div>
                                     </div>
-                                    <div class="tw-w-1/3">
-                                        <Input v-model="height" maxlength="7" />
-                                    </div>
-                                </div>
-                                <div class="tw-flex tw-items-center tw-space-x-4 tw-ml-3 tw-mt-4">
-                                    <div class="tw-w-2/3">
-                                        <div class="tw-font-medium">
+
+                                    <div class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
                                             {{ l('CodeBlockContainer.Alignment') }}
-                                        </div>
-                                        <div class="tw-text-sm tw-text-muted-foreground">
+                                        </Label>
+                                        <CSelect
+                                            :model-value="align"
+                                            :options="alignments"
+                                            @update:model-value="align = $event"
+                                            class="tw-w-full sm:tw-w-40"
+                                        />
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                        >
                                             {{ l('CodeBlockContainer.Alignment_detail') }}
                                         </div>
                                     </div>
-                                    <CSelect
-                                        :model-value="align"
-                                        :options="alignments"
-                                        @update:model-value="align = $event"
-                                        class="tw-w-1/3"
-                                    />
                                 </div>
                             </div>
                         </DropdownMenuContent>
