@@ -1,35 +1,42 @@
-<!DOCTYPE html>
-<html lang='de'>
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta name="codeblocks-baseurl" content="/" />
+        <link rel="icon" href="/favicon.ico" />
+        <title>frontend</title>
+        <!-- <link rel='stylesheet' href='/css/loader.css'> -->
+        <link rel="stylesheet" href="/css/roboto.css" />
+        <!-- <link rel='stylesheet' href='/css/main.css'> -->
+        <script src="/js/jquery.min.js" type="text/javascript"></script>
+        <style>
+            :root {
+                --planet-size: 1286px;
+                --rocket-width: 65px;
+                --rocket-height: 125px;
+            }
 
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width,initial-scale=1.0'>
-    <meta name='codeblocks-baseurl' content='/'>
-    <link rel='icon' href='/favicon.ico'>
-    <title>frontend</title>
-    <!-- <link rel='stylesheet' href='/css/loader.css'> -->
-    <link rel='stylesheet' href='/css/roboto.css'>
-    <!-- <link rel='stylesheet' href='/css/main.css'> -->
-    <script src='/js/jquery.min.js' type='text/javascript'></script>
-    <style>
-        codeblockseditor > *,
-        codeblocks > *,
-        [codeblockseditor] > *,
-        [codeblocks] > * {
-            display: none;
-        }
-    </style>
-    <script type='module' src='/src/main.ts'></script>
-</head>
+            codeblockseditor > *,
+            codeblocks > *,
+            [codeblockseditor] > *,
+            [codeblocks] > * {
+                display: none;
+            }
+        </style>
+        <script type="module" src="/src/main.ts"></script>
+    </head>
 
-<body>
-<noscript>
-    <strong>We're sorry but this doesn't work properly without JavaScript enabled. Please enable it to
-        continue.</strong>
-</noscript>
+    <body>
+        <noscript>
+            <strong
+                >We're sorry but this doesn't work properly without JavaScript enabled. Please
+                enable it to continue.</strong
+            >
+        </noscript>
 
-<!-- <div codeblocks data-compiler='python3' data-compiler-version='103' data-run-code='true'          >
+        <!-- <div codeblocks data-compiler='python3' data-compiler-version='103' data-run-code='true'          >
     <loading>
         <div></div>
         <div></div>
@@ -41,42 +48,59 @@ print(np.__version__)
 a = np.array([1, 2, 3, 4, 5, 6])
 print(a.shape)</pre>
 </div> -->
+        <div codeblockseditor src="examples/canvas/blocks.json">
+            <loading>
+                <div></div>
+                <div></div>
+            </loading>
+        </div>
 
-<div codeblockseditor data-compiler='java' data-compiler-version='102' data-run-code='true'
-     data-max-characters='10000' data-execution-timeout='5000'
-     data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]'
-     data-randomizer-active='true'
-     data-randomizer-known-tags='["test", "check"]'
-     data-randomizer-sets='[{"test": "test", "check": "check"}]'
-     data-randomizer-preview-index='0'
-     data-ui-theme='light'
-     data-output-parser='data'
-     data-emit-AST='true'
->
-    <loading>
-        <div></div>
-        <div></div>
-    </loading>
+        <!-- <div
+            codeblockseditor
+            data-compiler="java"
+            data-compiler-version="102"
+            data-run-code="true"
+            data-max-characters="10000"
+            data-execution-timeout="5000"
+            data-dom-libs='["lil-gui-0.16", "leaflet-1.9", "modelviewer-2.1.1"]'
+            data-randomizer-active="true"
+            data-randomizer-known-tags='["test", "check"]'
+            data-randomizer-sets='[{"test": "test", "check": "check"}, {"test": "proof", "check": "done"}]'
+            data-randomizer-preview-index="0"
+            data-ui-theme="light"
+            data-output-parser="data"
+            data-emit-AST="true"
+        >
+            <loading>
+                <div></div>
+                <div></div>
+            </loading>
 
-    <pre as="DATA" data-name="v0">{"name":"test", "age":3}</pre>
-    <div as="TEXT">Here is a simple &lt;b>Java&lt;/b> program:</div>
-    <pre as='BLOCK' data-hidden='true' data-label="test">import de.fau.tf.lgdv.CodeBlocks;
-import de.fau.tf.lgdv.json.JsonSerializer;
+            <pre as="DATA" data-name="v0">{"name":"test", "age":3}</pre>
+            <div as="TEXT">Here is a simple &lt;b>Java&lt;/b> program:</div>
+            <pre as="BLOCK" data-hidden="true" data-name="Custom Header">
+import de.fau.tf.lgdv.CodeBlocks;
+import de.fau.tf.lgdv.json.JsonObjectable;
+import de.fau.tf.lgdv.json.JsonObject;
 
-class Foo implements JsonSerializer{
-        public String toJson(){
-            return "{\"test\":42}";
+class Foo implements JsonObjectable{
+        public JsonObject toJsonObject(){
+            return new JsonObject().put("test", 42);
         }
 }
 public class App {
-    public static void main(String[] args){</pre>
-    <pre as='BLOCK'>        System.out.println("Hello World {:test}"); //this is line 11
+    public static void main(String[] args){</pre
+            >
+            <pre as="BLOCK">
+        System.out.println("Hello World {:test}"); //this is line 11
         System.out.println("or anyone else {:checked}");
         int[] testArray = {1,2,3,4,5};
         System.out.println(testArray[2]);
-        //System.out.println(testArray[-1]);
-        CodeBlocks.postResult(new Foo()); //this is line 16</pre>
-    <pre as='BLOCK' data-static='true'>    } //this is line 17
+        System.out.println(testArray[-1]);
+        CodeBlocks.postResult(new Foo()); //this is line 16</pre
+            >
+            <pre as="BLOCK" data-static="true" data-name="MainOverride Stuff">
+    } //this is line 17
 }
 
 class MainOverride {
@@ -84,38 +108,53 @@ class MainOverride {
         System.out.println("MainOverride was called");
         App.main(args);        
     }
-}</pre>
- <script as="LIBRARY" type="text/x-codeblocks" data-name="testPre100">
-    export default {                                          
-      create() {
-        console.log("LIB: Creating testPre100")
-          return { greet: () => console.log("LIB: GREETINGS from testPre100") }
-      },                                                                                                    
-      init() {
-          console.log("LIB: Hello testPre100")                                                              
-      }                                                     
-  }     
- </script>
-    <script as="PLAYGROUND" type="text/x-codeblocks" data-version="102" data-height="40px">export default {
-    init: function(canvasElement, outputElement, scope, runner) {
-        console.log("LIB: Hello PLAYGROUND")
-        testPre100.greet()
-        canvasElement.html("CANVAS")
-        console.log("TEST init", canvasElement, outputElement, scope, runner);
-    },
-    update: function(textData, jsonData, canvasElement, outputElement) {
-        console.log("TEST update", jsonData, textData, canvasElement, outputElement);
-        canvasElement.html("HALLO")
-        outputElement.html("OUTPUT: " + textData);
-    },
-    onASTAvailable: function(ast) {
-        console.log("TEST AST", ast);
-    }
-}
-    </script>
-</div>
+}</pre
+            >
+            <script as="LIBRARY" type="text/x-codeblocks" data-name="testPre100">
+                export default {
+                    value: 1,
+                    create() {
+                        console.log("LIB: Creating testPre100 {:check}")
+                        let myValue = 10;
+                        return {
+                            greet: () => console.log("LIB: GREETINGS2 from testPre100", this.value, myValue++)
+                        }
+                    },
+                    other(){
+                        console.log("LIB: other function in testPre100")
+                    },
+                    init() {
+                            localStorage.setItem('gdi-sticky', 1)
+                        console.log("LIB: Hello testPre100")
+                        this.other();
+                    },
+                        update(){
+                            this.value++;
+                        }
+                }
+            </script>
+            <script as="PLAYGROUND" type="text/x-codeblocks" data-version="102" data-height="40px">
+                export default {
+                                    init: function() {
+                                        console.log("LIB: Hello PLAYGROUND")
+                                        testPre100.greet()
+                                        const planetSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--planet-size'));
+                                        this.canvasElement.html("CANVAS:" + planetSize)
 
-
-</body>
-
+                                        console.log("TEST init", this.canvasElement, this.outputElement, this.scope, this.runner);
+                                        const universe = $('<div class="universe"></div>')
+                                    },
+                                    update: function(textData, jsonData) {
+                                        console.log("TEST update", jsonData, textData, this.canvasElement, this.outputElement);
+                                        this.canvasElement.html("HALLO {:test}")
+                                        //this.outputElement.html("OUTPUT: " + textData);
+                                        testPre100.greet()
+                                    },
+                                    onASTAvailable: function(ast) {
+                                        console.log("TEST AST", ast);
+                                    }
+                                }
+            </script>
+        </div> -->
+    </body>
 </html>
