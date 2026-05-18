@@ -1,7 +1,6 @@
-public class DemoApp  {  
-    static Image img;
-    static Div panel;
-    static Div badge;
+public class DemoApp {
+    static Layer panel;
+    static Layer badge;
     static void onReady(Image img) {
         System.out.println("Image is ready with dimensions: " + img.getWidth() + "x" + img.getHeight());
     }
@@ -38,23 +37,23 @@ public class DemoApp  {
         Int2D size = Canvas.getScreenDimensions(); 
         System.out.println("Canvas size: " + size.x + "x" + size.y);
 
-        panel = new Div("Hello Div", "demo-panel");
+        panel = new Layer("Hello Layer", "demo-panel");
         panel.setPosition(new Vec2D(16, 16));
         panel.setSize(new Vec2D(300, 140));
         panel.setBackground(new Color(0.11, 0.16, 0.28, 0.88));
         panel.setBorderWidth(2);
-        panel.setBorderType(Div.BorderType.SOLID);
+        panel.setBorderType(Layer.BorderType.SOLID);
         panel.setBorderColor(new Color(0.45, 0.70, 1.0, 1.0));
         panel.setRoundness(12);
         panel.setShadow(0, 8, 20, 0, new Color(0.0, 0.0, 0.0, 0.35));
-        panel.setMarkdown("## Div Example\n- Typed styling\n- Strict markdown\n- Child divs");
+        panel.setMarkdown("## Layer Example\n- Typed styling\n- Strict markdown\n- Child layers");
 
-        badge = new Div("CHILD", panel);
+        badge = new Layer("CHILD", panel);
         badge.setPosition(new Vec2D(190, 96));
         badge.setSize(new Vec2D(90, 28));
         badge.setBackground(new Color(1.0, 0.73, 0.2, 1.0));
         badge.setBorderWidth(1);
-        badge.setBorderType(Div.BorderType.SOLID);
+        badge.setBorderType(Layer.BorderType.SOLID);
         badge.setBorderColor(new Color(0.75, 0.45, 0.0, 1.0));
         badge.setRoundness(6);
         badge.setText("child div");

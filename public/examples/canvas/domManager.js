@@ -12,7 +12,7 @@ export default {
         }
         this.objectManager = objectManager
 
-        objectManager.registerType('DIV', (attrs, ready, error) => {
+        objectManager.registerType('LAYER', (attrs, ready, error) => {
             const node = $(document.createElement('div')).css({
                 position: 'absolute',
                 left: '0px',
@@ -42,10 +42,10 @@ export default {
                       : null
             if (Number.isInteger(parentId)) {
                 const parent = this.objectManager
-                    ? this.objectManager.get(parentRef || { type: 'DIV', id: parentId }, 'DIV')
+                    ? this.objectManager.get(parentRef || { type: 'LAYER', id: parentId }, 'LAYER')
                     : null
                 if (!parent || !parent.node || !parent.node.jquery) {
-                    const message = 'Invalid parent Div id: ' + String(parentId)
+                    const message = 'Invalid parent Layer id: ' + String(parentId)
                     console.error('PLAyRUN: ' + message)
                     if (error) {
                         error({ message })
