@@ -15,7 +15,13 @@
                                     id="library-name-input"
                                     v-model="name"
                                     size="xs"
-                                    class="tw-mb-0 tw-bg-white tw-pl-3"
+                                    :class="[
+                                        'tw-mb-0 tw-pl-3',
+                                        isEmbeddedLibrarySelected
+                                            ? 'tw-bg-gray-50 tw-text-gray-500'
+                                            : 'tw-bg-white',
+                                    ]"
+                                    :readonly="isEmbeddedLibrarySelected"
                                     :placeholder="$t('LibraryBlock.Name')"
                                 />
                             </TooltipTrigger>
@@ -122,28 +128,36 @@
             </Alert>
         </div>
 
-        <Transition
-            @before-enter="onBeforeEnter"
-            @enter="onEnter"
-            @after-enter="onAfterEnter"
-            @before-leave="onBeforeLeave"
-            @leave="onLeave"
-            @after-leave="onAfterLeave"
+        <div
+            :style="{
+                filter: isEmbeddedLibrarySelected ? 'grayscale(100%) brightness(0.95)' : 'none',
+            }"
+            :class="{ 'tw-pointer-events-none': isEmbeddedLibrarySelected }"
         >
-            <CodeBlock
-                v-if="editMode"
-                :appID="appID"
-                :blockID="blockID"
-                :block="block"
-                :theme="options.theme"
-                :mode="options.mode"
-                :visibleLines="visibleLinesNow"
-                :editMode="editMode"
-                :tagSet="tagSet"
-                :muteReadyState="true"
-                @code-changed-in-edit-mode="onCodeChange"
-            />
-        </Transition>
+            <Transition
+                @before-enter="onBeforeEnter"
+                @enter="onEnter"
+                @after-enter="onAfterEnter"
+                @before-leave="onBeforeLeave"
+                @leave="onLeave"
+                @after-leave="onAfterLeave"
+            >
+                <CodeBlock
+                    v-if="editMode"
+                    :appID="appID"
+                    :blockID="blockID"
+                    :block="block"
+                    :theme="options.theme"
+                    :mode="options.mode"
+                    :visibleLines="visibleLinesNow"
+                    :editMode="editMode"
+                    :tagSet="tagSet"
+                    :readonly="isEmbeddedLibrarySelected"
+                    :muteReadyState="true"
+                    @code-changed-in-edit-mode="onCodeChange"
+                />
+            </Transition>
+        </div>
     </div>
 </template>
 
@@ -209,6 +223,7 @@ const { whenBlockIsReady } = useBasicBlockMounting(true, props, blockStorage, (b
 // Error state
 const hasErrors: Ref<boolean> = ref(false)
 const errorDialogMessage: Ref<string> = ref('')
+const isEmbeddedLibrarySelected = computed(() => (block.value as any).isEmbeddedLibrary)
 
 const options: ComputedRef<IPlaygroundBlockOptions> = computed((): IPlaygroundBlockOptions => {
     return {
@@ -220,7 +235,7 @@ const options: ComputedRef<IPlaygroundBlockOptions> = computed((): IPlaygroundBl
         tabSize: 4,
         indentUnit: 4,
         autoCloseBrackets: true,
-        readOnly: !props.editMode,
+        readOnly: !props.editMode || isEmbeddedLibrarySelected.value,
         firstLineNumber: 1,
         gutters: ['diagnostics', 'CodeMirror-linenumbers'],
     }
@@ -228,9 +243,12 @@ const options: ComputedRef<IPlaygroundBlockOptions> = computed((): IPlaygroundBl
 
 const name = computed({
     get(): string {
-        return block.value.name
+        return (block.value as any).actualName ?? block.value.name
     },
     set(newName: string) {
+        if (isEmbeddedLibrarySelected.value) {
+            return
+        }
         block.value.name = newName
         if (block.value.obj && 'name' in block.value.obj) {
             ;(block.value.obj as any).name = newName
@@ -239,12 +257,21 @@ const name = computed({
 })
 
 const hasDuplicateName = computed(() => {
-    return blockStorage.appInfo.value.blocks.some(
-        (b) =>
-            b.uuid !== block.value.uuid &&
-            (b.type === KnownBlockTypes.LIBRARY || b.type === KnownBlockTypes.DATA) &&
-            b.name === block.value.name
-    )
+    const currentName = ((block.value as any).actualName ?? block.value.name).trim()
+    if (!currentName) {
+        return false
+    }
+
+    return blockStorage.appInfo.value.blocks.some((b) => {
+        if (b.uuid === block.value.uuid) {
+            return false
+        }
+        if (b.type !== KnownBlockTypes.LIBRARY && b.type !== KnownBlockTypes.DATA) {
+            return false
+        }
+        const otherName = (b as any).actualName ?? b.name
+        return otherName === currentName
+    })
 })
 
 const hasModernPlayground = computed(() => {
@@ -314,7 +341,7 @@ function updateErrors(): boolean {
 }
 
 const onCodeChange = () => {
-    if (props.editMode) {
+    if (props.editMode && !isEmbeddedLibrarySelected.value) {
         block.value.needsCodeRebuild = true
     }
 }

@@ -17,6 +17,14 @@ export default {
         Behaviour: 'Verhalten',
         ScriptV: 'Script-Version',
         ScriptV_detail: 'API-Version des Sandkastens.',
+        LibrarySource: 'Bibliotheksquelle',
+        LibrarySource_detail:
+            'Benutzerdefinierten Code verwenden oder eine mitgelieferte Bibliothek wählen.',
+        LibrarySourceCustom: 'Benutzerdefiniert',
+        LibraryCopyToCustom: 'In Benutzerdefiniert kopieren',
+        LibraryCopyToCustom_detail:
+            'Kopiert die gewählte Bibliothek in diesen Block, damit sie bearbeitet werden kann.',
+        LibraryCopyToCustomButton: 'Kopieren & wechseln',
         AutoReset: 'Autom. Reset',
         AutoReset_detail: 'Sandkasten bei jeder Ausführung neu erzeugen.',
         GenerateTemplate: 'Canvas erzeugen',
@@ -235,5 +243,10 @@ export default {
         ExportOriginal: 'Originalinhalt exportieren (mit Platzhaltern)',
         ExportCurrent: 'Aktuelle Würfler-Zusammenstellung exportieren',
         ExportAll: 'Alle Würfler-Zusammenstellungen exportieren',
+    },
+    EmbeddedLibraries: {
+        objectManager: 'Object Manager',
+        canvasManager: 'Canvas Manager',
+        domManager: 'DOM Manager',
     },
 }

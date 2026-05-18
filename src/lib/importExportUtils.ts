@@ -36,24 +36,32 @@ const commonMetadataSchema = z.object({
     expanded: booleanCoerce.optional(),
 })
 
-const expandableCodeMetadataSchema = commonMetadataSchema.extend({
-    codeExpanded: z
-        .union([z.nativeEnum(CodeExpansionType), z.string()])
-        .transform((val) => {
-            if (typeof val === 'string') {
-                const upper = val.toUpperCase()
-                if (upper === 'TINY' || val === 'false' || val === '0') {
-                    return CodeExpansionType.TINY
-                }
-                if (upper === 'LARGE' || val === '2') {
-                    return CodeExpansionType.LARGE
-                }
-                return CodeExpansionType.AUTO
+const codeExpansionSchema = z
+    .union([z.nativeEnum(CodeExpansionType), z.string()])
+    .transform((val) => {
+        if (typeof val === 'string') {
+            const upper = val.toUpperCase()
+            if (upper === 'TINY' || val === 'false' || val === '0') {
+                return CodeExpansionType.TINY
             }
-            return val
-        })
-        .optional(),
+            if (upper === 'LARGE' || val === '2') {
+                return CodeExpansionType.LARGE
+            }
+            return CodeExpansionType.AUTO
+        }
+        return val
+    })
+    .optional()
+
+const expandableCodeMetadataSchema = commonMetadataSchema.extend({
+    codeExpanded: codeExpansionSchema,
 })
+
+const libraryMetadataSchema = expandableCodeMetadataSchema.extend({
+    embeddedLibrary: z.string().optional(),
+})
+
+const dataMetadataSchema = expandableCodeMetadataSchema
 
 const playgroundMetadataSchema = expandableCodeMetadataSchema.extend({
     shouldAutoreset: booleanCoerce.optional(),
@@ -87,7 +95,8 @@ const blockMetadataSchema = commonMetadataSchema.extend({
 const metadataSchema = z.union([
     commonMetadataSchema,
     blockMetadataSchema,
-    expandableCodeMetadataSchema,
+    libraryMetadataSchema,
+    dataMetadataSchema,
     playgroundMetadataSchema,
 ])
 
@@ -121,21 +130,38 @@ const exportBlockMetadataSchema = z
         }),
         baseBlockSchema.extend({
             type: z.literal(KnownBlockTypes.LIBRARY),
-            metadata: expandableCodeMetadataSchema.optional().default({}),
+            metadata: libraryMetadataSchema.optional().default({}),
         }),
         baseBlockSchema.extend({
             type: z.literal(KnownBlockTypes.DATA),
-            metadata: expandableCodeMetadataSchema.optional().default({}),
+            metadata: dataMetadataSchema.optional().default({}),
         }),
         baseBlockSchema.extend({
             type: z.literal(KnownBlockTypes.TEXT),
             metadata: commonMetadataSchema.optional().default({}),
         }),
     ])
-    .refine((data) => data.content !== undefined || data.file !== undefined, {
-        message: 'Either content or file must be provided',
-        path: ['content'],
-    })
+    .refine(
+        (data) => {
+            const isLibrary = data.type === KnownBlockTypes.LIBRARY
+            const hasEmbeddedLibrary =
+                isLibrary &&
+                (data.metadata as any)?.embeddedLibrary !== undefined &&
+                (data.metadata as any)?.embeddedLibrary !== null
+
+            // For LIBRARY with embeddedLibrary, content/file is optional
+            // For all other blocks, either content or file must be provided
+            if (hasEmbeddedLibrary) {
+                return true
+            }
+            return data.content !== undefined || data.file !== undefined
+        },
+        {
+            message:
+                'Either content or file must be provided (unless embeddedLibrary is set for LIBRARY type)',
+            path: ['content'],
+        }
+    )
 
 const randomizerSetTagSchema = z.object({
     tag: z.string(),
@@ -220,6 +246,8 @@ const jsonExportSchema = z.object({
 
 export type ICommonMetadata = z.infer<typeof commonMetadataSchema>
 export type IExpandableCodeMetadata = z.infer<typeof expandableCodeMetadataSchema>
+export type ILibraryMetadata = z.infer<typeof libraryMetadataSchema>
+export type IDataMetadata = z.infer<typeof dataMetadataSchema>
 export type IPlaygroundMetadata = z.infer<typeof playgroundMetadataSchema>
 export type IBlockMetadata = z.infer<typeof blockMetadataSchema>
 export type IMetadata = z.infer<typeof metadataSchema>
@@ -228,9 +256,11 @@ export type MetadataByType<T extends KnownBlockTypes> = T extends KnownBlockType
     ? IPlaygroundMetadata
     : T extends KnownBlockTypes.BLOCK | KnownBlockTypes.BLOCKSTATIC | KnownBlockTypes.BLOCKHIDDEN
       ? IBlockMetadata
-      : T extends KnownBlockTypes.LIBRARY | KnownBlockTypes.DATA
-        ? IExpandableCodeMetadata
-        : ICommonMetadata
+      : T extends KnownBlockTypes.LIBRARY
+        ? ILibraryMetadata
+        : T extends KnownBlockTypes.DATA
+          ? IDataMetadata
+          : ICommonMetadata
 
 export type IExportBlockMetadata = z.infer<typeof exportBlockMetadataSchema>
 export type IExportedSettings = z.infer<typeof exportedSettingsSchema>
@@ -270,11 +300,11 @@ export const runtimeBlockSchema = z.discriminatedUnion('type', [
     }),
     baseRuntimeBlock.extend({
         type: z.literal(KnownBlockTypes.LIBRARY),
-        metadata: expandableCodeMetadataSchema.optional().default({}),
+        metadata: libraryMetadataSchema.optional().default({}),
     }),
     baseRuntimeBlock.extend({
         type: z.literal(KnownBlockTypes.DATA),
-        metadata: expandableCodeMetadataSchema.optional().default({}),
+        metadata: dataMetadataSchema.optional().default({}),
     }),
     baseRuntimeBlock.extend({
         type: z.literal(KnownBlockTypes.TEXT),
@@ -536,7 +566,13 @@ function getBlockMetadata<T extends KnownBlockTypes>(
             static: block.type === KnownBlockTypes.BLOCKSTATIC || block.static,
             hidden: block.type === KnownBlockTypes.BLOCKHIDDEN || block.hidden,
         } as MetadataByType<T>
-    } else if (block.type === KnownBlockTypes.LIBRARY || block.type === KnownBlockTypes.DATA) {
+    } else if (block.type === KnownBlockTypes.LIBRARY) {
+        return {
+            ...commonMetadata,
+            codeExpanded: block.codeExpanded,
+            embeddedLibrary: block.embeddedLibrary,
+        } as MetadataByType<T>
+    } else if (block.type === KnownBlockTypes.DATA) {
         return {
             ...commonMetadata,
             codeExpanded: block.codeExpanded,

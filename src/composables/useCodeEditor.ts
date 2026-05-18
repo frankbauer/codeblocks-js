@@ -18,6 +18,10 @@ export function useCodeEditor(
     editMode: Ref<boolean>,
     readonly: Ref<boolean>
 ) {
+    const isEmbeddedLibrary = computed(
+        () => block.value.type === 'LIBRARY' && (block.value as any).isEmbeddedLibrary
+    )
+
     const boxClass = computed(() => {
         const classes: string[] = []
         if (block.value.hidden && !editMode.value) {
@@ -36,13 +40,23 @@ export function useCodeEditor(
 
     const editorReadOnly = computed(
         () =>
-            !editMode.value &&
-            (block.value.readonly || block.value.static || block.value.hidden || readonly.value)
+            readonly.value ||
+            (editMode.value
+                ? isEmbeddedLibrary.value
+                : block.value.readonly || block.value.static || block.value.hidden)
     )
 
     const code = computed({
-        get: () => (editMode.value ? block.value.content : block.value.actualContent()),
-        set: (newCode) => (block.value.content = newCode),
+        get: () =>
+            editMode.value && !isEmbeddedLibrary.value
+                ? block.value.content
+                : block.value.actualContent(),
+        set: (newCode) => {
+            if (isEmbeddedLibrary.value) {
+                return
+            }
+            block.value.content = newCode
+        },
     })
 
     return {

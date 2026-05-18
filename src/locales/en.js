@@ -17,6 +17,13 @@ export default {
         Behaviour: 'Behaviour',
         ScriptV: 'Script Version',
         ScriptV_detail: 'API-Version for the Playground.',
+        LibrarySource: 'Library Source',
+        LibrarySource_detail: 'Use custom code or select a bundled library template.',
+        LibrarySourceCustom: 'Custom',
+        LibraryCopyToCustom: 'Copy To Custom',
+        LibraryCopyToCustom_detail:
+            'Copy the selected bundled library into this block so you can edit it.',
+        LibraryCopyToCustomButton: 'Copy & switch',
         AutoReset: 'Auto Reset',
         AutoReset_detail: 'Recreate Playground-Object for each run',
         GenerateTemplate: 'Create Canvas',
@@ -234,5 +241,10 @@ export default {
         ExportOriginal: 'Export original content (with tags)',
         ExportCurrent: 'Export current randomized set',
         ExportAll: 'Export all randomized sets',
+    },
+    EmbeddedLibraries: {
+        objectManager: 'Object Manager',
+        canvasManager: 'Canvas Manager',
+        domManager: 'DOM Manager',
     },
 }

@@ -92,7 +92,7 @@
                                     />
                                 </div>
                                 <div class="tw-space-y-1">
-                                    <Label class="tw-text-xs tw-text-muted-foreground tw-ml-1">
+                                    <Label class="tw-text-xs tw-text-muted-foreground">
                                         {{
                                             block.type === KnownBlockTypes.DATA ||
                                             block.type === KnownBlockTypes.LIBRARY
@@ -101,8 +101,9 @@
                                         }}
                                     </Label>
                                     <Input
-                                        v-model="block.name"
+                                        v-model="editableBlockName"
                                         class="tw-w-full"
+                                        :readonly="isEmbeddedLibrarySelected"
                                         :placeholder="
                                             block.type === KnownBlockTypes.DATA ||
                                             block.type === KnownBlockTypes.LIBRARY
@@ -111,23 +112,23 @@
                                         "
                                     />
                                 </div>
-                                <div class="tw-flex tw-items-center tw-gap-2 tw-mt-2">
-                                    <span
-                                        class="tw-text-sm tw-text-muted-foreground tw-whitespace-nowrap"
-                                    >
+                                <div class="tw-space-y-1 tw-mt-2">
+                                    <Label class="tw-text-xs tw-text-muted-foreground">
                                         {{ l('CodeBlockContainer.Position') }}
-                                    </span>
-                                    <Input
-                                        v-model="orderNumber"
-                                        type="number"
-                                        class="tw-w-20"
-                                        min="1"
-                                        :max="positions.length"
-                                        @change="applyOrderNumber"
-                                    />
-                                    <span class="tw-text-sm tw-text-muted-foreground"
-                                        >/ {{ positions.length }}</span
-                                    >
+                                    </Label>
+                                    <div class="tw-flex tw-items-center tw-gap-2">
+                                        <Input
+                                            v-model="orderNumber"
+                                            type="number"
+                                            class="!tw-w-16 !tw-min-w-16 !tw-max-w-16 tw-shrink-0"
+                                            min="1"
+                                            :max="positions.length"
+                                            @change="applyOrderNumber"
+                                        />
+                                        <span class="tw-text-xs tw-text-muted-foreground"
+                                            >/ {{ positions.length }}</span
+                                        >
+                                    </div>
                                 </div>
                             </div>
 
@@ -240,6 +241,45 @@
                                     </div>
                                     <div class="tw-w-1/3">
                                         <Switch v-model="shouldGenerateTemplate" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Embedded libraries (LIBRARY type) -->
+                            <div v-if="isLibraryBlock" class="tw-p-4 tw-space-y-4">
+                                <div class="tw-space-y-1">
+                                    <Label class="tw-text-xs tw-text-muted-foreground">
+                                        {{ l('CodeBlockContainer.LibrarySource') }}
+                                    </Label>
+                                    <CSelect
+                                        :model-value="selectedEmbeddedLibraryObj"
+                                        :options="embeddedLibraryOptions"
+                                        @update:model-value="selectedEmbeddedLibraryObj = $event"
+                                    />
+                                    <div
+                                        class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                    >
+                                        {{ l('CodeBlockContainer.LibrarySource_detail') }}
+                                    </div>
+                                </div>
+
+                                <div v-if="isEmbeddedLibrarySelected" class="tw-space-y-1">
+                                    <Label class="tw-text-xs tw-text-muted-foreground">
+                                        {{ l('CodeBlockContainer.LibraryCopyToCustom') }}
+                                    </Label>
+                                    <div>
+                                        <Button
+                                            variant="outline"
+                                            class="tw-w-full sm:tw-w-auto"
+                                            @click="copyEmbeddedLibraryToCustom"
+                                        >
+                                            {{ l('CodeBlockContainer.LibraryCopyToCustomButton') }}
+                                        </Button>
+                                    </div>
+                                    <div
+                                        class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                    >
+                                        {{ l('CodeBlockContainer.LibraryCopyToCustom_detail') }}
                                     </div>
                                 </div>
                             </div>
@@ -496,6 +536,7 @@
 import { BasicBlockProps, DEFAULT_BASIC_BLOCK_PROPS } from '@/composables/basicBlock'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { IListItemData } from '@/lib/ICompilerRegistry'
+import { CUSTOM_LIBRARY_ID, EMBEDDED_LIBRARIES } from '@/lib/embeddedLibraries'
 import { globalState } from '@/lib/globalState'
 import { l } from '@/plugins/i18n'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
@@ -776,12 +817,54 @@ const serializedOptions = computed({
     set(_v: string) {},
 })
 const hasExtendedSettings = computed(
-    () => type.value === KnownBlockTypes.PLAYGROUND || type.value === KnownBlockTypes.BLOCK
+    () =>
+        type.value === KnownBlockTypes.PLAYGROUND ||
+        type.value === KnownBlockTypes.BLOCK ||
+        type.value === KnownBlockTypes.LIBRARY
 )
 const isVersionedPlayground = computed(() => type.value === KnownBlockTypes.PLAYGROUND)
+const isLibraryBlock = computed(() => type.value === KnownBlockTypes.LIBRARY)
 const canSetLineNumbers = computed(() => type.value === KnownBlockTypes.BLOCK)
 const canHaveAlternativeContent = computed(() => type.value === KnownBlockTypes.BLOCK)
 const canDefinePlacement = computed(() => type.value === KnownBlockTypes.PLAYGROUND)
+const embeddedLibraryOptions = computed((): IListItemData[] => {
+    return [
+        { label: l('CodeBlockContainer.LibrarySourceCustom'), value: CUSTOM_LIBRARY_ID },
+        ...EMBEDDED_LIBRARIES.map((lib) => ({
+            label: l(lib.nameKey),
+            value: lib.id,
+        })),
+    ]
+})
+const selectedEmbeddedLibraryObj = computed({
+    get(): IListItemData {
+        const selected = block.value.embeddedLibrary ?? CUSTOM_LIBRARY_ID
+        return globalState.appState.itemForValue(embeddedLibraryOptions.value, selected)
+    },
+    set(v: IListItemData) {
+        ;(block.value as any).setSelectedEmbeddedLibrary?.(v.value)
+    },
+})
+const isEmbeddedLibrarySelected = computed(
+    () => isLibraryBlock.value && (block.value as any).isEmbeddedLibrary
+)
+const editableBlockName = computed({
+    get(): string {
+        if (isEmbeddedLibrarySelected.value) {
+            return (block.value as any).actualName ?? block.value.name
+        }
+        return block.value.name
+    },
+    set(v: string) {
+        if (isEmbeddedLibrarySelected.value) {
+            return
+        }
+        block.value.name = v
+    },
+})
+const copyEmbeddedLibraryToCustom = (): void => {
+    ;(block.value as any).copyEmbeddedLibraryToCustom?.()
+}
 const shouldAutoReset = computed({
     get(): boolean {
         return block.value.shouldAutoreset

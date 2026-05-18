@@ -16,6 +16,11 @@ import { IRuntimeData, IRuntimeBlock } from './importExportUtils'
 import { InternalCodeBlocksManager } from './domParser'
 import { createScriptBlock, createLibraryScriptBlock } from './scriptBlock'
 import { ICompilerErrorDescription, ICompilerID } from './ICompilerRegistry'
+import {
+    CUSTOM_LIBRARY_ID,
+    getEmbeddedLibraryDefinition,
+    type EmbeddedLibraryDefinition,
+} from './embeddedLibraries'
 
 export interface AppContext {
     appID: number
@@ -51,6 +56,7 @@ export class BlockData implements IBlockData {
     align: string
     lineCountHint: number
     name: string
+    embeddedLibrary: string
     //true when the code has been changed and the script object needs to be rebuilt, false otherwise. This is used to delay the rebuild until the playground is actually run to avoid unnecessary rebuilds while editing.
     needsCodeRebuild: boolean
 
@@ -98,6 +104,7 @@ export class BlockData implements IBlockData {
         this.align = m.align ?? 'center'
         this.lineCountHint = d.lineCountHint
         this.name = d.name
+        this.embeddedLibrary = m.embeddedLibrary ?? CUSTOM_LIBRARY_ID
 
         if (
             this.type === KnownBlockTypes.PLAYGROUND ||
@@ -144,6 +151,13 @@ export class BlockData implements IBlockData {
     }
 
     actualContent() {
+        if (this.type === KnownBlockTypes.LIBRARY) {
+            const embedded = this.embeddedLibraryDefinition
+            if (embedded) {
+                return embedded.content
+            }
+        }
+
         console.i('this.appSettings.randomizer.active', this.appSettings.randomizer.active)
         if (this.appSettings.randomizer.active) {
             return tagger.replaceRandomTagsInString(
@@ -179,7 +193,7 @@ export class BlockData implements IBlockData {
         } else if (this.type === KnownBlockTypes.LIBRARY) {
             console.i('recreateScriptObject - Library')
 
-            const so = createLibraryScriptBlock(this.actualContent(), this.name, this.version)
+            const so = createLibraryScriptBlock(this.actualContent(), this.actualName, this.version)
             this.obj = so
             console.i('Block Rebuild', this.obj, this.uuid)
         } else if (this.type === KnownBlockTypes.DATA) {
@@ -225,8 +239,8 @@ export class BlockData implements IBlockData {
     }
 
     get descriptiveName(): string {
-        if (this.name) {
-            return this.name
+        if (this.actualName) {
+            return this.actualName
         }
         const content = this.content || ''
         const firstLine = content.replace(/\s*\n\s*/g, ' ').trim()
@@ -287,6 +301,49 @@ export class BlockData implements IBlockData {
     //is this right. Happend when converting from JS
     get scriptVersion(): string {
         return this.version
+    }
+
+    get embeddedLibraryDefinition(): EmbeddedLibraryDefinition | undefined {
+        if (this.type !== KnownBlockTypes.LIBRARY) {
+            return undefined
+        }
+        return getEmbeddedLibraryDefinition(this.embeddedLibrary)
+    }
+
+    get isEmbeddedLibrary(): boolean {
+        return this.embeddedLibraryDefinition !== undefined
+    }
+
+    get actualName(): string {
+        return this.isEmbeddedLibrary ? this.embeddedLibrary : this.name
+    }
+
+    setSelectedEmbeddedLibrary(id: string): void {
+        if (this.type !== KnownBlockTypes.LIBRARY) {
+            return
+        }
+        if (this.embeddedLibrary === id) {
+            return
+        }
+
+        this.embeddedLibrary = id
+        this.needsCodeRebuild = true
+        this.recreateScriptObject()
+        this.appSettings.buildVersion++
+    }
+
+    copyEmbeddedLibraryToCustom(): void {
+        const embedded = this.embeddedLibraryDefinition
+        if (this.type !== KnownBlockTypes.LIBRARY || !embedded) {
+            return
+        }
+
+        this.content = embedded.content
+        this.name = embedded.id
+        this.embeddedLibrary = CUSTOM_LIBRARY_ID
+        this.needsCodeRebuild = true
+        this.recreateScriptObject()
+        this.appSettings.buildVersion++
     }
 
     get type(): KnownBlockTypes {

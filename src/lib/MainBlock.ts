@@ -214,6 +214,7 @@ export default class MainBlock implements IMainBlock {
                 hidden: type === KnownBlockTypes.BLOCKHIDDEN,
                 version: '101',
                 visibleLines: 10,
+                embeddedLibrary: 'custom',
                 shouldAutoreset: false,
                 shouldReloadResources: false,
                 generateTemplate: resolvedType === KnownBlockTypes.PLAYGROUND,
