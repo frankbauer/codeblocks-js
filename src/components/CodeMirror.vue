@@ -31,7 +31,6 @@ import {
     highlightSpecialChars,
     drawSelection,
     dropCursor,
-    rectSelection,
     highlightActiveLine,
     keymap,
     lineNumbers,
@@ -114,7 +113,12 @@ import { solarizedDarkTheme } from 'cm6-theme-solarized-dark'
 import { solarizedLightTheme } from 'cm6-theme-solarized-light'
 import { getSimpleIndentation } from '@/plugins/codemirror/codeIndentation'
 import { CodeSplitSegment } from '@/composables/useCodeEditor'
-import { createJavaCompletions } from '@/plugins/javaCompletions'
+import {
+    createJavaCompletions,
+    createJavaScriptCompletions,
+    createJsonCompletions,
+    createPythonCompletions,
+} from '@/plugins/completions'
 import { createHighlightStyle } from '@/plugins/codemirror/highlightStyles'
 import { getUITheme, UITheme, UIThemeType } from '@/lib/uiTheme'
 import { DEFAULT_EDITOR_THEME, EditorTheme, EditorThemes } from '@/plugins/codemirror/editorThemes'
@@ -134,6 +138,8 @@ interface Props {
     maxLines?: number
     tagSet?: IRandomizerSet | undefined
     codeSplitSegment?: CodeSplitSegment
+    isEditMode?: boolean
+    enableCompletionInViewMode?: boolean
 }
 
 // Fix emit types to match expected usage
@@ -155,6 +161,8 @@ const props = withDefaults(defineProps<Props>(), {
     maxLines: 1,
     tagSet: undefined,
     codeSplitSegment: undefined,
+    isEditMode: false,
+    enableCompletionInViewMode: true,
 })
 const {
     name,
@@ -167,6 +175,8 @@ const {
     maxLines,
     tagSet,
     codeSplitSegment,
+    isEditMode,
+    enableCompletionInViewMode,
 } = toRefs(props)
 
 // Replace code.value with proper v-model handling
@@ -192,23 +202,54 @@ const editorTheme = computed<EditorTheme>(() => {
     return theme.value
 })
 
+const normalizedLanguage = computed(() => {
+    return (language.value || '').trim().toLowerCase()
+})
+
+const isJavaLanguage = computed(() => {
+    return ['text/x-java', 'text/java', 'java'].includes(normalizedLanguage.value)
+})
+
+const isJavaScriptLanguage = computed(() => {
+    return ['text/javascript', 'application/javascript', 'javascript', 'text/js', 'js'].includes(
+        normalizedLanguage.value
+    )
+})
+
+const isJsonLanguage = computed(() => {
+    return ['application/json', 'text/json', 'json'].includes(normalizedLanguage.value)
+})
+
+const isPythonLanguage = computed(() => {
+    return ['text/python', 'text/x-python', 'application/x-python-code', 'python'].includes(
+        normalizedLanguage.value
+    )
+})
+
 const editorLanguage = computed(() => {
-    switch (language.value) {
+    switch (normalizedLanguage.value) {
         case 'text/css':
+        case 'css':
             return css()
         case 'text/html':
+        case 'html':
             return html()
         case 'text/json':
         case 'application/json':
+        case 'json':
             return json()
         case 'text/python':
         case 'text/x-python':
+        case 'python':
             return python()
         case 'text/x-java':
         case 'text/java':
+        case 'java':
             return java()
         case 'text/cpp':
         case 'text/x-c++src':
+        case 'cpp':
+        case 'c++':
             return cpp()
         default:
             return javascript()
@@ -267,13 +308,26 @@ function combinedCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
     const tagCompletions = createTagCompletions(tagSet)
 
     return (context: CompletionContext): CompletionResult | null => {
+        if (!isEditMode.value && !enableCompletionInViewMode.value) {
+            return null
+        }
+
         let res: CompletionResult | null = null
-        if (tagCompletions) {
+        if (tagCompletions && !isJsonLanguage.value) {
             res = tagCompletions(context)
         }
         if (res === null) {
-            if (language.value === 'text/java' || language.value === 'text/x-java') {
-                return createJavaCompletions(context)
+            if (isJavaLanguage.value) {
+                return createJavaCompletions(context, { includeRuntime: isEditMode.value })
+            }
+            if (isJavaScriptLanguage.value) {
+                return createJavaScriptCompletions(context, { includeRuntime: isEditMode.value })
+            }
+            if (isJsonLanguage.value) {
+                return createJsonCompletions(context)
+            }
+            if (isPythonLanguage.value) {
+                return createPythonCompletions(context)
             }
         }
         return res
@@ -487,6 +541,34 @@ watch(editorLanguage, (newValue) => {
     editorView.value.dispatch({
         effects: languageAutoCompleteCompartment.reconfigure(
             newValue.language.data.of({
+                autocomplete: combinedCompletions(tagSet),
+            })
+        ),
+    })
+})
+
+watch(isEditMode, () => {
+    if (editorView.value === null) {
+        return
+    }
+
+    editorView.value.dispatch({
+        effects: languageAutoCompleteCompartment.reconfigure(
+            editorLanguage.value.language.data.of({
+                autocomplete: combinedCompletions(tagSet),
+            })
+        ),
+    })
+})
+
+watch(enableCompletionInViewMode, () => {
+    if (editorView.value === null) {
+        return
+    }
+
+    editorView.value.dispatch({
+        effects: languageAutoCompleteCompartment.reconfigure(
+            editorLanguage.value.language.data.of({
                 autocomplete: combinedCompletions(tagSet),
             })
         ),

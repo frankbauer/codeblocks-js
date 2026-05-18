@@ -29,6 +29,18 @@ export function domToRuntimeData(el: HTMLElement, shadowRoot?: ShadowRoot): IRun
     const isCodeBlocksEditor =
         el.tagName === 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor')
 
+    const disableCompletionInViewModeAttr =
+        dataset.disableCompletionInViewMode ??
+        el.getAttribute('disable-completion-in-view-mode') ??
+        el.getAttribute('disableCompletionInViewMode')
+
+    const enableCompletionInViewModeSetting =
+        disableCompletionInViewModeAttr !== null && disableCompletionInViewModeAttr !== undefined
+            ? disableCompletionInViewModeAttr === 'false' || disableCompletionInViewModeAttr === '0'
+                ? 'true'
+                : 'false'
+            : dataset.enableCompletionInViewMode
+
     // 1. Parse compiler info (legacy attributes merge)
     const compiler = {
         languageType: dataset.compiler || 'javascript',
@@ -96,6 +108,7 @@ export function domToRuntimeData(el: HTMLElement, shadowRoot?: ShadowRoot): IRun
         domLibs: dataset.domLibs,
         workerLibs: dataset.workerLibs,
         continuousCompilation: dataset.continuousCompilation,
+        enableCompletionInViewMode: enableCompletionInViewModeSetting,
         messagePassing: dataset.messagePassing,
         keepAlive: dataset.keepAlive,
         persistentArguments: dataset.persistentArguments,

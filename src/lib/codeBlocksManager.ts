@@ -390,6 +390,7 @@ export interface IMainBlock {
     scopeUUID?: string
     scopeSelector?: string
     continuousCompilation: boolean
+    enableCompletionInViewMode: boolean
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean

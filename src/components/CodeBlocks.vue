@@ -213,6 +213,12 @@ const onContinousCompileStateChange = (v: boolean): void => {
     }
 }
 
+const onEnableCompletionInViewModeChange = (v: boolean): void => {
+    if (editMode) {
+        blockInfo.value.enableCompletionInViewMode = v
+    }
+}
+
 const onMessagePassingChange = (v: boolean): void => {
     if (editMode) {
         blockInfo.value.messagePassing = v
@@ -513,6 +519,7 @@ useResizeObserver(runnerRef, (entries) => {
             @compiler-version-change="onCompilerVersionChange"
             @run-state-change="onRunStateChange"
             @continuous-compile-change="onContinousCompileStateChange"
+            @enable-completion-in-view-mode-change="onEnableCompletionInViewModeChange"
             @message-passing-change="onMessagePassingChange"
             @keep-alive-change="onKeepAliveChange"
             @persistent-arguments-change="onPersistentArgumentsChange"

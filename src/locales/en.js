@@ -135,6 +135,7 @@ export default {
         },
         NumberErr: 'Must be a valid number.',
         ContinousCompile: 'Automatic Execution (while typing)',
+        CompletionInViewMode: 'Enable code completion outside edit mode',
         PersistentArguments: 'Persistente Arguments (between calls)',
         MessagePassing: 'Message exchange between DOM and Worker',
         KeepAlive: 'Keep Worker alive after main Finishes',

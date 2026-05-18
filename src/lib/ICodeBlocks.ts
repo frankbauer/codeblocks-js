@@ -104,6 +104,7 @@ export interface ICodeBlockSettingsOptions {
     runCode: boolean
     emitAST: boolean
     continuousCompilation: boolean
+    enableCompletionInViewMode: boolean
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean

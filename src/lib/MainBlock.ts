@@ -30,6 +30,7 @@ export default class MainBlock implements IMainBlock {
     scopeUUID?: string
     scopeSelector?: string
     continuousCompilation: boolean
+    enableCompletionInViewMode: boolean
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean
@@ -62,6 +63,7 @@ export default class MainBlock implements IMainBlock {
         this.scopeUUID = s.scopeUUID
         this.scopeSelector = s.scopeSelector
         this.continuousCompilation = s.continuousCompilation
+        this.enableCompletionInViewMode = s.enableCompletionInViewMode ?? true
         this.messagePassing = s.messagePassing
         this.keepAlive = s.keepAlive
         this.persistentArguments = s.persistentArguments
@@ -88,6 +90,7 @@ export default class MainBlock implements IMainBlock {
             this.domLibs = s.domLibs
             this.workerLibs = s.workerLibs
             this.continuousCompilation = s.continuousCompilation
+            this.enableCompletionInViewMode = s.enableCompletionInViewMode ?? true
             this.messagePassing = s.messagePassing
             this.keepAlive = s.keepAlive
             this.persistentArguments = s.persistentArguments

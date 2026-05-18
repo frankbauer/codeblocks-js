@@ -28,6 +28,8 @@
             :max-lines="totalLines"
             :tag-set="editMode ? tagSet : undefined"
             :code-split-segment="codeSplitSegment"
+            :is-edit-mode="editMode"
+            :enable-completion-in-view-mode="enableCompletionInViewMode"
             @update:model-value="onCodeChangeDefered"
             @focus="onCodeFocus"
             @ready="onCodeReady"
@@ -54,6 +56,8 @@
                 :theme="block.themeForCodeBlock"
                 :language="mode"
                 :read-only="editorReadOnly"
+                :is-edit-mode="editMode"
+                :enable-completion-in-view-mode="enableCompletionInViewMode"
                 @update:model-value="onAltCodeChangeDefered"
                 @ready="onAltCodeReady"
             />
@@ -218,6 +222,10 @@ const isNonStudentBlock = computed(() => {
     return !['block', 'block-hidden', 'block-static'].includes(typeName.value)
 })
 
+const enableCompletionInViewMode = computed(
+    () => blockStorage.appInfo.value.enableCompletionInViewMode ?? true
+)
+
 const iliasTypeNr = computed(() => {
     const types = {
         text: 0,
@@ -243,7 +251,8 @@ function posToOffset(view: EditorView, pos: { line: number; ch: number }): numbe
     return view.state.doc.line(pos.line + 1).from + pos.ch
 }
 
-function onCodeChangeDefered(newCode: string) {
+function onCodeChangeDefered(...args: unknown[]) {
+    const newCode = String(args[0] ?? '')
     if (!editMode.value) {
         onCodeChange(newCode)
         return
@@ -292,7 +301,8 @@ function onCodeChange(newCode: string) {
     }
 }
 
-function onAltCodeChangeDefered(newCode: string) {
+function onAltCodeChangeDefered(...args: unknown[]) {
+    const newCode = String(args[0] ?? '')
     const now = Date.now()
 
     if (altCodeUpdateTimer) {

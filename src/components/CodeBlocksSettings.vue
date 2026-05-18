@@ -421,6 +421,16 @@
                                 value="runtime"
                                 class="tw-space-y-4 tw-mt-4 tw-px-2 tw-max-h-[60vh] tw-overflow-y-auto tw-pr-1 modern-scrollbar"
                             >
+                                <div class="tw-flex tw-items-center tw-space-x-2 tw-mb-2">
+                                    <Switch
+                                        id="completion-in-view-mode"
+                                        v-model="enableCompletionInViewMode"
+                                    />
+                                    <Label for="completion-in-view-mode">
+                                        {{ $t('CodeBlocksSettings.CompletionInViewMode') }}
+                                    </Label>
+                                </div>
+
                                 <div v-if="showMaxRuntime">
                                     <CInput
                                         v-model="maxRuntime"
@@ -759,6 +769,7 @@ const emit = defineEmits([
     'theme-change',
     'output-parser-change',
     'continuous-compile-change',
+    'enable-completion-in-view-mode-change',
     'message-passing-change',
     'keep-alive-change',
     'persistent-arguments-change',
@@ -1045,6 +1056,15 @@ const continuousCompile = computed({
     },
     set: (v: boolean) => {
         emit('continuous-compile-change', v)
+    },
+})
+
+const enableCompletionInViewMode = computed({
+    get: () => {
+        return props.options.enableCompletionInViewMode
+    },
+    set: (v: boolean) => {
+        emit('enable-completion-in-view-mode-change', v)
     },
 })
 

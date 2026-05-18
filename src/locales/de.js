@@ -137,6 +137,7 @@ export default {
         },
         NumberErr: 'Muss eine gültige Zahl sein.',
         ContinousCompile: 'Automatisch Ausführen',
+        CompletionInViewMode: 'Code-Vervollständigung außerhalb des Edit-Modus',
         PersistentArguments: 'Persistente Argumente',
         MessagePassing: 'Nachrichtenaustauch (DOM und Worker)',
         KeepAlive: 'Worker nicht automatisch beenden',

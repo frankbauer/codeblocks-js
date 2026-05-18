@@ -249,6 +249,7 @@ import {
     exportToZip,
     getImportData,
     ExportRandomizerMode,
+    type IJsonExport,
 } from '@/lib/importExportUtils'
 import MainBlock from '@/lib/MainBlock'
 import { Button } from '@/shadcn/ui/button'
@@ -279,7 +280,7 @@ const selectedBlockUuids = ref<string[]>([])
 
 const randomizerExportMode = ref<ExportRandomizerMode>(ExportRandomizerMode.ORIGINAL)
 
-const importData = ref<any>(null)
+const importData = ref<IJsonExport | null>(null)
 const selectedImportIndexes = ref<number[]>([])
 const importSettings = ref(true)
 const importMode = ref<'append' | 'prepend' | 'override'>('append')

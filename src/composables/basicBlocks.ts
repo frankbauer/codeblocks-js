@@ -155,6 +155,7 @@ export function codeBlockSetup(
             outputParser: outputParser.value,
             randomizer: blockInfo.value.randomizer,
             continuousCompilation: blockInfo.value.continuousCompilation,
+            enableCompletionInViewMode: blockInfo.value.enableCompletionInViewMode,
             persistentArguments: blockInfo.value.persistentArguments,
             messagePassing: blockInfo.value.messagePassing,
             keepAlive: blockInfo.value.keepAlive,
