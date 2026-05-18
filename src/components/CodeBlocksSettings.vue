@@ -230,9 +230,9 @@
                         </TooltipContent>
                     </Tooltip>
                     <DialogScrollContent
-                        class="tw-w-full tw-max-w-lg sm:tw-max-w-xl md:tw-max-w-2xl"
+                        class="tw-w-full tw-max-w-lg sm:tw-max-w-xl md:tw-max-w-2xl tw-self-start tw-mt-8 tw-rounded-2xl tw-overflow-hidden tw-border-border/80 tw-bg-background/95 tw-shadow-2xl tw-backdrop-blur-sm"
                     >
-                        <DialogHeader>
+                        <DialogHeader class="tw-pb-3 tw-border-b tw-border-border/60">
                             <DialogTitle>{{ $t('CodeBlocksSettings.Settings') }}</DialogTitle>
                             <DialogDescription>
                                 {{ $t('CodeBlocksSettings.SettingsDesc') }}
@@ -240,7 +240,7 @@
                         </DialogHeader>
 
                         <Tabs v-model="activeTab" class="tw-mt-2">
-                            <TabsList class="tw-grid tw-w-full tw-grid-cols-5">
+                            <TabsList class="tw-grid tw-w-full tw-grid-cols-5 tw-rounded-lg">
                                 <TabsTrigger value="language">
                                     <Code2 class="tw-w-4 tw-h-4" />
                                     {{ $t('CodeBlocksSettings.Language') }}
@@ -264,7 +264,10 @@
                             </TabsList>
 
                             <!-- Tab: Language -->
-                            <TabsContent value="language" class="tw-space-y-4 tw-mt-4 tw-px-2">
+                            <TabsContent
+                                value="language"
+                                class="tw-space-y-4 tw-mt-4 tw-px-2 tw-max-h-[60vh] tw-overflow-y-auto tw-pr-1 modern-scrollbar"
+                            >
                                 <div class="tw-flex tw-items-center tw-space-x-2">
                                     <Switch
                                         id="run-code"
@@ -414,7 +417,10 @@
                             </TabsContent>
 
                             <!-- Tab: Runtime (only when execution is enabled) -->
-                            <TabsContent value="runtime" class="tw-space-y-4 tw-mt-4 tw-px-2">
+                            <TabsContent
+                                value="runtime"
+                                class="tw-space-y-4 tw-mt-4 tw-px-2 tw-max-h-[60vh] tw-overflow-y-auto tw-pr-1 modern-scrollbar"
+                            >
                                 <div v-if="showMaxRuntime">
                                     <CInput
                                         v-model="maxRuntime"
@@ -580,7 +586,10 @@
                             </TabsContent>
 
                             <!-- Tab: Output -->
-                            <TabsContent value="output" class="tw-space-y-4 tw-mt-4 tw-px-2">
+                            <TabsContent
+                                value="output"
+                                class="tw-space-y-4 tw-mt-4 tw-px-2 tw-max-h-[60vh] tw-overflow-y-auto tw-pr-1 modern-scrollbar"
+                            >
                                 <CInput
                                     v-model="maxCharacters"
                                     :rules="[validNumber]"
@@ -623,7 +632,10 @@
                             </TabsContent>
 
                             <!-- Tab: Libraries -->
-                            <TabsContent value="libraries" class="tw-space-y-4 tw-mt-4 tw-px-2">
+                            <TabsContent
+                                value="libraries"
+                                class="tw-space-y-4 tw-mt-4 tw-px-2 tw-max-h-[60vh] tw-overflow-y-auto tw-pr-1 modern-scrollbar"
+                            >
                                 <CMultiSelect
                                     v-model="domLibrary"
                                     :options="domLibraries"
@@ -638,7 +650,10 @@
                             </TabsContent>
 
                             <!-- Tab: Randomizer (full config) -->
-                            <TabsContent value="randomizer" class="w-space-y-4 tw-mt-4 tw-px-2">
+                            <TabsContent
+                                value="randomizer"
+                                class="tw-space-y-4 tw-mt-4 tw-px-2 tw-max-h-[60vh] tw-overflow-y-auto tw-pr-1 modern-scrollbar"
+                            >
                                 <RandomizerSettings :options="options" />
                             </TabsContent>
                         </Tabs>
