@@ -9,6 +9,7 @@
             :language="language"
             :scopeUUID="scopeUUID"
             :editMode="editMode"
+            :readonly="readonly"
             :appID="props.appID"
             :blockID="props.blockID"
             :block="block"

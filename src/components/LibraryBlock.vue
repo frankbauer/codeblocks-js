@@ -167,7 +167,7 @@
                         :visibleLines="visibleLinesNow"
                         :editMode="editMode"
                         :tagSet="tagSet"
-                        :readonly="isEmbeddedLibrarySelected"
+                        :readonly="isEmbeddedLibrarySelected || readonly"
                         :muteReadyState="true"
                         @code-changed-in-edit-mode="onCodeChange"
                     />

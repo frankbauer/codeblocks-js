@@ -22,6 +22,7 @@ interface OptionalEditableBlockProps extends OptionalBasicBlockProps {
     editMode?: boolean
     visibleLines?: VisibleLinesType
     theme?: EditorTheme
+    readonly?: boolean
 }
 
 export interface EditableBlockProps extends BasicBlockProps, OptionalEditableBlockProps {}
@@ -29,6 +30,7 @@ export interface EditableBlockProps extends BasicBlockProps, OptionalEditableBlo
 export const DEFAULT_EDITABLE_BLOCK_PROPS = {
     muteReadyState: false,
     editMode: false,
+    readonly: false,
     visibleLines: 'auto' as VisibleLinesType,
     theme: () => DEFAULT_EDITOR_THEME,
 }

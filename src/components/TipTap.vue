@@ -1,6 +1,6 @@
 <template>
-    <div class="tw-flex">
-        <div class="tw-w-full tw-md:tw-w-1/2">
+    <div class="tw-flex tw-flex-col md:tw-flex-row">
+        <div class="tw-w-full md:tw-w-1/2 tw-min-w-0">
             <CodeBlock
                 :appID="appID"
                 :blockID="blockID"
@@ -9,11 +9,12 @@
                 :mode="'text/html'"
                 :visibleLines="'auto'"
                 :editMode="editMode"
+                :readonly="readonly"
                 :muteReadyState="true"
                 class="plain accqstXmlInput noRTEditor tw-mt-5"
             />
         </div>
-        <div class="tw-w-full tw-md:tw-w-1/2 tw-pl-4">
+        <div class="tw-w-full md:tw-w-1/2 tw-min-w-0 tw-pl-0 md:tw-pl-4">
             <div
                 class="tw-text-sm tw-font-medium tw-pointer-events-none tw-truncate tw-z-50 tw-text-muted-foreground"
             >
@@ -35,6 +36,7 @@ interface Props {
     name: string
     scopeUUID: string
     editMode: boolean
+    readonly?: boolean
     language: string
     appID: number
     blockID: string
@@ -46,6 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
     name: '',
     scopeUUID: '',
     editMode: false,
+    readonly: false,
     language: 'javascript',
     appID: 0,
     blockID: '',

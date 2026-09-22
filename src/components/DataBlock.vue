@@ -146,6 +146,7 @@
                 :mode="options.mode"
                 :visibleLines="visibleLines"
                 :editMode="editMode"
+                :readonly="readonly"
                 :tagSet="tagSet"
                 :muteReadyState="true"
                 @code-changed-in-edit-mode="onCodeChange"
