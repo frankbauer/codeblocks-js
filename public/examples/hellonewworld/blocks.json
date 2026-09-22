@@ -1,0 +1,113 @@
+{
+    "version": "1.0",
+    "settings": {
+        "readonly": true,
+        "language": "java",
+        "compiler": {
+            "languageType": "java",
+            "version": "101"
+        },
+        "runCode": true,
+        "emitAST": false,
+        "executionTimeout": 15000,
+        "maxCharacters": 6000,
+        "outputParser": "data",
+        "uiTheme": "light",
+        "domLibs": ["chart-3.6.0"],
+        "workerLibs": [],
+        "continuousCompilation": false,
+        "enableCompletionInViewMode": true,
+        "messagePassing": false,
+        "keepAlive": false,
+        "persistentArguments": false,
+        "randomizer": {
+            "active": false,
+            "previewIndex": 0,
+            "knownTags": [],
+            "sets": []
+        }
+    },
+    "blocks": [
+        {
+            "id": 0,
+            "type": "DATA",
+            "name": "badges",
+            "file": "00_badges.json",
+            "alternativeContent": null,
+            "hasAlternativeContent": false,
+            "metadata": {
+                "expanded": true,
+                "codeExpanded": 1
+            }
+        },
+        {
+            "id": 1,
+            "type": "LIBRARY",
+            "name": "badgeLibrary",
+            "file": "01_badgeLibrary.js",
+            "alternativeContent": null,
+            "hasAlternativeContent": false,
+            "metadata": {
+                "expanded": true,
+                "codeExpanded": 1
+            }
+        },
+        {
+            "id": 2,
+            "type": "LIBRARY",
+            "name": "testLibrary",
+            "file": "02_testLibrary.js",
+            "alternativeContent": null,
+            "hasAlternativeContent": false,
+            "metadata": {
+                "expanded": true,
+                "codeExpanded": 1
+            }
+        },
+        {
+            "id": 3,
+            "type": "TEXT",
+            "name": "",
+            "file": "03_styles.html",
+            "alternativeContent": null,
+            "hasAlternativeContent": false,
+            "metadata": {
+                "expanded": false
+            }
+        },
+        {
+            "id": 4,
+            "type": "BLOCK",
+            "name": "",
+            "file": "04_block.java",
+            "alternativeContent": "",
+            "hasAlternativeContent": false,
+            "metadata": {
+                "expanded": true,
+                "visibleLines": "auto",
+                "hasAlternativeContent": false,
+                "static": false,
+                "hidden": false
+            }
+        },
+        {
+            "id": 5,
+            "type": "PLAYGROUND",
+            "name": "",
+            "file": "05_playground.js",
+            "alternativeContent": null,
+            "hasAlternativeContent": false,
+            "metadata": {
+                "expanded": true,
+                "version": "102",
+                "codeExpanded": 0,
+                "shouldAutoreset": false,
+                "shouldReloadResources": false,
+                "generateTemplate": true,
+                "width": "100%",
+                "height": "200px",
+                "align": "center"
+            }
+        }
+    ]
+}

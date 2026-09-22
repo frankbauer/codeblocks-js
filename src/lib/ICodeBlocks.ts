@@ -57,6 +57,7 @@ export interface IBlockData {
     readonly content: string
     readonly obj: any
     readonly themeForCodeBlock: EditorTheme
+    libraryElementHost?: JQuery<HTMLElement>
 }
 
 export interface IGlobalSettings {

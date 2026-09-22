@@ -39,4 +39,8 @@ export class SmartScope implements ICodeBlockScope {
     children(selector?: string): JQuery<HTMLElement> {
         return this.localScope.children(selector)
     }
+
+    attr(attributeName: string): string | undefined {
+        return this.localScope.attr(attributeName)
+    }
 }

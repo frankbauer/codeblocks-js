@@ -1,0 +1,25 @@
+{
+    "url": "https://gdi.cs.fau.de/resources/w24/badges",
+    "ex": "A01",
+    "title": "01. Hallo Welt",
+    "items": [
+        {
+            "id":"app",
+            "file":"badge_A01_first_app.jpg",
+            "title":"Echte <b>Klasse</b>",
+            "desc":"Lege die korrekte Klase an."
+        },
+        {
+            "id":"out",
+            "file":"badge_A01_first_text.jpg",
+            "title":"Mit <b>Text</b>",
+            "desc":"Gebe irgendeinen Text aus."
+        },
+        {
+            "id":"all",
+            "file":"badge_A01.jpg",
+            "title":"<b>Meister</b>haft!",
+            "desc":"Schreibe eine voll funktionsfähige Lösung."
+        }
+	]
+}

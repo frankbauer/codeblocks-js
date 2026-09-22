@@ -84,6 +84,8 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         l.outputElement = this._domCtx.outputElement
         l.scope = this._domCtx.scope
         l.runner = this._domCtx.runner
+        l.libraryElement = lib.libraryElement
+        l.DATA = lib.DATA
     }
 
     public override resetBlockData(blocks: IBlockData[] | undefined): void {
@@ -138,6 +140,9 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
 
         for (const lib of libraryBlocks) {
             console.log('Creating library instance for', lib.name, lib)
+            lib.obj.libraryElementHost = lib.libraryElementHost
+            lib.obj.resetLibraryElement()
+            lib.obj.DATA = this.DATA
             const instance = lib.obj.createInstance(context)
             if (lib.name && instance !== undefined) {
                 context[lib.name] = instance

@@ -62,6 +62,7 @@ export class BlockData implements IBlockData {
 
     obj: IScriptBlock | null
     dataObj: any | null
+    libraryElementHost?: JQuery<HTMLElement>
 
     constructor(d: IRuntimeBlock, mainBlock: IMainBlock) {
         this.obj = null

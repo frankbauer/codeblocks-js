@@ -12,6 +12,13 @@ export class LibraryScriptBlock extends BaseScriptBlock {
     public libraryObject: ILibraryObject | undefined = undefined
     public instance: any = undefined
 
+    // Stable host provided by LibraryBlock.vue; Vue never touches its contents.
+    public libraryElementHost: JQuery<HTMLElement> | undefined = undefined
+    // The actual container exposed to library code as `this.libraryElement`. Recreated
+    // (fresh node, no leftover children/classes/listeners) on every full reinit — see
+    // resetLibraryElement() — so setupDOM()/init() never end up adding UI twice.
+    public libraryElement: JQuery<HTMLElement> | undefined = undefined
+
     constructor(script: string, version: string, name: string) {
         super(script, version)
         this.name = name
@@ -49,7 +56,23 @@ export class LibraryScriptBlock extends BaseScriptBlock {
         }
     }
 
+    // Gives the library a fresh, empty `this.libraryElement` inside its stable host.
+    // Must run before createInstance()/create() so the instance never captures a stale node.
+    public resetLibraryElement(): void {
+        if (!this.libraryElementHost) {
+            this.libraryElement = undefined
+            return
+        }
+        this.libraryElementHost.empty()
+        this.libraryElement = $('<div></div>')
+        this.libraryElementHost.append(this.libraryElement)
+    }
+
     public createInstance(context: Record<string, any>): any {
+        if (this.libraryObject) {
+            this.libraryObject.libraryElement = this.libraryElement
+            this.libraryObject.DATA = this.DATA
+        }
         if (this.libraryObject?.create) {
             try {
                 this.instance = this.libraryObject.create(context)

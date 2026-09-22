@@ -109,6 +109,13 @@ export interface ILibraryObject {
     outputElement: JQuery<HTMLElement> | undefined
     scope: ICodeBlockScope
     runner: Runner | undefined
+    // A container scoped to this library block, for rendering a custom UI.
+    // Recreated (emptied out) whenever the playground fully reinitializes, so
+    // setupDOM()/init() never end up appending their UI twice.
+    libraryElement?: JQuery<HTMLElement>
+    // Parsed content of every DATA block in the app, keyed by DATA block name —
+    // same convention as this.DATA on a v102 playground.
+    DATA?: any[]
 
     name?: string
     create?(context: Record<string, any>): any
