@@ -35,6 +35,7 @@ import './plugins/compilerState'
 import './plugins/codemirror'
 import './plugins/highlight'
 import './plugins/tagger'
+import './plugins/icon'
 import { CodeBlocksManager } from './lib/codeBlocksManager'
 import { highlight } from '@/plugins/highlight'
 
