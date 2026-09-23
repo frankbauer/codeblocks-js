@@ -252,5 +252,7 @@ export default {
         objectManager: 'Object Manager',
         canvasManager: 'Canvas Manager',
         domManager: 'DOM Manager',
+        badgeManager: 'Badge Manager',
+        testManager: 'Test Manager',
     },
 }

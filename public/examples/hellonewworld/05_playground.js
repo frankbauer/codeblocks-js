@@ -1,14 +1,14 @@
 export default {
     setupDOM: function () {
         this.canvasElement.hide()
-        // Hand the test library our domain-specific "did the student pass" logic.
+        // Hand the test manager our domain-specific "did the student pass" logic.
         // It will call this once per run, as callback(txt, json, ast).
-        testLibrary.registerCallback(this.runTests.bind(this))
+        testManager.registerCallback(this.runTests.bind(this))
     },
     init: function () {},
     addArgumentsTo(args) {},
     update: function (txt, json) {
-        // The test library already rendered the protocol from the registered
+        // The test manager already rendered the protocol from the registered
         // callback — nothing left to do with the output here.
         return txt
     },
@@ -31,7 +31,7 @@ export default {
         return ret
     },
 
-    // Called by the test library as callback(txt, json, ast). `ast` is only ever
+    // Called by the test manager as callback(txt, json, ast). `ast` is only ever
     // defined if the app's "emitAST" setting is enabled — this example doesn't need
     // it, but it's there if a more advanced test wants to inspect the syntax tree
     // instead of (or in addition to) the printed output.
@@ -56,7 +56,7 @@ export default {
 
         // Structural checks use the compiler's AST if "emitAST" is on (Java v102),
         // and parse the source code otherwise
-        const java = testLibrary.java
+        const java = testManager.java
         const mainMethod = java
             .findClasses()
             .map((cl) => java.findMethod(cl, 'main', ['String[]'], 'void', ['public', 'static']))

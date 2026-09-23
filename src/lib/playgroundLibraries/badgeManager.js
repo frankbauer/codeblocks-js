@@ -10,7 +10,7 @@ export default {
         this.setStoredData = (id, badges, stored) => this._setStoredData(id, badges, stored)
 
         return {
-            // Called by the test library (if one is present) with the flattened list of
+            // Called by the test manager (if one is present) with the flattened list of
             // test results, so badges can be revealed/hidden as tests pass or fail.
             checkBadges: (tests) => this.checkBadges(tests),
             // Called to reveal or hide a badge by its ID. `store` controls whether the new

@@ -43,11 +43,11 @@
         {
             "id": 1,
             "type": "LIBRARY",
-            "name": "badgeLibrary",
-            "file": "01_badgeLibrary.js",
+            "name": "badgeManager",
             "alternativeContent": null,
             "hasAlternativeContent": false,
             "metadata": {
+                "embeddedLibrary": "badgeManager",
                 "expanded": true,
                 "codeExpanded": 0,
                 "layout": "horizontal"
@@ -56,11 +56,11 @@
         {
             "id": 2,
             "type": "LIBRARY",
-            "name": "testLibrary",
-            "file": "02_testLibrary.js",
+            "name": "testManager",
             "alternativeContent": null,
             "hasAlternativeContent": false,
             "metadata": {
+                "embeddedLibrary": "testManager",
                 "expanded": true,
                 "codeExpanded": 0,
                 "layout": "horizontal"

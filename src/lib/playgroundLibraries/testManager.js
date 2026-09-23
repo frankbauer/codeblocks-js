@@ -1,6 +1,6 @@
 export default {
     lastAST: undefined,
-    badgeLibrary: undefined,
+    badgeManager: undefined,
     testCallback: undefined,
     // Maps our internal result states to icon names from https://lucide.dev/icons —
     // <cb-icon>name</cb-icon> renders any icon from that set, everywhere (no
@@ -24,10 +24,10 @@ export default {
     sourceParsingEnabled: true,
 
     // `context` carries every library/DATA block created before this one, keyed by
-    // name. The badges library (if the question author added one) is optional — we
+    // name. The badge manager (if the question author added one) is optional — we
     // just check whether it's there before using it.
     create(context) {
-        this.badgeLibrary = context['badgeLibrary']
+        this.badgeManager = context['badgeManager']
 
         return {
             // The playground code calls this once (typically from its own setupDOM)
@@ -56,7 +56,7 @@ export default {
             //
             //      alterCodeBeforeRun(code) {
             //          const tests = code.filter((c) => c.type === 'hidden').at(-1)
-            //          testLibrary.setTestCodeEnabled('myMethod', hasMyMethod, tests)
+            //          testManager.setTestCodeEnabled('myMethod', hasMyMethod, tests)
             //      }
             enableTestCode: (name, code) => this.setTestCodeEnabled(name, true, code),
             disableTestCode: (name, code) => this.setTestCodeEnabled(name, false, code),
@@ -70,22 +70,22 @@ export default {
             // and queried with the find* functions. Every find* returns the first
             // match (or undefined), every find*s all matches.
             //
-            //      const cl = testLibrary.findClass('Foo')
-            //      testLibrary.findMethod(cl, 'hello')                      // * * hello(*)
-            //      testLibrary.findMethod(cl, 'hello', ['double', 'int'])   // * * hello(double, int)
-            //      testLibrary.findMethod(cl, 'hello', [['double', 'int'], ['int', 'int']])
-            //      testLibrary.findMethod(cl, 'hello', ['*', 'int'], ['double', 'int'])
-            //      testLibrary.findMethod(cl, 'hello', ['*', 'int'], 'int', ['public', 'static'])
-            //      testLibrary.findMethod(cl, 'hello', ['*', 'int'], 'int', [['public'], ['private']])
-            //      testLibrary.findConstructor(cl, ['int'], ['public'])
-            //      testLibrary.findAttribute(cl, 'count', 'int', ['private', '!static'])
-            //      testLibrary.findLocalVariable(method, 'sum', 'int', false)
-            //      testLibrary.hasControlStructure(method, 'for')
+            //      const cl = testManager.findClass('Foo')
+            //      testManager.findMethod(cl, 'hello')                      // * * hello(*)
+            //      testManager.findMethod(cl, 'hello', ['double', 'int'])   // * * hello(double, int)
+            //      testManager.findMethod(cl, 'hello', [['double', 'int'], ['int', 'int']])
+            //      testManager.findMethod(cl, 'hello', ['*', 'int'], ['double', 'int'])
+            //      testManager.findMethod(cl, 'hello', ['*', 'int'], 'int', ['public', 'static'])
+            //      testManager.findMethod(cl, 'hello', ['*', 'int'], 'int', [['public'], ['private']])
+            //      testManager.findConstructor(cl, ['int'], ['public'])
+            //      testManager.findAttribute(cl, 'count', 'int', ['private', '!static'])
+            //      testManager.findLocalVariable(method, 'sum', 'int', false)
+            //      testManager.hasControlStructure(method, 'for')
             //
             // See matchesName / matchesType / matchesParams / matchesModifiers below
             // for the filter syntax. `undefined`, null and '*' always match.
             //
-            // Each language has a set of these functions: testLibrary.java,
+            // Each language has a set of these functions: testManager.java,
             // .javascript and .python. The top level ones are the set of the app's
             // language (this.LANGUAGE, see setLanguage / currentLanguage).
             // A set queries the structure stored by its parseSourceCode() in this
@@ -97,7 +97,7 @@ export default {
             parseSourceCode: (code, language) => this.parseSourceCode(code, language),
             hasAST: () => this.hasAST(),
             // Switch the sources of structures on or off (for all sets, kept across
-            // runs). Without the AST, testLibrary.java parses the source; without
+            // runs). Without the AST, testManager.java parses the source; without
             // source parsing, this.CODE is never parsed automatically (explicit
             // parse / parseSourceCode calls still work) and a set without any
             // source queries an empty structure.
@@ -166,8 +166,8 @@ export default {
         }
         const tests = this.testCallback(txt, json, this.lastAST)
 
-        if (this.badgeLibrary && typeof this.badgeLibrary.checkBadges === 'function') {
-            this.badgeLibrary.checkBadges(this.flattenTests(tests))
+        if (this.badgeManager && typeof this.badgeManager.checkBadges === 'function') {
+            this.badgeManager.checkBadges(this.flattenTests(tests))
         }
 
         this.libraryElement.find('#cb-test-result').html(this.formatTestResults(tests))
@@ -184,7 +184,7 @@ export default {
         const isEntry = code !== null && typeof code === 'object' && typeof code.set === 'function'
         if (!isEntry && typeof code !== 'string') {
             throw new TypeError(
-                'testLibrary: expected a string or an entry of alterCodeBeforeRun(code)'
+                'testManager: expected a string or an entry of alterCodeBeforeRun(code)'
             )
         }
         const result = this.toggleTestSections(name, enabled, isEntry ? code.content : code)
@@ -294,7 +294,7 @@ export default {
             if (!this.warnedFallback && this.sourceParsingEnabled) {
                 this.warnedFallback = true
                 console.warn(
-                    'testLibrary.java: no AST available (enable the "emitAST" setting and use ' +
+                    'testManager.java: no AST available (enable the "emitAST" setting and use ' +
                         'Java v102), falling back to the source parser.'
                 )
             }
@@ -303,7 +303,7 @@ export default {
             if (!this.warnedNoSource) {
                 this.warnedNoSource = true
                 console.warn(
-                    `testLibrary.${language}: source parsing is disabled and there is no ` +
+                    `testManager.${language}: source parsing is disabled and there is no ` +
                         'AST or parseSourceCode() result, the structure is empty.'
                 )
             }
@@ -328,7 +328,7 @@ export default {
     parseCode(code, language) {
         const name = this.normalizeLanguage(language)
         if (!name) {
-            throw new TypeError(`testLibrary: unsupported language '${language}'`)
+            throw new TypeError(`testManager: unsupported language '${language}'`)
         }
         const src = this.sourceText(code)
         const key = name + '\n' + src
@@ -595,7 +595,7 @@ export default {
             return true
         }
         if (!Array.isArray(filter)) {
-            throw new TypeError('testLibrary: the parameter filter has to be an array')
+            throw new TypeError('testManager: the parameter filter has to be an array')
         }
         if (filter.length > 0 && filter.every((f) => Array.isArray(f))) {
             return filter.some((f) => this.matchesParams(types, f))
