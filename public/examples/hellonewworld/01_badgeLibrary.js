@@ -14,13 +14,16 @@ export default {
             // test results, so badges can be revealed/hidden as tests pass or fail.
             checkBadges: (tests) => this.checkBadges(tests),
             // Called to reveal or hide a badge by its ID. `store` controls whether the new
-            // state is persisted in localStorage. If omitted, defaults to true when showing
-            // a badge and false when hiding it.
+            // state is persisted (awarded when showing, revoked when hiding). If omitted,
+            // defaults to true when showing a badge and false when hiding it.
             setBadge: (id, state, store) => this.setBadge(id, state, store),
             hasValidBadgeData: () => this.hasValidBadgeData(),
+            // Replaces the localStorage persistence. Badges already stored by the new
+            // handlers are shown right away.
             setStorageHandlers: (getter, setter) => {
                 this.getStoredData = getter
                 this.setStoredData = setter
+                this.restoreStoredBadges()
             },
         }
     },
@@ -93,6 +96,7 @@ export default {
             return
         }
         this.renderBadges()
+        this.restoreStoredBadges()
     },
 
     // -- persisted badge state ---------------------------------------------------
@@ -111,7 +115,23 @@ export default {
         localStorage.setItem('cb-badges', JSON.stringify(stored))
     },
 
-    storeBadge(id) {
+    // Shows every badge that was awarded (and not revoked) in an earlier session.
+    restoreStoredBadges() {
+        if (!this.hasValidBadgeData() || !this.libraryElement) {
+            return
+        }
+        const badges = this.DATA['badges']
+        badges.items.forEach((b) => {
+            const stored = this.getStoredData(b.id, badges)
+            const ex = stored && stored[badges.url] && stored[badges.url][badges.ex]
+            if (ex && ex[b.id] === true) {
+                this.setBadge(b.id, true, false)
+            }
+        })
+    },
+
+    // Persists the badge as awarded (state = true) or revoked (state = false).
+    storeBadge(id, state) {
         const badges = this.DATA['badges']
         let stored = this.getStoredData(id, badges)
 
@@ -125,7 +145,11 @@ export default {
             ex = {}
             sem[badges.ex] = ex
         }
-        ex[id] = true
+        if (state) {
+            ex[id] = true
+        } else {
+            delete ex[id]
+        }
         this.setStoredData(id, badges, stored)
     },
 
@@ -140,15 +164,12 @@ export default {
         if (!state && !badge.hasClass('cb-hidden')) {
             badge.addClass('cb-hidden')
             badge.removeClass('cb-show')
-            if (store) {
-                this.storeBadge(id)
-            }
         } else if (state && badge.hasClass('cb-hidden')) {
             badge.removeClass('cb-hidden')
             badge.addClass('cb-show')
-            if (store) {
-                this.storeBadge(id)
-            }
+        }
+        if (store) {
+            this.storeBadge(id, state)
         }
     },
 
