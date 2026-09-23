@@ -99,6 +99,11 @@ export default {
 
     _getStoredData(id, badges) {
         let stored = localStorage.getItem('cb-badges')
+        // this is a special case to migrate our custom storage badges to the new storage key
+        // should be removed in a future version, but for now we want to keep the old badges for users that already have them
+        if (stored === undefined || stored === null) {
+            stored = localStorage.getItem('gdi-badges')
+        }
         return stored ? JSON.parse(stored) : {}
     },
 
