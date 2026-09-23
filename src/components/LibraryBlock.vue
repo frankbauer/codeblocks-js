@@ -1,13 +1,5 @@
 <template>
     <div>
-        <!--
-          Stable host for this library's custom UI (this.libraryElement in library code).
-          Always mounted, regardless of editMode, since library code runs for students too.
-          Vue never re-renders its contents — LibraryScriptBlock owns and recreates the
-          actual working element inside it on every full playground reinit.
-        -->
-        <div ref="libraryElementHostRef"></div>
-
         <div v-if="editMode">
             <div
                 class="tw-flex tw-justify-between tw-w-full tw-flex-nowrap tw-flex-row tw-items-center tw-content-center tw-mb-1"
@@ -174,6 +166,14 @@
                 </Transition>
             </div>
         </div>
+
+        <!--
+          tw-flow-root: library code renders arbitrary HTML/CSS into this host (e.g. via
+          libraryElement.html(...)); a negative margin-bottom in there would otherwise
+          collapse straight through this div , or even overlap the
+          next block. flow-root contains it so the bottom margin is reliable.
+        -->
+        <div ref="libraryElementHostRef" :class="{ 'tw-flow-root': editMode }"></div>
     </div>
 </template>
 
