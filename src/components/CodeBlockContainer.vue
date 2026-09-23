@@ -44,7 +44,7 @@
 
                 <!-- Extended buttons: slide out on toolbar :hover via CSS -->
                 <div
-                    class="cbc-extended tw-flex tw-items-center tw-w-max tw-h-6"
+                    class="cbc-extended tw-flex tw-items-center tw-gap-0.5 tw-w-max tw-h-6"
                     :class="{ 'is-open': toolbarIsOpen }"
                 >
                     <!-- Settings -->
@@ -277,6 +277,31 @@
                                         class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
                                     >
                                         {{ l('CodeBlockContainer.LibraryCopyToCustom_detail') }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Editor/Preview Layout (TEXT type) -->
+                            <div v-if="isTextBlock" class="tw-p-4">
+                                <div class="tw-text-lg tw-font-medium tw-mb-4">
+                                    {{ l('CodeBlockContainer.Display') }}
+                                </div>
+                                <div class="tw-space-y-4">
+                                    <div class="tw-space-y-1">
+                                        <Label class="tw-text-xs tw-text-muted-foreground">
+                                            {{ l('CodeBlockContainer.Layout') }}
+                                        </Label>
+                                        <CSelect
+                                            :model-value="layout"
+                                            :options="layouts"
+                                            @update:model-value="layout = $event"
+                                            class="tw-w-full sm:tw-w-40"
+                                        />
+                                        <div
+                                            class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                        >
+                                            {{ l('CodeBlockContainer.Layout_detail') }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -614,6 +639,7 @@ const emit = defineEmits([
     'type-change',
     'visible-lines-change',
     'placement-change',
+    'layout-change',
     'auto-reset-change',
     'reload-resources-change',
     'generate-template-change',
@@ -759,6 +785,16 @@ const alignments = computed((): IListItemData[] => {
         { label: l('CodeBlockContainer.End'), value: 'right' },
     ]
 })
+const layouts = computed((): IListItemData[] => {
+    if (l == undefined) {
+        return []
+    }
+    return [
+        { label: l('CodeBlockContainer.LayoutAuto'), value: 'auto' },
+        { label: l('CodeBlockContainer.LayoutVertical'), value: 'vertical' },
+        { label: l('CodeBlockContainer.LayoutHorizontal'), value: 'horizontal' },
+    ]
+})
 const scriptVersions = computed((): IListItemData[] => {
     if (l == undefined) {
         return []
@@ -825,10 +861,12 @@ const hasExtendedSettings = computed(
     () =>
         type.value === KnownBlockTypes.PLAYGROUND ||
         type.value === KnownBlockTypes.BLOCK ||
-        type.value === KnownBlockTypes.LIBRARY
+        type.value === KnownBlockTypes.LIBRARY ||
+        type.value === KnownBlockTypes.TEXT
 )
 const isVersionedPlayground = computed(() => type.value === KnownBlockTypes.PLAYGROUND)
 const isLibraryBlock = computed(() => type.value === KnownBlockTypes.LIBRARY)
+const isTextBlock = computed(() => type.value === KnownBlockTypes.TEXT)
 const canSetLineNumbers = computed(() => type.value === KnownBlockTypes.BLOCK)
 const canHaveAlternativeContent = computed(() => type.value === KnownBlockTypes.BLOCK)
 const canDefinePlacement = computed(() => type.value === KnownBlockTypes.PLAYGROUND)
@@ -1045,6 +1083,14 @@ const align = computed({
             align: v.value,
             id: block.value.id,
         })
+    },
+})
+const layout = computed({
+    get(): IListItemData {
+        return globalState.appState.itemForValue(layouts.value, block.value.layout)
+    },
+    set(v: IListItemData) {
+        emit('layout-change', { layout: v.value, id: block.value.id })
     },
 })
 const validNumber = (v: 'auto' | number): boolean | string => {
