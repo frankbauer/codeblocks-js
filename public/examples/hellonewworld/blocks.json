@@ -1,7 +1,7 @@
 {
     "version": "1.0",
     "settings": {
-        "readonly": true,
+        "readonly": false,
         "language": "java",
         "compiler": {
             "languageType": "java",
@@ -49,7 +49,8 @@
             "hasAlternativeContent": false,
             "metadata": {
                 "expanded": true,
-                "codeExpanded": 1
+                "codeExpanded": 0,
+                "layout": "horizontal"
             }
         },
         {
@@ -61,18 +62,8 @@
             "hasAlternativeContent": false,
             "metadata": {
                 "expanded": true,
-                "codeExpanded": 1
-            }
-        },
-        {
-            "id": 3,
-            "type": "TEXT",
-            "name": "",
-            "file": "03_styles.html",
-            "alternativeContent": null,
-            "hasAlternativeContent": false,
-            "metadata": {
-                "expanded": false
+                "codeExpanded": 0,
+                "layout": "horizontal"
             }
         },
         {
