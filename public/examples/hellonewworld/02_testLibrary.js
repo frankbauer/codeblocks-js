@@ -1,4 +1,22 @@
 export default {
+    lastAST: undefined,
+    badgeLibrary: undefined,
+    testCallback: undefined,
+    // Maps our internal result states to icon names from https://lucide.dev/icons —
+    // <cb-icon>name</cb-icon> renders any icon from that set, everywhere (no
+    // ILIAS-only font dependency), and takes normal style/class attributes for
+    // color and sizing just like the old <i class="material-icons"> markup did.
+    iconForState: {
+        // a passed test that also earns a badge
+        verified: 'circle-check',
+        // a passed test with no badge attached
+        done: 'check',
+        // a failed test
+        dangerous: 'circle-x',
+        // a test that couldn't be evaluated
+        contact_support: 'circle-question-mark',
+    },
+
     // `context` carries every library/DATA block created before this one, keyed by
     // name. The badges library (if the question author added one) is optional — we
     // just check whether it's there before using it.
@@ -20,18 +38,21 @@ export default {
     },
 
     setupDOM() {
-        this.libraryElement.html(`
-            <div class="gditest" style="display:none;">
+        this.libraryElement.html(
+            this.styles() +
+                `
+            <div class="cb-test" style="display:none;">
                 <h2>Testprotokoll</h2>
-                <div id="gditestresult"></div>
+                <div id="cb-test-result"></div>
             </div>
-            <div class="row" id="gditestlegend">
-                <div style="padding-right:16px;" class="col-lg-3 col-sm-6 col-xs-12"><i class="q-icon notranslate material-icons">verified</i>: Richtig (Teil einer Auszeichnung)</div>
-                <div style="padding-right:16px;" class="col-lg-3 col-sm-6 col-xs-12"><i class="q-icon notranslate material-icons">done</i>: Richtig</div>
-                <div style="padding-right:16px;" class="col-lg-3 col-sm-6 col-xs-12"><i class="q-icon notranslate material-icons" style="color:red">dangerous</i>: Test nicht erfüllt</div>
-                <div style="padding-right:16px;" class="col-lg-3 col-sm-6 col-xs-12"><i class="q-icon notranslate material-icons" style="color:gray">contact_support</i>: Kann nicht getestet werden</div>
+            <div class="tw-flex tw-flex-wrap" id="cb-test-legend">
+                <div class="tw-w-full sm:tw-w-1/2 lg:tw-w-1/4 tw-pr-4"><cb-icon>circle-check</cb-icon>: Richtig (Teil einer Auszeichnung)</div>
+                <div class="tw-w-full sm:tw-w-1/2 lg:tw-w-1/4 tw-pr-4"><cb-icon>check</cb-icon>: Richtig</div>
+                <div class="tw-w-full sm:tw-w-1/2 lg:tw-w-1/4 tw-pr-4"><cb-icon style="color:red">circle-x</cb-icon>: Test nicht erfüllt</div>
+                <div class="tw-w-full sm:tw-w-1/2 lg:tw-w-1/4 tw-pr-4"><cb-icon style="color:gray">circle-question-mark</cb-icon>: Kann nicht getestet werden</div>
             </div>
-        `)
+        `
+        )
     },
 
     // Fired automatically whenever the compiler produced an AST for this run (only
@@ -51,12 +72,12 @@ export default {
             this.badgeLibrary.checkBadges(this.flattenTests(tests))
         }
 
-        this.libraryElement.find('#gditestresult').html(this.formatTestResults(tests))
-        this.libraryElement.find('.gditest').show()
+        this.libraryElement.find('#cb-test-result').html(this.formatTestResults(tests))
+        this.libraryElement.find('.cb-test').show()
     },
 
     reset() {
-        this.libraryElement?.find('.gditest').hide()
+        this.libraryElement?.find('.cb-test').hide()
     },
 
     // -- formatting -----------------------------------------------------------
@@ -81,7 +102,7 @@ export default {
                         return ''
                     }
                     const color = t.ok === undefined ? 'gray' : t.ok ? 'white' : 'red'
-                    const icon =
+                    const state =
                         t.ok === undefined
                             ? 'contact_support'
                             : t.ok
@@ -90,7 +111,7 @@ export default {
                                   : 'done'
                               : 'dangerous'
                     const style = t.ok === undefined ? 'text-decoration: line-through;' : ''
-                    let res = `<li style="${style}color:${color}">${t.text} <i class="q-icon notranslate material-icons">${icon}</i>`
+                    let res = `<li style="${style}color:${color}">${t.text} <cb-icon>${this.iconForState[state]}</cb-icon>`
                     if (t.sub !== undefined) {
                         res += this.formatTestResults(t.sub)
                     }
@@ -99,5 +120,52 @@ export default {
                 .join('') +
             '</ol>'
         )
+    },
+
+    // -- styles -------------------------------------------------------------------
+    // Kept self-contained here (rather than in a separate TEXT block) so this
+    // library works standalone wherever it's dropped in.
+
+    styles() {
+        return `<style>
+    .cb-test {
+        border-radius: 4px;
+        background-color: black;
+        color: white;
+        padding: 0px 4px 1px 4px;
+        margin-bottom: 0px;
+    }
+    #cb-test-legend {
+        margin-bottom: 20px;
+        margin-top: 0px;
+        opacity: 0.75;
+    }
+    .cb-test h2 {
+        color: white;
+        font-family: roboto;
+        font-weight: 200;
+        padding-top: 4px;
+        padding-bottom: 8px;
+        padding-left: 8px;
+    }
+    #cb-test-result {
+        margin-left: 16px !important;
+    }
+    #cb-test-result ol {
+        margin-left: 16px;
+        padding-left: 0px;
+    }
+    #cb-test-result ol ol {
+        list-style-type: none;
+        counter-reset: list;
+        margin-left: 12px !important;
+    }
+    #cb-test-result ol ol > li {
+        counter-increment: list;
+    }
+    #cb-test-result ol ol > li:before {
+        content: counter(list, lower-alpha) ') ';
+    }
+</style>`
     },
 }
