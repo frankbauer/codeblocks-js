@@ -63,6 +63,12 @@ const libraryMetadataSchema = expandableCodeMetadataSchema.extend({
 
 const dataMetadataSchema = expandableCodeMetadataSchema
 
+const textLayoutSchema = z.enum(['auto', 'vertical', 'horizontal'])
+
+const textMetadataSchema = commonMetadataSchema.extend({
+    layout: textLayoutSchema.optional(),
+})
+
 const playgroundMetadataSchema = expandableCodeMetadataSchema.extend({
     shouldAutoreset: booleanCoerce.optional(),
     shouldReloadResources: booleanCoerce.optional(),
@@ -98,6 +104,7 @@ const metadataSchema = z.union([
     libraryMetadataSchema,
     dataMetadataSchema,
     playgroundMetadataSchema,
+    textMetadataSchema,
 ])
 
 const baseBlockSchema = z.object({
@@ -138,7 +145,7 @@ const exportBlockMetadataSchema = z
         }),
         baseBlockSchema.extend({
             type: z.literal(KnownBlockTypes.TEXT),
-            metadata: commonMetadataSchema.optional().default({}),
+            metadata: textMetadataSchema.optional().default({}),
         }),
     ])
     .refine(
@@ -251,6 +258,7 @@ export type ILibraryMetadata = z.infer<typeof libraryMetadataSchema>
 export type IDataMetadata = z.infer<typeof dataMetadataSchema>
 export type IPlaygroundMetadata = z.infer<typeof playgroundMetadataSchema>
 export type IBlockMetadata = z.infer<typeof blockMetadataSchema>
+export type ITextMetadata = z.infer<typeof textMetadataSchema>
 export type IMetadata = z.infer<typeof metadataSchema>
 
 export type MetadataByType<T extends KnownBlockTypes> = T extends KnownBlockTypes.PLAYGROUND
@@ -261,7 +269,9 @@ export type MetadataByType<T extends KnownBlockTypes> = T extends KnownBlockType
         ? ILibraryMetadata
         : T extends KnownBlockTypes.DATA
           ? IDataMetadata
-          : ICommonMetadata
+          : T extends KnownBlockTypes.TEXT
+            ? ITextMetadata
+            : ICommonMetadata
 
 export type IExportBlockMetadata = z.infer<typeof exportBlockMetadataSchema>
 export type IExportedSettings = z.infer<typeof exportedSettingsSchema>
@@ -309,7 +319,7 @@ export const runtimeBlockSchema = z.discriminatedUnion('type', [
     }),
     baseRuntimeBlock.extend({
         type: z.literal(KnownBlockTypes.TEXT),
-        metadata: commonMetadataSchema.optional().default({}),
+        metadata: textMetadataSchema.optional().default({}),
     }),
 ])
 
@@ -578,6 +588,11 @@ function getBlockMetadata<T extends KnownBlockTypes>(
         return {
             ...commonMetadata,
             codeExpanded: block.codeExpanded,
+        } as MetadataByType<T>
+    } else if (block.type === KnownBlockTypes.TEXT) {
+        return {
+            ...commonMetadata,
+            layout: block.layout,
         } as MetadataByType<T>
     }
     return commonMetadata as MetadataByType<T>

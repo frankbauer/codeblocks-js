@@ -13,6 +13,7 @@
             :appID="props.appID"
             :blockID="props.blockID"
             :block="block"
+            :layout="block.layout"
         />
     </div>
 </template>

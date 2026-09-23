@@ -184,6 +184,7 @@ function domToRuntimeBlock(
             width: dataset.width || '100%',
             height: dataset.height || '200px',
             align: dataset.align || 'center',
+            layout: dataset.layout,
             version: dataset.version || '101',
             hasAlternativeContent: dataset.alternativeContent !== undefined,
         },

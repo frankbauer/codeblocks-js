@@ -54,6 +54,7 @@ export class BlockData implements IBlockData {
     width: string
     height: string
     align: string
+    layout: 'auto' | 'vertical' | 'horizontal'
     lineCountHint: number
     name: string
     embeddedLibrary: string
@@ -103,6 +104,7 @@ export class BlockData implements IBlockData {
         this.width = m.width ?? '100%'
         this.height = m.height ?? '200px'
         this.align = m.align ?? 'center'
+        this.layout = m.layout ?? 'auto'
         this.lineCountHint = d.lineCountHint
         this.name = d.name
         this.embeddedLibrary = m.embeddedLibrary ?? CUSTOM_LIBRARY_ID

@@ -11,6 +11,7 @@ import {
     CodeBlocksProperties,
     IOnChangeOrder,
     IOnGenerateTemplateInfo,
+    IOnLayoutChangeInfo,
     IOnPlacementChangeInfo,
     IOnReloadResourcesInfo,
     IOnScriptVersionChangeInfo,
@@ -111,6 +112,16 @@ const onPlacementChange = (nfo: IOnPlacementChangeInfo): void => {
         bl.width = nfo.width
         bl.height = nfo.height
         bl.align = nfo.align
+    }
+}
+
+const onLayoutChange = (nfo: IOnLayoutChangeInfo): void => {
+    if (editMode) {
+        let bl = blockById(nfo.id)
+        if (bl === undefined) {
+            return
+        }
+        bl.layout = nfo.layout
     }
 }
 
@@ -543,6 +554,7 @@ useResizeObserver(runnerRef, (entries) => {
             @type-change="onTypeChange"
             @visible-lines-change="onVisibleLinesChange"
             @placement-change="onPlacementChange"
+            @layout-change="onLayoutChange"
             @script-version-change="onScriptVersionChange"
             @move-up="moveUp"
             @move-down="moveDown"

@@ -1,6 +1,6 @@
 <template>
-    <div class="tw-flex tw-flex-col md:tw-flex-row">
-        <div class="tw-w-full md:tw-w-1/2 tw-min-w-0">
+    <div :class="containerClass">
+        <div :class="editorPaneClass">
             <CodeBlock
                 :appID="appID"
                 :blockID="blockID"
@@ -14,7 +14,7 @@
                 class="plain accqstXmlInput noRTEditor tw-mt-5"
             />
         </div>
-        <div class="tw-w-full md:tw-w-1/2 tw-min-w-0 tw-pl-0 md:tw-pl-4">
+        <div :class="previewPaneClass">
             <div
                 class="tw-text-sm tw-font-medium tw-pointer-events-none tw-truncate tw-z-50 tw-text-muted-foreground"
             >
@@ -41,6 +41,7 @@ interface Props {
     appID: number
     blockID: string
     block: any // Assuming block type from blockStorage
+    layout?: 'auto' | 'vertical' | 'horizontal'
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -53,6 +54,37 @@ const props = withDefaults(defineProps<Props>(), {
     appID: 0,
     blockID: '',
     block: null,
+    layout: 'auto',
+})
+
+// 'vertical' = editor/preview side by side, 'horizontal' = editor/preview stacked top/bottom,
+// 'auto' = side by side once there is enough width, stacked otherwise (current default behaviour).
+const containerClass = computed(() => {
+    if (props.layout === 'vertical') {
+        return 'tw-flex tw-flex-row'
+    }
+    if (props.layout === 'horizontal') {
+        return 'tw-flex tw-flex-col'
+    }
+    return 'tw-flex tw-flex-col md:tw-flex-row'
+})
+const editorPaneClass = computed(() => {
+    if (props.layout === 'vertical') {
+        return 'tw-w-1/2 tw-min-w-0'
+    }
+    if (props.layout === 'horizontal') {
+        return 'tw-w-full tw-min-w-0'
+    }
+    return 'tw-w-full md:tw-w-1/2 tw-min-w-0'
+})
+const previewPaneClass = computed(() => {
+    if (props.layout === 'vertical') {
+        return 'tw-w-1/2 tw-min-w-0 tw-pl-4'
+    }
+    if (props.layout === 'horizontal') {
+        return 'tw-w-full tw-min-w-0 tw-pl-0'
+    }
+    return 'tw-w-full md:tw-w-1/2 tw-min-w-0 tw-pl-0 md:tw-pl-4'
 })
 
 function replaceTemplateTags(o: ITagReplaceAction) {

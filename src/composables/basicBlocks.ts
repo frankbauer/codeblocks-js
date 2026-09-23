@@ -40,6 +40,11 @@ export interface IOnPlacementChangeInfo {
     id: number
 }
 
+export interface IOnLayoutChangeInfo {
+    layout: 'auto' | 'vertical' | 'horizontal'
+    id: number
+}
+
 export interface IOnScriptVersionChangeInfo {
     version: string
     id: number
