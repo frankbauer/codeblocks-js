@@ -94,9 +94,10 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         l.libraryElement = lib.libraryElement
         l.DATA = lib.DATA
         l.CODE = this.CODE
+        l.LANGUAGE = this.LANGUAGE
     }
 
-    public override resetBlockData(blocks: IBlockData[] | undefined): void {
+    public override resetBlockData(blocks: IBlockData[] | undefined, language?: string): void {
         // console.i('Resetting block data for v102, new blocks:', blocks)
         // Clear only previous library instances from sandbox to preserve system utilities (console, etc.)
         this.activeLibraryKeys.forEach((key) => {
@@ -104,7 +105,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         })
         this.activeLibraryKeys.clear()
 
-        super.resetBlockData(blocks)
+        super.resetBlockData(blocks, language)
         this.CODE = createCodeEntries(blocks)
 
         if (!blocks) {
@@ -153,10 +154,12 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
             lib.obj.resetLibraryElement()
             lib.obj.DATA = this.DATA
             lib.obj.CODE = this.CODE
+            lib.obj.LANGUAGE = this.LANGUAGE
             const instance = lib.obj.createInstance(context)
-            if (lib.name && instance !== undefined) {
-                context[lib.name] = instance
-                this.activeLibraryKeys.add(lib.name)
+            const name = lib.actualName || lib.name
+            if (name && instance !== undefined) {
+                context[name] = instance
+                this.activeLibraryKeys.add(name)
             }
         }
 
@@ -176,6 +179,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         v.outputElement = outputElement
         v.scope = scope as ICodeBlockScope
         v.CODE = this.CODE
+        v.LANGUAGE = this.LANGUAGE
         v.setupDOM?.()
     }
 
@@ -193,6 +197,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         v.scope = scope as ICodeBlockScope
         v.runner = runner
         v.CODE = this.CODE
+        v.LANGUAGE = this.LANGUAGE
         v.init()
     }
 
@@ -207,6 +212,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         v.canvasElement = canvasElement
         v.outputElement = outputElement
         v.CODE = this.CODE
+        v.LANGUAGE = this.LANGUAGE
         return v.update(txt, json)
     }
 

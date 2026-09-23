@@ -73,7 +73,10 @@ function whenMounted(): void {
         compilerRegistry.loadLibraries(props.block.domLibs, () => {
             console.d('Will Init', canvas, $(canvas.value).css('background-color'))
             props.obj.resetResources()
-            props.obj.resetBlockData(props.block.appSettings.blocks)
+            props.obj.resetBlockData(
+                props.block.appSettings.blocks,
+                props.block.appSettings.language
+            )
             props.obj.rebuild()
             props.obj.setupDOM($(canvas.value), props.block.scope)
             nextTick(() => {

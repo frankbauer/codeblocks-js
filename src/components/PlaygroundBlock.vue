@@ -401,7 +401,10 @@ function resetBeforeRun(): void {
                     block.value.obj.resetResources()
                 }
 
-                block.value.obj.resetBlockData(block.value.appSettings.blocks)
+                block.value.obj.resetBlockData(
+                    block.value.appSettings.blocks,
+                    block.value.appSettings.language
+                )
                 block.value.obj.setupDOM(
                     jCanvas as JQuery<HTMLElement>,
                     scope as JQuery<HTMLElement>

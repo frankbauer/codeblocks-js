@@ -54,6 +54,8 @@ export interface IBlockData {
     readonly type: KnownBlockTypes
     readonly uuid: string
     readonly name: string
+    // Name a LIBRARY is published under (the library id for built-in libraries)
+    readonly actualName?: string
     readonly content: string
     readonly obj: any
     readonly themeForCodeBlock: EditorTheme

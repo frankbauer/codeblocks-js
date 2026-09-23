@@ -131,6 +131,8 @@ export interface IPlaygroundObjectV102 {
     DATA: any[]
     // All source code blocks (in source order), see ICodeEntry
     CODE: ICodeEntry[]
+    // Language of the app's code ('java', 'javascript', 'python', ...)
+    LANGUAGE: string
 }
 
 export interface ILibraryObject {
@@ -148,6 +150,8 @@ export interface ILibraryObject {
     DATA?: any[]
     // All source code blocks (in source order), see ICodeEntry
     CODE?: ICodeEntry[]
+    // Language of the app's code ('java', 'javascript', 'python', ...)
+    LANGUAGE?: string
 
     name?: string
     create?(context: Record<string, any>): any
@@ -226,5 +230,6 @@ export interface IScriptBlock {
 
     resetResources(): void
 
-    resetBlockData(blocks: IBlockData[] | undefined): void
+    // `language` is the language of the app's code, exposed as this.LANGUAGE
+    resetBlockData(blocks: IBlockData[] | undefined, language?: string): void
 }

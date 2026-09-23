@@ -130,8 +130,13 @@ export abstract class BaseScriptBlock implements IScriptBlock {
     }
 
     public DATA: any[] = []
+    // Language of the app's code, exposed to v102 playgrounds and libraries
+    public LANGUAGE: string = ''
 
-    public resetBlockData(blocks: IBlockData[] | undefined) {
+    public resetBlockData(blocks: IBlockData[] | undefined, language?: string) {
+        if (language !== undefined) {
+            this.LANGUAGE = language
+        }
         this.DATA = []
         if (blocks !== undefined) {
             this.addBlockDataFromBlocks(blocks)

@@ -74,6 +74,7 @@ export class LibraryScriptBlock extends BaseScriptBlock {
             this.libraryObject.libraryElement = this.libraryElement
             this.libraryObject.DATA = this.DATA
             this.libraryObject.CODE = this.CODE
+            this.libraryObject.LANGUAGE = this.LANGUAGE
         }
         if (this.libraryObject?.create) {
             try {
