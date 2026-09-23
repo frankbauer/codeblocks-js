@@ -1206,7 +1206,7 @@ const filteredCopy = (objIn: object, extended = true, path = 'this'): object => 
     border-color: #a855f7
 
 .default-border
-    border-color: var(--border)
+    border-color: hsl(var(--border))
 
 textarea.blockoptions
     display: none !important

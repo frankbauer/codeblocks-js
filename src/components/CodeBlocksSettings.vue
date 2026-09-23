@@ -230,7 +230,7 @@
                         </TooltipContent>
                     </Tooltip>
                     <DialogScrollContent
-                        class="tw-w-full tw-max-w-lg sm:tw-max-w-xl md:tw-max-w-2xl tw-self-start tw-mt-8 tw-rounded-2xl tw-overflow-hidden tw-border-border/80 tw-bg-background/95 tw-shadow-2xl tw-backdrop-blur-sm"
+                        class="tw-w-full tw-max-w-lg sm:tw-max-w-xl md:tw-max-w-2xl tw-self-start tw-mt-8 tw-rounded-2xl tw-overflow-hidden tw-border-border tw-bg-background tw-shadow-2xl"
                     >
                         <DialogHeader class="tw-pb-3 tw-border-b tw-border-border/60">
                             <DialogTitle>{{ $t('CodeBlocksSettings.Settings') }}</DialogTitle>
