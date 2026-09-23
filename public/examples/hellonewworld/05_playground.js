@@ -54,11 +54,27 @@ export default {
         const content = this.scope.find(`textarea[data-question=${qID}][data-blocktype=2]`).val()
         const className = this.getMainClass(content)
 
+        // Structural checks use the compiler's AST if "emitAST" is on (Java v102),
+        // and parse the source code otherwise
+        const java = testLibrary.java
+        const mainMethod = java
+            .findClasses()
+            .map((cl) => java.findMethod(cl, 'main', ['String[]'], 'void', ['public', 'static']))
+            .find((m) => m !== undefined)
+
         return [
             {
                 ok: className == '{:class}',
                 text: 'Korrekter Klassenname',
                 badge: 'app',
+                sub: [
+                    {
+                        ok: mainMethod !== undefined,
+                        text: mainMethod
+                            ? `main-Methode vorhanden: <code>${mainMethod.signature}</code> in <code>${mainMethod.className}</code>`
+                            : 'main-Methode vorhanden: <code>public static void main(String[] args)</code>',
+                    },
+                ],
             },
             {
                 ok: txt.trim() != '',

@@ -5,15 +5,15 @@
         "language": "java",
         "compiler": {
             "languageType": "java",
-            "version": "101"
+            "version": "102"
         },
         "runCode": true,
-        "emitAST": false,
+        "emitAST": true,
         "executionTimeout": 15000,
         "maxCharacters": 6000,
         "outputParser": "data",
         "uiTheme": "light",
-        "domLibs": ["chart-3.6.0"],
+        "domLibs": [],
         "workerLibs": [],
         "continuousCompilation": false,
         "enableCompletionInViewMode": true,
