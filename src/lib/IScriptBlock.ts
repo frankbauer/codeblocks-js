@@ -15,6 +15,30 @@ export interface IResourceInfo {
     name?: string
 }
 
+export type CodeEntryType = 'solution' | 'regular' | 'hidden'
+
+// One source code block as seen by v102 playgrounds and libraries through this.CODE (read-only)
+export interface ICodeEntry {
+    readonly id: number
+    readonly uuid: string
+    readonly name: string
+    readonly type: CodeEntryType
+    readonly content: string
+}
+
+// Entry passed to alterCodeBeforeRun(code). Only valid while that method runs.
+export interface ICodeRunEntry extends ICodeEntry {
+    // Content that is used when assembling the source (the override, if one was set)
+    readonly content: string
+    // Content of the block as stored in the editor
+    readonly originalContent: string
+    readonly isOverridden: boolean
+    // Overrides the content for the upcoming run only. The editor is never changed.
+    // Throws when called after alterCodeBeforeRun returned.
+    set(content: string): void
+    reset(): void
+}
+
 export interface ILegacyPlaygroundObject {
     init(canvasElement: JQuery<HTMLElement>): void
 
@@ -99,8 +123,14 @@ export interface IPlaygroundObjectV102 {
     addArgumentsTo?(args: object | string[]): void
     getResources?(): IResourceInfo[]
 
+    // Called right before the source is assembled and sent to the compiler.
+    // Use code[i].set(...) to transiently change the code for this run.
+    alterCodeBeforeRun?(code: ICodeRunEntry[]): void
+
     RESOURCES: any[]
     DATA: any[]
+    // All source code blocks (in source order), see ICodeEntry
+    CODE: ICodeEntry[]
 }
 
 export interface ILibraryObject {
@@ -116,6 +146,8 @@ export interface ILibraryObject {
     // Parsed content of every DATA block in the app, keyed by DATA block name —
     // same convention as this.DATA on a v102 playground.
     DATA?: any[]
+    // All source code blocks (in source order), see ICodeEntry
+    CODE?: ICodeEntry[]
 
     name?: string
     create?(context: Record<string, any>): any
@@ -132,6 +164,7 @@ export interface ILibraryObject {
     afterStop?(): void
     whenFinished?(args: string[] | object, resultData?: object | any[]): void
     addArgumentsTo?(args: object | string[]): void
+    alterCodeBeforeRun?(code: ICodeRunEntry[]): void
 }
 
 export interface IProcessedScriptOutput {
@@ -175,6 +208,10 @@ export interface IScriptBlock {
     onASTAvailable(ast: any): void
 
     addArgumentsTo(args: object | string[]): void
+
+    // Receives the entries used to assemble the source for the upcoming run.
+    // Implementations may call set() on them; the change only affects this run.
+    alterCodeBeforeRun(code: ICodeRunEntry[]): void
 
     onParseError(initialOutput: string, parseError: string): boolean
 

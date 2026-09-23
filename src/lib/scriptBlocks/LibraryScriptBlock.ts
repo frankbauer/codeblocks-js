@@ -1,4 +1,4 @@
-import { AnyCodeBlockScope, ILibraryObject, IScriptOutputObject } from '../IScriptBlock'
+import { AnyCodeBlockScope, ICodeEntry, ILibraryObject, IScriptOutputObject } from '../IScriptBlock'
 import { BaseScriptBlock } from './BaseScriptBlock'
 import { compileCode, stripModuleSyntax } from './sandbox'
 
@@ -11,6 +11,7 @@ export class LibraryScriptBlock extends BaseScriptBlock {
     public name: string
     public libraryObject: ILibraryObject | undefined = undefined
     public instance: any = undefined
+    public CODE: ICodeEntry[] = []
 
     // Stable host provided by LibraryBlock.vue; Vue never touches its contents.
     public libraryElementHost: JQuery<HTMLElement> | undefined = undefined
@@ -72,6 +73,7 @@ export class LibraryScriptBlock extends BaseScriptBlock {
         if (this.libraryObject) {
             this.libraryObject.libraryElement = this.libraryElement
             this.libraryObject.DATA = this.DATA
+            this.libraryObject.CODE = this.CODE
         }
         if (this.libraryObject?.create) {
             try {

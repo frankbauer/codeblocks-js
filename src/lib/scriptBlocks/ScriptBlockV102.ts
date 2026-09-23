@@ -1,6 +1,8 @@
 import {
     AnyCodeBlockScope,
     ICodeBlockScope,
+    ICodeEntry,
+    ICodeRunEntry,
     ILibraryObject,
     IPlaygroundObject,
     IPlaygroundObjectV102,
@@ -13,6 +15,7 @@ import { compileCode, stripModuleSyntax } from './sandbox'
 import { SmartScope } from './SmartScope'
 import { IBlockData, KnownBlockTypes } from '../ICodeBlocks'
 import { LibraryScriptBlock } from './LibraryScriptBlock'
+import { createCodeEntries } from './codeEntries'
 
 const v102CodeTemplate: ICodeTemplate = {
     prefix: 'with(sandbox) { return function(){ return {o:',
@@ -21,6 +24,10 @@ const v102CodeTemplate: ICodeTemplate = {
 
 export class ScriptBlockV102 extends PlaygroundScriptBlock {
     protected activeLibraryKeys: Set<string> = new Set()
+
+    // All source code blocks (in source order), read-only view on the editor contents.
+    // Changing the code for a run is done through the entries passed to alterCodeBeforeRun.
+    public CODE: ICodeEntry[] = []
 
     private _domCtx:
         | {
@@ -86,6 +93,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         l.runner = this._domCtx.runner
         l.libraryElement = lib.libraryElement
         l.DATA = lib.DATA
+        l.CODE = this.CODE
     }
 
     public override resetBlockData(blocks: IBlockData[] | undefined): void {
@@ -97,6 +105,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         this.activeLibraryKeys.clear()
 
         super.resetBlockData(blocks)
+        this.CODE = createCodeEntries(blocks)
 
         if (!blocks) {
             return
@@ -143,6 +152,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
             lib.obj.libraryElementHost = lib.libraryElementHost
             lib.obj.resetLibraryElement()
             lib.obj.DATA = this.DATA
+            lib.obj.CODE = this.CODE
             const instance = lib.obj.createInstance(context)
             if (lib.name && instance !== undefined) {
                 context[lib.name] = instance
@@ -165,6 +175,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         v.canvasElement = canvasElement
         v.outputElement = outputElement
         v.scope = scope as ICodeBlockScope
+        v.CODE = this.CODE
         v.setupDOM?.()
     }
 
@@ -181,6 +192,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         v.outputElement = outputElement
         v.scope = scope as ICodeBlockScope
         v.runner = runner
+        v.CODE = this.CODE
         v.init()
     }
 
@@ -194,6 +206,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         const v = o as unknown as IPlaygroundObjectV102
         v.canvasElement = canvasElement
         v.outputElement = outputElement
+        v.CODE = this.CODE
         return v.update(txt, json)
     }
 
@@ -241,6 +254,26 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         }
 
         return { outputElement, smartScope }
+    }
+
+    public override alterCodeBeforeRun(code: ICodeRunEntry[]): void {
+        this.chainLibraries(this.librariesBefore, (lib) =>
+            lib.libraryObject?.alterCodeBeforeRun?.(code)
+        )
+        this.lazyInit()
+        if (this.obj) {
+            const o = this.obj as unknown as IPlaygroundObjectV102
+            if (o.alterCodeBeforeRun) {
+                try {
+                    o.alterCodeBeforeRun(code)
+                } catch (e) {
+                    this.pushError(e)
+                }
+            }
+        }
+        this.chainLibraries(this.librariesAfter, (lib) =>
+            lib.libraryObject?.alterCodeBeforeRun?.(code)
+        )
     }
 
     public override onASTAvailable(ast: any) {

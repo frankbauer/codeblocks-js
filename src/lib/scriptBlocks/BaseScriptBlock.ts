@@ -6,6 +6,7 @@ import {
     ILegacyPlaygroundObject,
     Runner,
     AnyCodeBlockScope,
+    ICodeRunEntry,
 } from '@/lib/IScriptBlock'
 import { ICompileAndRunArguments } from '../ICompilerRegistry'
 import { IBlockData } from '../ICodeBlocks'
@@ -50,6 +51,10 @@ export abstract class BaseScriptBlock implements IScriptBlock {
     }
 
     public addArgumentsTo(args: object | string[]) {
+        // Default no-op
+    }
+
+    public alterCodeBeforeRun(code: ICodeRunEntry[]) {
         // Default no-op
     }
 

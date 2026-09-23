@@ -14,6 +14,7 @@ import { ICodeBlockSettingsOptions } from '@/lib/ICodeBlocks'
 import { BlockStorageType } from '@/storage/blockStorage'
 import { UIThemeType } from '@/lib/uiTheme'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
+import { assembleSource, createCodeRunEntries } from '@/lib/scriptBlocks/codeEntries'
 
 export interface CodeBlocksProperties {
     eventHub: EventHubType
@@ -450,6 +451,17 @@ export function codeBlockSetup(
             didRunOnce.value = true
             nextTick(() => {
                 nextTick(() => {
+                    // Let the script blocks transiently alter the code for this run. The
+                    // entries only hold the overrides, the blocks/editors stay untouched, and
+                    // they are sealed once the source is assembled.
+                    const codeEntries = createCodeRunEntries(blocks.value)
+                    blocks.value.forEach((bl) => {
+                        if (bl.obj) {
+                            bl.obj.alterCodeBeforeRun(codeEntries)
+                        }
+                    })
+                    const runSource = assembleSource(codeEntries)
+
                     let _args: object | string[] = {}
                     if (cmp.acceptsJSONArgument) {
                         _args = blockInfo.value.initArgsForLanguage()
@@ -550,7 +562,7 @@ export function codeBlockSetup(
                     }
                     cmp.compileAndRun(
                         '' + blockid.value,
-                        completeSource.value,
+                        runSource,
                         {
                             workerLibraries: workerLibraries.value,
                             $compilerRegistry: compilerRegistry,

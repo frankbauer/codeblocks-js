@@ -16,6 +16,9 @@ export default {
         // a test that couldn't be evaluated
         contact_support: 'circle-question-mark',
     },
+    // Prepended to every line of a disabled test section. It is a line comment, so
+    // block comments inside the test code are fine and the line count never changes.
+    disabledLinePrefix: '//~',
 
     // `context` carries every library/DATA block created before this one, keyed by
     // name. The badges library (if the question author added one) is optional — we
@@ -34,6 +37,28 @@ export default {
             registerCallback: (callback) => {
                 this.testCallback = callback
             },
+
+            // Enable/disable test code sections in a source. A section is everything
+            // between the marker lines
+            //      /* TEST START <name> */
+            //      ...
+            //      /* TEST END <name> */
+            // (a name may be used for several sections, all of them are toggled).
+            //
+            // `code` is either a string (the altered string is returned) or one of the
+            // entries passed to alterCodeBeforeRun(code). For an entry, the change is
+            // applied to the entry via set() — so it only affects the upcoming run —
+            // and the altered string is returned as well. Call this from
+            // alterCodeBeforeRun, e.g.:
+            //
+            //      alterCodeBeforeRun(code) {
+            //          const tests = code.filter((c) => c.type === 'hidden').at(-1)
+            //          testLibrary.setTestCodeEnabled('myMethod', hasMyMethod, tests)
+            //      }
+            enableTestCode: (name, code) => this.setTestCodeEnabled(name, true, code),
+            disableTestCode: (name, code) => this.setTestCodeEnabled(name, false, code),
+            setTestCodeEnabled: (name, enabled, code) =>
+                this.setTestCodeEnabled(name, enabled, code),
         }
     },
 
@@ -78,6 +103,55 @@ export default {
 
     reset() {
         this.libraryElement?.find('.cb-test').hide()
+    },
+
+    // -- test code sections -----------------------------------------------------
+
+    setTestCodeEnabled(name, enabled, code) {
+        const isEntry = code !== null && typeof code === 'object' && typeof code.set === 'function'
+        if (!isEntry && typeof code !== 'string') {
+            throw new TypeError(
+                'testLibrary: expected a string or an entry of alterCodeBeforeRun(code)'
+            )
+        }
+        const result = this.toggleTestSections(name, enabled, isEntry ? code.content : code)
+        if (isEntry) {
+            code.set(result)
+        }
+        return result
+    },
+
+    toggleTestSections(name, enabled, source) {
+        const escaped = String(name).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        const start = `/\\*\\s*TEST\\s+START\\s+${escaped}\\s*\\*/`
+        const startMarker = new RegExp(start)
+        // Older examples disabled a section by appending '/*' to the start marker
+        const legacyDisable = new RegExp(`(${start})\\s*/\\*`)
+        const endMarker = new RegExp(`/\\*\\s*TEST\\s+END\\s+${escaped}\\s*\\*/`)
+        const prefix = this.disabledLinePrefix
+
+        let inside = false
+        return source
+            .split('\n')
+            .map((line) => {
+                if (!inside) {
+                    if (startMarker.test(line)) {
+                        inside = !endMarker.test(line)
+                        return line.replace(legacyDisable, '$1')
+                    }
+                    return line
+                }
+                if (endMarker.test(line)) {
+                    inside = false
+                    return line
+                }
+                const isDisabled = line.startsWith(prefix)
+                if (enabled) {
+                    return isDisabled ? line.slice(prefix.length) : line
+                }
+                return isDisabled ? line : prefix + line
+            })
+            .join('\n')
     },
 
     // -- formatting -----------------------------------------------------------
