@@ -44,10 +44,9 @@
                                     :for="'export-' + block.uuid"
                                     class="tw-flex-1 tw-cursor-pointer"
                                 >
-                                    <div
-                                        class="tw-font-medium tw-text-sm"
-                                        v-html="block.descriptiveName"
-                                    ></div>
+                                    <div class="tw-font-medium tw-text-sm">
+                                        {{ block.descriptiveName }}
+                                    </div>
                                     <div class="tw-text-xs tw-text-muted-foreground">
                                         {{ block.type }}
                                     </div>
