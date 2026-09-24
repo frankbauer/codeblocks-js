@@ -99,6 +99,7 @@ import {
     watch,
 } from 'vue'
 
+import { useResizeObserver } from '@vueuse/core'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
 import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import {
@@ -183,8 +184,6 @@ const {
 const code = defineModel<string>('modelValue')
 const editorElement = ref<HTMLElement | null>(null)
 const editorView = shallowRef<EditorView | null>(new EditorView())
-
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 
 const mainClass = computed(() => {
     return {
@@ -430,26 +429,33 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
     ] as Extension[]
 })
 
-const tryFixSafari = () => {
-    if (!isSafari) {
+// WebKit (Safari) does not re-layout the scroller's flex box when its horizontal
+// scrollbar (dis)appears, e.g. because the editor width changed while the page was
+// still being laid out. The editor then keeps its old height: an empty strip below the
+// last line when the scrollbar is gone, or a scrollbar covering the last line when it
+// was added. Any style change on the scroller forces a re-layout. As the layout can
+// settle at any time, we check whenever the editor resizes instead of once after a
+// fixed delay.
+const fixStaleScrollerHeight = () => {
+    const view = editorView.value
+    if (!view) {
         return
     }
 
-    editorView.value?.requestMeasure()
-    const scroller = editorElement.value?.querySelector('.cm-scroller') as HTMLElement | null
-    if (scroller) {
-        scroller.style.scrollbarWidth = 'none'
+    const scroller = view.scrollDOM
+    const scrollbarHeight = scroller.offsetHeight - scroller.clientHeight
+    const expectedHeight = view.contentDOM.offsetHeight + scrollbarHeight
+    if (Math.abs(scroller.offsetHeight - expectedHeight) <= 1) {
+        return
     }
 
-    setTimeout(() => {
-        if (scroller) {
-            scroller.style.scrollbarWidth = 'auto'
-        }
-
-        editorView.value?.requestMeasure()
-        editorView.value?.dispatch({})
-    }, 500)
+    scroller.style.flexShrink = '0'
+    void scroller.offsetHeight // force a synchronous re-layout
+    scroller.style.flexShrink = ''
+    view.requestMeasure()
 }
+
+useResizeObserver(editorElement, () => requestAnimationFrame(fixStaleScrollerHeight))
 
 onMounted(() => {
     if (editorElement.value === null) {
@@ -491,7 +497,8 @@ onMounted(() => {
             state: editorView.value.state,
             container: editorElement.value,
         })
-        tryFixSafari()
+        fixStaleScrollerHeight()
+        document.fonts?.ready.then(fixStaleScrollerHeight)
     })
 })
 

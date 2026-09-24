@@ -190,6 +190,7 @@ import {
     Ref,
 } from 'vue'
 import { CodeExpansionType, KnownBlockTypes } from '@/lib/ICodeBlocks'
+import { useResizeObserver } from '@vueuse/core'
 
 import {
     DEFAULT_EDITABLE_BLOCK_PROPS,
@@ -228,7 +229,7 @@ const globalCodeBlock = globalState.appState
 const { onBeforeEnter, onEnter, onAfterEnter, onBeforeLeave, onLeave, onAfterLeave } =
     useSlideTransition()
 
-const emit = defineEmits(['ready'])
+const emit = defineEmits(['ready', 'content-change'])
 
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)
@@ -240,6 +241,17 @@ const { whenBlockIsReady } = useBasicBlockMounting(true, props, blockStorage, (b
 // Vue never touches its contents again — LibraryScriptBlock recreates the actual
 // this.libraryElement inside it on every full playground reinit.
 const libraryElementHostRef: Ref<HTMLElement | null> = ref(null)
+
+// Report whether the library currently renders any visible UI (used for edge rounding
+// of neighbouring code blocks in view mode).
+let lastHasContent: boolean | undefined = undefined
+useResizeObserver(libraryElementHostRef, (entries) => {
+    const hasContent = (entries[0]?.contentRect.height ?? 0) > 0
+    if (hasContent !== lastHasContent) {
+        lastHasContent = hasContent
+        emit('content-change', hasContent)
+    }
+})
 
 // Error state
 const hasErrors: Ref<boolean> = ref(false)
