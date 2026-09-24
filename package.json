@@ -11,6 +11,7 @@
     "build-phaser": "tsup --config tsup.phaser.config.ts",
     "build-lib": "vite build",
     "build-ilias": "node ilias-builder.js",
+    "build-lernwerk": "node lernwerk-builder.js",
     "build-examples": "node examples-builder.js"
   },
   "dependencies": {
