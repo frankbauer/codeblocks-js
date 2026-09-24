@@ -21,3 +21,4 @@ yarn-error.log*
 public/common/
 public/stuff/
 public/assets/
+.env
