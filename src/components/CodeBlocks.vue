@@ -100,6 +100,59 @@ const codeSplit = computed<CodeSplit>(() => {
     return codeSplit
 })
 
+// View mode: code boxes get rounded top/bottom edges unless they touch another code box.
+// Blocks that render nothing (hidden code, DATA, empty TEXT, LIBRARY without UI) are skipped.
+const libraryHasContent = ref<Record<string, boolean>>({})
+const onLibraryContentChange = (uuid: string, hasContent: boolean): void => {
+    libraryHasContent.value[uuid] = hasContent
+}
+
+const isEmptyHtml = (html: string | undefined): boolean => {
+    if (!html) {
+        return true
+    }
+    if (/<(img|svg|iframe|video|audio|canvas|object|embed|hr|table|input|math)\b/i.test(html)) {
+        return false
+    }
+    return html.replace(/<[^>]*>/g, '').replace(/&nbsp;|&#160;/g, '').trim() === ''
+}
+
+type EdgeKind = 'code' | 'content' | 'none'
+const edgeKind = (b: (typeof blocks.value)[number]): EdgeKind => {
+    if (b.hasCode) {
+        return b.hidden || b.type === KnownBlockTypes.BLOCKHIDDEN ? 'none' : 'code'
+    }
+    switch (b.type) {
+        case KnownBlockTypes.TEXT:
+            return isEmptyHtml(b.actualContent()) ? 'none' : 'content'
+        case KnownBlockTypes.LIBRARY:
+            return libraryHasContent.value[b.uuid] ? 'content' : 'none'
+        case KnownBlockTypes.PLAYGROUND:
+            return 'content'
+        default:
+            return 'none'
+    }
+}
+
+const edgeRounding = computed(() => {
+    const result = new Map<string, { top: boolean; bottom: boolean }>()
+    if (editMode) {
+        return result
+    }
+    const visible = blocks.value
+        .map((b) => ({ uuid: b.uuid, kind: edgeKind(b) }))
+        .filter((e) => e.kind !== 'none')
+    visible.forEach((e, i) => {
+        if (e.kind === 'code') {
+            result.set(e.uuid, {
+                top: visible[i - 1]?.kind !== 'code',
+                bottom: visible[i + 1]?.kind !== 'code',
+            })
+        }
+    })
+    return result
+})
+
 // Replace the existing event handlers with the composable
 const { onTypeChange, onVisibleLinesChange } = useCodeBlockEvents(blockById, editMode)
 
@@ -578,6 +631,8 @@ useResizeObserver(runnerRef, (entries) => {
                 :tagSet="activeTagSet"
                 :emitWhenTypingInViewMode="continuousCompile"
                 :code-split="codeSplit"
+                :roundTop="edgeRounding.get(block.uuid)?.top ?? false"
+                :roundBottom="edgeRounding.get(block.uuid)?.bottom ?? false"
                 @ready="blockBecameReady"
                 @build="handleRun"
                 @code-changed-in-view-mode="onViewCodeChange"
@@ -630,6 +685,7 @@ useResizeObserver(runnerRef, (entries) => {
                 :theme="themeForBlock(block)"
                 :tagSet="activeTagSet"
                 @ready="blockBecameReady"
+                @content-change="(v: boolean) => onLibraryContentChange(block.uuid, v)"
                 :eventHub="eventHub"
             />
         </CodeBlockContainer>

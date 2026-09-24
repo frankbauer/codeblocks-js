@@ -1,6 +1,15 @@
 `
 <template>
-    <div :class="[`codeblock block-${typeName}`, { 'non-student-editor': isNonStudentBlock }]">
+    <div
+        :class="[
+            `codeblock block-${typeName}`,
+            {
+                'non-student-editor': isNonStudentBlock,
+                'round-top': roundTop,
+                'round-bottom': roundBottom,
+            },
+        ]"
+    >
         <textarea
             ref="codeBoxRaw"
             style="display: none"
@@ -99,6 +108,8 @@ interface Props extends EditableBlockProps {
     mode?: string
     tagSet?: IRandomizerSet
     codeSplit?: CodeSplit
+    roundTop?: boolean
+    roundBottom?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -109,6 +120,8 @@ const props = withDefaults(defineProps<Props>(), {
     mode: 'text/javascript',
     tagSet: undefined,
     codeSplit: undefined,
+    roundTop: false,
+    roundBottom: false,
 })
 
 // Emits
@@ -436,6 +449,21 @@ defineExpose({
 
 .codeblock
     width: 100%
+
+// View mode: round edges that don't touch another code box (computed in CodeBlocks.vue)
+.round-top, .round-bottom
+    :deep(.code-editor > div)
+        overflow: hidden
+
+.round-top
+    :deep(.code-editor > div), :deep(.cm-editor)
+        border-top-left-radius: var(--radius, 6px)
+        border-top-right-radius: var(--radius, 6px)
+
+.round-bottom
+    :deep(.code-editor > div), :deep(.cm-editor)
+        border-bottom-left-radius: var(--radius, 6px)
+        border-bottom-right-radius: var(--radius, 6px)
 
 .alternative-codebox
     filter: grayscale(50%) brightness(105%) saturate(120%)
