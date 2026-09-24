@@ -1,5 +1,9 @@
 // Load library content from files in src/lib/playgroundLibraries/ at build time
-const libraryModules = import.meta.glob('./playgroundLibraries/*.js', { as: 'raw', eager: true })
+const libraryModules = import.meta.glob<string>('./playgroundLibraries/*.js', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+})
 
 export interface EmbeddedLibraryDefinition {
     id: string
