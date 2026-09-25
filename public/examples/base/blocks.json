@@ -1,0 +1,47 @@
+{
+    "version": "1.0",
+    "settings": {
+        "readonly": false,
+        "language": "java",
+        "compiler": {
+            "languageType": "java",
+            "version": "102"
+        },
+        "runCode": true,
+        "emitAST": true,
+        "executionTimeout": 15000,
+        "maxCharacters": 6000,
+        "outputParser": "data",
+        "uiTheme": "light",
+        "domLibs": [],
+        "workerLibs": [],
+        "continuousCompilation": false,
+        "enableCompletionInViewMode": true,
+        "messagePassing": false,
+        "keepAlive": false,
+        "persistentArguments": false,
+        "randomizer": {
+            "active": false,
+            "previewIndex": 0,
+            "knownTags": [],
+            "sets": []
+        }
+    },
+    "blocks": [
+        {
+            "id": 1,
+            "type": "BLOCK",
+            "name": "",
+            "file": "App.java",
+            "alternativeContent": "",
+            "hasAlternativeContent": false,
+            "metadata": {
+                "expanded": true,
+                "visibleLines": "auto",
+                "hasAlternativeContent": false,
+                "static": false,
+                "hidden": false
+            }
+        }
+    ]
+}

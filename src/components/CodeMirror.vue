@@ -270,12 +270,22 @@ const tagTooltip = createTagTooltip(tagMarkField, tagSet)
 const createIndentService = (): Extension => {
     return indentationCompartment.of(
         indentService.of((context, pos) => {
-            return getIndentationInSource(context.state.doc.toString(), pos)
+            return getIndentationInSource(context.state.doc.toString(), pos, indentOptions(context))
         })
     )
 }
 
-const getIndentationInSource = (docString: string, pos: number): number => {
+type IndentOptions = { simulateBreak?: number; simulateDoubleBreak?: boolean }
+
+// `options` is not part of the public typings, but it is what carries the simulated break
+const indentOptions = (context: IndentContext): IndentOptions =>
+    (context as unknown as { options: IndentOptions }).options
+
+const getIndentationInSource = (
+    docString: string,
+    pos: number,
+    options: IndentOptions = {}
+): number => {
     const newState = EditorState.create({
         doc: codeSplitSegment.value
             ? codeSplitSegment.value.before +
@@ -285,22 +295,37 @@ const getIndentationInSource = (docString: string, pos: number): number => {
         extensions: [EditorState.tabSize.of(4), indentUnit.of('    '), editorLanguage.value],
     })
 
-    const newPos = codeSplitSegment.value
-        ? Math.min(pos + codeSplitSegment.value.offset, newState.doc.length)
-        : pos
+    const mapPos = (p: number) =>
+        codeSplitSegment.value
+            ? Math.min(p + codeSplitSegment.value.offset, newState.doc.length)
+            : p
+    const newPos = mapPos(pos)
 
     // Force synchronous parse up to newPos to ensure indentation logic has a syntax tree
     ensureSyntaxTree(newState, newPos, 2000)
 
-    const indent = getIndentation(newState, newPos)
+    // Keep the simulated line break (e.g. from insertNewlineAndIndent), otherwise the
+    // indentation is computed as if the cursor were still on the line of the opening bracket
+    const simulateBreak =
+        options.simulateBreak !== undefined ? mapPos(options.simulateBreak) : undefined
+    const context = new IndentContext(newState, {
+        simulateBreak,
+        simulateDoubleBreak: options.simulateDoubleBreak,
+    })
+    const indent = getIndentation(context, newPos)
 
     if (indent !== null) {
         return indent
     }
 
     // Fallback to simpler indentation logic
-    const context = new IndentContext(newState, { simulateBreak: newPos })
-    return getSimpleIndentation(context, newPos, () => 0) ?? 0
+    return (
+        getSimpleIndentation(
+            new IndentContext(newState, { simulateBreak: newPos }),
+            newPos,
+            () => 0
+        ) ?? 0
+    )
 }
 
 function combinedCompletions(tagSet: Ref<IRandomizerSet | undefined>) {
@@ -347,18 +372,23 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
                         const isAtStartOfText = pos <= line.from + wsLen
 
                         if (isAtStartOfText) {
-                            const indent = getIndentationInSource(
-                                view.state.doc.toString(),
-                                line.from
-                            )
-                            const spaces = ' '.repeat(indent)
+                            // Indent the new empty line and the (moved down) text line
+                            // based on the document as it looks after the break
+                            const docString = view.state.doc.toString()
+                            const brokenDoc =
+                                docString.slice(0, line.from) +
+                                '\n' +
+                                docString.slice(line.from + wsLen)
+                            const upperIndent = getIndentationInSource(brokenDoc, line.from)
+                            const lowerIndent = getIndentationInSource(brokenDoc, line.from + 1)
                             view.dispatch({
                                 changes: {
                                     from: line.from,
-                                    to: pos,
-                                    insert: spaces + '\n' + spaces,
+                                    to: line.from + wsLen,
+                                    insert:
+                                        ' '.repeat(upperIndent) + '\n' + ' '.repeat(lowerIndent),
                                 },
-                                selection: { anchor: line.from + indent + 1 + indent },
+                                selection: { anchor: line.from + upperIndent + 1 + lowerIndent },
                                 scrollIntoView: true,
                             })
                             return true
@@ -518,7 +548,11 @@ watch([codeSplitSegment], () => {
                 indentationCompartment.reconfigure(
                     indentService.of((context, pos) => {
                         if (codeSplitSegment.value) {
-                            return getIndentationInSource(context.state.doc.toString(), pos)
+                            return getIndentationInSource(
+                                context.state.doc.toString(),
+                                pos,
+                                indentOptions(context)
+                            )
                         }
                         return getSimpleIndentation(context, pos, () => 0) ?? 0
                     })
