@@ -6,10 +6,11 @@ import {
 } from '@/lib/IScriptBlock'
 import { BaseScriptBlock } from './BaseScriptBlock'
 import { LibraryScriptBlock } from './LibraryScriptBlock'
+import { keepRaw } from './utils'
 
 export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
     // Persistent sandbox shared with the compiled playground closure via with(sandbox)
-    protected sandbox: Record<string, any> = {}
+    protected sandbox: Record<string, any> = keepRaw({})
 
     protected librariesBefore: LibraryScriptBlock[] = []
     protected librariesAfter: LibraryScriptBlock[] = []
@@ -232,7 +233,7 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
             if (o.getResources) {
                 if (self.RESOURCES === undefined) {
                     console.i('!!! FETCHING RESOURCES !!!')
-                    self.RESOURCES = []
+                    self.RESOURCES = keepRaw([])
                     const requests = o.getResources().map((res, idx, array) => {
                         return fetch(res.uri)
                             .then((response) => {
@@ -255,7 +256,7 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
                                     data = URL.createObjectURL(data)
                                 }
                                 if (self.RESOURCES === undefined) {
-                                    self.RESOURCES = []
+                                    self.RESOURCES = keepRaw([])
                                 }
                                 self.RESOURCES[idx] = data
 
@@ -271,7 +272,7 @@ export abstract class PlaygroundScriptBlock extends BaseScriptBlock {
                     Promise.all(requests)
                         .then((values) => {
                             if (self.RESOURCES === undefined) {
-                                self.RESOURCES = []
+                                self.RESOURCES = keepRaw([])
                             }
                             o.RESOURCES = self.RESOURCES
                             self._runInit(canvasElement, scope, runner)

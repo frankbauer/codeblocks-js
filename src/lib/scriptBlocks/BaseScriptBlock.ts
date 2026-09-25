@@ -10,13 +10,21 @@ import {
 } from '@/lib/IScriptBlock'
 import { ICompileAndRunArguments } from '../ICompilerRegistry'
 import { IBlockData } from '../ICodeBlocks'
-import { ICodeTemplate, jsErrorParser } from './utils'
+import { ICodeTemplate, jsErrorParser, keepRaw } from './utils'
 
 export abstract class BaseScriptBlock implements IScriptBlock {
     public err: IParsedError[] = []
     protected src: string | undefined = undefined
     protected fkt: Function | undefined = undefined
-    protected obj: IPlaygroundObject | ILegacyPlaygroundObject | undefined = undefined
+    // The user supplied playground object. Always stored raw (see keepRaw), so fields the
+    // playground keeps on `this` (arrays, objects, Chart.js instances, ...) stay plain objects.
+    private _obj: IPlaygroundObject | ILegacyPlaygroundObject | undefined = undefined
+    protected get obj(): IPlaygroundObject | ILegacyPlaygroundObject | undefined {
+        return this._obj
+    }
+    protected set obj(o: IPlaygroundObject | ILegacyPlaygroundObject | undefined) {
+        this._obj = keepRaw(o)
+    }
     protected didInit: boolean = false
 
     constructor(
@@ -129,7 +137,7 @@ export abstract class BaseScriptBlock implements IScriptBlock {
         // Default no-op
     }
 
-    public DATA: any[] = []
+    public DATA: any[] = keepRaw([])
     // Language of the app's code, exposed to v102 playgrounds and libraries
     public LANGUAGE: string = ''
 
@@ -137,7 +145,7 @@ export abstract class BaseScriptBlock implements IScriptBlock {
         if (language !== undefined) {
             this.LANGUAGE = language
         }
-        this.DATA = []
+        this.DATA = keepRaw([])
         if (blocks !== undefined) {
             this.addBlockDataFromBlocks(blocks)
         }

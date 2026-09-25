@@ -1,4 +1,16 @@
+import { markRaw } from 'vue'
 import { IParsedError } from '@/lib/IScriptBlock'
+
+// Script blocks live inside reactive Vue state (BlockData.obj), so every object read from
+// them would come back as a deep reactive proxy. Objects created by or handed to user code
+// (playground/library objects, their sandbox, DATA, CODE, RESOURCES, ...) must stay plain,
+// otherwise 3rd party libs (e.g. Chart.js) break when they receive such a proxy.
+export function keepRaw<T>(value: T): T {
+    if (value !== null && typeof value === 'object' && Object.isExtensible(value)) {
+        markRaw(value as object)
+    }
+    return value
+}
 
 export interface ICodeTemplate {
     prefix: string

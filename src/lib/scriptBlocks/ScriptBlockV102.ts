@@ -10,7 +10,7 @@ import {
     Runner,
 } from '../IScriptBlock'
 import { PlaygroundScriptBlock } from './PlaygroundScriptBlock'
-import { ICodeTemplate } from './utils'
+import { ICodeTemplate, keepRaw } from './utils'
 import { compileCode, stripModuleSyntax } from './sandbox'
 import { SmartScope } from './SmartScope'
 import { IBlockData, KnownBlockTypes } from '../ICodeBlocks'
@@ -27,7 +27,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
 
     // All source code blocks (in source order), read-only view on the editor contents.
     // Changing the code for a run is done through the entries passed to alterCodeBeforeRun.
-    public CODE: ICodeEntry[] = []
+    public CODE: ICodeEntry[] = keepRaw([])
 
     private _domCtx:
         | {
@@ -40,12 +40,12 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
 
     public override setupDOM(canvasElement: JQuery<HTMLElement>, scope: AnyCodeBlockScope): void {
         const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
-        this._domCtx = {
+        this._domCtx = keepRaw({
             canvasElement,
             outputElement,
             scope: smartScope as ICodeBlockScope,
             runner: undefined,
-        }
+        })
         super.setupDOM(canvasElement, scope)
     }
 
@@ -55,12 +55,12 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         runner: Runner
     ): void {
         const { outputElement, smartScope } = this.getScopeAndOutput(canvasElement, scope)
-        this._domCtx = {
+        this._domCtx = keepRaw({
             canvasElement,
             outputElement,
             scope: smartScope as ICodeBlockScope,
             runner,
-        }
+        })
         super._runInit(canvasElement, scope, runner)
     }
 
@@ -106,7 +106,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         this.activeLibraryKeys.clear()
 
         super.resetBlockData(blocks, language)
-        this.CODE = createCodeEntries(blocks)
+        this.CODE = keepRaw(createCodeEntries(blocks))
 
         if (!blocks) {
             return

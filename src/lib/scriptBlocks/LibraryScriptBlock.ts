@@ -1,6 +1,7 @@
 import { AnyCodeBlockScope, ICodeEntry, ILibraryObject, IScriptOutputObject } from '../IScriptBlock'
 import { BaseScriptBlock } from './BaseScriptBlock'
 import { compileCode, stripModuleSyntax } from './sandbox'
+import { keepRaw } from './utils'
 
 const libraryCodeTemplate = {
     prefix: 'with(sandbox) { return function(){ return {o:',
@@ -46,13 +47,13 @@ export class LibraryScriptBlock extends BaseScriptBlock {
                 this.fkt = compileCode(
                     libraryCodeTemplate.prefix + stripped + libraryCodeTemplate.postfix
                 )
-                this.libraryObject = this.fkt({}) as ILibraryObject
+                this.libraryObject = keepRaw(this.fkt({}) as ILibraryObject)
                 this.dequeueIncoming()
             } catch (e) {
                 this.pushError(e, libraryCodeTemplate)
             }
         } else if (this.fkt !== undefined) {
-            this.libraryObject = this.fkt({}) as ILibraryObject
+            this.libraryObject = keepRaw(this.fkt({}) as ILibraryObject)
             this.dequeueIncoming()
         }
     }
@@ -78,7 +79,7 @@ export class LibraryScriptBlock extends BaseScriptBlock {
         }
         if (this.libraryObject?.create) {
             try {
-                this.instance = this.libraryObject.create(context)
+                this.instance = keepRaw(this.libraryObject.create(context))
             } catch (e) {
                 this.pushError(e)
                 this.instance = undefined
