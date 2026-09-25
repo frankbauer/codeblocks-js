@@ -402,7 +402,7 @@ const onUpload = (
     processor: (fl: File, fr: FileReader) => void,
     action: (name: string, content: string | ArrayBuffer | null) => void
 ): void => {
-    if (uploader.files === undefined || uploader.files.length < 1) {
+    if (!uploader || uploader.files === undefined || uploader.files.length < 1) {
         return
     }
     const files = uploader.files
@@ -412,7 +412,7 @@ const onUpload = (
         if (fl.type == '') {
             const ext = fl.name.split('.').pop()
             const knownTextExtensions = ['obj', 'mat', 'vsh', 'fsh', 'ply']
-            if (knownTextExtensions.indexOf(ext) === 0) {
+            if (knownTextExtensions.indexOf(ext) >= 0) {
                 type = 'text/' + ext
             }
             console.log(ext, type)
@@ -456,7 +456,7 @@ const openJson = (): void => {
 }
 const onUploadImage = (event): void => {
     onUpload(
-        imageFileUploader,
+        imageFileUploader.value,
         (type) => type.startsWith('image/'),
         (fl, fr) => fr.readAsDataURL(fl),
         (fileName, content) => addImageURL(fileName, content)
@@ -464,7 +464,7 @@ const onUploadImage = (event): void => {
 }
 const onUploadPlain = (event): void => {
     onUpload(
-        plainFileUploader,
+        plainFileUploader.value,
         (type) => type.startsWith('text/'),
         (fl, fr) => fr.readAsText(fl),
         (fileName, content) => loadPlain(fileName, content)
@@ -472,7 +472,7 @@ const onUploadPlain = (event): void => {
 }
 const onUploadJson = (event): void => {
     onUpload(
-        jsonFileUploader,
+        jsonFileUploader.value,
         (type) => type.trim() === 'application/json' || type.trim() === 'text/json',
         (fl, fr) => fr.readAsText(fl),
         (fileName, content) => loadJson(fileName, content)

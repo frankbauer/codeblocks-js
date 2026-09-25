@@ -463,6 +463,7 @@ onMounted(() => {
         return
     }
 
+    editorView.value?.destroy()
     editorView.value = new EditorView({
         parent: editorElement.value,
         state: EditorState.create({ doc: code.value, extensions: extensions.value }),
@@ -500,6 +501,10 @@ onMounted(() => {
         fixStaleScrollerHeight()
         document.fonts?.ready.then(fixStaleScrollerHeight)
     })
+})
+
+onBeforeUnmount(() => {
+    editorView.value?.destroy()
 })
 
 function lineNr(a: number): string {
@@ -760,6 +765,7 @@ function underlineErrors() {
 }
 
 // Custom gutter marker for error symbols
+const errorTipApps = new WeakMap<Node, ReturnType<typeof createApp>>()
 class ErrorMarker extends GutterMarker {
     constructor(
         private severity: ErrorSeverity,
@@ -775,7 +781,13 @@ class ErrorMarker extends GutterMarker {
             severity: this.severity,
         })
         app.mount(marker)
+        errorTipApps.set(marker, app)
         return marker
+    }
+
+    destroy(dom: Node) {
+        errorTipApps.get(dom)?.unmount()
+        errorTipApps.delete(dom)
     }
 }
 

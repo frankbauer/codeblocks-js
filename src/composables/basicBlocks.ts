@@ -110,7 +110,7 @@ export function codeBlockSetup(
     const blockInfo = blockStorage.appInfo
     const didInitialize = ref<boolean>(false)
     const outputHTML = ref<string>('')
-    let output = ref<string>('')
+    const output = ref<string>('')
     const sansoutput = ref<string>('')
     const didClip = ref<boolean>(false)
     const _finalOutputObject = ref<IScriptOutputObject | null>(null)
@@ -303,7 +303,7 @@ export function codeBlockSetup(
             return
         }
         if (output.value != newOutput) {
-            output = ref(newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;'))
+            output.value = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
             if (maxCharacters.value > 0 && output.value.length > maxCharacters.value) {
                 outputHTML.value = formatOutput(output.value.substr(0, maxCharacters.value))
                 outputHTML.value += globalState.appState.format_info(

@@ -101,7 +101,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
     if (props.eventHub) {
-        props.eventHub.off('all-mounted')
+        props.eventHub.off('all-mounted', whenMounted)
     }
 })
 </script>

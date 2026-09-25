@@ -30,6 +30,7 @@ import { computed, onBeforeUnmount, onMounted } from 'vue'
 import { ITagReplaceAction, tagger } from '@/plugins/tagger'
 import CodeBlock from './CodeBlock.vue'
 import { DEFAULT_EDITOR_THEME } from '@/plugins/codemirror/editorThemes'
+import { BlockData } from '@/lib/codeBlocksManager'
 
 interface Props {
     value: string
@@ -40,7 +41,7 @@ interface Props {
     language: string
     appID: number
     blockID: string
-    block: any // Assuming block type from blockStorage
+    block: BlockData | null
     layout?: 'auto' | 'vertical' | 'horizontal'
 }
 
@@ -91,17 +92,13 @@ function replaceTemplateTags(o: ITagReplaceAction) {
     if (!props.editMode) {
         return
     }
-    if (o.scopeUUID != props.scopeUUID) {
+    if (o.scopeUUID != props.scopeUUID || props.block === null) {
         return
     }
-    props.block.value.content = tagger.replaceTemplateTagInString(
-        props.block.value.content,
-        o.name,
-        o.newValue
-    )
+    props.block.content = tagger.replaceTemplateTagInString(props.block.content, o.name, o.newValue)
 }
 
-const preview = computed(() => props.block?.value?.content || props.value)
+const preview = computed(() => props.block?.content || props.value)
 
 onMounted(() => {
     tagger.onReplaceTemplateTag(replaceTemplateTags)
