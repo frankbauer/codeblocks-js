@@ -18,9 +18,12 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
+    <!-- without a type, a <button> inside a form (e.g. an ILIAS test) submits that form;
+         an explicit type attribute still wins through the attribute fallthrough -->
     <Primitive
         :as="as"
         :as-child="asChild"
+        :type="!asChild && as === 'button' ? 'button' : undefined"
         :class="cn(buttonVariants({ variant, size }), props.class)"
     >
         <slot />

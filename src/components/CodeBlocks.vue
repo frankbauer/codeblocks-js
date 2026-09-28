@@ -784,6 +784,7 @@ useResizeObserver(runnerRef, (entries) => {
                 >
                     <button
                         v-if="hasOutput"
+                        type="button"
                         class="tw-flex tw-items-center tw-justify-center tw-rounded tw-p-1 tw-text-muted-foreground tw-transition-colors hover:tw-text-destructive hover:tw-bg-destructive/10"
                         :title="$t('CodeBlocks.clear_output')"
                         @click="resetOutput"
