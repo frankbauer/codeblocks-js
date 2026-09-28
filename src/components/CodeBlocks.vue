@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useFieldName } from '@/composables/fieldNames'
 import CodeBlock from '@/components/CodeBlock.vue'
 import CodeBlockContainer from '@/components/CodeBlockContainer.vue'
 import CodeBlocksSettings from '@/components/CodeBlocksSettings.vue'
@@ -44,6 +45,7 @@ import { l } from '@/plugins/i18n'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 
 const props = defineProps<CodeBlocksProperties>()
+const fieldName = useFieldName()
 const { appID } = toRefs(props)
 const blockStorage: BlockStorageType = useBlockStorage(appID.value)
 const blockInfo = blockStorage.appInfo
@@ -658,7 +660,7 @@ useResizeObserver(runnerRef, (entries) => {
                 :blockID="block.uuid"
                 :editMode="editMode"
                 :readonly="readonly"
-                :name="`block[${block.parentID}][${block.id}]`"
+                :name="fieldName('block', block.parentID, block.id)"
                 :scopeUUID="block.scopeUUID"
                 :tagSet="activeTagSet"
                 :language="language"

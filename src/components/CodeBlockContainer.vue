@@ -534,7 +534,7 @@
                 </div>
 
                 <textarea
-                    :name="`block_options[${block.parentID}][${block.id}]`"
+                    :name="fieldName('block_options', block.parentID, block.id)"
                     class="blockoptions"
                     v-model="serializedOptions"
                 ></textarea>
@@ -563,6 +563,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useFieldName } from '@/composables/fieldNames'
 import { BasicBlockProps, DEFAULT_BASIC_BLOCK_PROPS } from '@/composables/basicBlock'
 import { KnownBlockTypes } from '@/lib/ICodeBlocks'
 import { IListItemData } from '@/lib/ICompilerRegistry'
@@ -612,6 +613,8 @@ import {
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../shadcn/ui/hover-card'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../shadcn/ui/tooltip'
 import CSelect from './ui/CSelect.vue'
+
+const fieldName = useFieldName()
 
 interface IOnChangeOrder {
     id: number

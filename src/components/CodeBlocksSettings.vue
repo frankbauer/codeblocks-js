@@ -691,7 +691,7 @@
         <ImportExportDialog v-model:open="importExportOpen" :main-block="mainBlock" />
 
         <textarea
-            :name="`block_settings[${options.id}]`"
+            :name="fieldName('block_settings', options.id)"
             class="tw-hidden"
             v-model="serializedOptions"
         />
@@ -699,6 +699,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFieldName } from '@/composables/fieldNames'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import RandomizerSettings from './RandomizerSettings.vue'
@@ -758,6 +759,7 @@ import {
 } from 'lucide-vue-next'
 
 const props = defineProps<Props>()
+const fieldName = useFieldName()
 const emit = defineEmits([
     'run-state-change',
     'language-change',

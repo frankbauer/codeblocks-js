@@ -7,6 +7,7 @@ import { taggedDirective, tagger } from '@/plugins/tagger'
 import { highlight, highlightDirective } from '@/plugins/highlight'
 import { appUseCodeMirror } from '@/plugins/codemirror'
 import { storeBlock } from '@/storage/blockStorage'
+import { FieldNameStyleKey, fieldNameStyleFromAttribute } from '@/composables/fieldNames'
 import {
     IRuntimeData,
     runtimeSettingsSchema,
@@ -334,6 +335,7 @@ export class InternalCodeBlocksManager {
         }
 
         const app = createApp(App, context)
+        app.provide(FieldNameStyleKey, fieldNameStyleFromAttribute(this.element.dataset.fieldNames))
         app.use(i18n)
         app.directive('tagged', taggedDirective)
         app.directive('highlight', highlightDirective)

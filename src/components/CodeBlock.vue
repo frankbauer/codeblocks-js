@@ -15,7 +15,7 @@
             style="display: none"
             readonly
             v-model="block.content"
-            :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
+            :name="fieldName(`${namePrefix}block`, block.parentID, block.id)"
             :id="`teQ${block.parentID}B${block.id}`"
             :data-question="block.parentID"
             :data-blocktype="iliasTypeNr"
@@ -26,7 +26,7 @@
             ref="codeBox"
             v-model="code"
             :class="`accqstXmlInput noRTEditor codebox ${boxClass}`"
-            :name="`${namePrefix}block[${block.parentID}][${block.id}]`"
+            :name="fieldName(`${namePrefix}block`, block.parentID, block.id)"
             :id="`teQ${block.parentID}B${block.id}`"
             :data-question="block.parentID"
             :theme="block.themeForCodeBlock"
@@ -54,14 +54,14 @@
                 style="display: none"
                 readonly
                 v-model="block.alternativeContent"
-                :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
+                :name="fieldName(`${namePrefix}alt_block`, block.parentID, block.id)"
                 class="accqstXmlInput noRTEditor"
             />
             <code-mirror
                 ref="altBox"
                 v-model="altCode"
                 :class="`accqstXmlInput noRTEditor ${boxClass} alternative-codebox`"
-                :name="`${namePrefix}alt_block[${block.parentID}][${block.id}]`"
+                :name="fieldName(`${namePrefix}alt_block`, block.parentID, block.id)"
                 :theme="block.themeForCodeBlock"
                 :language="mode"
                 :read-only="editorReadOnly"
@@ -75,6 +75,7 @@
 </template>
 
 <script setup lang="ts">
+import { useFieldName } from '@/composables/fieldNames'
 import CodeMirror from '@/components/CodeMirror.vue'
 import {
     DEFAULT_EDITABLE_BLOCK_PROPS,
@@ -139,6 +140,7 @@ const t = instance?.proxy?.$root?.$t
 // Block storage and mounting
 const blockStorage: BlockStorageType = useBlockStorage(props.appID)
 const block = blockStorage.getBlock(props.blockID)
+const fieldName = useFieldName()
 const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
     true,
     props,
