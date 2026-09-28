@@ -1,5 +1,5 @@
-import { build } from 'vite'
-import shell from 'shelljs'
+import { execSync } from 'child_process'
+import fs from 'fs'
 import path from 'path'
 import { createRequire } from 'module'
 import { fileURLToPath } from 'url'
@@ -8,41 +8,68 @@ const require = createRequire(import.meta.url)
 const conf = require('./package.json')
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+const envFile = path.join(__dirname, '.env')
+if (fs.existsSync(envFile)) {
+    process.loadEnvFile(envFile)
+}
+
+// Root of the assCodeQuestion plugin to deploy into. Defaults to the plugin this
+// repository is checked out in (<plugin>/__dev/codeblocks.js).
+const pluginFolder = path.resolve(process.env.ILIAS_PLUGIN_FOLDER || path.join(__dirname, '..', '..'))
+if (!fs.existsSync(path.join(pluginFolder, 'plugin.php'))) {
+    console.error(`ILIAS_PLUGIN_FOLDER '${pluginFolder}' does not contain an ILIAS plugin (no plugin.php)`)
+    process.exit(1)
+}
+
 const iliasBase =
     process.env.ILIAS_VUE_PATH ||
-    path.join(
-        '/Customizing/global/plugins/Modules/TestQuestionPool/Questions/assCodeQuestion/codeblocks/',
-        conf.version,
-        '/'
+    `./Customizing/global/plugins/Modules/TestQuestionPool/Questions/assCodeQuestion/codeblocks/${conf.version}/`
+
+const relPath = path.join('codeblocks', conf.version) + '/'
+const dest = path.join(pluginFolder, relPath)
+const supportDir = path.join(pluginFolder, 'classes', 'support')
+const conffile = path.join(supportDir, `codeblocks-conf-${conf.version}.php`)
+
+const run = (cmd) => execSync(cmd, { cwd: __dirname, stdio: 'inherit' })
+const q = (p) => `'${p.replace(/'/g, `'\\''`)}'`
+
+console.log(`Deploying CodeBlocks ${conf.version} to '${dest}'`)
+console.log(`    - Config File at '${conffile}'`)
+console.log('    - Base URL:', iliasBase)
+
+console.log('Building CodeBlocks library...')
+run('npm run build-lib')
+
+// mirror the build (library bundle + runtime support files), dropping demo content
+fs.mkdirSync(dest, { recursive: true })
+run(
+    `rsync -a --delete --exclude .DS_Store --exclude /examples --exclude /stuff --exclude /favicon.ico ${q(path.join(__dirname, 'dist') + '/')} ${q(dest)}`
+)
+
+fs.writeFileSync(
+    conffile,
+    [
+        '<?php',
+        `define("CODEBLOCKS_VERSION",     "${conf.version}");`,
+        `define("CODEBLOCKS_BASE_URI",     "${iliasBase}");`,
+        `define("CODEBLOCKS_REL_PATH",     "${relPath}");`,
+        'define("CODEBLOCKS_TAG_REGEX",    "/({|&#123;):(?<name>[\\w]+)}/");',
+        '?>',
+    ].join('\n')
+)
+
+// point the plugin at the config of this version
+const codeBlocksPhp = path.join(supportDir, 'codeBlocks.php')
+if (fs.existsSync(codeBlocksPhp)) {
+    const src = fs.readFileSync(codeBlocksPhp, 'utf8')
+    const updated = src.replace(
+        /require_once\s+'codeblocks-conf-[^']+\.php';/,
+        `require_once 'codeblocks-conf-${conf.version}.php';`
     )
+    if (updated !== src) {
+        fs.writeFileSync(codeBlocksPhp, updated)
+        console.log(`    - Updated config include in '${codeBlocksPhp}'`)
+    }
+}
 
-const dest = path.join('..', '..', 'codeblocks', conf.version)
-const destAbs = path.resolve(__dirname, dest)
-const conffile = path.join('..', '..', 'classes', 'support', `codeblocks-conf-${conf.version}.php`)
-
-console.log("Deploying CodeBlocks to '" + dest + "'")
-console.log("    - Config File at '" + conffile + "'")
-console.log('Base URL:', iliasBase)
-
-await build({
-    base: iliasBase,
-    build: {
-        outDir: destAbs,
-        emptyOutDir: true,
-    },
-})
-
-shell.config.silent = true
-
-shell.echo('<?php ').to(conffile)
-shell.echo('define("CODEBLOCKS_VERSION",     "' + conf.version + '");').toEnd(conffile)
-shell.echo('define("CODEBLOCKS_BASE_URI",     "' + iliasBase + '");').toEnd(conffile)
-shell
-    .echo('define("CODEBLOCKS_REL_PATH",     "' + path.join('codeblocks', conf.version) + '/");')
-    .toEnd(conffile)
-shell.echo('define("CODEBLOCKS_TAG_REGEX",    "/({|&#123;):(?<name>[\\w]+)}/");').toEnd(conffile)
-shell.echo('-n', '?>').toEnd(conffile)
-
-const targetconf = path.join('..', 'classes', 'support', 'codeblocks-conf-' + conf.version + '.php')
-console.log(conffile, targetconf)
-shell.cp(conffile, targetconf)
+console.log('Done.')
