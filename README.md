@@ -44,7 +44,7 @@ ILIAS_VUE_PATH=/my/custom/path/ npm run build-ilias
 ```
 npm run build-examples
 ```
-Deploys the library to `docs/examples/js/codeblocks-js/`.
+Builds the library and mirrors its runtime folders (`js`, `resources`) to `docs/examples/`.
 
 ## Demos
 We currently have a [simple demo](https://frankbauer.github.io/codeblocks-js/docs/examples/simple.html) online.

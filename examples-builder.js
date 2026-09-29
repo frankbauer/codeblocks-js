@@ -1,38 +1,31 @@
-import { build } from 'vite'
-import shell from 'shelljs'
+import { execSync } from 'child_process'
+import fs from 'fs'
 import path from 'path'
-import { createRequire } from 'module'
 import { fileURLToPath } from 'url'
 
-const require = createRequire(import.meta.url)
-const conf = require('./package.json')
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const base = path.join('docs', 'examples')
-const lib = path.join(base, 'js')
-const dest = path.join(lib, 'codeblocks-js')
-const destAbs = path.resolve(__dirname, dest)
+// the example pages (docs/examples/*.html) load the library the same way ILIAS
+// and lernwerk do: <meta name="codeblocks-baseurl">, jQuery, codeblocks.css and
+// an ES module import of codeblocks.umd.js (Vue is bundled into the library)
+const dest = path.join(__dirname, 'docs', 'examples')
+// runtime folders of the build the examples need; everything else in dist
+// (examples, stuff, common, assets) is demo/ILIAS content
+const folders = ['js', 'resources']
 
-console.log("Deploying CodeBlocks to '" + dest + "'")
+const run = (cmd) => execSync(cmd, { cwd: __dirname, stdio: 'inherit' })
+const q = (p) => `'${p.replace(/'/g, `'\\''`)}'`
 
-const vue = path.join(lib, 'vue')
-const jquery = path.join(lib, 'jquery')
+console.log(`Deploying CodeBlocks examples to '${dest}'`)
 
-shell.mkdir('-p', base)
+console.log('Building CodeBlocks library...')
+run('npm run build-lib')
 
-shell.cp('-r', path.join('public', 'js'), base)
-shell.cp('-r', path.join('public', 'resources'), base)
+// mirror exactly, so files removed from CodeBlocks disappear here too
+fs.mkdirSync(dest, { recursive: true })
+for (const folder of folders) {
+    console.log(`Syncing '${folder}'`)
+    run(`rsync -a --delete --delete-excluded --exclude .DS_Store ${q(path.join(__dirname, 'dist', folder) + '/')} ${q(path.join(dest, folder) + '/')}`)
+}
 
-shell.mkdir('-p', vue)
-shell.cp(path.join('node_modules', 'vue', 'dist', 'vue.runtime.min.js'), vue)
-
-shell.mkdir('-p', jquery)
-shell.cp(path.join('node_modules', 'jquery', 'dist', 'jquery.min.js'), jquery)
-shell.cp(path.join('node_modules', 'jquery', 'dist', 'jquery.min.map'), jquery)
-
-await build({
-    build: {
-        outDir: destAbs,
-        emptyOutDir: true,
-    },
-})
+console.log('Done.')

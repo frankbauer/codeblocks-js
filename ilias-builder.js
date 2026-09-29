@@ -43,7 +43,7 @@ run('npm run build-lib')
 // mirror the build (library bundle + runtime support files), dropping demo content
 fs.mkdirSync(dest, { recursive: true })
 run(
-    `rsync -a --delete --exclude .DS_Store --exclude /examples --exclude /stuff --exclude /favicon.ico ${q(path.join(__dirname, 'dist') + '/')} ${q(dest)}`
+    `rsync -a --delete --delete-excluded --exclude .DS_Store --exclude /examples --exclude /stuff --exclude /favicon.ico ${q(path.join(__dirname, 'dist') + '/')} ${q(dest)}`
 )
 
 fs.writeFileSync(

@@ -22,8 +22,8 @@
       display:none;        
     }
   </style>
-  <script src="./js/jquery/jquery.min.js?v=3.5.1"></script>
-  <script src="./js/vue/vue.runtime.min.js?v=2.6.11"></script>
+  <meta name="codeblocks-baseurl" content="./">
+  <script src="./js/jquery.min.js"></script>
   <link rel="stylesheet" href="./js/codeblocks-js/codeblocks.css" shadow type="text/css">
 </head>
 
@@ -65,6 +65,7 @@
     </div>
   </div>
 
-  <script src="./js/codeblocks-js/codeblocks.umd.min.js"></script>
+  <!-- the library mounts all blocks on the page once it is loaded -->
+  <script type="module" src="./js/codeblocks-js/codeblocks.umd.js"></script>
 </body>
 </html>

@@ -18,7 +18,15 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-public/common/
+
+# images licensed from Freepik (see the LICENSE file in each folder):
+# usable in CodeBlocks, but not to be published in this repository
+public/common/scene/floatingworld/img/*
+!public/common/scene/floatingworld/img/LICENSE
+public/assets/trees/tree.autumn.png
+public/assets/trees/tree.spring.png
+public/assets/trees/tree.summer.png
+public/assets/trees/tree.winter.png
+public/assets/trees/tree.stylized.*.png
 public/stuff/
-public/assets/
 .env
