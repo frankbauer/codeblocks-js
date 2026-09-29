@@ -53,7 +53,7 @@ const value = computed({
     },
 })
 const previewValue = computed(() => {
-    return sanitizeMarkup(block.value.actualContent())
+    return sanitizeMarkup(block.value.actualContent(), { strict: false })
 })
 const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
     true,

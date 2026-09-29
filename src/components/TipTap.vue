@@ -99,7 +99,9 @@ function replaceTemplateTags(o: ITagReplaceAction) {
     props.block.content = tagger.replaceTemplateTagInString(props.block.content, o.name, o.newValue)
 }
 
-const preview = computed(() => sanitizeMarkup(props.block?.content || props.value))
+const preview = computed(() =>
+    sanitizeMarkup(props.block?.content || props.value, { strict: false })
+)
 
 onMounted(() => {
     tagger.onReplaceTemplateTag(replaceTemplateTags)
