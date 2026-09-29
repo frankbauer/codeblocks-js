@@ -8,6 +8,7 @@ import {
     ICompilerIDQuery,
     IUpdateMappingMap,
 } from './ICompilerRegistry'
+import { whenMathJaxReady } from '@/lib/mathjax'
 
 //prepare Compiler Registry
 export class CompilerRegistry implements ICompilerRegistry {
@@ -135,13 +136,7 @@ export class CompilerRegistry implements ICompilerRegistry {
             function () {
                 dlibs.forEach((l) => (l.didLoad = true))
 
-                if (window.MathJax === undefined) {
-                    whenLoaded()
-                } else {
-                    MathJax.Hub.Register.StartupHook('End', () => {
-                        whenLoaded()
-                    })
-                }
+                whenMathJaxReady(whenLoaded)
             }.bind(this)
         )
     }

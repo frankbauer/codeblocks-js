@@ -17,6 +17,7 @@ export interface ITagMarkers {
 
 import mitt from 'mitt'
 import { randomAndTemplateTag, TAG_CLASS_NAMES } from './tagHighlighter'
+import { whenMathJaxReady } from '@/lib/mathjax'
 
 type TaggerEvents = {
     'replace-template-tag': ITagReplaceAction
@@ -72,11 +73,7 @@ export default class Tagger {
                 this.processElement(el as HTMLElement, my_uuid)
             })
         }
-        if (window.MathJax === undefined) {
-            calle()
-        } else {
-            MathJax.Hub.Register.StartupHook('End', calle)
-        }
+        whenMathJaxReady(calle)
     }
 
     processElement(el: HTMLElement, scopeUUID: string): void {

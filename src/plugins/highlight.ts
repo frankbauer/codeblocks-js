@@ -16,6 +16,7 @@ import perl from 'highlight.js/lib/languages/perl'
 import php from 'highlight.js/lib/languages/php'
 import python from 'highlight.js/lib/languages/python'
 import r from 'highlight.js/lib/languages/r'
+import { whenMathJaxReady } from '@/lib/mathjax'
 
 hljs.registerLanguage('c', cpp)
 hljs.registerLanguage('c++', cpp)
@@ -133,13 +134,7 @@ hljs.$vue = {
         el.innerHTML = txt
     },
     processElement(el: HTMLElement, inLang: string | undefined) {
-        if (window.MathJax === undefined) {
-            this.processElementSimple(el, inLang)
-        } else {
-            MathJax.Hub.Register.StartupHook('End', () => {
-                this.processElementSimple(el, inLang)
-            })
-        }
+        whenMathJaxReady(() => this.processElementSimple(el, inLang))
     },
 }
 
