@@ -34,7 +34,6 @@ export default class MainBlock implements IMainBlock {
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean
-    shadowRoot?: ShadowRoot
     error?: string
     buildVersion: number = 0
 
@@ -67,7 +66,6 @@ export default class MainBlock implements IMainBlock {
         this.messagePassing = s.messagePassing
         this.keepAlive = s.keepAlive
         this.persistentArguments = s.persistentArguments
-        this.shadowRoot = s.shadowRoot
         this.error = s.error
 
         this.blocks = data.blocks.map((b) => new BlockData(b, this))

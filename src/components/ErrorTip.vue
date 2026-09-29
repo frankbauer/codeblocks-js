@@ -42,6 +42,7 @@ import { AlertCircle, AlertTriangle, OctagonX, TriangleAlert } from 'lucide-vue-
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shadcn/ui/tooltip'
 import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import { computed, ComputedRef, toRefs } from 'vue'
+import { escapeText } from '@/lib/sanitize'
 
 interface Props {
     errors: ICompilerErrorDescription[]
@@ -66,7 +67,8 @@ function iconForSeverity(s: ErrorSeverity) {
 }
 
 function formatMessage(msg: string): string {
-    return msg.replace(/\r?\n/g, '<br>')
+    // compiler messages quote student code, so they must never be read as markup
+    return escapeText(msg).replace(/\r?\n/g, '<br>')
 }
 
 const severityClass: ComputedRef<string> = computed(() => {

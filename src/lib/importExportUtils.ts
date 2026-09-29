@@ -244,7 +244,6 @@ export const runtimeSettingsSchema = exportedSettingsSchema.extend({
     id: z.number(),
     uuid: z.string(),
     editMode: z.boolean().default(false),
-    shadowRoot: z.custom<ShadowRoot>().optional(),
     error: z.string().optional(),
 })
 
@@ -760,7 +759,6 @@ export function importDataToRuntimeData(
         id: overrideSettings?.id ?? 0,
         uuid: overrideSettings?.uuid ?? uuid.v4(),
         editMode: overrideSettings?.editMode ?? false,
-        shadowRoot: overrideSettings?.shadowRoot,
         error: overrideSettings?.error,
         ...overrideSettings,
     }
@@ -795,7 +793,6 @@ export function applyImportToMainBlock(
         id: main.id,
         uuid: main.uuid,
         editMode: main.editMode,
-        shadowRoot: main.shadowRoot,
     })
 
     if (mode === 'override') {

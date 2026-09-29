@@ -27,6 +27,7 @@ import {
     useBasicBlockMounting,
 } from '@/composables/basicBlock'
 import { globalState } from '@/lib/globalState'
+import { sanitizeMarkup } from '@/lib/sanitize'
 import { BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
 
 interface Props extends EditableBlockProps {
@@ -52,7 +53,7 @@ const value = computed({
     },
 })
 const previewValue = computed(() => {
-    return block.value.actualContent()
+    return sanitizeMarkup(block.value.actualContent())
 })
 const { whenBlockIsReady, whenBlockIsDestroyed } = useBasicBlockMounting(
     true,

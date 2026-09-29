@@ -2308,7 +2308,8 @@ export default {
                                   : 'done'
                               : 'dangerous'
                     const style = t.ok === undefined ? 'text-decoration: line-through;' : ''
-                    let res = `<li style="${style}color:${color}">${t.text} <cb-icon>${this.iconForState[state]}</cb-icon>`
+                    // texts often include student output, so never render executable markup
+                    let res = `<li style="${style}color:${color}">${sanitizeMarkup(t.text)} <cb-icon>${this.iconForState[state]}</cb-icon>`
                     if (t.sub !== undefined) {
                         res += this.formatTestResults(t.sub)
                     }

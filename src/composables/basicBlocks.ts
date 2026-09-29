@@ -15,6 +15,7 @@ import { BlockStorageType } from '@/storage/blockStorage'
 import { UIThemeType } from '@/lib/uiTheme'
 import { EditorTheme } from '@/plugins/codemirror/editorThemes'
 import { assembleSource, createCodeRunEntries } from '@/lib/scriptBlocks/codeEntries'
+import { escapeText } from '@/lib/sanitize'
 
 export interface CodeBlocksProperties {
     eventHub: EventHubType
@@ -77,12 +78,12 @@ export interface IOnChangeOrder {
 
 function formatOutput(result) {
     const regex =
-        /^@(bold|italic|em)?(red|green|blue|cyan|magenta|yellow|orange|gray|#[\da-f]{6}|#[\da-f]{8}):(.*)/gim
+        /^@(bold|italic|em)?(red|green|blue|cyan|magenta|yellow|orange|gray|#[\da-f]{6}|#[\da-f]{8}):(.*)/i
     return result
         .split('\n')
-        .map((line, nr) => {
-            let m
-            if ((m = regex.exec(result)) !== null) {
+        .map((line) => {
+            const m = regex.exec(line)
+            if (m !== null) {
                 let style = ''
                 if (m[2] === 'gray') {
                     style = 'style="color:silver"'
@@ -303,7 +304,7 @@ export function codeBlockSetup(
             return
         }
         if (output.value != newOutput) {
-            output.value = newOutput.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+            output.value = escapeText(newOutput)
             if (maxCharacters.value > 0 && output.value.length > maxCharacters.value) {
                 outputHTML.value = formatOutput(output.value.substr(0, maxCharacters.value))
                 outputHTML.value += globalState.appState.format_info(
@@ -331,7 +332,7 @@ export function codeBlockSetup(
     }
     const log = (text: string): void => {
         output.value += text
-        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+        text = escapeText(text)
         if (!didClip.value) {
             let formatedText
             if (maxCharacters.value > 0 && output.value.length > maxCharacters.value) {
@@ -347,14 +348,14 @@ export function codeBlockSetup(
         }
     }
     const logError = (text: string): void => {
-        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+        text = escapeText(text)
         eventHub.emit('console-err', text)
         text = globalState.appState.format_error(text)
         sansoutput.value += text
         outputHTML.value += text
     }
     const logInfo = (text: string): void => {
-        text = text.replaceAllPoly('<', '&lt;').replaceAllPoly('>', '&gt;')
+        text = escapeText(text)
         eventHub.emit('console-nfo', text)
         text = globalState.appState.format_info(text)
         sansoutput.value += text

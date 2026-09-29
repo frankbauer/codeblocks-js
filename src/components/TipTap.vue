@@ -31,6 +31,7 @@ import { ITagReplaceAction, tagger } from '@/plugins/tagger'
 import CodeBlock from './CodeBlock.vue'
 import { DEFAULT_EDITOR_THEME } from '@/plugins/codemirror/editorThemes'
 import { BlockData } from '@/lib/codeBlocksManager'
+import { sanitizeMarkup } from '@/lib/sanitize'
 
 interface Props {
     value: string
@@ -98,7 +99,7 @@ function replaceTemplateTags(o: ITagReplaceAction) {
     props.block.content = tagger.replaceTemplateTagInString(props.block.content, o.name, o.newValue)
 }
 
-const preview = computed(() => props.block?.content || props.value)
+const preview = computed(() => sanitizeMarkup(props.block?.content || props.value))
 
 onMounted(() => {
     tagger.onReplaceTemplateTag(replaceTemplateTags)

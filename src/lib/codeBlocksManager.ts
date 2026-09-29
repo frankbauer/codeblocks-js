@@ -402,7 +402,6 @@ export interface IMainBlock {
     messagePassing: boolean
     keepAlive: boolean
     persistentArguments: boolean
-    shadowRoot?: ShadowRoot
     error?: string
     buildVersion: number
 

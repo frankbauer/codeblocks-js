@@ -1,4 +1,5 @@
 import compilerRegistry from '../CompilerRegistry'
+import { escapeText, sanitizeMarkup } from '../sanitize'
 
 export function stripModuleSyntax(code: string): string {
     return code
@@ -47,6 +48,9 @@ export function compileCode(src: string) {
             exports: undefined,
         }
         sandbox.jQuery = sandbox.$
+        // same sanitizers the app uses for TEXT blocks (markup) and student output (text)
+        sandbox.sanitizeMarkup = sanitizeMarkup
+        sandbox.escapeText = escapeText
         sandbox.console = console
         sandbox.Promise = Promise
         sandbox.Number = Number

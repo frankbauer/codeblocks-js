@@ -25,7 +25,7 @@ import compilerRegistry from './CompilerRegistry'
 
 let runningAppNumber = 10000
 
-export function domToRuntimeData(el: HTMLElement, shadowRoot?: ShadowRoot): IRuntimeData {
+export function domToRuntimeData(el: HTMLElement): IRuntimeData {
     const dataset = el.dataset
     const isCodeBlocksEditor =
         el.tagName === 'CODEBLOCKSEDITOR' || el.hasAttribute('codeblockseditor')
@@ -116,7 +116,6 @@ export function domToRuntimeData(el: HTMLElement, shadowRoot?: ShadowRoot): IRun
         randomizer,
         scopeUUID: dataset.scopeUUID,
         scopeSelector: dataset.scopeSelector,
-        shadowRoot,
     }
 
     if (!el.hasAttribute('uuid')) {
@@ -212,13 +211,10 @@ function domToRuntimeBlock(
     return runtimeBlockSchema.parse(rawBlock)
 }
 
-const useShadowDOM = false
-
 //this will handle the vue mounting on the dom
 export class InternalCodeBlocksManager {
     readonly element: HTMLElement
     private _data: IRuntimeData | undefined
-    readonly shadowRoot: ShadowRoot | undefined = undefined
 
     get data() {
         if (this._data === undefined) {
@@ -228,42 +224,12 @@ export class InternalCodeBlocksManager {
     }
 
     constructor(el: HTMLElement) {
-        if (useShadowDOM) {
-            const content = el.outerHTML
-
-            //replace original element with empty div that will store the shadowDOM
-            const parent = el.parentElement!
-            const rewrap = document.createElement('DIV')
-            parent.replaceChild(rewrap, el)
-
-            //add shadowDOM and clear content
-            const shadow = rewrap.attachShadow({ mode: 'open' })
-            this.shadowRoot = shadow
-            shadow.innerHTML = ''
-
-            //copy root-level styles into the shadowDOM
-            $('style').each((idx, style) => {
-                const st = document.createElement('STYLE')
-                st.innerHTML = style.innerHTML
-                shadow.appendChild(st)
-            })
-
-            $('link[shadow]').each((idx, link) => {
-                shadow.appendChild(link.cloneNode())
-            })
-
-            //append original element to shadowDOM
-            shadow.appendChild(el)
-            this.element = el
-        } else {
-            this.shadowRoot = undefined
-            this.element = el
-        }
+        this.element = el
         this.initialize()
     }
 
     initialize() {
-        this._data = domToRuntimeData(this.element, this.shadowRoot)
+        this._data = domToRuntimeData(this.element)
         console.d('INPUT DATA', this._data)
     }
 
@@ -313,7 +279,6 @@ export class InternalCodeBlocksManager {
                     id: this.data.settings.id,
                     uuid: this.data.settings.uuid,
                     editMode: this.data.settings.editMode,
-                    shadowRoot: this.data.settings.shadowRoot,
                     scopeUUID: this.data.settings.scopeUUID,
                     scopeSelector: this.data.settings.scopeSelector,
                 })

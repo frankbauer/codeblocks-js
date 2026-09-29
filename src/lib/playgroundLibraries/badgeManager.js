@@ -74,8 +74,8 @@ export default {
                 </div>
             </td>
             <td>
-                <div class="cb-badge-title">${b.title}</div>
-                <div class="cb-badge-desc">${b.desc}</div>
+                <div class="cb-badge-title">${sanitizeMarkup(b.title)}</div>
+                <div class="cb-badge-desc">${sanitizeMarkup(b.desc)}</div>
             </td>
         </tr>
     </table>
