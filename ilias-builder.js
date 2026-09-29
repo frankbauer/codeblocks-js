@@ -40,11 +40,28 @@ console.log('    - Base URL:', iliasBase)
 console.log('Building CodeBlocks library...')
 run('npm run build-lib')
 
+// images licensed from Freepik are not part of the repository (see licensed-assets.json).
+// If they are missing here, keep the ones already installed in the plugin.
+const licensed = JSON.parse(fs.readFileSync(path.join(__dirname, 'licensed-assets.json'), 'utf8'))
+const missingLicensed = licensed.files.filter((file) => !fs.existsSync(path.join(__dirname, 'dist', file)))
+if (missingLicensed.length > 0) {
+    console.warn(
+        `    - ${missingLicensed.length} licensed assets are missing (run 'npm run extract-licensed-assets'), keeping the installed ones`
+    )
+}
+const keep = missingLicensed
+    .filter((file) => fs.existsSync(path.join(dest, file)))
+    .map((file) => ({ file, data: fs.readFileSync(path.join(dest, file)) }))
+
 // mirror the build (library bundle + runtime support files), dropping demo content
 fs.mkdirSync(dest, { recursive: true })
 run(
     `rsync -a --delete --delete-excluded --exclude .DS_Store --exclude /examples --exclude /stuff --exclude /favicon.ico ${q(path.join(__dirname, 'dist') + '/')} ${q(dest)}`
 )
+for (const { file, data } of keep) {
+    fs.mkdirSync(path.dirname(path.join(dest, file)), { recursive: true })
+    fs.writeFileSync(path.join(dest, file), data)
+}
 
 fs.writeFileSync(
     conffile,

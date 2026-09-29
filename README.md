@@ -44,7 +44,18 @@ ILIAS_VUE_PATH=/my/custom/path/ npm run build-ilias
 ```
 npm run build-examples
 ```
-Builds the library and mirrors its runtime folders (`js`, `resources`) to `docs/examples/`.
+Builds the library and mirrors its runtime libraries (`js/`) to `docs/examples/`. The examples contain no image assets.
+
+### Licensed assets
+Some images (listed in `licensed-assets.json`) are licensed from [Freepik](https://www.freepik.com) and may be used in CodeBlocks, but must not be published in this repository. They are git-ignored and distributed separately as `codeblocks-licensed-assets.zip` (ask the maintainers for the download location):
+
+```
+npm run extract-licensed-assets
+```
+extracts `codeblocks-licensed-assets.zip` from the repository root into `public/`, where the build scripts pick the images up. Maintainers create the zip (images + licenses) from their working copy with
+```
+npm run build-licensed-assets
+```
 
 ## Demos
 We currently have a [simple demo](https://frankbauer.github.io/codeblocks-js/docs/examples/simple.html) online.

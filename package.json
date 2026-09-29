@@ -12,7 +12,9 @@
         "build-lib": "vite build",
         "build-ilias": "node ilias-builder.js",
         "build-lernwerk": "node lernwerk-builder.js",
-        "build-examples": "node examples-builder.js"
+        "build-examples": "node examples-builder.js",
+        "build-licensed-assets": "node licensed-assets.js build",
+        "extract-licensed-assets": "node licensed-assets.js extract"
     },
     "dependencies": {
         "@codemirror/gutter": "^0.19.9",
