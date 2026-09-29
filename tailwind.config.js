@@ -23,6 +23,12 @@ module.exports = {
     		}
     	},
     	extend: {
+    		zIndex: {
+    			// dialogs, menus, popovers and tooltips are portaled to <body>. They have to be above the
+    			// fixed page chrome of embedding pages (ILIAS: header 999, main bar 997, dropdowns 1000/1010),
+    			// but below real modal dialogs of the page (ILIAS/Bootstrap: backdrop 1040, modal 1050)
+    			overlay: '1030'
+    		},
     		colors: {
     			border: 'hsl(var(--border) / <alpha-value>)',
     			input: 'hsl(var(--input) / <alpha-value>)',
