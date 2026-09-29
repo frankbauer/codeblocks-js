@@ -245,7 +245,7 @@ export default {
         position: relative;
     }
     .cb-badge-row {
-        font-family: Roboto, 'Open Sans', Verdana, Arial, Helvetica, sans-serif !important;
+        font-family: Geist, 'Open Sans', Verdana, Arial, Helvetica, sans-serif !important;
         justify-content: flex-start;
         margin-top: 32px;
         padding-top: 8px;
@@ -288,7 +288,7 @@ export default {
         background-color: #fdf3e6;
         border-radius: 6px;
         padding: 10px 14px;
-        font-family: Roboto, 'Open Sans', Verdana, Arial, Helvetica, sans-serif !important;
+        font-family: Geist, 'Open Sans', Verdana, Arial, Helvetica, sans-serif !important;
     }
     .cb-badge-hint pre {
         background-color: #ffffff;

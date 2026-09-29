@@ -2340,7 +2340,7 @@ export default {
     }
     .cb-test h2 {
         color: white;
-        font-family: roboto;
+        font-family: Geist, sans-serif;
         font-weight: 200;
         padding-top: 4px;
         padding-bottom: 8px;

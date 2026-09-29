@@ -579,7 +579,7 @@ useResizeObserver(runnerRef, (entries) => {
 
 <template>
     <div
-        :class="`codeblocks ${addonClass}  ${backgroundColorClass} tw-mx-2 tw-mb-4`"
+        :class="`codeblocks tw-font-sans ${addonClass}  ${backgroundColorClass} tw-mx-2 tw-mb-4`"
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"
     >

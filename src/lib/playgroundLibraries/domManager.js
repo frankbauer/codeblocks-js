@@ -252,6 +252,7 @@ export default {
                     TREBUCHET_MS: '"Trebuchet MS", Helvetica, sans-serif',
                     IMPACT: 'Impact, Charcoal, sans-serif',
                     ROBOTO: 'Roboto, sans-serif',
+                    GEIST: 'Geist, sans-serif',
                     HELVETICA: '"Helvetica Neue", Helvetica, Arial, sans-serif',
                 }
                 const family = familyMap[String(payload.family).toUpperCase()]

@@ -1,4 +1,5 @@
 const animate = require('tailwindcss-animate')
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -23,6 +24,10 @@ module.exports = {
     		}
     	},
     	extend: {
+    		fontFamily: {
+    			// Geist ships with the library (src/assets/css/fonts.css)
+    			sans: ['Geist', ...defaultTheme.fontFamily.sans]
+    		},
     		zIndex: {
     			// dialogs, menus, popovers and tooltips are portaled to <body>. They have to be above the
     			// fixed page chrome of embedding pages (ILIAS: header 999, main bar 997, dropdowns 1000/1010),

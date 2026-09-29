@@ -1,3 +1,4 @@
+import './assets/css/fonts.css'
 import './assets/css/main.css'
 import './assets/css/loader.css'
 import '@/styles/app.scss'

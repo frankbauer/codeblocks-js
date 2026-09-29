@@ -45,7 +45,7 @@ codeblockseditor loading, codeblocks loading, [codeblockseditor] loading, [codeb
 
 loading > div:nth-of-type(1)::before {
     content: "Loading";
-    font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Geist", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 100;
     animation: blendOpacity 4s ease-in-out infinite;
 }
