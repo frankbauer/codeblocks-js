@@ -188,7 +188,7 @@ function domToRuntimeBlock(
             layout: dataset.layout,
             embeddedLibrary: dataset.embeddedLibrary,
             libraryPlacement: dataset.libraryPlacement,
-            version: dataset.version || '101',
+            version: dataset.version,
             hasAlternativeContent: dataset.alternativeContent !== undefined,
         },
     }

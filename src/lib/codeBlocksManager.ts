@@ -73,7 +73,11 @@ export class BlockData implements IBlockData {
         this.needsCodeRebuild = false
 
         this.appSettings = mainBlock
-        this._type = d.type
+        // BLOCK-static/BLOCK-hidden are only derived for display; stored blocks are BLOCK plus the
+        // static/hidden flags. Imports may still contain them: they only fill in a flag that is not set.
+        const isSuffixedBlock =
+            d.type === KnownBlockTypes.BLOCKSTATIC || d.type === KnownBlockTypes.BLOCKHIDDEN
+        this._type = isSuffixedBlock ? KnownBlockTypes.BLOCK : d.type
         this.content = d.content
         this.alternativeContent = d.alternativeContent || null
         this.noContent = d.noContent
@@ -87,13 +91,9 @@ export class BlockData implements IBlockData {
         this.static = m.static ?? d.type === KnownBlockTypes.BLOCKSTATIC
         this.hidden = m.hidden ?? d.type === KnownBlockTypes.BLOCKHIDDEN
         this.readonly = this.static || this.hidden || !!m.readonly
-        this.hasCode =
-            (m as any).hasCode ??
-            (this.type === KnownBlockTypes.BLOCK ||
-                this.type === KnownBlockTypes.BLOCKSTATIC ||
-                this.type === KnownBlockTypes.BLOCKHIDDEN)
+        this.hasCode = (m as any).hasCode ?? this.type === KnownBlockTypes.BLOCK
 
-        this.version = m.version ?? '101'
+        this.version = m.version ?? (d.type === KnownBlockTypes.LIBRARY ? '102' : '101')
         this.readyCount = d.readyCount
         this.errors = d.errors
         this.scopeUUID = d.scopeUUID

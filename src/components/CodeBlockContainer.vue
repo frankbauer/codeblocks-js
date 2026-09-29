@@ -872,7 +872,8 @@ const expanded = computed({
 })
 const serializedOptions = computed({
     get(): string {
-        return JSON.stringify(filteredCopy(block.value))
+        // type is a getter (backed by the internal _type), so filteredCopy does not see it
+        return JSON.stringify({ ...filteredCopy(block.value), type: block.value.type })
     },
     set(_v: string) {},
 })
