@@ -21,6 +21,10 @@ export enum CodeOutputTypes {
     MAGIC = 'magic',
 }
 
+// Where a LIBRARY block renders its libraryElement: in place (at the library block
+// itself), or teleported into the runner, directly above/below the output panel.
+export type LibraryPlacement = 'inline' | 'aboveOutput' | 'belowOutput'
+
 export enum CodeExpansionType {
     LARGE = 2,
     AUTO = 1,

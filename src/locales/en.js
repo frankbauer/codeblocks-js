@@ -19,6 +19,11 @@ export default {
         ScriptV_detail: 'API-Version for the Playground.',
         LibrarySource: 'Library Source',
         LibrarySource_detail: 'Use custom code or select a bundled library template.',
+        LibraryPlacement: 'Display Position',
+        LibraryPlacement_detail: 'Where the UI of this library (its libraryElement) is shown.',
+        LibraryPlacementInline: 'At the library block',
+        LibraryPlacementAboveOutput: 'Above the output',
+        LibraryPlacementBelowOutput: 'Below the output',
         LibrarySourceCustom: 'Custom',
         LibraryCopyToCustom: 'Copy To Custom',
         LibraryCopyToCustom_detail:

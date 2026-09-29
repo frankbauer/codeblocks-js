@@ -260,6 +260,22 @@
                                     </div>
                                 </div>
 
+                                <div class="tw-space-y-1">
+                                    <Label class="tw-text-xs tw-text-muted-foreground">
+                                        {{ l('CodeBlockContainer.LibraryPlacement') }}
+                                    </Label>
+                                    <CSelect
+                                        :model-value="libraryPlacement"
+                                        :options="libraryPlacements"
+                                        @update:model-value="libraryPlacement = $event"
+                                    />
+                                    <div
+                                        class="tw-text-xs tw-text-muted-foreground tw-leading-snug"
+                                    >
+                                        {{ l('CodeBlockContainer.LibraryPlacement_detail') }}
+                                    </div>
+                                </div>
+
                                 <div v-if="isEmbeddedLibrarySelected" class="tw-space-y-1">
                                     <Label class="tw-text-xs tw-text-muted-foreground">
                                         {{ l('CodeBlockContainer.LibraryCopyToCustom') }}
@@ -565,7 +581,7 @@
 <script lang="ts" setup>
 import { useFieldName } from '@/composables/fieldNames'
 import { BasicBlockProps, DEFAULT_BASIC_BLOCK_PROPS } from '@/composables/basicBlock'
-import { KnownBlockTypes } from '@/lib/ICodeBlocks'
+import { KnownBlockTypes, type LibraryPlacement } from '@/lib/ICodeBlocks'
 import { IListItemData } from '@/lib/ICompilerRegistry'
 import { CUSTOM_LIBRARY_ID, EMBEDDED_LIBRARIES } from '@/lib/embeddedLibraries'
 import { globalState } from '@/lib/globalState'
@@ -889,6 +905,22 @@ const selectedEmbeddedLibraryObj = computed({
     },
     set(v: IListItemData) {
         ;(block.value as any).setSelectedEmbeddedLibrary?.(v.value)
+    },
+})
+const libraryPlacements = computed((): IListItemData[] => [
+    { label: l('CodeBlockContainer.LibraryPlacementInline'), value: 'inline' },
+    { label: l('CodeBlockContainer.LibraryPlacementAboveOutput'), value: 'aboveOutput' },
+    { label: l('CodeBlockContainer.LibraryPlacementBelowOutput'), value: 'belowOutput' },
+])
+const libraryPlacement = computed({
+    get(): IListItemData {
+        return globalState.appState.itemForValue(
+            libraryPlacements.value,
+            block.value.libraryPlacement ?? 'inline'
+        )
+    },
+    set(v: IListItemData) {
+        block.value.libraryPlacement = v.value as LibraryPlacement
     },
 })
 const isEmbeddedLibrarySelected = computed(

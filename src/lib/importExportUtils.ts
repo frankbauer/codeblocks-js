@@ -59,6 +59,7 @@ const expandableCodeMetadataSchema = commonMetadataSchema.extend({
 
 const libraryMetadataSchema = expandableCodeMetadataSchema.extend({
     embeddedLibrary: z.string().optional(),
+    libraryPlacement: z.enum(['inline', 'aboveOutput', 'belowOutput']).optional(),
 })
 
 const dataMetadataSchema = expandableCodeMetadataSchema
@@ -583,6 +584,7 @@ function getBlockMetadata<T extends KnownBlockTypes>(
             ...commonMetadata,
             codeExpanded: block.codeExpanded,
             embeddedLibrary: block.embeddedLibrary,
+            libraryPlacement: block.libraryPlacement,
         } as MetadataByType<T>
     } else if (block.type === KnownBlockTypes.DATA) {
         return {

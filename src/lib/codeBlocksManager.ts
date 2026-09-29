@@ -4,6 +4,7 @@ import {
     KnownBlockTypes,
     IRandomizerSettings,
     CodeExpansionType,
+    LibraryPlacement,
 } from './ICodeBlocks'
 
 import { tagger } from '@/plugins/tagger'
@@ -58,6 +59,7 @@ export class BlockData implements IBlockData {
     lineCountHint: number
     name: string
     embeddedLibrary: string
+    libraryPlacement: LibraryPlacement
     //true when the code has been changed and the script object needs to be rebuilt, false otherwise. This is used to delay the rebuild until the playground is actually run to avoid unnecessary rebuilds while editing.
     needsCodeRebuild: boolean
 
@@ -108,6 +110,9 @@ export class BlockData implements IBlockData {
         this.lineCountHint = d.lineCountHint
         this.name = d.name
         this.embeddedLibrary = m.embeddedLibrary ?? CUSTOM_LIBRARY_ID
+        this.libraryPlacement = ['aboveOutput', 'belowOutput'].includes(m.libraryPlacement)
+            ? m.libraryPlacement
+            : 'inline'
 
         if (
             this.type === KnownBlockTypes.PLAYGROUND ||

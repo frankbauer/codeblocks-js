@@ -172,8 +172,13 @@
           libraryElement.html(...)); a negative margin-bottom in there would otherwise
           collapse straight through this div , or even overlap the
           next block. flow-root contains it so the bottom margin is reliable.
+
+          With a teleportTarget the host is moved next to the output panel. Teleport moves
+          the very same DOM node, so libraryElementHost (and this.libraryElement) stay valid.
         -->
-        <div ref="libraryElementHostRef" :class="{ 'tw-flow-root': editMode }"></div>
+        <Teleport defer :to="teleportTarget ?? 'body'" :disabled="!teleportTarget">
+            <div ref="libraryElementHostRef" :class="{ 'tw-flow-root': editMode }"></div>
+        </Teleport>
     </div>
 </template>
 
@@ -215,12 +220,15 @@ interface Props extends EditableBlockProps {
     namePrefix?: string
     eventHub: EventHubType
     tagSet?: IRandomizerSet | undefined
+    // CSS selector the libraryElement is teleported to (undefined = render in place)
+    teleportTarget?: string | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {
     ...DEFAULT_EDITABLE_BLOCK_PROPS,
     namePrefix: '',
     tagSet: undefined,
+    teleportTarget: undefined,
 })
 
 const instance = getCurrentInstance()

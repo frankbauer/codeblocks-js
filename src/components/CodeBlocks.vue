@@ -119,6 +119,17 @@ const isEmptyHtml = (html: string | undefined): boolean => {
     return html.replace(/<[^>]*>/g, '').replace(/&nbsp;|&#160;/g, '').trim() === ''
 }
 
+// LIBRARY blocks may render their libraryElement next to the output panel instead of
+// in place. The targets live inside the runner, so without a runner they stay inline.
+const libraryTargetID = (placement: 'aboveOutput' | 'belowOutput'): string =>
+    `cb-lib-${placement}-${blockInfo.value.uuid}`
+const libraryTeleportTarget = (b: (typeof blocks.value)[number]): string | undefined => {
+    if (!canRun.value || b.libraryPlacement === 'inline' || !b.libraryPlacement) {
+        return undefined
+    }
+    return `#${libraryTargetID(b.libraryPlacement)}`
+}
+
 type EdgeKind = 'code' | 'content' | 'none'
 const edgeKind = (b: (typeof blocks.value)[number]): EdgeKind => {
     if (b.hasCode) {
@@ -128,7 +139,9 @@ const edgeKind = (b: (typeof blocks.value)[number]): EdgeKind => {
         case KnownBlockTypes.TEXT:
             return isEmptyHtml(b.actualContent()) ? 'none' : 'content'
         case KnownBlockTypes.LIBRARY:
-            return libraryHasContent.value[b.uuid] ? 'content' : 'none'
+            return libraryHasContent.value[b.uuid] && !libraryTeleportTarget(b)
+                ? 'content'
+                : 'none'
         case KnownBlockTypes.PLAYGROUND:
             return 'content'
         default:
@@ -686,6 +699,7 @@ useResizeObserver(runnerRef, (entries) => {
                 :readonly="readonly"
                 :theme="themeForBlock(block)"
                 :tagSet="activeTagSet"
+                :teleportTarget="libraryTeleportTarget(block)"
                 @ready="blockBecameReady"
                 @content-change="(v: boolean) => onLibraryContentChange(block.uuid, v)"
                 :eventHub="eventHub"
@@ -813,6 +827,7 @@ useResizeObserver(runnerRef, (entries) => {
                     </Switch>
                 </div>
             </div>
+            <div :id="libraryTargetID('aboveOutput')" class="tw-flow-root"></div>
             <Transition
                 @before-enter="onBeforeEnter"
                 @enter="onEnter"
@@ -834,6 +849,7 @@ useResizeObserver(runnerRef, (entries) => {
                 { 'tw-opacity-40 tw-pointer-events-none tw-select-none tw-blur-sm': isShowingStale },            
           ]"></div></pre>
             </Transition>
+            <div :id="libraryTargetID('belowOutput')" class="tw-flow-root"></div>
         </div>
         <div ref="stickySentinelRef" class="tw-h-px tw-pointer-events-none" aria-hidden="true" />
     </div>

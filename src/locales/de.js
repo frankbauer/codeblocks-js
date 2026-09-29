@@ -20,6 +20,12 @@ export default {
         LibrarySource: 'Bibliotheksquelle',
         LibrarySource_detail:
             'Benutzerdefinierten Code verwenden oder eine mitgelieferte Bibliothek wählen.',
+        LibraryPlacement: 'Anzeigeposition',
+        LibraryPlacement_detail:
+            'Wo die Oberfläche dieser Bibliothek (ihr libraryElement) angezeigt wird.',
+        LibraryPlacementInline: 'Am Bibliotheksblock',
+        LibraryPlacementAboveOutput: 'Über der Ausgabe',
+        LibraryPlacementBelowOutput: 'Unter der Ausgabe',
         LibrarySourceCustom: 'Benutzerdefiniert',
         LibraryCopyToCustom: 'In Benutzerdefiniert kopieren',
         LibraryCopyToCustom_detail:

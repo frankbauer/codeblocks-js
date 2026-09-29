@@ -218,6 +218,7 @@ export default class MainBlock implements IMainBlock {
                 version: '101',
                 visibleLines: 10,
                 embeddedLibrary: 'custom',
+                libraryPlacement: 'inline',
                 shouldAutoreset: false,
                 shouldReloadResources: false,
                 generateTemplate: resolvedType === KnownBlockTypes.PLAYGROUND,
