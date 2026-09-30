@@ -7,9 +7,17 @@ export default {
     allowTick: false,
     tickMode: false,
     commandBuffer: [],
+    // commands of complete frames (closed by 'frameDone'), applied at the next animation frame
+    frameBuffer: [],
+    sawFrameDone: false,
     startTime: null,
     lastTickTime: null,
     animationFrameId: null,
+    overlay: null,
+    overlayCtx: null,
+    sprites: new Map(),
+    spriteOrder: 0,
+    spriteFrameId: null,
     state: {
         x: 0,
         y: 0,
@@ -58,6 +66,7 @@ export default {
 
             return {
                 src: safeSrc,
+                img,
                 onMessage: (cmd, data) => {
                     if (cmd === 'draw') {
                         const managedImage = this.objectManager
@@ -75,6 +84,10 @@ export default {
                 },
             }
         })
+
+        objectManager.registerType('SPRITE', (attrs, ready, error) =>
+            this._createSprite(attrs, ready, error)
+        )
 
         return {
             getContext: () => this.ctx,
@@ -109,6 +122,221 @@ export default {
             enableTicks: () => this.enableTicks(),
             disableTicks: () => this.disableTicks(),
         }
+    },
+    _createSprite(attrs, ready, error) {
+        const image = this.objectManager ? this.objectManager.get(attrs.image, 'IMAGE') : null
+        if (!image || !image.img) {
+            const message = 'Sprite needs a loaded Image (image #' + attrs.image + ' not found)'
+            console.error('PLAyRUN:', message)
+            error({ message })
+            return { onMessage: () => {} }
+        }
+
+        const sprite = {
+            id: attrs.id,
+            img: image.img,
+            frameWidth: Math.max(1, attrs.frameWidth | 0),
+            frameHeight: Math.max(1, attrs.frameHeight | 0),
+            firstFrame: Math.max(0, attrs.firstFrame | 0),
+            frameCount: attrs.frameCount | 0,
+            fps: +attrs.fps > 0 ? +attrs.fps : 12,
+            loop: attrs.loop !== false,
+            frame: 0,
+            playing: false,
+            reverse: false,
+            startTime: 0,
+            startFrame: 0,
+            visible: false,
+            position: { x: 0, y: 0 },
+            scale: 1,
+            anchor: { x: 0, y: 0 },
+            depth: 0,
+            order: this.spriteOrder++,
+        }
+
+        const init = () => {
+            const columns = Math.max(1, Math.floor(sprite.img.width / sprite.frameWidth))
+            const rows = Math.max(1, Math.floor(sprite.img.height / sprite.frameHeight))
+            const available = Math.max(1, columns * rows - sprite.firstFrame)
+            sprite.columns = columns
+            if (sprite.frameCount <= 0 || sprite.frameCount > available) {
+                sprite.frameCount = available
+            }
+            this.sprites.set(sprite.id, sprite)
+            ready({ frameCount: sprite.frameCount, columns, rows })
+        }
+        if (sprite.img.complete && sprite.img.naturalWidth > 0) {
+            init()
+        } else {
+            sprite.img.addEventListener('load', init, { once: true })
+        }
+
+        return {
+            sprite,
+            onMessage: (cmd, data) => this._spriteMessage(sprite, cmd, data || {}),
+        }
+    },
+    _spriteMessage(sprite, cmd, data) {
+        const now = performance.now()
+        switch (cmd) {
+            case 'play': {
+                this._updateSpriteFrame(sprite, now)
+                if (+data.fps > 0) sprite.fps = +data.fps
+                if (Number.isInteger(data.fromFrame) && data.fromFrame >= 0) {
+                    sprite.frame = Math.min(data.fromFrame, sprite.frameCount - 1)
+                }
+                sprite.reverse = data.reverse === true
+                sprite.playing = true
+                sprite.startTime = now
+                sprite.startFrame = sprite.frame
+                break
+            }
+            case 'pause':
+                this._updateSpriteFrame(sprite, now)
+                sprite.playing = false
+                break
+            case 'stop':
+                sprite.playing = false
+                sprite.frame = 0
+                break
+            case 'setFrame':
+                sprite.frame = Math.max(0, Math.min(sprite.frameCount - 1, data.frame | 0))
+                sprite.startTime = now
+                sprite.startFrame = sprite.frame
+                break
+            case 'setLoop':
+                this._updateSpriteFrame(sprite, now)
+                sprite.startTime = now
+                sprite.startFrame = sprite.frame
+                sprite.loop = data.loop !== false
+                break
+            case 'show':
+                if (data.position) sprite.position = data.position
+                if (data.scale !== undefined) sprite.scale = +data.scale
+                if (data.anchor) sprite.anchor = data.anchor
+                sprite.visible = true
+                break
+            case 'hide':
+                sprite.visible = false
+                break
+            case 'setPosition':
+                if (data.position) sprite.position = data.position
+                break
+            case 'setScale':
+                sprite.scale = +data.scale
+                break
+            case 'setAnchor':
+                if (data.anchor) sprite.anchor = data.anchor
+                break
+            case 'setDepth':
+                sprite.depth = +data.depth || 0
+                break
+            case 'draw':
+                if (this.tickMode) {
+                    this.commandBuffer.push({ type: 'SPRITE', sprite, data })
+                } else {
+                    this._drawSpriteFrame(this.ctx, sprite, data, performance.now())
+                }
+                return
+            default:
+                console.warn('PLAyRUN: Unknown sprite command:', cmd)
+                return
+        }
+        this._requestSpriteFrame()
+    },
+    // advances sprite.frame to the frame that belongs to `now`, sends 'ended' for finished animations
+    _updateSpriteFrame(sprite, now) {
+        if (!sprite.playing) {
+            return
+        }
+        const steps = Math.floor(((now - sprite.startTime) / 1000) * sprite.fps)
+        const count = sprite.frameCount
+        let frame = sprite.startFrame + (sprite.reverse ? -steps : steps)
+        if (sprite.loop) {
+            frame = ((frame % count) + count) % count
+        } else if (frame >= count || frame < 0) {
+            frame = frame < 0 ? 0 : count - 1
+            sprite.playing = false
+            this._sendSpriteEvent(sprite, 'ended')
+        }
+        sprite.frame = frame
+    },
+    _sendSpriteEvent(sprite, cmd) {
+        if (this.active && this.runner) {
+            this.runner.postMessage('o', {
+                json: JSON.stringify({ frame: sprite.frame }),
+                objid: sprite.id,
+                type: 'SPRITE',
+                cmd,
+            })
+        }
+    },
+    _drawSpriteFrame(ctx, sprite, data, now) {
+        if (!ctx) {
+            return
+        }
+        this._updateSpriteFrame(sprite, now)
+        const index = sprite.firstFrame + sprite.frame
+        const sx = (index % sprite.columns) * sprite.frameWidth
+        const sy = Math.floor(index / sprite.columns) * sprite.frameHeight
+        const pos = data.position ?? { x: data.x ?? 0, y: data.y ?? 0 }
+        const anchor = data.anchor ?? { x: 0, y: 0 }
+        const scale = data.scale ?? 1
+        const w = sprite.frameWidth * scale
+        const h = sprite.frameHeight * scale
+        ctx.drawImage(
+            sprite.img,
+            sx,
+            sy,
+            sprite.frameWidth,
+            sprite.frameHeight,
+            pos.x - anchor.x * w,
+            pos.y - anchor.y * h,
+            w,
+            h
+        )
+    },
+    // draws all visible sprites onto the sprite layer, sorted by depth (then creation order)
+    _renderSprites(now) {
+        if (!this.overlayCtx || !this.overlay) {
+            return false
+        }
+        const dpr = window.devicePixelRatio || 1
+        const ctx = this.overlayCtx
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+        ctx.clearRect(0, 0, this.overlay[0].width / dpr, this.overlay[0].height / dpr)
+
+        let animating = false
+        const visible = []
+        this.sprites.forEach((sprite) => {
+            if (sprite.visible) visible.push(sprite)
+            else this._updateSpriteFrame(sprite, now)
+            if (sprite.playing) animating = true
+        })
+        visible.sort((a, b) => a.depth - b.depth || a.order - b.order)
+        visible.forEach((sprite) => this._drawSpriteFrame(ctx, sprite, sprite, now))
+        return animating
+    },
+    _requestSpriteFrame() {
+        if (this.spriteFrameId) {
+            return
+        }
+        this.spriteFrameId = requestAnimationFrame(() => {
+            this.spriteFrameId = null
+            const animating = this._renderSprites(performance.now())
+            if (animating && this.active) {
+                this._requestSpriteFrame()
+            }
+        })
+    },
+    _resetSprites() {
+        if (this.spriteFrameId) {
+            cancelAnimationFrame(this.spriteFrameId)
+            this.spriteFrameId = null
+        }
+        this.sprites = new Map()
+        this.spriteOrder = 0
+        this._renderSprites(performance.now())
     },
     _normalizeAllowedImageSource(src) {
         if (typeof src !== 'string') {
@@ -186,6 +414,10 @@ export default {
         this.active = true
         this.startTime = null
         this.lastTickTime = null
+        this._resetSprites()
+        this.commandBuffer = []
+        this.frameBuffer = []
+        this.sawFrameDone = false
         this.bindEvents()
 
         if (window.ResizeObserver && this.canvasElement) {
@@ -205,6 +437,17 @@ export default {
             cancelAnimationFrame(this.animationFrameId)
             this.animationFrameId = null
         }
+        // sprites keep their last frame visible, but stop animating
+        const now = performance.now()
+        this.sprites.forEach((sprite) => {
+            this._updateSpriteFrame(sprite, now)
+            sprite.playing = false
+        })
+        if (this.spriteFrameId) {
+            cancelAnimationFrame(this.spriteFrameId)
+            this.spriteFrameId = null
+        }
+        this._renderSprites(now)
         this.unbindEvents()
         if (this.resizeObserver) {
             this.resizeObserver.disconnect()
@@ -216,9 +459,34 @@ export default {
         this.state.alt = false
         this.state.shift = false
         this.state.meta = false
-        this.commandBuffer = []
+        // show what was drawn last instead of dropping it
+        this.applyCommandBuffer(true)
+        this.sawFrameDone = false
     },
-    onMessage(cmd, data) {
+    // Worker messages carry their payload as JSON string in `value` (static @JSCommand) or `json`.
+    // Commands with a single parameter (e.g. setFillStyle(value), setTickMode(enabled)) are unwrapped.
+    _payload(data) {
+        if (!data || typeof data !== 'object' || Array.isArray(data) || !('command' in data)) {
+            return data
+        }
+        let value = data.value !== undefined ? data.value : data.json
+        if (typeof value === 'string') {
+            try {
+                value = JSON.parse(value)
+            } catch (_e) {
+                // plain string payload, e.g. Canvas.clear(color)
+            }
+        }
+        if (value && typeof value === 'object' && !Array.isArray(value)) {
+            const keys = Object.keys(value)
+            if (keys.length === 1 && (keys[0] === 'value' || keys[0] === 'enabled')) {
+                value = value[keys[0]]
+            }
+        }
+        return value
+    },
+    onMessage(cmd, rawData) {
+        const data = cmd === 'getScreenSize' ? rawData : this._payload(rawData)
         if (cmd === 'enableTicks') {
             this.enableTicks()
         } else if (cmd === 'disableTicks') {
@@ -226,8 +494,13 @@ export default {
         } else if (cmd === 'setTickMode') {
             this.tickMode = !!data
             if (!this.tickMode) {
-                this.applyCommandBuffer()
+                this.applyCommandBuffer(true)
             }
+        } else if (cmd === 'frameDone') {
+            // everything buffered so far belongs to a complete frame
+            this.sawFrameDone = true
+            this.frameBuffer = this.frameBuffer.concat(this.commandBuffer)
+            this.commandBuffer = []
         } else if (cmd === 'getScreenSize') {
             if (this.runner) {
                 this.runner.postMessage('getScreenSizeReply', {
@@ -235,6 +508,10 @@ export default {
                     json: JSON.stringify({
                         width: this.canvas ? this.canvas[0].width : 0,
                         height: this.canvas ? this.canvas[0].height : 0,
+                        // drawing coordinates are CSS pixels (the context is scaled by the pixel ratio)
+                        cssWidth: this.canvas ? this.canvas[0].width / (window.devicePixelRatio || 1) : 0,
+                        cssHeight: this.canvas ? this.canvas[0].height / (window.devicePixelRatio || 1) : 0,
+                        pixelRatio: window.devicePixelRatio || 1,
                     }),
                 })
             }
@@ -342,18 +619,30 @@ export default {
                 break
         }
     },
-    applyCommandBuffer() {
-        if (this.commandBuffer.length === 0) {
+    // applies the commands of complete frames. Without 'frameDone' messages (older worker
+    // libraries) or with `all`, everything that is buffered is applied.
+    applyCommandBuffer(all = false) {
+        let entries
+        if (all || !this.sawFrameDone) {
+            entries = this.frameBuffer.concat(this.commandBuffer)
+            this.frameBuffer = []
+            this.commandBuffer = []
+        } else {
+            entries = this.frameBuffer
+            this.frameBuffer = []
+        }
+        if (entries.length === 0) {
             return
         }
-        this.commandBuffer.forEach((entry) => {
+        entries.forEach((entry) => {
             if (entry.type === 'IMAGE') {
                 this._drawImage(entry.img, entry.data)
+            } else if (entry.type === 'SPRITE') {
+                this._drawSpriteFrame(this.ctx, entry.sprite, entry.data, performance.now())
             } else if (entry.type === 'CMD') {
                 this.executeCommand(entry.cmd, entry.data)
             }
         })
-        this.commandBuffer = []
     },
     tickLoop(timestamp) {
         if (!this.active || !this.allowTick) {
@@ -402,6 +691,12 @@ export default {
         this.ctx = this.canvas[0].getContext('2d')
         this.ctx.setTransform(1, 0, 0, 1, 0, 0)
         this.ctx.scale(dpr, dpr)
+        if (this.overlay) {
+            this.overlay[0].width = width * dpr
+            this.overlay[0].height = height * dpr
+            this.overlayCtx = this.overlay[0].getContext('2d')
+            this._renderSprites(performance.now())
+        }
         console.log('PLAyRUN: Canvas resized:', width, height, 'DPR:', dpr)
     },
     updateState(e) {
@@ -499,6 +794,23 @@ export default {
         }
         this.canvas = canvas
         this.ctx = this.canvas[0].getContext('2d')
+
+        // sprite layer: a second canvas on top of the drawing canvas that lets input events pass through
+        if (this.canvasElement.css('position') === 'static') {
+            this.canvasElement.css('position', 'relative')
+        }
+        this.overlay = $(document.createElement('canvas'))
+            .addClass('canvasManager-sprites')
+            .css({
+                position: 'absolute',
+                left: this.canvas[0].offsetLeft + 'px',
+                top: this.canvas[0].offsetTop + 'px',
+                width: this.canvas[0].offsetWidth ? this.canvas[0].offsetWidth + 'px' : '100%',
+                height: this.canvas[0].offsetHeight ? this.canvas[0].offsetHeight + 'px' : '100%',
+                'pointer-events': 'none',
+            })
+        this.canvas.after(this.overlay)
+        this.overlayCtx = this.overlay[0].getContext('2d')
 
         // Make canvas focusable
         this.canvas.attr('tabindex', '0').css('outline', 'none')
