@@ -18,6 +18,12 @@ export interface OverlayScoreInput {
     unit?: string
 }
 
+/** hover: bubble on hover, permanent: card below the range, inline: pill at the end of the line */
+export type HighlightDisplay = 'hover' | 'permanent' | 'inline'
+
+/** end: pill right after the code of the line, right: at the right edge of the editor */
+export type PillAlign = 'end' | 'right'
+
 export interface OverlayHighlight {
     id?: string
     /** shorthand for from/to: "1:6-4:12", "3" or "3-5" */
@@ -26,8 +32,10 @@ export interface OverlayHighlight {
     to?: OverlayPosInput
     color?: string
     comment?: string
-    display?: 'hover' | 'permanent'
+    display?: HighlightDisplay
     score?: OverlayScoreInput
+    /** where the score/inline pill goes, overrides the block's and the overlay's pillAlign */
+    align?: PillAlign
 }
 
 export interface OverlayGutterMarker {
@@ -45,12 +53,15 @@ export interface OverlayScore extends OverlayScoreInput {
     to?: OverlayPosInput
     color?: string
     id?: string
+    align?: PillAlign
 }
 
 export interface BlockOverlay {
     highlights?: OverlayHighlight[]
     gutter?: OverlayGutterMarker[]
     scores?: OverlayScore[]
+    /** default pill alignment in this block, overrides the overlay's pillAlign */
+    pillAlign?: PillAlign
 }
 
 /** keys are the block's data-name or its index ("0", "1", …) among all blocks of the app */
@@ -77,6 +88,8 @@ export interface ElementOverlay {
 export interface CodeBlocksOverlay {
     blocks?: OverlayMap
     elements?: ElementOverlay[]
+    /** default pill alignment for all blocks ('end' if not set) */
+    pillAlign?: PillAlign
 }
 
 // ---------------------------------------------------------------------------
@@ -98,8 +111,9 @@ export interface NormalizedHighlight {
     to: OverlayPos
     color: string
     comment?: string
-    display: 'hover' | 'permanent'
+    display: HighlightDisplay
     score?: NormalizedScore
+    align: PillAlign
 }
 
 export interface NormalizedGutterMarker {
@@ -111,6 +125,7 @@ export interface NormalizedGutterMarker {
 
 export interface NormalizedLineScore extends NormalizedScore {
     line: number
+    align: PillAlign
 }
 
 export interface NormalizedBlockOverlay {
@@ -191,8 +206,9 @@ const highlightSchema = z.object({
     to: posSchema.optional(),
     color: z.string().optional(),
     comment: z.string().optional(),
-    display: z.enum(['hover', 'permanent']).optional(),
+    display: z.enum(['hover', 'permanent', 'inline']).optional(),
     score: scoreSchema.optional(),
+    align: z.enum(['end', 'right']).optional(),
 })
 
 const gutterSchema = z.object({
@@ -208,6 +224,7 @@ const lineOrRangeScoreSchema = scoreSchema.extend({
     to: posSchema.optional(),
     color: z.string().optional(),
     id: z.string().optional(),
+    align: z.enum(['end', 'right']).optional(),
 })
 
 const elementSchema = z.object({
@@ -313,11 +330,32 @@ const nextId = () => `cb-ov-${++generatedIds}`
 
 // ---------------------------------------------------------------------------
 
-export function normalizeBlockOverlay(raw: BlockOverlay | undefined): NormalizedBlockOverlay {
+const PILL_ALIGNS: PillAlign[] = ['end', 'right']
+
+function pillAlign(value: unknown, fallback: PillAlign): PillAlign {
+    if (value === undefined) {
+        return fallback
+    }
+    if (PILL_ALIGNS.includes(value as PillAlign)) {
+        return value as PillAlign
+    }
+    console.warn(`[codeblocks overlay] pillAlign must be 'end' or 'right'`, value)
+    return fallback
+}
+
+/**
+ * @param defaultAlign the overlay-wide pillAlign; the block's pillAlign and each item's
+ *     align take precedence
+ */
+export function normalizeBlockOverlay(
+    raw: BlockOverlay | undefined,
+    defaultAlign: PillAlign = 'end'
+): NormalizedBlockOverlay {
     const res: NormalizedBlockOverlay = { highlights: [], gutter: [], scores: [] }
     if (!raw) {
         return res
     }
+    const blockAlign = pillAlign(raw.pillAlign, defaultAlign)
 
     for (const h of parseItems(highlightSchema, raw.highlights, 'highlight')) {
         const r = parseRange(h)
@@ -332,6 +370,7 @@ export function normalizeBlockOverlay(raw: BlockOverlay | undefined): Normalized
             comment: h.comment,
             display: h.display ?? 'hover',
             score: normalizeScore(h.score),
+            align: h.align ?? blockAlign,
         })
     }
 
@@ -357,9 +396,10 @@ export function normalizeBlockOverlay(raw: BlockOverlay | undefined): Normalized
                 ),
                 display: 'hover',
                 score,
+                align: s.align ?? blockAlign,
             })
         } else if (s.line !== undefined) {
-            res.scores.push({ ...score, line: s.line })
+            res.scores.push({ ...score, line: s.line, align: s.align ?? blockAlign })
         } else {
             console.warn('[codeblocks overlay] score needs a line or a range', s)
         }
@@ -413,8 +453,10 @@ export function validateOverlay(overlay: unknown): overlay is CodeBlocksOverlay 
     }
     const o = overlay as Record<string, unknown>
     for (const key of Object.keys(o)) {
-        if (key !== 'blocks' && key !== 'elements') {
-            console.warn(`[codeblocks overlay] unknown key "${key}" (expected blocks, elements)`)
+        if (key !== 'blocks' && key !== 'elements' && key !== 'pillAlign') {
+            console.warn(
+                `[codeblocks overlay] unknown key "${key}" (expected blocks, elements, pillAlign)`
+            )
         }
     }
     if (o.blocks !== undefined) {
@@ -422,7 +464,8 @@ export function validateOverlay(overlay: unknown): overlay is CodeBlocksOverlay 
             console.warn('[codeblocks overlay] blocks must be a map of block name/index → overlay')
             return false
         }
-        Object.values(o.blocks as OverlayMap).forEach((b) => normalizeBlockOverlay(b))
+        const align = pillAlign(o.pillAlign, 'end')
+        Object.values(o.blocks as OverlayMap).forEach((b) => normalizeBlockOverlay(b, align))
     }
     normalizeElementOverlays(o.elements)
     return true
@@ -441,36 +484,60 @@ function setContent(el: HTMLElement, text: string, plain = false) {
     }
 }
 
-export function createScorePill(
-    score: NormalizedScore,
-    dotColor?: string,
+export interface PillOptions {
+    /** points are shown first; without a score the pill is a plain comment pill */
+    score?: NormalizedScore
+    /** shown after the points; defaults to the score's text */
+    text?: string
+    /** colour dot in front (range scores) */
+    dot?: string
+    /** tint of a comment pill without score */
+    color?: string
     id?: string
-): HTMLElement {
+}
+
+export function createPill({ score, text, dot, color, id }: PillOptions): HTMLElement {
     const pill = document.createElement('span')
-    pill.className = `cb-ov-pill cb-ov-pill--${scoreTone(score.points)}`
+    pill.className = score
+        ? `cb-ov-pill cb-ov-pill--${scoreTone(score.points)}`
+        : 'cb-ov-pill cb-ov-pill--comment'
+    if (!score && color) {
+        pill.style.setProperty('--cb-ov-tone', color)
+    }
     if (id) {
         pill.dataset.cbOvId = id
     }
-    if (dotColor) {
-        const dot = document.createElement('span')
-        dot.className = 'cb-ov-dot'
-        dot.style.setProperty('--cb-ov-color', dotColor)
-        pill.appendChild(dot)
+    if (dot) {
+        const d = document.createElement('span')
+        d.className = 'cb-ov-dot'
+        d.style.setProperty('--cb-ov-color', dot)
+        pill.appendChild(d)
     }
-    const pts = document.createElement('span')
-    pts.className = 'cb-ov-pts'
-    pts.textContent = formatPoints(score.points, score.unit)
-    pill.appendChild(pts)
-    if (score.text) {
-        const sep = document.createElement('span')
-        sep.className = 'cb-ov-sep'
-        pill.appendChild(sep)
+    if (score) {
+        const pts = document.createElement('span')
+        pts.className = 'cb-ov-pts'
+        pts.textContent = formatPoints(score.points, score.unit)
+        pill.appendChild(pts)
+    }
+    const label = text ?? score?.text
+    if (label) {
+        if (score) {
+            const sep = document.createElement('span')
+            sep.className = 'cb-ov-sep'
+            pill.appendChild(sep)
+        }
         const txt = document.createElement('span')
         txt.className = 'cb-ov-txt'
-        setContent(txt, score.text)
+        setContent(txt, label)
+        // the full text, in case it is cut off
+        pill.title = txt.textContent ?? ''
         pill.appendChild(txt)
     }
     return pill
+}
+
+export function createScorePill(score: NormalizedScore, dot?: string, id?: string): HTMLElement {
+    return createPill({ score, dot, id })
 }
 
 export interface OverlayEntry {

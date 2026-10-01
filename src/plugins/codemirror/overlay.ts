@@ -26,7 +26,9 @@ import { ErrorSeverity, type ICompilerErrorDescription } from '@/lib/ICompilerRe
 import {
     createBubble,
     createEntry,
-    createScorePill,
+    createPill,
+    type PillAlign,
+    type PillOptions,
     type NormalizedBlockOverlay,
     type NormalizedGutterMarker,
     type NormalizedHighlight,
@@ -225,6 +227,7 @@ export function errorsToBlockOverlay(
             color,
             comment: e.message,
             display: 'hover',
+            align: 'end',
         })
         res.gutter.push({ kind, line: from.line, text: e.message, color })
     })
@@ -253,26 +256,27 @@ function bindFocus(view: EditorView, el: HTMLElement) {
     el.addEventListener('mouseleave', () => view.dispatch({ effects: focusOverlayEffect.of(null) }))
 }
 
-interface PillData {
-    id?: string
-    dot?: string
-    score: NormalizedLineScore | NonNullable<NormalizedHighlight['score']>
-}
+type PillData = PillOptions
 
 class PillsWidget extends WidgetType {
-    constructor(private pills: PillData[]) {
+    constructor(
+        private pills: PillData[],
+        private align: PillAlign
+    ) {
         super()
     }
 
     eq(other: PillsWidget) {
-        return JSON.stringify(other.pills) === JSON.stringify(this.pills)
+        return (
+            other.align === this.align && JSON.stringify(other.pills) === JSON.stringify(this.pills)
+        )
     }
 
     toDOM(view: EditorView) {
         const wrap = document.createElement('span')
-        wrap.className = 'cb-ov-pills'
+        wrap.className = `cb-ov-pills cb-ov-pills--${this.align}`
         for (const p of this.pills) {
-            wrap.appendChild(createScorePill(p.score, p.dot, p.id))
+            wrap.appendChild(createPill(p))
         }
         bindFocus(view, wrap)
         return wrap
@@ -331,35 +335,71 @@ function buildDecorations(state: EditorState): DecorationSet {
         if (value.focus !== null) {
             cls.push(value.focus === h.id ? 'cb-ov-hl--focus' : 'cb-ov-hl--dim')
         }
-        ranges.push(
-            Decoration.mark({
-                class: cls.join(' '),
-                attributes: { style: `--cb-ov-color: ${h.color}`, 'data-cb-ov-id': h.id },
-            }).range(h.start, h.end)
-        )
+        const attributes = { style: `--cb-ov-color: ${h.color}`, 'data-cb-ov-id': h.id }
+        // one mark per line: each piece ends at its line end, so the pills placed there
+        // are not wrapped into the range of a multi-line highlight. Pieces that continue
+        // on the previous/next line get square corners on that side.
+        for (let pos = h.start; pos < h.end; ) {
+            const line = doc.lineAt(pos)
+            const to = Math.min(h.end, line.to)
+            if (to > pos) {
+                const pieceCls = [...cls]
+                if (pos > h.start) {
+                    pieceCls.push('cb-ov-hl--cont-start')
+                }
+                if (to < h.end) {
+                    pieceCls.push('cb-ov-hl--cont-end')
+                }
+                ranges.push(
+                    Decoration.mark({ class: pieceCls.join(' '), attributes }).range(pos, to)
+                )
+            }
+            pos = line.to + 1
+        }
     }
 
-    // pills at the end of a line: line scores first, then range scores (on their end line)
-    const pillsByLine = new Map<number, PillData[]>()
-    const addPill = (line: number, p: PillData) => {
-        if (!pillsByLine.has(line)) {
-            pillsByLine.set(line, [])
+    // pills per line, either right after the code or at the right edge of the editor:
+    // line scores first, then range scores and inline comments (on their end line)
+    const pillsByLine: Record<PillAlign, Map<number, PillData[]>> = {
+        end: new Map(),
+        right: new Map(),
+    }
+    const addPill = (line: number, align: PillAlign, p: PillData) => {
+        const map = pillsByLine[align]
+        if (!map.has(line)) {
+            map.set(line, [])
         }
-        pillsByLine.get(line)!.push(p)
+        map.get(line)!.push(p)
     }
     for (const s of allOf(value, 'scores')) {
-        addPill(doc.lineAt(s.pos).number, { score: s })
+        addPill(doc.lineAt(s.pos).number, s.align, { score: s })
     }
     const byStart = [...highlights].sort((a, b) => a.start - b.start || b.end - a.end)
     for (const h of byStart) {
-        if (h.score) {
-            addPill(doc.lineAt(h.end).number, { id: h.id, dot: h.color, score: h.score })
+        const line = doc.lineAt(h.end).number
+        if (h.display === 'inline' && h.comment) {
+            // inline comment: one pill with the comment (and the points, if there are any)
+            addPill(line, h.align, {
+                id: h.id,
+                score: h.score,
+                text: h.comment,
+                dot: h.score ? h.color : undefined,
+                color: h.color,
+            })
+        } else if (h.score) {
+            addPill(line, h.align, { id: h.id, dot: h.color, score: h.score })
         }
     }
-    for (const [line, pills] of pillsByLine) {
-        ranges.push(
-            Decoration.widget({ widget: new PillsWidget(pills), side: 1 }).range(doc.line(line).to)
-        )
+    for (const align of ['end', 'right'] as const) {
+        for (const [line, pills] of pillsByLine[align]) {
+            ranges.push(
+                Decoration.widget({
+                    widget: new PillsWidget(pills, align),
+                    // the floated right pills come after the ones following the code
+                    side: align === 'end' ? 1 : 2,
+                }).range(doc.line(line).to)
+            )
+        }
     }
 
     // permanent comments, merged per end line

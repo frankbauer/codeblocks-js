@@ -240,10 +240,13 @@ export default class MainBlock implements IMainBlock {
         if (!map) {
             return undefined
         }
-        if (block.name && map[block.name] !== undefined) {
-            return map[block.name]
+        const overlay =
+            block.name && map[block.name] !== undefined ? map[block.name] : map[String(block.id)]
+        if (!overlay) {
+            return undefined
         }
-        return map[String(block.id)]
+        // the overlay-wide default alignment of pills applies unless the block sets its own
+        return { ...overlay, pillAlign: overlay.pillAlign ?? this.overlay.pillAlign }
     }
 
     totalLines(): number {

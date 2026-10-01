@@ -147,6 +147,15 @@ console.log(Math.max(...data))</pre
                                     range: '4:9-4:27',
                                     color: 'amber',
                                     comment: 'values[values.length] is undefined → NaN',
+                                    display: 'inline',
+                                },
+                                {
+                                    range: '9:1-9:25',
+                                    color: 'violet',
+                                    comment: 'Use <code>const</code> consistently',
+                                    display: 'inline',
+                                    align: 'right',
+                                    score: { points: 0.5 },
                                 },
                             ],
                             gutter: [
@@ -155,7 +164,7 @@ console.log(Math.max(...data))</pre
                                 { line: 9, color: 'green', text: 'Nice test data' },
                             ],
                             scores: [
-                                { line: 1, points: 2, text: 'Correct signature' },
+                                { line: 1, points: 2, text: 'Correct signature', align: 'right' },
                                 { line: 6, points: 0, text: 'Return ok' },
                                 { range: '11:13-11:30', points: 0.5, text: 'Spread used' },
                             ],
