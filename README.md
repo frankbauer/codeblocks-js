@@ -47,7 +47,7 @@ npm run build-examples
 Builds the library and mirrors its runtime libraries (`js/`) to `docs/examples/`. The examples contain no image assets.
 
 ### Licensed assets
-Some images (listed in `licensed-assets.json`) are licensed from [Freepik](https://www.freepik.com) and may be used in CodeBlocks, but must not be published in this repository. They are git-ignored and distributed separately as `codeblocks-licensed-assets.zip` (ask the maintainers for the download location):
+Some tree images in `public/assets/trees/` (listed in `licensed-assets.json`) are licensed from [Freepik](https://www.freepik.com) and may be used in CodeBlocks, but must not be published in this repository. They are git-ignored and distributed separately as `codeblocks-licensed-assets.zip` (ask the maintainers for the download location):
 
 ```
 npm run extract-licensed-assets

@@ -58,4 +58,16 @@ for (const name of entries) {
 }
 fs.writeFileSync(manifestFile, JSON.stringify(entries, null, 4) + '\n')
 
+// scene assets (public/assets/<scene>) used by the lernwerk example scenes in common/scene,
+// mirrored to <lernwerk>/assets/<scene> (same layout as an ILIAS installation: assets/ next to common/)
+const sceneAssets = ['robots', 'floatingworld', 'cherrygame', 'maze']
+const destAssets = path.join(lernwerk, 'assets')
+fs.mkdirSync(destAssets, { recursive: true })
+for (const name of sceneAssets) {
+    const src = path.join(__dirname, 'dist', 'assets', name)
+    const dst = path.join(destAssets, name)
+    console.log(`Syncing 'assets/${name}' to '${dst}'`)
+    run(`rsync -a --delete --delete-excluded --exclude .DS_Store ${q(src + '/')} ${q(dst + '/')}`)
+}
+
 console.log('Done.')

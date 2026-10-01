@@ -3,7 +3,6 @@
     "zip": "codeblocks-licensed-assets.zip",
     "root": "public",
     "licenses": [
-        "common/scene/floatingworld/img/LICENSE",
         "assets/trees/LICENSE"
     ],
     "files": [
@@ -26,20 +25,6 @@
         "assets/trees/tree.stylized.14.png",
         "assets/trees/tree.stylized.15.png",
         "assets/trees/tree.summer.png",
-        "assets/trees/tree.winter.png",
-        "common/scene/floatingworld/img/Background.jpg",
-        "common/scene/floatingworld/img/Cherry.png",
-        "common/scene/floatingworld/img/Cloud2.png",
-        "common/scene/floatingworld/img/Cloud3.png",
-        "common/scene/floatingworld/img/Ghost1.png",
-        "common/scene/floatingworld/img/Ghost2.png",
-        "common/scene/floatingworld/img/GhostWorld.png",
-        "common/scene/floatingworld/img/Gras1.png",
-        "common/scene/floatingworld/img/Gras2.png",
-        "common/scene/floatingworld/img/Player1.png",
-        "common/scene/floatingworld/img/Player2.png",
-        "common/scene/floatingworld/img/Stone.png",
-        "common/scene/floatingworld/img/Tree.png",
-        "common/scene/floatingworld/img/World.png"
+        "assets/trees/tree.winter.png"
     ]
 }

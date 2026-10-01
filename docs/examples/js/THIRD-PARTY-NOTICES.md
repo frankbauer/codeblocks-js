@@ -41,8 +41,6 @@ Outside of `js/` (ILIAS deployment only):
 
 | Folder | Content | License |
 |---|---|---|
-| `assets/`, `resources/` | CodeBlocks sprites and tiles | CC BY-NC 4.0 |
+| `assets/`, `resources/` | CodeBlocks sprites, tiles and scene images (`assets/robots`, `assets/floatingworld`, `assets/cherrygame`, `assets/maze`) | CC BY-NC 4.0 |
 | `assets/trees/` (tree.autumn/spring/summer/winter, tree.stylized.*) | Tree images | Freepik license |
-| `common/scene/maze/img/` | Maze tiles | CC BY-NC 4.0 |
-| `common/scene/floatingworld/img/` | Floating World images | Freepik license |
 | `common/` (code, `codeblocks.zip`) | CodeBlocks examples | MIT |

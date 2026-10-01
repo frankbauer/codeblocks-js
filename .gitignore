@@ -22,8 +22,6 @@ yarn-error.log*
 # images licensed from Freepik (see licensed-assets.json and the LICENSE file in each folder):
 # usable in CodeBlocks, but not to be published in this repository
 codeblocks-licensed-assets.zip
-public/common/scene/floatingworld/img/*
-!public/common/scene/floatingworld/img/LICENSE
 public/assets/trees/tree.autumn.png
 public/assets/trees/tree.spring.png
 public/assets/trees/tree.summer.png
