@@ -470,6 +470,7 @@ function onFinalOutputObject(val) {
                 if (block.value.obj !== null && canvas.value !== undefined) {
                     console.log('DATA: update - CanvasElement', canvas.value)
                     let result = block.value.obj.update(val, $(canvas.value))
+                    props.eventHub.emit('playground-updated', {})
                     if (updateErrors()) {
                         return
                     }

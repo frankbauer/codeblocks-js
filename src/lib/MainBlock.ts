@@ -9,6 +9,7 @@ import { ICompilerID } from '@/lib/ICompilerRegistry'
 import { BlockData, IMainBlock } from '@/lib/codeBlocksManager'
 import { UITheme, UIThemeType } from '@/lib/uiTheme'
 import { IRuntimeData, IRuntimeBlock, runtimeBlockSchema } from './importExportUtils'
+import type { BlockOverlay, CodeBlocksOverlay } from './overlay'
 
 export default class MainBlock implements IMainBlock {
     id: number
@@ -36,6 +37,9 @@ export default class MainBlock implements IMainBlock {
     persistentArguments: boolean
     error?: string
     buildVersion: number = 0
+    // set at runtime through window.codeblocks.setOverlay, never exported
+    overlay: CodeBlocksOverlay = {}
+    overlayRevision: number = 0
 
     constructor(data: IRuntimeData) {
         const s = data.settings
@@ -228,6 +232,18 @@ export default class MainBlock implements IMainBlock {
         this.blocks.splice(position, 0, new BlockData(newBlockData, this))
         this.blocks.forEach((v, i) => (v.id = i))
         this.buildVersion++
+    }
+
+    /** overlay for a block, looked up by its name first and then by its index */
+    findBlockOverlay(block: BlockData): BlockOverlay | undefined {
+        const map = this.overlay.blocks
+        if (!map) {
+            return undefined
+        }
+        if (block.name && map[block.name] !== undefined) {
+            return map[block.name]
+        }
+        return map[String(block.id)]
     }
 
     totalLines(): number {

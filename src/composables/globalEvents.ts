@@ -11,6 +11,9 @@ type EventHubEvents = {
     'clicked-run': void
     'before-run': {}
     'initialized-libraries': {}
+    // the playground UI finished rendering after init / after a run
+    'playground-initialized': {}
+    'playground-updated': {}
 }
 export type EventHubType = Emitter<EventHubEvents>
 

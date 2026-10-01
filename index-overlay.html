@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta name="codeblocks-baseurl" content="/" />
+        <title>Overlay Demo</title>
+        <script src="/js/jquery.min.js" type="text/javascript"></script>
+        <style>
+            body {
+                max-width: 960px;
+                margin: 24px auto;
+                font-family: system-ui, sans-serif;
+            }
+            [codeblocks] > * {
+                display: none;
+            }
+            h2 {
+                font-size: 15px;
+                margin: 28px 8px 4px;
+            }
+        </style>
+        <script type="module" src="/src/main.ts"></script>
+    </head>
+
+    <body>
+        <!--
+            Two apps with identical code and playground classes: the overlay is set on app 1
+            only, so app 2 must stay untouched (overlays are scoped to their root element).
+        -->
+        <h2>App 1 (with overlay)</h2>
+        <div
+            codeblocks
+            data-question="1"
+            data-compiler="javascript"
+            data-compiler-version="101"
+            data-run-code="true"
+        >
+            <pre as="BLOCK" data-name="solution">
+function sum(values) {
+    let total = 0
+    for (let i = 0; i &lt;= values.length; i++) {
+        total += values[i]
+    }
+    return total
+}
+
+const data = [3, 4, 5]
+console.log(sum(data))
+console.log(Math.max(...data))</pre
+            >
+            <script
+                as="playground"
+                type="application/playground"
+                data-generate-template="true"
+                data-version="102"
+                data-height="120px"
+            >
+                export default {
+                    render(values) {
+                        const cells = values
+                            .map((v, i) => `<div class="cell result-cell-${i}">${v}</div>`)
+                            .join('')
+                        this.canvasElement.html(
+                            `<div class="grid" style="display:flex;gap:16px;padding:24px;font:14px system-ui">${cells}<div class="summary" style="margin-left:auto">${values.length} values</div></div>`
+                        )
+                        this.canvasElement.find('.cell').css({ padding: '8px 14px', background: '#f1f3f7', borderRadius: '6px' })
+                    },
+                    init() {
+                        this.render(['–', '–'])
+                    },
+                    update(txt) {
+                        this.render(txt.trim().split(/\s+/))
+                    },
+                }
+            </script>
+        </div>
+
+        <h2>App 2 (dark, same classes, no overlay)</h2>
+        <div
+            codeblocks
+            data-question="2"
+            data-ui-theme="dark"
+            data-compiler="javascript"
+            data-compiler-version="101"
+            data-run-code="true"
+        >
+            <pre as="BLOCK" data-name="solution">
+function sum(values) {
+    let total = 0
+    for (let i = 0; i &lt;= values.length; i++) {
+        total += values[i]
+    }
+    return total
+}
+
+const data = [3, 4, 5]
+console.log(sum(data))
+console.log(Math.max(...data))</pre
+            >
+            <script
+                as="playground"
+                type="application/playground"
+                data-generate-template="true"
+                data-version="102"
+                data-height="120px"
+            >
+                export default {
+                    render(values) {
+                        const cells = values
+                            .map((v, i) => `<div class="cell result-cell-${i}">${v}</div>`)
+                            .join('')
+                        this.canvasElement.html(
+                            `<div class="grid" style="display:flex;gap:16px;padding:24px;font:14px system-ui">${cells}<div class="summary" style="margin-left:auto">${values.length} values</div></div>`
+                        )
+                        this.canvasElement.find('.cell').css({ padding: '8px 14px', background: '#f1f3f7', borderRadius: '6px' })
+                    },
+                    init() {
+                        this.render(['–', '–'])
+                    },
+                    update(txt) {
+                        this.render(txt.trim().split(/\s+/))
+                    },
+                }
+            </script>
+        </div>
+
+        <script>
+            window.addEventListener('codeblocks:mounted', () => {
+                codeblocks.setOverlay(1, {
+                    blocks: {
+                        solution: {
+                            highlights: [
+                                {
+                                    range: '3:5-5:5',
+                                    color: 'blue',
+                                    comment: 'Loop is fine in principle …',
+                                },
+                                {
+                                    range: '3:21-3:41',
+                                    color: 'red',
+                                    comment: 'Off-by-one: use < instead of <=',
+                                    display: 'permanent',
+                                    score: { points: -1.5, text: 'Off-by-one' },
+                                },
+                                {
+                                    range: '4:9-4:27',
+                                    color: 'amber',
+                                    comment: 'values[values.length] is undefined → NaN',
+                                },
+                            ],
+                            gutter: [
+                                { line: 3, color: 'red', text: 'Loop bound wrong' },
+                                { line: 3, color: 'amber', text: 'Also consider for…of' },
+                                { line: 9, color: 'green', text: 'Nice test data' },
+                            ],
+                            scores: [
+                                { line: 1, points: 2, text: 'Correct signature' },
+                                { line: 6, points: 0, text: 'Return ok' },
+                                { range: '11:13-11:30', points: 0.5, text: 'Spread used' },
+                            ],
+                        },
+                    },
+                    elements: [
+                        {
+                            selector: 'result-cell-0',
+                            comment: 'Should be 12',
+                            color: 'red',
+                            border: true,
+                            display: 'permanent',
+                        },
+                        { selector: 'result-cell-0', color: 'amber', border: 'dashed' },
+                        {
+                            selector: 'result-cell-1',
+                            comment: 'Max is correct',
+                            color: 'green',
+                            border: 'dotted',
+                            score: { points: 1, text: 'max' },
+                        },
+                        {
+                            selector: 'summary',
+                            comment: 'Count is shown',
+                            placement: 'bottom',
+                            score: { points: 0.5 },
+                        },
+                    ],
+                })
+            })
+        </script>
+    </body>
+</html>

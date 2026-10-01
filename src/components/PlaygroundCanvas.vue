@@ -83,6 +83,7 @@ function whenMounted(): void {
                 nextTick(() => {
                     props.obj.init($(canvas.value), props.block.scope, props.runner)
                     emit('did-init', canvas.value)
+                    props.eventHub?.emit('playground-initialized', {})
                 })
             })
         })

@@ -22,7 +22,8 @@ import {
 import compilerRegistry from '@/lib/CompilerRegistry'
 import { CodeOutputTypes } from '@/lib/ICodeBlocks'
 import { type BlockStorageType, useBlockStorage } from '@/storage/blockStorage'
-import { computed, nextTick, ref, toRefs, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
+import { DomOverlayManager } from '@/lib/domOverlay'
 import { useStorage, useIntersectionObserver, useResizeObserver } from '@vueuse/core'
 import { useCodeBlockEvents } from '@/composables/useCodeBlockEvents'
 import { CodeSplit } from '@/composables/useCodeEditor'
@@ -575,10 +576,45 @@ useResizeObserver(runnerRef, (entries) => {
         }
     }
 })
+
+// Overlays on elements inside this app (e.g. a custom UI rendered by a playground).
+// They are re-applied whenever that UI may have been re-rendered.
+const rootRef = ref<HTMLElement | null>(null)
+const domOverlay = new DomOverlayManager(
+    () => rootRef.value,
+    blockInfo.value.uuid,
+    () => (blockInfo.value.uiTheme === 'dark' ? 'dark' : 'light')
+)
+const OVERLAY_RENDER_EVENTS = [
+    'all-mounted',
+    'initialized-libraries',
+    'output-updated',
+    'playground-initialized',
+    'playground-updated',
+] as const
+const scheduleDomOverlay = () => domOverlay.schedule()
+
+watch(
+    () => [blockInfo.value.overlay?.elements, blockInfo.value.overlayRevision] as const,
+    ([elements]) => domOverlay.setOverlays(elements),
+    { deep: true }
+)
+watch(() => blockInfo.value.uiTheme, scheduleDomOverlay)
+
+onMounted(() => {
+    OVERLAY_RENDER_EVENTS.forEach((e) => props.eventHub.on(e, scheduleDomOverlay))
+    domOverlay.setOverlays(blockInfo.value.overlay?.elements)
+})
+
+onBeforeUnmount(() => {
+    OVERLAY_RENDER_EVENTS.forEach((e) => props.eventHub.off(e, scheduleDomOverlay))
+    domOverlay.dispose()
+})
 </script>
 
 <template>
     <div
+        ref="rootRef"
         :class="`codeblocks tw-font-sans ${addonClass}  ${backgroundColorClass} tw-mx-2 tw-mb-4`"
         :data-question="blockInfo.id"
         :uuid="blockInfo.uuid"

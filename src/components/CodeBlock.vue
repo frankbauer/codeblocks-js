@@ -34,6 +34,7 @@
             :first-line="block.firstLine"
             :read-only="editorReadOnly"
             :errors="block.errors"
+            :overlay="blockOverlay"
             :max-lines="totalLines"
             :tag-set="editMode ? tagSet : undefined"
             :code-split-segment="codeSplitSegment"
@@ -215,6 +216,12 @@ const codeSplitSegment = computed<CodeSplitSegment | undefined>(() => {
 })
 
 const totalLines = computed(() => blockStorage.appInfo.value.totalLines())
+
+const blockOverlay = computed(() => {
+    // depend on the revision, so setting the same overlay again re-renders it
+    void blockStorage.appInfo.value.overlayRevision
+    return blockStorage.appInfo.value.findBlockOverlay(block.value)
+})
 
 const hasAlternativeContent = computed(
     () => block.value.hasAlternativeContent && typeName.value === 'block'

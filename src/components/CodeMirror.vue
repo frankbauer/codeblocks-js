@@ -18,7 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import ErrorTip from '@/components/ErrorTip.vue'
 import { cpp } from '@codemirror/lang-cpp'
 import { css } from '@codemirror/lang-css'
 import { html } from '@codemirror/lang-html'
@@ -35,11 +34,6 @@ import {
     keymap,
     lineNumbers,
     ViewUpdate,
-    Decoration,
-    DecorationSet,
-    gutter,
-    GutterMarker,
-    hoverTooltip,
     tooltips,
 } from '@codemirror/view'
 import {
@@ -80,16 +74,12 @@ import {
     EditorState,
     type Extension,
     type Line,
-    RangeSetBuilder,
-    StateEffect,
-    StateField,
     type Transaction,
     Prec,
 } from '@codemirror/state'
 import {
     computed,
     ComputedRef,
-    createApp,
     nextTick,
     onBeforeUnmount,
     onMounted,
@@ -102,7 +92,7 @@ import {
 
 import { useResizeObserver } from '@vueuse/core'
 import { IRandomizerSet } from '@/lib/ICodeBlocks'
-import { ErrorSeverity, ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
+import { ICompilerErrorDescription } from '@/lib/ICompilerRegistry'
 import {
     createTagCompletions,
     createTagMarkField,
@@ -125,7 +115,14 @@ import { createHighlightStyle } from '@/plugins/codemirror/highlightStyles'
 import { getUITheme, UITheme, UIThemeType } from '@/lib/uiTheme'
 import { DEFAULT_EDITOR_THEME, EditorTheme, EditorThemes } from '@/plugins/codemirror/editorThemes'
 import { createDOMEventHandlers } from '@/plugins/codemirror/keyHandling'
-import { createErrorHoverTooltip, ErrorRange } from '@/plugins/codemirror/errorHoverTooltip'
+import {
+    ERROR_LAYER,
+    errorsToBlockOverlay,
+    MANUAL_LAYER,
+    overlayExtension,
+    setOverlayLayerEffect,
+} from '@/plugins/codemirror/overlay'
+import { type BlockOverlay, normalizeBlockOverlay } from '@/lib/overlay'
 
 // Add proper typing for the props
 interface Props {
@@ -142,6 +139,7 @@ interface Props {
     codeSplitSegment?: CodeSplitSegment
     isEditMode?: boolean
     enableCompletionInViewMode?: boolean
+    overlay?: BlockOverlay
 }
 
 // Fix emit types to match expected usage
@@ -165,6 +163,7 @@ const props = withDefaults(defineProps<Props>(), {
     codeSplitSegment: undefined,
     isEditMode: false,
     enableCompletionInViewMode: true,
+    overlay: undefined,
 })
 const {
     name,
@@ -179,6 +178,7 @@ const {
     codeSplitSegment,
     isEditMode,
     enableCompletionInViewMode,
+    overlay,
 } = toRefs(props)
 
 // Replace code.value with proper v-model handling
@@ -456,9 +456,7 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         ),
         tagMarkField,
         tagTooltip,
-        underlineField,
-        createErrorHoverTooltip(errorRanges),
-        errorGutter,
+        overlayExtension(),
         createIndentService(),
     ] as Extension[]
 })
@@ -521,8 +519,9 @@ onMounted(() => {
             return
         }
 
-        // Initialize error underlining
-        underlineErrors()
+        // Initialize the overlay layers (compiler errors and the host page's overlay)
+        updateErrorLayer()
+        updateManualLayer()
 
         // Initialize tag marks
         markTags(editorView.value, tagSet)
@@ -683,194 +682,33 @@ watch(
 
 const lineCount = (): number => editorView.value?.state.doc.lines ?? 0
 
-// Create underline decoration based on errors
-const addUnderline = StateEffect.define<ErrorRange>({
-    map: ({ from, to, severity, message, decoration }, change) =>
-        validateRange({
-            from: change.mapPos(from),
-            to: change.mapPos(to),
-            severity,
-            message,
-            decoration,
+// Compiler errors and the host page's overlay are separate layers of the overlay
+// extension, so replacing one of them leaves the other untouched
+function updateErrorLayer() {
+    const view = editorView.value
+    if (!view) {
+        return
+    }
+    view.dispatch({
+        effects: setOverlayLayerEffect.of({
+            layer: ERROR_LAYER,
+            overlay: errorsToBlockOverlay(errors.value, firstLine.value, view.state.doc),
         }),
-})
-
-// Define a StateEffect for clearing all underlines
-const clearUnderlines = StateEffect.define()
-
-const underlineField = StateField.define<DecorationSet>({
-    create() {
-        return Decoration.none
-    },
-    update(underlines, tr) {
-        underlines = underlines.map(tr.changes)
-        for (let e of tr.effects) {
-            // Handle the clearUnderlines effect by resetting underlines
-            if (e.is(clearUnderlines)) {
-                underlines = Decoration.none
-            } else if (e.is(addUnderline)) {
-                const decoration =
-                    e.value.decoration || underlineMarkError(e.value.severity, e.value.message)
-                underlines = underlines.update({
-                    add: [decoration.range(e.value.from, e.value.to)],
-                })
-            }
-        }
-        return underlines
-    },
-    provide: (f) => EditorView.decorations.from(f),
-})
-
-const underlineMarkError = (severity: ErrorSeverity, msg: string) =>
-    Decoration.mark({
-        class: severity === ErrorSeverity.Warning ? 'yellow-wave' : 'red-wave',
-        attributes: {},
     })
-
-function clamp(n: number) {
-    return Math.max(0, Math.min(n, editorView.value!.state.doc.length - 1))
 }
 
-function validateRange(range: ErrorRange): ErrorRange {
-    range.from = clamp(range.from)
-    range.to = clamp(range.to)
-    if (range.from === range.to) {
-        range.to = clamp(range.to + 1)
-    }
-    if (range.from === range.to) {
-        range.from = clamp(range.from - 1)
-    }
-    if (range.from > range.to) {
-        return {
-            from: range.to,
-            to: range.from,
-            severity: range.severity,
-            message: range.message,
-            decoration: range.decoration,
-        }
-    }
-    return range
+function updateManualLayer() {
+    editorView.value?.dispatch({
+        effects: setOverlayLayerEffect.of({
+            layer: MANUAL_LAYER,
+            overlay: normalizeBlockOverlay(overlay.value),
+        }),
+    })
 }
 
-const errorRanges = computed(() => {
-    return errors.value
-        .map((e) => {
-            if (firstLine.value === 0) {
-                return validateRange({
-                    from: editorView.value!.state.doc.length - 2,
-                    to: editorView.value!.state.doc.length - 1,
-                    severity: e.severity,
-                    message: e.message,
-                })
-            }
-            const sLine = e.start.line - firstLine.value + 1
-            const startLine = editorView.value!.state.doc.line(sLine)
-            if (startLine) {
-                const from = startLine.from + e.start.column
-                const eLine = e.end.line - firstLine.value + 1
-                if (eLine >= sLine && eLine <= lineCount()) {
-                    const endLine = editorView.value!.state.doc.line(eLine)
-                    if (endLine) {
-                        return validateRange({
-                            from: from,
-                            to: endLine.from + e.end.column,
-                            severity: e.severity,
-                            message: e.message,
-                        })
-                    }
-                } else {
-                    return validateRange({
-                        from: from,
-                        to: from + 1,
-                        severity: e.severity,
-                        message: e.message,
-                    })
-                }
-            }
-            return undefined
-        })
-        .filter((e) => e !== undefined)
-})
+watch([errors, firstLine], updateErrorLayer, { immediate: true, deep: true })
 
-function underlineErrors() {
-    let effects: StateEffect<unknown>[] = [
-        clearUnderlines.of(null),
-        ...errorRanges.value.map((e) => addUnderline.of(e)),
-    ]
-
-    editorView.value!.dispatch({ effects })
-    return true
-}
-
-// Custom gutter marker for error symbols
-const errorTipApps = new WeakMap<Node, ReturnType<typeof createApp>>()
-class ErrorMarker extends GutterMarker {
-    constructor(
-        private severity: ErrorSeverity,
-        private errors: ICompilerErrorDescription[]
-    ) {
-        super()
-    }
-
-    toDOM() {
-        const marker = document.createElement('span')
-        const app = createApp(ErrorTip, {
-            errors: this.errors,
-            severity: this.severity,
-        })
-        app.mount(marker)
-        errorTipApps.set(marker, app)
-        return marker
-    }
-
-    destroy(dom: Node) {
-        errorTipApps.get(dom)?.unmount()
-        errorTipApps.delete(dom)
-    }
-}
-
-// Custom gutter for errors
-const errorGutter = gutter({
-    class: 'error-gutter',
-    markers: (view: EditorView) => {
-        let builder = new RangeSetBuilder<GutterMarker>()
-        const errorsByLine = new Map<number, ICompilerErrorDescription[]>()
-
-        errors.value.forEach((e) => {
-            const lineNumber = e.start.line - firstLine.value + 1
-            if (lineNumber >= 1 && lineNumber <= view.state.doc.lines) {
-                if (!errorsByLine.has(lineNumber)) {
-                    errorsByLine.set(lineNumber, [])
-                }
-                errorsByLine.get(lineNumber)!.push(e)
-            }
-        })
-
-        const sortedLines = Array.from(errorsByLine.keys()).sort((a, b) => a - b)
-        for (const lineNr of sortedLines) {
-            const lineErrors = errorsByLine.get(lineNr)!
-            const line = view.state.doc.line(lineNr)
-            const maxSeverity = lineErrors.some((e) => e.severity === ErrorSeverity.Error)
-                ? ErrorSeverity.Error
-                : ErrorSeverity.Warning
-            builder.add(line.from, line.from, new ErrorMarker(maxSeverity, lineErrors))
-        }
-
-        return builder.finish()
-    },
-})
-
-watch(
-    errors,
-    () => {
-        if (editorView.value === null) {
-            return
-        }
-        console.log('Errors', errors.value)
-        underlineErrors()
-    },
-    { immediate: true, deep: true }
-)
+watch(overlay, updateManualLayer, { deep: true })
 
 watch(
     tagSet,
