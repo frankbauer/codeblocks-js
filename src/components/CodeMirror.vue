@@ -40,6 +40,7 @@ import {
     gutter,
     GutterMarker,
     hoverTooltip,
+    tooltips,
 } from '@codemirror/view'
 import {
     indentWithTab,
@@ -407,6 +408,9 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
         bracketMatching(),
         closeBrackets(),
+        // Render tooltips (autocompletion, hover) into the body. Inside the editor DOM
+        // they end up behind the neighbouring code block when shown above the first line.
+        tooltips({ parent: document.body }),
         autocompletion({
             activateOnTyping: true,
         }),
@@ -915,55 +919,6 @@ defineExpose({
         .cm-lineNumbers
             min-width: 60px
 
-    .cm-tooltip
-        background-color: rgba(255, 255, 255, 0.2) !important
-        backdrop-filter: blur(4px) saturate(50%) brightness(130%) !important
-        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2) !important
-        border-radius: 4px !important
-
-        .code-tooltip
-            border-width: 1px
-            border-style: solid
-            border-radius: 4px
-            padding: 4px 8px
-            max-width: 400px
-            word-wrap: break-word
-            pointer-events: none
-            z-index: 1000
-            font-family: "Source Code Pro", monospace
-            background-color: rgba(0, 0, 0, 0)
-
-            &.error-tooltip
-                color: #f82c2c !important
-                font-weight: 700
-                border-color: #e51e56
-
-            &.warning-tooltip
-                color: #422f05 !important
-                font-weight: 400
-                border-color: #e5a91e
-
-    .cm-tooltip.cm-tooltip-autocomplete
-        background-color: rgba(255, 255, 255, 0.95)
-        border: 1px solid #ddd
-        border-radius: 4px
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15)
-
-        > ul
-            font-family: "Source Code Pro", monospace
-            padding: 4px 0
-
-            > li
-                padding: 4px 8px
-
-                &[aria-selected]
-                    background-color: #0366d6
-                    color: white
-
-                .cm-completionDetail
-                    color: #666
-                    font-size: 0.9em
-                    margin-left: 8px
     .cm-scroller
         min-height: 0 !important
 
@@ -1007,4 +962,56 @@ defineExpose({
 
     textarea.accqstXmlInput, textarea.noRTEditor
         display: none !important
+
+// Tooltips are rendered into document.body (see tooltips() in the extensions),
+// so they must not be nested under .code-editor
+.cm-tooltip
+    background-color: rgba(255, 255, 255, 0.2) !important
+    backdrop-filter: blur(4px) saturate(50%) brightness(130%) !important
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2) !important
+    border-radius: 4px !important
+
+    .code-tooltip
+        border-width: 1px
+        border-style: solid
+        border-radius: 4px
+        padding: 4px 8px
+        max-width: 400px
+        word-wrap: break-word
+        pointer-events: none
+        z-index: 1000
+        font-family: "Source Code Pro", monospace
+        background-color: rgba(0, 0, 0, 0)
+
+        &.error-tooltip
+            color: #f82c2c !important
+            font-weight: 700
+            border-color: #e51e56
+
+        &.warning-tooltip
+            color: #422f05 !important
+            font-weight: 400
+            border-color: #e5a91e
+
+.cm-tooltip.cm-tooltip-autocomplete
+    background-color: rgba(255, 255, 255, 0.95)
+    border: 1px solid #ddd
+    border-radius: 4px
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15)
+
+    > ul
+        font-family: "Source Code Pro", monospace
+        padding: 4px 0
+
+        > li
+            padding: 4px 8px
+
+            &[aria-selected]
+                background-color: #0366d6
+                color: white
+
+            .cm-completionDetail
+                color: #666
+                font-size: 0.9em
+                margin-left: 8px
 </style>
