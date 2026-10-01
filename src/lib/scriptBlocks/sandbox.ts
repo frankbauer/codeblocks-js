@@ -41,9 +41,11 @@ export function compileCode(src: string) {
         }
 
         const oldRequestAnimationFrame = requestAnimationFrame
-        sandbox.requestAnimationFrame = (callback: FrameRequestCallback) => {
-            oldRequestAnimationFrame(callback)
+        // return the id, so callers can cancelAnimationFrame() it
+        sandbox.requestAnimationFrame = (callback: FrameRequestCallback): number => {
+            return oldRequestAnimationFrame(callback)
         }
+        sandbox.cancelAnimationFrame = cancelAnimationFrame.bind(window)
         sandbox.module = {
             exports: undefined,
         }
@@ -182,7 +184,7 @@ export function compileCode(src: string) {
             setInterval: sandbox.setInterval,
             clearInterval: sandbox.clearInterval,
             requestAnimationFrame: sandbox.requestAnimationFrame,
-            cancelAnimationFrame: cancelAnimationFrame.bind(window),
+            cancelAnimationFrame: sandbox.cancelAnimationFrame,
             console: sandbox.console,
             fetch: sandbox.fetch,
             $: sandbox.$,

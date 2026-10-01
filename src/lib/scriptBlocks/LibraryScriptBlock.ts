@@ -2,6 +2,7 @@ import { AnyCodeBlockScope, ICodeEntry, ILibraryObject, IScriptOutputObject } fr
 import { BaseScriptBlock } from './BaseScriptBlock'
 import { compileCode, stripModuleSyntax } from './sandbox'
 import { keepRaw } from './utils'
+import { globalState } from '@/lib/globalState'
 
 const libraryCodeTemplate = {
     prefix: 'with(sandbox) { return function(){ return {o:',
@@ -76,6 +77,7 @@ export class LibraryScriptBlock extends BaseScriptBlock {
             this.libraryObject.DATA = this.DATA
             this.libraryObject.CODE = this.CODE
             this.libraryObject.LANGUAGE = this.LANGUAGE
+            this.libraryObject.ASSETS_URL = globalState.appState.assetsurl
         }
         if (this.libraryObject?.create) {
             try {

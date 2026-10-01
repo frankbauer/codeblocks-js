@@ -27,7 +27,7 @@ public class DemoApp {
 
     public static void main(String[] args) {
         System.out.println("DemoApp started: " + CodeBlocks.getVersion());
-        img = new Image("/assets/floatingworld/Player1.png", DemoApp::onReady, DemoApp::onFailed);        
+        img = new Image("@assets/floatingworld/Player1.png", DemoApp::onReady, DemoApp::onFailed);        
         Canvas.addMouseEventListener(DemoApp::onMouseEvent);
         Canvas.addKeyEventListener(DemoApp::onKeyEvent);
         Canvas.addTickEventListener(DemoApp::onTick);

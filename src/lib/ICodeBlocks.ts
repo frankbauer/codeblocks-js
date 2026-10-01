@@ -71,6 +71,9 @@ export interface IGlobalSettings {
 }
 
 export interface IGlobalState extends IGlobalSettings {
+    // URL of the bundled asset folder (baseurl + 'assets/'); '@assets/' URLs resolve against it
+    readonly assetsurl: string
+
     format_info(text: string): string
 
     format_error(text: string): string

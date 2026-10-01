@@ -495,6 +495,25 @@ watch(isReady, (ready) => {
     }
 })
 
+// Keep the (height-limited) output box pinned to the newest output, unless the
+// user scrolled up inside it to read earlier lines.
+watch(
+    outputHTML,
+    () => {
+        const el = outputElement.value
+        if (!el) {
+            return
+        }
+        const pinned = el.scrollHeight - el.scrollTop - el.clientHeight <= 20
+        if (pinned) {
+            nextTick(() => {
+                el.scrollTop = el.scrollHeight
+            })
+        }
+    },
+    { flush: 'pre' }
+)
+
 // --- Runner Context-Aware Scroll Fix ---
 const runnerRef = ref<HTMLElement | null>(null)
 const contentEndRef = ref<HTMLElement | null>(null)
@@ -963,6 +982,8 @@ div.runner
         white-space: pre-wrap
         word-break: break-all
         word-wrap: break-word
+        max-height: 50vh
+        overflow-y: auto
         .outtext
             padding: 9.5px
 

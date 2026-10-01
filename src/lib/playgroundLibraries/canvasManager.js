@@ -343,9 +343,14 @@ export default {
             return null
         }
 
-        const trimmed = src.trim()
+        let trimmed = src.trim()
         if (!trimmed) {
             return null
+        }
+
+        // '@assets/...' points into the bundled asset folder, wherever it is installed
+        if (trimmed.startsWith('@assets/')) {
+            trimmed = (this.ASSETS_URL ?? 'assets/') + trimmed.substring('@assets/'.length)
         }
 
         if (trimmed.startsWith('//')) {

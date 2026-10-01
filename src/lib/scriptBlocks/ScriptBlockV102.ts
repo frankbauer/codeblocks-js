@@ -16,6 +16,7 @@ import { SmartScope } from './SmartScope'
 import { IBlockData, KnownBlockTypes } from '../ICodeBlocks'
 import { LibraryScriptBlock } from './LibraryScriptBlock'
 import { createCodeEntries } from './codeEntries'
+import { globalState } from '@/lib/globalState'
 
 const v102CodeTemplate: ICodeTemplate = {
     prefix: 'with(sandbox) { return function(){ return {o:',
@@ -95,6 +96,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         l.DATA = lib.DATA
         l.CODE = this.CODE
         l.LANGUAGE = this.LANGUAGE
+        l.ASSETS_URL = globalState.appState.assetsurl
     }
 
     public override resetBlockData(blocks: IBlockData[] | undefined, language?: string): void {
@@ -180,6 +182,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         v.scope = scope as ICodeBlockScope
         v.CODE = this.CODE
         v.LANGUAGE = this.LANGUAGE
+        v.ASSETS_URL = globalState.appState.assetsurl
         v.setupDOM?.()
     }
 
@@ -198,6 +201,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         v.runner = runner
         v.CODE = this.CODE
         v.LANGUAGE = this.LANGUAGE
+        v.ASSETS_URL = globalState.appState.assetsurl
         v.init()
     }
 
@@ -213,6 +217,7 @@ export class ScriptBlockV102 extends PlaygroundScriptBlock {
         v.outputElement = outputElement
         v.CODE = this.CODE
         v.LANGUAGE = this.LANGUAGE
+        v.ASSETS_URL = globalState.appState.assetsurl
         return v.update(txt, json)
     }
 

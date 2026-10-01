@@ -48,6 +48,10 @@ export class GlobalState implements IGlobalState {
         this.baseurl = options.baseurl
     }
 
+    get assetsurl(): string {
+        return this.baseurl + 'assets/'
+    }
+
     format_info(text: string): string {
         return '<span style="color:green">' + text + '</span>'
     }

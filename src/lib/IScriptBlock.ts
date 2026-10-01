@@ -133,6 +133,8 @@ export interface IPlaygroundObjectV102 {
     CODE: ICodeEntry[]
     // Language of the app's code ('java', 'javascript', 'python', ...)
     LANGUAGE: string
+    // URL of the bundled asset folder, see ILibraryObject.ASSETS_URL
+    ASSETS_URL: string
 }
 
 export interface ILibraryObject {
@@ -152,6 +154,10 @@ export interface ILibraryObject {
     CODE?: ICodeEntry[]
     // Language of the app's code ('java', 'javascript', 'python', ...)
     LANGUAGE?: string
+    // URL of the bundled asset folder (always ends with '/'), e.g. '/assets/' in the
+    // demo/lernwerk setup or '<plugin>/codeblocks/<version>/assets/' in ILIAS.
+    // Resource URLs starting with '@assets/' should be resolved against it.
+    ASSETS_URL?: string
 
     name?: string
     create?(context: Record<string, any>): any
