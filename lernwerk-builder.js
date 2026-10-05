@@ -60,7 +60,7 @@ fs.writeFileSync(manifestFile, JSON.stringify(entries, null, 4) + '\n')
 
 // scene assets (public/assets/<scene>) used by the lernwerk example scenes in common/scene,
 // mirrored to <lernwerk>/assets/<scene> (same layout as an ILIAS installation: assets/ next to common/)
-const sceneAssets = ['robots', 'floatingworld', 'cherrygame', 'maze']
+const sceneAssets = ['robots', 'floatingworld', 'cherrygame', 'maze', 'universum', 'snowmeadow', 'seasonal']
 const destAssets = path.join(lernwerk, 'assets')
 fs.mkdirSync(destAssets, { recursive: true })
 for (const name of sceneAssets) {
