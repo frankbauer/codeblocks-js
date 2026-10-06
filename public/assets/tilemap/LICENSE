@@ -1,0 +1,27 @@
+CodeBlocks Tile Map Assets (assets/tilemap/)
+
+SPDX-License-Identifier: CC-BY-NC-4.0
+
+Copyright (c) T. Miehm
+
+The tile sheets, sprites and characters in this directory (themes/*.png,
+sprites/*.png) and their sources (art/Tiles/*.png, *.aseprite) were created by
+hand by T. Miehm. They are licensed under the
+Creative Commons Attribution-NonCommercial 4.0 International License
+(CC BY-NC 4.0).
+
+tilemap.json (the description of the tiles) is part of CodeBlocks and is
+licensed under the same terms, see ../LICENSE.
+
+You are free to:
+- Share - copy and redistribute the material in any medium or format
+- Adapt - remix, transform, and build upon the material
+
+Under the following terms:
+- Attribution - You must give appropriate credit, provide a link to
+  the license, and indicate if changes were made.
+  Suggested credit: "Tile map art by T. Miehm, CC BY-NC 4.0"
+- NonCommercial - You may not use the material for commercial purposes.
+
+Full license text:
+https://creativecommons.org/licenses/by-nc/4.0/legalcode

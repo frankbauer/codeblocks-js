@@ -13,6 +13,10 @@ Exception: tree.autumn.png, tree.spring.png, tree.summer.png, tree.winter.png
 and tree.stylized.*.png in trees/ are licensed from Freepik, see
 trees/LICENSE. They are not covered by CC BY-NC 4.0.
 
+The tile map art in tilemap/ (themes/*.png, sprites/*.png) was created by
+T. Miehm. It is also licensed under CC BY-NC 4.0, but must be credited to
+T. Miehm, see tilemap/LICENSE.
+
 You are free to:
 - Share - copy and redistribute the material in any medium or format
 - Adapt - remix, transform, and build upon the material

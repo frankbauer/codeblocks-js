@@ -1,0 +1,3278 @@
+{
+ "format": "codeblocks-tilemap",
+ "version": 1,
+ "tileSize": 16,
+ "sheet": {
+  "columns": 20,
+  "rows": 10
+ },
+ "themes": {
+  "valley": {
+   "image": "themes/valley.png",
+   "background": "#61a2ff",
+   "description": "Green valley with deciduous trees"
+  },
+  "beach": {
+   "image": "themes/beach.png",
+   "background": "#61a2ff",
+   "description": "Sandy beach with palm trees"
+  },
+  "desert": {
+   "image": "themes/desert.png",
+   "background": "#61a2ff",
+   "description": "Desert with cacti"
+  },
+  "snow": {
+   "image": "themes/snow.png",
+   "background": "#61a2ff",
+   "description": "Winter landscape with fir trees"
+  }
+ },
+ "defaultTheme": "valley",
+ "tiles": [
+  {
+   "id": 0,
+   "name": "LAND",
+   "layer": "terrain",
+   "kind": "land",
+   "group": "land",
+   "description": "Plain ground (grass, sand or snow, depending on the theme)"
+  },
+  {
+   "id": 1,
+   "name": "WATER",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "water",
+   "description": "Plain water. Auto tiling turns it into the matching coast tile"
+  },
+  {
+   "id": 2,
+   "name": "WATER_WAVES",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "water",
+   "description": "Water with small waves"
+  },
+  {
+   "id": 3,
+   "name": "WATER_FIN",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "water",
+   "description": "Water with a shark fin"
+  },
+  {
+   "id": 4,
+   "name": "WATER_WAVES_2",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "water",
+   "description": "Water with small waves"
+  },
+  {
+   "id": 5,
+   "name": "COAST_SE_SW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "SE",
+    "SW"
+   ],
+   "description": "Water with land at SE, SW"
+  },
+  {
+   "id": 6,
+   "name": "WATER_ISLAND",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with a small island"
+  },
+  {
+   "id": 7,
+   "name": "WATER_ISLETS",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with islets"
+  },
+  {
+   "id": 8,
+   "name": "GROUND_DETAIL_1",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Small ground details (grass tufts, ripples, ...)"
+  },
+  {
+   "id": 9,
+   "name": "GROUND_DETAIL_2",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Small ground details"
+  },
+  {
+   "id": 10,
+   "name": "GROUND_DETAIL_3",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Small ground details"
+  },
+  {
+   "id": 11,
+   "name": "GROUND_DETAIL_4",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Small ground details"
+  },
+  {
+   "id": 12,
+   "name": "GROUND_DETAIL_5",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Small ground details"
+  },
+  {
+   "id": 13,
+   "name": "AXE",
+   "layer": "decoration",
+   "group": "item",
+   "description": "Axe"
+  },
+  {
+   "id": 14,
+   "name": "BOOK_CLOSED",
+   "layer": "decoration",
+   "group": "item",
+   "description": "Closed book"
+  },
+  {
+   "id": 15,
+   "name": "ANIMAL_1",
+   "layer": "decoration",
+   "group": "animal",
+   "description": "Animals (ducks, gull, snake, snowman)"
+  },
+  {
+   "id": 16,
+   "name": "PATH_N_S",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N",
+    "S"
+   ],
+   "description": "Dirt path connected to N, S"
+  },
+  {
+   "id": 17,
+   "name": "PATH_E_W",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "E",
+    "W"
+   ],
+   "description": "Dirt path connected to E, W"
+  },
+  {
+   "id": 18,
+   "name": "PATH_S",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "S"
+   ],
+   "description": "Dirt path connected to S"
+  },
+  {
+   "id": 19,
+   "name": "PATH_W",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "W"
+   ],
+   "description": "Dirt path connected to W"
+  },
+  {
+   "id": 20,
+   "name": "COAST_N_S_ALT",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "S"
+   ],
+   "description": "Variant of tile 62"
+  },
+  {
+   "id": 21,
+   "name": "COAST_SE_NW_ALT",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "SE",
+    "NW"
+   ],
+   "description": "Variant of tile 103"
+  },
+  {
+   "id": 22,
+   "name": "COAST_S",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "S"
+   ],
+   "description": "Water with land at S"
+  },
+  {
+   "id": 23,
+   "name": "COAST_NE_SW_ALT",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "NE",
+    "SW"
+   ],
+   "description": "Variant of tile 101"
+  },
+  {
+   "id": 24,
+   "name": "COAST_NE_SE_SW_NW_ISLET",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "NE",
+    "SE",
+    "SW",
+    "NW"
+   ],
+   "description": "Variant of tile 26"
+  },
+  {
+   "id": 25,
+   "name": "COAST_E_W",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "E",
+    "W"
+   ],
+   "description": "Water with land at E, W"
+  },
+  {
+   "id": 26,
+   "name": "COAST_NE_SE_SW_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "NE",
+    "SE",
+    "SW",
+    "NW"
+   ],
+   "description": "Water with land at NE, SE, SW, NW"
+  },
+  {
+   "id": 27,
+   "name": "WATER_ISLETS_2",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with islets"
+  },
+  {
+   "id": 28,
+   "name": "FLOWERS_1",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Flowers (footprints in the snow theme)"
+  },
+  {
+   "id": 29,
+   "name": "FLOWERS_2",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Flowers"
+  },
+  {
+   "id": 30,
+   "name": "FLOWERS_3",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Flowers"
+  },
+  {
+   "id": 31,
+   "name": "FLOWERS_4",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Flowers"
+  },
+  {
+   "id": 32,
+   "name": "DEBRIS",
+   "layer": "decoration",
+   "group": "item",
+   "description": "Debris"
+  },
+  {
+   "id": 33,
+   "name": "LOG",
+   "layer": "decoration",
+   "group": "item",
+   "description": "Log"
+  },
+  {
+   "id": 34,
+   "name": "BOOK_OPEN",
+   "layer": "decoration",
+   "group": "item",
+   "description": "Open book"
+  },
+  {
+   "id": 35,
+   "name": "MARKER_RED",
+   "layer": "decoration",
+   "group": "marker",
+   "description": "Red dot"
+  },
+  {
+   "id": 36,
+   "name": "PATH_E_S",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "E",
+    "S"
+   ],
+   "description": "Dirt path connected to E, S"
+  },
+  {
+   "id": 37,
+   "name": "PATH_E_S_W",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "E",
+    "S",
+    "W"
+   ],
+   "description": "Dirt path connected to E, S, W"
+  },
+  {
+   "id": 38,
+   "name": "PATH_S_W",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "S",
+    "W"
+   ],
+   "description": "Dirt path connected to S, W"
+  },
+  {
+   "id": 39,
+   "name": "PATH_N",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N"
+   ],
+   "description": "Dirt path connected to N"
+  },
+  {
+   "id": 40,
+   "name": "COAST_SE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "SE"
+   ],
+   "description": "Water with land at SE"
+  },
+  {
+   "id": 41,
+   "name": "COAST_E_S",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "E",
+    "S"
+   ],
+   "description": "Water with land at E, S"
+  },
+  {
+   "id": 42,
+   "name": "COAST_N_E_S_W",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "E",
+    "S",
+    "W"
+   ],
+   "description": "Water with land at N, E, S, W"
+  },
+  {
+   "id": 43,
+   "name": "COAST_S_W",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "S",
+    "W"
+   ],
+   "description": "Water with land at S, W"
+  },
+  {
+   "id": 44,
+   "name": "COAST_SW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "SW"
+   ],
+   "description": "Water with land at SW"
+  },
+  {
+   "id": 45,
+   "name": "COAST_NE_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "NE",
+    "NW"
+   ],
+   "description": "Water with land at NE, NW"
+  },
+  {
+   "id": 46,
+   "name": "COAST_E_S_W",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "E",
+    "S",
+    "W"
+   ],
+   "description": "Water with land at E, S, W"
+  },
+  {
+   "id": 47,
+   "name": "WATER_ISLETS_3",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with an islet"
+  },
+  {
+   "id": 48,
+   "name": "TREE_1",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Tree (palm, cactus, fir, depending on the theme)"
+  },
+  {
+   "id": 49,
+   "name": "TREE_2",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Tree"
+  },
+  {
+   "id": 50,
+   "name": "TREE_3",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Tree"
+  },
+  {
+   "id": 51,
+   "name": "TREES_1",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Group of trees"
+  },
+  {
+   "id": 52,
+   "name": "TREES_2",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Group of trees (penguins in the snow theme)"
+  },
+  {
+   "id": 53,
+   "name": "HOUSE",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Small house"
+  },
+  {
+   "id": 54,
+   "name": "BUSH",
+   "layer": "decoration",
+   "group": "nature",
+   "description": "Bush (birds, snake or snow drift, depending on the theme)"
+  },
+  {
+   "id": 55,
+   "name": "MARKER_YELLOW",
+   "layer": "decoration",
+   "group": "marker",
+   "description": "Yellow dot"
+  },
+  {
+   "id": 56,
+   "name": "PATH_N_E_S",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N",
+    "E",
+    "S"
+   ],
+   "description": "Dirt path connected to N, E, S"
+  },
+  {
+   "id": 57,
+   "name": "PATH",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N",
+    "E",
+    "S",
+    "W"
+   ],
+   "description": "Dirt path. Auto tiling connects it to the neighbouring path tiles"
+  },
+  {
+   "id": 58,
+   "name": "PATH_N_S_W",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N",
+    "S",
+    "W"
+   ],
+   "description": "Dirt path connected to N, S, W"
+  },
+  {
+   "id": 59,
+   "name": "PATH_E",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "E"
+   ],
+   "description": "Dirt path connected to E"
+  },
+  {
+   "id": 60,
+   "name": "COAST_E",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "E"
+   ],
+   "description": "Water with land at E"
+  },
+  {
+   "id": 61,
+   "name": "COAST_N_S_W",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "S",
+    "W"
+   ],
+   "description": "Water with land at N, S, W"
+  },
+  {
+   "id": 62,
+   "name": "COAST_N_S",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "S"
+   ],
+   "description": "Water with land at N, S"
+  },
+  {
+   "id": 63,
+   "name": "COAST_N_E_S",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "E",
+    "S"
+   ],
+   "description": "Water with land at N, E, S"
+  },
+  {
+   "id": 64,
+   "name": "COAST_W",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "W"
+   ],
+   "description": "Water with land at W"
+  },
+  {
+   "id": 65,
+   "name": "LAND_TARGET",
+   "layer": "terrain",
+   "kind": "land",
+   "group": "land",
+   "description": "Ground with a target marker"
+  },
+  {
+   "id": 66,
+   "name": "COAST_E_S_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "E",
+    "S",
+    "NW"
+   ],
+   "description": "Water with land at E, S, NW"
+  },
+  {
+   "id": 67,
+   "name": "COAST_S_W_NE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "S",
+    "W",
+    "NE"
+   ],
+   "description": "Water with land at S, W, NE"
+  },
+  {
+   "id": 68,
+   "name": "WATER_ISLETS_4",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with islets"
+  },
+  {
+   "id": 69,
+   "name": "DOCK",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Dock at a coast to the west"
+  },
+  {
+   "id": 70,
+   "name": "DOCK_2",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Dock at a cliff to the north"
+  },
+  {
+   "id": 71,
+   "name": "ROCKS_1",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Rocks in the water"
+  },
+  {
+   "id": 72,
+   "name": "ROCK_1",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Small rock in the water"
+  },
+  {
+   "id": 73,
+   "name": "HOUSE_2",
+   "layer": "decoration",
+   "group": "building",
+   "description": "House"
+  },
+  {
+   "id": 74,
+   "name": "HOUSE_3",
+   "layer": "decoration",
+   "group": "building",
+   "description": "House with a gate"
+  },
+  {
+   "id": 75,
+   "name": "MARKER_ARROW",
+   "layer": "decoration",
+   "group": "marker",
+   "description": "Yellow arrow pointing down"
+  },
+  {
+   "id": 76,
+   "name": "PATH_N_E",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N",
+    "E"
+   ],
+   "description": "Dirt path connected to N, E"
+  },
+  {
+   "id": 77,
+   "name": "PATH_N_E_W",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N",
+    "E",
+    "W"
+   ],
+   "description": "Dirt path connected to N, E, W"
+  },
+  {
+   "id": 78,
+   "name": "PATH_N_W",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N",
+    "W"
+   ],
+   "description": "Dirt path connected to N, W"
+  },
+  {
+   "id": 79,
+   "name": "PATH_N_S_ALT",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "N",
+    "S"
+   ],
+   "description": "Variant of tile 16"
+  },
+  {
+   "id": 80,
+   "name": "COAST_NE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "NE"
+   ],
+   "description": "Water with land at NE"
+  },
+  {
+   "id": 81,
+   "name": "COAST_N_E",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "E"
+   ],
+   "description": "Water with land at N, E"
+  },
+  {
+   "id": 82,
+   "name": "COAST_N_E_W",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "E",
+    "W"
+   ],
+   "description": "Water with land at N, E, W"
+  },
+  {
+   "id": 83,
+   "name": "COAST_N_W",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "W"
+   ],
+   "description": "Water with land at N, W"
+  },
+  {
+   "id": 84,
+   "name": "COAST_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "NW"
+   ],
+   "description": "Water with land at NW"
+  },
+  {
+   "id": 85,
+   "name": "LAND_TRAIL",
+   "layer": "terrain",
+   "kind": "land",
+   "group": "land",
+   "description": "Ground with a trail leading down to the water (place water below it)"
+  },
+  {
+   "id": 86,
+   "name": "COAST_N_E_SW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "E",
+    "SW"
+   ],
+   "description": "Water with land at N, E, SW"
+  },
+  {
+   "id": 87,
+   "name": "COAST_N_W_SE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "W",
+    "SE"
+   ],
+   "description": "Water with land at N, W, SE"
+  },
+  {
+   "id": 88,
+   "name": "WATER_ISLETS_5",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with islets"
+  },
+  {
+   "id": 89,
+   "name": "ROCKS_2",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Rocks in the water"
+  },
+  {
+   "id": 90,
+   "name": "ROCKS_3",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Rocks in the water"
+  },
+  {
+   "id": 91,
+   "name": "ROCK_2",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Small rocks in the water"
+  },
+  {
+   "id": 92,
+   "name": "ROCK_3",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Small rock in the water"
+  },
+  {
+   "id": 93,
+   "name": "VILLAGE_NW",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Village, top left quarter (see SpriteType.VILLAGE)"
+  },
+  {
+   "id": 94,
+   "name": "VILLAGE_NE",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Village, top right quarter"
+  },
+  {
+   "id": 95,
+   "name": "CASTLE_NW",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Castle, top left part (see SpriteType.CASTLE)"
+  },
+  {
+   "id": 96,
+   "name": "CASTLE_N",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Castle, top middle part"
+  },
+  {
+   "id": 97,
+   "name": "CASTLE_NE",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Castle, top right part"
+  },
+  {
+   "id": 98,
+   "name": "ANIMAL_2",
+   "layer": "decoration",
+   "group": "animal",
+   "description": "Animal"
+  },
+  {
+   "id": 99,
+   "name": "PATH_E_W_ALT",
+   "layer": "decoration",
+   "group": "path",
+   "connects": [
+    "E",
+    "W"
+   ],
+   "description": "Variant of tile 17"
+  },
+  {
+   "id": 100,
+   "name": "COAST_NE_SE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "NE",
+    "SE"
+   ],
+   "description": "Water with land at NE, SE"
+  },
+  {
+   "id": 101,
+   "name": "COAST_NE_SW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "NE",
+    "SW"
+   ],
+   "description": "Water with land at NE, SW"
+  },
+  {
+   "id": 102,
+   "name": "COAST_N",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N"
+   ],
+   "description": "Water with land at N"
+  },
+  {
+   "id": 103,
+   "name": "COAST_SE_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "SE",
+    "NW"
+   ],
+   "description": "Water with land at SE, NW"
+  },
+  {
+   "id": 104,
+   "name": "COAST_SW_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "SW",
+    "NW"
+   ],
+   "description": "Water with land at SW, NW"
+  },
+  {
+   "id": 105,
+   "name": "WATER_TRAIL",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "End of the trail of LAND_TRAIL in the water"
+  },
+  {
+   "id": 106,
+   "name": "WATER_ISLETS_6",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with islets"
+  },
+  {
+   "id": 107,
+   "name": "WATER_ISLETS_7",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with islets"
+  },
+  {
+   "id": 108,
+   "name": "WATER_ISLAND_2",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "island",
+   "description": "Water with a small island and a rock"
+  },
+  {
+   "id": 109,
+   "name": "ROCKS_4",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Rocks in the water"
+  },
+  {
+   "id": 110,
+   "name": "ROCKS_5",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Rocks in the water"
+  },
+  {
+   "id": 111,
+   "name": "ROCK_4",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Small rocks in the water"
+  },
+  {
+   "id": 112,
+   "name": "ROCK_5",
+   "layer": "decoration",
+   "group": "rocks",
+   "description": "Small rock in the water"
+  },
+  {
+   "id": 113,
+   "name": "VILLAGE_SW",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Village, bottom left quarter"
+  },
+  {
+   "id": 114,
+   "name": "VILLAGE_SE",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Village, bottom right quarter"
+  },
+  {
+   "id": 115,
+   "name": "CASTLE_SW",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Castle, bottom left part"
+  },
+  {
+   "id": 116,
+   "name": "CASTLE_S",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Castle, bottom middle part"
+  },
+  {
+   "id": 117,
+   "name": "CASTLE_SE",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Castle, bottom right part"
+  },
+  {
+   "id": 118,
+   "name": "ANIMAL_3",
+   "layer": "decoration",
+   "group": "animal",
+   "description": "Small animal"
+  },
+  {
+   "id": 119,
+   "name": "ANIMAL_4",
+   "layer": "decoration",
+   "group": "animal",
+   "description": "Animal (a boat in the beach theme)"
+  },
+  {
+   "id": 120,
+   "name": "COAST_N_SW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "SW"
+   ],
+   "description": "Water with land at N, SW"
+  },
+  {
+   "id": 121,
+   "name": "COAST_N_SE_SW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "SE",
+    "SW"
+   ],
+   "description": "Water with land at N, SE, SW"
+  },
+  {
+   "id": 122,
+   "name": "COAST_N_SE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "N",
+    "SE"
+   ],
+   "description": "Water with land at N, SE"
+  },
+  {
+   "id": 123,
+   "name": "COAST_S_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "S",
+    "NW"
+   ],
+   "description": "Water with land at S, NW"
+  },
+  {
+   "id": 124,
+   "name": "COAST_S_NE_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "S",
+    "NE",
+    "NW"
+   ],
+   "description": "Water with land at S, NE, NW"
+  },
+  {
+   "id": 125,
+   "name": "COAST_S_NE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "S",
+    "NE"
+   ],
+   "description": "Water with land at S, NE"
+  },
+  {
+   "id": 126,
+   "name": "ROUTE_E_TO_NW",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 127,
+   "name": "ROUTE_E_TO_SW",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 128,
+   "name": "ROUTE_W_TO_SE",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 129,
+   "name": "ROUTE_W_TO_NE",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 130,
+   "name": "ROUTE_E_TO_NW_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 131,
+   "name": "ROUTE_E_TO_SW_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 132,
+   "name": "ROUTE_W_TO_SE_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 133,
+   "name": "ROUTE_W_TO_NE_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 134,
+   "name": "ROUTE_S_TO_NE",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 135,
+   "name": "ROUTE_S_TO_NW",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 136,
+   "name": "ROUTE_N_TO_SE",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 137,
+   "name": "ROUTE_N_TO_SW",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 138,
+   "name": "ROUTE_SW_TO_NE",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 139,
+   "name": "ROUTE_SE_TO_NW",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 140,
+   "name": "CLOUD_DENSE_1",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Single dense cloud"
+  },
+  {
+   "id": 141,
+   "name": "CLOUD_DENSE_NW",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 142,
+   "name": "CLOUD_DENSE_N",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 143,
+   "name": "CLOUD_DENSE_NE",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 144,
+   "name": "CLOUD_DENSE_2",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Single dense cloud"
+  },
+  {
+   "id": 145,
+   "name": "CLOUD_MEDIUM_1",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Single medium cloud"
+  },
+  {
+   "id": 146,
+   "name": "CLOUD_MEDIUM_NW",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 147,
+   "name": "CLOUD_MEDIUM_N",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 148,
+   "name": "CLOUD_MEDIUM_NE",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 149,
+   "name": "CLOUD_MEDIUM_2",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Single medium cloud"
+  },
+  {
+   "id": 150,
+   "name": "CLOUD_LIGHT_1",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Single light cloud"
+  },
+  {
+   "id": 151,
+   "name": "CLOUD_LIGHT_NW",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 152,
+   "name": "CLOUD_LIGHT_N",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 153,
+   "name": "CLOUD_LIGHT_NE",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 154,
+   "name": "CLOUD_LIGHT_2",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Single light cloud"
+  },
+  {
+   "id": 155,
+   "name": "ROUTE_S_E",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 156,
+   "name": "ROUTE_W_E",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 157,
+   "name": "ROUTE_W_S",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 158,
+   "name": "ROUTE_NW_TO_SE",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 159,
+   "name": "ROUTE_NE_TO_SW",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 160,
+   "name": "COAST_E_SW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "E",
+    "SW"
+   ],
+   "description": "Water with land at E, SW"
+  },
+  {
+   "id": 161,
+   "name": "CLOUD_DENSE_W",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 162,
+   "name": "CLOUD_DENSE_CENTER",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 163,
+   "name": "CLOUD_DENSE_E",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 164,
+   "name": "COAST_W_NE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "W",
+    "NE"
+   ],
+   "description": "Water with land at W, NE"
+  },
+  {
+   "id": 165,
+   "name": "COAST_W_SE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "W",
+    "SE"
+   ],
+   "description": "Water with land at W, SE"
+  },
+  {
+   "id": 166,
+   "name": "CLOUD_MEDIUM_W",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 167,
+   "name": "CLOUD_MEDIUM_CENTER",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 168,
+   "name": "CLOUD_MEDIUM_E",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 169,
+   "name": "COAST_E_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "E",
+    "NW"
+   ],
+   "description": "Water with land at E, NW"
+  },
+  {
+   "id": 170,
+   "name": "COAST_W_NE_SE",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "W",
+    "NE",
+    "SE"
+   ],
+   "description": "Water with land at W, NE, SE"
+  },
+  {
+   "id": 171,
+   "name": "CLOUD_LIGHT_W",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 172,
+   "name": "CLOUD_LIGHT_CENTER",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 173,
+   "name": "CLOUD_LIGHT_E",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 174,
+   "name": "COAST_E_SW_NW",
+   "layer": "terrain",
+   "kind": "water",
+   "group": "coast",
+   "land": [
+    "E",
+    "SW",
+    "NW"
+   ],
+   "description": "Water with land at E, SW, NW"
+  },
+  {
+   "id": 175,
+   "name": "ROUTE_N_S",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 176,
+   "name": "SHIP",
+   "layer": "decoration",
+   "group": "building",
+   "description": "Anchored ship"
+  },
+  {
+   "id": 177,
+   "name": "ROUTE_N_S_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 178,
+   "name": "ROUTE_S_TO_NE_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 179,
+   "name": "ROUTE_S_TO_NW_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 180,
+   "name": "CLOUD_DENSE_3",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Single dense cloud"
+  },
+  {
+   "id": 181,
+   "name": "CLOUD_DENSE_SW",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 182,
+   "name": "CLOUD_DENSE_S",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 183,
+   "name": "CLOUD_DENSE_SE",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Part of a dense cloud area"
+  },
+  {
+   "id": 184,
+   "name": "CLOUD_DENSE_4",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 3,
+   "description": "Single dense cloud"
+  },
+  {
+   "id": 185,
+   "name": "CLOUD_MEDIUM_3",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Single medium cloud"
+  },
+  {
+   "id": 186,
+   "name": "CLOUD_MEDIUM_SW",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 187,
+   "name": "CLOUD_MEDIUM_S",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 188,
+   "name": "CLOUD_MEDIUM_SE",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Part of a medium cloud area"
+  },
+  {
+   "id": 189,
+   "name": "CLOUD_MEDIUM_4",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 2,
+   "description": "Single medium cloud"
+  },
+  {
+   "id": 190,
+   "name": "CLOUD_LIGHT_3",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Single light cloud"
+  },
+  {
+   "id": 191,
+   "name": "CLOUD_LIGHT_SW",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 192,
+   "name": "CLOUD_LIGHT_S",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 193,
+   "name": "CLOUD_LIGHT_SE",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Part of a light cloud area"
+  },
+  {
+   "id": 194,
+   "name": "CLOUD_LIGHT_4",
+   "layer": "decoration",
+   "group": "fog",
+   "fogLevel": 1,
+   "description": "Single light cloud"
+  },
+  {
+   "id": 195,
+   "name": "ROUTE_N_E",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 196,
+   "name": "ROUTE_W_E_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 197,
+   "name": "ROUTE_N_W",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 198,
+   "name": "ROUTE_N_TO_SE_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  },
+  {
+   "id": 199,
+   "name": "ROUTE_N_TO_SW_ALT",
+   "layer": "decoration",
+   "group": "route",
+   "description": "Dotted route between level points"
+  }
+ ],
+ "autotiles": {
+  "coast": {
+   "description": "Applied to WATER (1). Key: land neighbours, edges N E S W and the diagonal neighbours NE SE SW NW whose two adjacent sides are water.",
+   "mode": "blob",
+   "appliesTo": [
+    1
+   ],
+   "neighbour": "land",
+   "tiles": {
+    "": 1,
+    "N": 102,
+    "E": 60,
+    "S": 22,
+    "W": 64,
+    "N E": 81,
+    "E S": 41,
+    "S W": 43,
+    "N W": 83,
+    "N S": 62,
+    "E W": 25,
+    "N E S": 63,
+    "E S W": 46,
+    "N S W": 61,
+    "N E W": 82,
+    "N E S W": 42,
+    "NE": 80,
+    "SE": 40,
+    "SW": 44,
+    "NW": 84,
+    "NE SE": 100,
+    "SE SW": 5,
+    "SW NW": 104,
+    "NE NW": 45,
+    "NE SW": 101,
+    "SE NW": 103,
+    "NE SE SW NW": 26,
+    "N SW": 120,
+    "N SE": 122,
+    "N SE SW": 121,
+    "E NW": 169,
+    "E SW": 160,
+    "E SW NW": 174,
+    "S NW": 123,
+    "S NE": 125,
+    "S NE NW": 124,
+    "W NE": 164,
+    "W SE": 165,
+    "W NE SE": 170,
+    "N E SW": 86,
+    "N W SE": 87,
+    "E S NW": 66,
+    "S W NE": 67
+   },
+   "fallback": 26
+  },
+  "path": {
+   "description": "Applied to PATH (57). Key: neighbouring path tiles N E S W.",
+   "mode": "cardinal",
+   "appliesTo": [
+    57
+   ],
+   "neighbour": "path",
+   "tiles": {
+    "N E S W": 57,
+    "N S": 16,
+    "E W": 17,
+    "N": 39,
+    "E": 59,
+    "S": 18,
+    "W": 19,
+    "N E": 76,
+    "E S": 36,
+    "S W": 38,
+    "N W": 78,
+    "N E W": 77,
+    "N E S": 56,
+    "E S W": 37,
+    "N S W": 58,
+    "": 18
+   }
+  },
+  "fog": {
+   "description": "Fog layer with the levels 1 (light), 2 (medium) and 3 (dense). Areas use the 3 x 3 frame, cells without a neighbour on two opposite sides use one of the single clouds.",
+   "mode": "frame",
+   "levels": {
+    "3": {
+     "frame": [
+      [
+       141,
+       142,
+       143
+      ],
+      [
+       161,
+       162,
+       163
+      ],
+      [
+       181,
+       182,
+       183
+      ]
+     ],
+     "single": [
+      140,
+      144,
+      180,
+      184
+     ]
+    },
+    "2": {
+     "frame": [
+      [
+       146,
+       147,
+       148
+      ],
+      [
+       166,
+       167,
+       168
+      ],
+      [
+       186,
+       187,
+       188
+      ]
+     ],
+     "single": [
+      145,
+      149,
+      185,
+      189
+     ]
+    },
+    "1": {
+     "frame": [
+      [
+       151,
+       152,
+       153
+      ],
+      [
+       171,
+       172,
+       173
+      ],
+      [
+       191,
+       192,
+       193
+      ]
+     ],
+     "single": [
+      150,
+      154,
+      190,
+      194
+     ]
+    }
+   }
+  }
+ },
+ "sprites": {
+  "VOLCANO": {
+   "image": "sprites/vulcano.png",
+   "frameWidth": 78,
+   "frameHeight": 68,
+   "frames": 33,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 32,
+     "loop": true
+    },
+    "smoke": {
+     "from": 1,
+     "to": 7,
+     "loop": true
+    },
+    "sparks": {
+     "from": 8,
+     "to": 16,
+     "loop": true
+    },
+    "lava": {
+     "from": 17,
+     "to": 32,
+     "loop": true
+    },
+    "idle": {
+     "from": 0,
+     "to": 0,
+     "loop": false
+    }
+   },
+   "default": "smoke",
+   "footprint": [
+    5,
+    4
+   ],
+   "description": "Volcano with smoke, sparks and lava",
+   "themes": {
+    "snow": {
+     "image": "sprites/vulcanoWinter2.png",
+     "frameWidth": 78,
+     "frameHeight": 68,
+     "frames": 33,
+     "durations": [
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      50,
+      50,
+      50,
+      50,
+      50,
+      50,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      100,
+      300
+     ],
+     "animations": {
+      "loop": {
+       "from": 0,
+       "to": 32,
+       "loop": true
+      },
+      "smoke": {
+       "from": 1,
+       "to": 7,
+       "loop": true
+      },
+      "sparks": {
+       "from": 8,
+       "to": 16,
+       "loop": true
+      },
+      "lava": {
+       "from": 17,
+       "to": 26,
+       "loop": true
+      },
+      "calm": {
+       "from": 27,
+       "to": 32,
+       "loop": true
+      },
+      "idle": {
+       "from": 0,
+       "to": 0,
+       "loop": false
+      }
+     }
+    }
+   }
+  },
+  "ARROW": {
+   "image": "sprites/arrow.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 4,
+   "durations": [
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 3,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Bouncing arrow"
+  },
+  "LEVEL_POINT_RED": {
+   "image": "sprites/levelPointRed.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 7,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 6,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Flashing red level point"
+  },
+  "LEVEL_POINT_YELLOW": {
+   "image": "sprites/levelPointYellow.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 7,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 6,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Flashing yellow level point"
+  },
+  "BOOK": {
+   "image": "sprites/glossar.png",
+   "frameWidth": 31,
+   "frameHeight": 19,
+   "frames": 9,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    500,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 8,
+     "loop": true
+    },
+    "closed": {
+     "from": 0,
+     "to": 0,
+     "loop": false
+    },
+    "open": {
+     "from": 0,
+     "to": 4,
+     "loop": false
+    },
+    "opened": {
+     "from": 4,
+     "to": 4,
+     "loop": false
+    },
+    "close": {
+     "from": 4,
+     "to": 8,
+     "loop": false
+    }
+   },
+   "default": "closed",
+   "footprint": [
+    2,
+    1
+   ],
+   "description": "Book (glossary) that opens and closes"
+  },
+  "DUCK_BROWN": {
+   "image": "sprites/duckBrown.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 34,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 33,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Brown duck"
+  },
+  "DUCK_GREEN": {
+   "image": "sprites/duckGreen.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 35,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 34,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Green duck"
+  },
+  "DUCK_YELLOW": {
+   "image": "sprites/duckYellow.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 35,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 34,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Yellow duckling"
+  },
+  "SHARK": {
+   "image": "sprites/cShark.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 2,
+   "durations": [
+    500,
+    300
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 1,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Shark fin"
+  },
+  "SHARK_SWIMMING": {
+   "image": "sprites/swimmingCShark.png",
+   "frameWidth": 64,
+   "frameHeight": 16,
+   "frames": 9,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 8,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    4,
+    1
+   ],
+   "description": "Shark swimming from left to right"
+  },
+  "SHIPWRECK": {
+   "image": "sprites/shipwreck.png",
+   "frameWidth": 20,
+   "frameHeight": 24,
+   "frames": 2,
+   "durations": [
+    600,
+    100
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 1,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Shipwreck"
+  },
+  "GRASS_WIND": {
+   "image": "sprites/grasMovement1.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 2,
+   "durations": [
+    1500,
+    1500
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 1,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Grass moving in the wind"
+  },
+  "GRASS_WIND_2": {
+   "image": "sprites/grasMovement2.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 2,
+   "durations": [
+    1500,
+    1500
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 1,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Grass moving in the wind"
+  },
+  "WATER_RIPPLES": {
+   "image": "sprites/waterMovement1.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 2,
+   "durations": [
+    500,
+    500
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 1,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Ripples on the water"
+  },
+  "WATER_RIPPLES_2": {
+   "image": "sprites/waterMovement2.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 2,
+   "durations": [
+    500,
+    500
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 1,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Ripples on the water"
+  },
+  "VILLAGE": {
+   "tiles": [
+    [
+     93,
+     94
+    ],
+    [
+     113,
+     114
+    ]
+   ],
+   "footprint": [
+    2,
+    2
+   ],
+   "description": "Village (2 x 2 tiles)"
+  },
+  "CASTLE": {
+   "tiles": [
+    [
+     95,
+     96,
+     97
+    ],
+    [
+     115,
+     116,
+     117
+    ]
+   ],
+   "footprint": [
+    3,
+    2
+   ],
+   "description": "Castle (3 x 2 tiles)"
+  },
+  "GROUND_DETAIL_1": {
+   "tiles": [
+    [
+     8
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small ground details (grass tufts, ripples, ...)"
+  },
+  "GROUND_DETAIL_2": {
+   "tiles": [
+    [
+     9
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small ground details"
+  },
+  "GROUND_DETAIL_3": {
+   "tiles": [
+    [
+     10
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small ground details"
+  },
+  "GROUND_DETAIL_4": {
+   "tiles": [
+    [
+     11
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small ground details"
+  },
+  "GROUND_DETAIL_5": {
+   "tiles": [
+    [
+     12
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small ground details"
+  },
+  "FLOWERS_1": {
+   "tiles": [
+    [
+     28
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Flowers (footprints in the snow theme)"
+  },
+  "FLOWERS_2": {
+   "tiles": [
+    [
+     29
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Flowers"
+  },
+  "FLOWERS_3": {
+   "tiles": [
+    [
+     30
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Flowers"
+  },
+  "FLOWERS_4": {
+   "tiles": [
+    [
+     31
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Flowers"
+  },
+  "TREE_1": {
+   "tiles": [
+    [
+     48
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Tree (palm, cactus, fir, depending on the theme)"
+  },
+  "TREE_2": {
+   "tiles": [
+    [
+     49
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Tree"
+  },
+  "TREE_3": {
+   "tiles": [
+    [
+     50
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Tree"
+  },
+  "TREES_1": {
+   "tiles": [
+    [
+     51
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Group of trees"
+  },
+  "TREES_2": {
+   "tiles": [
+    [
+     52
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Group of trees (penguins in the snow theme)"
+  },
+  "BUSH": {
+   "tiles": [
+    [
+     54
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Bush (birds, snake or snow drift, depending on the theme)"
+  },
+  "ANIMAL_1": {
+   "tiles": [
+    [
+     15
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Animals (ducks, gull, snake, snowman)"
+  },
+  "ANIMAL_2": {
+   "tiles": [
+    [
+     98
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Animal"
+  },
+  "ANIMAL_3": {
+   "tiles": [
+    [
+     118
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small animal"
+  },
+  "ANIMAL_4": {
+   "tiles": [
+    [
+     119
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Animal (a boat in the beach theme)"
+  },
+  "AXE": {
+   "tiles": [
+    [
+     13
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Axe"
+  },
+  "LOG": {
+   "tiles": [
+    [
+     33
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Log"
+  },
+  "BOOK_CLOSED": {
+   "tiles": [
+    [
+     14
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Closed book"
+  },
+  "BOOK_OPEN": {
+   "tiles": [
+    [
+     34
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Open book"
+  },
+  "DEBRIS": {
+   "tiles": [
+    [
+     32
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Debris"
+  },
+  "MARKER_RED": {
+   "tiles": [
+    [
+     35
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Red dot"
+  },
+  "MARKER_YELLOW": {
+   "tiles": [
+    [
+     55
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Yellow dot"
+  },
+  "MARKER_ARROW": {
+   "tiles": [
+    [
+     75
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Yellow arrow pointing down"
+  },
+  "HOUSE": {
+   "tiles": [
+    [
+     53
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small house"
+  },
+  "HOUSE_2": {
+   "tiles": [
+    [
+     73
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "House"
+  },
+  "HOUSE_3": {
+   "tiles": [
+    [
+     74
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "House with a gate"
+  },
+  "DOCK": {
+   "tiles": [
+    [
+     69
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Dock at a coast to the west"
+  },
+  "DOCK_2": {
+   "tiles": [
+    [
+     70
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Dock at a cliff to the north"
+  },
+  "SHIP": {
+   "tiles": [
+    [
+     176
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Anchored ship"
+  },
+  "ROCKS_1": {
+   "tiles": [
+    [
+     71
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Rocks in the water"
+  },
+  "ROCKS_2": {
+   "tiles": [
+    [
+     89
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Rocks in the water"
+  },
+  "ROCKS_3": {
+   "tiles": [
+    [
+     90
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Rocks in the water"
+  },
+  "ROCKS_4": {
+   "tiles": [
+    [
+     109
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Rocks in the water"
+  },
+  "ROCKS_5": {
+   "tiles": [
+    [
+     110
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Rocks in the water"
+  },
+  "ROCK_1": {
+   "tiles": [
+    [
+     72
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small rock in the water"
+  },
+  "ROCK_2": {
+   "tiles": [
+    [
+     91
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small rocks in the water"
+  },
+  "ROCK_3": {
+   "tiles": [
+    [
+     92
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small rock in the water"
+  },
+  "ROCK_4": {
+   "tiles": [
+    [
+     111
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small rocks in the water"
+  },
+  "ROCK_5": {
+   "tiles": [
+    [
+     112
+    ]
+   ],
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Small rock in the water"
+  }
+ },
+ "characters": {
+  "HERO": {
+   "image": "sprites/char.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 15,
+   "durations": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100,
+    100
+   ],
+   "animations": {
+    "idle": {
+     "from": 0,
+     "to": 2,
+     "loop": true
+    },
+    "walkForward": {
+     "from": 3,
+     "to": 6,
+     "loop": true
+    },
+    "walkBackward": {
+     "from": 7,
+     "to": 10,
+     "loop": true
+    },
+    "walkRight": {
+     "from": 11,
+     "to": 12,
+     "loop": true
+    },
+    "walkLeft": {
+     "from": 13,
+     "to": 14,
+     "loop": true
+    }
+   },
+   "description": "Walking character",
+   "walksOn": "land",
+   "speed": 4,
+   "idle": "idle",
+   "directions": {
+    "N": "walkBackward",
+    "S": "walkForward",
+    "E": "walkRight",
+    "W": "walkLeft",
+    "NE": "walkRight",
+    "SE": "walkRight",
+    "SW": "walkLeft",
+    "NW": "walkLeft"
+   }
+  },
+  "SHIP": {
+   "image": "sprites/MSFloatingPoint.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 16,
+   "durations": [
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250,
+    250
+   ],
+   "animations": {
+    "left": {
+     "from": 0,
+     "to": 1,
+     "loop": true
+    },
+    "right": {
+     "from": 2,
+     "to": 3,
+     "loop": true
+    },
+    "down": {
+     "from": 4,
+     "to": 5,
+     "loop": true
+    },
+    "up": {
+     "from": 6,
+     "to": 7,
+     "loop": true
+    },
+    "down-right": {
+     "from": 8,
+     "to": 9,
+     "loop": true
+    },
+    "down-left": {
+     "from": 10,
+     "to": 11,
+     "loop": true
+    },
+    "up-right": {
+     "from": 12,
+     "to": 13,
+     "loop": true
+    },
+    "up-left": {
+     "from": 14,
+     "to": 15,
+     "loop": true
+    }
+   },
+   "description": "Sailing ship (MS Floating Point), keeps rocking when idle",
+   "walksOn": "water",
+   "speed": 2.5,
+   "idle": null,
+   "directions": {
+    "N": "up",
+    "S": "down",
+    "E": "right",
+    "W": "left",
+    "NE": "up-right",
+    "SE": "down-right",
+    "SW": "down-left",
+    "NW": "up-left"
+   }
+  }
+ }
+}
