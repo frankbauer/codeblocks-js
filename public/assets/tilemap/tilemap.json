@@ -3382,6 +3382,23 @@
     "SE": "walkRight",
     "SW": "walkLeft",
     "NW": "walkLeft"
+   },
+   "blink": {
+    "sequence": [
+     1,
+     2,
+     1
+    ],
+    "durations": [
+     70,
+     90,
+     70
+    ],
+    "delay": [
+     2000,
+     6000
+    ],
+    "twice": 0.2
    }
   },
   "SHIP": {

@@ -813,11 +813,40 @@ export default {
             return anim.from + Math.min(n - 1, Math.floor((step.progress ?? 0) * n))
         }
         const walking = ch.current?.type === 'step' || now - ch.lastWalk <= this.WALK_GRACE_MS
+        if (!walking && def.idle && def.blink) {
+            return this._blinkFrame(ch, def, now)
+        }
         if (!walking && def.idle) {
             const idle = def.animations[def.idle]
             return this._animFrame(def, idle.from, idle.to, now - ch.idleStart, true, ch).frame
         }
         return this._animFrame(def, anim.from, anim.to, now - ch.walkStart, true, ch).frame
+    },
+
+    // standing with `blink`: the first idle frame (eyes open), after a random pause the blink
+    // sequence (frames relative to the idle animation) plays once, sometimes twice in a row
+    _blinkFrame(ch, def, now) {
+        const idle = def.animations[def.idle]
+        const blink = def.blink
+        const [minDelay, maxDelay] = blink.delay || [2000, 6000]
+        if (!ch.blinkAt || ch.blinkAt < ch.idleStart) {
+            ch.blinkAt = ch.idleStart + minDelay + Math.random() * (maxDelay - minDelay)
+        }
+        const t = now - ch.blinkAt
+        if (t < 0) {
+            return idle.from
+        }
+        let rest = t
+        for (let i = 0; i < blink.sequence.length; i++) {
+            rest -= blink.durations?.[i] ?? 80
+            if (rest < 0) {
+                return Math.min(idle.from + blink.sequence[i], idle.to)
+            }
+        }
+        // blink done: next one right away (blinking twice) or after a new pause
+        const again = Math.random() < (blink.twice ?? 0)
+        ch.blinkAt = now + (again ? 180 : minDelay + Math.random() * (maxDelay - minDelay))
+        return idle.from
     },
 
     // ------------------------------------------------------------------ auto tiling
