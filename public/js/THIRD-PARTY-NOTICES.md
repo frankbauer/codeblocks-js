@@ -41,6 +41,6 @@ Outside of `js/` (ILIAS deployment only):
 
 | Folder | Content | License |
 |---|---|---|
-| `assets/`, `resources/` | CodeBlocks sprites, tiles and scene images (`assets/robots`, `assets/floatingworld`, `assets/cherrygame`, `assets/maze`, `assets/universum`, `assets/snowmeadow`) | CC BY-NC 4.0 |
+| `assets/`, `resources/` | CodeBlocks sprites, tiles and scene images (`assets/robots`, `assets/floatingworld`, `assets/cherrygame`, `assets/maze`, `assets/universum`, `assets/tilemap` and the isometric sprite sheets in `assets/snowman`, `assets/fire`, `assets/figure_*`, ...); the tile map art in `assets/tilemap` is by T. Miehm (see `assets/tilemap/LICENSE`) | CC BY-NC 4.0 |
 | `assets/trees/` (tree.autumn/spring/summer/winter, tree.stylized.*) | Tree images | Freepik license |
 | `common/` (code, `codeblocks.zip`) | CodeBlocks examples | MIT |

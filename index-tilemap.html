@@ -23,10 +23,17 @@
         <script type="module" src="/src/main.ts"></script>
     </head>
     <body>
-        <!-- tileMap library: public/examples/tilemap (command queue) and
-             public/examples/tilemap-interactive (RPC, WASD keys) -->
+        <!-- tileMap library: public/examples/tilemap (command queue), public/examples/tilemap-iso
+             (isometric map, RPC) and public/examples/tilemap-interactive (RPC, WASD keys) -->
         <h2>Command queue</h2>
         <div codeblockseditor src="examples/tilemap/blocks.json" data-question="1">
+            <loading>
+                <div></div>
+                <div></div>
+            </loading>
+        </div>
+        <h2>Isometric (click a cell or a snowman)</h2>
+        <div codeblockseditor src="examples/tilemap-iso/blocks.json" data-question="3">
             <loading>
                 <div></div>
                 <div></div>

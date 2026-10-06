@@ -1,5 +1,6 @@
 export default {
-    // Draws 2D pixel art tile maps (de.fau.tf.lgdv.tilemap in Java). The tiles, sprites and
+    // Draws 2D tile maps (de.fau.tf.lgdv.tilemap in Java), either top-down with the pixel art
+    // tile sheets or isometric with pre-rendered sprites on a drawn grid. Tiles, sprites and
     // characters are described in @assets/tilemap/tilemap.json (built by art/Tiles/build_tilemap.py).
     //
     // Java talks to this library in two ways:
@@ -15,6 +16,11 @@ export default {
     // every sprite and character animates a bit faster or slower (+-15%) and starts its
     // looping animations at a random frame, so many of them on screen do not move in sync
     TEMPO_JITTER: 0.15,
+    // isometric maps: the screen direction a step into a map direction goes to
+    // (column + 1 goes to the bottom right, row + 1 to the bottom left)
+    ISO_SCREEN: { N: 'NE', NE: 'E', E: 'SE', SE: 'S', S: 'SW', SW: 'W', W: 'NW', NW: 'N' },
+    // space around an isometric map (map pixels) for tall sprites, the sun and the coordinates
+    ISO_MARGIN: { top: 70, side: 40, bottom: 16 },
     objectManager: null,
     data: null,
     dataPromise: null,
@@ -196,6 +202,16 @@ export default {
         return themes[map.theme] ? map.theme : this.data.defaultTheme
     },
 
+    _isIso(map) {
+        return map.projection === 'isometric'
+    },
+
+    // colors of an isometric map
+    _isoTheme(map) {
+        const themes = this.data.isometric.themes
+        return themes[map.theme] ?? themes[this.data.defaultTheme]
+    },
+
     // sprite or character definition, with the overrides of the map's theme
     _definition(kind, name, map) {
         const def = this.data[kind][name]
@@ -214,6 +230,7 @@ export default {
             id: attrs.id,
             live,
             theme: attrs.theme,
+            projection: attrs.projection === 'isometric' ? 'isometric' : 'topdown',
             columns: attrs.columns,
             rows: attrs.rows,
             terrain: this._cells(attrs.terrain, n, 1),
@@ -223,16 +240,24 @@ export default {
             zoom: +attrs.zoom || 0,
             followId: -1,
             grid: false,
+            coordinates: false,
             clicks: false,
             dirty: true,
             fogDirty: true,
             layer: null,
             fogLayer: null,
+            // fading effects (sun rays, flashing cells) and tinted cells
+            effects: [],
+            tints: new Map(),
         }
         this.maps.set(map.id, map)
         this.currentMap = map
         this._loadData()
-            .then(() => this._image(this.data.themes[this._themeOf(map)].image).promise)
+            .then(() =>
+                this._isIso(map)
+                    ? null
+                    : this._image(this.data.themes[this._themeOf(map)].image).promise
+            )
             .then(() => ready({ columns: map.columns, rows: map.rows }))
             .catch((e) => error({ message: e.message }))
         this._startLoop()
@@ -260,11 +285,13 @@ export default {
             name: attrs.sprite,
             col: attrs.col | 0,
             row: attrs.row | 0,
+            variant: attrs.variant | 0,
             glide: null,
             visible: true,
             depth: 0,
             anim: null,
-            frame: 0,
+            // shown while no animation plays, null: the sprite's default frame
+            frame: null,
             ...this._randomTiming(),
         }
         this.sprites.set(sprite.id, sprite)
@@ -275,7 +302,7 @@ export default {
                 if (!def) {
                     throw new Error('Unknown sprite ' + sprite.name + ' or map #' + sprite.mapId)
                 }
-                if (def.default && sprite.anim === null && sprite.frame === 0) {
+                if (def.default && sprite.anim === null && sprite.frame === null) {
                     this._play(sprite, def, def.default, undefined)
                 }
                 return def.image ? this._image(def.image).promise : null
@@ -299,8 +326,9 @@ export default {
             name: attrs.character,
             col: attrs.col | 0,
             row: attrs.row | 0,
-            x: (attrs.col | 0) * this.TILE,
-            y: (attrs.row | 0) * this.TILE,
+            // position on the way between two cells
+            fc: attrs.col | 0,
+            fr: attrs.row | 0,
             dir: attrs.dir || 'S',
             speed: +attrs.speed > 0 ? +attrs.speed : 3,
             queue: [],
@@ -384,6 +412,7 @@ export default {
     _mapMessage(map, cmd, data) {
         const n = map.columns * map.rows
         const inside = (c, r) => c >= 0 && r >= 0 && c < map.columns && r < map.rows
+        const now = performance.now()
         switch (cmd) {
             case 'setTerrain':
                 if (inside(data.col, data.row)) {
@@ -430,7 +459,11 @@ export default {
             }
             case 'setTheme':
                 map.theme = data.theme
-                this._loadData().then(() => this._image(this.data.themes[this._themeOf(map)].image))
+                if (!this._isIso(map)) {
+                    this._loadData().then(() =>
+                        this._image(this.data.themes[this._themeOf(map)].image)
+                    )
+                }
                 map.dirty = map.fogDirty = true
                 break
             case 'setAutoTiling':
@@ -446,8 +479,47 @@ export default {
             case 'showGrid':
                 map.grid = !!data.visible
                 break
+            case 'showCoordinates':
+                map.coordinates = !!data.visible
+                break
             case 'listenClicks':
                 map.clicks = !!data.enabled
+                break
+            case 'sunRay':
+                map.effects.push({
+                    type: 'sun',
+                    col: data.col | 0,
+                    row: data.row | 0,
+                    start: now,
+                    duration: (+data.seconds || 2.2) * 1000,
+                })
+                break
+            case 'flash':
+                map.effects.push({
+                    type: 'flash',
+                    col: data.col | 0,
+                    row: data.row | 0,
+                    color: data.color || 'rgba(255,225,60,1)',
+                    start: now,
+                    duration: (+data.seconds || 0.6) * 1000,
+                })
+                break
+            case 'tint':
+                if (inside(data.col, data.row)) {
+                    const key = data.row * map.columns + data.col
+                    if (data.color) {
+                        map.tints.set(key, {
+                            color: data.color,
+                            start: now,
+                            duration: Math.max(0, +data.seconds || 0) * 1000,
+                        })
+                    } else {
+                        map.tints.delete(key)
+                    }
+                }
+                break
+            case 'clearTints':
+                map.tints.clear()
                 break
             default:
                 console.warn('tileMap: unknown map command', cmd)
@@ -490,6 +562,9 @@ export default {
             case 'setFrame':
                 sprite.anim = null
                 sprite.frame = Math.max(0, data.frame | 0)
+                break
+            case 'setVariant':
+                sprite.variant = Math.max(0, data.variant | 0)
                 break
             case 'setVisible':
                 sprite.visible = data.visible !== false
@@ -579,14 +654,17 @@ export default {
         }
     },
 
+    _frameDuration(def, f) {
+        return def.durations?.[f] || def.frameDuration || 100
+    },
+
     // frame of an animation (from..to with per frame durations) `elapsed` ms after its start.
     // `obj` (sprite or character) scales the speed with its tempo; looping animations start
     // at its phase (fraction of one loop).
     _animFrame(def, from, to, elapsed, loop, obj) {
-        const durations = def.durations || []
         let total = 0
         for (let f = from; f <= to; f++) {
-            total += durations[f] || 100
+            total += this._frameDuration(def, f)
         }
         if (total <= 0) {
             return { frame: from, done: true }
@@ -602,7 +680,7 @@ export default {
             t %= total
         }
         for (let f = from; f <= to; f++) {
-            t -= durations[f] || 100
+            t -= this._frameDuration(def, f)
             if (t < 0) {
                 return { frame: f, done: false }
             }
@@ -610,9 +688,11 @@ export default {
         return { frame: to, done: false }
     },
 
+    // frame of the sprite within its variant
     _spriteFrame(sprite, def, now) {
         if (!sprite.anim) {
-            return Math.min(sprite.frame, (def.frames || 1) - 1)
+            const frames = def.variantFrames || def.frames || 1
+            return Math.min(sprite.frame ?? def.frame ?? 0, frames - 1)
         }
         const a = sprite.anim
         const { frame, done } = this._animFrame(def, a.from, a.to, now - a.start, a.loop, sprite)
@@ -640,7 +720,6 @@ export default {
 
     // advances the move queue of a character up to `now`
     _updateCharacter(ch, now) {
-        const T = this.TILE
         for (let guard = 0; guard < 1000; guard++) {
             if (!ch.current) {
                 if (ch.queue.length === 0) {
@@ -657,8 +736,8 @@ export default {
                     }
                     ch.current = {
                         type: 'step',
-                        fromX: ch.x,
-                        fromY: ch.y,
+                        fromC: ch.fc,
+                        fromR: ch.fr,
                         col: item.col,
                         row: item.row,
                         start,
@@ -675,10 +754,8 @@ export default {
                         ch.speed = +item.speed > 0 ? +item.speed : ch.speed
                     }
                     if (item.type === 'teleport') {
-                        ch.col = item.col | 0
-                        ch.row = item.row | 0
-                        ch.x = ch.col * T
-                        ch.y = ch.row * T
+                        ch.col = ch.fc = item.col | 0
+                        ch.row = ch.fr = item.row | 0
                     }
                     ch.clock = start
                     continue
@@ -687,9 +764,10 @@ export default {
             const cur = ch.current
             const t = cur.duration > 0 ? (now - cur.start) / cur.duration : 1
             if (cur.type === 'step') {
-                const k = Math.min(1, t)
-                ch.x = cur.fromX + (cur.col * T - cur.fromX) * k
-                ch.y = cur.fromY + (cur.row * T - cur.fromY) * k
+                const k = Math.max(0, Math.min(1, t))
+                ch.fc = cur.fromC + (cur.col - cur.fromC) * k
+                ch.fr = cur.fromR + (cur.row - cur.fromR) * k
+                cur.progress = k
                 ch.lastWalk = now
             }
             if (t < 1) {
@@ -698,10 +776,8 @@ export default {
             ch.clock = cur.start + cur.duration
             ch.current = null
             if (cur.type === 'step') {
-                ch.col = cur.col
-                ch.row = cur.row
-                ch.x = ch.col * T
-                ch.y = ch.row * T
+                ch.col = ch.fc = cur.col
+                ch.row = ch.fr = cur.row
                 this._send(ch, 'MAPCHARACTER', 'step', { col: ch.col, row: ch.row })
             }
         }
@@ -715,16 +791,33 @@ export default {
         }
     },
 
-    _characterFrame(ch, def, now) {
-        const walking = ch.current?.type === 'step' || now - ch.lastWalk <= this.WALK_GRACE_MS
-        let name = def.directions[ch.dir] || def.directions.S
-        let start = ch.walkStart
-        if (!walking && def.idle) {
-            name = def.idle
-            start = ch.idleStart
+    // animation of a character for its current direction. `screenDirections` (isometric art)
+    // is keyed by the direction on screen, `directions` by the direction on the map.
+    _directionAnimation(ch, def, map) {
+        if (def.screenDirections) {
+            const screen = this._isIso(map) ? this.ISO_SCREEN[ch.dir] : ch.dir
+            return def.screenDirections[screen] || def.screenDirections.S
         }
-        const anim = def.animations[name]
-        return this._animFrame(def, anim.from, anim.to, now - start, true, ch).frame
+        return def.directions[ch.dir] || def.directions.S
+    },
+
+    _characterFrame(ch, def, map, now) {
+        const anim = def.animations[this._directionAnimation(ch, def, map)]
+        if (def.syncToStep) {
+            // one run of the animation per step (e.g. a hop), first frame while standing
+            const step = ch.current?.type === 'step' ? ch.current : null
+            if (!step) {
+                return anim.from
+            }
+            const n = anim.to - anim.from + 1
+            return anim.from + Math.min(n - 1, Math.floor((step.progress ?? 0) * n))
+        }
+        const walking = ch.current?.type === 'step' || now - ch.lastWalk <= this.WALK_GRACE_MS
+        if (!walking && def.idle) {
+            const idle = def.animations[def.idle]
+            return this._animFrame(def, idle.from, idle.to, now - ch.idleStart, true, ch).frame
+        }
+        return this._animFrame(def, anim.from, anim.to, now - ch.walkStart, true, ch).frame
     },
 
     // ------------------------------------------------------------------ auto tiling
@@ -829,6 +922,51 @@ export default {
         return def.frame[!n ? 0 : !s ? 2 : 1][!w ? 0 : !e ? 2 : 1]
     },
 
+    // ------------------------------------------------------------------ projection
+
+    // size of the map in map pixels and the origin of the isometric grid
+    _world(map) {
+        if (!this._isIso(map)) {
+            return { width: map.columns * this.TILE, height: map.rows * this.TILE }
+        }
+        const { tileWidth: tw, tileHeight: th } = this.data.isometric
+        const m = this.ISO_MARGIN
+        const span = map.columns + map.rows
+        return {
+            width: (span * tw) / 2 + 2 * m.side,
+            height: m.top + (span * th) / 2 + m.bottom,
+            ox: m.side + (map.rows * tw) / 2,
+            oy: m.top,
+        }
+    },
+
+    // map pixel of the center of a (fractional) cell
+    _ground(map, world, c, r) {
+        if (!this._isIso(map)) {
+            const T = this.TILE
+            return { x: (c + 0.5) * T, y: (r + 0.5) * T }
+        }
+        const { tileWidth: tw, tileHeight: th } = this.data.isometric
+        return { x: world.ox + ((c - r) * tw) / 2, y: world.oy + ((c + r) * th) / 2 + th / 2 }
+    },
+
+    // outline of a cell (rectangle or diamond), `inset` map pixels smaller
+    _cellPath(ctx, map, world, c, r, inset = 0) {
+        ctx.beginPath()
+        if (!this._isIso(map)) {
+            const T = this.TILE
+            ctx.rect(c * T + inset, r * T + inset, T - 2 * inset, T - 2 * inset)
+            return
+        }
+        const { tileWidth: tw, tileHeight: th } = this.data.isometric
+        const m = this._ground(map, world, c, r)
+        ctx.moveTo(m.x, m.y - th / 2 + inset)
+        ctx.lineTo(m.x + tw / 2 - 2 * inset, m.y)
+        ctx.lineTo(m.x, m.y + th / 2 - inset)
+        ctx.lineTo(m.x - tw / 2 + 2 * inset, m.y)
+        ctx.closePath()
+    },
+
     // ------------------------------------------------------------------ rendering
 
     _sheetTile(ctx, sheet, id, x, y) {
@@ -838,6 +976,14 @@ export default {
         const cols = this.data.sheet.columns
         const T = this.TILE
         ctx.drawImage(sheet, (id % cols) * T, Math.floor(id / cols) * T, T, T, x, y, T, T)
+    },
+
+    // draws frame `frame` of a sheet image (frames numbered row by row)
+    _drawFrame(ctx, def, img, frame, x, y) {
+        const fw = def.frameWidth
+        const fh = def.frameHeight
+        const cols = def.columns || def.frames || 1
+        ctx.drawImage(img, (frame % cols) * fw, Math.floor(frame / cols) * fh, fw, fh, x, y, fw, fh)
     },
 
     _layerCanvas(map, key) {
@@ -853,7 +999,7 @@ export default {
         return c
     },
 
-    // terrain and decorations, drawn once at 1:1 and redrawn when they change
+    // terrain and decorations of a top-down map, drawn once at 1:1 and redrawn when they change
     _updateLayers(map) {
         const sheet = this._image(this.data.themes[this._themeOf(map)].image)
         if (!sheet.loaded) {
@@ -893,37 +1039,61 @@ export default {
         return true
     },
 
+    // the isometric ground: a diamond per cell, land and water in two alternating colors
+    _drawIsoGround(ctx, map, world, view) {
+        const colors = this._isoTheme(map)
+        ctx.lineWidth = 1 / view.scale
+        ctx.strokeStyle = colors.outline
+        for (let r = 0; r < map.rows; r++) {
+            for (let c = 0; c < map.columns; c++) {
+                const kind = this.kindOf[map.terrain[r * map.columns + c]] ?? 'land'
+                const pair = colors[kind] ?? colors.land
+                this._cellPath(ctx, map, world, c, r)
+                ctx.fillStyle = pair[(r + c) % 2]
+                ctx.fill()
+                ctx.stroke()
+            }
+        }
+    },
+
     // scale (device pixels per map pixel) and camera (map pixel shown at the top left)
     _layout(map) {
         const cw = this.canvas[0].width
         const ch = this.canvas[0].height
         const dpr = window.devicePixelRatio || 1
-        const mw = map.columns * this.TILE
-        const mh = map.rows * this.TILE
+        const world = this._world(map)
+        const iso = this._isIso(map)
         let scale
         if (map.zoom > 0) {
             scale = map.zoom * dpr
         } else {
+            scale = Math.min(cw / world.width, ch / world.height)
             // whole multiples keep the pixel art even, below 2x the map rather fills the view
-            scale = Math.min(cw / mw, ch / mh)
-            if (scale >= 2) {
+            if (!iso && scale >= 2) {
                 scale = Math.floor(scale)
             }
         }
         const vw = cw / scale
         const vh = ch / scale
         const follow = map.followId >= 0 ? this.characters.get(map.followId) : null
-        const camera = (size, view, center) => {
-            if (size <= view) {
-                return (size - view) / 2
+        const center = follow
+            ? this._ground(map, world, follow.fc, follow.fr)
+            : { x: world.width / 2, y: world.height / 2 }
+        const camera = (size, viewSize, c) => {
+            if (size <= viewSize) {
+                return (size - viewSize) / 2
             }
-            return Math.max(0, Math.min(size - view, center - view / 2))
+            return Math.max(0, Math.min(size - viewSize, c - viewSize / 2))
         }
-        const T = this.TILE
-        const x = camera(mw, vw, follow ? follow.x + T / 2 : mw / 2)
-        const y = camera(mh, vh, follow ? follow.y + T / 2 : mh / 2)
+        const x = camera(world.width, vw, center.x)
+        const y = camera(world.height, vh, center.y)
         // whole device pixels, so the tiles stay crisp
-        return { scale, x: Math.round(x * scale) / scale, y: Math.round(y * scale) / scale }
+        return {
+            world,
+            scale,
+            x: Math.round(x * scale) / scale,
+            y: Math.round(y * scale) / scale,
+        }
     },
 
     _render(now) {
@@ -938,25 +1108,35 @@ export default {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             return !!map
         }
+        const iso = this._isIso(map)
         this.characters.forEach((ch) => {
             if (ch.mapId === map.id) {
                 this._updateCharacter(ch, now)
             }
         })
 
-        ctx.fillStyle = this.data.themes[this._themeOf(map)].background
+        ctx.fillStyle = iso
+            ? this._isoTheme(map).background
+            : this.data.themes[this._themeOf(map)].background
         ctx.fillRect(0, 0, canvas.width, canvas.height)
-        if (!this._updateLayers(map)) {
+        if (!iso && !this._updateLayers(map)) {
             return true
         }
 
         const view = this._layout(map)
-        ctx.imageSmoothingEnabled = false
+        const world = view.world
+        ctx.imageSmoothingEnabled = iso
         ctx.setTransform(view.scale, 0, 0, view.scale, -view.x * view.scale, -view.y * view.scale)
-        ctx.drawImage(map.layer, 0, 0)
+        if (iso) {
+            this._drawIsoGround(ctx, map, world, view)
+        } else {
+            ctx.drawImage(map.layer, 0, 0)
+        }
+        map.effects = map.effects.filter((e) => now - e.start < e.duration)
+        this._drawCellEffects(ctx, map, world, now)
 
         const T = this.TILE
-        const sheet = this._image(this.data.themes[this._themeOf(map)].image).img
+        const sheet = iso ? null : this._image(this.data.themes[this._themeOf(map)].image).img
         const drawables = []
         this.sprites.forEach((sprite) => {
             if (sprite.mapId !== map.id || !sprite.visible) {
@@ -968,33 +1148,19 @@ export default {
             }
             const pos = this._spritePos(sprite, now)
             const fp = def.footprint || [1, 1]
+            const ground = this._ground(
+                map,
+                world,
+                pos.col + (fp[0] - 1) / 2,
+                pos.row + (fp[1] - 1) / 2
+            )
             drawables.push({
-                key: (pos.row + fp[1]) * T,
+                key: iso ? ground.y : (pos.row + fp[1]) * T,
+                x: ground.x,
                 depth: sprite.depth,
                 order: 0,
                 id: sprite.id,
-                draw: () => {
-                    const x0 = Math.round(pos.col * T)
-                    const y0 = Math.round(pos.row * T)
-                    if (def.tiles) {
-                        def.tiles.forEach((line, r) =>
-                            line.forEach((id, c) =>
-                                this._sheetTile(ctx, sheet, id, x0 + c * T, y0 + r * T)
-                            )
-                        )
-                        return
-                    }
-                    const img = this._image(def.image)
-                    if (!img.loaded) {
-                        return
-                    }
-                    const frame = this._spriteFrame(sprite, def, now)
-                    const fw = def.frameWidth
-                    const fh = def.frameHeight
-                    const x = x0 + Math.round((fp[0] * T - fw) / 2)
-                    const y = y0 + fp[1] * T - fh
-                    ctx.drawImage(img.img, frame * fw, 0, fw, fh, x, y, fw, fh)
-                },
+                draw: () => this._drawSprite(ctx, map, sprite, def, pos, ground, sheet, now),
             })
         })
         this.characters.forEach((ch) => {
@@ -1005,8 +1171,10 @@ export default {
             if (!def) {
                 return
             }
+            const ground = this._ground(map, world, ch.fc, ch.fr)
             drawables.push({
-                key: ch.y + T,
+                key: iso ? ground.y : (ch.fr + 1) * T,
+                x: ground.x,
                 depth: 0,
                 order: 1,
                 id: ch.id,
@@ -1015,58 +1183,193 @@ export default {
                     if (!img.loaded) {
                         return
                     }
-                    const frame = this._characterFrame(ch, def, now)
-                    const fw = def.frameWidth
-                    const fh = def.frameHeight
-                    const x = Math.round(ch.x + (T - fw) / 2)
-                    const y = Math.round(ch.y + T - fh)
-                    ctx.drawImage(img.img, frame * fw, 0, fw, fh, x, y, fw, fh)
+                    const frame = this._characterFrame(ch, def, map, now)
+                    let x, y
+                    if (def.anchor) {
+                        x = ground.x - def.anchor[0]
+                        y = ground.y - def.anchor[1]
+                    } else {
+                        x = Math.round(ch.fc * T + (T - def.frameWidth) / 2)
+                        y = Math.round(ch.fr * T + T - def.frameHeight)
+                    }
+                    this._drawFrame(ctx, def, img.img, frame, x, y)
                 },
             })
         })
         drawables.sort(
-            (a, b) => a.key - b.key || a.depth - b.depth || a.order - b.order || a.id - b.id
+            (a, b) =>
+                a.key - b.key || a.depth - b.depth || a.x - b.x || a.order - b.order || a.id - b.id
         )
         drawables.forEach((d) => d.draw())
 
-        if (map.hasFog) {
+        if (map.hasFog && !iso) {
             ctx.drawImage(map.fogLayer, 0, 0)
         }
+        this._drawSuns(ctx, map, world, view, now)
         if (map.grid) {
             this._drawGrid(ctx, map, view)
+        }
+        if (map.coordinates) {
+            this._drawCoordinates(ctx, map, view)
         }
         return true
     },
 
-    _drawGrid(ctx, map, view) {
+    _drawSprite(ctx, map, sprite, def, pos, ground, sheet, now) {
         const T = this.TILE
-        ctx.save()
-        ctx.lineWidth = 1 / view.scale
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)'
-        ctx.beginPath()
-        for (let c = 0; c <= map.columns; c++) {
-            ctx.moveTo(c * T, 0)
-            ctx.lineTo(c * T, map.rows * T)
+        if (def.tiles) {
+            const x0 = Math.round(pos.col * T)
+            const y0 = Math.round(pos.row * T)
+            def.tiles.forEach((line, r) =>
+                line.forEach((id, c) => this._sheetTile(ctx, sheet, id, x0 + c * T, y0 + r * T))
+            )
+            return
         }
-        for (let r = 0; r <= map.rows; r++) {
-            ctx.moveTo(0, r * T)
-            ctx.lineTo(map.columns * T, r * T)
+        const img = this._image(def.image)
+        if (!img.loaded) {
+            return
         }
-        ctx.stroke()
-        // labels in screen pixels, independent of the zoom
+        const variants = def.variants || 1
+        const variant = Math.min(sprite.variant, variants - 1)
+        const frame = variant * (def.variantFrames || 0) + this._spriteFrame(sprite, def, now)
+        let x, y
+        if (def.anchor) {
+            x = ground.x - def.anchor[0]
+            y = ground.y - def.anchor[1]
+        } else {
+            const fp = def.footprint || [1, 1]
+            x = Math.round(pos.col * T) + Math.round((fp[0] * T - def.frameWidth) / 2)
+            y = Math.round(pos.row * T) + fp[1] * T - def.frameHeight
+        }
+        this._drawFrame(ctx, def, img.img, frame, x, y)
+    },
+
+    // tinted cells, flashing cell outlines and the light of sun rays on the ground
+    _drawCellEffects(ctx, map, world, now) {
+        const iso = this._isIso(map)
+        const th = iso ? this.data.isometric.tileHeight : this.TILE
+        map.tints.forEach((tint, key) => {
+            const c = key % map.columns
+            const r = Math.floor(key / map.columns)
+            ctx.globalAlpha =
+                tint.duration > 0 ? Math.min(1, (now - tint.start) / tint.duration) : 1
+            this._cellPath(ctx, map, world, c, r, th * 0.18)
+            ctx.fillStyle = tint.color
+            ctx.fill()
+        })
+        ctx.globalAlpha = 1
+        map.effects.forEach((e) => {
+            const a = 1 - (now - e.start) / e.duration
+            ctx.globalAlpha = Math.max(0, a)
+            if (e.type === 'flash') {
+                this._cellPath(ctx, map, world, e.col, e.row, iso ? 1.5 : 1)
+                ctx.strokeStyle = e.color
+                ctx.lineWidth = iso ? 2.5 : 1.5
+                ctx.stroke()
+            } else if (e.type === 'sun') {
+                this._cellPath(ctx, map, world, e.col, e.row)
+                ctx.fillStyle = 'rgba(255,235,140,0.45)'
+                ctx.fill()
+            }
+        })
+        ctx.globalAlpha = 1
+    },
+
+    // sun rays: a light beam from a sun at the top of the view down to the cell
+    _drawSuns(ctx, map, world, view, now) {
+        const iso = this._isIso(map)
+        const cellWidth = iso ? this.data.isometric.tileWidth : this.TILE
+        // sizes are made for the 90 px isometric tiles
+        const u = cellWidth / 90
+        const dpr = window.devicePixelRatio || 1
+        map.effects.forEach((e) => {
+            if (e.type !== 'sun') {
+                return
+            }
+            const a = Math.max(0, 1 - (now - e.start) / e.duration)
+            const m = this._ground(map, world, e.col, e.row)
+            const rad = Math.max(9 * u, (9 * dpr) / view.scale)
+            const top = view.y + (16 * dpr) / view.scale
+            ctx.fillStyle = `rgba(255,230,120,${0.35 * a})`
+            ctx.beginPath()
+            ctx.moveTo(m.x - rad * 0.66, top)
+            ctx.lineTo(m.x + rad * 0.66, top)
+            ctx.lineTo(m.x + cellWidth / 3, m.y)
+            ctx.lineTo(m.x - cellWidth / 3, m.y)
+            ctx.closePath()
+            ctx.fill()
+
+            ctx.strokeStyle = `rgba(255,176,0,${a})`
+            ctx.lineWidth = Math.max(1 / view.scale, rad / 5)
+            ctx.beginPath()
+            for (let i = 0; i < 8; i++) {
+                const w = (i * Math.PI) / 4
+                ctx.moveTo(m.x + Math.cos(w) * rad * 1.3, top + Math.sin(w) * rad * 1.3)
+                ctx.lineTo(m.x + Math.cos(w) * rad * 1.8, top + Math.sin(w) * rad * 1.8)
+            }
+            ctx.stroke()
+            ctx.fillStyle = `rgba(255,210,63,${a})`
+            ctx.beginPath()
+            ctx.arc(m.x, top, rad, 0, Math.PI * 2)
+            ctx.fill()
+        })
+    },
+
+    // row numbers along the left and column numbers along the top edge of the map
+    _drawCoordinates(ctx, map, view) {
+        const world = view.world
+        const iso = this._isIso(map)
+        const dpr = window.devicePixelRatio || 1
         const s = view.scale
-        if (s * T >= 24) {
+        ctx.save()
+        ctx.setTransform(1, 0, 0, 1, 0, 0)
+        ctx.font = Math.max(9 * dpr, Math.round((iso ? 11 : 5) * s)) + 'px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillStyle = iso ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.85)'
+        const off = iso ? -0.8 : -0.35
+        const label = (text, c, r) => {
+            const p = this._ground(map, world, c, r)
+            ctx.fillText(text, (p.x - view.x) * s, (p.y - view.y) * s)
+        }
+        for (let r = 0; r < map.rows; r++) {
+            label('' + r, off, r)
+        }
+        for (let c = 0; c < map.columns; c++) {
+            label('' + c, c, off)
+        }
+        ctx.restore()
+    },
+
+    _drawGrid(ctx, map, view) {
+        const world = view.world
+        const s = view.scale
+        ctx.save()
+        ctx.lineWidth = 1 / s
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)'
+        for (let r = 0; r < map.rows; r++) {
+            for (let c = 0; c < map.columns; c++) {
+                this._cellPath(ctx, map, world, c, r)
+                ctx.stroke()
+            }
+        }
+        // labels in screen pixels, independent of the zoom
+        const cellWidth = this._isIso(map) ? this.data.isometric.tileWidth / 2 : this.TILE
+        if (s * cellWidth >= 24) {
             ctx.setTransform(1, 0, 0, 1, 0, 0)
             const dpr = window.devicePixelRatio || 1
             ctx.font = 9 * dpr + 'px sans-serif'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
             ctx.lineWidth = 2 * dpr
             ctx.lineJoin = 'round'
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)'
             ctx.fillStyle = 'white'
             for (let r = 0; r < map.rows; r++) {
                 for (let c = 0; c < map.columns; c++) {
-                    const x = (c * T - view.x) * s + 2 * dpr
-                    const y = (r * T - view.y) * s + 10 * dpr
+                    const p = this._ground(map, world, c, r)
+                    const x = (p.x - view.x) * s
+                    const y = (p.y - view.y) * s
                     ctx.strokeText(c + ',' + r, x, y)
                     ctx.fillText(c + ',' + r, x, y)
                 }
@@ -1120,8 +1423,17 @@ export default {
         const view = this._layout(map)
         const x = ((clientX - rect.left) * dpr) / view.scale + view.x
         const y = ((clientY - rect.top) * dpr) / view.scale + view.y
-        const col = Math.floor(x / this.TILE)
-        const row = Math.floor(y / this.TILE)
+        let col, row
+        if (this._isIso(map)) {
+            const { tileWidth: tw, tileHeight: th } = this.data.isometric
+            const u = (x - view.world.ox) / (tw / 2)
+            const v = (y - view.world.oy - th / 2) / (th / 2)
+            col = Math.floor((u + v) / 2 + 0.5)
+            row = Math.floor((v - u) / 2 + 0.5)
+        } else {
+            col = Math.floor(x / this.TILE)
+            row = Math.floor(y / this.TILE)
+        }
         if (col < 0 || row < 0 || col >= map.columns || row >= map.rows) {
             return null
         }

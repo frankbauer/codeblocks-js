@@ -1,6 +1,6 @@
 {
  "format": "codeblocks-tilemap",
- "version": 1,
+ "version": 2,
  "tileSize": 16,
  "sheet": {
   "columns": 20,
@@ -3127,6 +3127,196 @@
     1
    ],
    "description": "Small rock in the water"
+  },
+  "SNOWMAN": {
+   "projection": "isometric",
+   "image": "../snowman/snowman.webp",
+   "frameWidth": 90,
+   "frameHeight": 53,
+   "columns": 45,
+   "frames": 305,
+   "variants": 5,
+   "variantFrames": 61,
+   "frameDuration": 23,
+   "anchor": [
+    45,
+    31
+   ],
+   "frame": 0,
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Snowman (5 variants) that melts (\"melt\")",
+   "animations": {
+    "melt": {
+     "from": 0,
+     "to": 60,
+     "loop": false
+    }
+   }
+  },
+  "SNOWMAN_XMAS": {
+   "projection": "isometric",
+   "image": "../snowman_xmas/snowman_xmas.webp",
+   "frameWidth": 90,
+   "frameHeight": 58,
+   "columns": 45,
+   "frames": 366,
+   "variants": 6,
+   "variantFrames": 61,
+   "frameDuration": 23,
+   "anchor": [
+    45,
+    36
+   ],
+   "frame": 0,
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Snowman with a Christmas hat (6 variants) that melts (\"melt\")",
+   "animations": {
+    "melt": {
+     "from": 0,
+     "to": 60,
+     "loop": false
+    }
+   }
+  },
+  "FIRE": {
+   "projection": "isometric",
+   "image": "../fire/fire.webp",
+   "frameWidth": 90,
+   "frameHeight": 83,
+   "columns": 45,
+   "frames": 252,
+   "variants": 1,
+   "variantFrames": 252,
+   "frameDuration": 33,
+   "anchor": [
+    45,
+    61
+   ],
+   "frame": 1,
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Pile of hay that burns: \"burn\" (all), or \"ignite\", \"burning\" (loop) and \"burnOut\"",
+   "animations": {
+    "burn": {
+     "from": 0,
+     "to": 251,
+     "loop": false
+    },
+    "ignite": {
+     "from": 0,
+     "to": 60,
+     "loop": false
+    },
+    "burning": {
+     "from": 61,
+     "to": 136,
+     "loop": true
+    },
+    "burnOut": {
+     "from": 137,
+     "to": 251,
+     "loop": false
+    }
+   }
+  },
+  "SNOW": {
+   "projection": "isometric",
+   "image": "../snow/snow.webp",
+   "frameWidth": 90,
+   "frameHeight": 83,
+   "columns": 45,
+   "frames": 504,
+   "variants": 4,
+   "variantFrames": 126,
+   "frameDuration": 33,
+   "anchor": [
+    45,
+    61
+   ],
+   "frame": 0,
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Snow clouds (4 variants) that leave snow (\"snowing\")",
+   "animations": {
+    "snowing": {
+     "from": 0,
+     "to": 125,
+     "loop": false
+    }
+   }
+  },
+  "TREES": {
+   "projection": "isometric",
+   "image": "../trees/trees.webp",
+   "frameWidth": 90,
+   "frameHeight": 59,
+   "columns": 20,
+   "frames": 20,
+   "variants": 20,
+   "variantFrames": 1,
+   "frameDuration": 100,
+   "anchor": [
+    46,
+    33
+   ],
+   "frame": 0,
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Group of trees (20 variants)"
+  },
+  "STONES": {
+   "projection": "isometric",
+   "image": "../stones/stones.webp",
+   "frameWidth": 90,
+   "frameHeight": 59,
+   "columns": 20,
+   "frames": 20,
+   "variants": 20,
+   "variantFrames": 1,
+   "frameDuration": 100,
+   "anchor": [
+    46,
+    33
+   ],
+   "frame": 0,
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Rocks (20 variants)"
+  },
+  "HUT": {
+   "projection": "isometric",
+   "image": "../huts/huts.webp",
+   "frameWidth": 120,
+   "frameHeight": 64,
+   "columns": 6,
+   "frames": 6,
+   "variants": 6,
+   "variantFrames": 1,
+   "frameDuration": 100,
+   "anchor": [
+    60,
+    38
+   ],
+   "frame": 0,
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Hut (6 colors)"
   }
  },
  "characters": {
@@ -3272,6 +3462,1460 @@
     "SE": "down-right",
     "SW": "down-left",
     "NW": "up-left"
+   }
+  },
+  "FIGURE_BLUE": {
+   "projection": "isometric",
+   "image": "../figure_blue/figure_blue.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (blue)"
+  },
+  "FIGURE_BLUE_BIG": {
+   "projection": "isometric",
+   "image": "../figure_blue_big/figure_blue_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (blue, big)"
+  },
+  "FIGURE_BLUE_LOADED": {
+   "projection": "isometric",
+   "image": "../figure_blue_loaded/figure_blue_loaded.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (blue, loaded)"
+  },
+  "FIGURE_BLUE_LOADED_BIG": {
+   "projection": "isometric",
+   "image": "../figure_blue_loaded_big/figure_blue_loaded_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (blue, loaded, big)"
+  },
+  "FIGURE_GREEN": {
+   "projection": "isometric",
+   "image": "../figure_green/figure_green.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (green)"
+  },
+  "FIGURE_GREEN_BIG": {
+   "projection": "isometric",
+   "image": "../figure_green_big/figure_green_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (green, big)"
+  },
+  "FIGURE_GREEN_LOADED": {
+   "projection": "isometric",
+   "image": "../figure_green_loaded/figure_green_loaded.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (green, loaded)"
+  },
+  "FIGURE_GREEN_LOADED_BIG": {
+   "projection": "isometric",
+   "image": "../figure_green_loaded_big/figure_green_loaded_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (green, loaded, big)"
+  },
+  "FIGURE_GRINCH": {
+   "projection": "isometric",
+   "image": "../figure_grinch/figure_grinch.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (grinch)"
+  },
+  "FIGURE_GRINCH_BIG": {
+   "projection": "isometric",
+   "image": "../figure_grinch_big/figure_grinch_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (grinch, big)"
+  },
+  "FIGURE_GRINCH_LOADED": {
+   "projection": "isometric",
+   "image": "../figure_grinch_loaded/figure_grinch_loaded.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (grinch, loaded)"
+  },
+  "FIGURE_GRINCH_LOADED_BIG": {
+   "projection": "isometric",
+   "image": "../figure_grinch_loaded_big/figure_grinch_loaded_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (grinch, loaded, big)"
+  },
+  "FIGURE_SNOWMAN": {
+   "projection": "isometric",
+   "image": "../figure_snowman/figure_snowman.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (snowman)"
+  },
+  "FIGURE_SNOWMAN_BIG": {
+   "projection": "isometric",
+   "image": "../figure_snowman_big/figure_snowman_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (snowman, big)"
+  },
+  "FIGURE_SNOWMAN_LOADED": {
+   "projection": "isometric",
+   "image": "../figure_snowman_loaded/figure_snowman_loaded.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (snowman, loaded)"
+  },
+  "FIGURE_SNOWMAN_LOADED_BIG": {
+   "projection": "isometric",
+   "image": "../figure_snowman_loaded_big/figure_snowman_loaded_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (snowman, loaded, big)"
+  },
+  "FIGURE_SNOWMAN_XMAS": {
+   "projection": "isometric",
+   "image": "../figure_snowman_xmas/figure_snowman_xmas.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (snowman xmas)"
+  },
+  "FIGURE_SNOWMAN_XMAS_BIG": {
+   "projection": "isometric",
+   "image": "../figure_snowman_xmas_big/figure_snowman_xmas_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (snowman xmas, big)"
+  },
+  "FIGURE_SNOWMAN_XMAS_LOADED": {
+   "projection": "isometric",
+   "image": "../figure_snowman_xmas_loaded/figure_snowman_xmas_loaded.webp",
+   "frameWidth": 38,
+   "frameHeight": 32,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    18,
+    18
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (snowman xmas, loaded)"
+  },
+  "FIGURE_SNOWMAN_XMAS_LOADED_BIG": {
+   "projection": "isometric",
+   "image": "../figure_snowman_xmas_loaded_big/figure_snowman_xmas_loaded_big.webp",
+   "frameWidth": 76,
+   "frameHeight": 64,
+   "columns": 20,
+   "frames": 160,
+   "frameDuration": 50,
+   "anchor": [
+    35,
+    39
+   ],
+   "animations": {
+    "N": {
+     "from": 0,
+     "to": 19,
+     "loop": true
+    },
+    "NO": {
+     "from": 20,
+     "to": 39,
+     "loop": true
+    },
+    "O": {
+     "from": 40,
+     "to": 59,
+     "loop": true
+    },
+    "SO": {
+     "from": 60,
+     "to": 79,
+     "loop": true
+    },
+    "S": {
+     "from": 80,
+     "to": 99,
+     "loop": true
+    },
+    "SW": {
+     "from": 100,
+     "to": 119,
+     "loop": true
+    },
+    "W": {
+     "from": 120,
+     "to": 139,
+     "loop": true
+    },
+    "NW": {
+     "from": 140,
+     "to": 159,
+     "loop": true
+    }
+   },
+   "screenDirections": {
+    "N": "NO",
+    "NE": "O",
+    "E": "SO",
+    "SE": "S",
+    "S": "SW",
+    "SW": "W",
+    "W": "NW",
+    "NW": "N"
+   },
+   "idle": null,
+   "syncToStep": true,
+   "walksOn": "land",
+   "speed": 2,
+   "description": "Game figure (snowman xmas, loaded, big)"
+  }
+ },
+ "isometric": {
+  "tileWidth": 90,
+  "tileHeight": 45,
+  "themes": {
+   "valley": {
+    "land": [
+     "#7fb24a",
+     "#74a843"
+    ],
+    "water": [
+     "#5b93c7",
+     "#5289bf"
+    ],
+    "outline": "rgba(40,70,30,0.35)",
+    "background": "#2b3a4a"
+   },
+   "beach": {
+    "land": [
+     "#e7cf8f",
+     "#dec383"
+    ],
+    "water": [
+     "#4fa3d1",
+     "#4697c4"
+    ],
+    "outline": "rgba(110,80,30,0.3)",
+    "background": "#24465a"
+   },
+   "desert": {
+    "land": [
+     "#d9b26a",
+     "#cfa55d"
+    ],
+    "water": [
+     "#4f9fbf",
+     "#4693b2"
+    ],
+    "outline": "rgba(100,60,20,0.3)",
+    "background": "#3a2e24"
+   },
+   "snow": {
+    "land": [
+     "#e9f1f5",
+     "#dbe7ee"
+    ],
+    "water": [
+     "#7fb0d6",
+     "#73a5cc"
+    ],
+    "outline": "rgba(60,90,120,0.3)",
+    "background": "#2b3a4a"
    }
   }
  }

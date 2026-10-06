@@ -1,0 +1,72 @@
+{
+    "version": "1.0",
+    "settings": {
+        "readonly": false,
+        "language": "java",
+        "compiler": {
+            "languageType": "java",
+            "version": "102"
+        },
+        "runCode": true,
+        "emitAST": true,
+        "executionTimeout": 30000,
+        "maxCharacters": 20000,
+        "outputParser": "data",
+        "uiTheme": "light",
+        "domLibs": [],
+        "workerLibs": [],
+        "continuousCompilation": false,
+        "messagePassing": true,
+        "keepAlive": true,
+        "persistentArguments": false,
+        "randomizer": {
+            "active": false
+        }
+    },
+    "blocks": [
+        {
+            "id": 0,
+            "type": "BLOCK",
+            "name": "IsoDemo",
+            "file": "IsoDemo.java",
+            "isCombined": false,
+            "metadata": {
+                "expanded": false,
+                "visibleLines": "auto"
+            }
+        },
+        {
+            "id": 1,
+            "type": "LIBRARY",
+            "name": "objectManager",
+            "metadata": {
+                "expanded": false,
+                "codeExpanded": 1,
+                "embeddedLibrary": "objectManager"
+            }
+        },
+        {
+            "id": 2,
+            "type": "LIBRARY",
+            "name": "tileMap",
+            "metadata": {
+                "expanded": false,
+                "codeExpanded": 1,
+                "embeddedLibrary": "tileMap"
+            }
+        },
+        {
+            "id": 3,
+            "type": "PLAYGROUND",
+            "name": "",
+            "file": "isoPlayground.js",
+            "metadata": {
+                "expanded": true,
+                "version": "102",
+                "codeExpanded": 0,
+                "width": "720px",
+                "height": "440px"
+            }
+        }
+    ]
+}

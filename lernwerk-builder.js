@@ -61,7 +61,7 @@ fs.writeFileSync(manifestFile, JSON.stringify(entries, null, 4) + '\n')
 // scene assets (public/assets/<scene>) used by the lernwerk example scenes in common/scene
 // and by the tileMap library (tilemap), mirrored to <lernwerk>/assets/<scene> (same layout as
 // an ILIAS installation: assets/ next to common/)
-const sceneAssets = ['robots', 'floatingworld', 'cherrygame', 'maze', 'universum', 'snowmeadow', 'seasonal', 'sunnyhill', 'hologram', 'tilemap']
+const sceneAssets = ['robots', 'floatingworld', 'cherrygame', 'maze', 'universum', 'seasonal', 'sunnyhill', 'hologram', 'tilemap']
 const destAssets = path.join(lernwerk, 'assets')
 fs.mkdirSync(destAssets, { recursive: true })
 for (const name of sceneAssets) {
@@ -69,6 +69,21 @@ for (const name of sceneAssets) {
     const dst = path.join(destAssets, name)
     console.log(`Syncing 'assets/${name}' to '${dst}'`)
     run(`rsync -a --delete --delete-excluded --exclude .DS_Store ${q(src + '/')} ${q(dst + '/')}`)
+}
+
+// isometric sprites of the tileMap library: only the sprite sheets (<folder>/<folder>.webp) and
+// licenses, not the single frames they were built from
+const distAssets = path.join(__dirname, 'dist', 'assets')
+const sheetAssets = ['fire', 'snow', 'snowman', 'snowman_xmas', 'stones', 'huts', 'trees'].concat(
+    fs.readdirSync(distAssets).filter((name) => name.startsWith('figure_'))
+)
+for (const name of sheetAssets) {
+    const src = path.join(distAssets, name)
+    const dst = path.join(destAssets, name)
+    console.log(`Syncing sprite sheets of 'assets/${name}' to '${dst}'`)
+    run(
+        `rsync -a --delete --delete-excluded --include '*.webp' --include LICENSE --exclude '*' ${q(src + '/')} ${q(dst + '/')}`
+    )
 }
 
 console.log('Done.')
