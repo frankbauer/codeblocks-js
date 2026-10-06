@@ -1,10 +1,19 @@
 import compilerRegistry from '../CompilerRegistry'
 import { escapeText, sanitizeMarkup } from '../sanitize'
 
+// whitespace and comments that may precede `export default` / `module.exports =`
+const LEADING = String.raw`^((?:\s|\/\/[^\n]*|\/\*[\s\S]*?\*\/)*)`
+const EXPORT_DEFAULT = new RegExp(LEADING + String.raw`export\s+default\s*`)
+const MODULE_EXPORTS = new RegExp(LEADING + String.raw`module\.exports\s*=\s*`)
+
+// blank the statement, but keep comments and line breaks so error positions stay valid
+const blankExport = (m: string, lead: string) =>
+    lead + m.slice(lead.length).replace(/[^\n]/g, ' ')
+
 export function stripModuleSyntax(code: string): string {
     return code
-        .replace(/^\s*export\s+default\s*/, (m) => m.replace(/[^\n]/g, ' '))
-        .replace(/^\s*module\.exports\s*=\s*/, (m) => m.replace(/[^\n]/g, ' '))
+        .replace(EXPORT_DEFAULT, blankExport)
+        .replace(MODULE_EXPORTS, blankExport)
         .replace(/;\s*$/, (m) => m.replace(/[^\n]/g, ' '))
         .trimEnd()
 }

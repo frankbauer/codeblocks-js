@@ -259,5 +259,6 @@ export default {
         domManager: 'DOM Manager',
         badgeManager: 'Badge Manager',
         testManager: 'Test Manager',
+        tileMap: 'Tile Map',
     },
 }

@@ -423,6 +423,8 @@ export default {
         this.commandBuffer = []
         this.frameBuffer = []
         this.sawFrameDone = false
+        // allow...Events() in init() may have bound the handlers already
+        this.unbindEvents()
         this.bindEvents()
 
         if (window.ResizeObserver && this.canvasElement) {

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta name="codeblocks-baseurl" content="/" />
+        <title>Tile Map Demo</title>
+        <script src="/js/jquery.min.js" type="text/javascript"></script>
+        <style>
+            body {
+                max-width: 1100px;
+                margin: 24px auto;
+                font-family: system-ui, sans-serif;
+            }
+            [codeblockseditor] > * {
+                display: none;
+            }
+            h2 {
+                font-size: 15px;
+                margin: 28px 8px 4px;
+            }
+        </style>
+        <script type="module" src="/src/main.ts"></script>
+    </head>
+    <body>
+        <!-- tileMap library: public/examples/tilemap (command queue) and
+             public/examples/tilemap-interactive (RPC, WASD keys) -->
+        <h2>Command queue</h2>
+        <div codeblockseditor src="examples/tilemap/blocks.json" data-question="1">
+            <loading>
+                <div></div>
+                <div></div>
+            </loading>
+        </div>
+        <h2>Interactive (click the map, then use W A S D)</h2>
+        <div codeblockseditor src="examples/tilemap-interactive/blocks.json" data-question="2">
+            <loading>
+                <div></div>
+                <div></div>
+            </loading>
+        </div>
+    </body>
+</html>
