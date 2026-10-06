@@ -28,10 +28,10 @@ public class IsoDemo {
         // a fire that ignites and keeps burning, and snow clouds
         MapSprite fire = new MapSprite(map, SpriteType.FIRE, 2, 3);
         block(fire);
-        fire.setOnAnimationEnded((sprite, animation) -> sprite.play("burning"));
-        fire.play("ignite");
+        fire.setOnAnimationEnded((sprite, animation) -> sprite.play(Animation.BURNING));
+        fire.play(Animation.IGNITE);
         MapSprite snow = new MapSprite(map, SpriteType.SNOW, 7, 2, 3);
-        snow.play("snowing", true);
+        snow.play(Animation.SNOWING, true);
 
         // snowmen in all variants
         for (int v = 0; v < SpriteType.SNOWMAN_XMAS.variants; v++) {
@@ -58,7 +58,7 @@ public class IsoDemo {
         MapSprite snowman = snowmen[row][column];
         if (snowman != null) {
             map.sunRay(column, row);
-            snowman.play("melt");
+            snowman.play(Animation.MELT);
             map.tintCell(column, row, new Color(0.35, 0.6, 0.8, 0.5), 1.4);
             snowmen[row][column] = null;
         } else if (!hero.goTo(column, row)) {

@@ -151,7 +151,7 @@ public class Explorer {
         boolean onBook = row == book.getRow() && column >= book.getColumn() && column < book.getColumn() + 2;
         if (onBook != bookOpen) {
             bookOpen = onBook;
-            book.play(onBook ? "open" : "close");
+            book.play(onBook ? Animation.OPEN : Animation.CLOSE);
         }
         if (column == 22 && row == 15) {
             System.out.println("You found the yellow level point!");

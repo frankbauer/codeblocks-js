@@ -63,7 +63,7 @@ public class MapDemo {
         new MapSprite(map, SpriteType.LEVEL_POINT_YELLOW, 12, 9);
         new MapSprite(map, SpriteType.DUCK_BROWN, 9, 6);
         MapSprite book = new MapSprite(map, SpriteType.BOOK, 17, 9);
-        book.play("open");
+        book.play(Animation.OPEN);
         MapSprite shark = new MapSprite(map, SpriteType.SHARK_SWIMMING, 0, 13);
         shark.moveTo(14, 13, 8);
 
