@@ -79,25 +79,60 @@ export function isEmptyBlockOverlay(o: NormalizedBlockOverlay | undefined): bool
     return !o || (o.highlights.length === 0 && o.gutter.length === 0 && o.scores.length === 0)
 }
 
-function lineAt(doc: Text, line: number) {
-    return doc.line(Math.max(1, Math.min(line, doc.lines)))
+function clampOffset(doc: Text, pos: number): number {
+    if (!Number.isFinite(pos)) {
+        return 0
+    }
+    return Math.max(0, Math.min(Math.floor(pos), doc.length))
 }
 
-function startOffset(doc: Text, p: OverlayPos): number {
+/** line containing pos; positions outside the document are clamped to it */
+function lineAtPos(doc: Text, pos: number) {
+    return doc.lineAt(clampOffset(doc, pos))
+}
+
+/** line number clamped to the document, or null if it is not a number at all */
+function lineAt(doc: Text, line: number) {
+    if (!Number.isFinite(line)) {
+        return null
+    }
+    return doc.line(Math.max(1, Math.min(Math.floor(line), doc.lines)))
+}
+
+function columnOf(p: OverlayPos): number | undefined {
+    return Number.isFinite(p.column) ? Math.floor(p.column!) : undefined
+}
+
+function startOffset(doc: Text, p: OverlayPos): number | null {
     const l = lineAt(doc, p.line)
-    return p.column === undefined ? l.from : Math.min(l.from + p.column - 1, l.to)
+    if (!l) {
+        return null
+    }
+    const column = columnOf(p)
+    return column === undefined ? l.from : Math.max(l.from, Math.min(l.from + column - 1, l.to))
 }
 
 // end columns are inclusive
-function endOffset(doc: Text, p: OverlayPos): number {
+function endOffset(doc: Text, p: OverlayPos): number | null {
     const l = lineAt(doc, p.line)
-    return p.column === undefined ? l.to : Math.min(l.from + p.column, l.to)
+    if (!l) {
+        return null
+    }
+    const column = columnOf(p)
+    return column === undefined ? l.to : Math.max(l.from, Math.min(l.from + column, l.to))
 }
 
 function resolveLayer(doc: Text, overlay: NormalizedBlockOverlay): LayerState {
-    const highlights = overlay.highlights.map((h) => {
-        let start = startOffset(doc, h.from)
-        let end = endOffset(doc, h.to)
+    const highlights: ResolvedHighlight[] = []
+    for (const h of overlay.highlights) {
+        const from = startOffset(doc, h.from)
+        const to = endOffset(doc, h.to)
+        if (from === null && to === null) {
+            // no usable position at all
+            continue
+        }
+        let start = from ?? to!
+        let end = to ?? from!
         if (end < start) {
             ;[start, end] = [end, start]
         }
@@ -109,12 +144,17 @@ function resolveLayer(doc: Text, overlay: NormalizedBlockOverlay): LayerState {
                 start = Math.max(0, end - 1)
             }
         }
-        return { ...h, start, end }
-    })
+        highlights.push({ ...h, start, end })
+    }
+    const anchored = <T extends { line: number }>(items: T[]) =>
+        items.flatMap((item) => {
+            const l = lineAt(doc, item.line)
+            return l ? [{ ...item, pos: l.from }] : []
+        })
     return {
         highlights,
-        scores: overlay.scores.map((s) => ({ ...s, pos: lineAt(doc, s.line).from })),
-        gutter: overlay.gutter.map((g) => ({ ...g, pos: lineAt(doc, g.line).from })),
+        scores: anchored(overlay.scores),
+        gutter: anchored(overlay.gutter),
     }
 }
 
@@ -339,15 +379,16 @@ function buildDecorations(state: EditorState): DecorationSet {
         // one mark per line: each piece ends at its line end, so the pills placed there
         // are not wrapped into the range of a multi-line highlight. Pieces that continue
         // on the previous/next line get square corners on that side.
-        for (let pos = h.start; pos < h.end; ) {
+        const hEnd = clampOffset(doc, h.end)
+        for (let pos = clampOffset(doc, h.start); pos < hEnd; ) {
             const line = doc.lineAt(pos)
-            const to = Math.min(h.end, line.to)
+            const to = Math.min(hEnd, line.to)
             if (to > pos) {
                 const pieceCls = [...cls]
                 if (pos > h.start) {
                     pieceCls.push('cb-ov-hl--cont-start')
                 }
-                if (to < h.end) {
+                if (to < hEnd) {
                     pieceCls.push('cb-ov-hl--cont-end')
                 }
                 ranges.push(
@@ -372,11 +413,11 @@ function buildDecorations(state: EditorState): DecorationSet {
         map.get(line)!.push(p)
     }
     for (const s of allOf(value, 'scores')) {
-        addPill(doc.lineAt(s.pos).number, s.align, { score: s })
+        addPill(lineAtPos(doc, s.pos).number, s.align, { score: s })
     }
     const byStart = [...highlights].sort((a, b) => a.start - b.start || b.end - a.end)
     for (const h of byStart) {
-        const line = doc.lineAt(h.end).number
+        const line = lineAtPos(doc, h.end).number
         if (h.display === 'inline' && h.comment) {
             // inline comment: one pill with the comment (and the points, if there are any)
             addPill(line, h.align, {
@@ -408,7 +449,7 @@ function buildDecorations(state: EditorState): DecorationSet {
         if (h.display !== 'permanent' || !h.comment) {
             continue
         }
-        const line = doc.lineAt(h.end).number
+        const line = lineAtPos(doc, h.end).number
         if (!cardsByLine.has(line)) {
             cardsByLine.set(line, [])
         }
@@ -525,7 +566,7 @@ const overlayGutter = gutter({
         const doc = view.state.doc
         const byLine = new Map<number, NormalizedGutterMarker[]>()
         for (const g of allOf(view.state.field(overlayField), 'gutter')) {
-            const line = doc.lineAt(g.pos)
+            const line = lineAtPos(doc, g.pos)
             if (!byLine.has(line.from)) {
                 byLine.set(line.from, [])
             }
