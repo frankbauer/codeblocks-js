@@ -1,0 +1,1061 @@
+[
+    {
+        "week": 1,
+        "start": "2026-10-12",
+        "end": "2026-10-18",
+        "label": "Vorbereitung",
+        "content": [
+            {
+                "liveEmbed": true,
+                "slides": "https://gdi.cs.fau.de/slides/Folien/00_Organisatorisches.html",
+                "previewSlide": "6",
+                "video": "",
+                "videotime": "",
+                "nr": 0,
+                "title": "Organisatorisches",
+                "uuid": "c18e5080-4779-423a-8cd9-95629df33485",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135800/download"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/01_Einfuehrung.html",
+                "previewSlide": 2,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6730/",
+                "videoTime": "42:55",
+                "nr": 1,
+                "title": "Einführung OOP",
+                "uuid": "b7d14e9c-5168-4fef-9a34-f6b7e8f3f7a5",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135809/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135876"
+            }
+        ],
+        "events": [
+            {
+                "date": "2026-10-15",
+                "title": "1. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 1
+            },
+            {
+                "date": "2026-10-16",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "1. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135893\">1. Frag-Uns-Aufgabe</a> zum Thema Ausgabe beginnt. Die Bearbeitungszeit endet am <b>26. Oktober 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 1,
+                "topic": "Ausgabe",
+                "short": "Ausgabe",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135893"
+            }
+        ]
+    },
+    {
+        "week": 2,
+        "start": "2026-10-19",
+        "end": "2026-10-25",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/02_Variablen.html",
+                "previewSlide": 1,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6744",
+                "videoTime": "7:30",
+                "nr": 2,
+                "title": "Variablen",
+                "uuid": "9c9ba98e-9aed-4754-b6f2-c1a0d077307b",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135799/download"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/03_Operationen.html",
+                "previewSlide": 5,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6744",
+                "videoTime": "1:00:00",
+                "nr": 3,
+                "title": "Ausdrücke",
+                "uuid": "1e8e0d30-f443-4347-8720-320687a28a49",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135801/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135960"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/04_Datentypen.html",
+                "previewSlide": 1,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6771",
+                "videoTime": "44:40",
+                "nr": 4,
+                "title": "Datentypen",
+                "uuid": "32cfd1ab-60dd-4c04-ab43-ebbd390436ba",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135802/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135875"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "1. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135893\">1. Frag-Uns-Aufgabe</a> zum Thema Ausgabe läuft noch bis zum <b>26. Oktober 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 1,
+                "topic": "Ausgabe",
+                "short": "Ausgabe",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135893"
+            },
+            {
+                "date": "2026-10-19",
+                "time": "12:00",
+                "icon": "mdi-account-check",
+                "title": "Erster Programmierschuppen",
+                "type": "tutorialstart"
+            },
+            {
+                "date": "2026-10-22",
+                "title": "2. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 2
+            },
+            {
+                "date": "2026-10-23",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "2. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135896\">2. Frag-Uns-Aufgabe</a> zum Thema Variablen & Operatoren beginnt. Die Bearbeitungszeit endet am <b>2. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 2,
+                "topic": "Variablen & Operatoren",
+                "short": "Variablen & Operatoren",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135896"
+            }
+        ]
+    },
+    {
+        "week": 3,
+        "start": "2026-10-26",
+        "end": "2026-11-01",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "liveEmbed": true,
+                "slides": "https://gdi.cs.fau.de/slides/Folien/05_Methodenaufrufe.html",
+                "previewSlide": 6,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6783",
+                "videoTime": "39:30",
+                "nr": 5,
+                "title": "Methodenaufrufe",
+                "uuid": "071516f4-17b6-46ca-87b7-90ff062d0e92",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135803/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135961"
+            },
+            {
+                "liveEmbed": true,
+                "slides": "https://gdi.cs.fau.de/slides/Folien/06_Objekte.html",
+                "previewSlide": 5,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6817",
+                "videoTime": "",
+                "nr": 6,
+                "title": "Objekte",
+                "uuid": "487ce7de-49c2-4a20-969e-33c12f1ec0ae",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135805/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135878"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "2. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135896\">2. Frag-Uns-Aufgabe</a> zum Thema Variablen & Operatoren läuft noch bis zum <b>2. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 2,
+                "topic": "Variablen & Operatoren",
+                "short": "Variablen & Operatoren",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135896"
+            },
+            {
+                "date": "2026-10-26",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "1. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135893\">1. Frag-Uns-Aufgabe</a> zum Thema Ausgabe endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 1,
+                "topic": "Ausgabe",
+                "short": "Ausgabe",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135893"
+            },
+            {
+                "date": "2026-10-29",
+                "title": "3. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 3
+            },
+            {
+                "date": "2026-10-30",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "3. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135899\">3. Frag-Uns-Aufgabe</a> zum Thema Methodenaufrufe & Objekte beginnt. Die Bearbeitungszeit endet am <b>9. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 3,
+                "topic": "Methodenaufrufe & Objekte",
+                "short": "Methodenaufrufe & Objekte",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135899"
+            }
+        ]
+    },
+    {
+        "week": 4,
+        "start": "2026-11-02",
+        "end": "2026-11-08",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/07_Bedingungen.html",
+                "previewSlide": 1,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6817",
+                "videoTime": "50:40",
+                "nr": 7,
+                "title": "Bedingungen",
+                "uuid": "37404ddc-7c1a-4471-b29b-096d3cabcf66",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135804/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135879"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/08_Schleifen.html",
+                "previewSlide": 2,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6820",
+                "videoTime": "",
+                "nr": 8,
+                "title": "Schleifen",
+                "uuid": "5f093d46-f282-4d48-8833-709a954b3a6f",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135806/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135877"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "3. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135899\">3. Frag-Uns-Aufgabe</a> zum Thema Methodenaufrufe & Objekte läuft noch bis zum <b>9. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 3,
+                "topic": "Methodenaufrufe & Objekte",
+                "short": "Methodenaufrufe & Objekte",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135899"
+            },
+            {
+                "date": "2026-11-02",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "2. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135896\">2. Frag-Uns-Aufgabe</a> zum Thema Variablen & Operatoren endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 2,
+                "topic": "Variablen & Operatoren",
+                "short": "Variablen & Operatoren",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135896"
+            },
+            {
+                "date": "2026-11-05",
+                "title": "4. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 4
+            },
+            {
+                "date": "2026-11-05",
+                "time": "16:00",
+                "icon": "mdi-alarm-check",
+                "title": "1. Boss-Level",
+                "content": "Alle relevanten Inhalte für den <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135945\">Boss-Level</a> zum Thema Kontrollfluss wurden nun besprochen.",
+                "type": "prepare",
+                "subtype": "begin",
+                "nr": 1,
+                "topic": "Kontrollfluss",
+                "short": "Kontrollfluss",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135945"
+            },
+            {
+                "date": "2026-11-06",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "4. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135905\">4. Frag-Uns-Aufgabe</a> zum Thema Kontrollfluss beginnt. Die Bearbeitungszeit endet am <b>16. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 4,
+                "topic": "Kontrollfluss",
+                "short": "Kontrollfluss",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135905"
+            }
+        ]
+    },
+    {
+        "week": 5,
+        "start": "2026-11-09",
+        "end": "2026-11-15",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/09_Methoden.html",
+                "previewSlide": 3,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6888",
+                "videoTime": "47:40",
+                "nr": 9,
+                "title": "Methoden",
+                "uuid": "b6b099b8-1ada-4b19-8ea2-4ccc17225ddd",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135808/download"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/10_Klassen.html",
+                "previewSlide": 4,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6889",
+                "videoTime": "4:00",
+                "nr": 10,
+                "title": "Attribute",
+                "uuid": "5b66d165-2c5f-4666-b8da-0b9951037986",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135810/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135867"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "4. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135905\">4. Frag-Uns-Aufgabe</a> zum Thema Kontrollfluss läuft noch bis zum <b>16. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 4,
+                "topic": "Kontrollfluss",
+                "short": "Kontrollfluss",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135905"
+            },
+            {
+                "date": "2026-11-09",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "3. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135899\">3. Frag-Uns-Aufgabe</a> zum Thema Methodenaufrufe & Objekte endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 3,
+                "topic": "Methodenaufrufe & Objekte",
+                "short": "Methodenaufrufe & Objekte",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135899"
+            },
+            {
+                "date": "2026-11-12",
+                "title": "5. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 5
+            },
+            {
+                "date": "2026-11-12",
+                "time": "16:00",
+                "icon": "mdi-alarm-check",
+                "title": "2. Boss-Level",
+                "content": "Alle relevanten Inhalte für den <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135947\">Boss-Level</a> zum Thema Methoden wurden nun besprochen.",
+                "type": "prepare",
+                "subtype": "begin",
+                "nr": 2,
+                "topic": "Methoden",
+                "short": "Methoden",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135947"
+            },
+            {
+                "date": "2026-11-13",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "5. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135910\">5. Frag-Uns-Aufgabe</a> zum Thema Statische Methoden & Attribute beginnt. Die Bearbeitungszeit endet am <b>23. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 5,
+                "topic": "Statische Methoden & Attribute",
+                "short": "Statische Methoden & Attribute",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135910"
+            },
+            {
+                "date": "2026-11-13",
+                "time": "18:00",
+                "icon": "mdi-alarm-off",
+                "title": "1. Boss-Level - Bearbeitungsende",
+                "content": "Die Bearbeitung des <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135945\">Boss-Level</a> zum Thema Kontrollfluss sollte nun beendet sein.",
+                "type": "prepare",
+                "subtype": "end",
+                "nr": 1,
+                "topic": "Kontrollfluss",
+                "short": "Kontrollfluss",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135945"
+            }
+        ]
+    },
+    {
+        "week": 6,
+        "start": "2026-11-16",
+        "end": "2026-11-22",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/11_Felder_1D.html",
+                "previewSlide": 1,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6820",
+                "videoTime": "52:00",
+                "nr": 11,
+                "title": "Felder 1D",
+                "uuid": "c4d8c096-c228-4eb2-bf55-7d5146f785f7",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135807/download"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/12_Felder.html",
+                "previewSlide": 1,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6888",
+                "videoTime": "16:40",
+                "nr": 12,
+                "title": "Felder n-Dim.",
+                "uuid": "804e6cc4-8b25-4c99-afc2-0bff42c926be",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135812/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135962"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "5. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135910\">5. Frag-Uns-Aufgabe</a> zum Thema Statische Methoden & Attribute läuft noch bis zum <b>23. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 5,
+                "topic": "Statische Methoden & Attribute",
+                "short": "Statische Methoden & Attribute",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135910"
+            },
+            {
+                "date": "2026-11-16",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "4. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135905\">4. Frag-Uns-Aufgabe</a> zum Thema Kontrollfluss endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 4,
+                "topic": "Kontrollfluss",
+                "short": "Kontrollfluss",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135905"
+            },
+            {
+                "date": "2026-11-19",
+                "title": "6. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 6
+            },
+            {
+                "date": "2026-11-20",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "6. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135916\">6. Frag-Uns-Aufgabe</a> zum Thema Felder beginnt. Die Bearbeitungszeit endet am <b>30. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 6,
+                "topic": "Felder",
+                "short": "Felder",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135916"
+            },
+            {
+                "date": "2026-11-27",
+                "time": "18:00",
+                "icon": "mdi-alarm-off",
+                "title": "2. Boss-Level - Bearbeitungsende",
+                "content": "Die Bearbeitung des <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135947\">Boss-Level</a> zum Thema Methoden sollte nun beendet sein.",
+                "type": "prepare",
+                "subtype": "end",
+                "nr": 2,
+                "topic": "Methoden",
+                "short": "Methoden",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135947"
+            }
+        ]
+    },
+    {
+        "week": 7,
+        "start": "2026-11-23",
+        "end": "2026-11-29",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/13_KlassenUndInstanzen.html",
+                "previewSlide": 1,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6889",
+                "videoTime": "30:52",
+                "nr": 13,
+                "title": "Instanzen",
+                "uuid": "bd600c7b-6556-40e3-bac6-f42bf6d623b4",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135811/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135868"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/14_Referenzvariablen.html",
+                "previewSlide": 1,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6937",
+                "videoTime": "",
+                "nr": 14,
+                "title": "Referenzen",
+                "uuid": "c2dfc5bf-96cc-4d23-9398-0e7357823dbe",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135815/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135873"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "6. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135916\">6. Frag-Uns-Aufgabe</a> zum Thema Felder läuft noch bis zum <b>30. November 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 6,
+                "topic": "Felder",
+                "short": "Felder",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135916"
+            },
+            {
+                "date": "2026-11-23",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "5. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135910\">5. Frag-Uns-Aufgabe</a> zum Thema Statische Methoden & Attribute endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 5,
+                "topic": "Statische Methoden & Attribute",
+                "short": "Statische Methoden & Attribute",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135910"
+            },
+            {
+                "date": "2026-11-26",
+                "title": "7. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 7
+            },
+            {
+                "date": "2026-11-26",
+                "time": "16:00",
+                "icon": "mdi-alarm-check",
+                "title": "3. Boss-Level",
+                "content": "Alle relevanten Inhalte für den <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135949\">Boss-Level</a> zum Thema Klassen wurden nun besprochen.",
+                "type": "prepare",
+                "subtype": "begin",
+                "nr": 3,
+                "topic": "Klassen",
+                "short": "Klassen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135949"
+            },
+            {
+                "date": "2026-11-27",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "7. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135921\">7. Frag-Uns-Aufgabe</a> zum Thema Klassen beginnt. Die Bearbeitungszeit endet am <b>7. Dezember 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 7,
+                "topic": "Klassen",
+                "short": "Klassen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135921"
+            }
+        ]
+    },
+    {
+        "week": 8,
+        "start": "2026-11-30",
+        "end": "2026-12-06",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/15_Schnittstellen.html",
+                "previewSlide": 2,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6941",
+                "videoTime": "22:30",
+                "nr": 15,
+                "title": "Schnittstellen",
+                "uuid": "aa643ba0-17cf-4a16-8598-782c86166efd",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135813/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135880"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/17_Rekursion.html",
+                "previewSlide": 3,
+                "video": "https://www.video.uni-erlangen.de/clip/id/7074",
+                "videoTime": "56:30",
+                "nr": 17,
+                "title": "Rekursion",
+                "uuid": "860fd73a-f20d-4856-8ce9-6477c5ccbc7a",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135821/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135881"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "7. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135921\">7. Frag-Uns-Aufgabe</a> zum Thema Klassen läuft noch bis zum <b>7. Dezember 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 7,
+                "topic": "Klassen",
+                "short": "Klassen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135921"
+            },
+            {
+                "date": "2026-11-30",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "6. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135916\">6. Frag-Uns-Aufgabe</a> zum Thema Felder endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 6,
+                "topic": "Felder",
+                "short": "Felder",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135916"
+            },
+            {
+                "date": "2026-12-03",
+                "title": "8. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 8
+            },
+            {
+                "date": "2026-12-03",
+                "time": "16:00",
+                "icon": "mdi-alarm-check",
+                "title": "4. Boss-Level",
+                "content": "Alle relevanten Inhalte für den <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135951\">Boss-Level</a> zum Thema Rekursion und Vererbung wurden nun besprochen.",
+                "type": "prepare",
+                "subtype": "begin",
+                "nr": 4,
+                "topic": "Rekursion und Vererbung",
+                "short": "Rek...",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135951"
+            },
+            {
+                "date": "2026-12-04",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "8. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135926\">8. Frag-Uns-Aufgabe</a> zum Thema Schnittstellen beginnt. Die Bearbeitungszeit endet am <b>14. Dezember 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 8,
+                "topic": "Schnittstellen",
+                "short": "Schnittstellen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135926"
+            },
+            {
+                "date": "2026-12-04",
+                "time": "18:00",
+                "icon": "mdi-alarm-off",
+                "title": "3. Boss-Level - Bearbeitungsende",
+                "content": "Die Bearbeitung des <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135949\">Boss-Level</a> zum Thema Klassen sollte nun beendet sein.",
+                "type": "prepare",
+                "subtype": "end",
+                "nr": 3,
+                "topic": "Klassen",
+                "short": "Klassen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135949"
+            },
+            {
+                "date": "2026-12-06",
+                "time": "23:59",
+                "title": "Ende der Klausuranmeldung",
+                "type": "signupend"
+            }
+        ]
+    },
+    {
+        "week": 9,
+        "start": "2026-12-07",
+        "end": "2026-12-13",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/18_Collections.html",
+                "previewSlide": 2,
+                "video": "https://www.video.uni-erlangen.de/clip/id/6976",
+                "videoTime": "",
+                "nr": 18,
+                "title": "Collections ",
+                "uuid": "f29b7065-5fdc-4b17-894d-c242a2f0ed94",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135816/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135870"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/19_Graphen.html",
+                "previewSlide": 3,
+                "video": "https://www.video.uni-erlangen.de/clip/id/7151",
+                "videoTime": "48:08",
+                "nr": 19,
+                "title": "Graphen",
+                "uuid": "f3495626-d0c3-49c6-8217-4084ae4f4383",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135828/download"
+            }
+        ],
+        "events": [
+            {
+                "date": "2026-12-07",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "7. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135921\">7. Frag-Uns-Aufgabe</a> zum Thema Klassen endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 7,
+                "topic": "Klassen",
+                "short": "Klassen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135921"
+            },
+            {
+                "date": "2026-12-10",
+                "title": "9. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 9
+            },
+            {
+                "date": "2026-12-11",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "9. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135931\">9. Frag-Uns-Aufgabe</a> zum Thema Rekursion beginnt. Die Bearbeitungszeit endet am <b>11. Januar 2027</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 9,
+                "topic": "Rekursion",
+                "short": "Rekursion",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135931"
+            },
+            {
+                "date": "2026-12-14",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "8. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135926\">8. Frag-Uns-Aufgabe</a> zum Thema Schnittstellen endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 8,
+                "topic": "Schnittstellen",
+                "short": "Schnittstellen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135926"
+            },
+            {
+                "date": "2026-12-18",
+                "time": "18:00",
+                "icon": "mdi-alarm-off",
+                "title": "4. Boss-Level - Bearbeitungsende",
+                "content": "Die Bearbeitung des <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135951\">Boss-Level</a> zum Thema Rekursion und Vererbung sollte nun beendet sein.",
+                "type": "prepare",
+                "subtype": "end",
+                "nr": 4,
+                "topic": "Rekursion und Vererbung",
+                "short": "Rek...",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135951"
+            }
+        ]
+    },
+    {
+        "week": 10,
+        "start": "2026-12-14",
+        "end": "2027-01-10",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/20_GraphenAblaufen.html",
+                "previewSlide": 6,
+                "video": "https://www.video.uni-erlangen.de/clip/id/7151",
+                "videoTime": "1:08:55",
+                "nr": 20,
+                "title": "Traversieren",
+                "uuid": "4499d1b2-adf8-44ab-95da-eb04534fc118",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135827/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135887"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/21_Graphalgorithmen.html",
+                "previewSlide": 4,
+                "video": "https://www.video.uni-erlangen.de/clip/id/7202",
+                "videoTime": "50:15",
+                "nr": 21,
+                "title": "Algorithmen",
+                "uuid": "8975ad54-7e71-4957-8b8e-6620b587daa2",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135829/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135871"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "9. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135931\">9. Frag-Uns-Aufgabe</a> zum Thema Rekursion läuft noch bis zum <b>11. Januar 2027</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 9,
+                "topic": "Rekursion",
+                "short": "Rekursion",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135931"
+            },
+            {
+                "date": "2026-12-17",
+                "title": "10. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 10
+            },
+            {
+                "date": "2026-12-18",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "10. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135936\">10. Frag-Uns-Aufgabe</a> zum Thema Schnittstellen & Objekte beginnt. Die Bearbeitungszeit endet am <b>18. Januar 2027</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 10,
+                "topic": "Schnittstellen & Objekte",
+                "short": "Schnittstellen & Objekte",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135936"
+            }
+        ]
+    },
+    {
+        "week": 11,
+        "start": "2027-01-11",
+        "end": "2027-01-17",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/23_Zahlendarstellung.html",
+                "previewSlide": 5,
+                "video": "https://www.video.uni-erlangen.de/clip/id/7070",
+                "videoTime": "39:30",
+                "nr": 23,
+                "title": "Zahlen I",
+                "uuid": "d6836ff1-e149-4266-aa55-6ecbc3817ca9",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135819/download"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/24_NegativeUndGleitkommazahlen.html",
+                "previewSlide": 7,
+                "video": "https://www.video.uni-erlangen.de/clip/id/7074",
+                "videoTime": "15:00",
+                "nr": 24,
+                "title": "Zahlen II",
+                "uuid": "3f6914e2-f0ac-4010-bae4-6b62aad26d3c",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135820/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135872"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "10. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135936\">10. Frag-Uns-Aufgabe</a> zum Thema Schnittstellen & Objekte läuft noch bis zum <b>18. Januar 2027</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 10,
+                "topic": "Schnittstellen & Objekte",
+                "short": "Schnittstellen & Objekte",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135936"
+            },
+            {
+                "date": "2027-01-11",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "9. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135931\">9. Frag-Uns-Aufgabe</a> zum Thema Rekursion endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 9,
+                "topic": "Rekursion",
+                "short": "Rekursion",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135931"
+            },
+            {
+                "date": "2027-01-14",
+                "title": "11. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 11
+            },
+            {
+                "date": "2027-01-15",
+                "time": "5:00",
+                "icon": "mdi-school",
+                "title": "11. Aufgabe - Bearbeitungsbeginn",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135941\">11. Frag-Uns-Aufgabe</a> zum Thema Zahlen beginnt. Die Bearbeitungszeit endet am <b>25. Januar 2027</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "begin",
+                "nr": 11,
+                "topic": "Zahlen",
+                "short": "Zahlen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135941"
+            }
+        ]
+    },
+    {
+        "week": 12,
+        "start": "2027-01-18",
+        "end": "2027-01-24",
+        "label": "Lerninhalte",
+        "content": [
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/25_Bilder.html",
+                "previewSlide": 6,
+                "video": "https://www.video.uni-erlangen.de/clip/id/7105",
+                "videoTime": "50:50",
+                "nr": 25,
+                "title": "Bilder",
+                "uuid": "49b07c7a-e887-44d9-8556-8f258bd4fa40",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135826/download"
+            },
+            {
+                "slides": "https://gdi.cs.fau.de/slides/Folien/26_Bildfilter.html",
+                "previewSlide": 10,
+                "video": "https://www.video.uni-erlangen.de/clip/id/7108",
+                "videoTime": "21:45",
+                "nr": 26,
+                "title": "Bildfilter",
+                "uuid": "91e08f65-45c4-43a3-b975-da69a9293f36",
+                "pdf": "https://www.studon.fau.de/studon/go/file/7135831/download",
+                "test": "https://www.studon.fau.de/studon/go/tst/7135869"
+            }
+        ],
+        "events": [
+            {
+                "icon": "mdi-school",
+                "title": "11. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135941\">11. Frag-Uns-Aufgabe</a> zum Thema Zahlen läuft noch bis zum <b>25. Januar 2027</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 11,
+                "topic": "Zahlen",
+                "short": "Zahlen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135941"
+            },
+            {
+                "date": "2027-01-18",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "10. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135936\">10. Frag-Uns-Aufgabe</a> zum Thema Schnittstellen & Objekte endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 10,
+                "topic": "Schnittstellen & Objekte",
+                "short": "Schnittstellen & Objekte",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135936"
+            },
+            {
+                "date": "2027-01-21",
+                "title": "12. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
+                "icon": "mdi-cast-education",
+                "content": " ",
+                "contentClass": "temp",
+                "time": "10:15",
+                "timePrefix": "ab",
+                "type": "lecture",
+                "nr": 12
+            }
+        ]
+    },
+    {
+        "week": 13,
+        "start": "2027-01-25",
+        "end": "2027-01-31",
+        "label": "Lerninhalte",
+        "content": [],
+        "events": [
+            {
+                "date": "2027-01-25",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "11. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135941\">11. Frag-Uns-Aufgabe</a> zum Thema Zahlen endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 11,
+                "topic": "Zahlen",
+                "short": "Zahlen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135941"
+            }
+        ]
+    },
+    {
+        "week": 14,
+        "start": "2027-02-01",
+        "end": "2027-02-07",
+        "label": "Lerninhalte",
+        "content": [],
+        "events": [
+            {
+                "date": "2027-02-05",
+                "title": "Ende der Vorlesungszeit",
+                "type": "lectureend"
+            }
+        ]
+    }
+]

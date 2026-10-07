@@ -1,0 +1,72 @@
+{
+    "version": "1.0",
+    "settings": {
+        "readonly": false,
+        "language": "java",
+        "compiler": {
+            "languageType": "java",
+            "version": "102"
+        },
+        "runCode": false,
+        "emitAST": false,
+        "executionTimeout": 15000,
+        "maxCharacters": 10000,
+        "outputParser": "auto",
+        "uiTheme": "light",
+        "domLibs": [],
+        "workerLibs": [],
+        "continuousCompilation": false,
+        "messagePassing": false,
+        "keepAlive": false,
+        "persistentArguments": false,
+        "randomizer": {
+            "active": false
+        }
+    },
+    "blocks": [
+        {
+            "id": 0,
+            "type": "DATA",
+            "name": "timeline",
+            "file": "00_timeline.json",
+            "metadata": {
+                "expanded": true,
+                "codeExpanded": 0
+            }
+        },
+        {
+            "id": 1,
+            "type": "DATA",
+            "name": "previews",
+            "file": "01_previews.json",
+            "metadata": {
+                "expanded": true,
+                "codeExpanded": 0
+            }
+        },
+        {
+            "id": 2,
+            "type": "DATA",
+            "name": "recordings",
+            "file": "02_recordings.json",
+            "metadata": {
+                "expanded": true,
+                "codeExpanded": 0
+            }
+        },
+        {
+            "id": 3,
+            "type": "PLAYGROUND",
+            "name": "",
+            "file": "timelinePlayground.js",
+            "metadata": {
+                "expanded": true,
+                "version": "102",
+                "codeExpanded": 0,
+                "width": "100%",
+                "height": "auto",
+                "align": "center"
+            }
+        }
+    ]
+}

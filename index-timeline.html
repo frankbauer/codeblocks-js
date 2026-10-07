@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta name="codeblocks-baseurl" content="/" />
+        <title>GdI Timeline Demo</title>
+        <script src="/js/jquery.min.js" type="text/javascript"></script>
+        <style>
+            body {
+                max-width: 1100px;
+                margin: 24px auto;
+                font-family: system-ui, sans-serif;
+            }
+            [codeblockseditor] > * {
+                display: none;
+            }
+        </style>
+        <script type="module" src="/src/main.ts"></script>
+    </head>
+    <body>
+        <!-- public/examples/timeline: renders the GdI timeline and lesson table from the
+             out.json of gdi/source/buildTimeline.js (DATA block "timeline"), no code is run -->
+        <div codeblockseditor src="examples/timeline/blocks.json" data-question="1">
+            <loading>
+                <div></div>
+                <div></div>
+            </loading>
+        </div>
+    </body>
+</html>
