@@ -33,7 +33,7 @@ public class Explorer {
     };
 
     static final int __ = Decoration.NONE, PA = Decoration.PATH,
-            T1 = Decoration.TREE_1, T2 = Decoration.TREE_2, TG = Decoration.TREES_1,
+            T1 = Decoration.TREE_1, T2 = Decoration.TREE_2, TG = Decoration.TREES_1, TR = Decoration.TREES_2, // a group of trees: left and right half
             FL = Decoration.FLOWERS_1, GD = Decoration.GROUND_DETAIL_1, RK = Decoration.ROCKS_1,
             RO = Decoration.ROCK_1;
     static final int[][] DECORATIONS = {
@@ -46,7 +46,7 @@ public class Explorer {
         {__, __, __, __, __, GD, PA, __, __, __, __, PA, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __},
         {__, __, __, __, __, __, PA, __, __, __, __, PA, PA, PA, PA, PA, PA, PA, PA, PA, PA, PA, PA, PA, __, __, __, __, T1, __, __, __},
         {__, __, __, __, __, __, PA, __, __, __, __, PA, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __},
-        {__, __, __, __, __, __, PA, __, __, T1, __, PA, __, __, TG, __, __, __, __, __, __, __, __, __, PA, __, __, __, __, __, __, __},
+        {__, __, __, __, __, __, PA, __, __, T1, __, PA, __, __, TG, TR, __, __, __, __, __, __, __, __, PA, __, __, __, __, __, __, __},
         {__, __, __, __, __, __, PA, PA, PA, PA, PA, PA, __, __, __, __, __, __, __, __, __, __, __, __, PA, __, __, __, __, __, __, __},
         {__, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, __, PA, __, __, __, __, __, __, __},
         {__, __, __, __, __, __, __, __, __, T2, __, __, __, __, __, __, __, __, __, __, __, __, PA, PA, PA, __, __, __, __, __, __, __},

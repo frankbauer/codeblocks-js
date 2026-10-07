@@ -510,14 +510,14 @@
    "name": "TREES_1",
    "layer": "decoration",
    "group": "nature",
-   "description": "Group of trees"
+   "description": "Group of trees, left half (TREES_2 is the right half, see SpriteType.TREE_GROUP); a big cactus in the desert theme"
   },
   {
    "id": 52,
    "name": "TREES_2",
    "layer": "decoration",
    "group": "nature",
-   "description": "Group of trees (penguins in the snow theme)"
+   "description": "Group of trees, right half (next to TREES_1); a group of cacti in the desert theme, penguins in the snow theme"
   },
   {
    "id": 53,
@@ -2286,7 +2286,26 @@
     "loop": {
      "from": 0,
      "to": 33,
+     "loop": true,
+     "cycle": {
+      "repeat": "swim",
+      "times": [
+       2,
+       5
+      ],
+      "then": "dive",
+      "start": 16
+     }
+    },
+    "swim": {
+     "from": 12,
+     "to": 33,
      "loop": true
+    },
+    "dive": {
+     "from": 0,
+     "to": 11,
+     "loop": false
     }
    },
    "default": "loop",
@@ -2342,7 +2361,26 @@
     "loop": {
      "from": 0,
      "to": 34,
+     "loop": true,
+     "cycle": {
+      "repeat": "swim",
+      "times": [
+       2,
+       5
+      ],
+      "then": "dive",
+      "start": 16
+     }
+    },
+    "swim": {
+     "from": 12,
+     "to": 34,
      "loop": true
+    },
+    "dive": {
+     "from": 0,
+     "to": 11,
+     "loop": false
     }
    },
    "default": "loop",
@@ -2398,7 +2436,26 @@
     "loop": {
      "from": 0,
      "to": 34,
+     "loop": true,
+     "cycle": {
+      "repeat": "swim",
+      "times": [
+       2,
+       5
+      ],
+      "then": "dive",
+      "start": 5
+     }
+    },
+    "swim": {
+     "from": 0,
+     "to": 26,
      "loop": true
+    },
+    "dive": {
+     "from": 27,
+     "to": 34,
+     "loop": false
     }
    },
    "default": "loop",
@@ -2619,6 +2676,19 @@
    ],
    "description": "Castle (3 x 2 tiles)"
   },
+  "TREE_GROUP": {
+   "tiles": [
+    [
+     51,
+     52
+    ]
+   ],
+   "footprint": [
+    2,
+    1
+   ],
+   "description": "Group of trees (2 x 1 tiles: TREES_1 and TREES_2); cacti in the desert, firs and penguins in the snow theme"
+  },
   "GROUND_DETAIL_1": {
    "tiles": [
     [
@@ -2773,7 +2843,7 @@
     1,
     1
    ],
-   "description": "Group of trees"
+   "description": "Group of trees, left half (TREES_2 is the right half, see SpriteType.TREE_GROUP); a big cactus in the desert theme"
   },
   "TREES_2": {
    "tiles": [
@@ -2785,7 +2855,7 @@
     1,
     1
    ],
-   "description": "Group of trees (penguins in the snow theme)"
+   "description": "Group of trees, right half (next to TREES_1); a group of cacti in the desert theme, penguins in the snow theme"
   },
   "BUSH": {
    "tiles": [

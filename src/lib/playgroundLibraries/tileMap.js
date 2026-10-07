@@ -699,6 +699,10 @@ export default {
         if (pause) {
             return this._pausedFrame(sprite, def, a, pause, now)
         }
+        const cycle = a.loop && def.animations?.[a.name]?.cycle
+        if (cycle && def.animations[cycle.repeat] && def.animations[cycle.then]) {
+            return this._cycleFrame(def, a, cycle, now)
+        }
         const { frame, done } = this._animFrame(def, a.from, a.to, now - a.start, a.loop, sprite)
         if (done && !a.ended) {
             a.ended = true
@@ -728,6 +732,52 @@ export default {
             a.runAt = now + wait()
         }
         return pause.frame ?? null
+    },
+
+    // a looping animation with `cycle` plays the animation `repeat` a random number of times (`times`,
+    // inclusive range), then `then` once, and starts over: the ducks swim a few rounds, then dive.
+    // Each round of `repeat` begins at frame `start`, so it can end where `then` fits on seamlessly.
+    _cycleFrame(def, a, cycle, now) {
+        const run = (anim) => {
+            let total = 0
+            for (let f = anim.from; f <= anim.to; f++) {
+                total += this._frameDuration(def, f)
+            }
+            return total || 1
+        }
+        const repeat = def.animations[cycle.repeat]
+        const then = def.animations[cycle.then]
+        const [minN, maxN] = cycle.times || [2, 4]
+        const count = () => minN + Math.floor(Math.random() * (maxN - minN + 1))
+        if (a.cycleAt === undefined) {
+            // start somewhere in the first rounds, so several ducks do not dive together
+            a.cycleLeft = count()
+            a.cycleThen = false
+            a.cycleAt = a.start - Math.random() * a.cycleLeft * run(repeat)
+        }
+        let t = now - a.cycleAt
+        for (let guard = 0; guard < 100; guard++) {
+            const length = a.cycleThen ? run(then) : a.cycleLeft * run(repeat)
+            if (t < length) {
+                break
+            }
+            a.cycleAt += length
+            t -= length
+            a.cycleThen = !a.cycleThen
+            if (!a.cycleThen) {
+                a.cycleLeft = count()
+            }
+        }
+        if (a.cycleThen) {
+            return this._animFrame(def, then.from, then.to, t, false, null).frame
+        }
+        // the rounds begin at frame `start` and wrap around the range of `repeat`
+        let offset = 0
+        for (let f = repeat.from; f < (cycle.start ?? repeat.from); f++) {
+            offset += this._frameDuration(def, f)
+        }
+        const local = (t + offset) % run(repeat)
+        return this._animFrame(def, repeat.from, repeat.to, local, false, null).frame
     },
 
     _spritePos(sprite, now) {
