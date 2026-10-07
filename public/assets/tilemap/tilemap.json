@@ -2451,7 +2451,14 @@
     "loop": {
      "from": 0,
      "to": 8,
-     "loop": true
+     "loop": true,
+     "pause": {
+      "delay": [
+       3000,
+       9000
+      ],
+      "frame": null
+     }
     }
    },
    "default": "loop",

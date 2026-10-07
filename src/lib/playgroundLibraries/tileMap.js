@@ -555,7 +555,7 @@ export default {
                 break
             case 'stop':
                 if (def) {
-                    sprite.frame = this._spriteFrame(sprite, def, now)
+                    sprite.frame = this._spriteFrame(sprite, def, now) ?? def.frame ?? 0
                 }
                 sprite.anim = null
                 break
@@ -688,19 +688,46 @@ export default {
         return { frame: to, done: false }
     },
 
-    // frame of the sprite within its variant
+    // frame of the sprite within its variant, null: nothing to draw (the pause of an animation)
     _spriteFrame(sprite, def, now) {
         if (!sprite.anim) {
             const frames = def.variantFrames || def.frames || 1
             return Math.min(sprite.frame ?? def.frame ?? 0, frames - 1)
         }
         const a = sprite.anim
+        const pause = a.loop && def.animations?.[a.name]?.pause
+        if (pause) {
+            return this._pausedFrame(sprite, def, a, pause, now)
+        }
         const { frame, done } = this._animFrame(def, a.from, a.to, now - a.start, a.loop, sprite)
         if (done && !a.ended) {
             a.ended = true
             this._send(sprite, 'MAPSPRITE', 'ended', { animation: a.name })
         }
         return frame
+    },
+
+    // a looping animation with `pause` plays once, then waits a random time (`delay`, ms) showing
+    // `pause.frame` (null: nothing) before it plays again, like the blinking of the HERO
+    _pausedFrame(sprite, def, a, pause, now) {
+        const [minDelay, maxDelay] = pause.delay || [2000, 6000]
+        const wait = () => minDelay + Math.random() * (maxDelay - minDelay)
+        if (a.runAt === undefined) {
+            // the first run after a random part of a pause, so many sprites do not start together
+            a.runAt = a.start + Math.random() * wait()
+        }
+        let total = 0
+        for (let f = a.from; f <= a.to; f++) {
+            total += this._frameDuration(def, f)
+        }
+        const t = now - a.runAt
+        if (t >= 0 && t < total) {
+            return this._animFrame(def, a.from, a.to, t, false, null).frame
+        }
+        if (t >= total) {
+            a.runAt = now + wait()
+        }
+        return pause.frame ?? null
     },
 
     _spritePos(sprite, now) {
@@ -1258,9 +1285,13 @@ export default {
         if (!img.loaded) {
             return
         }
+        const own = this._spriteFrame(sprite, def, now)
+        if (own === null) {
+            return // pausing without a frame
+        }
         const variants = def.variants || 1
         const variant = Math.min(sprite.variant, variants - 1)
-        const frame = variant * (def.variantFrames || 0) + this._spriteFrame(sprite, def, now)
+        const frame = variant * (def.variantFrames || 0) + own
         let x, y
         if (def.anchor) {
             x = ground.x - def.anchor[0]
