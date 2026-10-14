@@ -11,7 +11,7 @@
 // literal, so the helpers are methods of the object.
 {
     view: 'timeline',
-    selected: 0,
+    selected: 0, 
     today: 0,
 
     MAX_CONTENT_PER_DAY: 4,
@@ -26,6 +26,7 @@
         'mdi-alert-octagram': 'octagon-alert',
         'mdi-video-wireless': 'radio-tower',
         'mdi-file-video': 'file-video-camera',
+        'mdi-clipboard-text': 'clipboard-pen-line',
     },
 
     // lucide icons (ISC license, https://lucide.dev) as inline svg markup, <cb-icon> does not
@@ -39,6 +40,8 @@
         'octagon-alert': '<path d="M12 16h.01"/><path d="M12 8v4"/><path d="M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z"/>',
         'radio-tower': '<path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9"/><path d="M7.8 4.7a6.14 6.14 0 0 0-.8 7.5"/><circle cx="12" cy="9" r="2"/><path d="M16.2 4.8c2 2 2.26 5.11.8 7.47"/><path d="M19.1 1.9a9.96 9.96 0 0 1 0 14.1"/><path d="M9.5 18h5"/><path d="m8 22 4-11 4 11"/>',
         'file-video-camera': '<path d="M4 12V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="m10 17.843 3.033-1.755a.64.64 0 0 1 .967.56v4.704a.65.65 0 0 1-.967.56L10 20.157"/><rect width="7" height="6" x="3" y="16" rx="1"/>',
+        'clipboard-pen-line': '<rect width="8" height="4" x="8" y="2" rx="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-.5"/><path d="M16 4h2a2 2 0 0 1 1.73 1"/><path d="M8 18h1"/><path d="M21.378 12.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/>',
+        'calendar-off': '<path d="M4.2 4.2A2 2 0 0 0 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 1.82-1.18"/><path d="M21 15.5V6a2 2 0 0 0-2-2H9.5"/><path d="M16 2v4"/><path d="M3 10h7"/><path d="M21 10h-5.5"/><path d="m2 2 20 20"/>',
         'calendar': '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
         'presentation': '<path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/>',
         'circle-play': '<path d="M9 9.003a1 1 0 0 1 1.517-.859l4.997 2.997a1 1 0 0 1 0 1.718l-4.997 2.997A1 1 0 0 1 9 14.996z"/><circle cx="12" cy="12" r="10"/>',
@@ -204,6 +207,22 @@
     },
     monthShort(date) {
         return this.MONTHS[date.getMonth()].slice(0, 3)
+    },
+
+    // the vacation days of a week (from settings.vacation in buildTimeline.js) as ranges of
+    // consecutive days, ranges that only cover a weekend are left out
+    vacationRanges(week) {
+        const ranges = []
+        for (const day of [...(week.vacations ?? [])].sort().map((d) => this.parseDay(d))) {
+            const last = ranges.at(-1)
+            if (last && this.dayDiff(last.end, day) === 1) last.end = day
+            else ranges.push({ start: day, end: day })
+        }
+        return ranges.filter((r) => {
+            for (let d = r.start; d <= r.end; d = this.addDays(d, 1))
+                if (this.isoWeekday(d) < 5) return true
+            return false
+        })
     },
 
     isoWeek(date) {
@@ -407,6 +426,13 @@
         const start = this.parseDay(w.start),
             end = this.parseDay(w.end)
         const badge = idx === this.today ? '<span class="tl-badge">aktuelle Woche</span>' : ''
+        const vacation = this.vacationRanges(w)
+            .map((r) =>
+                this.sameDay(r.start, r.end)
+                    ? this.fmtDay(r.start)
+                    : `${this.fmtDay(r.start)} – ${this.fmtDay(r.end)}`
+            )
+            .join(', ')
         const lectures = (w.content ?? []).map((l) => this.lectureCard(l)).join('')
         const events = (w.events ?? []).map((e) => this.eventItem(e)).join('')
 
@@ -418,6 +444,7 @@
                     <div class="tl-kicker">// ${w.week}. Woche · KW ${this.isoWeek(start)} ${badge}</div>
                     <h2>${w.label ?? ''}</h2>
                     <div class="tl-range">${this.icon('calendar')} ${this.fmtDay(start)} – ${this.fmtDay(end)}</div>
+                    ${vacation ? `<div class="tl-range tl-vacation">${this.icon('calendar-off')} vorlesungsfrei: ${vacation}</div>` : ''}
                 </div>
             </section>
             ${lectures ? `<h3 class="tl-section">${this.icon('book-open')} Lerninhalte</h3><div class="tl-grid">${lectures}</div>` : ''}
@@ -672,7 +699,10 @@
 .tl-step:disabled { opacity: .3; cursor: default; }
 .tl-chips { position: relative; display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; flex: 1;
     /* room for the glow of the selected chip, which the scroll container would clip */
-    padding: 20px 14px; margin: -14px -8px; }
+    padding: 20px 14px; margin: -14px -8px;
+    /* fade chips out towards the step buttons instead of cutting them off at the scroll edge */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent); }
 .tl-chips::-webkit-scrollbar { display: none; }
 .tl-chips::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--line); min-width: 100%; }
 .tl-chip { position: relative; flex: none; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); color: var(--muted); font: 700 13px/1 var(--mono); transition: transform .15s, background .15s; }
@@ -693,6 +723,7 @@
 .tl-kicker { font: 600 12px/1.4 var(--mono); color: var(--brand); }
 .tl-badge { margin-left: 6px; padding: 2px 8px; border-radius: 999px; background: var(--brand); color: #fff; font: 600 11px/1 system-ui, sans-serif; vertical-align: 1px; display: inline-block; white-space: nowrap; }
 .tl-range { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+.tl-vacation { display: flex; margin-top: 4px; }
 .tl-section { display: flex; align-items: center; gap: 8px; margin: 22px 0 12px; font: 700 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
 .tl-section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
@@ -723,6 +754,7 @@
 .tl-ev.type-homework { --c: var(--homework); --c-soft: var(--homework-soft); }
 .tl-ev.type-prepare { --c: var(--prepare); --c-soft: var(--prepare-soft); }
 .tl-ev.type-lectureend, .tl-ev.type-signupend, .tl-ev.type-tutorialstart { --c: var(--brand); --c-soft: var(--brand-soft); }
+.tl-ev.type-exam { --c: var(--brand-deep); --c-soft: var(--brand-soft); }
 .tl-when { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-bottom: 14px; }
 .tl-cal { width: 52px; border-radius: 10px; overflow: hidden; background: var(--surface); text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px var(--line); }
 .tl-cal-wd { display: block; background: var(--c); color: #fff; font: 700 10px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; padding: 4px 0 3px; }

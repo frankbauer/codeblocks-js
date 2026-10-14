@@ -21,6 +21,7 @@ export default (() => {
         'mdi-alert-octagram': 'octagon-alert',
         'mdi-video-wireless': 'radio-tower',
         'mdi-file-video': 'file-video-camera',
+        'mdi-clipboard-text': 'clipboard-pen-line',
     }
     // own icons in lucide style (24x24, 2px round strokes), used like a lucide name
     const CUSTOM_ICONS = {
@@ -98,6 +99,21 @@ export default (() => {
     const fmtDay = (date) => `${date.getDate()}. ${MONTHS[date.getMonth()]}`
     const fmtShort = (date) =>
         `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${String(date.getFullYear()).slice(2)}`
+
+    // the vacation days of a week (from settings.vacation in buildTimeline.js) as ranges of
+    // consecutive days, ranges that only cover a weekend are left out
+    function vacationRanges(week) {
+        const ranges = []
+        for (const day of [...(week.vacations ?? [])].sort().map(parseDay)) {
+            const last = ranges.at(-1)
+            if (last && dayDiff(last.end, day) === 1) last.end = day
+            else ranges.push({ start: day, end: day })
+        }
+        return ranges.filter((r) => {
+            for (let d = r.start; d <= r.end; d = addDays(d, 1)) if (isoWeekday(d) < 5) return true
+            return false
+        })
+    }
 
     function isoWeek(date) {
         const thursday = addDays(date, 3 - isoWeekday(date))
@@ -361,6 +377,13 @@ export default (() => {
             const start = parseDay(w.start),
                 end = parseDay(w.end)
             const badge = idx === this.today ? '<span class="tl-badge">aktuelle Woche</span>' : ''
+            const vacation = vacationRanges(w)
+                .map((r) =>
+                    sameDay(r.start, r.end)
+                        ? fmtDay(r.start)
+                        : `${fmtDay(r.start)} – ${fmtDay(r.end)}`
+                )
+                .join(', ')
             const lectures = (w.content ?? []).map((l) => this.lectureCard(l)).join('')
             const events = (w.events ?? []).map((e) => this.eventItem(e)).join('')
 
@@ -372,6 +395,7 @@ export default (() => {
                     <div class="tl-kicker">// ${w.week}. Woche · KW ${isoWeek(start)} ${badge}</div>
                     <h2>${escapeText(w.label ?? '')}</h2>
                     <div class="tl-range">${icon('calendar')} ${fmtDay(start)} – ${fmtDay(end)}</div>
+                    ${vacation ? `<div class="tl-range tl-vacation">${icon('calendar-off')} vorlesungsfrei: ${vacation}</div>` : ''}
                 </div>
             </section>
             ${lectures ? `<h3 class="tl-section">${icon('book-open')} Lerninhalte</h3><div class="tl-grid">${lectures}</div>` : ''}
@@ -629,7 +653,10 @@ export default (() => {
 .tl-step:disabled { opacity: .3; cursor: default; }
 .tl-chips { position: relative; display: flex; gap: 10px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; flex: 1;
     /* room for the glow of the selected chip, which the scroll container would clip */
-    padding: 20px 14px; margin: -14px -8px; }
+    padding: 20px 14px; margin: -14px -8px;
+    /* fade chips out towards the step buttons instead of cutting them off at the scroll edge */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent); }
 .tl-chips::-webkit-scrollbar { display: none; }
 .tl-chips::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--line); min-width: 100%; }
 .tl-chip { position: relative; flex: none; width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); color: var(--muted); font: 700 13px/1 var(--mono); transition: transform .15s, background .15s; }
@@ -650,6 +677,7 @@ export default (() => {
 .tl-kicker { font: 600 12px/1.4 var(--mono); color: var(--brand); }
 .tl-badge { margin-left: 6px; padding: 2px 8px; border-radius: 999px; background: var(--brand); color: #fff; font: 600 11px/1 system-ui, sans-serif; vertical-align: 1px; display: inline-block; white-space: nowrap; }
 .tl-range { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+.tl-vacation { display: flex; margin-top: 4px; }
 .tl-section { display: flex; align-items: center; gap: 8px; margin: 22px 0 12px; font: 700 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
 .tl-section::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
@@ -680,6 +708,7 @@ export default (() => {
 .tl-ev.type-homework { --c: var(--homework); --c-soft: var(--homework-soft); }
 .tl-ev.type-prepare { --c: var(--prepare); --c-soft: var(--prepare-soft); }
 .tl-ev.type-lectureend, .tl-ev.type-signupend, .tl-ev.type-tutorialstart { --c: var(--brand); --c-soft: var(--brand-soft); }
+.tl-ev.type-exam { --c: var(--brand-deep); --c-soft: var(--brand-soft); }
 .tl-when { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-bottom: 14px; }
 .tl-cal { width: 52px; border-radius: 10px; overflow: hidden; background: var(--surface); text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px var(--line); }
 .tl-cal-wd { display: block; background: var(--c); color: #fff; font: 700 10px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; padding: 4px 0 3px; }
