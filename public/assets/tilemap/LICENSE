@@ -4,20 +4,27 @@ SPDX-License-Identifier: CC-BY-NC-4.0
 
 Copyright (c) T. Miehm
 
-The tile sheets, sprites and characters in this directory (themes/*.png,
-sprites/*.png) and their sources (art/Tiles/*.png, *.aseprite) were created by
+The tile sheets, sprites and characters in this directory (themes/_.png,
+sprites/_.png) and their sources (art/Tiles/_.png, _.aseprite) were created by
 hand by T. Miehm. They are licensed under the
 Creative Commons Attribution-NonCommercial 4.0 International License
 (CC BY-NC 4.0).
+
+Exception: the sprites TREASURE_X and TREASURE_CHEST (treasureX.aseprite,
+treasureChest.aseprite, sprites/treasureX.png, sprites/treasureChest.png) were
+added later for the GdI lecture (F. Bauer) in the style of the other sprites.
+They are licensed under the same terms.
 
 tilemap.json (the description of the tiles) is part of CodeBlocks and is
 licensed under the same terms, see ../LICENSE.
 
 You are free to:
+
 - Share - copy and redistribute the material in any medium or format
 - Adapt - remix, transform, and build upon the material
 
 Under the following terms:
+
 - Attribution - You must give appropriate credit, provide a link to
   the license, and indicate if changes were made.
   Suggested credit: "Tile map art by T. Miehm, CC BY-NC 4.0"

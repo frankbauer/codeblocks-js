@@ -2548,6 +2548,55 @@
    ],
    "description": "Shipwreck"
   },
+  "TREASURE_X": {
+   "image": "sprites/treasureX.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 1,
+   "durations": [
+    1000
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 0,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Red X that marks the spot of a buried treasure"
+  },
+  "TREASURE_CHEST": {
+   "image": "sprites/treasureChest.png",
+   "frameWidth": 16,
+   "frameHeight": 16,
+   "frames": 6,
+   "durations": [
+    180,
+    900,
+    160,
+    120,
+    1100,
+    180
+   ],
+   "animations": {
+    "loop": {
+     "from": 0,
+     "to": 5,
+     "loop": true
+    }
+   },
+   "default": "loop",
+   "footprint": [
+    1,
+    1
+   ],
+   "description": "Open treasure chest with glinting gold"
+  },
   "GRASS_WIND": {
    "image": "sprites/grasMovement1.png",
    "frameWidth": 16,
@@ -2657,6 +2706,19 @@
    ],
    "description": "Village (2 x 2 tiles)"
   },
+  "TREE_GROUP": {
+   "tiles": [
+    [
+     51,
+     52
+    ]
+   ],
+   "footprint": [
+    2,
+    1
+   ],
+   "description": "Group of trees (2 x 1 tiles: TREES_1 and TREES_2); cacti in the desert, firs and penguins in the snow theme"
+  },
   "CASTLE": {
    "tiles": [
     [
@@ -2675,19 +2737,6 @@
     2
    ],
    "description": "Castle (3 x 2 tiles)"
-  },
-  "TREE_GROUP": {
-   "tiles": [
-    [
-     51,
-     52
-    ]
-   ],
-   "footprint": [
-    2,
-    1
-   ],
-   "description": "Group of trees (2 x 1 tiles: TREES_1 and TREES_2); cacti in the desert, firs and penguins in the snow theme"
   },
   "GROUND_DETAIL_1": {
    "tiles": [
