@@ -538,10 +538,25 @@
             .sort((a, b) => a.sortNumber - b.sortNumber)
     },
 
+    // packs the tests into lanes (table columns): a test goes into the first lane of its
+    // type that is free on its start day, so a lane only ever holds tests of one type.
+    // The homework lanes come first, then the prepare lanes
+    testLanes(tests) {
+        const byType = { prepare: [], homework: [] }
+        const sorted = [...tests].sort((a, b) => a.start - b.start || a.sortNumber - b.sortNumber)
+        for (const t of sorted) {
+            const lanes = byType[t.type]
+            let lane = lanes.find((l) => l.tests[l.tests.length - 1].end < t.start)
+            if (!lane) lanes.push((lane = { type: t.type, tests: [] }))
+            lane.tests.push(t)
+        }
+        return byType.homework.concat(byType.prepare)
+    },
+
     buildTable() {
         const MAX = this.MAX_CONTENT_PER_DAY
         const all = this.weeks.flatMap((w) => w.events ?? [])
-        const tests = this.testSpans()
+        const lanes = this.testLanes(this.testSpans())
         const finals = all.filter(
             (e) => (e.type === 'homework' && e.subtype === 'end') || e.type === 'lectureend'
         )
@@ -560,15 +575,40 @@
                 (w) => this.parseDay(w.start) <= day && day <= this.parseDay(w.end)
             ) ?? this.weeks[this.weeks.length - 1]
 
+        // a weekday (Mon-Fri) without lectures: vacation, public holiday or after the lecture period
+        const isFree = (w, day) =>
+            (w.vacations ?? []).includes(this.isoDay(day)) || day > lectureEnd || this.isHoliday(day)
+        // all weekdays of the calendar week of `day` are free
+        const isFreeWeek = (day) => {
+            const monday = this.addDays(day, -this.isoWeekday(day))
+            const w = weekFor(monday)
+            return [0, 1, 2, 3, 4].every((d) => isFree(w, this.addDays(monday, d)))
+        }
+        // a test is drawn as one cell per run of days that are (not) in a free week, so the
+        // part running through e.g. the christmas break can look different (.paused)
+        const segmentsOf = (t) => {
+            const segments = []
+            for (let day = t.start; day <= t.end; day = this.addDays(day, 1)) {
+                const paused = isFreeWeek(day)
+                const last = segments[segments.length - 1]
+                if (last && last.paused === paused) last.end = day
+                else segments.push({ start: day, end: day, paused })
+            }
+            // the label goes into the longest segment, preferably one that is not paused
+            const days = (sg) => this.dayDiff(sg.start, sg.end) + (sg.paused ? 0 : 1000)
+            segments.reduce((a, b) => (days(b) > days(a) ? b : a)).label = true
+            return segments
+        }
+        lanes.forEach((lane) => lane.tests.forEach((t) => (t.segments = segmentsOf(t))))
+
         const rows = []
         for (let monday = firstDay; monday <= lastDay; monday = this.addDays(monday, 7)) {
             const w = weekFor(monday)
+            const freeWeek = isFreeWeek(monday)
             for (let d = 0; d < 7; d++) {
                 const day = this.addDays(monday, d)
                 const iso = this.isoDay(day)
-                const free =
-                    d <= 4 &&
-                    ((w.vacations ?? []).includes(iso) || day > lectureEnd || this.isHoliday(day))
+                const free = d <= 4 && isFree(w, day)
                 const cls = [`d${d}`, d > 4 ? 'weekend' : '', iso === todayIso ? 'today' : ''].join(
                     ' '
                 )
@@ -576,7 +616,7 @@
 
                 let cells = ''
                 if (d === 0)
-                    cells += `<td class="week" rowspan="7"><b>${w.week}. Woche</b><span>KW ${this.isoWeek(day)}</span></td>`
+                    cells += `<td class="week${freeWeek ? ' free-week' : ''}" rowspan="7"><b>${w.week}. Woche</b><span>KW ${this.isoWeek(day)}</span></td>`
                 cells += `<td class="dow${freeCls}">${this.WEEKDAYS[day.getDay()].slice(0, 2)}</td><td class="day${freeCls}">${this.fmtShort(day)}</td>`
 
                 const hasLecture = (w.events ?? []).some(
@@ -588,30 +628,43 @@
                     cells += `<td class="content${freeCls}${edge}">${lecture ? this.tableLecture(lecture) : ''}</td>`
                 }
 
-                tests.forEach((t, i) => {
+                lanes.forEach((lane, i) => {
                     const edge = i === 0 ? ' first' : ''
-                    if (this.sameDay(day, t.start)) {
-                        const span = this.dayDiff(t.start, t.end) + 1
-                        const label = t.link
-                            ? `<a href="${t.link}" target="_blank" rel="noopener">${t.label}</a>`
-                            : t.label
-                        cells += `<td class="test ${t.type} selected${edge}" rowspan="${span}" title="${t.title}: ${this.fmtDay(t.start)} – ${this.fmtDay(t.end)}"><div>${label}</div></td>`
-                    } else if (day < t.start || day > t.end) {
-                        cells += `<td class="test ${t.type}${edge}"></td>`
+                    const t = lane.tests.find((t) => t.start <= day && day <= t.end)
+                    if (!t) {
+                        cells += `<td class="test ${lane.type}${edge}"></td>`
+                    } else {
+                        const k = t.segments.findIndex((sg) => this.sameDay(sg.start, day))
+                        const sg = t.segments[k]
+                        if (sg) {
+                            const span = this.dayDiff(sg.start, sg.end) + 1
+                            const segCls =
+                                (sg.paused ? ' paused' : '') +
+                                (k === 0 ? ' seg-first' : '') +
+                                (k === t.segments.length - 1 ? ' seg-last' : '')
+                            const label = t.link
+                                ? `<a href="${t.link}" target="_blank" rel="noopener">${t.label}</a>`
+                                : t.label
+                            cells += `<td class="test ${t.type} selected${segCls}${edge}" rowspan="${span}" title="${t.title}: ${this.fmtDay(t.start)} – ${this.fmtDay(t.end)}">${sg.label ? `<div>${label}</div>` : ''}</td>`
+                        }
                     }
                 })
+                cells += '<td class="spacer"></td>'
                 rows.push(`<tr class="${cls}">${cells}</tr>`)
             }
         }
 
-        return `<div class="tl-legend">
-                <span><i class="sw prepare"></i>Vorbereitungstest</span>
-                <span><i class="sw homework"></i>Frag-Uns-Aufgabe</span>
-                <span><i class="sw free"></i>vorlesungsfrei / Feiertag</span>
-            </div>
-            <div class="tl-table-wrap">
+        const legend = `<div class="tl-legend">
+            <span><i class="sw homework"></i>Frag-Uns-Aufgabe</span>
+            <span><i class="sw prepare"></i>Boss-Level</span>
+            <span><i class="sw free"></i>vorlesungsfrei / Feiertag</span>
+        </div>`
+        return `<div class="tl-table-wrap">
                 <table class="tl-table">
-                    <thead><tr><th>Woche</th><th colspan="2">Tag</th><th colspan="${MAX}">Stoff</th><th colspan="${tests.length}">Übungen</th></tr></thead>
+                    <thead>
+                        <tr><th>Woche</th><th colspan="2">Tag</th><th colspan="${MAX}">Stoff</th><th colspan="${lanes.length + 1}">Übungen</th></tr>
+                        <tr class="tl-legend-row"><th colspan="${3 + MAX + lanes.length + 1}">${legend}</th></tr>
+                    </thead>
                     <tbody>${rows.join('')}</tbody>
                 </table>
             </div>`
@@ -692,7 +745,7 @@
 @media (prefers-reduced-motion: reduce) { .tl-link { transition: none; } }
 
 /* ---------- week track ---------- */
-.tl-week-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; outline: none; }
+.tl-week-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 36px; outline: none; }
 .tl-week-nav:focus-visible { box-shadow: 0 0 0 2px var(--brand); border-radius: 10px; }
 .tl-step { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 18px; display: grid; place-items: center; transition: all .15s; }
 .tl-step:hover:not(:disabled) { background: var(--brand); border-color: var(--brand); color: #fff; }
@@ -792,11 +845,11 @@
 .tl-empty { color: var(--muted); font-style: italic; }
 
 /* ---------- lesson table ---------- */
-.tl-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+.tl-legend { display: flex; gap: 18px; flex-wrap: wrap; font: 500 12px/1.2 system-ui, sans-serif; color: var(--muted); text-transform: none; letter-spacing: normal; }
 .tl-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .tl-legend .sw { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
 .sw.prepare { background: var(--prepare); } .sw.homework { background: var(--homework); } .sw.free { background: var(--free); box-shadow: inset 0 0 0 1px #ecd97a; }
-.tl-table-wrap { max-height: 640px; overflow: auto; border-radius: var(--radius); background: var(--surface); box-shadow: 0 0 0 1px var(--line); }
+.tl-table-wrap { margin-top: 18px; max-height: 640px; overflow: auto; border-radius: var(--radius); background: var(--surface); box-shadow: 0 0 0 1px var(--line); }
 .tl-table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 12px; }
 .tl-table th { position: sticky; top: 0; z-index: 3; background: var(--ink); color: #fff; text-align: left; padding: 9px 8px; font: 700 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
 .tl-table td { padding: 3px 6px; border-bottom: 1px solid #f3efec; vertical-align: top; }
@@ -804,9 +857,15 @@
 .tl-table tr.weekend td:not(.week):not(.test) { background: var(--surface-2); color: #b8b0aa; }
 .tl-table tr.today td.dow, .tl-table tr.today td.day { background: var(--brand); color: #fff; font-weight: 700; }
 /* week and day stay in place while the table scrolls sideways (fixed widths for the left offsets) */
-.tl-table th:nth-child(1) { position: sticky; left: 0; z-index: 4; }
+/* starts where the week name in the column below starts (4px bar + 10px padding) */
+.tl-table th:nth-child(1) { position: sticky; left: 0; z-index: 4; padding-left: 14px; }
 .tl-table th:nth-child(2) { position: sticky; left: 92px; z-index: 4; }
+/* the legend sits in a second header row, sticky right below the first one (9px + 11px + 9px) */
+.tl-table tr.tl-legend-row th { top: 29px; left: auto; z-index: 3; padding: 2px 8px 9px 14px; }
+.tl-table tr.tl-legend-row .tl-legend { color: rgba(255, 255, 255, .75); }
 .tl-table td.week { position: sticky; left: 0; z-index: 2; width: 92px; min-width: 92px; max-width: 92px; background: var(--surface); border-right: 1px solid var(--line); border-left: 4px solid var(--coral); white-space: nowrap; padding: 8px 10px; }
+/* a week without any lecture day gets the yellow of the link cards instead of the red bar */
+.tl-table td.week.free-week { border-left-color: #f2c037; }
 .tl-table td.week b { font: 700 13px/1.2 var(--display); }
 .tl-table td.week span { display: block; color: var(--muted); font: 11px var(--mono); }
 .tl-table td.dow { position: sticky; left: 92px; z-index: 2; width: 30px; min-width: 30px; max-width: 30px; background: var(--surface); color: var(--muted); font-family: var(--mono); }
@@ -819,11 +878,20 @@
 /* the exercise columns: a gap between neighbouring columns, continuous bars inside a column */
 .tl-table td.test { width: 24px; min-width: 24px; padding: 0; border-bottom: 0; border-left: 2px solid var(--surface); border-right: 1px solid var(--surface); background-clip: padding-box; background-image: linear-gradient(90deg, transparent calc(50% - .5px), #f1ece8 calc(50% - .5px), #f1ece8 calc(50% + .5px), transparent calc(50% + .5px)); }
 .tl-table tr.d0 td.test { border-top: 0; }
-.tl-table td.test.selected { border-radius: 8px; background-image: none; position: relative; }
+/* empty last column, keeps the lanes clear of the (overlay) scrollbar */
+.tl-table td.spacer { width: 16px; min-width: 16px; padding: 0; border: 0 !important; background: var(--surface) !important; }
+.tl-table td.test.selected { background-image: none; position: relative; }
+.tl-table td.test.selected.seg-first { border-top-left-radius: 8px; border-top-right-radius: 8px; }
+.tl-table td.test.selected.seg-last { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+/* the part of a test in a week without lectures is striped (clear / half transparent) */
+.tl-table td.test.prepare.selected.paused { background-color: transparent; background-image: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--prepare) 50%, transparent) 5px 10px); }
+.tl-table td.test.homework.selected.paused { background-color: transparent; background-image: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--homework) 50%, transparent) 5px 10px); }
 .tl-table td.test.prepare.selected { background-color: var(--prepare); }
 .tl-table td.test.homework.selected { background-color: var(--homework); }
 .tl-table td.test.selected:hover { filter: brightness(1.08); }
-.tl-table td.test.selected div { writing-mode: vertical-lr; white-space: nowrap; margin: 8px auto; font: 600 11px/1 system-ui, sans-serif; color: #fff; }
+.tl-table td.test.selected div { writing-mode: vertical-lr; white-space: nowrap; margin: 8px auto; font: 600 11px/1 system-ui, sans-serif; color: #fff;
+    /* the rotated glyphs sit on the baseline (left) side of the line box, so it looks off-center */
+    transform: translateX(1px); }
 .tl-table td.test.selected a { color: #fff; }
 
 @media (max-width: 560px) {
