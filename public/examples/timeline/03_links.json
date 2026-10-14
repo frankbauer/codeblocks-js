@@ -1,0 +1,43 @@
+[
+    {
+        "title": "Editor",
+        "href": "https://gdi.cs.fau.de/livecompile/",
+        "target": "_blank",
+        "description": "Hier finden Sie unseren online Code Editor",
+        "color": "yellow",
+        "icon": "square-code"
+    },
+    {
+        "title": "Chat",
+        "href": "https://matrix.to/#/#gdi:fau.de",
+        "target": "_top",
+        "description": "Hier finden Sie unseren FAU-Chat (<b>Homeserver: matrix.fau.de</b>)",
+        "color": "yellow",
+        "icon": "messages-square"
+    },
+    {
+        "title": "Live-Stream",
+        "href": "https://www.studon.fau.de/studon/go/xxco/7135856",
+        "target": "_top",
+        "description": "Immer während der Vorlesung am Donnerstag von 10:15 bis 13:45",
+        "color": "purple",
+        "icon": "radio"
+    },
+    {
+        "title": "Inhalt",
+        "href": "https://www.studon.fau.de/studon/goto.php?target=lcode_nYtJsWDS",
+        "target": "_top",
+        "description": "Alle Inhalte auf einen Blick",
+        "color": "blue",
+        "icon": "layout-grid"
+    },
+    {
+        "title": "Lernwerk",
+        "href": "https://gdi.cs.fau.de/livecompile/karte.html",
+        "target": "_blank",
+        "description": "Übungen und Abenteuerkarte zum Selbstlernen",
+        "color": "green",
+        "icon": "treasure-map",
+        "disabled": true
+    }
+]
