@@ -496,19 +496,6 @@
                 "topic": "Felder",
                 "short": "Felder",
                 "link": "https://www.studon.fau.de/studon/go/fold/7135916"
-            },
-            {
-                "date": "2026-11-27",
-                "time": "18:00",
-                "icon": "mdi-alarm-off",
-                "title": "2. Boss-Level - Bearbeitungsende",
-                "content": "Die Bearbeitung des <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135947\">Boss-Level</a> zum Thema Methoden sollte nun beendet sein.",
-                "type": "prepare",
-                "subtype": "end",
-                "nr": 2,
-                "topic": "Methoden",
-                "short": "Methoden",
-                "link": "https://www.studon.fau.de/studon/go/fold/7135947"
             }
         ]
     },
@@ -602,6 +589,19 @@
                 "topic": "Klassen",
                 "short": "Klassen",
                 "link": "https://www.studon.fau.de/studon/go/fold/7135921"
+            },
+            {
+                "date": "2026-11-27",
+                "time": "18:00",
+                "icon": "mdi-alarm-off",
+                "title": "2. Boss-Level - Bearbeitungsende",
+                "content": "Die Bearbeitung des <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135947\">Boss-Level</a> zum Thema Methoden sollte nun beendet sein.",
+                "type": "prepare",
+                "subtype": "end",
+                "nr": 2,
+                "topic": "Methoden",
+                "short": "Methoden",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135947"
             }
         ]
     },
@@ -747,6 +747,17 @@
         ],
         "events": [
             {
+                "icon": "mdi-school",
+                "title": "8. Aufgabe",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135926\">8. Frag-Uns-Aufgabe</a> zum Thema Schnittstellen läuft noch bis zum <b>14. Dezember 2026</b> um 5:00 Uhr (morgens).",
+                "type": "homework",
+                "subtype": "remind",
+                "nr": 8,
+                "topic": "Schnittstellen",
+                "short": "Schnittstellen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135926"
+            },
+            {
                 "date": "2026-12-07",
                 "time": "5:00",
                 "icon": "mdi-alert-octagram",
@@ -782,32 +793,6 @@
                 "topic": "Rekursion",
                 "short": "Rekursion",
                 "link": "https://www.studon.fau.de/studon/go/fold/7135931"
-            },
-            {
-                "date": "2026-12-14",
-                "time": "5:00",
-                "icon": "mdi-alert-octagram",
-                "title": "8. Aufgabe - Bearbeitungsende",
-                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135926\">8. Frag-Uns-Aufgabe</a> zum Thema Schnittstellen endet.",
-                "type": "homework",
-                "subtype": "end",
-                "nr": 8,
-                "topic": "Schnittstellen",
-                "short": "Schnittstellen",
-                "link": "https://www.studon.fau.de/studon/go/fold/7135926"
-            },
-            {
-                "date": "2026-12-18",
-                "time": "18:00",
-                "icon": "mdi-alarm-off",
-                "title": "4. Boss-Level - Bearbeitungsende",
-                "content": "Die Bearbeitung des <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135951\">Boss-Level</a> zum Thema Rekursion und Vererbung sollte nun beendet sein.",
-                "type": "prepare",
-                "subtype": "end",
-                "nr": 4,
-                "topic": "Rekursion und Vererbung",
-                "short": "Rek...",
-                "link": "https://www.studon.fau.de/studon/go/fold/7135951"
             }
         ]
     },
@@ -853,6 +838,19 @@
                 "link": "https://www.studon.fau.de/studon/go/fold/7135931"
             },
             {
+                "date": "2026-12-14",
+                "time": "5:00",
+                "icon": "mdi-alert-octagram",
+                "title": "8. Aufgabe - Bearbeitungsende",
+                "content": "Die Bearbeitungszeit für die <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135926\">8. Frag-Uns-Aufgabe</a> zum Thema Schnittstellen endet.",
+                "type": "homework",
+                "subtype": "end",
+                "nr": 8,
+                "topic": "Schnittstellen",
+                "short": "Schnittstellen",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135926"
+            },
+            {
                 "date": "2026-12-17",
                 "title": "10. Vorlesung <a href=\"https://www.studon.fau.de/studon/go/xxco/7135856\" target=\"_blank\" class=\"stream lecture\"><span class=\"mdi mdi-video-wireless\"></span></a>",
                 "icon": "mdi-cast-education",
@@ -875,6 +873,19 @@
                 "topic": "Schnittstellen & Objekte",
                 "short": "Schnittstellen & Objekte",
                 "link": "https://www.studon.fau.de/studon/go/fold/7135936"
+            },
+            {
+                "date": "2026-12-18",
+                "time": "18:00",
+                "icon": "mdi-alarm-off",
+                "title": "4. Boss-Level - Bearbeitungsende",
+                "content": "Die Bearbeitung des <a target=\"_blank\" href=\"https://www.studon.fau.de/studon/go/fold/7135951\">Boss-Level</a> zum Thema Rekursion und Vererbung sollte nun beendet sein.",
+                "type": "prepare",
+                "subtype": "end",
+                "nr": 4,
+                "topic": "Rekursion und Vererbung",
+                "short": "Rek...",
+                "link": "https://www.studon.fau.de/studon/go/fold/7135951"
             }
         ],
         "vacations": [
@@ -1084,7 +1095,7 @@
                 "date": "2027-03-11",
                 "time": "09:00-13:00",
                 "icon": "mdi-clipboard-text",
-                "title": "<span style=\"color:silver\">Klausur (noch unbestätigt)</span> ",
+                "title": "<span style=\"color:silver\">Klausur? (noch unbestätigt)</span> ",
                 "type": "exam"
             }
         ]
